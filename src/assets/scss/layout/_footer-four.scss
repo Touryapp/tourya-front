@@ -1,0 +1,126 @@
+/*============================
+  29.footer-four
+============================*/
+
+footer {
+    &.footer-four {
+        .footer-top{
+            background: linear-gradient(184.15deg, $white 2.72%, #FFF2F2 95.98%);     
+            padding: 60px 0 40px;
+            .footer-widget {
+                h5 {
+                    margin-bottom: 16px;
+                    &::before {
+                        content: none;
+                    }
+                }
+            }
+            @include respond-below(lg) {
+                padding: 40px 0 20px;
+            }
+        }
+        .footer-input{
+            .input-group {
+                width: 100%;
+                @include rounded(54px);
+                background: $white;
+                padding: 8px 16px;
+                border: 1px solid $primary;
+                .input-group-text {
+                    background: $white;
+                    border: 0 !important;
+                    @include rounded(54px 54px 54px 54px);
+                    color: $gray-600;
+                }
+                .form-control {
+                    border: 0 !important;
+                    box-shadow: none;
+                    margin-right: 5px;
+                    height: 37px;
+                    min-height: 37px;
+                    padding: 0 10px;
+                }
+                .btn {
+                    border-radius: 54px !important;
+                }
+            }
+        }
+        .footer-bottom {
+            padding: 12px 0 2px;
+            border-top: $primary-100;
+            background: $primary-transparent;
+            .social-icon {
+                li {
+                    margin-right: 8px;
+                    padding-right: 0;
+                    a {
+                        width: 32px;
+                        height: 32px;
+                        background: $white;
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-align: center;
+                        -ms-flex-align: center;
+                        align-items: center;
+                        justify-content: center;
+                        @include rounded(50%);
+                        &:hover {
+                            background: $primary;
+                            color: $white;
+                        } 
+                    }
+                    &::after {
+                        content: none;
+                    }
+                }
+            }
+            .policy-links {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                flex-wrap: wrap;
+                li {
+                    margin: 0 16px 10px 0;
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                    a {
+                        color: $gray-600;
+                        &:hover {
+                            color: $primary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.footer-input{
+    .input-group {
+        width: 100%;
+        @include rounded(54px);
+        background: $white;
+        padding: 8px 16px;  
+        .input-group-text {
+            background: $white;
+            border: 0 !important;
+            @include rounded(54px 54px 54px 54px);
+            color: $gray-600;
+        }
+        .form-control {
+            border: 0 !important;
+            box-shadow: none;
+            margin-right: 5px;
+            height: 37px;
+            min-height: 37px;
+            padding: 0 10px;
+        }
+        .btn {
+            border-radius: 54px !important;
+        }
+    }
+}

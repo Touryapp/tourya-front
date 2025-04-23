@@ -1,0 +1,80 @@
+<!-- Booking Header -->
+<div class="card booking-header">
+    <div class="card-body header-content d-flex align-items-center justify-content-between flex-wrap ">
+        <div>
+            <h6>Enquiries</h6>
+            <p class="fs-14 text-gray-6 fw-normal">No of  Enquiries : 200</p>
+        </div>
+
+        <div class="d-flex align-items-center flex-wrap">
+            <div class="input-icon-start position-relative">
+                <span class="icon-addon">
+                    <i class="isax isax-calendar-edit fs-14"></i>
+                </span>
+                <app-date-range-picker></app-date-range-picker>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Booking Header -->
+
+<!-- Hotel-Booking List -->
+<div class="card hotel-list">
+    <div class="card-body p-0">
+        <div class="list-header d-flex align-items-center justify-content-between flex-wrap">
+            <h6 class="">Enquiries List</h6>
+            <div class="d-flex align-items-center flex-wrap">
+                <div class="input-icon-start position-relative">
+                    <span class="icon-addon">
+                        <i class="isax isax-search-normal-1 fs-14"></i>
+                    </span>
+                    <input [(ngModel)]="searchDataValue" name="search" (ngModelChange)="searchData(searchDataValue)" type="search" class="form-control form-control-sm" placeholder="Search" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Hotel List -->
+        <div class="custom-datatable-filter table-responsive">
+            <table class="table datatable">
+                <thead matSort (matSortChange)="sortData($event)" class="thead-light">
+                    <tr>
+                        <th mat-sort-header="type">Type</th>
+                        <th mat-sort-header="enquiryFor">Enquiry for</th>
+                        <th mat-sort-header="name">Customer Info</th>
+                        <th mat-sort-header="status">Status</th>
+                        <th mat-sort-header="inquiredOn">Inquired On</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (data of tableData; track data; let i = $index) {
+                    <tr>
+                        <td><a href="javascript:void(0);" class="link-primary fw-medium">{{data.type}}</a></td>
+                        <td>
+                            <h6 class="fs-14">{{data.enquiryFor}}</h6>
+                        </td>
+                        <td>
+                            <p class="fs-14 fw-n mb-1">{{data.name}}</p>
+                            <a [routerLink]="routes.agentEnquirersDetails" class="link-primary">View Details</a>
+                        </td>
+                        <td>
+                            <span class="badge  rounded-pill d-inline-flex align-items-center fs-10" 
+                            [ngClass]="data.status==='Completed'?'badge-success': 'badge-secondary'"><i class="fa-solid fa-circle fs-5 me-1"></i>{{data.status}}</span>
+                        </td>
+                        <td>{{data.inquiredOn}}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <a [routerLink]="routes.agentEnquirersDetails"><i class="isax isax-eye"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                   
+                </tbody>
+            </table>
+        </div>
+        <!-- /Hotel List -->
+    </div>
+</div>
+<app-custom-pagination></app-custom-pagination>
+<!-- /Hotel-Booking List -->

@@ -1,0 +1,126 @@
+{
+    "data":[
+        {
+            "img":"cruise-15.jpg",
+            "id": "#CR-1245",
+            "cruiseName": "Super Aquamarine",
+            "destination": "Barcelona",
+            "cabinType": "Interior",
+            "guestDetails": "2 Adults, 1 Child",
+            "duration": "4 Days, 3 Nights",
+            "price": "$11,569",
+            "date": "15 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"cruise-06.jpg",
+            "id": "#CR-3215",
+            "cruiseName": "Adventure of the Seas",
+            "destination": "London",
+            "cabinType": "Balcony",
+            "guestDetails": "2 Adults, 2 Child",
+            "duration": "3 Days, 2 Nights",
+            "price": "$10,745",
+            "date": "20 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"cruise-05.jpg",
+            "id": "#CR-4581",
+            "cruiseName": "Coral Cruiser",
+            "destination": "Edinburgh",
+            "cabinType": "Oceanview",
+            "guestDetails": "3 Adults, 2 Child",
+            "duration": "2 Days, 1 Night",
+            "price": "$8,160",
+            "date": "04 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"cruise-12.jpg",
+            "id": "#CR-6545",
+            "cruiseName": "Celebrity Cruise",
+            "destination": "Manchester",
+            "cabinType": "Suite",
+            "guestDetails": "2 Adults, 1 Child",
+            "duration": "5 Days, 4 Nights",
+            "price": "$14,840",
+            "date": "17 Jun 2025",
+            "status": "Pending"
+        },
+        {
+            "img":"cruise-09.jpg",
+            "id": "#CR-3256",
+            "cruiseName": "Princess Cruises",
+            "destination": "Chelsea",
+            "cabinType": "Concierge Class",
+            "guestDetails": "1 Adult, 1 Child",
+            "duration": "3 Days, 2 Nights",
+            "price": "$10,450",
+            "date": "25 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"cruise-12.jpg",
+            "id": "#CR-3654",
+            "cruiseName": "Cunard",
+            "destination": "Las Vegas",
+            "cabinType": "Outside room",
+            "guestDetails": "3 Adults, 2 Child",
+            "duration": "4 Days, 3 Nights",
+            "price": "$12,600",
+            "date": "02 Jul 2025",
+            "status": "Cancelled"
+        },
+        {
+            "img":"cruise-25.jpg",
+            "id": "#CR-1458",
+            "cruiseName": "Norwegian Cruise",
+            "destination": "Salford",
+            "cabinType": "Solo cabins",
+            "guestDetails": "1 Adult, 1 Child",
+            "duration": "2 Days, 1 Night",
+            "price": "$9,380",
+            "date": "12 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "img":"cruise-26.jpg",
+            "id": "#CR-6589",
+            "cruiseName": "Azamara",
+            "destination": "Newyork",
+            "cabinType": "Balcony",
+            "guestDetails": "2 Adults, 1 Child",
+            "duration": "3 Days, 2 Nights",
+            "price": "$10,400",
+            "date": "26 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "img":"cruise-27.jpg",
+            "id": "#CR-2315",
+            "cruiseName": "Costa Cruise",
+            "destination": "Cambridge",
+            "cabinType": "Interior",
+            "guestDetails": "3 Adults, 2 Child",
+            "duration": "4 Days, 3 Nights",
+            "price": "$12,810",
+            "date": "10 Aug 2025",
+            "status": "Completed"
+        },
+        {
+            "img":"cruise-28.jpg",
+            "id": "#CR-5414",
+            "cruiseName": "Oceania Cruises",
+            "destination": "Bristol",
+            "cabinType": "Outside room",
+            "guestDetails": "1 Adult, 1 Child",
+            "duration": "5 Days, 4 Nights",
+            "price": "$15,450",
+            "date": "22 Aug 2025",
+            "status": "Completed"
+        }
+    ],
+    "totalData":10
+    
+}

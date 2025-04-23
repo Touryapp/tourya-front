@@ -1,0 +1,274 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Blog List</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item">Pages</li>
+                            <li class="breadcrumb-item active" aria-current="page">Blog List</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-xl-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                                <a [routerLink]="routes.blogDetails" class="blog-img">
+                                    <img src="assets/img/blog/blog-list-03.jpg" class="w-100" alt="img">
+                                </a>
+                                <span class="badge bg-primary fs-13 fw-medium">Travel</span>
+                                <div class="blog-info text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center">
+                                        <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2">
+                                                    <img src="assets/img/users/user-01.jpg" class="rounded-circle border border-white" alt="img">
+                                                </span>
+                                                <p>Bryan Bradfield</p>
+                                            </a>
+                                        </div>
+                                        <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                                    </div>
+                                    <h5><a [routerLink]="routes.blogDetails">Top 10 Hidden Gems places in Central Europe in 2025</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                                <a [routerLink]="routes.blogDetails" class="blog-img blog-list-img">
+                                    <img src="assets/img/blog/blog-list-01.jpg" class="w-100" alt="img">
+                                </a>
+                                <span class="badge bg-primary fs-13 fw-medium">Guide</span>
+                                <div class="blog-info text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center">
+                                        <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2">
+                                                    <img src="assets/img/users/user-02.jpg" class="rounded-circle border border-white" alt="img">
+                                                </span>
+                                                <p>Michell West</p>
+                                            </a>
+                                        </div>
+                                        <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>12 May 2025</p>
+                                    </div>
+                                    <h5><a [routerLink]="routes.blogDetails">Exploring the World: Your Ultimate Dream Tour Itinerary</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                                <a [routerLink]="routes.blogDetails" class="blog-img">
+                                    <img src="assets/img/blog/blog-list-02.jpg" class="w-100" alt="img">
+                                </a>
+                                <span class="badge bg-primary fs-13 fw-medium">Rental</span>
+                                <div class="blog-info text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center">
+                                        <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2">
+                                                    <img src="assets/img/users/user-03.jpg" class="rounded-circle border border-white" alt="img">
+                                                </span>
+                                                <p>Patricia Hasbro</p>
+                                            </a>
+                                        </div>
+                                        <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                                    </div>
+                                    <h5><a [routerLink]="routes.blogDetails">New York City, USA - The City That  Never Sleeps</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav class="pagination-nav mb-4 mb-lg-0">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+                            <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                            <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+                            <li class="page-item active"><a class="page-link" href="javascript:void(0);">4</a></li>
+                            <li class="page-item"><a class="page-link" href="javascript:void(0);">5</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- /Pagination -->
+
+                </div>
+                <!-- Sidebar -->
+                <div class="col-xl-4 col-lg-4 ">
+                    <div class="theiaStickySidebar">
+                    <!-- Search -->
+                    <div class="card mb-3">
+                        <div class="card-header border-0 pb-0">
+                            <div class="pb-3 border-bottom">
+                                <h5><i class="isax isax-search-normal-1 text-primary fs-16 me-2"></i>Search</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pt-3">
+                            <form >
+                                <div class="bg-light-100 p-3 rounded border">
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+											<i class="isax isax-search-normal-1 fs-14"></i>
+										</span>
+                                        <input type="text" class="form-control" placeholder="Search">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /Search -->
+
+                    <!-- Categories -->
+                    <div class="card mb-3">
+                        <div class="card-header border-0 pb-0">
+                            <div class="pb-3 border-bottom">
+                                <h5><i class="isax isax-candle text-primary fs-16 me-2"></i>Categories</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-medium mb-0"><a href="javascript:void(0);">Travel</a></h6>
+                                <p>(12)</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-medium mb-0"><a href="javascript:void(0);">Guide</a></h6>
+                                <p>(10)</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-medium mb-0"><a href="javascript:void(0);">Rental</a></h6>
+                                <p>(14)</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="text-dark fw-medium mb-0"><a href="javascript:void(0);">Adventure</a></h6>
+                                <p>(16)</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-medium mb-0"><a href="javascript:void(0);">Vacation</a></h6>
+                                <p>(20)</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="fw-medium mb-0"><a href="javascript:void(0);">Tips</a></h6>
+                                <p>(15)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Categories -->
+
+                    <!-- Related Posts -->
+                    <div class="card mb-3">
+                        <div class="card-header border-0 pb-0">
+                            <div class="pb-3 border-bottom">
+                                <h5><i class="ti ti-brand-blogger text-primary fs-16 me-2"></i>Related Posts</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pt-3">
+                            <div class="blog-post mb-3">
+                                <div class="d-flex align-items-center">
+                                    <a [routerLink]="routes.blogDetails" class="avatar avatar-xxl flex-shrink-0 me-2">
+                                        <img src="assets/img/blog/blog-09.jpg" class="rounded" alt="Img">
+                                    </a>
+                                    <div>
+                                        <a [routerLink]="routes.blogDetails" class="two-line-ellipsis fs-14 fw-medium">How to Travel on a Budget: Affordable Destinations & Tips</a>
+                                        <div class="d-flex align-items-center mt-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center border-end pe-2 me-2">
+                                                <span class="avatar avatar-xs me-1">
+                                                    <img src="assets/img/users/user-01.jpg" class="blog-user-img rounded-circle border border-light" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate">Bryan</p>
+                                            </a>
+                                            <p class="fs-14 text-truncate"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-post mb-3">
+                                <div class="d-flex align-items-center">
+                                    <a [routerLink]="routes.blogDetails" class="avatar avatar-xxl flex-shrink-0 me-2">
+                                        <img src="assets/img/blog/blog-05.jpg" class="rounded" alt="Img">
+                                    </a>
+                                    <div>
+                                        <a [routerLink]="routes.blogDetails" class="two-line-ellipsis fs-14 fw-medium">The Ultimate Guide to Solo Travel: Tips for First-Time Travelers</a>
+                                        <div class="d-flex align-items-center mt-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center border-end pe-2 me-2">
+                                                <span class="avatar avatar-sm me-1">
+												<img src="assets/img/users/user-03.jpg" class="blog-user-img rounded-circle border border-light" alt="img">
+											</span>
+                                                <p class="fs-14 text-truncate">Michell</p>
+                                            </a>
+                                            <p class="fs-14 text-truncate"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-post">
+                                <div class="d-flex align-items-center">
+                                    <a [routerLink]="routes.blogDetails" class="avatar avatar-xxl flex-shrink-0 me-2">
+                                        <img src="assets/img/blog/blog-06.jpg" class="rounded" alt="Img">
+                                    </a>
+                                    <div>
+                                        <a [routerLink]="routes.blogDetails" class="two-line-ellipsis fs-14 fw-medium">Top 10 Breath taking Destinations You Must Visit in 2025</a>
+                                        <div class="d-flex align-items-center mt-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center border-end pe-2 me-2">
+                                                <span class="avatar avatar-xs me-1">
+													<img src="assets/img/users/user-04.jpg" class="blog-user-img rounded-circle border border-light" alt="img">
+												</span>
+                                                <p class="fs-14 text-truncate">Bradfield</p>
+                                            </a>
+                                            <p class="fs-14 text-truncate"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Related Posts -->
+
+                    <!-- Popular Tags -->
+                    <div class="card mb-0">
+                        <div class="card-header border-0 pb-0">
+                            <div class="pb-3 border-bottom">
+                                <h5><i class="isax isax-tag text-primary fs-16 me-2"></i>Popular Tags</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pt-3 pb-2">
+                            <div class="d-flex align-items-center flex-wrap category-tag">
+                                <a href="javascript:void(0);" class="badge badge-md fw-normal me-2 mb-2">Luxury</a>
+                                <a href="javascript:void(0);" class="badge badge-md fw-normal me-2 mb-2">Travel</a>
+                                <a href="javascript:void(0);" class="badge badge-md fw-normal me-2 mb-2">Nature</a>
+                                <a href="javascript:void(0);" class="badge badge-md fw-normal mb-2">Photography</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Popular Tags -->
+                    </div>
+                </div>
+                <!-- /Sidebar -->
+
+
+
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->

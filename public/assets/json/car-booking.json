@@ -1,0 +1,116 @@
+{
+    "data":[
+        {
+            "img":"car-01.jpg",
+            "id": "#CB-1245",
+            "carName": "Volkswagen Amarok",
+            "carType": "Sedan",
+            "travellers": "2 Adults, 1 Child",
+            "days": "4 Days",
+            "price": "$1,569",
+            "date": "15 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"car-06.jpg",
+            "id": "#CB-3215",
+            "carName": "Toyota Camry SE 400",
+            "carType": "Hatchback",
+            "travellers": "2 Adults, 2 Child",
+            "days": "3 Days",
+            "price": "$1,745",
+            "date": "20 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"car-07.jpg",
+            "id": "#CB-4581",
+            "carName": "Ford Mustang 4.0 AT",
+            "carType": "Coupe",
+            "travellers": "2 Adults, 1 Child",
+            "days": "2 Days",
+            "price": "$2,160",
+            "date": "04 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"car-08.jpg",
+            "id": "#CB-6545",
+            "carName": "Ferrari 458 MM Special",
+            "carType": "SUV",
+            "travellers": "1 Adult, 1 Child",
+            "days": "2 Days",
+            "price": "$1,840",
+            "date": "17 Jun 2025",
+            "status": "Pending"
+        },
+        {
+            "img":"car-09.jpg",
+            "id": "#CB-3256",
+            "carName": "Mercedes-benz",
+            "carType": "Sports",
+            "travellers": "2 Adults, 1 Child",
+            "days": "3 Days",
+            "price": "$1,450",
+            "date": "25 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img":"car-10.jpg",
+            "id": "#CB-3654",
+            "carName": "BMW 3.0 Gran Turismo",
+            "carType": "Hatchback",
+            "travellers": "3 Adults, 2 Child",
+            "days": "4 Days",
+            "price": "$1,600",
+            "date": "02 Jul 2025",
+            "status": "Cancelled"
+        },
+        {
+            "img":"car-11.jpg",
+            "id": "#CB-1458",
+            "carName": "Infiniti QX60",
+            "carType": "Hatchback",
+            "travellers": "2 Adults, 2 Child",
+            "days": "5 Days",
+            "price": "$2,380",
+            "date": "12 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "img":"car-12.jpg",
+            "id": "#CB-6589",
+            "carName": "Toyota 86 Coupe",
+            "carType": "Sedan",
+            "travellers": "2 Adults, 1 Child",
+            "days": "3 Days",
+            "price": "$1,400",
+            "date": "26 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "img":"car-13.jpg",
+            "id": "#CB-2315",
+            "carName": "Jeep Wrangler",
+            "carType": "Coupe",
+            "travellers": "2 Adults, 2 Child",
+            "days": "2 Days",
+            "price": "$1,810",
+            "date": "10 Aug 2025",
+            "status": "Completed"
+        },
+        {
+            "img":"car-14.jpg",
+            "id": "#CB-5414",
+            "carName": "Jaguar XK",
+            "carType": "Sedan",
+            "travellers": "3 Adults, 1 Child",
+            "days": "2 Days",
+            "price": "$1,450",
+            "date": "22 Aug 2025",
+            "status": "Completed"
+        }
+    ],
+    "totalData":10
+    
+}

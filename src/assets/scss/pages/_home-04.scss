@@ -1,0 +1,512 @@
+/*============================
+  36.home-04
+============================*/
+
+.hero-section-four {
+    background-image: url('../../../../public/assets/img/banner/flight-banner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    position: relative;
+    .hero-content {
+        padding: 120px 0;
+        z-index: 1;
+        position: relative;
+        @include respond-below(md) {
+            padding: 60px 0;
+        }
+        h1 {
+            .flight-icon {
+                position: relative;
+                display: inline-block;
+                img {
+                    animation: flight-motion 4s linear infinite;
+                }
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    @include transform(translate(-50%, -50%));
+                    width: 158px;
+                    height: 45px;
+                    @include rounded(40px);
+                    background: $primary;
+                    z-index: -1;
+                }
+            }
+        }
+        .video-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: $white;
+            color: $gray-600;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            justify-content: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            z-index: 2;
+            margin: 110px auto 20px;
+            @include respond-below(md) {
+                margin-top: 40px;
+            }
+        }
+        .video-effect {
+            position: relative;
+            color: $gray-600;
+            &::before,
+            &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 52px;
+                height: 52px;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                box-shadow: 0 0 0 0 rgba($white, 0.4);
+                animation: ripple 3s infinite;
+            }
+            &::before {
+                animation-delay: 0.9s;
+            }
+            &::after {
+                animation-delay: 0.6s;
+            }
+        }
+    }
+    &::before {
+        content: "";
+        background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 100%);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+@keyframes flight-motion {
+    0% {
+        transform: translateX(0) translateY(-5px);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(10px) translateY(10px);
+        opacity: 1;
+    }
+    75% {
+        transform: translateX(5px) translateY(5px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0) translateY(-5px);
+        opacity: 1;
+    }
+}
+.banner-search-four {
+    position: relative;
+    margin-top: -100px;
+    z-index: 2;
+    @include respond-below(md) {
+        margin-top: -60px;
+    }
+}
+.section-header {
+    &.section-header-four {
+        h2 {
+            span {
+                position: relative;
+
+                &::before {
+                    width: 100%;
+                    height: 10px;
+                    content: "";
+                    background: $primary;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    clip-path: polygon(0 0, 100% 50%, 100% 100%, 0% 100%);
+                }
+            }
+        }
+    }
+}
+.faq-four {
+    .accordion-item {
+        &.show {
+            background: $white;
+            box-shadow: $box-shadow;
+            @include rounded(10px);
+            border: 0;
+            .accordion-button {
+                padding-bottom: 8px;
+                color: $primary;
+
+                &::after {
+                    color: $primary;
+                }
+            }
+        }
+        .accordion-button {
+            color: $gray-900;
+            font-size: $font-size-16;
+            padding: 20px;
+            &::after {
+                font-size: $font-size-16;
+            }
+        }
+        .accordion-body {
+            padding: 0 20px 20px;
+        }
+    }
+}
+.client-section-four {
+    position: relative;
+    padding: 0;
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        background: $light-200;
+        height: 50%;
+        width: 100%;
+    }
+}
+.business-wrap {
+    position: relative;
+    overflow: hidden;
+    @include rounded(20px);
+    z-index: 1;
+    margin-top: 60px;
+    @include respond-below(lg) {
+        margin-top: 50px;
+    }
+    .business-info {
+        padding: 43px 0 43px 100px;
+        @include respond-below(xxl) {
+            padding-left: 80px;
+        }
+        @include respond-below(xl) {
+            padding-left: 43px;
+        }
+        @include respond-below(lg) {
+            padding: 40px;
+        }
+    }
+    &::before {
+        position: absolute;
+        content: "";
+        top: -90px;
+        right: 100px;
+        width: 300px;
+        height: 600px;
+        background: $primary;
+        @include transform(rotate(-24deg));
+        z-index: -1;
+    }
+    .business-img {
+        @include respond-below(lg) {
+            display: none;
+        }
+    }
+}
+.about-section-four {
+    position: relative;
+    overflow: hidden;
+}
+.flight-about {
+    position: relative;
+    z-index: 1;
+    @include transition(all 0.9s);
+    .flight-bg {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 90%;
+        height: 100%;
+        z-index: -1;
+        text-align: end;
+    }
+    &:hover {
+        @include transition(all 0.9s);
+
+        &>img {
+            animation: flight-motion 4s linear infinite;
+            @include transition(all 0.9s);
+        }
+    }
+    @include respond-below(md) {
+        display: none;
+    }
+}
+.flight-bg-01 {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 171px;
+    z-index: -1;
+}
+.flight-bg-02 {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    @include transform(translateY(-50%));
+    width: 171px;
+    z-index: -1;
+}
+.blog-section-four {
+    .blog-item {
+        .blog-img {
+            &::before {
+                background: linear-gradient(180.13deg, rgba(0, 0, 0, 0) 36.74%, #000000 99.89%);
+            }
+        }
+        .blog-date {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: $white;
+            @include rounded(5px);
+            padding: 4px;
+            z-index: 1;
+            width: 60px;
+            height: 60px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+        .blog-info {
+            .badge {
+                position: unset;
+                @include rounded(34px);
+                font-weight: $font-weight-normal;
+            }
+        }
+    }
+}
+.location-wrap {
+    position: relative;
+    @include rounded(20px);
+    @include transition(all 0.9s);
+    overflow: hidden;
+    &::before {
+        content: "";
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+        left: 0;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        @include rounded(20px);
+        z-index: 1;
+    }
+    img {
+        @include rounded(20px);
+        transform: scale(1);
+        @include transition(all 0.9s);
+    }
+    .loc-name {
+        display: inline-block;
+        @include rounded(10px);
+        font-weight: $font-weight-medium;
+        padding: 4px 8px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform(translate(-50%, -50%));
+        @include transition(all 0.9s);
+        z-index: 2;
+    }
+    .loc-view {
+        width: 44px;
+        height: 44px;
+        @include rounded(50%);
+        font-size: $font-size-24;
+        background: $white;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        @include transform(translate(-50%, -50%));
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        @include transition(all 0.9s);
+        opacity: 0;
+        z-index: 2;
+        &:hover {
+            background: $primary;
+            color: $white;
+        }
+    }
+    &:hover {
+        @include transition(all 0.9s);
+        .loc-name {
+            opacity: 0;
+            top: 70%;
+        }
+        .loc-view {
+            opacity: 1;
+            top: 50%;
+        }
+        img {
+            transform: scale(1.2);
+        }
+        .loc-view-bottom {
+            background: $primary;
+            color: $white;
+        }
+    }
+}
+.success-icon {
+    position: absolute;
+    top: -90px;
+    right: 50px;
+
+    @include respond-below(lg) {
+        display: none;
+    }
+}
+.success-wrap {
+    max-width: 415px;
+}
+.testimonial-success {
+    position: relative;
+    .testimonial-bg-03 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform(translate(-50%, -50%));
+        width: 250px;
+        z-index: -1;
+    }
+}
+.testimonial-bg-01 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 500px;
+    height: 500px;
+    z-index: -1;
+}
+.testimonial-bg-02 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    z-index: -1;
+}
+.package-sec {
+    padding-top: 36px;
+
+    @include respond-below(lg) {
+        padding-top: 26px;
+    }
+}
+.client-sec {
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+    @include rounded(20px);
+    padding: 60px;
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 0px 0 0 0;
+        transform-origin: left;
+        transform: skewY(1.5deg);
+        background: $primary;
+        @include rounded(20px);
+    }
+    @include respond-below(lg) {
+        padding: 40px;
+    }
+
+    @include respond-below(md) {
+        padding: 30px;
+    }
+}
+.flight-expert {
+    border: 1px solid $border-color;
+    @include rounded(10px);
+    position: relative;
+    padding: 20px;
+    &:hover {
+        box-shadow: $box-shadow;
+    }
+    &::before {
+        content: "";
+        background: $light-200;
+        height: 92px;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        @include rounded(10px 10px 0 0);
+    }
+    .expert-img {
+        width: 120px;
+        height: 120px;
+        @include rounded(50%);
+        background: $white;
+        border: 1px solid $border-color;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        margin: 0 auto 16px;
+        img {
+            width: auto;
+            height: auto;
+        }
+    }
+    .fav-icon {
+        width: 24px;
+        height: 24px;
+        font-size: $font-size-14;
+        color: $light;
+        background: $white;
+        @include rounded(50%);
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        &:hover,
+        &.selected {
+            color: $primary;
+        }
+    }
+}

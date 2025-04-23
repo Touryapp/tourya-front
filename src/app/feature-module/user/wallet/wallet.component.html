@@ -1,0 +1,360 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-01 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Wallet</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Wallet</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+
+            <div class="row">
+
+                <!-- Sidebar -->
+                <div class="col-xl-3 col-lg-4 ">
+                    <app-user-dashboard/>
+                </div>
+                <!-- /Sidebar -->
+
+                <!-- Wallet -->
+                <div class="col-xl-9 col-lg-8">
+                    <div class="row">
+
+                        <!-- Wallet List -->
+                        <div class="col-xl-5 col-lg-12 d-flex">
+                            <div class="row flex-fill">
+                                <div class="col-xl-6 col-lg-6 col-md-6  d-flex">
+                                    <div class="card shadow-none mb-4 flex-fill">
+                                        <div class="card-body">
+                                            <span class="avatar avatar-lg rounded-circle bg-primary mb-3"><i class="isax isax-calendar-15 text-white"></i></span>
+                                            <div class="mb-3">
+                                                <p class="mb-0 text-truncate line-ellipsis-2">Wallet Balance</p>
+                                                <h4>$4596</h4>
+                                            </div>
+                                            <p class="fs-14"><span class="text-teal fw-medium">+8%</span> last Month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6  d-flex">
+                                    <div class="card shadow-none mb-4 flex-fill">
+                                        <div class="card-body">
+                                            <span class="avatar avatar-lg rounded-circle bg-secondary mb-3"><i class="isax isax-money-send5 text-white"></i></span>
+                                            <div class="mb-3">
+                                                <p class="mb-0 text-truncate line-ellipsis-2">Total Credit</p>
+                                                <h4>$15659</h4>
+                                            </div>
+                                            <p class="fs-14"><span class="text-danger fw-medium">-6%</span> last Month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6  d-flex">
+                                    <div class="card shadow-none mb-4 flex-fill">
+                                        <div class="card-body">
+                                            <span class="avatar avatar-lg rounded-circle bg-purple mb-3"><i class="isax isax-money-time5 text-white"></i></span>
+                                            <div class="mb-3">
+                                                <h4>$16598</h4>
+                                                <p class="mb-0">Total Debit</p>
+                                            </div>
+                                            <p class="fs-14"><span class="text-teal fw-medium">+9%</span> last Month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6  d-flex">
+                                    <div class="card shadow-none mb-4 flex-fill">
+                                        <div class="card-body">
+                                            <span class="avatar avatar-lg rounded-circle bg-teal mb-3"><i class="isax isax-money-time5 text-white"></i></span>
+                                            <div class="mb-3">
+                                                <h4>60</h4>
+                                                <p class="mb-0">Transactions</p>
+                                            </div>
+                                            <p class="fs-14"><span class="text-teal fw-medium">+7%</span> last Month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Wallet List -->
+
+                        <!-- Wallet -->
+                        <div class="col-xl-7 col-lg-12 d-flex">
+                            <div class="card payment-details flex-fill mb-4">
+                                <div class="card-header">
+                                    <h5>Wallet</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Add Amount</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="tab-pane fade active show" id="wallet">
+                                        <div class="d-flex align-items-center  flex-wrap mb-1">
+                                            <h6 class="fs-16 me-3 mb-2">Payment Type</h6>
+                                            <div class="d-flex align-items-center flex-wrap payment-form">
+                                                <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                    <input class="form-check-input mt-0" type="radio" name="Radio" id="credit-card" value="credit-card" checked (click)="onPayment()">
+                                                    <label class="form-check-label fs-14 ms-2" for="credit-card">
+                                                        Credit / Debit Card
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                    <input class="form-check-input mt-0" type="radio" name="Radio" id="paypal" value="paypal" (click)="onPayment1()">
+                                                    <label class="form-check-label fs-14 ms-2" for="paypal">
+                                                        Paypal
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center me-0 mb-2">
+                                                    <input class="form-check-input mt-0" type="radio" name="Radio" id="stripe" value="stripe" (click)="onPayment2()">
+                                                    <label class="form-check-label fs-14 ms-2" for="stripe">
+                                                        Stripe
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="credit-card-details " [ngStyle]="{'display':isPayment?'block':'none'}">
+                                            <div class="card-form">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <label class="form-label">Card Holder Name</label>
+                                                            <div class="user-icon">
+                                                                <span class="input-icon fs-14"><i class="isax isax-user"></i></span>
+                                                                <input type="email" class="form-control ">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <label class="form-label">Card Number</label>
+                                                            <div class="user-icon">
+                                                                <span class="input-icon fs-14"><i class="isax isax-card-tick"></i></span>
+                                                                <input type="email" class="form-control ">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Expire Date</label>
+                                                            <div class="user-icon">
+                                                                <span class="input-icon fs-14"><i class="isax isax-calendar-2"></i></span>
+                                                                <input type="email" class="form-control datetimepicker">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">CVV</label>
+                                                            <div class="user-icon">
+                                                                <span class="input-icon fs-14"><i class="isax isax-check"></i></span>
+                                                                <input type="email" class="form-control ">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Paypal -->
+                                        <div class="paypal-details" [ngStyle]="{'display':isPayment1?'block':'none'}">
+                                            <div class="mb-3">
+                                                <h6 class="fs-16 ">Payment With Paypal</h6>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email Address</label>
+                                                        <div class="user-icon">
+                                                            <span class="input-icon fs-14"><i class="isax isax-sms"></i></span>
+                                                            <input type="email" class="form-control ">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Password</label>
+                                                        <div class="pass-group input-icon">
+                                                            <span class="input-icon-addon fs-14">
+                                                                <i class="isax isax-lock"></i>
+                                                              </span>
+                                                            <input
+                                                            [type]="password[0] ? 'text' : 'password'"
+                                                            class="pass-input form-control"
+                                                            placeholder="Enter Password"
+                                                          />
+                                                          <span
+                                                            class="isax toggle-password fs-14"
+                                                            [ngClass]="password[0] ? 'isax-eye' : 'isax-eye-slash'"
+                                                            (click)="togglePassword(0)"
+                                                            (keydown.enter)="togglePassword(0)"
+                                                            tabindex="0"
+                                                          ></span>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Paypal -->
+
+                                        <!-- Stripe -->
+                                        <div class="stripe-details" [ngStyle]="{'display':isPayment2?'block':'none'}">
+                                            <div class="mb-3">
+                                                <h6 class="fs-16">Payment With Stripe</h6>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email Address</label>
+                                                        <div class="user-icon">
+                                                            <span class="input-icon fs-14"><i class="isax isax-sms"></i></span>
+                                                            <input type="email" class="form-control ">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Password</label>
+                                                        <div class="pass-group input-icon">
+                                                            <span class="input-icon-addon fs-14">
+                                                                <i class="isax isax-lock"></i>
+                                                              </span>
+                                                            <input
+                                                            [type]="password[1] ? 'text' : 'password'"
+                                                            class="pass-input form-control"
+                                                            placeholder="Enter Password"
+                                                          />
+                                                          <span
+                                                            class="isax toggle-password fs-14"
+                                                            [ngClass]="password[1] ? 'isax-eye' : 'isax-eye-slash'"
+                                                            (click)="togglePassword(1)"
+                                                            (keydown.enter)="togglePassword(1)"
+                                                            tabindex="0"
+                                                          ></span>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Stripe -->
+                                        
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <a href="javascript:void(0);" class="btn btn-primary">Add Payment</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Wallet -->
+
+                    </div>
+
+                    <!-- Transactions -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3">
+                                <div>
+                                    <h6>Transactions</h6>
+                                    <p class="fs-14">No of Transactions : 60</p>
+                                </div>
+                                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                                    <app-date-range-picker/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Transactions -->
+
+                    <!-- Transactions List -->
+                    <div class="card hotel-list mb-0">
+                        <div class="card-body p-0">
+                            <div class="list-header d-flex align-items-center justify-content-between flex-wrap">
+                                <h6>Transactions List</h6>
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <div class="input-icon-start  me-2 position-relative">
+                                        <span class="icon-addon">
+										<i class="isax isax-search-normal-1 fs-14"></i>
+									</span>
+                                    <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }"
+                                    (ngModelChange)="searchData(searchDataValue)" type="search" class="form-control form-control-sm"
+                                    placeholder="Search" />
+                                    </div>
+                                    <div class="dropdown me-3">
+                                        <a href="javascript:void(0);" class="dropdown-toggle text-gray-6 btn  rounded border d-inline-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+										Status
+									</a>
+                                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Completed</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Pending</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Cancelled</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table matSort (matSortChange)="sortData($event)" class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th mat-sort-header="id">Payment Type</th>
+                                            <th mat-sort-header="flight">Credit / Debit</th>
+                                            <th mat-sort-header="ticket">Date</th>
+                                            <th mat-sort-header="fromto">Amount</th>
+                                            <th mat-sort-header="price">Balance</th>
+                                            <th mat-sort-header="status">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (data of tableData; track data; let i = $index) {
+                                            <tr>
+                                                <td class="text-gray-9 fw-medium">{{data.paymentType}}</td>
+                                                <td>{{data.creditOrDebit}}</td>
+                                                <td>{{data.date}}</td>
+                                                <td><span class="text-danger">{{data.amount}}</span></td>
+                                                <td>{{data.balance}}</td>
+                                                <td>
+                                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                                    [ngClass]="data.status==='Pending'?'badge-secondary': data.status==='Cancelled'?'badge-danger': data.status==='Completed'?'badge-success': ''">
+                                                    <i class="fa-solid fa-circle fs-5 me-1"></i>{{data.status}}</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                        @if (tableData.length === 0) {
+                                            <tr>
+                                            <td colspan="10">
+                                                <h5 style="text-align: center">No data found</h5>
+                                            </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Transactions List -->
+
+                </div>
+                <!-- /Wallet -->
+
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->

@@ -1,0 +1,117 @@
+/*============================
+  28.footer
+============================*/
+
+footer {
+    background: $light-500;
+    .footer-top {
+        padding: 40px 0 0;
+        .footer-widget {
+            margin-bottom: 20px;
+            h5 {
+                margin-bottom: 22px;
+                position: relative;
+                &::before {
+                    content: "";
+                    position: absolute;
+                    bottom: -6px;
+                    left: 0;
+                    width: 38px;
+                    height: 2px;
+                    background: $primary;
+                    @include rounded(30px);
+                }
+            }
+            .footer-menu {
+                li {
+                    margin-bottom: 8px;
+                    a {
+                        position: relative;
+                        color: $text-color;
+                        &:hover {
+                            color: $primary;
+                        }
+                    }
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+    .footer-wrap {
+        @include rounded(10px);
+        box-shadow: $box-shadow;
+        padding: 20px 20px 4px;
+        margin: 20px 0 24px;
+    }
+    .footer-bottom {
+        background: $light;
+        padding-top: 10px;
+        p {
+            margin-bottom: 10px;
+        }
+        .card-links {
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            li {
+                a {
+                    position: relative;
+                    margin-right: 8px;
+                    color: $gray-700;
+                }
+                &:last-child {
+                    a {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+.social-icon {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 10px;
+    li {
+        margin-right: 12px;
+        padding-right: 12px;
+        position: relative;
+        &::after {
+            content: "";
+            width: 2px;
+            height: 25px;
+            background: $light-500;
+            position: absolute;
+            top: 0;
+            right: 0;
+            @include transform(rotate(15deg));
+        }
+        a {
+            color: $gray-900;
+            &:hover {
+                color: $primary;
+            }
+        }
+        &:last-child {
+            margin-right: 0;
+            padding-right: 0;
+            &::after {
+                content: none;
+            }
+        }
+    }
+}
+.footer-logo-dark {
+    display: none;
+}

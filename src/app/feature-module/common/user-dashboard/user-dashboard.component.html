@@ -1,0 +1,64 @@
+    <!-- Sidebar -->
+    
+        <div class="card user-sidebar mb-4 mb-lg-0 theiaStickySidebar">
+            <div class="card-header user-sidebar-header">
+                <div class="profile-content rounded-pill">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class=" d-flex align-items-center justify-content-center">
+                            <img src="assets/img/users/user-01.jpg" alt="image" class="img-fluid avatar avatar-lg rounded-circle me-1">
+                            <div>
+                                <h6 class="fs-16">Jeffrey Wilson</h6>
+                                <span class="fs-14 text-gray-6">Since 10 May 2025</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <a [href]="routes.profileSettings" class="p-1 rounded-circle btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-edit-2 fs-14"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body user-sidebar-body">
+                <ul>
+                    @for (mainTittle of sideBar2; track mainTittle) {
+                        <li>
+                            <span class="fs-14 text-gray-3 fw-medium mb-2">{{mainTittle.tittle}}</span>
+                        </li>
+                        @for (menu of mainTittle.menu; track menu) {
+                            @if (menu.hasSubRoute === false) {
+                                <li>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a [href]="menu.route" class="d-flex align-items-center" [class.active]="page===menu.base || page===menu.base2 || page===menu.base3 || page===menu.base4 || page===menu.base5"  [ngClass]="{ 'subdrop': menu.showSubRoute === false }" (click)="expandSubMenus(menu)">
+                                            <i class="isax" [class]="menu.icon"></i> {{menu.menuValue}}
+                                        </a>
+                                        <div class="message-content">
+                                            <span *ngIf="menu.count==='1'" class="msg-count rounded-circle">02</span>
+                                            <span *ngIf="menu.count==='2'" class="msg-count bg-purple rounded-circle">05</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                            @if (menu.hasSubRoute === true) {
+                                <li class="submenu" >
+                                    <a href="javascript:void(0);" class="d-block" [class.active]="page===menu.base || page===menu.base2 || page===menu.base3 || page===menu.base4 || page===menu.base5"   [ngClass]="{ 'subdrop': menu.showSubRoute === true }" (click)="expandSubMenus(menu)">
+                                        <i class="isax" [class]="menu.icon"></i>
+                                        <span>{{menu.menuValue}}</span><span class="menu-arrow" ></span>
+                                    </a>
+                                    <ul [ngClass]="menu.showSubRoute === true ? 'show-sub-menu' : 'hide-sub-menu'">
+                                        @for (subMenus of menu.subMenus; track subMenus) {
+                                            <li >
+                                                <a [href]="subMenus.route" class="fs-14 d-inline-flex align-items-center" [class.active]="page===subMenus.base" >{{subMenus.menuValue}}</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    }
+                    
+                    </ul>
+            </div>
+        </div>
+
+    <!-- /Sidebar -->

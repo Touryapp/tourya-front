@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "type": "Hotel",
+      "enquiryFor": "Vivanta",
+      "name": "Adrian Markel",
+      "status": "Pending",
+      "inquiredOn": "15 May 2025"
+    },
+    {
+      "type": "Cars",
+      "enquiryFor": "Toyota Camry SE 400",
+      "name": "Timothy Brewer",
+      "status": "Completed",
+      "inquiredOn": "15 May 2025"
+    },
+    {
+      "type": "Flight",
+      "enquiryFor": "SkyBound 102",
+      "name": "Mark Arrington",
+      "status": "Completed",
+      "inquiredOn": "15 May 2025"
+    },
+    {
+      "type": "Cruise",
+      "enquiryFor": "Super Aquamarine",
+      "name": "Kenneth Palmer",
+      "status": "Completed",
+      "inquiredOn": "15 May 2025"
+    },
+    {
+      "type": "Tours",
+      "enquiryFor": "PlayPalooza Part",
+      "name": "Ronald Moultrie",
+      "status": "Completed",
+      "inquiredOn": "15 May 2025"
+    }
+  ],
+  "totalData": 5
+}

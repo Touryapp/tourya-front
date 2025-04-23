@@ -1,0 +1,126 @@
+{
+    "data":[
+        {
+            "id": "#CB-1245",
+            "carName": "Volkswagen Amarok",
+            "carType": "Sedan",
+            "bookedBy": "Lynwood Dickens",
+            "travellers": "2 Adults, 1 Child",
+            "days": "4 Days",
+            "price": "$1,569",
+            "bookedOn": "15 May 2025",
+            "status": "Upcoming",
+            "location":"Barcelona"
+        },
+        {
+            "id": "#CB-3215",
+            "carName": "Toyota Camry SE 400",
+            "carType": "Hatchback",
+            "bookedBy": "James Osborne",
+            "travellers": "2 Adults, 2 Child",
+            "days": "3 Days",
+            "location":"California",
+            "price": "$1,745",
+            "bookedOn": "20 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CB-4581",
+            "carName": "Ford Mustang 4.0 AT",
+            "carType": "Coupe",
+            "bookedBy": "Steve Grieve",
+            "travellers": "2 Adults, 1 Child",
+            "days": "2 Days",
+            "location":"Newyork",
+            "price": "$2,160",
+            "bookedOn": "04 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CB-6545",
+            "carName": "Ferrari 458 MM Special",
+            "carType": "SUV",
+            "bookedBy": "Alene Downing",
+            "travellers": "1 Adult, 1 Child",
+            "days": "2 Days",
+            "location":"Florida",
+            "price": "$1,840",
+            "bookedOn": "17 Jun 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#CB-3256",
+            "carName": "Mercedes-benz",
+            "carType": "Sports",
+            "bookedBy": "Carol Gardner",
+            "travellers": "2 Adults, 1 Child",
+            "days": "3 Days",
+            "location":"Georgia",
+            "price": "$1,450",
+            "bookedOn": "25 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CB-3654",
+            "carName": "BMW 3.0 Gran Turismo",
+            "carType": "Hatchback",
+            "bookedBy": "Enrique Archer",
+            "travellers": "3 Adults, 2 Child",
+            "days": "4 Days",
+            "location":"Las Vegas",
+            "price": "$1,600",
+            "bookedOn": "02 Jul 2025",
+            "status": "Cancelled"
+        },
+        {
+            "id": "#CB-1458",
+            "carName": "Infiniti QX60",
+            "carType": "Hatchback",
+            "bookedBy": "Weston Carrasco",
+            "travellers": "2 Adults, 2 Child",
+            "days": "5 Days",
+            "location":"Texas",
+            "price": "$2,380",
+            "bookedOn": "12 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#CB-6589",
+            "carName": "Toyota 86 Coupe",
+            "carType": "Sedan",
+            "bookedBy": "Bonnie Coleman",
+            "travellers": "2 Adults, 1 Child",
+            "days": "3 Days",
+            "location":"California",
+            "price": "$1,400",
+            "bookedOn": "26 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#CB-2315",
+            "carName": "Jeep Wrangler",
+            "carType": "Coupe",
+            "bookedBy": "Aurora Conklin",
+            "travellers": "2 Adults, 2 Child",
+            "days": "2 Days",
+            "location":"Georgia",
+            "price": "$1,810",
+            "bookedOn": "10 Aug 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#CB-5414",
+            "carName": "Jaguar XK",
+            "carType": "Sedan",
+            "bookedBy": "Robin Banks",
+            "travellers": "3 Adults, 1 Child",
+            "days": "2 Days",
+            "location":"Las Vegas",
+            "price": "$1,450",
+            "bookedOn": "22 Aug 2025",
+            "status": "Completed"
+        }
+    ],
+    "totalData":10
+    
+}

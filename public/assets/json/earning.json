@@ -1,0 +1,95 @@
+{
+    "data": [
+        {
+            "ID": "#IN-1245",
+            "InvoiceFor": "Hotel Atheena Plaza",
+            "Service": "Hotel",
+            "PaymentType": "Card",
+            "Date": "15 May 2025, 10:00 AM",
+            "Amount": "$11,569",
+            "Status": "Paid"
+        },
+        {
+            "ID": "#IN-3215",
+            "InvoiceFor": "Antonov-12",
+            "Service": "Flight",
+            "PaymentType": "Paypal",
+            "Date": "20 May 2025, 10:00 AM",
+            "Amount": "$12,543",
+            "Status": "Pending"
+        },
+        {
+            "ID": "#IN-4581",
+            "InvoiceFor": "The Queen of Ocean",
+            "Service": "Cruise",
+            "PaymentType": "Stripe",
+            "Date": "27 May 2025, 10:00 AM",
+            "Amount": "$14,697",
+            "Status": "Paid"
+        },
+        {
+            "ID": "#IN-6545",
+            "InvoiceFor": "Ford Mustang",
+            "Service": "Car",
+            "PaymentType": "Card",
+            "Date": "12 Jun 2025, 10:00 AM",
+            "Amount": "$10,528",
+            "Status": "Paid"
+        },
+        {
+            "ID": "#IN-5769",
+            "InvoiceFor": "PlayPalooza Part",
+            "Service": "Tour",
+            "PaymentType": "Stripe",
+            "Date": "18 Jun 2025, 10:00 AM",
+            "Amount": "$12,297",
+            "Status": "Paid"
+        },
+        {
+            "ID": "#IN-4742",
+            "InvoiceFor": "The Urban Retreat",
+            "Service": "Hotel",
+            "PaymentType": "Card",
+            "Date": "22 Jun 2025, 10:00 AM",
+            "Amount": "$18,349",
+            "Status": "Paid"
+        },
+        {
+            "ID": "#IN-9364",
+            "InvoiceFor": "Foodie Fiesta",
+            "Service": "Tour",
+            "PaymentType": "Stripe",
+            "Date": "16 Jul 2025, 10:00 AM",
+            "Amount": "$17,875",
+            "Status": "Paid"
+        },
+        {
+            "ID": "#IN-6184",
+            "InvoiceFor": "Nimbus 345",
+            "Service": "Flight",
+            "PaymentType": "Paypal",
+            "Date": "25 Jul 2025, 10:00 AM",
+            "Amount": "$15,175",
+            "Status": "Paid"
+        },
+        {
+            "ID": "#IN-8207",
+            "InvoiceFor": "The Grand Horizon",
+            "Service": "Hotel",
+            "PaymentType": "Card",
+            "Date": "14 Jul 2025, 10:00 AM",
+            "Amount": "$12,766",
+            "Status": "Cancelled"
+        },
+        {
+            "ID": "#IN-3854",
+            "InvoiceFor": "Mercedes-benz",
+            "Service": "Car",
+            "PaymentType": "Paypal",
+            "Date": "28 Aug 2025, 10:00 AM",
+            "Amount": "$13,496",
+            "Status": "Paid"
+        }
+    ],
+    "totalData": 10
+}

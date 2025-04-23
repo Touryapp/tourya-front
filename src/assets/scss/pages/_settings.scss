@@ -1,0 +1,83 @@
+/*============================
+  54.settings
+============================*/
+
+.settings {
+    box-shadow: none;
+    .card-body {
+        .settings-link {
+            margin-bottom: 16px;
+            a {
+                padding: 8px;
+                display: flex;
+                align-items: center;
+                margin-right: 16px;
+                font-size: $font-size-16;
+                font-weight: 500;
+                color: $gray-600;
+                &:last-child {
+                    margin-right: 0;
+                }
+                i {
+                    color: $gray-900;
+                }
+                &.active {
+                    color: $primary;
+                    border-bottom: 2px solid $primary;
+                    i {
+                        color: $primary;
+                    }
+                }
+                &:hover {
+                    color: $primary;
+                    i {
+                        color: $primary;
+                    }
+                }
+            }
+        }
+        .upload-btn {
+            padding: 5px 12px;
+            font-size: $font-size-13;
+            font-weight: 500;
+            color: $white;
+            background-color: $primary;
+            border-radius: 54px;
+        }
+        .security-content {
+            padding: 16px;
+            border-bottom: 1px solid $light;
+            .form-check-input {
+                height: 18px;
+            }
+        }
+        .notification-content {
+            padding: 16px;
+            border-bottom: 1px solid $light;
+        }
+        .preference-content {
+            padding: 15px;
+            border: 1px solid $light;
+            border-radius: 10px;
+        }
+        .integration-card {
+            box-shadow: none;
+            .card-body {
+                padding: 15px;
+                .integration-content {
+                    .icons {
+                        padding: 8px;
+                        background-color: $base-light;
+                        border-radius: 5px;
+                    }
+                }
+
+            }
+
+        }
+    }
+    .card-footer {
+        border: 0;
+        padding-top: 0;
+    }
+}

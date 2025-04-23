@@ -1,0 +1,66 @@
+/*============================
+  26.header-four
+============================*/
+
+.main-header {
+    &.main-header-four {
+        position: relative;
+        .header__hamburger {
+            .sidebar-menu {
+                color: $gray-900;
+            }
+        }
+        .header-nav{
+            .main-menu-wrapper{
+                padding: 10px 0;
+                .main-nav{
+                    > li{
+                        &.active, &:hover  {
+                            > a {
+                                color: $primary;
+                                i {
+                                    color: $primary;
+                                }
+                            }  
+                        }
+                       > a{
+                            color: $gray-900;
+                            i{
+                                color: $gray-500;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.header-topbar {
+    &.topbar-four {
+        background: $white;
+        border-bottom: 1px solid $light;
+        p {
+            color: $gray-600;
+        }
+        .dropdown {
+            & > a {
+                color: $gray-900;
+            }
+        }
+        @include respond-below(lg) {
+            display: none;
+        }
+    }
+}
+.header-four {
+    .header-btn {
+        .theme-toggle {
+            color: $gray-900;
+        }
+        .dropdown {
+            @include respond-below(md) {
+                display: none;
+            }
+        }
+    }  
+}

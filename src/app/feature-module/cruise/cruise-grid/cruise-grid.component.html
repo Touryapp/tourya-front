@@ -1,0 +1,1345 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-06 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Cruise</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item">Cruise</li>
+                            <li class="breadcrumb-item active" aria-current="page">Cruise Grid</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+
+            <!-- Cruise Search -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="banner-form">
+                        <form class="d-lg-flex">
+                            <div class="d-flex  form-info">
+                                <div class="form-item dropdown">
+                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                        <label class="form-label fs-14 text-default mb-1">City, Property name or Location</label>
+                                        <input type="text" class="form-control" value="Newyork">
+                                        <p class="fs-12 mb-0">USA</p>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-md p-0">
+                                        <div class="input-search p-3 border-bottom">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Search for City, Property name or Location">
+                                                <span class="input-group-text px-2 border-start-0"><i class="isax isax-search-normal"></i></span>
+                                            </div>
+                                        </div>
+                                        <ul>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">USA</h6>
+                                                    <p>2000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Japan</h6>
+                                                    <p>3000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Singapore</h6>
+                                                    <p>8000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Russia</h6>
+                                                    <p>8000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Germany</h6>
+                                                    <p>2000 Properties</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                    <input
+                                        type="text"
+                                        class="form-control datetimepicker"
+                                        bsDatepicker
+                                        [bsConfig]="{ adaptivePosition: true }"
+                                        placeholder="21-10-2024"
+                                        [bsValue]="bsValue"
+                                        [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                        />
+                                    <p class="fs-12 mb-0">Monday</p>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Check Out</label>
+                                    <input
+                                        type="text"
+                                        class="form-control datetimepicker"
+                                        bsDatepicker
+                                        [bsConfig]="{ adaptivePosition: true }"
+                                        placeholder="21-10-2024"
+                                        [bsValue]="bsValue"
+                                        [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                        />
+                                    <p class="fs-12 mb-0">Monday</p>
+                                </div>
+                                <div class="form-item dropdown">
+                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                        <label class="form-label fs-14 text-default mb-1">Guests</label>
+                                        <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
+                                        <p class="fs-12 mb-0">4 Adult, 2 Rooms</p>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-xl">
+                                        <h5 class="mb-3">Select Travelers &  Class</h5>
+                                        <div class="mb-3 border br-10 info-item pb-1">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Rooms</label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Adults</label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Children <span class="text-default fw-normal">( 2-12 Yrs )</span></label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 0-12 Yrs )</span></label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 border br-10 info-item pb-1">
+                                            <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room1" checked>
+                                                    <label class="form-check-label" for="room1">
+                                                        Single
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room2">
+                                                    <label class="form-check-label" for="room2">
+                                                        Double
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room3">
+                                                    <label class="form-check-label" for="room3">
+                                                        Delux
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room4">
+                                                    <label class="form-check-label" for="room4">
+                                                        Suite
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 border br-10 info-item pb-1">
+                                            <h6 class="fs-16 fw-medium mb-2">Property Type</h6>
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property1" checked>
+                                                    <label class="form-check-label" for="property1">
+                                                        Villa
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property2">
+                                                    <label class="form-check-label" for="property2">
+                                                        Condo
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property3">
+                                                    <label class="form-check-label" for="property3">
+                                                        Cabin
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property4">
+                                                    <label class="form-check-label" for="property4">
+                                                        Apartments
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Cancel</a>
+                                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary search-btn rounded">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /Cruise Search -->
+
+            <!-- Cruise Types -->
+            <div class="mb-2">
+                <div class="mb-3">
+                    <h5 class="mb-2">Choose type of Cruise you are interested</h5>
+                </div>
+                <div class="row">
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.cruiseGrid" class="avatar avatar-lg">
+                                <img src="assets/img/cruise/cruise-04.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.cruiseGrid">Luxury Cruise</a></h6>
+                                <p class="fs-14">216 Cruises</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.cruiseGrid" class="avatar avatar-lg">
+                                <img src="assets/img/cruise/cruise-02.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.cruiseGrid">Adventure Cruise</a></h6>
+                                <p class="fs-14">569 Cruises</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.cruiseGrid" class="avatar avatar-lg">
+                                <img src="assets/img/cruise/cruise-03.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.cruiseGrid">River Cruise</a></h6>
+                                <p class="fs-14">129 Cruises</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.cruiseGrid" class="avatar avatar-lg">
+                                <img src="assets/img/cruise/cruise-04.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.cruiseGrid">Family Cruise</a></h6>
+                                <p class="fs-14">150 Cruises</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.cruiseGrid" class="avatar avatar-lg">
+                                <img src="assets/img/cruise/cruise-05.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.cruiseGrid">Sailing Cruises</a></h6>
+                                <p class="fs-14">200 Cruises</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.cruiseGrid" class="avatar avatar-lg">
+                                <img src="assets/img/cruise/cruise-06.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.cruiseGrid">World Cruises</a></h6>
+                                <p class="fs-14">320 Cruises</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Cruise Types -->
+
+            <div class="row">
+
+                <!-- Sidebar -->
+                <div class="col-xl-3 col-lg-4 ">
+                    <div class="card filter-sidebar mb-4 mb-lg-0 theiaStickySidebar">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5>Filters</h5>
+                            <a href="javascript:void(0);" class="fs-14 link-primary">Reset</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <form>
+                                <div class="p-3 border-bottom">
+                                    <label class="form-label fs-16">Search by Cruise Type</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+											<i class="isax isax-search-normal"></i>
+										</span>
+                                        <input type="text" class="form-control" placeholder="Search by Cruise Type">
+                                    </div>
+                                </div>
+                                <div class="accordion accordion-list">
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-populars" aria-expanded="true" aria-controls="accordion-populars" role="button">
+                                                <i class="isax isax-ranking me-2 text-primary"></i>Popular
+                                            </div>
+                                        </div>
+                                        <div id="accordion-populars" class="accordion-collapse collapse show">
+                                            <div class="accordion-body pt-2">
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="popular1" type="checkbox" id="popular1" checked>
+                                                    <label class="form-check-label ms-2" for="popular1">
+                                                        Wi-Fi
+                                                    </label>
+                                                </div>
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="popular2" type="checkbox" id="popular2">
+                                                    <label class="form-check-label ms-2" for="popular2">
+                                                        Beverage Packages
+                                                    </label>
+                                                </div>
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="popular3" type="checkbox" id="popular3">
+                                                    <label class="form-check-label ms-2" for="popular3">
+                                                        Adventure
+                                                    </label>
+                                                </div>
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="popular4" type="checkbox" id="popular4">
+                                                    <label class="form-check-label ms-2" for="popular4">
+                                                        Spa & Wellness
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-popular" aria-expanded="true" aria-controls="accordion-popular" role="button">
+                                                <i class="isax isax-coin me-2 text-primary"></i>Price Per Night
+                                            </div>
+                                        </div>
+                                        <div id="accordion-popular" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="badge badge-xs badge-light text-gray-4">$200</span>
+                                                    <span class="badge badge-xs badge-light text-gray-4">$5695</span>
+                                                </div>
+                                                <div class="filter-range">
+                                                    <mat-slider min="200" max="5000" step="500" showTickMarks discrete [displayWith]="formatLabel1">
+                                                        <input  matSliderStartThumb [value]="startValue">
+                                                        <input  matSliderEndThumb [value]="endValue">
+                                                    </mat-slider>
+                                                </div>
+                                                <div class="filter-range-amount">
+                                                    <p class="fs-14">Range : <span class="text-gray-9 fw-medium">$200 - $5695</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-cabin" aria-expanded="true" aria-controls="accordion-cabin" role="button">
+                                                <i class="isax isax-airplane4 me-2 text-primary"></i>Cabin Types
+                                            </div>
+                                        </div>
+                                        <div id="accordion-cabin" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="more-content" [ngStyle]="{'height':isMore[0]? '203px' : '148px'}">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cabin1" type="checkbox" id="cabin1" checked>
+                                                        <label class="form-check-label ms-2" for="cabin1">
+                                                            Inside
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cabin2" type="checkbox" id="cabin2" checked>
+                                                        <label class="form-check-label ms-2" for="cabin2">
+                                                            Oceanview
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cabin3" type="checkbox" id="cabin3">
+                                                        <label class="form-check-label ms-2" for="cabin3">
+                                                            Balcony
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cabin4" type="checkbox" id="cabin4">
+                                                        <label class="form-check-label ms-2" for="cabin4">
+                                                            Suite
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cabin5" type="checkbox" id="cabin5">
+                                                        <label class="form-check-label ms-2" for="cabin5">
+                                                            Mini-Suite
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cabin6" type="checkbox" id="cabin6">
+                                                        <label class="form-check-label ms-2" for="cabin6">
+                                                            Family Cabin
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cabin7" type="checkbox" id="cabin7">
+                                                        <label class="form-check-label ms-2" for="cabin7">
+                                                            Penthouse Suite
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <a href="javascript:void(0);" class="more-view fw-medium fs-14" [ngStyle]="{'display':isMore[0]?'none':'block'}" (click)="showMore(0)">Show More</a>
+                                            <a href="javascript:void(0);" class="more-view fw-medium fs-14" [ngStyle]="{'display':isMore[0]?'block':'none'}" (click)="showMore(0)">Show Less</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-amenity" aria-expanded="true" aria-controls="accordion-amenity" role="button">
+                                                <i class="isax isax-candle me-2 text-primary"></i>Amenities
+                                            </div>
+                                        </div>
+                                        <div id="accordion-amenity" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="more-content" [ngStyle]="{'height':isMore[1]? '203px' : '148px'}">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="amenity1" type="checkbox" id="amenity1" checked>
+                                                        <label class="form-check-label ms-2" for="amenity1">
+                                                            Free Wifi
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="amenity2" type="checkbox" id="amenity2">
+                                                        <label class="form-check-label ms-2" for="amenity2">
+                                                            Casinos
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="amenity3" type="checkbox" id="amenity3" checked>
+                                                        <label class="form-check-label ms-2" for="amenity3">
+                                                            Pool
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="amenity4" type="checkbox" id="amenity4">
+                                                        <label class="form-check-label ms-2" for="amenity4">
+                                                            Fitness Centers
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="amenity5" type="checkbox" id="amenity5">
+                                                        <label class="form-check-label ms-2" for="amenity5">
+                                                            Theaters
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="amenity6" type="checkbox" id="amenity6">
+                                                        <label class="form-check-label ms-2" for="amenity6">
+                                                            Complimentary meals
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="amenity7" type="checkbox" id="amenity7">
+                                                        <label class="form-check-label ms-2" for="amenity7">
+                                                            Play Areas
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <a href="javascript:void(0);" class="more-view fw-medium fs-14" [ngStyle]="{'display':isMore[1]?'none':'block'}" (click)="showMore(1)">Show More</a>
+                                            <a href="javascript:void(0);" class="more-view fw-medium fs-14" [ngStyle]="{'display':isMore[1]?'block':'none'}" (click)="showMore(1)">Show Less</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3 pb-2">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-daylist" aria-expanded="true" aria-controls="accordion-daylist" role="button">
+                                                <i class="isax isax-timer me-2 text-primary"></i>Days
+                                            </div>
+                                        </div>
+                                        <div id="accordion-daylist" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="daylist1" type="checkbox" id="daylist1">
+                                                        <label class="form-check-label ms-2" for="daylist1">
+                                                            1 - 2 days
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="daylist2" type="checkbox" id="daylist2">
+                                                        <label class="form-check-label ms-2" for="daylist2">
+                                                            3 - 5 days
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="daylist3" type="checkbox" id="daylist3">
+                                                        <label class="form-check-label ms-2" for="daylist3">
+                                                            6 - 9 days
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="daylist4" type="checkbox" id="daylist4">
+                                                        <label class="form-check-label ms-2" for="daylist4">
+                                                            10+ days
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-meal" aria-expanded="true" aria-controls="accordion-meal" role="button">
+                                                <i class="isax isax-reserve me-2 text-primary"></i>Meal plans available
+                                            </div>
+                                        </div>
+                                        <div id="accordion-meal" class="accordion-collapse collapse show">
+                                            <div class="accordion-body pt-2">
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="meals1" type="checkbox" id="meals1">
+                                                    <label class="form-check-label ms-2" for="meals1">
+                                                        All inclusive
+                                                    </label>
+                                                </div>
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="meals2" type="checkbox" id="meals2">
+                                                    <label class="form-check-label ms-2" for="meals2">
+                                                        Breakfast
+                                                    </label>
+                                                </div>
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="meals3" type="checkbox" id="meals3">
+                                                    <label class="form-check-label ms-2" for="meals3">
+                                                        Lunch
+                                                    </label>
+                                                </div>
+                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="meals4" type="checkbox" id="meals4">
+                                                    <label class="form-check-label ms-2" for="meals4">
+                                                        Dinner
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-cruise" aria-expanded="true" aria-controls="accordion-cruise" role="button">
+                                                <i class="isax isax-home-2 me-2 text-primary"></i>Cruise Types
+                                            </div>
+                                        </div>
+                                        <div id="accordion-cruise" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="more-content" [ngStyle]="{'height':isMore[2]? '174px' : '148px'}">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cruise1" type="checkbox" id="cruise1" checked>
+                                                        <label class="form-check-label ms-2" for="cruise1">
+                                                            Luxury Cruise
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cruise2" type="checkbox" id="cruise2" checked>
+                                                        <label class="form-check-label ms-2" for="cruise2">
+                                                            Adventure Cruise
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cruise3" type="checkbox" id="cruise3">
+                                                        <label class="form-check-label ms-2" for="cruise3">
+                                                            Expedition Cruise
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cruise4" type="checkbox" id="cruise4" checked>
+                                                        <label class="form-check-label ms-2" for="cruise4">
+                                                            River Cruise
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cruise5" type="checkbox" id="cruise5">
+                                                        <label class="form-check-label ms-2" for="cruise5">
+                                                            Family Cruise
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="cruise6" type="checkbox" id="cruise6">
+                                                        <label class="form-check-label ms-2" for="cruise6">
+                                                            Economic Cruise
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <a href="javascript:void(0);" class="more-view fw-medium fs-14" [ngStyle]="{'display':isMore[2]?'none':'block'}" (click)="showMore(2)">Show More</a>
+                                            <a href="javascript:void(0);" class="more-view fw-medium fs-14" [ngStyle]="{'display':isMore[2]?'block':'none'}" (click)="showMore(2)">Show Less</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3 pb-2">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-guests" aria-expanded="true" aria-controls="accordion-guests" role="button">
+                                                <i class="isax isax-timer me-2 text-primary"></i>Guests
+                                            </div>
+                                        </div>
+                                        <div id="accordion-guests" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="guests1" type="checkbox" id="guests1">
+                                                        <label class="form-check-label ms-2" for="guests1">
+                                                            1 - 5
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="guests2" type="checkbox" id="guests2">
+                                                        <label class="form-check-label ms-2" for="guests2">
+                                                            5 - 10
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="guests3" type="checkbox" id="guests3">
+                                                        <label class="form-check-label ms-2" for="guests3">
+                                                            10 - 15
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="guests4" type="checkbox" id="guests4">
+                                                        <label class="form-check-label ms-2" for="guests4">
+                                                            15 - 20
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" name="guests5" type="checkbox" id="guests5">
+                                                        <label class="form-check-label ms-2" for="guests5">
+                                                            20+
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-brand" aria-expanded="true" aria-controls="accordion-brand" role="button">
+                                                <i class="isax isax-discount-shape me-2 text-primary"></i>Reviews
+                                            </div>
+                                        </div>
+                                        <div id="accordion-brand" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="review1" type="checkbox" id="review1">
+                                                    <label class="form-check-label ms-2" for="review1">
+                                                        <span class="rating d-flex align-items-center">
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary"></i>
+                                                            <span class="ms-2">5 Star</span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="review2" type="checkbox" id="review2">
+                                                    <label class="form-check-label ms-2" for="review2">
+                                                        <span class="rating d-flex align-items-center">
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary"></i>
+                                                            <span class="ms-2">4 Star</span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="review3" type="checkbox" id="review3">
+                                                    <label class="form-check-label ms-2" for="review3">
+                                                        <span class="rating d-flex align-items-center">
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary"></i>
+                                                            <span class="ms-2">3 Star</span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="review4" type="checkbox" id="review4">
+                                                    <label class="form-check-label ms-2" for="review4">
+                                                        <span class="rating d-flex align-items-center">
+                                                            <i class="fas fa-star filled text-primary me-1"></i>
+                                                            <i class="fas fa-star filled text-primary"></i>
+                                                            <span class="ms-2">2 Star</span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                    <input class="form-check-input ms-0 mt-0" name="review5" type="checkbox" id="review5">
+                                                    <label class="form-check-label ms-2" for="review5">
+                                                        <span class="rating d-flex align-items-center">
+                                                            <i class="fas fa-star filled text-primary"></i>
+                                                            <span class="ms-2">1 Star</span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Sidebar -->
+
+                <div class="col-xl-9 col-lg-8 ">
+                    <div class="theiaStickySidebar">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <h6 class="mb-3">1920 Cruises Found on Your Search</h6>
+                            <div class="d-flex align-items-center flex-wrap">
+                                <div class="list-item d-flex align-items-center mb-3">
+                                    <a [routerLink]="routes.cruiseGrid" class="list-icon active me-2"><i class="isax isax-grid-1"></i></a>
+                                    <a [routerLink]="routes.cruiseList" class="list-icon me-2"><i class="isax isax-firstline"></i></a>
+                                    <a [routerLink]="routes.cruiseMap" class="list-icon me-2"><i class="isax isax-map-1"></i></a>
+                                </div>
+                                <div class="dropdown mb-3">
+                                    <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="fw-medium text-gray-9">Sort By : </span>Recommended
+                                    </a>
+                                    <div class="dropdown-menu dropdown-sm">
+                                        <form>
+                                            <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend1" checked>
+                                                <label class="form-check-label ms-2" for="recommend1">Recommended</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend2">
+                                                <label class="form-check-label ms-2" for="recommend2">Price: low to high</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend3">
+                                                <label class="form-check-label ms-2" for="recommend3">Price: high to low</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend4">
+                                                <label class="form-check-label ms-2" for="recommend4">Newest</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend5">
+                                                <label class="form-check-label ms-2" for="recommend5">Ratings</label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend6">
+                                                <label class="form-check-label ms-2" for="recommend6">Reviews</label>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
+                                                <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
+                                                <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-info br-10 p-3 pb-2 mb-4">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                <p class="fs-14 fw-medium mb-2 d-inline-flex align-items-center"><i class="isax isax-info-circle me-2"></i>Save an average of 15% on thousands of cruise when you're signed in</p>
+                                <a [routerLink]="routes.login" class="btn btn-white btn-sm mb-2">Sign In</a>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-05.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-02.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-04.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="isSelected[1]? '':'selected'" (click)="selectClass(1)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                        <img src="assets/img/users/user-08.jpg" class="rounded-circle" alt="img">
+                                                    </span>
+                                                <p class="fs-14 text-truncate">Beth Williams</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.9</span>
+                                                <p class="fs-14 text-truncate">(400)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Super Aquamarine</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Ciutat Vella, Barcelona</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2021</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">4</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">88.47 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">19 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$500 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <a [routerLink]="routes.cruiseDetails">
+                                            <img src="assets/img/cruise/cruise-12.jpg" class="img-fluid" alt="img">
+                                        </a>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[0] }" (click)="toggleClass(0)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                    <img src="assets/img/users/user-09.jpg" class="rounded-circle" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate">Tom Andrews</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.7</span>
+                                                <p class="fs-14 text-truncate">(300)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Bonnie Yacht</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Oxford Street, London</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2020</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">3</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">70.63 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">17 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$600 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <a [routerLink]="routes.cruiseDetails">
+                                            <img src="assets/img/cruise/cruise-09.jpg" class="img-fluid" alt="img">
+                                        </a>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[1] }" (click)="toggleClass(1)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                    <img src="assets/img/users/user-10.jpg" class="rounded-circle" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate ">Robert Cogs</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.5</span>
+                                                <p class="fs-14 text-truncate">(320)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Coral Cruiser</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Princes Street, Edinburgh</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2021</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">4</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">88.47 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">19 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$500 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <a [routerLink]="routes.cruiseDetails">
+                                            <img src="assets/img/cruise/cruise-09.jpg" class="img-fluid" alt="img">
+                                        </a>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[2] }" (click)="toggleClass(2)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                    <img src="assets/img/users/user-11.jpg" class="rounded-circle" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate ">Kenneth Pal</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.3</span>
+                                                <p class="fs-14 text-truncate">(380)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Harbor Haven</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Princes Street, Edinburgh</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2016</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">6</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">98.15 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">14 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$300 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-01.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-07.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-05.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[3] }" (click)="toggleClass(3)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                    <img src="assets/img/users/user-12.jpg" class="rounded-circle" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate ">Timothy</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.1</span>
+                                                <p class="fs-14 text-truncate">(300)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Albert Yacht</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>King’s Road, Chelsea</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2018</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">3</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">90.25 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">25 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$550 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <a [routerLink]="routes.cruiseDetails">
+                                            <img src="assets/img/cruise/cruise-11.jpg" class="img-fluid" alt="img">
+                                        </a>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[4] }" (click)="toggleClass(4)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                    <img src="assets/img/users/user-13.jpg" class="rounded-circle" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate ">Mark Arriton</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.4</span>
+                                                <p class="fs-14 text-truncate">(450)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Shelly Yacht</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Bold Street, Liverpool</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2023</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">2</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">72.83 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">23 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$450 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-07.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-08.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-11.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[5] }" (click)="toggleClass(5)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                    <img src="assets/img/users/user-14.jpg" class="rounded-circle" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate ">Beth Will</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.6</span>
+                                                <p class="fs-14 text-truncate">(520)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Sunny Sailor</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Broad Street, Bristol</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2008</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">4</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">64.37 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">18 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$350 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-06.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-12.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-04.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[6] }" (click)="toggleClass(6)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                    <img src="assets/img/users/user-15.jpg" class="rounded-circle" alt="img">
+                                                </span>
+                                                <p class="fs-14 text-truncate ">John James</p>
+                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.8</span>
+                                                <p class="fs-14 text-truncate">(360)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Ocean Voyager</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Chapel Street, Salford</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2022</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">7</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">98.56 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">15 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$700 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                            <!-- Cruise Grid -->
+                            <div class="col-xl-4 col-md-6 d-flex">
+                                <div class="place-item mb-4 flex-fill">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-08.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-05.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.cruiseDetails">
+                                                        <img src="assets/img/cruise/cruise-03.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[7] }" (click)="toggleClass(7)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                        </div>
+                                    </div>
+                                    <div class="place-content">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+
+                                            <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden me-2">
+                                                <span class="avatar avatar-md flex-shrink-0 me-2">
+                                                        <img src="assets/img/users/user-16.jpg" class="rounded-circle" alt="img">
+                                                    </span>
+                                                <p class="fs-14 text-truncate ">Ronald Moult</p>
+                                            </a>
+
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.2</span>
+                                                <p class="fs-14 text-truncate">(500)</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.cruiseDetails">Sailor’s Delight</a></h5>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Castle Street, Cambridge</p>
+                                        <div class="curise-details d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-calendar-2 text-gray-6 me-1"></i>Year : <span class="text-dark fw-medium">2021</span></p>
+                                                <p><i class="isax isax-user me-1"></i>Guests : <span class="text-dark fw-medium">6</span></p>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1"><i class="isax isax-fatrows text-gray-6 me-1"></i>Width : <span class="text-dark fw-medium">95.14 m</span></p>
+                                                <p><i class="isax isax-flash-1 me-1"></i>Speed : <span class="text-dark fw-medium">16 Knots</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                                            <h6 class="d-flex align-items-center"><i class="isax isax-home-wifi ms-2 me-2"></i><i class="isax isax-scissor me-2"></i><i class="isax isax-profile-2user me-2"></i><i class="isax isax-wind-2 me-2"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2">$650 <span class="fs-14 fw-normal text-default">/ day</span></h5>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cruise Grid -->
+
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav class="pagination-nav">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+                                <li class="page-item active"><a class="page-link" href="javascript:void(0);">4</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0);">5</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- /Pagination -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->

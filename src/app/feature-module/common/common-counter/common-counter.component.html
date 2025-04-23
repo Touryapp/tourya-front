@@ -1,0 +1,15 @@
+<div class="custom-increment">
+    <div class="input-group">
+        <span class="input-group-btn float-start">
+            <button type="button" class="quantity-left-minus btn btn-light btn-number"  (click)="decrementQuantity()">
+            <span><i class="isax isax-minus"></i></span>
+        </button>
+        </span>
+        <input type="text" name="quantity" class="input-number" [(ngModel)]="quantity" name="quantity" (input)="validateQuantity($event)">
+        <span class="input-group-btn float-end">
+            <button type="button" class="quantity-right-plus btn btn-light btn-number" (click)="incrementQuantity()">
+                <span><i class="isax isax-add"></i></span>
+        </button>
+        </span>
+    </div>
+</div>

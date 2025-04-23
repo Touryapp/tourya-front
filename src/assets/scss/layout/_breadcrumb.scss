@@ -1,0 +1,81 @@
+/*============================
+  32.breadcrumb
+============================*/
+
+.breadcrumb-bar {
+    padding: 150px 0 40px;
+    position: relative;
+    z-index: 1;
+    .breadcrumb-title {
+        font-size: $font-size-36;
+        color: $white;
+        @include respond-below(lg) {
+            font-size: $font-size-26;
+        }
+        @include respond-below(md) {
+            font-size: $font-size-22;
+        }
+    }
+    &::before {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        content: "";
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(95.36deg, rgba(0, 0, 0, 0.8) 13.15%, rgba(0, 0, 0, 0.5) 78.27%);
+        z-index: -1;
+    }
+    @include respond-below(md) {
+        padding: 90px 0 30px;
+    }
+}
+.breadcrumb {
+    .breadcrumb-item {
+        color: $light;
+        a {
+            color: $white;
+            &:hover {
+                color: $primary;
+            }
+        }
+        & +.breadcrumb-item {
+            &:before {
+                content: "\f054";
+                font-family: 'fontawesome';
+                line-height: 2;
+                font-size: $font-size-12;
+                color: $light;
+            }
+        }
+        &.active {
+            color: $light;
+        }
+    }
+}
+.breadcrumb-bg-01 {
+    background: url('../../../../public/assets/img/bg/breadcrumb.jpg') no-repeat;
+    background-size: cover;
+}
+.breadcrumb-bg-02 {
+    background: url('../../../../public/assets/img/bg/breadcrumb-02.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.breadcrumb-bg-03{
+    background: url('../../../../public/assets/img/bg/breadcrumb-03.jpg') no-repeat;
+    background-size: cover;
+}
+.breadcrumb-bg-04{
+    background-color: $gray-900;
+}
+.breadcrumb-bg-05{
+    background: url('../../../../public/assets/img/bg/breadcrumb-05.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.breadcrumb-bg-06{
+    background: url('../../../../public/assets/img/bg/breadcrumb-04.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+}

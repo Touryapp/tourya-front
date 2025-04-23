@@ -1,0 +1,106 @@
+/*============================
+  30.footer-three
+============================*/
+
+footer {
+    &.footer-three {
+        .footer-top {
+            background: $gray-900;
+            padding: 40px 0 20px 0;
+            .footer-widget {
+                h5 {
+                    margin-bottom: 24px;
+                    color: $white;
+                    &::before {
+                        background: $gray-800;
+                        width: 100%;
+                        bottom: -10px;
+                    }
+                }
+                .footer-menu {
+                    li {
+                        a {
+                            color: $gray-400;
+                            &:hover {
+                                color: $primary;
+                            }
+                        }
+                    }
+                }       
+            }         
+            .footer-about {
+                max-width: 416px;
+                width: 100%;
+                p {
+                    color: $gray-400;
+                }
+                h5 {
+                    &::before {
+                        content: none;
+                    }
+                }
+            }   
+        }
+        .social-icon {
+            li {
+                margin-right: 8px;
+                padding-right: 0;
+                a {
+                    width: 32px;
+                    height: 32px;
+                    background: $white;
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    justify-content: center;
+                    @include rounded(50%);
+                    &:hover {
+                        background: $primary;
+                        color: $white;
+                    } 
+                }
+                &::after {
+                    content: none;
+                }
+            }
+        }
+        .footer-bottom {
+            background: $gray-900;
+            border-top: 1px solid $gray-800;
+            padding: 20px 0 10px;
+            p {
+                color: $gray-400;
+            }
+            .policy-links {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                justify-content: space-between;
+                -webkit-justify-content: space-between;
+                -ms-flex-pack: space-between;
+                flex-wrap: wrap;
+                li {
+                    margin: 0 8px 10px 0;
+                    a {
+                        color: $gray-400;
+                        &:hover {
+                            color: $primary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}         
+.footer-contact {
+    padding: 20px 0;
+    .social-icon {
+        margin-bottom: 0;
+        @include respond-below(xl) {
+            margin-bottom: 16px;
+        }
+    }
+}   

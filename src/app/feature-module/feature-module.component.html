@@ -1,0 +1,35 @@
+<div [attr.dir]="page==='index-rtl'?'rtl':''">
+
+<div *ngIf="(base === 'index' || base === 'index-2' || base === 'index-3' || base === 'index-4' || base === 'index-5' || base === 'index-6' || page === 'index-rtl') && showPreloader" id="loader-wrapper">        	
+    <div id="loader">
+        <span class="loader-line"></span>
+    </div>
+</div>
+  <div class="">
+    @if(!withoutWrapperPages) {
+      <app-default-header></app-default-header>
+      }
+  <router-outlet></router-outlet>
+  @if(!withoutWrapperPages) {
+      <app-footer/>
+  }
+  <div class="xb-cursor tx-js-cursor is-enabled" [ngClass]="{ 'is-active': isHovered }">
+    <div class="xb-cursor-wrapper">
+      <div class="xb-cursor--follower xb-js-follower"></div>
+    </div>
+  </div>
+  </div>
+  <div class="back-to-top" *ngIf="showBackToTop">
+    <a
+      class="back-to-top-icon align-items-center justify-content-center d-flex"
+      href="javascript:void(0);"
+      (click)="scrollToTop()"
+      aria-label="Back to Top"
+      [ngClass]="{'show':isShow}"
+    >
+      <i class="fa-solid fa-arrow-up"></i>
+    </a>
+  </div>
+</div>
+
+

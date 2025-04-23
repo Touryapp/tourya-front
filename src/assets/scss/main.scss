@@ -1,0 +1,156 @@
+/*---------------------------------------------------------------------------------
+
+    Template Name: DreamsTour
+    Version      : 1.0
+    Author: Dreams Technologies
+    Author URI: https://themeforest.net/user/dreamstechnologies
+
+-----------------------------------------------------------------------------------
+
+/*============================
+[Table of CSS]
+
+1.variables
+2.mixins
+3.rangepicker-plugin
+4.base
+5.background
+6.alerts
+7.avatar
+8.boostrap
+9.button
+10.badge
+11.border
+12.dropdown
+13.font
+14.typography
+15.forms
+16.accordion
+17.cards
+18.navs-tabs
+19.grid
+20.cursor
+21.tables
+22.common
+23.content
+24.header
+25.header-three
+26.header-four
+27.header-five
+28.footer
+29.footer-four
+30.footer-three
+31.footer-five
+32.breadcrumb
+33.sidebar
+34.rtl
+35.home-03
+36.home-04
+37.home
+38.cruise
+39.login
+40.hotel
+41.hotel-details
+42.tour
+43.about-us
+44.blog
+45.team
+46.service
+47.booking-confirmation
+48.cart
+49.flight
+50.hotel-map
+51.tour-details
+52.car-details
+53.hotel-booking
+54.settings
+55.home-02
+56.chat
+57.home-06
+58.theme
+59.loader
+60.meanmenu
+62.select2
+63.datatables
+64.agent-list
+65.expert
+
+============================*/
+
+/****** Utils ******/
+@import "utils/variables";
+@import "utils/mixins";
+@import "utils/rangepicker-plugin";
+
+/******* Base *******/
+@import "base/base";
+@import "base/background";
+
+/******* Components ******/
+@import "components/alerts";
+@import "components/avatar";
+@import "components/boostrap";
+@import "components/button";
+@import "components/badge";
+@import "components/border";
+@import "components/dropdown";
+@import "components/font";
+@import "components/typography";
+@import "components/forms";
+@import "components/accordion";
+@import "components/cards";
+@import "components/navs-tabs";
+@import "components/grid";
+@import "components/cursor";
+@import "components/tables";
+
+/****** Layout ******/
+@import "layout/common";
+@import "layout/content";
+@import "layout/header";
+@import "layout/header-three";
+@import "layout/header-four";
+@import "layout/header-five";
+@import "layout/footer";
+@import "layout/footer-four";
+@import "layout/footer-three";
+@import "layout/footer-five";
+@import "layout/breadcrumb";
+@import "layout/sidebar";
+@import "layout/rtl";
+
+/******* Pages ******/
+@import "pages/home";
+@import "pages/home-03";
+@import "pages/home-04";
+@import "pages/cruise";
+@import "pages/login";
+@import "pages/hotel";
+@import "pages/hotel-details";
+@import "pages/tour";
+@import "pages/about-us";
+@import "pages/blog";
+@import "pages/team";
+@import "pages/service";
+@import "pages/booking-confirmation";
+@import "pages/cart";
+@import "pages/flight";
+@import "pages/hotel-map";
+@import "pages/tour-details";
+@import "pages/car-details";
+@import "pages/hotel-booking";
+@import "pages/settings";
+@import "pages/home-02";
+@import "pages/chat";
+@import "pages/home-06";
+@import "pages/theme";
+@import "pages/loader";
+@import "pages/agent-list";
+@import "pages/expert";
+
+/******* Vendors ******/
+@import "vendors/meanmenu";
+@import "vendors/select2";
+@import "vendors/datatables";
+
+

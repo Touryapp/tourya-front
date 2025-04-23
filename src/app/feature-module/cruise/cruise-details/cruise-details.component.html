@@ -1,0 +1,1170 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-06 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Cruise Details</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item">Cruise</li>
+                            <li class="breadcrumb-item active" aria-current="page">Cruise Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-xl-8">
+
+                    <!-- Slider -->
+                    <div>
+                        <div class="service-wrap slider-wrap-four mb-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="mb-2">
+                                    <h4 class="mb-1 d-flex align-items-center flex-wrap">Coral Cruiser<span class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-ship me-2"></i>Luxury Cruise</p>
+                                        <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>Ciutat Vella, Barcelona<a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">View Location</a></p>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
+                                            <p class="fs-14"><a href="#reviews">(400 Reviews)</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <a href="javascript:void(0);" class="btn btn-outline-light btn-icon btn-sm d-flex align-items-center justify-content-center me-2"><i class="isax isax-share"></i></a>
+                                    <a href="javascript:void(0);" class="btn btn-outline-light btn-sm d-inline-flex align-items-center"><i class="isax isax-heart5 text-danger me-1"></i>Save</a>
+                                </div>
+                            </div>
+                            <div class="service-wrap mb-4">
+                                <div class="slider-wrap">
+                                    <ngx-slick-carousel class="slider-fors service-carousel nav-center" #mainSlider="slick-carousel" [config]="mainSliderConfig">
+                                        <div ngxSlickItem *ngFor="let slide of mainSlides" class="service-img">
+                                            <img [src]="slide" class="img-fluid" alt="Slider Img" />
+                                        </div>
+                                    </ngx-slick-carousel>
+                                    <lightgallery
+                                [settings]="gallerySettings"
+                                class="flight-gallery"
+                                >
+                                <a
+                                    *ngFor="let image of images"
+                                    [attr.href]="image.src"
+                                    class="btn btn-white btn-xs view-btn"
+                                >
+                                <i class="isax isax-image me-1"></i>See All
+                                </a>
+                                </lightgallery>
+                                </div>
+                                <ngx-slick-carousel class="slider-nav slider-nav-thumbnails custom-margin nav-center " #thumbSlider="slick-carousel" [config]="thumbSliderConfig">
+                                    <div ngxSlickItem *ngFor="let slide of thumbSlides">
+                                        <img [src]="slide" class="img-fluid" alt="Slider Img" />
+                                    </div>
+                                </ngx-slick-carousel>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Slider -->
+                    <div class="accordion custom-accordion accordion-shadow">
+                        <div class="accordion-item border-0 mb-4">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_two" aria-expanded="true">
+                                    Description
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_two" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <p class="mb-2" [ngStyle]="{'height':isMore[0]?'100px':'50px'}" style="overflow: hidden;">Kicking off on April 1, 2025, the "DreamsTour" will take Luna to major cities across North America and Europe, including Los Angeles, New York, Chicago, Toronto, and London. Each concert will showcase her unique blend
+                                        of pop and ethereal soundscapes, bringing her music to life in a way you've never seen before.
+                                    </p>
+                                    <a href="javascript:void(0);" class="fs-14 fw-medium text-decoration-underline mb-2" [ngStyle]="{'display':isMore[0]?'none':'block'}" (click)="showLess(0)">Show More</a>
+                                    <a href="javascript:void(0);" class="fs-14 fw-medium text-decoration-underline mb-2" [ngStyle]="{'display':isMore[0]?'block':'none'}" (click)="showLess(0)">Show Less</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item border-0 mb-4">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_one" aria-expanded="true">
+                                    Details
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_one" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div class="row gy-3">
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
+													<i class="isax isax-timer fs-16"></i>
+												</span>
+                                                <div>
+                                                    <h6 class="mb-1">Duration</h6>
+                                                    <span>6 days</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
+													<i class="isax isax-profile-2user fs-16"></i>
+												</span>
+                                                <div>
+                                                    <h6 class="mb-1">No of Guests</h6>
+                                                    <span>569</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
+													<i class="isax isax-calendar fs-16"></i>
+												</span>
+                                                <div>
+                                                    <h6 class="mb-1">Date</h6>
+                                                    <span>15 May - 21 May 2025</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 border-0">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_three" aria-expanded="true">
+                                    Cruise Amenities
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_three" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div class="row gy-3">
+                                        <div class="col-lg-4 col-md-6">
+                                            <div>
+                                                <h6 class="mb-2">Dining Options</h6>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Room Service</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Cafés and Bakeries</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Specialty Restaurants</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-0">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Buffet Restaurants</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6">
+                                            <div>
+                                                <h6 class="mb-2">Entertainment</h6>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Live Shows</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Movie Theaters</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Nightclubs & Bars</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-0">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Casino</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6">
+                                            <div>
+                                                <h6 class="mb-2">Sports & Fitness</h6>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Pools</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Fitness Centers</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Sports Courts</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-0">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Rock Climbing Walls</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6">
+                                            <div>
+                                                <h6 class="mb-2">Wellness & Relaxation</h6>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Spas</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Thermal Suites</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-0">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Adult-Only Retreats</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6">
+                                            <div>
+                                                <h6 class="mb-2">Family & Kids</h6>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Kids' Clubs</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Arcades</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-0">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Water Parks</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6">
+                                            <div>
+                                                <h6 class="mb-2">Accommodations</h6>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Cabins</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Private Balconies</p>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-0">
+                                                    <i class="isax isax-verify text-primary me-2 fs-16"></i>
+                                                    <p>Concierge and Butler Service</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 border-0">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_six" aria-expanded="true">
+                                    Available Cabins
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_six" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div class="hotel-list">
+                                        <div class="place-item mb-4">
+                                            <div class="place-img custom-item">
+                                                <div class="img-slider nav-center">
+                                                    <div class="slide-images">
+                                                        <a [routerLink]="routes.cruiseDetails">
+                                                            <img src="assets/img/cruise/cruise-04.jpg" class="img-fluid" alt="img">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="fav-item">
+                                                    <span class="badge bg-pink">Popular</span>
+                                                    <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[0] }" (click)="toggleClass(0)">
+                                                        <i class="isax isax-heart5"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="place-content pb-1">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                    <div class="overflow-hidden">
+                                                        <h5 class="mb-2 d-inline-flex align-items-center text-truncate"><a [routerLink]="routes.cruiseDetails">Balcony</a></h5>
+                                                    </div>
+                                                    <div class="d-flex align-items-center text-nowrap mb-2">
+                                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.3</span>
+                                                        <p class="fs-14">(380 Reviews)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center flex-wrap">
+                                                    <p class="mb-2 d-inline-flex align-items-center fs-14"><i class="isax isax-tick-circle5 text-success me-2"></i>Butler Service</p>
+                                                    <p class="me-2 mb-2 d-inline-flex align-items-center fs-14"><i class="isax isax-tick-circle5 text-success me-2"></i>Laundry Services</p>
+                                                </div>
+                                                <div class="d-flex align-items-center flex-wrap">
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2"> LED TV 2</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2"> Refrigerator</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Balcony </span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">15 m²</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Free WiFi</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Private Safe</span>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                                    <h5 class="text-primary me-2 mb-3">$252 <span class="text-default text-decoration-line-through">$252</span> <span class="fs-14 fw-normal text-default">/ Night ( $759 total includes taxes & fees)</span></h5>
+                                                    <div class="btn btn-primary btn-md mb-3">
+                                                        <div class="form-check d-flex align-items-center ps-0">
+                                                            <input class="form-check-input ms-0 mt-0 border border-white" name="book" type="checkbox" id="book1" checked>
+                                                            <label class="form-check-label fs-13 text-white ms-2" for="book1">Select</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="place-item mb-4">
+                                            <div class="place-img custom-item">
+                                                <div class="img-slider nav-center">
+                                                    <div class="slide-images">
+                                                        <a [routerLink]="routes.cruiseDetails">
+                                                            <img src="assets/img/cruise/cruise-06.jpg" class="img-fluid" alt="img">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="fav-item justify-content-end">
+                                                    <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[1] }" (click)="toggleClass(1)">
+                                                        <i class="isax isax-heart5"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="place-content pb-1">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                    <div class="overflow-hidden">
+                                                        <h5 class="mb-2 d-inline-flex align-items-center text-truncate"><a [routerLink]="routes.cruiseDetails">Ocean View</a></h5>
+                                                    </div>
+                                                    <div class="d-flex align-items-center text-nowrap mb-2">
+                                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.3</span>
+                                                        <p class="fs-14">(380 Reviews)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center flex-wrap">
+                                                    <p class="me-2 mb-2 d-inline-flex align-items-center fs-14"><i class="isax isax-tick-circle5 text-success me-2"></i>Unlimited Wi-Fi</p>
+                                                    <p class="mb-2 d-inline-flex align-items-center fs-14"><i class="isax isax-tick-circle5 text-success me-2"></i>Private Dining</p>
+                                                </div>
+                                                <div class="d-flex align-items-center flex-wrap">
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2"> LED TV 2</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2"> Refrigerator</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Balcony </span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">15 m²</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Free WiFi</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Private Safe</span>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                                    <h5 class="text-primary me-2 mb-3">$658 <span class="text-default text-decoration-line-through">$252</span> <span class="fs-14 fw-normal text-default">/ Night ( $759 total includes taxes & fees)</span></h5>
+                                                    <div class="btn btn-primary btn-md mb-3">
+                                                        <div class="form-check d-flex align-items-center ps-0">
+                                                            <input class="form-check-input ms-0 mt-0 border border-white" name="book" type="checkbox" id="book2">
+                                                            <label class="form-check-label fs-13 text-white ms-2" for="book2">Select</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="place-item mb-0">
+                                            <div class="place-img custom-item">
+                                                <div class="img-slider nav-center">
+                                                    <div class="slide-images">
+                                                        <a [routerLink]="routes.cruiseDetails">
+                                                            <img src="assets/img/cruise/cruise-14.jpg" class="img-fluid" alt="img">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="fav-item justify-content-end">
+                                                    <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[0] }" (click)="toggleClass(0)">
+                                                        <i class="isax isax-heart5"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="place-content pb-1">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                    <div class="overflow-hidden">
+                                                        <h5 class="mb-2 d-inline-flex align-items-center text-truncate"><a [routerLink]="routes.cruiseDetails">Suite</a></h5>
+                                                    </div>
+                                                    <div class="d-flex align-items-center text-nowrap mb-2">
+                                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.3</span>
+                                                        <p class="fs-14">(380 Reviews)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center flex-wrap">
+                                                    <p class="me-2 mb-2 d-inline-flex align-items-center fs-14"><i class="isax isax-tick-circle5 text-success me-2"></i>Laundry Services</p>
+                                                    <p class="mb-2 d-inline-flex align-items-center fs-14"><i class="isax isax-tick-circle5 text-success me-2"></i>Butler Service</p>
+                                                </div>
+                                                <div class="d-flex align-items-center flex-wrap">
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2"> LED TV 2</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2"> Refrigerator</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Balcony </span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">15 m²</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Free WiFi</span>
+                                                    <span class="badge badge-info-100 fs-10 fw-medium rounded-pill me-2 mb-2">Private Safe</span>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                                    <h5 class="text-primary me-2 mb-3">$658 <span class="text-default text-decoration-line-through">$252</span> <span class="fs-14 fw-normal text-default">/ Night ( $759 total includes taxes & fees)</span></h5>
+                                                    <div class="btn btn-primary btn-md mb-3">
+                                                        <div class="form-check d-flex align-items-center ps-0">
+                                                            <input class="form-check-input ms-0 mt-0 border border-white" name="book" type="checkbox" id="book3">
+                                                            <label class="form-check-label fs-13 text-white ms-2" for="book3">Select</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 border-0">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_ten" aria-expanded="true">
+                                    Itinerary
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_ten" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div class="stage-flow">
+                                        <div class="d-flex align-items-center flows-step">
+                                            <span class="flow-step">01</span>
+                                            <div class="flow-content">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap mb-1">
+                                                    <div class="mb-1">
+                                                        <h6 class="fw-medium mb-1">Day 1, Kickoff in Los Angeles</h6>
+                                                        <p>25 May 2025, 04:45 AM</p>
+                                                    </div>
+                                                    <span class="avatar avatar-lg avatar-rounded flex-shrink-0 mb-1"><img src="assets/img/tours/tours-16.jpg" alt="Img"></span>
+                                                </div>
+                                                <p>The tour launches with a spectacular concert at The Hollywood Bowl, where Luna will debut her latest hits amidst a breathtaking backdrop of lights and visuals.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center flows-step">
+                                            <span class="flow-step">02</span>
+                                            <div class="flow-content">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap mb-1">
+                                                    <div class="mb-1">
+                                                        <h6 class="fw-medium mb-1">Day 2, West Coast Wonders</h6>
+                                                        <p>26 May 2025, 09:45 AM</p>
+                                                    </div>
+                                                    <span class="avatar avatar-lg avatar-rounded flex-shrink-0 mb-1"><img src="assets/img/tours/tours-17.jpg" alt="Img"></span>
+                                                </div>
+                                                <p>Fans in Seattle and Portland can look forward to intimate performances, complete with fan meet-and-greets that allow for personal connections with Luna.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center flows-step">
+                                            <span class="flow-step">03</span>
+                                            <div class="flow-content">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap mb-1">
+                                                    <div class="mb-1">
+                                                        <h6 class="fw-medium mb-1">Day 3, Midwest Magic</h6>
+                                                        <p>27 May 2025, 09:45 AM</p>
+                                                    </div>
+                                                    <span class="avatar avatar-lg avatar-rounded flex-shrink-0 mb-1"><img src="assets/img/tours/tours-18.jpg" alt="Img"></span>
+                                                </div>
+                                                <p>The tour moves to Chicago, where Luna will perform at the iconic United Center. Expect a night filled with energy and emotion as she shares her music with devoted fans.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center flows-step">
+                                            <span class="flow-step">04</span>
+                                            <div class="flow-content">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap mb-1">
+                                                    <div class="mb-1">
+                                                        <h6 class="fw-medium mb-1">Day 4, East Coast Excitement</h6>
+                                                        <p>31 May 2025, 09:45 AM</p>
+                                                    </div>
+                                                    <span class="avatar avatar-lg avatar-rounded flex-shrink-0 mb-1"><img src="assets/img/tours/tours-19.jpg" alt="Img"></span>
+                                                </div>
+                                                <p>
+                                                    The New York show at Madison Square Garden promises to be a highlight of the tour, featuring special guests and surprises. Luna will also engage with fans in Central Park, offering a chance for unforgettable memories.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 border-0">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_four" aria-expanded="true">
+                                    Gallery
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_four" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <lightgallery class="row row-cols-lg-6 row-cols-sm-4 row-cols-2 g-2" [settings]="settings" [onBeforeSlide]="onBeforeSlide">
+                                        <div class="col" data-src="assets/img/cruise/cruise-large-01.jpg" data-responsive="assets/img/cruise/cruise-large-01.jpg">
+                                            <a class="galley-wrap" data-fancybox="gallery" href="assets/img/cruise/cruise-large-01.jpg">
+                                                <img src="assets/img/cruise/cruise-thumb-01.jpg" alt="img">
+                                            </a>
+                                        </div>
+                                        <div class="col" data-src="assets/img/cruise/cruise-large-02.jpg" data-responsive="assets/img/cruise/cruise-large-02.jpg">
+                                            <a class="galley-wrap" data-fancybox="gallery" href="assets/img/cruise/cruise-large-02.jpg">
+                                                <img src="assets/img/cruise/cruise-thumb-02.jpg" alt="img">
+                                            </a>
+                                        </div>
+                                        <div class="col" data-src="assets/img/cruise/cruise-large-03.jpg" data-responsive="assets/img/cruise/cruise-large-03.jpg">
+                                            <a class="galley-wrap" data-fancybox="gallery" href="assets/img/cruise/cruise-large-03.jpg">
+                                                <img src="assets/img/cruise/cruise-thumb-03.jpg" alt="img">
+                                            </a>
+                                        </div>
+                                        <div class="col" data-src="assets/img/cruise/cruise-large-04.jpg" data-responsive="assets/img/cruise/cruise-large-04.jpg">
+                                            <a class="galley-wrap" data-fancybox="gallery" href="assets/img/cruise/cruise-large-04.jpg">
+                                                <img src="assets/img/cruise/cruise-thumb-04.jpg" alt="img">
+                                            </a>
+                                        </div>
+                                        <div class="col" data-src="assets/img/cruise/cruise-large-05.jpg" data-responsive="assets/img/cruise/cruise-large-05.jpg">
+                                            <a class="galley-wrap" data-fancybox="gallery" href="assets/img/cruise/cruise-large-05.jpg">
+                                                <img src="assets/img/cruise/cruise-thumb-05.jpg" alt="img">
+                                            </a>
+                                        </div>
+                                        <div class="col" data-src="assets/img/cruise/cruise-large-04.jpg" data-responsive="assets/img/cruise/cruise-large-04.jpg">
+                                            <div class="galley-wrap more-gallery d-flex align-items-center justify-content-center">
+                                                <a data-fancybox="gallery" href="assets/img/cruise/cruise-large-04.jpg" class="btn btn-white btn-xs"><i class="isax isax-image5 me-1"></i>See All</a>
+                                            </div>
+                                        </div>
+                                    </lightgallery>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 border-0">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_five" aria-expanded="true">
+                                    Video
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_five" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div class="position-relative">
+                                        <a href="javascript:void(0);">
+                                            <img src="assets/img/cruise/cruise-large-03.jpg" class="rounded" alt="Img">
+                                        </a>
+                                        <lightgallery
+                            [settings]="settings"
+                            [onInit]="onInit"
+                            size="1400-933"
+                            class="text-center slider-video-btn"
+                          >
+                            <a
+                              class="avatar play-video rounded-circle circle-middle"
+                              src="https://www.youtube.com/watch?v=4fMuE_t5YL4"
+                            >
+                             <span><i class="isax isax-play5 text-dark fs-16"></i></span>
+                            </a>
+                          </lightgallery>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 border-0">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_seven" aria-expanded="true">
+                                    Location
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_seven" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <!-- Map -->
+                                    <div>
+                                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509170.989457427!2d-123.80081967108484!3d37.192957227641294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sin!4v1669181581381!5m2!1sen!2sin"
+                                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="tour-detail-map w-100"></iframe>
+                                    </div>
+                                    <!-- /Map -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 border-0" id="location">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_eight" aria-expanded="true">
+                                    Frequently Asked Questions
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_eight" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div class="accordion faq-accordion" id="accordionFaq">
+                                        <div class="accordion-item show mb-2">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button fw-medium" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapseOne" aria-expanded="false" aria-controls="faq-collapseOne">
+                                                    How old do I need to be to rent a car?
+                                                </button>
+                                            </div>
+                                            <div id="faq-collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFaq">
+                                                <div class="accordion-body">
+                                                    <p class="mb-0">
+                                                        We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item mb-2">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-two" aria-expanded="false" aria-controls="faq-two">
+                                                    What documents do I need to rent a car?
+                                                </button>
+                                            </div>
+                                            <div id="faq-two" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                                                <div class="accordion-body">
+                                                    <p class="mb-0">
+                                                        We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item mb-2">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-three" aria-expanded="false" aria-controls="faq-three">
+                                                    What types of vehicles are available for rent?
+                                                </button>
+                                            </div>
+                                            <div id="faq-three" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                                                <div class="accordion-body">
+                                                    <p class="mb-0">
+                                                        We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <div class="accordion-header">
+                                                <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-four" aria-expanded="false" aria-controls="faq-four">
+                                                    Can I rent a car with a debit card?
+                                                </button>
+                                            </div>
+                                            <div id="faq-four" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                                                <div class="accordion-body">
+                                                    <p class="mb-0">
+                                                        We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-4 mb-xl-0 border-0" id="reviews">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_collapse_nine" aria-expanded="true">
+                                    Reviews
+                                </button>
+                            </div>
+                            <div id="accordion_collapse_nine" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                            <h6 class="mb-3">Reviews (45)</h6>
+                                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>Write a Review</a>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 d-flex">
+                                                <div class="rating-item bg-light-200 text-center flex-fill mb-3">
+                                                    <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
+                                                    <h5 class="display-6">4.9 / 5.0</h5>
+                                                    <div class="d-inline-flex align-items-center justify-content-center mb-3">
+                                                        <i class="ti ti-star-filled text-primary me-1"></i>
+                                                        <i class="ti ti-star-filled text-primary me-1"></i>
+                                                        <i class="ti ti-star-filled text-primary me-1"></i>
+                                                        <i class="ti ti-star-filled text-primary me-1"></i>
+                                                        <i class="ti ti-star-filled text-primary"></i>
+                                                    </div>
+                                                    <p>Based On 2,459 Reviews</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 d-flex">
+                                                <div class="card rating-progress shadow-none flex-fill mb-3">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <p class="me-2 text-nowrap mb-0">5 Star Ratings</p>
+                                                            <div class="progress w-100" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
+                                                                <div class="progress-bar bg-primary" style="width: 90%"></div>
+                                                            </div>
+                                                            <p class="progress-count ms-2">247</p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <p class="me-2 text-nowrap mb-0">4 Star Ratings</p>
+                                                            <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+                                                                <div class="progress-bar bg-primary" style="width: 80%"></div>
+                                                            </div>
+                                                            <p class="progress-count ms-2">145</p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <p class="me-2 text-nowrap mb-0">3 Star Ratings</p>
+                                                            <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                                                                <div class="progress-bar bg-primary" style="width: 70%"></div>
+                                                            </div>
+                                                            <p class="progress-count ms-2">600</p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <p class="me-2 text-nowrap mb-0">2 Star Ratings</p>
+                                                            <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
+                                                                <div class="progress-bar bg-primary" style="width: 60%"></div>
+                                                            </div>
+                                                            <p class="progress-count ms-2">560</p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center">
+                                                            <p class="me-2 text-nowrap mb-0">1 Star Ratings</p>
+                                                            <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                                                                <div class="progress-bar bg-primary" style="width: 40%"></div>
+                                                            </div>
+                                                            <p class="progress-count ms-2">400</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card review-item shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="review-info">
+                                                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <span class="avatar avatar-lg me-2 flex-shrink-0">
+																<img src="assets/img/users/user-05.jpg" class="rounded-circle" alt="img">
+															</span>
+                                                            <div>
+                                                                <h6 class="fs-16 fw-medium mb-1">Joseph Massey</h6>
+                                                                <div class="d-flex align-items-center flex-wrap date-info">
+                                                                    <p class="fs-14 mb-0">2 days ago</p>
+                                                                    <p class="fs-14 d-inline-flex align-items-center mb-0"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>Unforgettable Stay!</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="javascript:void(0);" class="btn btn-outline-light btn-md d-inline-flex align-items-center mb-2"><i class="isax isax-repeat me-1"></i>Reply</a>
+                                                    </div>
+                                                    <p class="mb-2">It was a good location however the cocoon concept was weird. No tables, chairs etc was difficult as everything went on the floor.</p>
+                                                    <lightgallery class="d-flex align-items-center">
+                                                        <a class="avatar avatar-md me-2 mb-2" data-fancybox="gallery" href="assets/img/cruise/cruise-large-02.jpg">
+                                                            <img src="assets/img/cruise/cruise-thumb-02.jpg" alt="img">
+                                                        </a>
+                                                        <a class="avatar avatar-md me-2 mb-2" data-fancybox="gallery" href="assets/img/cruise/cruise-large-03.jpg">
+                                                            <img src="assets/img/cruise/cruise-thumb-03.jpg" alt="img">
+                                                        </a>
+                                                        <a class="avatar avatar-md me-0 mb-2" data-fancybox="gallery" href="assets/img/cruise/cruise-large-01.jpg">
+                                                            <img src="assets/img/cruise/cruise-thumb-01.jpg" alt="img">
+                                                        </a>
+                                                    </lightgallery>
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>21</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>50</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>45</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card review-item shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="review-info">
+                                                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <span class="avatar avatar-lg me-2 flex-shrink-0">
+																<img src="assets/img/users/user-21.jpg" class="rounded-circle" alt="img">
+															</span>
+                                                            <div>
+                                                                <h6 class="fs-16 fw-medium mb-1">Jeffrey Jones</h6>
+                                                                <div class="d-flex align-items-center flex-wrap date-info">
+                                                                    <p class="fs-14 mb-0">2 days ago</p>
+                                                                    <p class="fs-14 d-inline-flex align-items-center mb-0"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.0</span>Excellent service!</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="javascript:void(0);" class="btn btn-outline-light btn-md d-inline-flex align-items-center mb-2"><i class="isax isax-repeat me-1"></i>Reply</a>
+                                                    </div>
+                                                    <p class="mb-2">From the moment we arrived, the staff made us feel welcome. The rooms were immaculate, and every detail was thoughtfully arranged. It was the perfect blend of comfort and luxury!</p>
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>15</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>30</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>52</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card review-item shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="review-info">
+                                                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <span class="avatar avatar-lg me-2 flex-shrink-0">
+																<img src="assets/img/users/user-26.jpg" class="rounded-circle" alt="img">
+															</span>
+                                                            <div>
+                                                                <h6 class="fs-16 fw-medium mb-1">Jessie Alves</h6>
+                                                                <div class="d-flex align-items-center flex-wrap date-info">
+                                                                    <p class="fs-14 mb-0">2 days ago</p>
+                                                                    <p class="fs-14 d-inline-flex align-items-center mb-0"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>Convenient Location!</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="javascript:void(0);" class="btn btn-outline-light btn-md d-inline-flex align-items-center mb-2"><i class="isax isax-repeat me-1"></i>Reply</a>
+                                                    </div>
+                                                    <p class="mb-2">The location was perfect for exploring the city, and the views from our room were breathtaking. It made our trip so much more enjoyable to stay somewhere central and scenic</p>
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>13</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>38</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>75</a>
+                                                    </div>
+                                                </div>
+                                                <div class="review-info reply mt-4 p-3">
+                                                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <span class="avatar avatar-lg me-2 flex-shrink-0">
+																<img src="assets/img/users/user-25.jpg" class="rounded-circle" alt="img">
+															</span>
+                                                            <div>
+                                                                <h6 class="fs-16 fw-medium mb-1">Adrian Hendriques</h6>
+                                                                <div class="d-flex align-items-center flex-wrap date-info">
+                                                                    <p class="fs-14 mb-0">2 days ago</p>
+                                                                    <p class="fs-14 d-inline-flex align-items-center mb-0"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">2.0</span>Excellent service!</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="javascript:void(0);" class="btn btn-outline-light btn-md d-inline-flex align-items-center me-2"><i class="isax isax-repeat me-1"></i>Reply</a>
+                                                    </div>
+                                                    <p class="mb-2">Thank you so much for your kind words! We're thrilled to hear that our location and views made your trip even more enjoyable. We hope to welcome you back soon for another scenic stay!</p>
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>10</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>21</a>
+                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>46</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mb-4 mb-xl-0">
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-md d-inline-flex align-items-center justify-content-center mt-2">See all 4,078 reviews<i class="isax isax-arrow-right-3 ms-1"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 ">
+                    <div>
+                        <div class="card bg-light-200">
+                            <div class="card-body">
+                                <h5 class="d-flex align-items-center fs-18 mb-3">
+                                    <span class="avatar avatar-md rounded-circle bg-primary me-2"><i class="isax isax-ship5"></i></span>
+                                    Cruise Information
+                                </h5>
+                                <div>
+                                    <div class="d-flex align-items-center justify-content-between details-info">
+                                        <h6 class="fw-medium">Launched On</h6>
+                                        <p class="flex-fill">25 May 2025</p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between details-info">
+                                        <h6 class="fw-medium">Length</h6>
+                                        <p class="flex-fill">35 M</p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between details-info">
+                                        <h6 class="fw-medium">Staffs</h6>
+                                        <p class="flex-fill">200</p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between details-info">
+                                        <h6 class="fw-medium">Beam</h6>
+                                        <p class="flex-fill">200 ft</p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between details-info">
+                                        <h6 class="fw-medium">Weight</h6>
+                                        <p class="flex-fill">8000 grt</p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between details-info">
+                                        <h6 class="fw-medium">Dining Crew</h6>
+                                        <p class="flex-fill">80</p>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between details-info">
+                                        <h6 class="fw-medium">Speed</h6>
+                                        <p class="flex-fill">80.6 knots</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow-none">
+                            <div class="card-body">
+                                <h5 class="fs-18 mb-3">Check Availability</h5>
+                                <div class="d-flex align-items-center justify-content-between bg-light-200 rounded p-3 mb-3">
+                                    <p class="fs-13 fw-medium mb-0">Starts From</p>
+                                    <h5 class="text-primary">$500 <span class="fs-14 text-default fw-normal">/ Night</span></h5>
+                                </div>
+                                <div class="banner-form">
+                                    <form (ngSubmit)="onSubmit1()" class="form-info border-0">
+                                        <div class="form-info border-0">
+                                            <div class="form-item dropdown border rounded p-3 mb-3 w-100">
+                                                <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                                    <label class="form-label fs-14 text-default mb-1">Destination</label>
+                                                    <input type="text" class="form-control" value="Newyork">
+                                                    <p class="fs-12 mb-0">USA</p>
+                                                </div>
+                                                <div class="dropdown-menu dropdown-md p-0">
+                                                    <div class="input-search p-3 border-bottom">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Search Location">
+                                                            <span class="input-group-text px-2 border-start-0"><i class="isax isax-search-normal"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <ul>
+                                                        <li class="border-bottom">
+                                                            <a class="dropdown-item" href="javascript:void(0);">
+                                                                <h6 class="fs-16 fw-medium">Newyork</h6>
+                                                                <p>Ken International Airport</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="border-bottom">
+                                                            <a class="dropdown-item" href="javascript:void(0);">
+                                                                <h6 class="fs-16 fw-medium">Boston</h6>
+                                                                <p>Boston Logan International Airport</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="border-bottom">
+                                                            <a class="dropdown-item" href="javascript:void(0);">
+                                                                <h6 class="fs-16 fw-medium">Northern Virginia</h6>
+                                                                <p>Dulles International Airport</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="border-bottom">
+                                                            <a class="dropdown-item" href="javascript:void(0);">
+                                                                <h6 class="fs-16 fw-medium">Los Angeles</h6>
+                                                                <p>Los Angeles International Airport</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="border-bottom">
+                                                            <a class="dropdown-item" href="javascript:void(0);">
+                                                                <h6 class="fs-16 fw-medium">Orlando</h6>
+                                                                <p>Orlando International Airport</p>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="form-item border rounded p-3 mb-3 w-100">
+                                                <label class="form-label fs-14 text-default mb-1">Start Date</label>
+                                                <input
+                                                    type="text"
+                                                    class="form-control datetimepicker"
+                                                    bsDatepicker
+                                                    [bsConfig]="{ adaptivePosition: true }"
+                                                    placeholder="21-10-2024"
+                                                    [bsValue]="bsValue"
+                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                                    />
+                                                <p class="fs-12 mb-0">Monday</p>
+                                            </div>
+                                            <div class="form-item border rounded p-3 mb-3 w-100">
+                                                <label class="form-label fs-14 text-default mb-1">End Date</label>
+                                                <input
+                                                    type="text"
+                                                    class="form-control datetimepicker"
+                                                    bsDatepicker
+                                                    [bsConfig]="{ adaptivePosition: true }"
+                                                    placeholder="21-10-2024"
+                                                    [bsValue]="bsValue"
+                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                                    />
+                                                <p class="fs-12 mb-0">Monday</p>
+                                            </div>
+                                            <div class="card shadow-none mb-3">
+                                                <div class="card-body p-3 pb-0">
+                                                    <div class="border-bottom pb-2 mb-2">
+                                                        <h6>Details</h6>
+                                                    </div>
+                                                    <div class="custom-increment">
+                                                        <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                            <label class="form-label text-gray-9 mb-0">Adults</label>
+                                                            <app-common-counter/>
+                                                        </div>
+                                                        <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                            <label class="form-label text-gray-9 mb-0">Infants <span class="text-default fw-normal">( 0-12 Yrs )</span></label>
+                                                            <app-common-counter/>
+                                                        </div>
+                                                        <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                            <label class="form-label text-gray-9 mb-0">Children <span class="text-default fw-normal">( 2-12 Yrs )</span></label>
+                                                            <app-common-counter/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-lg search-btn ms-0 w-100 mb-3 fs-14">Book Now</button>
+                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                            <h6 class="fs-14 fw-medium text-success">3 Cabin Available on your Search</h6>
+                                            <a href="#accordion_collapse_six" class="link-primary text-decoration-underline fs-14">View Cabins</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enquiry -->
+                        <div class="card shadow-none">
+                            <div class="card-body">
+                                <form >
+                                    <h5 class="mb-3 fs-18">Enquire Us</h5>
+                                    <div class="py-1">
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Message</label>
+                                            <textarea class="form-control" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 btn-lg d-flex align-items-center justify-content-center">Submit Enquiry</button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /Enquiry -->
+
+                        <div class="card shadow-none">
+                            <div class="card-body">
+                                <h5 class="fs-18 mb-3">Why Book With Us</h5>
+                                <div>
+                                    <p class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md bg-light rounded-circle text-dark me-2">
+                                            <i class="isax isax-medal-star"></i>
+                                        </span>Expertise and Experience
+                                    </p>
+                                    <p class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md bg-light rounded-circle text-dark me-2">
+                                            <i class="isax isax-menu"></i>
+                                        </span>Tailored Services
+                                    </p>
+                                    <p class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md bg-light rounded-circle text-dark me-2">
+                                            <i class="isax isax-message-minus"></i>
+                                        </span>Comprehensive Planning
+                                    </p>
+                                    <p class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md bg-light rounded-circle text-dark me-2">
+                                            <i class="isax isax-user-add"></i>
+                                        </span>Client Satisfaction
+                                    </p>
+                                    <p class="d-flex align-items-center">
+                                        <span class="avatar avatar-md bg-light rounded-circle text-dark me-2">
+                                            <i class="isax isax-grammerly"></i>
+                                        </span>24/7 Support
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow-none mb-0">
+                            <div class="card-body">
+                                <h5 class="fs-18 mb-3">Provider Details</h5>
+                                <div class="py-1">
+                                    <div class="bg-light-500 br-10 mb-3 d-flex align-items-center p-3">
+                                        <a href="javascript:void(0);" class="avatar avatar-lg flex-shrink-0">
+                                            <img src="assets/img/users/user-05.jpg" alt="img" class="rounded-circle">
+                                        </a>
+                                        <div class="ms-2 overflow-hidden">
+                                            <h6 class="fw-medium text-truncate"><a href="javascript:void(0);">Adrian Hendriques</a></h6>
+                                            <p class="fs-14">Member Since : 14 May 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="border br-10 mb-3 p-3">
+                                        <div class="d-flex align-items-center border-bottom pb-3 mb-3">
+                                            <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-call-outgoing5"></i></span>
+                                            <p>+1 12545 45548</p>
+                                        </div>
+                                        <div class="d-flex align-items-center border-bottom pb-3 mb-3">
+                                            <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-message-search5"></i></span>
+                                            <p>Info&#64;example.com</p>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-location-tick5"></i></span>
+                                            <p>4635 Pheasant Ridge Road, USA</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-sm-6">
+                                        <a href="javascript:void(0);" class="btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-messages5 me-2"></i>Whatsapp Us</a>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a [routerLink]="routes.chat" class="btn btn-primary d-flex align-items-center justify-content-center"><i class="isax isax-message-notif5 me-2"></i>Chat Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+
+        <!-- Review Modal -->
+        <div class="modal fade" id="add_review">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center justify-content-between">
+                        <h5>Write a Review</h5>
+                        <a href="javascript:void(0);" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="ti ti-x fs-16"></i>
+                        </a>
+                    </div>
+                    <form >
+                        <div class="modal-body pb-0">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Your Rating <span class="text-danger">*</span></label>
+                                        <div class="selection-wrap">
+                                            <div class="d-inline-block">
+                                                <div class="rating-selction">
+                                                    <input type="radio" name="rating" value="5" id="rating5">
+                                                    <label for="rating5"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="4" id="rating4">
+                                                    <label for="rating4"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="3" id="rating3">
+                                                    <label for="rating3"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="2" id="rating2">
+                                                    <label for="rating2"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="1" id="rating1">
+                                                    <label for="rating1"><i class="fa-solid fa-star"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Write Your Review <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="d-flex align-items-center justify-content-end m-0">
+                                <button type="submit" data-bs-dismiss="modal" class="btn btn-primary btn-md"><i class="isax isax-edit-2 me-1"></i>Submit Review</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Review Modal -->

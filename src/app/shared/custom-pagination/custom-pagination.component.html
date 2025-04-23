@@ -1,0 +1,86 @@
+<div class=" table-paginate d-flex justify-content-between align-items-center flex-wrap row-gap-3 ">
+  <div class="value d-flex align-items-center">
+    <span>Show</span> 
+      <select [(ngModel)]="pageSize" name="page" (ngModelChange)="changePageSize(pageSize)">
+        <option value="10">5</option>
+        <option value="25">10</option>
+        <option value="50">20</option>
+      </select>
+      <span> of {{ totalData }} Results</span>
+  </div>
+  <div class="d-flex align-items-center justify-content-center">
+    <nav  aria-label="Page navigation">
+      <ul class="paginations d-flex justify-content-center align-items-center ">
+        <li
+          class="page-item"
+          [ngClass]="{
+            disabled: currentPage === 1
+          }"
+        >
+          <a
+            (click)="getMoreData('previous')"
+            href="javascript:void(0);"
+            tabindex="-1"
+            ><span class="me-3"><i class="isax isax-arrow-left-2"></i></span>
+          </a>
+        </li>
+
+        @for (item of pageNumberArray; track item; let i = $index) {
+        <li
+          class="page-item me-2"
+          [class.active]="item === currentPage"
+          [ngClass]="
+            (pageNumberArray[currentPage - 2] > item && item !== 1 && pageNumberArray.length > 6) ||
+            (pageNumberArray[currentPage] < item && item !== 1 && pageNumberArray.length > 6 && pageNumberArray.length !== item) ? 'hide-page-no': 'show-page-no'">
+          <a
+            (click)="moveToPage(item)" [class.active]="item === currentPage"
+            class="page-link-1 d-flex justify-content-center align-items-center"
+            href="javascript:void(0);"
+          >
+            {{ item }}
+          </a>
+        </li>
+        @if (i === 0 && pageNumberArray.length > 6 && currentPage > 2) {
+        <li
+          class="page-item me-2"
+          [hidden]="currentPage === 1"
+          (click)="moveToPage(currentPage - 2)"
+          (keydown.enter)="moveToPage(currentPage - 2)"
+          tabindex="0"
+        >
+          <a class="page-link-1 d-flex justify-content-center align-items-center" href="javascript:void(0);"> ... </a>
+        </li>
+        } @if ( i === pageNumberArray.length - 2 && pageNumberArray.length > 6 )
+        {
+        <li
+          [hidden]="
+            currentPage >= pageNumberArray[pageNumberArray.length - 2] ||
+            totalData < serialNumberArray[serialNumberArray.length - 1]
+          "
+          class="page-item"
+          (click)="moveToPage(currentPage + 2)"
+          (keydown.enter)="moveToPage(currentPage + 2)"
+          tabindex="0"
+        >
+          <a class="page-link-1 active d-flex justify-content-center align-items-center" href="javascript:void(0);"> ... </a>
+        </li>
+        } }
+
+        <li
+          class="page-item me-2"
+          [ngClass]="{
+            disabled:
+              currentPage === pageNumberArray[pageNumberArray.length - 1] ||
+              tableData.length === 0
+          }"
+        >
+          <a
+            (click)="getMoreData('next')"
+            href="javascript:void(0);"
+            ><span class="ms-3"><i class="isax isax-arrow-right-3"></i></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

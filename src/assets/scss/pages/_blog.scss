@@ -1,0 +1,39 @@
+/*============================
+  44.blog
+============================*/
+
+.blog-post{
+    position: relative;
+    padding: 15px;
+    border: 1px solid $light;
+    border-radius: 10px;
+}
+.text-truncate {
+    white-space: normal;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    &.line-clamb-3 {
+        -webkit-line-clamp: 3;
+    }
+    &.line-clamb-2 {
+        -webkit-line-clamp: 2;
+    }
+}
+.blog-user-img{
+    width: 16px !important;
+    height: 16px !important;
+}
+.category-tag {
+    a {
+        &.badge {
+            background: $light-500;
+            color: $gray-600;
+            @include rounded(10px);
+            &:hover {
+                background: $primary;
+                color: $white;
+            }
+        }
+    }
+}

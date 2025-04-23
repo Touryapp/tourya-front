@@ -1,0 +1,98 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-04 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">{{page | capitalizeWords}}</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{page | capitalizeWords}}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+
+            <div class="row">
+
+                 <!-- Sidebar -->
+                 <div  class="col-xl-3 col-lg-4 ">
+                    <div class="card user-sidebar agent-sidebar mb-4 mb-lg-0 theiaStickySidebar">
+                        <div class="card-header user-sidebar-header text-center bg-gray-transparent">
+                            <div class="agent-profile d-inline-flex">
+                                <img src="assets/img/users/user-43.jpg" alt="image" class="img-fluid rounded-circle">
+                                <a [routerLink]="routes.agentSettings" class="avatar avatar-sm rounded-circle btn btn-primary d-flex align-items-center justify-content-center p-0"><i class="isax isax-edit-2 fs-14"></i></a>
+                            </div>
+                            <h6 class="fs-16">Chris Foxy</h6>
+                            <p class="fs-14 mb-2">Member Since 10 May 2025</p>
+                            <div class="d-flex align-items-center justify-content-center notify-item">
+                                <a [routerLink]="routes.agentNotification" class="rounded-circle btn btn-white d-flex align-items-center justify-content-center p-0 me-2 position-relative" [ngClass]="page==='agent-notification'?'dashboard-btn':''">
+                                    <i class="isax isax-notification-bing5 fs-20"></i>
+                                    <span class="position-absolute p-1 bg-secondary rounded-circle"></span>
+                                </a>
+                                <a [routerLink]="routes.agentChat" class="rounded-circle btn btn-white d-flex align-items-center justify-content-center p-0 position-relative" >
+                                    <i class="isax isax-message-square5 fs-20"></i>
+                                    <span class="position-absolute p-1 bg-danger rounded-circle"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body user-sidebar-body">
+                            <ul>
+                                @for (mainTittle of sideBar2; track mainTittle) {
+                                   
+                                    @for (menu of mainTittle.menu; track menu) {
+                                        @if (menu.hasSubRoute === false) {
+                                            <li>
+                                                    <a [href]="menu.route" class="d-flex align-items-center" [class.active]="page===menu.base || page===menu.base2 || page===menu.base3 || page===menu.base4 " [ngClass]="{ 'subdrop': menu.showSubRoute === false }" (click)="expandSubMenus(menu)">
+                                                        <i class="isax" [class]="menu.icon"></i> {{menu.menuValue}}
+                                                    </a>
+                                                   
+                                            </li>
+                                        }
+                                        @if (menu.hasSubRoute === true) {
+                                            <li class="submenu" >
+                                                <a href="javascript:void(0);" class="d-block" [class.active]="page===menu.base || page===menu.base2 || page===menu.base3 || page===menu.base4 || page===menu.base5" [ngClass]="{ 'subdrop': menu.showSubRoute === true }" (click)="expandSubMenus(menu)">
+                                                    <i class="isax" [class]="menu.icon"></i>
+                                                    <span>{{menu.menuValue}}</span><span class="menu-arrow" ></span>
+                                                </a>
+                                                <ul [ngClass]="menu.showSubRoute === true ? 'show-sub-menu' : 'hide-sub-menu'">
+                                                    @for (subMenus of menu.subMenus; track subMenus) {
+                                                        <li >
+                                                            <a [href]="subMenus.route" class="fs-14 d-inline-flex align-items-center" [class.active]="page===subMenus.base" >{{subMenus.menuValue}}</a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
+                                }
+                                <li class="logout-link">
+                                    <a [routerLink]="routes.index" class="d-flex align-items-center pb-0">
+                                        <i class="isax isax-logout-15"></i> Logout
+                                    </a>
+                                </li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Sidebar -->
+
+                <div class="col-xl-9 col-lg-8">
+
+                    <router-outlet></router-outlet>
+                </div>
+
+            </div>
+            <!-- <div *ngIf="page==='agent-chat'">
+                <router-outlet></router-outlet>
+            </div> -->
+        </div>
+    </div>
+    <!-- /Page Wrapper -->

@@ -1,0 +1,126 @@
+{
+    "data":[
+        {
+            "id": "#HB-1245",
+            "hotelName": "Hotel Athenee",
+            "hotelLocation": "Barcelona",
+            "bookedBy": "Lynwood Dickens",
+            "room": "Suite Room",
+            "guest": "2 Adults, 1 Child",
+            "days": "4 Days, 3 Nights",
+            "pricing": "$11,569",
+            "bookedOn": "15 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#HB-3215",
+            "hotelName": "The Luxe Haven",
+            "hotelLocation": "London",
+            "bookedBy": "James Osborne",
+            "room": "Queen Room",
+            "guest": "2 Adults, 2 Child",
+            "days": "3 Days, 2 Nights",
+            "pricing": "$10,745",
+            "bookedOn": "20 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#HB-4581",
+            "hotelName": "The Urban Retreat",
+            "hotelLocation": "Edinburgh",
+            "bookedBy": "Steve Grieve",
+            "room": "Single Room",
+            "guest": "2 Adults, 1 Child",
+            "days": "2 Days, 1 Night",
+            "pricing": "$8,160",
+            "bookedOn": "04 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#HB-6545",
+            "hotelName": "The Grand Horizon",
+            "hotelLocation": "Manchester",
+            "bookedBy": "The Grand Horizon",
+            "room": "Balcony View",
+            "guest": "3 Adults, 2 Child",
+            "days": "5 Days, 4 Nights",
+            "pricing": "$14,840",
+            "bookedOn": "17 Jun 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#HB-3256",
+            "hotelName": "Hotel Serene Valley",
+            "hotelLocation": "Chelsea",
+            "bookedBy": "Hotel Serene Valley",
+            "room": "City View",
+            "guest": "Chelsea",
+            "days": "3 Days, 2 Nights",
+            "pricing": "$10,450",
+            "bookedOn": "25 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#HB-3654",
+            "hotelName": "Hotel Evergreen",
+            "hotelLocation": "Las Vegas",
+            "bookedBy": "Hotel Evergreen",
+            "room": "Suite Room",
+            "guest": "2 Adults, 1 Child",
+            "days": "4 Days, 3 Nights",
+            "pricing": "$12,600",
+            "bookedOn": "02 Jul 2025",
+            "status": "Cancelled"
+        },
+        {
+            "id": "#HB-1458",
+            "hotelName": "Stardust Hotel",
+            "hotelLocation": "Salford",
+            "bookedBy": "Stardust Hotel",
+            "room": "Suite Room",
+            "guest": "2 Adults, 2 Child",
+            "days": "2 Days, 1 Night",
+            "pricing": "$9,380",
+            "bookedOn": "12 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#HB-6589",
+            "hotelName": "Hotel Plaza",
+            "hotelLocation": "Newyork",
+            "bookedBy": "Hotel Plaza",
+            "room": "Single Room",
+            "guest": "1 Adult, 1 Child",
+            "days": "3 Days, 2 Nights",
+            "pricing": "$10,400",
+            "bookedOn": "26 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#HB-2315",
+            "hotelName": "Hotel Skyline Vista",
+            "hotelLocation": "Cambridge",
+            "bookedBy": "Hotel Skyline Vista",
+            "room": "Queen Room",
+            "guest": "2 Adults, 1 Child",
+            "days": "4 Days, 3 Nights",
+            "pricing": "$12,810",
+            "bookedOn": "10 Aug 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#HB-5414",
+            "hotelName": "Hotel Aurora Bliss",
+            "hotelLocation": "Bristol",
+            "bookedBy": "Hotel Aurora Bliss",
+            "room": "Suite Room",
+            "guest": "2 Adults, 1 Child",
+            "days": "5 Days, 4 Nights",
+            "pricing": "$15,450",
+            "bookedOn": "22 Aug 2025",
+            "status": "Completed"
+        }
+    ],
+    "totalData":11
+    
+}

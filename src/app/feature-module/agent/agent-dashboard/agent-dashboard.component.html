@@ -1,0 +1,958 @@
+<div class="row">
+    <div class="col-xl-3 col-sm-6 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body text-center">
+                <span class="avatar avatar rounded-circle bg-success mb-2">
+                    <i class="isax isax-calendar-15 fs-24"></i>
+                </span>
+                <p class="mb-1">Total Bookings</p>
+                <h5 class="mb-2">456</h5>
+                <p class="d-flex align-items-center justify-content-center fs-14"><i class="isax isax-arrow-up-15 me-1 text-success"></i>20% From Last Month </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body text-center">
+                <span class="avatar avatar rounded-circle bg-orange mb-2">
+                    <i class="isax isax-money-time5 fs-24"></i>
+                </span>
+                <p class="mb-1">Total Listings</p>
+                <h5 class="mb-2">23</h5>
+                <a [routerLink]="routes.agentListings" class="fs-14 link-primary text-decoration-underline">View All</a>   
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body text-center">
+                <span class="avatar avatar rounded-circle bg-info mb-2">
+                    <i class="isax isax-money-send5 fs-24"></i>
+                </span>
+                <p class="mb-1">Total Earnings</p>
+                <h5 class="mb-2">$5,6560</h5>
+                <p class="d-flex align-items-center justify-content-center fs-14"><i class="isax isax-arrow-down5 me-1 text-danger"></i>15% From Last Month </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body text-center">
+                <span class="avatar avatar rounded-circle bg-indigo mb-2">
+                    <i class="isax isax-magic-star5 fs-24"></i>
+                </span>
+                <p class="mb-1">Total Reviews</p>
+                <h5 class="mb-2">62</h5>
+                <a [routerLink]="routes.agentReview" class="fs-14 link-primary text-decoration-underline">View All</a>   
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <!-- Bookings Statistics -->
+    <div class="col-xl-4 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6>Bookings Statistics</h6>
+                    <div class="dropdown ">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn bg-light-200 btn-sm text-gray-6 rounded-pill fw-normal fs-14 d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                            <i class="isax isax-calendar-2 me-2 fs-14 text-gray-6"></i>2025
+                        </a>
+                        <ul class="dropdown-menu  dropdown-menu-end p-3">
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">
+                                    <i class="ti ti-point-filled me-1"></i>2025
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">
+                                    <i class="ti ti-point-filled me-1"></i>2024
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">
+                                    <i class="ti ti-point-filled me-1"></i>2023
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-center mb-3">
+                    <div id="booking-chart">
+                        <apx-chart
+                                    [series]="booking_chart.series"
+                                    [chart]="booking_chart.chart"
+                                    [colors]="booking_chart.colors"
+                                    [xaxis]="booking_chart.xaxis"
+                                    [yaxis]="booking_chart.yaxis"
+                                    [grid]="booking_chart.grid"
+                                    [dataLabels]="booking_chart.dataLabels"
+                                    [plotOptions]="booking_chart.plotOptions"
+                                    [labels]="booking_chart.labels"
+                                    [legend]="booking_chart.legend"
+                                    ></apx-chart>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="border-icon teal">Hotels</h6>
+                    <p class="fs-14"><span class="text-gray-9 fw-medium">16</span> Bookings</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="border-icon secondary">Flights</h6>
+                    <p class="fs-14"><span class="text-gray-9 fw-medium">12</span> Bookings</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="border-icon purple">Cars</h6>
+                    <p class="fs-14"><span class="text-gray-9 fw-medium">14</span> Bookings</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="border-icon dark">Cruise</h6>
+                    <p class="fs-14"><span class="text-gray-9 fw-medium">16</span> Bookings</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-0">
+                    <h6 class="border-icon primary">Tour</h6>
+                    <p class="fs-14"><span class="text-gray-9 fw-medium">04</span> Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- /Bookings Statistics -->
+
+    <!-- Earnings -->
+    <div class="col-xl-8 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body pb-0">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6>Earnings</h6>
+                    <div class="dropdown ">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn bg-light-200 btn-sm text-gray-6 rounded-pill fw-normal fs-14 d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                            <i class="isax isax-calendar-2 me-2 fs-14 text-gray-6"></i>2025
+                        </a>
+                        <ul class="dropdown-menu  dropdown-menu-end p-3">
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">
+                                    <i class="ti ti-point-filled me-1"></i>2025
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">
+                                    <i class="ti ti-point-filled me-1"></i>2024
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">
+                                    <i class="ti ti-point-filled me-1"></i>2023
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <div class="mb-2">
+                            <p class="mb-0">Total Earnings this Year</p>
+                            <h3>$20,659</h3>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <p class="fs-14"><span class="badge badge-soft-success badge-md border border-success rounded-pill me-2"><i class="isax isax-arrow-up-3 "></i>12%</span>vs last years</p>
+                        </div>
+                    </div>
+                    <div id="earning-chart">
+                        <apx-chart
+                                    [series]="earning_chart.series"
+                                    [chart]="earning_chart.chart"
+                                    [colors]="earning_chart.colors"
+                                    [xaxis]="earning_chart.xaxis"
+                                    [yaxis]="earning_chart.yaxis"
+                                    [tooltip]="earning_chart.tooltip"
+                                    [grid]="earning_chart.grid"
+                                    [dataLabels]="earning_chart.dataLabels"
+                                    [plotOptions]="earning_chart.plotOptions"
+                                    ></apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Earnings -->                        
+
+</div>
+
+<div class="row">
+
+    <!-- Recently Added -->
+    <div class="col-xl-6 col-xxl-5 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body">
+                <h6 class="mb-4">Recently Added</h6>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="routes.hotelDetails" class="avatar avatar-lg flex-shrink-0 me-2">
+                            <img src="assets/img/hotels/hotel-20.jpg" class="img-fluid rounded-circle" alt="Img">
+                        </a>
+                        <div>
+                            <h6 class="fs-16"><a [routerLink]="routes.hotelDetails">The Grand Horizon</a> <span class="badge badge-soft-info badge-xs rounded-pill"><i class="isax isax-signpost me-1"></i>Hotels</span></h6>
+                            <p class="fs-14">Last Booked : 25 Apr 2025</p>
+                        </div>
+                    </div>
+                    <a [routerLink]="routes.agentHotelBooking" class="btn rebook-btn btn-sm">06 Bookings</a>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="routes.tourDetails" class="avatar avatar-lg flex-shrink-0 me-2">
+                            <img src="assets/img/tours/tours-28.jpg" class="img-fluid rounded-circle" alt="Img">
+                        </a>
+                        <div>
+                            <h6 class="fs-16"><a [routerLink]="routes.tourDetails">Dare DevCon</a> <span class="badge badge-soft-pink badge-xs rounded-pill"><i class="isax isax-signpost me-1"></i>Tour</span></h6>
+                            <p class="fs-14">Last Booked : 16 May 2025</p>
+                        </div>
+                    </div>
+                    <a [routerLink]="routes.agentTourBooking" class="btn rebook-btn btn-sm">12 Bookings</a>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="routes.flightDetails" class="avatar avatar-lg flex-shrink-0 me-2">
+                            <img src="assets/img/flight/flight-05.jpg" class="img-fluid rounded-circle" alt="Img">
+                        </a>
+                        <div>
+                            <h6 class="fs-16"><a [routerLink]="routes.flightDetails">Altair 333</a> <span class="badge badge-soft-teal badge-xs rounded-pill"><i class="isax isax-signpost me-1"></i>Flight</span></h6>
+                            <p class="fs-14">Last Booked : 25 May 2025</p>
+                        </div>
+                    </div>
+                    <a [routerLink]="routes.agentFlightBooking" class="btn rebook-btn btn-sm">14 Bookings</a>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="routes.cruiseDetails" class="avatar avatar-lg flex-shrink-0 me-2">
+                            <img src="assets/img/cruise/cruise-28.jpg" class="img-fluid rounded-circle" alt="Img">
+                        </a>
+                        <div>
+                            <h6 class="fs-16"><a [routerLink]="routes.cruiseDetails">Oceania Cruises</a> <span class="badge badge-soft-cyan badge-xs rounded-pill"><i class="isax isax-signpost me-1"></i>Cruise</span></h6>
+                            <p class="fs-14">Last Booked : 18 Jun 2025</p>
+                        </div>
+                    </div>
+                    <a [routerLink]="routes.agentCruiseBooking" class="btn rebook-btn btn-sm">22 Bookings</a>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="routes.tourDetails" class="avatar avatar-lg flex-shrink-0 me-2">
+                            <img src="assets/img/tours/tours-26.jpg" class="img-fluid rounded-circle" alt="Img">
+                        </a>
+                        <div>
+                            <h6 class="fs-16"><a [routerLink]="routes.tourDetails">Fitness Frenzy</a> <span class="badge badge-soft-pink badge-xs rounded-pill"><i class="isax isax-signpost me-1"></i>Tour</span></h6>
+                            <p class="fs-14">Last Booked : 25 May 2025</p>
+                        </div>
+                    </div>
+                    <a [routerLink]="routes.agentTourBooking" class="btn rebook-btn btn-sm">40 Bookings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Recently Added -->
+
+    <!-- Recent Invoices -->
+    <div class="col-xxl-7 col-xl-6 d-flex">
+        <div class="card shadow-none flex-fill">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4 gap-2">
+                    <h6>Latest Invoices</h6>
+                </div>
+                <div class="card shadow-none mb-4">
+                    <div class="card-body p-2">
+                        <div class="d-flex justify-content-between align-items-center flex-fill">
+                            <div>
+                                <div class="d-flex align-items-center flex-wrap mb-1">
+                                    <a [routerLink]="routes.invoices" class="fs-14 link-primary border-end pe-2 me-2 mb-0">#INV12565</a>
+                                    <p class="fs-14">Date: 15 May 2024</p>
+                                </div>
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.flightDetails">Cloudrider 789</a></h6>
+                            </div>
+                            <div class="text-end">
+                                <p class="fs-14 mb-1">Amount</p>
+                                <h6 class="fw-medium">$569</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-none mb-4">
+                    <div class="card-body p-2">
+                        <div class="d-flex justify-content-between align-items-center flex-fill">
+                            <div>
+                                <div class="d-flex align-items-center flex-wrap mb-1">
+                                    <a [routerLink]="routes.invoices" class="fs-14 link-primary border-end pe-2 me-2 mb-0">#INV12564</a>
+                                    <p class="fs-14">Date: 13 May 2024</p>
+                                </div>
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.hotelDetails">The Luxe Haven</a></h6>
+                            </div>
+                            <div class="text-end">
+                                <p class="fs-14 mb-1">Amount</p>
+                                <h6 class="fw-medium">$430</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-none mb-4">
+                    <div class="card-body p-2">
+                        <div class="d-flex justify-content-between align-items-center flex-fill">
+                            <div>
+                                <div class="d-flex align-items-center flex-wrap mb-1">
+                                    <a [routerLink]="routes.invoices" class="fs-14 link-primary border-end pe-2 me-2 mb-0">#INV12563</a>
+                                    <p class="fs-14">Date: 10 May 2024</p>
+                                </div>
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.carDetails">Ford Mustang 4.0 AT</a></h6>
+                            </div>
+                            <div class="text-end">
+                                <p class="fs-14 mb-1">Amount</p>
+                                <h6 class="fw-medium">$380</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-none mb-0">
+                    <div class="card-body p-2">
+                        <div class="d-flex justify-content-between align-items-center flex-fill">
+                            <div>
+                                <h6 class="fs-16 fw-medium mb-1"><a [routerLink]="routes.cruiseDetails">Super Aquamarine</a></h6>
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <a [routerLink]="routes.invoices" class="fs-14 link-primary border-end pe-2 me-2 mb-0">#INV12562</a>
+                                    <p class="fs-14">Date: 04 May 2024</p>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <p class="fs-14 mb-1">Amount</p>
+                                <h6 class="fw-medium">$475</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Recent Invoices -->
+
+</div>
+
+<!-- Add Lists -->
+<div class="row row-cols-1 row-cols-md-3 row-cols-xl-5 justify-content-center">
+    <div class="col">
+        <div class="card bg-success-100 border-0 shadow-none">
+            <div class="card-body">
+                <h6 class="mb-1">4 Hotels</h6>
+                <a [routerLink]="routes.addHotel" class="fs-14 fw-medium link-default text-decoration-underline">Add New Hotels</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card bg-pink-100 border-0 shadow-none">
+            <div class="card-body">
+                <h6 class="mb-1">4 Flights</h6>
+                <a [routerLink]="routes.addFlight" class="fs-14 fw-medium link-primary text-decoration-underline">Add New Flight</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card bg-danger-100 border-0 shadow-none">
+            <div class="card-body">
+                <h6 class="mb-1">5 Tours</h6>
+                <a [routerLink]="routes.addTour" class="fs-14 fw-medium link-default text-decoration-underline">Add New Tour</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card bg-purple-100 border-0 shadow-none">
+            <div class="card-body">
+                <h6 class="mb-1">9 Cars</h6>
+                <a [routerLink]="routes.addCar" class="fs-14 fw-medium link-default text-decoration-underline">Add New Car</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card bg-cyan-100 border-0 shadow-none">
+            <div class="card-body">
+                <h6 class="mb-1">8 Cruise</h6>
+                <a [routerLink]="routes.addCruise" class="fs-14 fw-medium link-default text-decoration-underline">Add New Cruise</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /Add Lists -->
+
+<!-- Hotel-Booking List -->
+<div class="card hotel-list mb-0">
+    <div class="card-body p-0">
+        <div class="list-header d-flex align-items-center justify-content-between flex-wrap">
+            <h6 class="">Recent Bookings</h6>
+            <div class="d-flex align-items-center flex-wrap">
+                <div class="dropdown me-3">
+                    <a href="javascript:void(0);" class="dropdown-toggle text-gray-6 btn  rounded border d-inline-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                        Hotels
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end p-3">
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Single Room</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Double Room</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Twin Room</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="input-icon-start position-relative">
+                    <span class="icon-addon">
+                        <i class="isax isax-search-normal-1 fs-14"></i>
+                    </span>
+                    <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }"
+                                            (ngModelChange)="searchData(searchDataValue)" type="search" class="form-control form-control-sm"
+                                            placeholder="Search" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Hotel List -->
+        <div class="custom-datatable-filter table-responsive">
+            <table matSort (matSortChange)="sortData($event)" class="table datatable">
+                <thead class="thead-light">
+                    <tr>
+                        <th mat-sort-header="id">ID</th>
+                        <th mat-sort-header="hotel">Hotel</th>
+                        <th mat-sort-header="room">Room & Guest</th>
+                        <th mat-sort-header="days">Days</th>
+                        <th mat-sort-header="price">Pricing</th>
+                        <th mat-sort-header="date">Booked on</th>
+                        <th mat-sort-header="status">Status</th>
+                        <th mat-sort-header="action"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (data of tableData; track data; let i = $index) {
+                        <tr>
+                            <td><a href="javascript:void(0);" class="link-primary fw-medium" data-bs-toggle="modal" data-bs-target="#upcoming">{{data.id}}</a></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <a [routerLink]="routes.hotelDetails" class="avatar avatar-lg"><img src="assets/img/hotels/hotel-01.jpg" class="img-fluid rounded-circle" alt="img"></a>
+                                    <div class="ms-2">
+                                        <p class="text-dark mb-0 fw-medium fs-14"><a [routerLink]="routes.hotelDetails">{{data.hotelName}}</a></p>
+                                        <span class="fs-14 fw-normal text-gray-6">{{data.hotelLocation}}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <h6 class="fs-14 mb-1">{{data.room}}</h6>
+                                <span class="fs-14 fw-normal text-gray-6">{{data.guest}}</span>
+                            </td>
+                            <td>{{data.days}}</td>
+                            <td>{{data.pricing}}</td>
+                            <td>{{data.bookedOn}}</td>
+                            <td>
+                                <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                [ngClass]="data.status==='Upcoming'?'badge-info': data.status==='Pending'?'badge-secondary': data.status==='Cancelled'?'badge-danger':''">
+                                <i class="fa-solid fa-circle fs-5 me-1"></i>{{data.status}}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" [attr.data-bs-target]="data.status==='Upcoming'?'#upcoming':data.status==='Pending'?'#pending':data.status==='Cancelled'?'#cancelled':''"><i class="isax isax-eye"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (tableData.length === 0) {
+                        <tr>
+                        <td colspan="10">
+                            <h5 style="text-align: center">No data found</h5>
+                        </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /Hotel List -->
+
+    </div>
+</div>
+<!-- /Hotel-Booking List -->
+
+
+<!-- Upcoming Modal -->
+<div class="modal fade" id="upcoming" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Booking Info <span class="fs-14 fw-medium text-primary">#HB-1245</span></h5>
+                <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn-close text-dark"></a>
+            </div>
+            <div class="modal-body">
+                <div class="upcoming-content">
+                    <div class="upcoming-title mb-4 d-flex align-items-center justify-content-between p-3 rounded">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <div class="me-2">
+                                <img src="assets/img/hotels/hotel-13.jpg" alt="image" class="avatar avartar-md avatar-rounded">
+                            </div>
+                            <div>
+                                <h6 class="mb-1">The Luxe Haven</h6>
+                                <div class="title-list">
+                                    <p class="d-flex align-items-center pe-2 me-2 border-end border-light fw-normal"><i class="isax isax-building me-2"></i>Luxury Hotel</p>
+                                    <p class="d-flex align-items-center pe-2 me-2 border-end border-light fw-normal"><i class="isax isax-location5 me-2"></i>15/C Prince Dareen Road, New York</p>
+                                    <p class="d-flex align-items-center pe-2 me-2  fw-normal"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>(400 Reviews)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="badge badge-info rounded-pill d-inline-flex align-items-center fs-10"><i class="fa-solid fa-circle fs-5 me-1"></i>Upcoming</span>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Room Details</h6>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Room Type</h6>
+                                <p class="text-gray-6 fs-16 ">Queen Room</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">No of Rooms</h6>
+                                <p class="text-gray-6 fs-16 ">1</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Room Price</h6>
+                                <p class="text-gray-6 fs-16 ">$400</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Guests</h6>
+                                <p class="text-gray-6 fs-16 ">4 Adults, 2 Child</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Booking Info</h6>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Booked On</h6>
+                                <p class="text-gray-6 fs-16 ">15 May 2024</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Check In Date & Time</h6>
+                                <p class="text-gray-6 fs-16 ">20 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Checkout Date & Time</h6>
+                                <p class="text-gray-6 fs-16 ">25 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">No of Days Stay</h6>
+                                <p class="text-gray-6 fs-16 ">4 Days, 5 Nights</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Extra Service Info</h6>
+                        <div class="d-flex align-items-center">
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14 me-2">Cleaning</span>
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14 me-2">Airport Pickup</span>
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14">Breakfast</span>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Billing Info</h6>
+                        <div class="row gy-3">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Name</h6>
+                                <p class="text-gray-6 fs-16 ">Chris Foxy</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Email</h6>
+                                <p class="text-gray-6 fs-16 ">chrfo2356&#64;example.com</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Phone</h6>
+                                <p class="text-gray-6 fs-16 ">+1 12656 26654</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Address</h6>
+                                <p class="text-gray-6 fs-16 ">15/C Prince Dareen Road, New York</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Order Info</h6>
+                        <div class="row gy-3">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Order Id</h6>
+                                <p class="text-primary fs-16 ">#45669</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Payment Method</h6>
+                                <p class="text-gray-6 fs-16 ">Credit Card (Visa)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Payment Status</h6>
+                                <p class="text-success fs-16 ">Paid</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Date of Payment</h6>
+                                <p class="text-gray-6 fs-16 ">20 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Tax</h6>
+                                <p class="text-gray-6 fs-16 ">15% ($60)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Discount</h6>
+                                <p class="text-gray-6 fs-16 ">20% ($15)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Booking Fees</h6>
+                                <p class="text-gray-6 fs-16 ">$25</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Total Paid</h6>
+                                <p class="text-gray-6 fs-16 ">$6569</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-md btn-primary" data-bs-toggle="modal" data-bs-target="#cancel-booking">Cancel Booking</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Upcoming Modal -->
+
+<!-- Pending Modal -->
+<div class="modal fade" id="pending" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Booking Info <span class="fs-14 fw-medium text-primary">#HB-1245</span></h5>
+                <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn-close text-dark"></a>
+            </div>
+            <div class="modal-body">
+                <div class="upcoming-content">
+                    <div class="upcoming-title mb-4 d-flex align-items-center justify-content-between p-3 rounded">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <div class="me-2">
+                                <img src="assets/img/hotels/hotel-13.jpg" alt="image" class="avatar avartar-md avatar-rounded">
+                            </div>
+                            <div>
+                                <h6 class="mb-1">The Luxe Haven</h6>
+                                <div class="title-list">
+                                    <p class="d-flex align-items-center pe-2 me-2 border-end border-light fw-normal"><i class="isax isax-building me-2"></i>Luxury Hotel</p>
+                                    <p class="d-flex align-items-center pe-2 me-2 border-end border-light fw-normal"><i class="isax isax-location5 me-2"></i>15/C Prince Dareen Road, New York</p>
+                                    <p class="d-flex align-items-center pe-2 me-2  fw-normal"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>(400 Reviews)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="badge badge-secondary rounded-pill d-inline-flex align-items-center fs-10"><i class="fa-solid fa-circle fs-5 me-1"></i>Pending</span>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Room Details</h6>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Room Type</h6>
+                                <p class="text-gray-6 fs-16 ">Queen Room</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">No of Rooms</h6>
+                                <p class="text-gray-6 fs-16 ">1</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Room Price</h6>
+                                <p class="text-gray-6 fs-16 ">$400</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Guests</h6>
+                                <p class="text-gray-6 fs-16 ">4 Adults, 2 Child</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Booking Info</h6>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Booked On</h6>
+                                <p class="text-gray-6 fs-16 ">15 May 2024</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Check In Date & Time</h6>
+                                <p class="text-gray-6 fs-16 ">20 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Checkout Date & Time</h6>
+                                <p class="text-gray-6 fs-16 ">25 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">No of Days Stay</h6>
+                                <p class="text-gray-6 fs-16 ">4 Days, 5 Nights</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Extra Service Info</h6>
+                        <div class="d-flex align-items-center">
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14 me-2">Cleaning</span>
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14 me-2">Airport Pickup</span>
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14">Breakfast</span>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Billing Info</h6>
+                        <div class="row gy-3">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Name</h6>
+                                <p class="text-gray-6 fs-16 ">Chris Foxy</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Email</h6>
+                                <p class="text-gray-6 fs-16 ">chrfo2356&#64;example.com</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Phone</h6>
+                                <p class="text-gray-6 fs-16 ">+1 12656 26654</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Address</h6>
+                                <p class="text-gray-6 fs-16 ">15/C Prince Dareen Road, New York</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Order Info</h6>
+                        <div class="row gy-3">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Order Id</h6>
+                                <p class="text-primary fs-16 ">#45669</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Payment Method</h6>
+                                <p class="text-gray-6 fs-16 ">Credit Card (Visa)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Payment Status</h6>
+                                <p class="text-success fs-16 ">Paid</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Date of Payment</h6>
+                                <p class="text-gray-6 fs-16 ">20 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Tax</h6>
+                                <p class="text-gray-6 fs-16 ">15% ($60)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Discount</h6>
+                                <p class="text-gray-6 fs-16 ">20% ($15)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Booking Fees</h6>
+                                <p class="text-gray-6 fs-16 ">$25</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Total Paid</h6>
+                                <p class="text-gray-6 fs-16 ">$6569</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-md btn-primary" data-bs-toggle="modal" data-bs-target="#cancel-booking">Cancel Booking</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Pending Modal -->
+
+<!-- Cancelled Modal -->
+<div class="modal fade" id="cancelled" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Booking Info <span class="fs-14 fw-medium text-primary">#HB-1245</span></h5>
+                <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn-close text-dark"></a>
+            </div>
+            <div class="modal-body">
+                <div class="upcoming-content">
+                    <div class="upcoming-title mb-4 d-flex align-items-center justify-content-between p-3 rounded">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <div class="me-2">
+                                <img src="assets/img/hotels/hotel-13.jpg" alt="image" class="avatar avartar-md avatar-rounded">
+                            </div>
+                            <div>
+                                <h6 class="mb-1">The Luxe Haven</h6>
+                                <div class="title-list">
+                                    <p class="d-flex align-items-center pe-2 me-2 border-end border-light fw-normal"><i class="isax isax-building me-2"></i>Luxury Hotel</p>
+                                    <p class="d-flex align-items-center pe-2 me-2 border-end border-light fw-normal"><i class="isax isax-location5 me-2"></i>15/C Prince Dareen Road, New York</p>
+                                    <p class="d-flex align-items-center pe-2 me-2  fw-normal"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>(400 Reviews)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="badge badge-danger rounded-pill d-inline-flex align-items-center fs-10"><i class="fa-solid fa-circle fs-5 me-1"></i>Cancelled</span>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Room Details</h6>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Room Type</h6>
+                                <p class="text-gray-6 fs-16 ">Queen Room</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">No of Rooms</h6>
+                                <p class="text-gray-6 fs-16 ">1</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Room Price</h6>
+                                <p class="text-gray-6 fs-16 ">$400</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Guests</h6>
+                                <p class="text-gray-6 fs-16 ">4 Adults, 2 Child</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Booking Info</h6>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Booked On</h6>
+                                <p class="text-gray-6 fs-16 ">15 May 2024</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Check In Date & Time</h6>
+                                <p class="text-gray-6 fs-16 ">20 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Checkout Date & Time</h6>
+                                <p class="text-gray-6 fs-16 ">25 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">No of Days Stay</h6>
+                                <p class="text-gray-6 fs-16 ">4 Days, 5 Nights</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Extra Service Info</h6>
+                        <div class="d-flex align-items-center">
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14 me-2">Cleaning</span>
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14 me-2">Airport Pickup</span>
+                            <span class="bg-light rounded-pill py-1 px-2 text-gray-6 fs-14">Breakfast</span>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Billing Info</h6>
+                        <div class="row gy-3">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Name</h6>
+                                <p class="text-gray-6 fs-16 ">Chris Foxy</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Email</h6>
+                                <p class="text-gray-6 fs-16 ">chrfo2356&#64;example.com</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Phone</h6>
+                                <p class="text-gray-6 fs-16 ">+1 12656 26654</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Address</h6>
+                                <p class="text-gray-6 fs-16 ">15/C Prince Dareen Road, New York</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details">
+                        <h6 class="mb-2">Order Info</h6>
+                        <div class="row gy-3">
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Order Id</h6>
+                                <p class="text-primary fs-16 ">#45669</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Payment Method</h6>
+                                <p class="text-gray-6 fs-16 ">Credit Card (Visa)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Payment Status</h6>
+                                <p class="text-success fs-16 ">Paid</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Date of Payment</h6>
+                                <p class="text-gray-6 fs-16 ">20 May 2024, 10:50 AM</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Tax</h6>
+                                <p class="text-gray-6 fs-16 ">15% ($60)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Discount</h6>
+                                <p class="text-gray-6 fs-16 ">20% ($15)</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Booking Fees</h6>
+                                <p class="text-gray-6 fs-16 ">$25</p>
+                            </div>
+                            <div class="col-lg-3">
+                                <h6 class="fs-14">Total Paid</h6>
+                                <p class="text-gray-6 fs-16 ">$6569</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-details mb-0">
+                        <h6 class="mb-2">Cancel Reason</h6>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <h6 class="fs-14">Reason</h6>
+                                <p class="text-gray-6 fs-16 ">Illness or medical appointments that prevent travel</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a [routerLink]="routes.hotelDetails" data-bs-dismiss="modal" class="btn btn-md btn-primary">Reschedule</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Cancelled Modal -->
+
+<!-- Booking Cancel -->
+<div class="modal fade" id="cancel-booking">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-5">
+                <form>
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <i class="isax isax-location-cross5 text-danger fs-40"></i>
+                        </div>
+                        <h5 class="mb-2">Are you sure you want to cancel booking?</h5>
+                        <p class="mb-4 text-gray-9">Order ID : <span class="text-primary">#HB-1245</span></p>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Reason <span class="text-danger">*</span></label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>    
+                    <div class="d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">No, Dont Cancel</a>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Yes, Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  
+<!-- /Booking Cancel -->

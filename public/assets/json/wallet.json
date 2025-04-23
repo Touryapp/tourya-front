@@ -1,0 +1,46 @@
+{
+    "data":[
+        {
+            "paymentType": "Card",
+            "creditOrDebit": "Debit",
+            "date": "15 May 2025, 10:00 AM",
+            "amount": "-$256",
+            "balance": "$11,569",
+            "status": "Completed"
+        },
+        {
+            "paymentType": "Paypal",
+            "creditOrDebit": "Credit",
+            "date": "20 May 2025, 11:20 AM",
+            "amount": "+$3000",
+            "balance": "$11,569",
+            "status": "Pending"
+        },
+        {
+            "paymentType": "Stripe",
+            "creditOrDebit": "Credit",
+            "date": "22 May 2025, 02:40 PM",
+            "amount": "+$4000",
+            "balance": "$12,497",
+            "status": "Completed"
+        },
+        {
+            "paymentType": "Card",
+            "creditOrDebit": "Debit",
+            "date": "12 Jun 2025, 05:15 PM",
+            "amount": "-$600",
+            "balance": "$14,284",
+            "status": "Cancelled"
+        },
+        {
+            "paymentType": "Card",
+            "creditOrDebit": "Debit",
+            "date": "17 Jun 2025, 09:30 AM",
+            "amount": "+$11,569",
+            "balance": "$13,025",
+            "status": "Completed"
+        }
+    ],
+    "totalData":5
+    
+}

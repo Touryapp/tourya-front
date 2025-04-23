@@ -1,0 +1,1366 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-01 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Add Hotel</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add Hotel</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+            <div class="place-nav">
+                <ul class="nav" role="tablist">
+                    <li>
+                        <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#add_hotel" aria-selected="true" role="tab">
+							Add New Hotel
+						</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#add_room" aria-selected="false" role="tab" tabindex="-1">
+							Add New Room
+						</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+
+                <!-- Add Hotel -->
+                <div class="tab-pane fade active show" id="add_hotel" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-3 ">
+                            <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
+                                <div class="card-body">
+                                    <div>
+                                        <h5 class="mb-3">Add Hotel</h5>
+                                        <ul class="add-tab-list">
+                                            <li *ngFor="let tab of tabs">
+                                                <a 
+                                                href="javascript:void(0);" 
+                                                [class.active]="activeTab === tab.id"
+                                                (click)="scrollTo(tab.id)"
+                                                >
+                                                  {{ tab.label }}
+                                                </a>
+                                              </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <form (ngSubmit)="onSubmit()">
+                                <div class="card shadow-none" id="basic_info">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Hotel Details</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Hotel Name</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Category</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">Hotels</mat-option>
+                                                        <mat-option value="1">Villa</mat-option>
+                                                        <mat-option value="1">Apartment</mat-option>
+                                                        <mat-option value="1">Guest House</mat-option>
+                                                        <mat-option value="1">Lodge</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Established</label>
+                                                    <div class="input-icon-end position-relative">
+                                                        <input
+                                                    type="text"
+                                                    class="form-control datetimepicker"
+                                                    bsDatepicker
+                                                    [bsConfig]="{ adaptivePosition: true }"
+                                                    placeholder="21-10-2024"
+                                                    [bsValue]="bsValue"
+                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                                    />
+                                                        <span class="input-icon-addon">
+															<i class="isax isax-calendar"></i>
+														</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Renovation</label>
+                                                    <div class="input-icon-end position-relative">
+                                                        <input
+                                                    type="text"
+                                                    class="form-control datetimepicker"
+                                                    bsDatepicker
+                                                    [bsConfig]="{ adaptivePosition: true }"
+                                                    placeholder="21-10-2024"
+                                                    [bsValue]="bsValue"
+                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                                    />
+                                                        <span class="input-icon-addon">
+															<i class="isax isax-calendar"></i>
+														</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Star Ratings</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">1</mat-option>
+                                                        <mat-option value="1">2</mat-option>
+                                                        <mat-option value="1">3</mat-option>
+                                                        <mat-option value="1">4</mat-option>
+                                                        <mat-option value="1">5</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Total Number Of Rooms</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Maximum Capacity</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="location">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Location</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Country</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">United States</mat-option>
+                                                        <mat-option value="1">Canada</mat-option>
+                                                        <mat-option value="1">United Kingdom</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">City</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">State</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Zip Code</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Address</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Address 1</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="highlights">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Highlights</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row add-highlight-info">
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Highlights</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ng-container  *ngFor="let item of formData; let i = index; trackBy: trackByIndex">
+                                            <div class="col-md-12 highlight-info"><div class="mb-3">
+                                                <label class="form-label">Highlights</label>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="text" class="form-control">
+                                                    <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3" (click)="removeRow(i)">
+                                                        <i class="isax isax-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </ng-container>
+                                        <div>
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight" (click)="addNewRow()"><i class="isax isax-add-circle me-1"></i>Add New</a>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                                <div class="card shadow-none">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Services</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-1">
+                                                        <label class="form-check-label ms-2" for="service-1">
+                                                            24-Hour Room Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-2">
+                                                        <label class="form-check-label ms-2" for="service-2">
+                                                            In-Room Dining
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-3">
+                                                        <label class="form-check-label ms-2" for="service-3">
+                                                            Concierge Services
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-4">
+                                                        <label class="form-check-label ms-2" for="service-4">
+                                                            Daily Housekeeping
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-5">
+                                                        <label class="form-check-label ms-2" for="service-5">
+                                                            Front Desk Services
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-6">
+                                                        <label class="form-check-label ms-2" for="service-6">
+                                                            On-Site Restaurants
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-7">
+                                                        <label class="form-check-label ms-2" for="service-7">
+                                                            Check-In/Check-Out Assistance
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-8">
+                                                        <label class="form-check-label ms-2" for="service-8">
+                                                            Free luggage deposit
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-9">
+                                                        <label class="form-check-label ms-2" for="service-9">
+                                                            Laundry and Ironing Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-10">
+                                                        <label class="form-check-label ms-2" for="service-10">
+                                                            Dry Cleaning Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-11">
+                                                        <label class="form-check-label ms-2" for="service-11">
+                                                            Hair and Beauty Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-12">
+                                                        <label class="form-check-label ms-2" for="service-12">
+                                                            In-Room Spa Treatments
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-13">
+                                                        <label class="form-check-label ms-2" for="service-13">
+                                                            Valet Parking
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-14">
+                                                        <label class="form-check-label ms-2" for="service-14">
+                                                            Babysitting
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-15">
+                                                        <label class="form-check-label ms-2" for="service-15">
+                                                            Dry Cleaning Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-16">
+                                                        <label class="form-check-label ms-2" for="service-16">
+                                                            Wake-Up Call Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-17">
+                                                        <label class="form-check-label ms-2" for="service-17">
+                                                            Translator Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-18">
+                                                        <label class="form-check-label ms-2" for="service-18">
+                                                            Currency Exchange Service
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Accessibility</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-1">
+                                                        <label class="form-check-label ms-2" for="accessibility-1">
+                                                            Wheelchair accessible
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-2">
+                                                        <label class="form-check-label ms-2" for="accessibility-2">
+                                                            Visual alarms in hallways
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-3">
+                                                        <label class="form-check-label ms-2" for="accessibility-3">
+                                                            Elevator
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-4">
+                                                        <label class="form-check-label ms-2" for="accessibility-4">
+                                                            Braille/raised signage
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-5">
+                                                        <label class="form-check-label ms-2" for="accessibility-5">
+                                                            Roll-in shower with a bench or seat
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-6">
+                                                        <label class="form-check-label ms-2" for="accessibility-6">
+                                                            Grab bars near the toilet and shower
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-7">
+                                                        <label class="form-check-label ms-2" for="accessibility-7">
+                                                            Wheelchair-accessible gym
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-8">
+                                                        <label class="form-check-label ms-2" for="accessibility-8">
+                                                            Wheelchair-accessible business center
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-9">
+                                                        <label class="form-check-label ms-2" for="accessibility-9">
+                                                            Wheelchair-accessible lounge
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-10">
+                                                        <label class="form-check-label ms-2" for="accessibility-10">
+                                                            Wheelchair-accessible concierge desk
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-11">
+                                                        <label class="form-check-label ms-2" for="accessibility-11">
+                                                            Lowered towel racks
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-12">
+                                                        <label class="form-check-label ms-2" for="accessibility-12">
+                                                            Braille on room numbers, elevator buttons
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-13">
+                                                        <label class="form-check-label ms-2" for="accessibility-13">
+                                                            Step-free or ramped access
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-14">
+                                                        <label class="form-check-label ms-2" for="accessibility-14">
+                                                            Automatic doors
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-15">
+                                                        <label class="form-check-label ms-2" for="accessibility-15">
+                                                            Grab bars in the bathroom
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-16">
+                                                        <label class="form-check-label ms-2" for="accessibility-16">
+                                                            Wide doorways
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-17">
+                                                        <label class="form-check-label ms-2" for="accessibility-17">
+                                                            Lowered switches
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-18">
+                                                        <label class="form-check-label ms-2" for="accessibility-18">
+                                                            Accessible curtains
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="room_types">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Room Types</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-1">
+                                                        <label class="form-check-label ms-2" for="room-1">
+                                                            Single Room
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-2">
+                                                        <label class="form-check-label ms-2" for="room-2">
+                                                            Double Room
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-3">
+                                                        <label class="form-check-label ms-2" for="room-3">
+                                                            Twin Room
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-4">
+                                                        <label class="form-check-label ms-2" for="room-4">
+                                                            Deluxe Room
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-5">
+                                                        <label class="form-check-label ms-2" for="room-5">
+                                                            Suite
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-6">
+                                                        <label class="form-check-label ms-2" for="room-6">
+                                                            Junior Suite
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-7">
+                                                        <label class="form-check-label ms-2" for="room-7">
+                                                            Family Room
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-8">
+                                                        <label class="form-check-label ms-2" for="room-8">
+                                                            Connecting Rooms
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-9">
+                                                        <label class="form-check-label ms-2" for="room-9">
+                                                            Accessible Room
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-10">
+                                                        <label class="form-check-label ms-2" for="room-10">
+                                                            Studio Room
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-11">
+                                                        <label class="form-check-label ms-2" for="room-11">
+                                                            Penthouse
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-12">
+                                                        <label class="form-check-label ms-2" for="room-12">
+                                                            Villa
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-13">
+                                                        <label class="form-check-label ms-2" for="room-13">
+                                                            Economy Room
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-14">
+                                                        <label class="form-check-label ms-2" for="room-14">
+                                                            City View
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="room-15">
+                                                        <label class="form-check-label ms-2" for="room-15">
+                                                            Ocean View
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="popular_amenities">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Amenities</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-1">
+                                                        <label class="form-check-label ms-2" for="amenities-1">
+                                                            Free Wi-Fi
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-2">
+                                                        <label class="form-check-label ms-2" for="amenities-2">
+                                                            Air Conditioning
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-3">
+                                                        <label class="form-check-label ms-2" for="amenities-3">
+                                                            Heater
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-4">
+                                                        <label class="form-check-label ms-2" for="amenities-4">
+                                                            TV (Cable/Satellite)
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-5">
+                                                        <label class="form-check-label ms-2" for="amenities-5">
+                                                            Coffee Maker
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-6">
+                                                        <label class="form-check-label ms-2" for="amenities-6">
+                                                            Mini Fridge
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-7">
+                                                        <label class="form-check-label ms-2" for="amenities-7">
+                                                            Safe Deposit Box
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-8">
+                                                        <label class="form-check-label ms-2" for="amenities-8">
+                                                            Iron/Ironing Board
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-9">
+                                                        <label class="form-check-label ms-2" for="amenities-9">
+                                                            Hair Dryer
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-10">
+                                                        <label class="form-check-label ms-2" for="amenities-10">
+                                                            Shower
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-11">
+                                                        <label class="form-check-label ms-2" for="amenities-11">
+                                                            Jacuzzi/Hot Tub
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-12">
+                                                        <label class="form-check-label ms-2" for="amenities-12">
+                                                            Microwave
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-13">
+                                                        <label class="form-check-label ms-2" for="amenities-13">
+                                                            Bluetooth Speaker
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-14">
+                                                        <label class="form-check-label ms-2" for="amenities-14">
+                                                            Sofa/Seating Area
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-15">
+                                                        <label class="form-check-label ms-2" for="amenities-15">
+                                                            Extra Pillows and Blankets
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="faq">
+                                    <div class="card-header">
+                                        <h5 class="fs-18">FAQ</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="card shadow-none mb-3">
+                                            <div class="card-body px-3 py-2">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                                                    <h6><a href="javascript:void(0);">Does offer free cancellation for a full refund?</a></h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_faq" class="rounded-edit d-flex align-items-center justify-content-center me-2">
+                                                            <i class="isax isax-edit-2"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="trash-icon d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete_modal">
+                                                            <i class="isax isax-trash text-danger"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card shadow-none mb-3">
+                                            <div class="card-body px-3 py-2">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                                                    <h6><a href="javascript:void(0);">Is there a pool?</a></h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_faq" class="rounded-edit d-flex align-items-center justify-content-center me-2">
+                                                            <i class="isax isax-edit-2"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="trash-icon d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete_modal">
+                                                            <i class="isax isax-trash text-danger"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight" data-bs-toggle="modal" data-bs-target="#add_faq">
+                                                <i class="isax isax-add-circle me-1"></i>Add New
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="gallery">
+                                    <div class="card-header">
+                                        <h5 class="fs-18">Gallery</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
+                                            <span class="upload-img d-block mb-2"><i class="isax isax-document-upload fs-24"></i></span>
+                                            <h6 class="mb-1">Upload Gallery Images</h6>
+                                            <p class="mb-0">Upload Feature Image First, Image size should below 5MB</p>
+                                            <input type="file" accept="video/image">
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[0]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-01.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(0)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[1]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-02.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(1)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[2]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-03.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(2)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[3]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-04.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(3)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[4]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-05.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(4)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="description">
+                                    <div class="card-header">
+                                        <h5 class="fs-18">Description</h5>
+                                    </div>
+                                    <div class="card-body text-editor">
+                                        <ngx-editor [editor]="editor">
+                                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                                            </ngx-editor-menu>
+                                          </ngx-editor>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button type="button" class="btn btn-light me-2">Reset</button>
+                                    <button type="submit" class="btn btn-primary">Add New Hotel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Add Hotel -->
+
+                <!-- Add Room -->
+                <div class="tab-pane fade" id="add_room" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-3 ">
+                            <div class="card border-0 theiaStickySidebar">
+                                <div class="card-body">
+                                    <div>
+                                        <h5 class="mb-3">Add Room</h5>
+                                        <ul class="add-tab-list">
+                                            <li *ngFor="let tab of tabs1">
+                                                <a 
+                                                href="javascript:void(0);" 
+                                                [class.active]="activeTab === tab.id"
+                                                (click)="scrollTo(tab.id)"
+                                                >
+                                                  {{ tab.label }}
+                                                </a>
+                                              </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <form (ngSubmit)="onSubmit()">
+                                <div class="card shadow-none" id="basic_info_2">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Basic Info</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Room Name</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Room Type</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">Queen Room</mat-option>
+                                                        <mat-option value="1">Double Room</mat-option>
+                                                        <mat-option value="1">Suite Room</mat-option>
+                                                        <mat-option value="1">Family Room</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Hotel Name</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">Hotel Plaza Athenee</mat-option>
+                                                        <mat-option value="1">The Luxe Haven</mat-option>
+                                                        <mat-option value="1">The Urban Retreat</mat-option>
+                                                        <mat-option value="1">The Grand Horizon</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="description_2">
+                                    <div class="card-header">
+                                        <h5 class="fs-18">Description</h5>
+                                    </div>
+                                    <div class="card-body text-editor">
+                                        <ngx-editor [editor]="editor1">
+                                            <ngx-editor-menu [editor]="editor1" [toolbar]="toolbar">
+                                            </ngx-editor-menu>
+                                          </ngx-editor>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="specification">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Specifications</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Maximum Occupancy</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">1-2</mat-option>
+                                                        <mat-option value="1">2-4</mat-option>
+                                                        <mat-option value="1">4-6</mat-option>
+                                                        <mat-option value="1">6-10</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Room Size</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sleeps</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">1</mat-option>
+                                                        <mat-option value="1">2</mat-option>
+                                                        <mat-option value="1">3</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Bed Type</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">Single Bed</mat-option>
+                                                        <mat-option value="1">Double Bed</mat-option>
+                                                        <mat-option value="1">Queen Bed</mat-option>
+                                                        <mat-option value="1">King Bed</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">View</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select">
+                                                        <mat-option value="1">Select</mat-option>
+                                                        <mat-option value="1">Ocean View</mat-option>
+                                                        <mat-option value="1">Beachfront View</mat-option>
+                                                        <mat-option value="1">Mountain View</mat-option>
+                                                        <mat-option value="1">City View</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Price Per Night</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="services">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Services</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-19">
+                                                        <label class="form-check-label ms-2" for="service-19">
+                                                            24-Hour Room Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-20">
+                                                        <label class="form-check-label ms-2" for="service-20">
+                                                            In-Room Dining
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-21">
+                                                        <label class="form-check-label ms-2" for="service-21">
+                                                            Concierge Services
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-22">
+                                                        <label class="form-check-label ms-2" for="service-22">
+                                                            Daily Housekeeping
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-23">
+                                                        <label class="form-check-label ms-2" for="service-23">
+                                                            Check-In/Check-Out Assistance
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-24">
+                                                        <label class="form-check-label ms-2" for="service-24">
+                                                            Free luggage deposit
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-25">
+                                                        <label class="form-check-label ms-2" for="service-25">
+                                                            Laundry and Ironing Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-26">
+                                                        <label class="form-check-label ms-2" for="service-26">
+                                                            Dry Cleaning Service
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-27">
+                                                        <label class="form-check-label ms-2" for="service-27">
+                                                            Valet Parking
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-28">
+                                                        <label class="form-check-label ms-2" for="service-28">
+                                                            Babysitting
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-29">
+                                                        <label class="form-check-label ms-2" for="service-29">
+                                                            Dry Cleaning Service
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-30">
+                                                        <label class="form-check-label ms-2" for="service-30">
+                                                            Wake-Up Call Service
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="accssibilty">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Accessibility</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-19">
+                                                        <label class="form-check-label ms-2" for="accessibility-19">
+                                                            Wheelchair accessible
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-20">
+                                                        <label class="form-check-label ms-2" for="accessibility-20">
+                                                            Visual alarms in hallways
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-21">
+                                                        <label class="form-check-label ms-2" for="accessibility-21">
+                                                            Elevator
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-22">
+                                                        <label class="form-check-label ms-2" for="accessibility-22">
+                                                            Braille/raised signage
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-23">
+                                                        <label class="form-check-label ms-2" for="accessibility-23">
+                                                            Wheelchair-accessible gym
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-24">
+                                                        <label class="form-check-label ms-2" for="accessibility-24">
+                                                            Wheelchair-accessible business center
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-25">
+                                                        <label class="form-check-label ms-2" for="accessibility-25">
+                                                            Wheelchair-accessible lounge
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-26">
+                                                        <label class="form-check-label ms-2" for="accessibility-26">
+                                                            Wheelchair-accessible concierge desk
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-27">
+                                                        <label class="form-check-label ms-2" for="accessibility-27">
+                                                            Step-free or ramped access
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-28">
+                                                        <label class="form-check-label ms-2" for="accessibility-28">
+                                                            Automatic doors
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="accessibility-29">
+                                                        <label class="form-check-label ms-2" for="accessibility-29">
+                                                            Grab bars in the bathroom
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="popular_amenities_2">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">Amenities</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-1">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-16">
+                                                        <label class="form-check-label ms-2" for="amenities-16">
+                                                            Free Wi-Fi
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-17">
+                                                        <label class="form-check-label ms-2" for="amenities-17">
+                                                            Air Conditioning
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-18">
+                                                        <label class="form-check-label ms-2" for="amenities-18">
+                                                            Heater
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-19">
+                                                        <label class="form-check-label ms-2" for="amenities-19">
+                                                            Safe Deposit Box
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-20">
+                                                        <label class="form-check-label ms-2" for="amenities-20">
+                                                            Iron/Ironing Board
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-21">
+                                                        <label class="form-check-label ms-2" for="amenities-21">
+                                                            Hair Dryer
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-22">
+                                                        <label class="form-check-label ms-2" for="amenities-22">
+                                                            Bluetooth Speaker
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-23">
+                                                        <label class="form-check-label ms-2" for="amenities-23">
+                                                            Sofa/Seating Area
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-24">
+                                                        <label class="form-check-label ms-2" for="amenities-24">
+                                                            Extra Pillows and Blankets
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow-none" id="gallery_2">
+                                    <div class="card-header">
+                                        <h5 class="fs-18">Gallery</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
+                                            <span class="upload-img d-block mb-2"><i class="isax isax-document-upload fs-24"></i></span>
+                                            <h6 class="mb-1">Upload Gallery Images</h6>
+                                            <p class="mb-0">Upload Feature Image First, Image size should below 5MB</p>
+                                            <input type="file" accept="video/image">
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[5]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-01.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(5)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[6]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-02.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(6)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[7]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-03.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(7)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[8]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-04.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(8)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[9]?'none':'block'}">
+                                                <img src="assets/img/uploads/upload-05.jpg" alt="Img">
+                                                <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(9)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button type="button" class="btn btn-light me-2">Reset</button>
+                                    <button type="submit" class="btn btn-primary">Add New Room</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Add Room -->
+
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+
+        <!-- Add New FAQ -->
+        <div class="modal fade" id="add_faq" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Add New FAQ</h5>
+                        <button data-bs-dismiss="modal" aria-label="close" class="btn-close"></button>
+                    </div>
+                    <form >
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Question <span class="text-danger"> *</span></label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div>
+                                <label class="form-label">Answer <span class="text-danger"> *</span></label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="d-flex align-items-center justify-content-end m-0">
+                                <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-light me-2">Cancel</button>
+                                <button type="submit" data-bs-dismiss="modal" class="btn btn-sm btn-primary">Add FAQ</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Add New FAQ -->    
+    
+        <!-- Faq Modal -->
+        <div class="modal fade" id="edit_faq" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Edit FAQ</h5>
+                        <button data-bs-dismiss="modal" aria-label="close" class="btn-close"></button>
+                    </div>
+                    <form >
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Question <span class="text-danger"> *</span></label>
+                                <input type="text" class="form-control" value="Does offer free cancellation for a full refund?">
+                            </div>
+                            <div>
+                                <label class="form-label">Answer <span class="text-danger"> *</span></label>
+                                <input type="text" class="form-control" value="yes">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="d-flex align-items-center justify-content-end m-0">
+                                <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-light me-2">Cancel</button>
+                                <button type="submit" data-bs-dismiss="modal" class="btn btn-sm btn-primary">Save FAQ</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Faq Modal -->
+    
+        <!-- Delete Modal -->
+        <div class="modal fade" id="delete_modal">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form>
+                            <div class="text-center">
+                                <h5 class="mb-3">Confirm Delete</h5>
+                                <p class="mb-3">Are you sure you want to delete this item?</p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">No</a>
+                                    <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Yes</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete Modal -->

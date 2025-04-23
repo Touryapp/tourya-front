@@ -1,0 +1,125 @@
+{
+    "data":[
+        {
+            "img": "hotel-01.jpg",
+            "id": "#HB-1245",
+            "hotel": "Hotel Athenee",
+            "location":"Barcelona",
+            "guest":"2 Adults, 1 Child",
+            "room": "Suite Room",
+            "days": "4 Days, 3 Nights",
+            "pricing": "$11,569",
+            "bookedOn": "15 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img": "hotel-18.jpg",
+            "id": "#HB-3215",
+            "hotel": "The Luxe Haven",
+            "room": "Queen Room",
+            "location":"London",
+            "guest":"2 Adults, 1 Child",
+            "days": "3 Days, 2 Nights",
+            "pricing": "$10,745",
+            "bookedOn": "20 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img": "hotel-19.jpg",
+            "id": "#HB-4581",
+            "hotel": "The Urban Retreat",
+            "room": "Single Room",
+            "location":"Edinburgh",
+            "guest":"2 Adults, 1 Child",
+            "days": "2 Days, 1 Night",
+            "pricing": "$8,160",
+            "bookedOn": "04 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img": "hotel-20.jpg",
+            "id": "#HB-6545",
+            "hotel": "The Grand Horizon",
+            "room": "Balcony View",
+            "location":"Manchester",
+            "guest":"3 Adults,  Child",
+            "days": "5 Days, 4 Nights",
+            "pricing": "$14,840",
+            "bookedOn": "17 Jun 2025",
+            "status": "Pending"
+        },
+        {
+            "img": "hotel-21.jpg",
+            "id": "#HB-3256",
+            "hotel": "Hotel Serene Valley",
+            "room": "City View",
+            "location":"Chelsea",
+            "guest":"2 Adults, 2 Child",
+            "days": "3 Days, 2 Nights",
+            "pricing": "$10,450",
+            "bookedOn": "25 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "img": "hotel-22.jpg",
+            "id": "#HB-3654",
+            "hotel": "Hotel Evergreen",
+            "room": "Suite Room",
+            "location":" Las Vegas",
+            "guest":"2 Adults, 1 Child",
+            "days": "4 Days, 3 Nights",
+            "pricing": "$12,600",
+            "bookedOn": "02 Jul 2025",
+            "status": "Cancelled"
+        },
+        {
+            "img": "hotel-model-05.jpg",
+            "id": "#HB-1458",
+            "hotel": "Stardust Hotel",
+            "room": "Suite Room",
+            "location":"Salford",
+            "guest":"2 Adults, 2 Child",
+            "days": "2 Days, 1 Night",
+            "pricing": "$9,380",
+            "bookedOn": "12 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "img": "hotel-23.jpg",
+            "id": "#HB-6589",
+            "hotel": "Hotel Plaza",
+            "room": "Single Room",
+            "location":"Newyork",
+            "guest":"1 Adults, 1 Child",
+            "days": "3 Days, 2 Nights",
+            "pricing": "$10,400",
+            "bookedOn": "26 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "img": "hotel-13.jpg",
+            "id": "#HB-2315",
+            "hotel": "Hotel Skyline Vista",
+            "room": "Queen Room",
+            "location":"Cambridge",
+            "guest":"2 Adults, 1 Child",
+            "days": "4 Days, 3 Nights",
+            "pricing": "$12,810",
+            "bookedOn": "10 Aug 2025",
+            "status": "Completed"
+        },
+        {
+            "img": "hotel-24.jpg",
+            "id": "#HB-5414",
+            "hotel": "Hotel Aurora Bliss",
+            "room": "Suite Room",
+            "location":"Bristol",
+            "guest":"2 Adults, 1 Child",
+            "days": "5 Days, 4 Nights",
+            "pricing": "$15,450",
+            "bookedOn": "22 Aug 2025",
+            "status": "Completed"
+        }
+    ],
+    "totaldata":10
+}

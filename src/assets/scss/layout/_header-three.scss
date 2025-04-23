@@ -1,0 +1,62 @@
+/*============================
+  25.header-three
+============================*/
+
+.header-three {
+    margin-top: 20px;
+    &.fixed {
+        margin: 0;
+    }
+    .header__hamburger {
+        .sidebar-menu {
+            color: $gray-900;
+        }
+    }
+    .header-nav {
+        background: $white;
+        padding: 20px;
+        border-radius: 10px;
+        .main-menu-wrapper {
+            padding: 0;
+            .main-nav {
+                > li{
+                    &.active, &:hover  {
+                        > a {
+                            color: $primary;
+                            i {
+                                color: $primary;
+                            }
+                        }  
+                    }
+                    &.active {
+                        & > a {
+                            &::after  {
+                                color: $primary;
+                            }
+                        }
+                    }
+                    > a{
+                        color: $gray-900;
+                        i {
+                            color: $gray-500;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .header-btn{
+        a {
+            color: $gray-900;
+            font-size: 20px;
+        }
+        .btn {
+            font-size: 13px;
+        }
+        .cart-dropdown, .fav-dropdown {
+            @include respond-below(md) {
+                display: none;
+            }
+        }
+    }
+}

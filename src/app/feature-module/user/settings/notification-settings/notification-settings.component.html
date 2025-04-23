@@ -1,0 +1,172 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-04 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Settings</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-grid-55"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Notifications</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+
+            <div class="row">
+
+                <!-- Sidebar -->
+                <div class="col-xl-3 col-lg-4">
+                    <app-user-dashboard/>
+                </div>
+                <!-- /Sidebar -->
+
+                <!-- Profile Settings -->
+                <div class="col-xl-9 col-lg-8">
+                    <div class="card settings mb-0">
+                        <div class="card-header">
+                            <h6>Settings</h6>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="settings-link d-flex align-items-center flex-wrap">
+                                <a [routerLink]="routes.profileSettings"><i class="isax isax-user-octagon me-2"></i>Profile Settings</a>
+                                <a [routerLink]="routes.securitySettings"><i class="isax isax-shield-tick me-2"></i>Security</a>
+                                <a [routerLink]="routes.notificationSettings" class="active ps-3"><i class="isax isax-notification me-2"></i>Notifications</a>
+                                <a [routerLink]="routes.integrationSettings" class="pe-3"><i class="isax isax-hierarchy me-2"></i>Integrations</a>
+                            </div>
+
+                            <!-- Security Content -->
+                            <div class="row gy-2">
+                                <div class="col-xl-6 d-flex">
+                                    <div class="notification-content mb-0 flex-fill">
+                                        <div class="row g-4">
+                                            <div class="col-md-6">
+                                                <h6 class="fs-14 mb-1">Booking Confirmations</h6>
+                                                <p class="fs-14 fw-normal">Instant notifications for flight, hotel, or activity bookings</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Push</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check1">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">SMS</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check2" checked>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Email</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check3" checked>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 d-flex">
+                                    <div class="notification-content flex-fill">
+                                        <div class="row g-4">
+                                            <div class="col-md-6">
+                                                <h6 class="fs-14 mb-1">Trip Reminders</h6>
+                                                <p class="fs-14 fw-normal">Alerts for upcoming trips (1 day, 1 week before).</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Push</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check4">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">SMS</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check5" checked>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Email</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check6" checked>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 d-flex">
+                                    <div class="notification-content flex-fill border-0">
+                                        <div class="row g-4">
+                                            <div class="col-md-6">
+                                                <h6 class="fs-14 mb-1">Price Alerts</h6>
+                                                <p class="fs-14 fw-normal">Notify users of price drops for flights or accommodations.</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Push</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check7" checked>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">SMS</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check8" checked>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Email</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check9">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="notification-content border-0">
+                                        <div class="row g-4">
+                                            <div class="col-md-6">
+                                                <h6 class="fs-14 mb-1">Special Offers</h6>
+                                                <p class="fs-14 fw-normal">Optional notifications for discounts or promotions.</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Push</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check10" checked>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">SMS</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check11">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="fs-14 mb-1">Email</h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="check12" checked>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /Security Content-->
+                        </div>
+                    </div>
+                </div>
+                <!-- /Profile Settings -->
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->

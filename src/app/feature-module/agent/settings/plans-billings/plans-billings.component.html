@@ -1,0 +1,273 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-04 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Plans & Billings</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-grid-55"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Plans & Billings</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+            <div class="mb-3">
+                <a [routerLink]="routes.agentPlansSettings" class="text-primary d-inline-flex align-items-center fs-14"><i class="isax isax-arrow-left me-2"></i>Back to Plans & Billings</a>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow-none">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5>Personal Info</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row gx-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow-none">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5>Billing Address</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row gx-3">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Country</label>
+                                        <mat-select class="custom-mat-select select" placeholder="Select">
+                                            <mat-option value="1">United States</mat-option>
+                                            <mat-option value="1">Canada</mat-option>
+                                            <mat-option value="1">United Kingdom</mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">State</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">City</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Postal Code</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card payment-details flex-fill">
+                        <div class="card-header">
+                            <h5>Payment Method</h5>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="tab-pane fade active show" id="wallet">
+                                <div class="d-flex align-items-center  flex-wrap mb-3">
+                                    <div class="d-flex align-items-center flex-wrap payment-form">
+                                        <div class="form-check d-flex align-items-center me-3 mb-2">
+                                            <input class="form-check-input mt-0" type="radio" name="Radio" id="credit-card" value="credit-card" checked>
+                                            <label class="form-check-label fs-14 ms-2" for="credit-card">
+                                                Credit / Debit Card
+                                            </label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center me-3 mb-2">
+                                            <input class="form-check-input mt-0" type="radio" name="Radio" id="paypal" value="paypal">
+                                            <label class="form-check-label fs-14 ms-2" for="paypal">
+                                                Paypal
+                                            </label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center me-0 mb-2">
+                                            <input class="form-check-input mt-0" type="radio" name="Radio" id="stripe" value="stripe">
+                                            <label class="form-check-label fs-14 ms-2" for="stripe">
+                                                Stripe
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="credit-card-details">
+                                    <div class="card-form">
+                                        <h6 class="mb-3">Payment With Credit Card</h6>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-2">
+                                                    <label class="form-label">Card Holder Name</label>
+                                                    <div class="user-icon">
+                                                        <span class="input-icon fs-14"><i class="isax isax-user"></i></span>
+                                                        <input type="email" class="form-control ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-2">
+                                                    <label class="form-label">Card Number</label>
+                                                    <div class="user-icon">
+                                                        <span class="input-icon fs-14"><i class="isax isax-card-tick"></i></span>
+                                                        <input type="email" class="form-control ">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Expire Date</label>
+                                                    <div class="user-icon">
+                                                        <span class="input-icon fs-14"><i class="isax isax-calendar-2"></i></span>
+                                                        <input type="email" class="form-control datetimepicker">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">CVV</label>
+                                                    <div class="user-icon">
+                                                        <span class="input-icon fs-14"><i class="isax isax-check"></i></span>
+                                                        <input type="email" class="form-control ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Paypal -->
+                                <div class="paypal-details">
+                                    <div class="mb-3">
+                                        <h6 class="fs-16">Payment With Paypal</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Email Address</label>
+                                                <div class="user-icon">
+                                                    <span class="input-icon fs-14"><i class="isax isax-sms"></i></span>
+                                                    <input type="email" class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Password</label>
+                                                <div class="user-icon">
+                                                    <span class="input-icon fs-14"><i class="isax isax-eye"></i></span>
+                                                    <input type="password" class="form-control pass-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Paypal -->
+
+                                <!-- Stripe -->
+                                <div class="stripe-details">
+                                    <div class="mb-3">
+                                        <h6 class="fs-16">Payment With Stripe</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Email Address</label>
+                                                <div class="user-icon">
+                                                    <span class="input-icon fs-14"><i class="isax isax-sms"></i></span>
+                                                    <input type="email" class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Password</label>
+                                                <div class="user-icon">
+                                                    <span class="input-icon fs-14"><i class="isax isax-eye"></i></span>
+                                                    <input type="password" class="form-control pass-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Stripe -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <a href="javascript:void(0);" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#payment_success">Proceed to Pay $99.00</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 ">
+                    <div class="card shadow-none theiaStickySidebar">
+                        <div class="card-header">
+                            <h5>Subscription Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="border rounded p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <p class="mb-0">Plan Name:</p>
+                                    <h6 class="fw-medium">Basic</h6>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <p class="mb-0">Plan Amount:</p>
+                                    <h6 class="fw-medium">$99.00</h6>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <p class="mb-0">Tax:</p>
+                                    <h6 class="fw-medium">$0.00</h6>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <p class="mb-0">Total:</p>
+                                    <h6 class="fw-medium">$99.00</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->

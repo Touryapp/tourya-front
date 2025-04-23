@@ -1,0 +1,136 @@
+{
+    "data":[
+        {
+            "id": "#CR-1245",
+            "cruiseName": "Super Aquamarine",
+            "cruiseLocation": "Barcelona",
+            "bookedBy": "Lynwood Dickens",
+            "location": "Texas",
+            "cabinType": "Interior",
+            "guests": "2 Adults, 1 Child",
+            "duration": "4 Days, 3 Nights",
+            "price": "$11,569",
+            "bookedOn": "15 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CR-3215",
+            "cruiseName": "Adventure of the Seas",
+            "cruiseLocation": "London",
+            "bookedBy": "James Osborne",
+            "location": "California",
+            "cabinType": "Balcony",
+            "guests": "2 Adults, 2 Child",
+            "duration": "3 Days, 2 Nights",
+            "price": "$10,745",
+            "bookedOn": "20 May 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CR-4581",
+            "cruiseName": "Coral Cruiser",
+            "cruiseLocation": "Edinburgh",
+            "bookedBy": "Steve Grieve",
+            "location": "Newyork",
+            "cabinType": "Oceanview",
+            "guests": "3 Adults, 2 Child",
+            "duration": "2 Days, 1 Night",
+            "price": "$8,160",
+            "bookedOn": "04 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CR-6545",
+            "cruiseName": "Celebrity Cruise",
+            "cruiseLocation": "Manchester",
+            "bookedBy": "Alene Downing",
+            "location": "Florida",
+            "cabinType": "Suite",
+            "guests": "2 Adults, 1 Child",
+            "duration": "5 Days, 4 Nights",
+            "price": "$14,840",
+            "bookedOn": "17 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CR-3256",
+            "cruiseName": "Princess Cruises",
+            "cruiseLocation": "Chelsea",
+            "bookedBy": "Carol Gardner",
+            "location": "Georgia",
+            "cabinType": "Concierge Class",
+            "guests": "1 Adult, 1 Child",
+            "duration": "3 Days, 2 Nights",
+            "price": "$10,450",
+            "bookedOn": "25 Jun 2025",
+            "status": "Upcoming"
+        },
+        {
+            "id": "#CR-3654",
+            "cruiseName": "Cunard",
+            "cruiseLocation": "Las Vegas",
+            "bookedBy": "Enrique Archer",
+            "location": "Las Vegas",
+            "cabinType": "Outside room",
+            "guests": "3 Adults, 2 Child",
+            "duration": "4 Days, 3 Nights",
+            "price": "$12,600",
+            "bookedOn": "02 Jul 2025",
+            "status": "Cancelled"
+        },
+        {
+            "id": "#CR-1458",
+            "cruiseName": "Norwegian Cruise",
+            "cruiseLocation": "Salford",
+            "bookedBy": "Weston Carrasco",
+            "location": "Texas",
+            "cabinType": "Solo cabins",
+            "guests": "1 Adult, 1 Child",
+            "duration": "2 Days, 1 Night",
+            "price": "$9,380",
+            "bookedOn": "12 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#CR-6589",
+            "cruiseName": "Azamara",
+            "cruiseLocation": "Newyork",
+            "bookedBy": "Bonnie Coleman",
+            "location": "California",
+            "cabinType": "Balcony",
+            "guests": "2 Adults, 1 Child",
+            "duration": "3 Days, 2 Nights",
+            "price": "$10,400",
+            "bookedOn": "26 Jul 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#CR-2315",
+            "cruiseName": "Costa Cruise",
+            "cruiseLocation": "Cambridge",
+            "bookedBy": "Aurora Conklin",
+            "location": "Georgia",
+            "cabinType": "Interior",
+            "guests": "3 Adults, 2 Child",
+            "duration": "4 Days, 3 Nights",
+            "price": "$12,810",
+            "bookedOn": "10 Aug 2025",
+            "status": "Completed"
+        },
+        {
+            "id": "#CR-5414",
+            "cruiseName": "Oceania Cruises",
+            "cruiseLocation": "Bristol",
+            "bookedBy": "Robin Banks",
+            "location": "Las Vegas",
+            "cabinType": "Outside room",
+            "guests": "1 Adult, 1 Child",
+            "duration": "5 Days, 4 Nights",
+            "price": "$15,450",
+            "bookedOn": "22 Aug 2025",
+            "status": "Completed"
+        }
+    ],
+    "totalData":14
+    
+}

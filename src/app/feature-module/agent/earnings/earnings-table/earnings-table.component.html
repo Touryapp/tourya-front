@@ -1,0 +1,87 @@
+ <!-- Earning List -->
+ <div class="card hotel-list">
+    <div class="card-body p-0">
+        <div class="list-header d-flex align-items-center justify-content-between flex-wrap">
+            <h6 class="">Invoices</h6>
+            <div class="d-flex align-items-center flex-wrap">
+                <div class="input-icon-start  me-2 position-relative">
+                    <span class="icon-addon">
+                    <i class="isax isax-search-normal-1 fs-14"></i>
+                </span>
+                <input [(ngModel)]="searchDataValue" name="search" (ngModelChange)="searchData(searchDataValue)" type="search" class="form-control form-control-sm" placeholder="Search" />
+                </div>
+                <div class="dropdown me-3">
+                    <a href="javascript:void(0);" class="dropdown-toggle text-gray-6 btn  rounded border d-inline-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                    Status
+                </a>
+                    <ul class="dropdown-menu dropdown-menu-end p-3">
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Paid</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Pending</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1">Cancelled</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex align-items-center flex-wrap">
+                    <div class="input-icon-start position-relative">
+                        <span class="icon-addon">
+                            <i class="isax isax-calendar-edit fs-14"></i>
+                        </span>
+                        <app-date-range-picker/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="custom-datatable-filter table-responsive">
+            <table class="table datatable">
+                <thead class="thead-light" matSort (matSortChange)="sortData($event)" >
+                    <tr>
+                        <th mat-sort-header="ID">ID</th>
+                        <th mat-sort-header="InvoiceFor">Invoice For</th>
+                        <th mat-sort-header="Service">Service</th>
+                        <th mat-sort-header="PaymentType">Payment Type</th>
+                        <th mat-sort-header="Date">Date</th>
+                        <th mat-sort-header="Amount">Amount</th>
+                        <th mat-sort-header="Status">Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (data of tableData; track data; let i = $index) {
+                    <tr>
+                        <td><a href="javascript:void(0);" class="link-primary fw-medium" data-bs-toggle="modal" data-bs-target="#earning_invoice">{{data.ID}}</a></td>
+                        <td>
+                            <p class="text-dark mb-0 fw-medium fs-14">{{data.InvoiceFor}}</p>
+                        </td>
+                        <td>
+                            {{data.Service}}
+                        </td>
+                        <td>
+                            {{data.PaymentType}}
+                        </td>
+                        <td>{{data.Date}}</td>
+                        <td>{{data.Amount}}</td>
+                        <td>
+                            <span class="badge  rounded-pill d-inline-flex align-items-center fs-10" [ngClass]="data.Status ==='Paid' ? 'badge-success':data.Status ==='Pending'?'badge-secondary':'badge-danger '" ><i class="fa-solid fa-circle fs-5 me-1"></i>{{data.Status}}</span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#earning_invoice" class="me-2"><i class="isax isax-eye"></i></a>
+                                <a href="javascript:void(0);"><i class="isax isax-document-download"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- /Earning List -->
+<app-custom-pagination></app-custom-pagination>

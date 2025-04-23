@@ -1,0 +1,274 @@
+<div class="card border-0">
+    <div class="card-body d-flex align-items-center justify-content-between flex-wrap row-gap-2">
+        <div>
+            <h5 class="mb-1">Listings</h5>
+            <p>No of  Listings : 200</p>
+        </div>
+       <div>
+        <a [routerLink]="routes.addHotel" class="btn btn-primary d-inline-flex align-items-center me-0"><i class="isax isax-add me-1 fs-16"></i>Add Listing</a>
+       </div>
+    </div>
+</div>
+<div class="row justify-content-center">
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-01.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Hotel Plaza Athenee</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Ciutat Vella, Barcelona</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$500 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-05.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">The Luxe Haven</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Oxford Street, London</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$600 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-06.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">The Urban Retreat</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Princes Street, Edinburgh</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$500 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-07.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">The Grand Horizon</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Deansgate, Manchester</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$400 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="javascript:void(0);" class="me-2 d-inline-flex"><i class="isax isax-edit"></i></a>
+                        <a href="javascript:void(0);" class="me-2 d-inline-flex"><i class="isax isax-trash"></i></a>
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-08.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Hotel Evergreen </a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>King’s Road, Chelsea</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$550 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-09.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Stardust Hotel</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Bold Street, Liverpool</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$450 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-10.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Hotel Serene Valley</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Broad Street, Bristol</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$350 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-11.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Hotel Skyline Vista</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Chapel Street, Salford</p> 
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$700 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <!-- Hotel Grid -->
+    <div class="col-xl-4 col-md-6 d-flex">
+        <div class="place-item mb-4 flex-fill">
+            <div class="place-img">
+                <a [routerLink]="routes.hotelDetails">
+                    <img src="assets/img/hotels/hotel-12.jpg" class="img-fluid" alt="img">
+                </a>
+                <div class="edit-delete-item d-flex align-items-center">
+                    <a [routerLink]="routes.editHotel" class="me-2 d-inline-flex align-items-center justify-content-center"><i class="isax isax-edit"></i></a>
+                    <a href="javascript:void(0);" class="d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete-list"><i class="isax isax-trash"></i></a>
+                </div>
+            </div>
+            <div class="place-content">
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Hotel Aurora Bliss</a></h5>
+                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Castle Street, Cambridge</p>
+                <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                    <h5 class="text-primary text-nowrap me-2">$650 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                    <div class="d-flex align-items-center lh-1">
+                        <a href="#inactive_list" data-bs-toggle="modal" class="d-flex align-items-center"><i class="isax isax-info-circle me-1"></i>Active</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Hotel Grid -->
+
+    <div class="col-md-12">
+        <!-- Pagination -->
+        <nav class="pagination-nav">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+                <li class="page-item active"><a class="page-link" href="javascript:void(0);">4</a></li>
+                <li class="page-item"><a class="page-link" href="javascript:void(0);">5</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /Pagination -->
+    </div>
+
+</div>

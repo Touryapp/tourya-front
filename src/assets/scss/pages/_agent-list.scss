@@ -1,0 +1,98 @@
+/*============================
+  64.agent-list
+============================*/
+.place-nav {
+    &.listing-nav {
+        li {
+            a {
+                background: $light;
+            }
+        }
+    }
+}
+.add-reply {
+    &:hover {
+        background: $primary !important;
+        color: $white !important;
+    }
+}
+.review-reply {
+    display: none;
+    &.show {
+        display: block;
+    }
+}
+.earning-box {
+    .avatar-md {
+        width: 40px;
+        height: 40px;
+        background: $primary-800;
+    }
+}
+.card {
+    &.card-detail {
+        background: $light-transparent;
+        p {
+            color: $gray-600;
+        }
+    }
+}
+.modal-lg.invoice-modal {
+    max-width: 945px;
+}
+.modal-md.w-500 {
+    max-width: 500px !important;
+}
+.digit-group {
+    input {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+    }
+}
+.integration-card {
+    position: relative;
+    .circle-check-top {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        opacity: 0;
+    }
+    &.selected {
+        border-color: $success;
+        .circle-check-top {
+            opacity: 1;
+        }
+    }
+}
+.payment-img {
+    width: 50px;
+    height: 43px;
+}
+.edit-delete-icon {
+    .avatar {
+        width: 30px;
+        height: 30px;
+        color: $gray-600;
+        &:hover {
+            background: $primary;
+            color: $white;
+            border-color: $primary !important;
+        }
+    }
+}
+.edit-delete-item {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    a {
+        width: 30px;
+        height: 30px;
+        background: $white;
+        border-radius: 50%;
+        &:hover {
+            background: $primary;
+            color: $white;
+        }
+    }
+}

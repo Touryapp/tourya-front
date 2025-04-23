@@ -1,0 +1,1186 @@
+    
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-01 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Hotels</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item">Hotels</li>
+                            <li class="breadcrumb-item active" aria-current="page">Hotel Maps</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content pb-0 ">
+        <div class="map-content">
+            <!-- Hotel Search -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="banner-form">
+                        <form class="d-lg-flex">
+                            <div class="d-flex  form-info">
+                                <div class="form-item dropdown">
+                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                        <label class="form-label fs-14 text-default mb-1">City, Property name or Location</label>
+                                        <input type="text" class="form-control" value="Newyork">
+                                        <p class="fs-12 mb-0">USA</p>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-md p-0">
+                                        <div class="input-search p-3 border-bottom">
+                                            <div class="input-group">
+                                                <input type="email" class="form-control" placeholder="Search for City, Property name or Location">
+                                                <span class="input-group-text px-2 border-start-0"><i class="isax isax-search-normal"></i></span>
+                                            </div>
+                                        </div>
+                                        <ul>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">USA</h6>
+                                                    <p>2000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Japan</h6>
+                                                    <p>3000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Singapore</h6>
+                                                    <p>8000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Russia</h6>
+                                                    <p>8000 Properties</p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Germany</h6>
+                                                    <p>2000 Properties</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                    <input
+                                    type="text"
+                                    class="form-control datetimepicker"
+                                    bsDatepicker
+                                    [bsConfig]="{ adaptivePosition: true }"
+                                    placeholder="21-10-2024"
+                                    [bsValue]="bsValue"
+                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                    />
+                                    <p class="fs-12 mb-0">Monday</p>
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Check Out</label>
+                                    <input
+                                    type="text"
+                                    class="form-control datetimepicker"
+                                    bsDatepicker
+                                    [bsConfig]="{ adaptivePosition: true }"
+                                    placeholder="21-10-2024"
+                                    [bsValue]="bsValue"
+                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                    />
+                                    <p class="fs-12 mb-0">Monday</p>
+                                </div>
+                                <div class="form-item dropdown">
+                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                        <label class="form-label fs-14 text-default mb-1">Guests</label>
+                                        <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
+                                        <p class="fs-12 mb-0">4 Adult, 2 Rooms</p>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-xl">
+                                        <h5 class="mb-3">Select Travelers &  Class</h5>
+                                        <div class="mb-3 border br-10 info-item pb-1">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Rooms</label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Adults</label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Children <span class="text-default fw-normal">( 2-12 Yrs )</span></label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 0-12 Yrs )</span></label>
+                                                        <app-common-counter/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 border br-10 info-item pb-1">
+                                            <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room1" checked>
+                                                    <label class="form-check-label" for="room1">
+                                                        Single
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room2">
+                                                    <label class="form-check-label" for="room2">
+                                                        Double
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room3">
+                                                    <label class="form-check-label" for="room3">
+                                                        Delux
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input" type="radio" name="room" id="room4">
+                                                    <label class="form-check-label" for="room4">
+                                                        Suite
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 border br-10 info-item pb-1">
+                                            <h6 class="fs-16 fw-medium mb-2">Property Type</h6>
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property1" checked>
+                                                    <label class="form-check-label" for="property1">
+                                                        Villa
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property2">
+                                                    <label class="form-check-label" for="property2">
+                                                        Condo
+                                                    </label>
+                                                </div>
+                                                <div class="form-check me-3 mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property3">
+                                                    <label class="form-check-label" for="property3">
+                                                        Cabin
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input" type="radio" name="property" id="property4">
+                                                    <label class="form-check-label" for="property4">
+                                                        Apartments
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Cancel</a>
+                                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-item dropdown">
+                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                        <label class="form-label fs-14 text-default mb-1">Price per Night</label>
+                                        <input type="text" class="form-control" value="$1000 - $15000">
+                                        <p class="fs-12 mb-0">20 Offers Available</p>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-md p-0">
+                                        <ul>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">$500 - $2000</h6>
+                                                    <p>Upto 65% offers</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">Upto 65% offers</h6>
+                                                    <p>Upto 40% offers</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">$5000 - $8000</h6>
+                                                    <p>Upto 35% offers</p>
+                                                </a>
+                                            </li>
+                                            <li class="border-bottom">
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">$9000 - $11000</h6>
+                                                    <p>Upto 20% offers</p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                    <h6 class="fs-16 fw-medium">$11000 - $15000</h6>
+                                                    <p>Upto 10% offers</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary search-btn rounded">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /Hotel Search -->
+            <!-- Hotel Types -->
+            <div class="mb-2">
+                <div class="mb-3">
+                    <h5 class="mb-2">Choose type of Hotels you are interested</h5>
+                </div>
+                <div class="row">
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.hotelGrid" class="avatar avatar-lg">
+                                <img src="assets/img/hotels/hotel-model-01.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.hotelGrid">Condos</a></h6>
+                                <p class="fs-14">216 Hotels</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.hotelGrid" class="avatar avatar-lg">
+                                <img src="assets/img/hotels/hotel-model-02.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.hotelGrid">Apartments</a></h6>
+                                <p class="fs-14">569 Hotels</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.hotelGrid" class="avatar avatar-lg">
+                                <img src="assets/img/hotels/hotel-model-03.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.hotelGrid">Villas</a></h6>
+                                <p class="fs-14">129 Hotels</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.hotelGrid" class="avatar avatar-lg">
+                                <img src="assets/img/hotels/hotel-model-04.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.hotelGrid">5 Star Hotels</a></h6>
+                                <p class="fs-14">600 Hotels</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.hotelGrid" class="avatar avatar-lg">
+                                <img src="assets/img/hotels/hotel-model-01.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.hotelGrid">3 Start Hotels</a></h6>
+                                <p class="fs-14">200 Hotels</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="d-flex align-items-center hotel-type-item mb-3">
+                            <a [routerLink]="routes.hotelGrid" class="avatar avatar-lg">
+                                <img src="assets/img/hotels/hotel-model-06.jpg" class="rounded-circle" alt="img">
+                            </a>
+                            <div class="ms-2">
+                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.hotelGrid">2 Start Hotels</a></h6>
+                                <p class="fs-14">180 Hotels</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Hotel Types -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap recommend-wrap mb-2">
+                <div class="d-flex align-items-center flex-wrap">
+                    <div class="dropdown mb-3">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-sm border rounded" data-bs-toggle="modal" data-bs-target="#filter_modal">
+                            <i class="isax isax-filter-add me-1"></i> Filters
+                        </a>
+                    </div>
+                    <div class="dropdown mb-3">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-sm border rounded" data-bs-toggle="dropdown" aria-expanded="false">
+							Pricing
+						</a>
+                        <div class="dropdown-menu dropdown-sm">
+                            <form (ngSubmit)="onSubmit1()">
+                                <h6 class="fw-medium fs-16 mb-3">Pricing</h6>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="pricing1" type="checkbox" id="pricing1" checked>
+                                    <label class="form-check-label ms-2" for="pricing1">
+                                        $50 - $100
+                                    </label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="pricing2" type="checkbox" id="pricing2" checked>
+                                    <label class="form-check-label ms-2" for="pricing2">
+                                        $100 - $1000
+                                    </label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="pricing3" type="checkbox" id="pricing3" checked>
+                                    <label class="form-check-label ms-2" for="pricing3">
+                                        $1000 - $5000
+                                    </label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                    <input class="form-check-input ms-0 mt-0" name="pricing4" type="checkbox" id="pricing4" checked>
+                                    <label class="form-check-label ms-2" for="pricing4">
+                                        $10000 - $2000
+                                    </label>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
+                                    <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
+                                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="dropdown mb-3">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-sm border rounded" data-bs-toggle="dropdown" aria-expanded="false">
+							Guest Ratings
+						</a>
+                        <div class="dropdown-menu dropdown-sm">
+                            <form (ngSubmit)="onSubmit1()">
+                                <h6 class="fw-medium fs-16 mb-3">Ratings</h6>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="review01" type="checkbox" id="review01">
+                                    <label class="form-check-label ms-2" for="review01">
+                                        <span class="rating d-flex align-items-center">
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary"></i>
+											<span class="ms-2">5 Star</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="review02" type="checkbox" id="review02">
+                                    <label class="form-check-label ms-2" for="review02">
+                                        <span class="rating d-flex align-items-center">
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary"></i>
+											<span class="ms-2">4 Star</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="review03" type="checkbox" id="review03">
+                                    <label class="form-check-label ms-2" for="review03">
+                                        <span class="rating d-flex align-items-center">
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary"></i>
+											<span class="ms-2">3 Star</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="review04" type="checkbox" id="review04">
+                                    <label class="form-check-label ms-2" for="review04">
+                                        <span class="rating d-flex align-items-center">
+											<i class="fas fa-star filled text-primary me-1"></i>
+											<i class="fas fa-star filled text-primary"></i>
+											<span class="ms-2">2 Star</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                    <input class="form-check-input ms-0 mt-0" name="review05" type="checkbox" id="review05">
+                                    <label class="form-check-label ms-2" for="review05">
+                                        <span class="rating d-flex align-items-center">
+											<i class="fas fa-star filled text-primary"></i>
+											<span class="ms-2">1 Star</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
+                                    <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
+                                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="dropdown mb-3">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-sm border rounded" data-bs-toggle="dropdown" aria-expanded="false">
+							Amenities
+						</a>
+                        <div class="dropdown-menu dropdown-sm">
+                            <form (ngSubmit)="onSubmit1()">
+                                <h6 class="fw-medium fs-16 mb-3">Amenities</h6>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities1" type="checkbox" id="amenities1" checked>
+                                    <label class="form-check-label ms-2" for="amenities1">Pet friendly</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities2" type="checkbox" id="amenities2">
+                                    <label class="form-check-label ms-2" for="amenities2">Airport shuttle included</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities3" type="checkbox" id="amenities3">
+                                    <label class="form-check-label ms-2" for="amenities3">Spa</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities4" type="checkbox" id="amenities4">
+                                    <label class="form-check-label ms-2" for="amenities4">Hot tub</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities5" type="checkbox" id="amenities5">
+                                    <label class="form-check-label ms-2" for="amenities5">Parking</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities6" type="checkbox" id="amenities6">
+                                    <label class="form-check-label ms-2" for="amenities6">Kitchen</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities7" type="checkbox" id="amenities7">
+                                    <label class="form-check-label ms-2" for="amenities7">Air conditioned</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities8" type="checkbox" id="amenities8" checked>
+                                    <label class="form-check-label ms-2" for="amenities8">Cribs</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities9" type="checkbox" id="amenities9" checked>
+                                    <label class="form-check-label ms-2" for="amenities9">Gym</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities10" type="checkbox" id="amenities10" checked>
+                                    <label class="form-check-label ms-2" for="amenities10">Wifi Included</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                    <input class="form-check-input ms-0 mt-0" name="amenities11" type="checkbox" id="amenities11" checked>
+                                    <label class="form-check-label ms-2" for="amenities11">Ocean view</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center flex-wrap">
+                    <div class="input-icon mb-3 me-3">
+                        <span class="input-icon-addon">
+							<i class="isax isax-search-normal"></i>
+						</span>
+                        <input type="text" class="form-control" placeholder="Search by Hotel Name">
+                    </div>
+                    <div class="list-item d-flex align-items-center mb-3">
+                        <a [routerLink]="routes.hotelGrid" class="list-icon me-2"><i class="isax isax-grid-1"></i></a>
+                        <a [routerLink]="routes.hotelList" class="list-icon me-2"><i class="isax isax-firstline"></i></a>
+                        <a [routerLink]="routes.hotelMap" class="list-icon active  me-2"><i class="isax isax-map-1"></i></a>
+                    </div>
+                    <div class="dropdown mb-3">
+                        <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="fw-medium text-gray-9">Sort By : </span>Recommended
+                        </a>
+                        <div class="dropdown-menu dropdown-sm">
+                            <form>
+                                <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend1" checked>
+                                    <label class="form-check-label ms-2" for="recommend1">Recommended</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend2">
+                                    <label class="form-check-label ms-2" for="recommend2">Price: low to high</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend3">
+                                    <label class="form-check-label ms-2" for="recommend3">Price: high to low</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend4">
+                                    <label class="form-check-label ms-2" for="recommend4">Newest</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                    <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend5">
+                                    <label class="form-check-label ms-2" for="recommend5">Ratings</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                    <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend6">
+                                    <label class="form-check-label ms-2" for="recommend6">Reviews</label>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
+                                    <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
+                                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                </div>       
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="map-lists-widget border-top">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <h6 class="mb-4">1920 Hotels Found on Your Search</h6>
+                        <div class="list-item d-flex align-items-center shadow-md bg-white rounded-3 p-2 mb-4">
+                            <a [routerLink]="routes.hotelGrid" class="list-icon me-2"><i class="isax isax-grid-1"></i></a>
+                            <a [routerLink]="routes.hotelList" class="list-icon active"><i class="isax isax-firstline"></i></a>
+                        </div>
+                    </div>
+                    <div class="hotel-list">
+                        <div class="row justify-content-center">
+
+                            <div class="col-md-12">
+
+                                <!-- Hotel Grid -->
+                                <div class="place-item custom-item mb-4">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-01.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-02.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-03.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                            <a href="javascript:void(0);" class="fav-icon " [ngClass]="isSelected[0]? '':'selected'" (click)="selectClass(0)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="place-content pb-1">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div>
+                                                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Hotel Plaza Athenee</a></h5>
+                                                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Ciutat Vella, Barcelona</p>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden border-end pe-2 me-2">
+                                                    <span class="avatar avatar-md flex-shrink-0 me-2">
+														<img src="assets/img/users/user-01.jpg" class="rounded-circle" alt="img">
+													</span>
+                                                    <p class="fs-14 text-truncate">Beth Williams</p>
+                                                </a>
+                                                <div class="d-flex align-items-center text-nowrap">
+                                                    <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
+                                                    <p class="fs-14">(400 Reviews)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="line-ellipsis fs-14">Experience luxury and comfort at our centrally located hotel, featuring modern amenities, spacious rooms, and exceptional service.</p>
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                            <h6 class="d-flex align-items-center mb-3">Facillities :<i class="isax isax-home-wifi ms-2 me-2 text-primary"></i><i class="isax isax-scissor me-2 text-primary"></i><i class="isax isax-profile-2user me-2 text-primary"></i><i class="isax isax-wind-2 me-2 text-primary"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2 mb-3">$500 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Hotel Grid -->
+
+                                <!-- Hotel Grid -->
+                                <div class="place-item mb-4">
+                                    <div class="place-img">
+                                        <a [routerLink]="routes.hotelDetails">
+                                            <img src="assets/img/hotels/hotel-05.jpg" class="img-fluid" alt="img">
+                                        </a>
+                                        <div class="fav-item">
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="isSelected[1]? '':'selected'" (click)="selectClass(1)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="place-content pb-1">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div>
+                                                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">The Luxe Haven</a></h5>
+                                                <p class="d-flex align-items-center mb-2"><i class="isax isax-location5 me-2"></i>Oxford Street, London</p>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden border-end pe-2 me-2">
+                                                    <span class="avatar avatar-md flex-shrink-0 me-2">
+														<img src="assets/img/users/user-02.jpg" class="rounded-circle" alt="img">
+													</span>
+                                                    <p class="fs-14 text-truncate">Tom Andrews</p>
+                                                </a>
+                                                <div class="d-flex align-items-center text-nowrap">
+                                                    <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.7</span>
+                                                    <p class="fs-14">(360 Reviews)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="line-ellipsis fs-14">Stay in luxury at our hotel, featuring premium amenities, stunning cityscape views, and an on-site spa for the ultimate relaxation experience</p>
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                            <h6 class="d-flex align-items-center mb-3">Facillities :<i class="isax isax-home-wifi ms-2 me-2 text-primary"></i><i class="isax isax-scissor me-2 text-primary"></i><i class="isax isax-profile-2user me-2 text-primary"></i><i class="isax isax-wind-2 me-2 text-primary"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2 mb-3">$600 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Hotel Grid -->
+
+                                <!-- Hotel Grid -->
+                                <div class="place-item mb-4">
+                                    <div class="place-img">
+                                        <a [routerLink]="routes.hotelDetails">
+                                            <img src="assets/img/hotels/hotel-06.jpg" class="img-fluid" alt="img">
+                                        </a>
+                                        <div class="fav-item">
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="isSelected[2]? '':'selected'" (click)="selectClass(2)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="place-content pb-1">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="overflow-hidden">
+                                                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">The Urban Retreat</a></h5>
+                                                <p class="d-flex align-items-center text-truncate mb-2"><i class="isax isax-location5 me-2"></i>Princes Street, Edinburgh</p>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden border-end pe-2 me-2">
+                                                    <span class="avatar avatar-md flex-shrink-0 me-2">
+														<img src="assets/img/users/user-03.jpg" class="rounded-circle" alt="img">
+													</span>
+                                                    <p class="fs-14 text-truncate">Rober Cowell</p>
+                                                </a>
+                                                <div class="d-flex align-items-center text-nowrap">
+                                                    <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.5</span>
+                                                    <p class="fs-14">(500 Reviews)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="line-ellipsis fs-14">Conveniently located near top attractions, our hotel offers modern rooms, free parking, and a complimentary breakfast to start your day right.</p>
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                            <h6 class="d-flex align-items-center mb-3">Facillities :<i class="isax isax-home-wifi ms-2 me-2 text-primary"></i><i class="isax isax-scissor me-2 text-primary"></i><i class="isax isax-profile-2user me-2 text-primary"></i><i class="isax isax-wind-2 me-2 text-primary"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2 mb-3">$300 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Hotel Grid -->
+
+                                <!-- Hotel Grid -->
+                                <div class="place-item custom-item mb-4">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-07.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-02.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-03.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="isSelected[4]? '':'selected'" (click)="selectClass(4)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="place-content pb-1">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="overflow-hidden">
+                                                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">The Grand Horizon</a></h5>
+                                                <p class="d-flex align-items-center text-truncate mb-2"><i class="isax isax-location5 me-2"></i>Deansgate, Manchester</p>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden border-end pe-2 me-2">
+                                                    <span class="avatar avatar-md flex-shrink-0 me-2">
+														<img src="assets/img/users/user-05.jpg" class="rounded-circle" alt="img">
+													</span>
+                                                    <p class="fs-14 text-truncate">Timothy Brewer</p>
+                                                </a>
+                                                <div class="d-flex align-items-center text-nowrap">
+                                                    <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.9</span>
+                                                    <p class="fs-14">(450 Reviews)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="line-ellipsis fs-14">Discover the perfect balance of luxury and affordability at our hotel, with a 24-hour concierge, free Wi-Fi, and easy access to local hotspots.</p>
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                            <h6 class="d-flex align-items-center mb-3">Facillities :<i class="isax isax-home-wifi ms-2 me-2 text-primary"></i><i class="isax isax-scissor me-2 text-primary"></i><i class="isax isax-profile-2user me-2 text-primary"></i><i class="isax isax-wind-2 me-2 text-primary"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2 mb-3">$400 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Hotel Grid -->
+
+                                <!-- Hotel Grid -->
+                                <div class="place-item custom-item mb-4">
+                                    <div class="place-img">
+                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-08.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-02.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template carouselSlide>
+                                                <div class="slide-images">
+                                                    <a [routerLink]="routes.hotelDetails">
+                                                        <img src="assets/img/hotels/hotel-03.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                            
+                                        </owl-carousel-o>
+                                        <div class="fav-item">
+                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
+                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[6] }" (click)="toggleClass(6)">
+                                                <i class="isax isax-heart5"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="place-content pb-1">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="overflow-hidden">
+                                                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.hotelDetails">Hotel Evergreen </a></h5>
+                                                <p class="d-flex align-items-center text-truncate mb-2"><i class="isax isax-location5 me-2"></i>King’s Road, Chelsea</p>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <a href="javascript:void(0);" class="d-flex align-items-center overflow-hidden border-end pe-2 me-2">
+                                                    <span class="avatar avatar-md flex-shrink-0 me-2">
+														<img src="assets/img/users/user-06.jpg" class="rounded-circle" alt="img">
+													</span>
+                                                    <p class="fs-14 text-truncate">Timothy Rio</p>
+                                                </a>
+                                                <div class="d-flex align-items-center text-nowrap">
+                                                    <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">4.5</span>
+                                                    <p class="fs-14">(500 Reviews)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="line-ellipsis fs-14">Our hotel offers pet-friendly rooms, complimentary shuttle service, and comfortable accommodations just minutes from key attractions and business centers.</p>
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top pt-3">
+                                            <h6 class="d-flex align-items-center mb-3">Facillities :<i class="isax isax-home-wifi ms-2 me-2 text-primary"></i><i class="isax isax-scissor me-2 text-primary"></i><i class="isax isax-profile-2user me-2 text-primary"></i><i class="isax isax-wind-2 me-2 text-primary"></i><a href="javascript:void(0);" class="fs-14 fw-normal text-default d-inline-block">+2</a></h6>
+                                            <h5 class="text-primary text-nowrap me-2 mb-3">$300 <span class="fs-14 fw-normal text-default">/ Night</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Hotel Grid -->
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="text-center">
+                        <a href="javascript:void(0);" class="btn btn-primary">Load More</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Map -->
+            <div class="col-xl-4 map-right grid-map">
+                <div id="map" class="map-listing"></div>
+            </div>
+            <!-- /Map -->
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+
+
+
+        <!-- Filter Modal -->
+        <div class="modal fade" id="filter_modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center justify-content-between">
+                        <h4>Filters</h4>
+                        <a href="javascript:void(0);" class="text-primary">Clear</a>
+                    </div>
+                    <form>
+                        <div class="modal-body">
+                            <div class=" mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="me-2"><i class="isax isax-ranking text-primary"></i></span>
+                                    <h6>Popular</h6>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="popular1" type="checkbox" id="popular1" checked="">
+                                        <label class="form-check-label ms-2" for="popular1">
+                                            Local Guide
+                                        </label>
+                                    </div>
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="popular2" type="checkbox" id="popular2">
+                                        <label class="form-check-label ms-2" for="popular2">
+                                            VIP Access
+                                        </label>
+                                    </div>
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="popular3" type="checkbox" id="popular3">
+                                        <label class="form-check-label ms-2" for="popular3">
+                                            Photographs
+                                        </label>
+                                    </div>
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="popular4" type="checkbox" id="popular4">
+                                        <label class="form-check-label ms-2" for="popular4">
+                                            Adventure Gears
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2 pb-2">
+                                    <span class="me-2"><i class="isax isax-coin text-primary"></i></span>
+                                    <h6>Price Per Night</h6>
+                                </div>
+                                <div class="mt-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge badge-xs badge-light text-gray-4">$200</span>
+                                        <span class="badge badge-xs badge-light text-gray-4">$5695</span>
+                                    </div>
+                                    <div class="filter-range">
+                                        <mat-slider min="200" max="5000" step="500" showTickMarks discrete [displayWith]="formatLabel1">
+                                            <input matSliderStartThumb [value]="startValue">
+                                            <input matSliderEndThumb [value]="endValue">
+                                        </mat-slider>
+                                    </div>
+                                    <div class="filter-range-amount">
+                                        <p class="fs-14">Range : <span class="text-gray-9 fw-medium">$200 - $5695</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="me-2"><i class="isax isax-buildings text-primary"></i></span>
+                                    <h6>Hotel Types</h6>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-1">
+                                        <label class="form-check-label ms-2" for="hotel-1">
+                                            Ecotourism
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-2">
+                                        <label class="form-check-label ms-2" for="hotel-2">
+                                            Adventure Tour
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-3">
+                                        <label class="form-check-label ms-2" for="hotel-3">
+                                            Group Tours
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-4" checked>
+                                        <label class="form-check-label ms-2" for="hotel-4">
+                                            Beach Tours
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-5">
+                                        <label class="form-check-label ms-2" for="hotel-5">
+                                            Honey Moon
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-6">
+                                        <label class="form-check-label ms-2" for="hotel-6">
+                                            Historical Tours
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-7">
+                                        <label class="form-check-label ms-2" for="hotel-7">
+                                            Summer Trip
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="hotel-8">
+                                        <label class="form-check-label ms-2" for="hotel-8">
+                                            City Trip
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="me-2"><i class="isax isax-candle text-primary"></i></span>
+                                    <h6>Accommodation Type</h6>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-1">
+                                        <label class="form-check-label ms-2" for="amenities-1">
+                                            Hotel
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-2">
+                                        <label class="form-check-label ms-2" for="amenities-2">
+                                            Campsite
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-3">
+                                        <label class="form-check-label ms-2" for="amenities-3">
+                                            Resort
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-4" checked>
+                                        <label class="form-check-label ms-2" for="amenities-4">
+                                            Cabin
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="me-2"><i class="isax isax-activity text-primary"></i></span>
+                                    <h6>Activities</h6>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-1">
+                                        <label class="form-check-label ms-2" for="loc-1">
+                                            Hiking
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-2">
+                                        <label class="form-check-label ms-2" for="loc-2">
+                                            Sightseeing
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-3">
+                                        <label class="form-check-label ms-2" for="loc-3">
+                                            Wildlife Safari
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-4" checked>
+                                        <label class="form-check-label ms-2" for="loc-4">
+                                            Boat Tours
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-5">
+                                        <label class="form-check-label ms-2" for="loc-5">
+                                            Adventure Sports
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-6">
+                                        <label class="form-check-label ms-2" for="loc-6">
+                                            Cycling
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-7">
+                                        <label class="form-check-label ms-2" for="loc-7">
+                                            Photography
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="loc-8">
+                                        <label class="form-check-label ms-2" for="loc-8">
+                                            Water Sports
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="me-2"><i class="isax isax-reserve text-primary"></i></span>
+                                    <h6>Meal plans available</h6>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="meal1" type="checkbox" id="meal1" checked="">
+                                        <label class="form-check-label ms-2" for="meal1">
+                                            All inclusive
+                                        </label>
+                                    </div>
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="meal2" type="checkbox" id="meal2" checked="">
+                                        <label class="form-check-label ms-2" for="meal2">
+                                            Breakfast
+                                        </label>
+                                    </div>
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="meal3" type="checkbox" id="meal3" checked="">
+                                        <label class="form-check-label ms-2" for="meal3">
+                                            Lunch
+                                        </label>
+                                    </div>
+                                    <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                        <input class="form-check-input ms-0 mt-0" name="meal4" type="checkbox" id="meal4" checked="">
+                                        <label class="form-check-label ms-2" for="meal4">
+                                            Dinner
+                                        </label>
+                                    </div>
+    
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="me-2"><i class="isax isax-building text-primary"></i></span>
+                                    <h6>Guests</h6>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="Guest1">
+                                        <label class="form-check-label ms-2" for="Guest1">
+                                            1 - 5
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="Guest2">
+                                        <label class="form-check-label ms-2" for="Guest2">
+                                            5 - 10
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="Guest3">
+                                        <label class="form-check-label ms-2" for="Guest3">
+                                            10 - 15
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="Guest4">
+                                        <label class="form-check-label ms-2" for="Guest4">
+                                            15 - 20
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="Guest5">
+                                        <label class="form-check-label ms-2" for="Guest5">
+                                            20+
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="me-2"><i class="isax isax-building text-primary"></i></span>
+                                    <h6>Reviews</h6>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="star1">
+                                        <label class="form-check-label ms-2" for="star1">
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="star2">
+                                        <label class="form-check-label ms-2" for="star2">
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="star3">
+                                        <label class="form-check-label ms-2" for="star3">
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="star4">
+                                        <label class="form-check-label ms-2" for="star4">
+                                            <i class="fas fa-star filled text-primary"></i>
+                                            <i class="fas fa-star filled text-primary"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center ps-0 me-4">
+                                        <input class="form-check-input ms-0 mt-0" type="checkbox" id="star5">
+                                        <label class="form-check-label ms-2" for="star5">
+                                            <i class="fas fa-star filled text-primary"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="d-flex align-items-center justify-content-end m-0">
+                                <button type="button" class="btn btn-light btn-md me-2" data-bs-dismiss="modal">Reset</button>
+                                <button type="submit" class="btn btn-primary btn-md" data-bs-dismiss="modal">Apply Filters</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Filter Modal -->

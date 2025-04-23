@@ -1,0 +1,755 @@
+/*============================
+  58.theme
+============================*/
+
+.dark-mode {
+    body {
+        background: $darkmode-white;
+        a {
+            color: $darkmode-text;
+            &:hover {
+                color: $primary;
+            }
+        }
+        h1,h2,h3,h4,h5,h6 {
+            color: $darkmode-text;
+        }
+        p,span {
+            color:$darkmode-text;
+        }
+        .plan-card{
+            background: $darkmode-white;
+        }
+        .badge{
+            background: $darkmode-white;
+        }
+        .counter-wrap{
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .bg-white {
+            background: $darkmode-white !important; 
+        }
+        .card {
+            background: $darkmode-white; 
+            border-color: $darkmode-light;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.5);
+        }
+        .place-item{
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.5);
+        }
+        .form-control {
+            color: $darkmode-text;
+        }
+        .main-header.main-header-four .header-nav .main-menu-wrapper .main-nav > li > a {
+            color: $darkmode-text;
+            i {
+                color: $darkmode-text;
+            }
+        }
+        header.fixed {
+            .header-nav {
+                .main-menu-wrapper {
+                    .main-nav {
+                        > li {
+                            > a {
+                                color: $darkmode-text;
+                            }
+                        } 
+                    } 
+                } 
+            } 
+            .header-logo.logo-dark {
+                display: none;
+            }
+            .header-logo.logo-white {
+                display: block;
+            }
+        } 
+        header.fixed {
+            background: $darkmode-white;
+        }
+        .dropdown-menu {
+            background: $darkmode-white;
+            border-color: $darkmode-light;
+        }
+        .border,.border-bottom,.border-top,.border-start,.border-end,.border-white {
+            border-color: $darkmode-light !important;
+        }
+        .banner-form-tab {
+            background: $darkmode-white;
+            .nav {
+                li {
+                    .nav-link {
+                        color: $darkmode-text;
+                    }
+                }
+            }
+        }
+        .banner-form {
+            .form-info {
+                border-color: $darkmode-light;
+                .form-item {
+                    border-color: $darkmode-light;
+                }
+            } 
+            .nav {
+                li {
+                    .nav-link {
+                        color: $darkmode-text;
+                    }
+                }
+            }
+        } 
+        .select2-container--default {
+            .select2-results>.select2-results__options{
+                background: $darkmode-white;
+                color: $white;
+            }
+        }
+        .rounded-arrow-next {
+            color: $darkmode-white;
+        }
+        .bg-light-200 {
+            background: $darkmode-light-200 !important;
+        }
+        .place-item {
+            .place-content {
+                background: $darkmode-white; 
+            }
+        }
+        .more-companies-logo .client-img {
+            background: $darkmode-white; 
+            border-color: $darkmode-light;
+        }
+        .form-check-input:checked ~ .form-check-label {
+            color: $darkmode-gray-900;
+        }
+        .offer-counter-inner {
+            .counter  {
+                color: $white;
+            }
+        }
+        .slider-video-btn .video-btn {
+            background: $darkmode-white; 
+        }
+        .text-white {
+            color: $darkmode-text !important;
+        }
+        .loc-view-bottom {
+            background: $darkmode-white;
+        }
+        .accordion-item {
+            background: $darkmode-white;
+        }
+        .accordion-header .accordion-button {
+            background: $darkmode-white;
+            color: $darkmode-text;
+        }
+        .blog-grid .blog-date {
+            background: $darkmode-white;
+        }
+        .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev {
+            background: $darkmode-white;
+            color: $darkmode-text;
+        }
+        .footer-two {
+            background: $darkmode-light-300;
+            background: $darkmode-light-500;
+            .footer-bottom {
+                background: $darkmode-light-500;
+                border-color: $darkmode-light;
+            }
+            .social-icon-two li a {
+                background: $darkmode-white;
+            }
+            .customer-info .customer-info-content {
+                span, h6 {
+                    color: $darkmode-text;
+                }
+            }
+        }
+    }
+    .btn-white  {
+        background: $darkmode-white;
+        border-color: $darkmode-light;
+    }
+    .bg-light-300 {
+        background: $darkmode-light-300 !important;
+    }
+    .about-section {
+        background: $darkmode-light-400;
+    }
+    .expert-item {
+        border-color: $darkmode-light;
+    }
+    .testimonial-section {
+        background: $darkmode-light-400;
+    }
+    .update-section {
+        background: $darkmode-white;
+    }
+    .faq-sec {
+        background: $darkmode-white;
+    }
+    footer {
+        background: $darkmode-light-500;
+        .footer-bottom {
+            background: $darkmode-light;
+        }
+    }
+    .btn-light {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+		&:active, &:focus {
+			background: $darkmode-light;
+			border-color: $darkmode-light;
+		}
+    }
+    .custom-increment .input-group .input-number {
+        background: $darkmode-light-500;
+    }
+    .header-three .header-nav {
+        background: $darkmode-white;
+        .main-menu-wrapper .main-nav > li > a {
+            color: $darkmode-text;
+        }
+    }
+    .pickup-card {
+        background: $darkmode-light !important;
+    }
+    .category-wrap .category-img {
+        background: $darkmode-light-200;
+    }
+    .location-item,.blog-item.blog-wrap {
+        border-color: $darkmode-light;
+    }
+    .feeback-section,.faq-section-three {
+        background: $darkmode-white;
+    }
+    header.fixed .header-btn .theme-toggle,.header-four .header-btn .theme-toggle {
+        color: $white;
+    }
+    .card .card-header {
+        border-color: $darkmode-light;
+    }
+    .place-section,.client-section-four::before {
+        background: $darkmode-white;
+    }
+    .place-content {
+        .date-info {
+            background: $darkmode-light-300;
+            border: 1px solid $darkmode-light;
+            p  {
+                color: $white;
+            }
+        }
+    }
+    .flight-expert::before {
+        background: $darkmode-light-200;
+    }
+    .flight-expert,.megamenu-wrapper .single-demo {
+        border-color: $darkmode-light;
+    }
+    .header-five .header-nav {
+        background: $darkmode-white;
+    }
+    .header-five .header-nav .main-menu-wrapper .main-nav > li > a,.header-five .header-btn a {
+        color: $darkmode-text;
+    }
+    header .main-menu-wrapper .main-nav li.has-submenu > .submenu {
+        background: $darkmode-white;
+    }
+    .header-top-six .dropdown > a,.text-gray-9 {
+        color: $darkmode-text !important;
+    }
+    .table {
+        --bs-table-bg: $darkmode-white;
+        tr {
+            td {
+                border-color: $darkmode-light;  
+            }
+            th {
+                background: $darkmode-light-200 !important; 
+                color: $darkmode-text;
+                border-color: $darkmode-light !important;  
+            }
+        }
+    }
+    .tours-item,.user-sidebar .user-sidebar-header .profile-content {
+        border-color: $darkmode-light;  
+    }
+    .form-control {
+        background: $darkmode-light-200;
+        border-color: $darkmode-light;  
+    }
+    .hotel-list .table .thead-light th {
+        color: $darkmode-text;
+    }
+    .chat-cont-left .chat-users-list .chat-member,.chat-cont-right .msg_head {
+        background: $darkmode-light-200;
+        border-color: $darkmode-light;
+    }
+    .msg_card_body .media .media-body .msg-box:first-child .sent-message {
+        background: $darkmode-light-200 !important;
+        border-color: $darkmode-light !important;
+    }
+    .msg_card_body .media .media-body .msg-box:first-child .received-message {
+        background: $darkmode-light-200 !important;
+        border-color: $darkmode-light !important;
+    }
+    .select2-selection.select2-selection--single {
+        background: $darkmode-light-200 !important;
+        border-color: $darkmode-light !important;
+    }
+    .accordion-item,.accordion-button,.faq-accordion .accordion-item .accordion-body {
+        border-color: $darkmode-light !important;
+    }
+    header .header-nav .main-menu-wrapper .main-nav > li .submenu li a {
+        color: $darkmode-text;
+    }
+    .hotel-type-item,.recommend-wrap {
+        background: $darkmode-light-200;
+        border-color: $darkmode-light;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.5);
+    }
+    .btn.btn-white,header.fixed .header__hamburger .sidebar-menu {
+        color: $darkmode-text;
+    }
+    .offcanvas-wrap,.mean-container .mean-bar,.mean-container .mean-nav {
+        background: $darkmode-white;
+    }
+    .mean-container .mean-nav > ul > li {
+        border-color: $darkmode-light;
+    }
+    .offcanvas-info {
+        background: $darkmode-white !important;
+    }
+    .white-logo-responsive {
+        display: block;
+    }
+    .black-logo-responsive {
+        display: none;
+    }
+    .offcanvas-close {
+        color: $darkmode-text !important; 
+    }
+    .wishlist-info,.header-dropdown {
+        background: $darkmode-light-200;
+    }
+    header {
+        &.header-five {
+            .header-logo {
+                &.logo-dark {
+                    display: block !important;
+                }
+                &.logo-white {
+                    display: none !important;
+                }
+            }
+        }
+       &.header-four {
+            .header-logo {
+                &.logo-dark {
+                    display: block !important;
+                }
+                &.logo-white {
+                    display: none !important;
+                }
+            }
+        }
+       &.header-three {
+            .header-logo {
+                &.logo-dark {
+                    display: block !important;
+                }
+                &.logo-white {
+                    display: none !important;
+                }
+            }
+        }
+    }
+    .header-topbar.topbar-four {
+        border-color: $darkmode-light;
+    }
+    .footer-five .footer-bottom {
+        border-color: $darkmode-light;
+    }
+    .footer-five .footer-about .footer-input .input-group {
+        background: $darkmode-light;
+    }
+    .input-group-text {
+        background: $darkmode-light-200 !important;
+        border-color: $darkmode-light !important;
+    }
+    .footer-five .footer-bottom .social-icon a {
+        background:  $darkmode-light;
+    }
+    .package-sec {
+        .card  {
+            background: $darkmode-light-200 !important;
+        }
+    }
+    .accordion .accordion-body {
+        background: $darkmode-white;
+    }
+    .bg-light {
+        background: $darkmode-light !important;
+        border-color: $darkmode-light !important;
+    }
+    .faq-secpath-two,.faq-accordion-five {
+        background: $darkmode-light;
+    }
+    .flight-loc .loc-name {
+        background: $darkmode-white;
+        border-color: $darkmode-light;
+    }
+    .form-checkbox {
+        background: $darkmode-light-500;
+    }
+    .menu-img img,.btn-outline-light {
+        border-color: $darkmode-light !important;
+    }
+    .btn-outline-light {
+        color: $darkmode-text !important;
+        &:hover {
+            background: $darkmode-light !important;
+        }
+    }
+    .review-item .review-info.reply {
+        background: $darkmode-light-200;
+        border-color: $darkmode-light;
+    }
+    .bg-light-500 {
+        background: $darkmode-light-500 !important;
+    }
+    .text-editor .note-toolbar {
+        background: $darkmode-light-200;
+        border-color: $darkmode-light;
+    }
+    .text-editor .note-editor.note-frame {
+        border-color: $darkmode-light;
+    }
+    .btn.btn-light {
+        color: $darkmode-text !important;
+    }
+    .alert.badge-amenity {
+        border-color: $darkmode-light;
+        color: $darkmode-text;
+    }
+    .accordion.accordion-list .accordion-item .accordion-header .accordion-button {
+        color: $darkmode-text;
+    }
+    .policy-wrap {
+        border-color: $darkmode-light;
+    }
+    .pagination-nav .pagination .page-item .page-link {
+        background: $darkmode-light-200;
+    }
+    .list-item .list-icon {
+        background: $darkmode-light-200;
+    }
+    .modal-header,.modal-body,.modal-footer {
+        background: $darkmode-white;
+        border-color: $darkmode-light;
+    }
+    .accordion.custom-accordion > .accordion-item > .accordion-collapse > .accordion-body {
+        border-color: $darkmode-light;
+    }
+    .badge.badge-light {
+        background: $darkmode-light;
+    }
+    .service-wrap.slider-wrap-four .slider-nav-thumbnails img {
+        border-color: $darkmode-light;
+    }
+    .stage-flow .flows-step .flow-content::before {
+        border-color: $darkmode-light;
+    }
+    .file-upload {
+        border-color: $darkmode-light;
+    }
+    .choose-us-section {
+        background: $darkmode-light-400;
+    }
+    .bg-light-400 {
+        background: $darkmode-light-400 !important;
+    }
+    .pricing-plan-tab .nav .tab-btn {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+    }
+    .team-member {
+        background: $darkmode-light;    
+    }
+    .invoice-table {
+        border-color: $darkmode-light;
+    }
+    .invoice-logo-dark {
+        display: none;
+    }
+    .invoice-logo-white {
+        display: block;
+    }
+    .bg-light-100 {
+        background: $darkmode-light !important;
+    }
+    .blog-post,.blog-search .search-content .search-feild {
+        border-color: $darkmode-light;
+    }
+    .category-tag a.badge {
+        background: $darkmode-light-400;
+    }
+    .blog-search .search-content {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+    }
+    .blog-search .search-content .search-feild {
+        background: $darkmode-white;
+    }
+    .update-sec {
+        background: $darkmode-light-400;
+    }
+    .update-sec .input-group {
+        background: $darkmode-white;
+    }
+    .update-sec .input-group {
+        outline-color: $darkmode-light;
+    }
+    .header-navigation {
+        border-color: $darkmode-light;
+    }
+    .credit-card-details .card-form .user-icon {
+        border-color: $darkmode-light;
+    }
+    .settings .card-body {
+        .notification-content,.security-content,.preference-content {
+            border-color: $darkmode-light;
+        }
+    } 
+    .galley-wrap.more-gallery {
+        background: $darkmode-light;
+    }
+    .header-three .header-btn a, .booking-confirmation .service-info span {
+        color: $darkmode-text;
+    }
+    .footer-input .input-group {
+        background: $darkmode-white;
+    }
+    footer.footer-four .footer-top,footer.footer-four .footer-input .input-group {
+        background: $darkmode-light-400;
+    }
+    footer.footer-four .footer-bottom .social-icon li a {
+        background: $darkmode-white;
+    }
+    footer.footer-three .social-icon li a {
+        background: $darkmode-white;
+    }
+    .footer-logo-dark {
+        display: block;
+    }
+    .footer-logo-light {
+        display: none !important;
+    }
+    .tourism-text-info .card {
+        background: $darkmode-light-200 !important;
+    }
+    .faq-cards-six .accordion-item.show {
+        background: $darkmode-white;
+    }
+    .dropdown-divider {
+        border-color: $darkmode-light;
+    }
+    .rounded-edit {
+        background: $darkmode-light !important;
+    }
+    .card .card-footer {
+        border-color: $darkmode-light;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: $darkmode-text !important;
+    }
+    .bg-transparent-success,.credit-card-details .card-detials .card-add {
+        background: $darkmode-light !important;
+    }
+    .rebook-btn {
+        background: $darkmode-light;
+    }
+    .credit-card-details .card-detials .card-content {
+        border-color: $darkmode-light;
+    }
+    .fancybox-image {
+        border-color: $darkmode-light;
+    }
+    .about-progress {
+        background: $darkmode-light;
+    }
+    .video-wrap .video-btn {
+        background: $darkmode-light;
+        color: $darkmode-light;
+    }
+    .text-default, .text-gray-6, .text-gray-7 {
+        color: $darkmode-text !important;
+    }
+    .day-badge::after {
+        border-color: $darkmode-light;
+    }
+    .hotel-list .table tbody tr td, .booking-header .header-content .input-icon-start .form-control {
+        color: $darkmode-text;
+    }
+    .settings .card-body .settings-link a {
+        color: $darkmode-text;
+        i {
+            color: $darkmode-text;
+        }
+        &.active, &:hover {
+            color: $primary;
+            i {
+                color: $primary;
+            }
+        }
+           
+    }
+    .user-sidebar .user-sidebar-body ul li a {
+        color: $darkmode-text;
+        &.active, &:hover {
+            color: $primary;
+        }
+    }
+    .place-item .place-img .fav-item .fav-icon, .work-avatar {
+        background: $darkmode-light;
+    }
+    #loader-wrapper {
+        background: $darkmode-white;
+    }
+    .location-wrap .loc-view {
+        background: $darkmode-light;
+    }
+    .flight-expert .expert-img {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+    }
+    .faq-secpath {
+        background: $darkmode-light-400;
+    }
+    .banner-form-tab-six .nav li .nav-link {
+        background: $darkmode-light;
+        color: $darkmode-text;
+        &.active {
+            background: $primary;
+        }
+    }
+    .header-top-six .cart-dropdown a {
+        color: $darkmode-text;
+    }
+    .header-topbar {
+        .logo-dark {
+            display: none;
+        }
+        .logo-white  {
+            display: block;
+        }
+    }
+    .work-section-six {
+        background: $darkmode-light-400;
+        &:before {
+            display: none;
+        }
+    }
+    .testi-sec-six{
+        background: $darkmode-light-400;
+        &:before {
+            display: none;
+        }
+    }
+    .value select {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+        color: $darkmode-text;
+    }
+    .paginations .page-link-1 {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+    }
+    .modal .modal-body .upcoming-content .upcoming-title {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+    }
+    .upcoming-details  {
+        border-color: $darkmode-light !important;
+    }
+    .btn-close {
+        --bs-btn-close-color: $darkmode-white;
+    }
+    .text-dark,.hotel-list .table tbody tr td a {
+        color: $darkmode-text !important;
+    }
+    .note-toolbar {
+        background: $darkmode-light-500;
+        border-color: $darkmode-light;
+    }
+    .note-btn {
+        background: $darkmode-light;
+        border-color: $darkmode-light;
+        color: $darkmode-text;
+    }
+    .bg-gray-transparent {
+        background: $darkmode-light !important;
+    }
+    .user-sidebar.agent-sidebar .user-sidebar-body > ul > li.logout-link {
+        border-color: $darkmode-light;
+    }
+    .bg-success-100, .bg-pink-100, .bg-danger-100, .bg-purple-100, .bg-cyan-100 {
+        h6 {
+            color: $darkmode-light;
+        }
+    }
+    .guest-details ul li h6 span, .guest-details ul li h6 i {
+        color: $darkmode-text;
+    }
+    .edit-delete-item a {
+        color: $darkmode-light;
+    }
+    .banner-form .input-search .input-group {
+        .form-control {
+            border-color: $darkmode-light;
+        }
+        .input-group-text {
+            color: $darkmode-light;
+        }
+    }
+    .login-or .span-or {
+        background: $darkmode-white;
+    }
+    .login-or::before, .login-or::after {
+        border-color: $darkmode-light;
+    }
+    .wishlist-info .cart-dropdown a, .wishlist-info .fav-dropdown a, .mean-container .mean-nav > ul li a,
+    .header-dropdown .dropdown .dropdown-toggle, footer.footer-four .footer-input .input-group .input-group-text,
+    .custom-increment .input-group .input-number, .header-five .header__hamburger .sidebar-menu, .header-three .header__hamburger .sidebar-menu  {
+        color: $darkmode-text;
+    }
+    .bootstrap-datetimepicker-widget table {
+        th {
+            color: $darkmode-text;
+        }
+        td {
+            color: $darkmode-text;
+        }
+    } 
+    footer.footer-four .footer-bottom .policy-links li a, footer .footer-top .footer-widget .footer-menu li a {
+        color: $darkmode-text;
+        &:hover {
+            color: $primary;
+        }
+    }
+    .header-top-six .fav-dropdown a, .header-topbar.topbar-four .dropdown > a, .form-check-label, .guest-details ul li h6,
+    .header-topbar.topbar-four p, .main-header.main-header-four .header__hamburger .sidebar-menu, .accordion-button:after,
+    .footer-five .customer-info .customer-info-content span, .footer-five .customer-info .customer-info-content h6, .form-label {
+        color: $darkmode-text;
+    }
+    .footer-five, .footer-three, .news-letter-sec {
+      .form-control, .input-group-text {
+            background: transparent !important;
+      }
+    }
+}
