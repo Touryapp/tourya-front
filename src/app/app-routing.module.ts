@@ -12,7 +12,7 @@ import { UnderMaintenanceComponent } from './auth/under-maintenance/under-mainte
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/index',
+    redirectTo: '/home',
     pathMatch: 'full',
   },
   

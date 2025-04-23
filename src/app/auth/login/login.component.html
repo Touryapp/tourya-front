@@ -9,23 +9,23 @@
                   <div class="card authentication-card">
                       <div class="card-header">
                           <div class="text-center">
-                              <h5 class="mb-1">Sign In</h5>
-                              <p>Sign in to Start Manage your DreamsTour Account</p>
+                              <h5 class="mb-1">Iniciar Sesión</h5>
+                              <p>Inicia sesión para empezar a gestionar cuenta de tus sueños</p>
                           </div>
                       </div>
                       <div class="card-body">
                           <form>
                               <div class="mb-3">
-                                  <label htmlFor="" class="form-label">Email</label>
+                                  <label htmlFor="" class="form-label">Correo</label>
                                   <div class="input-icon">
                                       <span class="input-icon-addon">
                                         <i class="isax isax-message"></i>
                                       </span>
-                                      <input type="email" class="form-control form-control-lg" placeholder="Enter Email">
+                                      <input type="email" class="form-control form-control-lg" placeholder="Ingresa tu correo">
                                   </div>
                               </div>
                               <div class="mb-3">
-                                  <label htmlFor="" class="form-label">Password</label>
+                                  <label htmlFor="" class="form-label">Contraseña</label>
                                   <div class="pass-group input-icon">
                                     <span class="input-icon-addon">
                                         <i class="isax isax-lock"></i>
@@ -33,7 +33,7 @@
                                     <input
                                     [type]="password[0] ? 'text' : 'password'"
                                     class="pass-input form-control"
-                                    placeholder="Enter Password"
+                                    placeholder="Ingresar Contraseña"
                                   />
                                   <span
                                     class="isax toggle-password"
@@ -49,17 +49,17 @@
                                       <div class="form-check d-flex align-items-center mb-2">
                                           <input class="form-check-input mt-0" type="checkbox" value="" id="remembers_me">
                                           <label htmlFor="" class="form-check-label ms-2 text-gray-9 fs-14" for="remembers_me">
-                                              Remember Me
+                                              Recuerdame
                                           </label>
                                       </div>
-                                      <a [routerLink]="routes.forgotPassword" class="link-primary fw-medium fs-14 mb-2">Forgot Password?</a>
+                                      <a [routerLink]="routes.forgotPassword" class="link-primary fw-medium fs-14 mb-2">Olvidaste tu Contraseña?</a>
                                   </div>
                               </div>
                               <div class="mb-3">
-                                  <a [routerLink]="routes.index" class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100">Login<i class="isax isax-arrow-right-3 ms-2"></i></a>
+                                  <a [routerLink]="routes.index" class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100">Iniciar Sesión<i class="isax isax-arrow-right-3 ms-2"></i></a>
                               </div>
                               <div class="login-or mb-3">
-                                  <span class="span-or">Or</span>
+                                  <span class="span-or">O</span>
                               </div>
                               <div class="d-flex align-items-center mb-3">
                                   <a href="javascript:void(0);" class="btn btn-light flex-fill d-flex align-items-center justify-content-center me-2">
@@ -70,7 +70,7 @@
                                   </a>
                               </div>
                               <div class="d-flex justify-content-center">
-                                  <p class="fs-14">Don't you have an account? <a [routerLink]="routes.register" class="link-primary fw-medium">Sign up</a></p>
+                                  <p class="fs-14">No tienes cuenta aún? <a [routerLink]="routes.register" class="link-primary fw-medium">Registrate</a></p>
                               </div>
                           </form>
                       </div>

@@ -13,6 +13,7 @@ import { DefaultHeaderComponent } from '../shared/common/default-header/default-
   declarations: [
     PagesModuleComponent,
     DefaultHeaderComponent,
+    
   ],
   imports: [
     CommonModule,

@@ -2019,6 +2019,7 @@ button:focus {
 }
 .btn.btn-primary {
   background-color: #CF3425;
+  /*background-color: #f89201;*/
   border: 1px solid #CF3425;
   color: #FFF;
 }
@@ -13906,7 +13907,7 @@ footer.footer-three .footer-bottom .policy-links li a:hover {
 }
 .authentication-wrapper::before {
   content: "";
-  background-image: url(../img/bg/authetication-bg.png);
+  /* background-image: url(../img/bg/authetication-bg.png); */
   position: absolute;
   width: 100%;
   height: 200px;
@@ -13918,7 +13919,8 @@ footer.footer-three .footer-bottom .policy-links li a:hover {
 }
 .authentication-wrapper::after {
   content: "";
-  background-image: url(../img/bg/authentication-footer-bg.png);
+  /* background-image: url(../img/bg/authentication-footer-bg.png); */
+  /* background-image: url(../img/bg/authetication-bg.png); */
   position: absolute;
   width: 100%;
   height: 150px;
