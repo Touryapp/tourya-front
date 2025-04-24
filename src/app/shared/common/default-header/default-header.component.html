@@ -1,7 +1,7 @@
-<div class="main-header" [ngClass]="{'main-header-four':base==='index-2' || base==='index-4' || base==='index-6'}">
+<div class="main-header" [ngClass]="{'main-header-four':base==='index-2' || base==='index-4' || base==='index-6' || base === 'home-clients' || base === 'home-providers'}">
 
     <!-- Header Topbar-->
-    <div [hidden]="base === 'index-2' || base === 'index-3' || base === 'index-4' || base === 'index-5' || base === 'index-6' || page==='index-rtl'" class="header-topbar text-center bg-transparent">
+    <div [hidden]="base === 'index-2' || base === 'index-3' || base === 'index-4' || base === 'index-5' || base === 'index-6' || base === 'home-clients' || base === 'home-providers' || page==='index-rtl'" class="header-topbar text-center bg-transparent">
         <div class="container">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
                 <p class="d-flex align-items-center fw-medium fs-14 mb-2"><i class="isax isax-call5 me-2"></i>Toll Free : +1 56565 56594</p>
@@ -139,7 +139,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="base==='index-6'" class="header-topbar header-top-six text-center bg-transparent">
+    <div *ngIf="base==='index-6' || base === 'home-clients' || base === 'home-providers'" class="header-topbar header-top-six text-center bg-transparent">
         <div class="container">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
                 <div class="d-flex align-items-center flex-wrap">
@@ -187,7 +187,7 @@
     </div>
     <!-- /Header Topbar-->
 
-    <header [ngClass]="{ 'header-three': base === 'index-3', 'header-four': base === 'index-4'|| base === 'index-2', 'header-five': base === 'index-5' , 'header-six': base === 'index-6','fixed': isFixed }">
+    <header [ngClass]="{ 'header-three': base === 'index-3', 'header-four': base === 'index-4'|| base === 'index-2', 'header-five': base === 'index-5' , 'header-six': base === 'index-6' || base === 'home-clients' || base === 'home-providers','fixed': isFixed }">
         <div [ngClass]="base ==='index-4' ? 'container-fluid' : 'container'">
             <div class="offcanvas-info" [ngClass]="{ 'show': show }">
                 <div class="offcanvas-wrap">
