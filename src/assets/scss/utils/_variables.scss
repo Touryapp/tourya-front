@@ -24,8 +24,8 @@ $font-awesome: "Fontawesome";
 $font-iconsax: "iconsax";
 
 // Theme Colors Variables
-//$primary: #CF3425;
-$primary: #1b6475;
+$primary: #CF3425;
+//$primary: #1b6475;
 $primary-hover: color.adjust($primary, $lightness: 10%);
 $secondary: #98AA30;
 $secondary-hover: color.adjust($secondary, $lightness: 10%);
@@ -60,6 +60,14 @@ $primary-700: #E17163;
 $primary-800: #DB5D4F;
 $primary-900: #D4483B;
 
+$primary-001: #1b6475;
+$primary-002: #51a9ba;  
+$primary-003: #2d7b8c;                                                                                          
+$primary-004: #63c0d1;
+$primary-005: #3f92a3;
+
+
+
 // Secondary
 $secondary-100: #F1F7ED;
 $secondary-200: #E2F0DB;
@@ -70,6 +78,20 @@ $secondary-600: #AAD092;
 $secondary-700: #9CC880;
 $secondary-800: #8EC06D;
 $secondary-900: #80B859;
+
+$secondary-001:#f89201;                                              
+$secondary-002:#faa633;
+$secondary-003:#fbb466;       
+$secondary-004:#fcc299;
+$secondary-005:#fdd0cc;
+
+// terceros
+$terceros-001:#2dcecf;
+$terceros-002:#4dd8d8;
+$terceros-003:#6de2e2;                                    
+$terceros-004:#8decec;
+$terceros-005:#ade6e6;
+
 
 // Pink
 $pink-100: #FFECF4;
