@@ -16,91 +16,150 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
                                 <div class="mb-3">
-                                    <label class="form-label">Nombre</label>
+                                    <label class="form-label" for="name">Nombre</label>
                                     <div class="input-icon">
                                         <span class="input-icon-addon">
                                             <i class="isax isax-user"></i>
                                         </span>
-                                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa tu nombre">
+                                        <input type="text" id="name" formControlName="name"
+                                            class="form-control form-control-lg" placeholder="Ingresa tu nombre"
+                                            maxlength="50">
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Correo</label>
-                                    <div class="input-icon">
-                                        <span class="input-icon-addon">
-                                            <i class="isax isax-message"></i>
-                                        </span>
-                                        <input type="email" class="form-control form-control-lg" placeholder="Ingresar Correo">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Contraseña</label>
-                                    <div class="pass-group input-icon">
-                                        <span class="input-icon-addon">
-                                            <i class="isax isax-lock"></i>
-                                          </span>
-                                        <input
-                                        [type]="password[0] ? 'text' : 'password'"
-                                        class="pass-input form-control"
-                                        placeholder="Ingresar Contraseña"
-                                      />
-                                      <span
-                                        class="isax toggle-password"
-                                        [ngClass]="password[0] ? 'isax-eye' : 'isax-eye-slash'"
-                                        (click)="togglePassword(0)"
-                                        (keydown.enter)="togglePassword(0)"
-                                        tabindex="0"
-                                      ></span>
-                                      </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Confirmar Contraseña</label>
-                                    <div class="pass-group input-icon">
-                                        <span class="input-icon-addon">
-                                            <i class="isax isax-lock"></i>
-                                          </span>
-                                        <input
-                                        [type]="password[1] ? 'text' : 'password'"
-                                        class="pass-input form-control"
-                                        placeholder="Ingresar Contraseña"
-                                      />
-                                      <span
-                                        class="isax toggle-password"
-                                        [ngClass]="password[1] ? 'isax-eye' : 'isax-eye-slash'"
-                                        (click)="togglePassword(1)"
-                                        (keydown.enter)="togglePassword(1)"
-                                        tabindex="0"
-                                      ></span>
-                                      </div>
-                                </div>
-                                <div class="mt-3 mb-3">
-                                    <div class="d-flex">
-                                        <div class="form-check d-flex align-items-center mb-2">
-                                            <input class="form-check-input mt-0" type="checkbox" value="" id="agree">
-                                            <label class="form-check-label ms-2 text-gray-9 fs-14" for="agree">
-                                                Acepto los <a [routerLink]="routes.termsConditions" class="link-primary fw-medium">Terminos De Servicio.</a>
-                                            </label>
+
+                                    <div *ngIf="registerForm.controls['name'].invalid && (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)"
+                                        class="text-danger">
+                                        <div *ngIf="registerForm.controls['name'].errors?.['required']">
+                                            Nombre es requerido
+                                        </div>
+                                        <div *ngIf="registerForm.controls['name'].errors?.['minlength']">
+                                            Nombre debe tener al menos 2 caracteres
+                                        </div>
+                                        <div *ngIf="registerForm.controls['name'].errors?.['maxlength']">
+                                            Nombre no puede tener más de 50 caracteres
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <a [routerLink]="routes.login" class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100">Registrarme<i class="isax isax-arrow-right-3 ms-2"></i></a>
+                                    <label class="form-label" for="email">Correo</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="isax isax-message"></i>
+                                        </span>
+                                        <input type="email" id="email" formControlName="email"
+                                            class="form-control form-control-lg" placeholder="Ingresar Correo">
+                                    </div>
+
+                                    <div *ngIf="registerForm.controls['email'].invalid && (registerForm.controls['email'].dirty || registerForm.controls['email'].touched)"
+                                        class="text-danger">
+
+                                        <div *ngIf="registerForm.controls['email'].errors?.['required']">
+                                            Correo es requerido
+                                        </div>
+                                        <div *ngIf="registerForm.controls['email'].errors?.['email']">
+                                            Correo no es válido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="password">Contraseña</label>
+                                    <div class="pass-group input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="isax isax-lock"></i>
+                                        </span>
+                                        <input [type]="password[0] ? 'text' : 'password'" id="password"
+                                            formControlName="password" class="pass-input form-control"
+                                            placeholder="Ingresar Contraseña" />
+                                        <span class="isax toggle-password"
+                                            [ngClass]="password[0] ? 'isax-eye' : 'isax-eye-slash'"
+                                            (click)="togglePassword(0)" (keydown.enter)="togglePassword(0)"
+                                            tabindex="0"></span>
+                                    </div>
+
+                                    <div *ngIf="registerForm.controls['password'].invalid && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)"
+                                        class="text-danger">
+                                        <div *ngIf="registerForm.controls['password'].errors?.['required']">
+                                            Contraseña es requerida
+                                        </div>
+                                        <div *ngIf="registerForm.controls['password'].errors?.['minlength']">
+                                            Contraseña debe tener al menos 8 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="password_confirm">Confirmar Contraseña</label>
+                                    <div class="pass-group input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="isax isax-lock"></i>
+                                        </span>
+                                        <input [type]="password[1] ? 'text' : 'password'" id="password_confirm"
+                                            formControlName="confirmPassword" class="pass-input form-control"
+                                            placeholder="Ingresar Contraseña" />
+                                        <span class="isax toggle-password"
+                                            [ngClass]="password[1] ? 'isax-eye' : 'isax-eye-slash'"
+                                            (click)="togglePassword(1)" (keydown.enter)="togglePassword(1)"
+                                            tabindex="0"></span>
+                                    </div>
+
+                                    <div *ngIf="registerForm.controls['confirmPassword'].invalid && (registerForm.controls['confirmPassword'].dirty || registerForm.controls['confirmPassword'].touched) || registerForm.errors?.['passwordMismatch']"
+                                        class="text-danger">
+                                        <div *ngIf="registerForm.controls['confirmPassword'].errors?.['required']">
+                                            Contraseña es requerida
+                                        </div>
+                                        <div *ngIf="registerForm.controls['confirmPassword'].errors?.['minlength']">
+                                            Contraseña debe tener al menos 8 caracteres
+                                        </div>
+
+                                        <div *ngIf="registerForm.errors?.['passwordMismatch']">
+                                            Contraseñas no coinciden
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 mb-3">
+                                    <div class="d-flex">
+                                        <div class="form-check d-flex align-items-center mb-2">
+                                            <input class="form-check-input mt-0" type="checkbox" formControlName="terms"
+                                                id="agree">
+                                            <label class="form-check-label ms-2 text-gray-9 fs-14" for="agree">
+                                                Acepto los <a [routerLink]="routes.termsConditions"
+                                                    class="link-primary fw-medium">Términos De Servicio.</a>
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                    <div *ngIf="registerForm.controls['terms'].invalid && (registerForm.controls['terms'].dirty || registerForm.controls['terms'].touched)"
+                                        class="text-danger">
+                                        <div *ngIf="registerForm.controls['terms'].errors?.['required']">
+                                            Los términos de servicio deben ser aceptados
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="submit"
+                                        class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
+                                        [disabled]="loading || registerForm.invalid">
+                                        <span>Registrarme</span>
+                                        <div *ngIf="loading" class="spinner-border spinner-border-sm ml-5">
+                                        </div>
+                                    </button>
                                 </div>
                                 <div class="login-or mb-3">
                                     <span class="span-or">O</span>
                                 </div>
                                 <div class="d-flex align-items-center mb-3">
-                                    <a href="javascript:void(0);" class="btn btn-light flex-fill d-flex align-items-center justify-content-center me-2">
+                                    <a href="javascript:void(0);"
+                                        class="btn btn-light flex-fill d-flex align-items-center justify-content-center me-2">
                                         <img src="assets/img/icons/google-icon.svg" class="me-2" alt="Img">Google
                                     </a>
-                                    <a href="javascript:void(0);" class="btn btn-light flex-fill d-flex align-items-center justify-content-center">
+                                    <a href="javascript:void(0);"
+                                        class="btn btn-light flex-fill d-flex align-items-center justify-content-center">
                                         <img src="assets/img/icons/fb-icon.svg" class="me-2" alt="Img">Facebook
                                     </a>
                                 </div>
                                 <div class="d-flex justify-content-center">
-                                    <p class="fs-14">Ya tienes cuenta? <a [routerLink]="routes.login" class="link-primary fw-medium">Iniciar Sesión</a></p>
+                                    <p class="fs-14">Ya tienes cuenta? <a [routerLink]="routes.login"
+                                            class="link-primary fw-medium">Iniciar Sesión</a></p>
                                 </div>
                             </form>
                         </div>
@@ -113,6 +172,7 @@
 
     </div>
     <div class="coprright-footer">
-        <p class="fs-14">Copyright &copy; 2025. All Rights Reserved, <a href="javascript:void(0);" class="text-primary fw-medium">DreamsTour</a></p>
+        <p class="fs-14">Copyright &copy; 2025. All Rights Reserved, <a href="javascript:void(0);"
+                class="text-primary fw-medium">DreamsTour</a></p>
     </div>
 </div>
