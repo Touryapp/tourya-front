@@ -3,6 +3,8 @@ import { Router } from "@angular/router";
 import { routes } from "../../shared/routes/routes";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { passwordMatchValidator } from "../../shared/validators/password-match.validator";
+import { dayjsDateValidator } from "../../shared/validators/date-format.validator";
+import { onlyNumberValidator } from "../../shared/validators/only-number.validator";
 
 @Component({
   selector: "app-register",
@@ -12,9 +14,28 @@ import { passwordMatchValidator } from "../../shared/validators/password-match.v
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   public routes = routes;
+
   loading: boolean = false;
   password: boolean[] = [false, false]; // Add more as needed
+
   registerForm: FormGroup;
+
+  bsValue = undefined;
+  maxDate = new Date();
+
+  typeOfDocuments: any[] = [
+    { id: 1, name: "DNI" },
+    { id: 2, name: "Pasaporte" },
+    { id: 3, name: "Cédula de identidad" },
+    { id: 4, name: "RUT" },
+  ];
+
+  genders: any[] = [
+    { id: 1, name: "Masculino" },
+    { id: 2, name: "Femenino" },
+    { id: 3, name: "No binario" },
+    { id: 4, name: "Prefiero no decirlo" },
+  ];
 
   togglePassword(index: number): void {
     this.password[index] = !this.password[index];
@@ -27,12 +48,40 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ) {
     this.registerForm = new FormGroup(
       {
-        name: new FormControl("", [
+        names: new FormControl("", [
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(50),
         ]),
+        surnames: new FormControl("", [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+        ]),
+        typeOfDocument: new FormControl("", [Validators.required]),
+        documentNumber: new FormControl("", [
+          Validators.required,
+          Validators.minLength(7),
+          Validators.maxLength(10),
+          onlyNumberValidator(),
+        ]),
+        birthdate: new FormControl("", [
+          Validators.required,
+          dayjsDateValidator("DD-MM-YYYY"),
+        ]),
+        gender: new FormControl("", [Validators.required]),
+        phone: new FormControl("", [Validators.required]),
         email: new FormControl("", [Validators.required, Validators.email]),
+        city: new FormControl("", [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+        ]),
+        address: new FormControl("", [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+        ]),
         password: new FormControl("", [
           Validators.required,
           Validators.minLength(8),
@@ -54,7 +103,21 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.renderer.addClass(document.body, "bg-light-200");
 
-    this.registerForm.controls["password"];
+    this.registerForm.get("typeOfDocument")?.valueChanges.subscribe((value) => {
+      if (value) {
+        if (!this.isValidTypeOfDocument) {
+          this.registerForm.get("typeOfDocument")?.setValue("");
+        }
+      }
+    });
+
+    this.registerForm.get("gender")?.valueChanges.subscribe((value) => {
+      if (value) {
+        if (!this.isValidGender) {
+          this.registerForm.get("gender")?.setValue("");
+        }
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -62,6 +125,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   submitForm() {
+    console.log("Form submitted", this.registerForm);
     this.loading = true;
 
     if (this.registerForm.valid) {
@@ -71,6 +135,43 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.router.navigate([routes.myProfile]);
         }, 3000);
       });
+    } else {
+      this.registerForm.markAllAsTouched();
+      this.loading = false;
+    }
+  }
+
+  get isValidTypeOfDocument(): boolean {
+    const typeOfDocumentValue = +this.registerForm.get("typeOfDocument")?.value;
+
+    const found = this.typeOfDocuments.find(
+      (typeOfDocument) => typeOfDocument.id === typeOfDocumentValue
+    );
+
+    return !!found;
+  }
+
+  get isValidGender(): boolean {
+    const genderValue = +this.registerForm.get("gender")?.value;
+
+    const found = this.genders.find((gender) => gender.id === genderValue);
+
+    return !!found;
+  }
+
+  onKeypressDateTimePicker(event: KeyboardEvent) {
+    return false;
+  }
+
+  onKeydownDateTimePicker(event: KeyboardEvent) {
+    if (event.key === "Backspace") {
+      this.registerForm.get("birthdate")?.setValue("");
+    }
+  }
+
+  onKeyPressDocumentNumber(event: KeyboardEvent): void {
+    if (/[^0-9]/.test(event.key)) {
+      event.preventDefault();
     }
   }
 }
