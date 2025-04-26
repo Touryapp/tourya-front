@@ -28,7 +28,8 @@ $font-iconsax: "iconsax";
 $primary: #1b6475;
 
 $primary-hover: color.adjust($primary, $lightness: 10%);
-$secondary: #98AA30;
+$secondary:#f89201;
+//$secondary: #98AA30;
 $secondary-hover: color.adjust($secondary, $lightness: 10%);
 $success: #04BD6C;
 $success-hover: color.adjust($success, $lightness: 10%);
@@ -38,7 +39,8 @@ $warning: #FFCA18;
 $warning-hover: color.adjust($warning, $lightness: 10%);
 $danger: #FF0000;
 $danger-hover: color.adjust($danger, $lightness: 10%);
-$dark: #212E47;
+$dark: #f89201;
+//$dark: #212E47;
 $light: #E4EBF1;
 $light-hover: color.adjust($light, $lightness: 10%);
 $white: #FFF;
@@ -86,6 +88,7 @@ $secondary-002:#faa633;
 $secondary-003:#fbb466;       
 $secondary-004:#fcc299;
 $secondary-005:#fdd0cc;
+$secondary-006:#d17a01;
 
 // terceros
 $terceros-001:#2dcecf;
