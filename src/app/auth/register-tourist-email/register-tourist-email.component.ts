@@ -58,7 +58,7 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
       this.ngZone.run(() => {
         setTimeout(() => {
           this.loading = false;
-          this.router.navigate([routes.register]);
+          this.router.navigate(["home"]);
         }, 3000);
       });
     } else {
