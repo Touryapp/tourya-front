@@ -71,7 +71,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         ]),
         gender: new FormControl("", [Validators.required]),
         phone: new FormControl("", [Validators.required]),
-        email: new FormControl("", [Validators.required, Validators.email]),
         city: new FormControl("", [
           Validators.required,
           Validators.minLength(2),
@@ -82,15 +81,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           Validators.minLength(2),
           Validators.maxLength(50),
         ]),
-        password: new FormControl("", [
-          Validators.required,
-          Validators.minLength(8),
-        ]),
-        confirmPassword: new FormControl("", [
-          Validators.required,
-          Validators.minLength(8),
-        ]),
-        terms: new FormControl(false, [Validators.requiredTrue]),
       },
       { validators: [passwordMatchValidator("password", "confirmPassword")] }
     );
