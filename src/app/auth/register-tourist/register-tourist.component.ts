@@ -7,18 +7,18 @@ import { dayjsDateValidator } from "../../shared/validators/date-format.validato
 import { onlyNumberValidator } from "../../shared/validators/only-number.validator";
 
 @Component({
-  selector: "app-register",
+  selector: "app-register-tourist",
   standalone: false,
-  templateUrl: "./register.component.html",
-  styleUrl: "./register.component.scss",
+  templateUrl: "./register-tourist.component.html",
+  styleUrl: "./register-tourist.component.scss",
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterTouristComponent implements OnInit, OnDestroy {
   public routes = routes;
 
   loading: boolean = false;
   password: boolean[] = [false, false]; // Add more as needed
 
-  registerForm: FormGroup;
+  registerTouristForm: FormGroup;
 
   bsValue = undefined;
   maxDate = new Date();
@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private ngZone: NgZone
   ) {
-    this.registerForm = new FormGroup(
+    this.registerTouristForm = new FormGroup(
       {
         names: new FormControl("", [
           Validators.required,
@@ -93,18 +93,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.renderer.addClass(document.body, "bg-light-200");
 
-    this.registerForm.get("typeOfDocument")?.valueChanges.subscribe((value) => {
-      if (value) {
-        if (!this.isValidTypeOfDocument) {
-          this.registerForm.get("typeOfDocument")?.setValue("");
+    this.registerTouristForm
+      .get("typeOfDocument")
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          if (!this.isValidTypeOfDocument) {
+            this.registerTouristForm.get("typeOfDocument")?.setValue("");
+          }
         }
-      }
-    });
+      });
 
-    this.registerForm.get("gender")?.valueChanges.subscribe((value) => {
+    this.registerTouristForm.get("gender")?.valueChanges.subscribe((value) => {
       if (value) {
         if (!this.isValidGender) {
-          this.registerForm.get("gender")?.setValue("");
+          this.registerTouristForm.get("gender")?.setValue("");
         }
       }
     });
@@ -117,7 +119,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   submitForm() {
     this.loading = true;
 
-    if (this.registerForm.valid) {
+    if (this.registerTouristForm.valid) {
       this.ngZone.run(() => {
         setTimeout(() => {
           this.loading = false;
@@ -125,13 +127,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
         }, 3000);
       });
     } else {
-      this.registerForm.markAllAsTouched();
+      this.registerTouristForm.markAllAsTouched();
       this.loading = false;
     }
   }
 
   get isValidTypeOfDocument(): boolean {
-    const typeOfDocumentValue = +this.registerForm.get("typeOfDocument")?.value;
+    const typeOfDocumentValue =
+      +this.registerTouristForm.get("typeOfDocument")?.value;
 
     const found = this.typeOfDocuments.find(
       (typeOfDocument) => typeOfDocument.id === typeOfDocumentValue
@@ -141,7 +144,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   get isValidGender(): boolean {
-    const genderValue = +this.registerForm.get("gender")?.value;
+    const genderValue = +this.registerTouristForm.get("gender")?.value;
 
     const found = this.genders.find((gender) => gender.id === genderValue);
 
@@ -154,7 +157,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   onKeydownDateTimePicker(event: KeyboardEvent) {
     if (event.key === "Backspace") {
-      this.registerForm.get("birthdate")?.setValue("");
+      this.registerTouristForm.get("birthdate")?.setValue("");
     }
   }
 

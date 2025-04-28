@@ -1,12 +1,12 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { LoginComponent } from "./auth/login/login.component";
+import { LoginTouristComponent } from "./auth/login-tourist/login-tourist.component";
 import { Error404Component } from "./auth/error-404/error-404.component";
 import { ChangePasswordComponent } from "./auth/change-password/change-password.component";
 import { ComingSoonComponent } from "./auth/coming-soon/coming-soon.component";
 import { Error500Component } from "./auth/error-500/error-500.component";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
-import { RegisterComponent } from "./auth/register/register.component";
+import { RegisterTouristComponent } from "./auth/register-tourist/register-tourist.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
 
@@ -18,16 +18,16 @@ const routes: Routes = [
   },
 
   {
-    path: "login",
-    component: LoginComponent,
+    path: "login-tourist",
+    component: LoginTouristComponent,
   },
   {
     path: "forgot-password",
     component: ForgotPasswordComponent,
   },
   {
-    path: "register",
-    component: RegisterComponent,
+    path: "register-tourist",
+    component: RegisterTouristComponent,
   },
   {
     path: "register-tourist-email",

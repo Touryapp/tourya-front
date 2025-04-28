@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
+                            <form [formGroup]="registerTouristForm" (ngSubmit)="submitForm()">
                                 <div class="mb-3">
                                     <label class="form-label" for="names">Nombres</label>
                                     <div class="input-icon">
@@ -28,15 +28,15 @@
                                             minlength="2" maxlength="50">
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['names'].invalid && (registerForm.controls['names'].dirty || registerForm.controls['names'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['names'].invalid && (registerTouristForm.controls['names'].dirty || registerTouristForm.controls['names'].touched)"
                                         class="text-danger">
-                                        <div *ngIf="registerForm.controls['names'].errors?.['required']">
+                                        <div *ngIf="registerTouristForm.controls['names'].errors?.['required']">
                                             Nombres es requerido
                                         </div>
-                                        <div *ngIf="registerForm.controls['names'].errors?.['minlength']">
+                                        <div *ngIf="registerTouristForm.controls['names'].errors?.['minlength']">
                                             Nombres debe tener al menos 2 caracteres
                                         </div>
-                                        <div *ngIf="registerForm.controls['names'].errors?.['maxlength']">
+                                        <div *ngIf="registerTouristForm.controls['names'].errors?.['maxlength']">
                                             Nombres no puede tener más de 50 caracteres
                                         </div>
                                     </div>
@@ -53,15 +53,15 @@
                                             minlength="2" maxlength="50">
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['surnames'].invalid && (registerForm.controls['surnames'].dirty || registerForm.controls['surnames'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['surnames'].invalid && (registerTouristForm.controls['surnames'].dirty || registerTouristForm.controls['surnames'].touched)"
                                         class="text-danger">
-                                        <div *ngIf="registerForm.controls['surnames'].errors?.['required']">
+                                        <div *ngIf="registerTouristForm.controls['surnames'].errors?.['required']">
                                             Apellidos es requerido
                                         </div>
-                                        <div *ngIf="registerForm.controls['surnames'].errors?.['minlength']">
+                                        <div *ngIf="registerTouristForm.controls['surnames'].errors?.['minlength']">
                                             Apellidos debe tener al menos 2 caracteres
                                         </div>
-                                        <div *ngIf="registerForm.controls['surnames'].errors?.['maxlength']">
+                                        <div *ngIf="registerTouristForm.controls['surnames'].errors?.['maxlength']">
                                             Apellidos no puede tener más de 50 caracteres
                                         </div>
                                     </div>
@@ -82,10 +82,11 @@
                                         </select>
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['typeOfDocument'].invalid && (registerForm.controls['typeOfDocument'].dirty || registerForm.controls['typeOfDocument'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['typeOfDocument'].invalid && (registerTouristForm.controls['typeOfDocument'].dirty || registerTouristForm.controls['typeOfDocument'].touched)"
                                         class="text-danger">
 
-                                        <div *ngIf="registerForm.controls['typeOfDocument'].errors?.['required']">
+                                        <div
+                                            *ngIf="registerTouristForm.controls['typeOfDocument'].errors?.['required']">
                                             Tipo de documento es requerido
                                         </div>
                                     </div>
@@ -103,18 +104,22 @@
                                             (keypress)="onKeyPressDocumentNumber($event)">
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['documentNumber'].invalid && (registerForm.controls['documentNumber'].dirty || registerForm.controls['documentNumber'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['documentNumber'].invalid && (registerTouristForm.controls['documentNumber'].dirty || registerTouristForm.controls['documentNumber'].touched)"
                                         class="text-danger">
-                                        <div *ngIf="registerForm.controls['documentNumber'].errors?.['required']">
+                                        <div
+                                            *ngIf="registerTouristForm.controls['documentNumber'].errors?.['required']">
                                             Documento es requerido
                                         </div>
-                                        <div *ngIf="registerForm.controls['documentNumber'].errors?.['minlength']">
+                                        <div
+                                            *ngIf="registerTouristForm.controls['documentNumber'].errors?.['minlength']">
                                             Documento debe tener al menos 7 caracteres
                                         </div>
-                                        <div *ngIf="registerForm.controls['documentNumber'].errors?.['maxlength']">
+                                        <div
+                                            *ngIf="registerTouristForm.controls['documentNumber'].errors?.['maxlength']">
                                             Documento no puede tener más de 10 caracteres
                                         </div>
-                                        <div *ngIf="registerForm.controls['documentNumber'].errors?.['onlyNumber']">
+                                        <div
+                                            *ngIf="registerTouristForm.controls['documentNumber'].errors?.['onlyNumber']">
                                             Documento solo puede contener números
                                         </div>
                                     </div>
@@ -140,14 +145,15 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['birthdate'].invalid && (registerForm.controls['birthdate'].dirty || registerForm.controls['birthdate'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['birthdate'].invalid && (registerTouristForm.controls['birthdate'].dirty || registerTouristForm.controls['birthdate'].touched)"
                                         class="text-danger">
 
-                                        <div *ngIf="registerForm.controls['birthdate'].errors?.['required']">
+                                        <div *ngIf="registerTouristForm.controls['birthdate'].errors?.['required']">
                                             Fecha de nacimiento es requerida
                                         </div>
 
-                                        <div *ngIf="registerForm.controls['birthdate'].errors?.['invalidDayjsDate']">
+                                        <div
+                                            *ngIf="registerTouristForm.controls['birthdate'].errors?.['invalidDayjsDate']">
                                             Fecha de nacimiento no es válida
                                         </div>
                                     </div>
@@ -168,10 +174,10 @@
                                         </select>
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['gender'].invalid && (registerForm.controls['gender'].dirty || registerForm.controls['gender'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['gender'].invalid && (registerTouristForm.controls['gender'].dirty || registerTouristForm.controls['gender'].touched)"
                                         class="text-danger">
 
-                                        <div *ngIf="registerForm.controls['gender'].errors?.['required']">
+                                        <div *ngIf="registerTouristForm.controls['gender'].errors?.['required']">
                                             Sexo es requerido
                                         </div>
                                     </div>
@@ -188,13 +194,13 @@
                                             placeholder="Ingresa tu número de teléfono" mask="(000) 000-0000">
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['phone'].invalid && (registerForm.controls['phone'].dirty || registerForm.controls['phone'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['phone'].invalid && (registerTouristForm.controls['phone'].dirty || registerTouristForm.controls['phone'].touched)"
                                         class="text-danger">
-                                        <div *ngIf="registerForm.controls['phone'].errors?.['required']">
+                                        <div *ngIf="registerTouristForm.controls['phone'].errors?.['required']">
                                             Teléfono es requerido
                                         </div>
 
-                                        <div *ngIf="registerForm.controls['phone'].errors?.['mask']">
+                                        <div *ngIf="registerTouristForm.controls['phone'].errors?.['mask']">
                                             Teléfono no es válido
                                         </div>
 
@@ -213,15 +219,15 @@
                                             minlength="2" maxlength="50">
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['city'].invalid && (registerForm.controls['city'].dirty || registerForm.controls['city'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['city'].invalid && (registerTouristForm.controls['city'].dirty || registerTouristForm.controls['city'].touched)"
                                         class="text-danger">
-                                        <div *ngIf="registerForm.controls['city'].errors?.['required']">
+                                        <div *ngIf="registerTouristForm.controls['city'].errors?.['required']">
                                             Ciudad es requerido
                                         </div>
-                                        <div *ngIf="registerForm.controls['city'].errors?.['minlength']">
+                                        <div *ngIf="registerTouristForm.controls['city'].errors?.['minlength']">
                                             Ciudad debe tener al menos 2 caracteres
                                         </div>
-                                        <div *ngIf="registerForm.controls['city'].errors?.['maxlength']">
+                                        <div *ngIf="registerTouristForm.controls['city'].errors?.['maxlength']">
                                             Ciudad no puede tener más de 50 caracteres
                                         </div>
                                     </div>
@@ -241,15 +247,15 @@
 
                                     </div>
 
-                                    <div *ngIf="registerForm.controls['address'].invalid && (registerForm.controls['address'].dirty || registerForm.controls['address'].touched)"
+                                    <div *ngIf="registerTouristForm.controls['address'].invalid && (registerTouristForm.controls['address'].dirty || registerTouristForm.controls['address'].touched)"
                                         class="text-danger">
-                                        <div *ngIf="registerForm.controls['address'].errors?.['required']">
+                                        <div *ngIf="registerTouristForm.controls['address'].errors?.['required']">
                                             Dirección es requerido
                                         </div>
-                                        <div *ngIf="registerForm.controls['address'].errors?.['minlength']">
+                                        <div *ngIf="registerTouristForm.controls['address'].errors?.['minlength']">
                                             Dirección debe tener al menos 2 caracteres
                                         </div>
-                                        <div *ngIf="registerForm.controls['address'].errors?.['maxlength']">
+                                        <div *ngIf="registerTouristForm.controls['address'].errors?.['maxlength']">
                                             Dirección no puede tener más de 50 caracteres
                                         </div>
                                     </div>
@@ -258,7 +264,7 @@
                                 <div class="mb-3">
                                     <button type="submit"
                                         class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
-                                        [disabled]="loading || (registerForm.touched && registerForm.invalid)">
+                                        [disabled]="loading || (registerTouristForm.touched && registerTouristForm.invalid)">
                                         <span>Registrarme</span>
                                         <div *ngIf="loading" class="spinner-border spinner-border-sm">
                                         </div>

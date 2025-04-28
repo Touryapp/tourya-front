@@ -7,21 +7,21 @@ import { SharedModule } from "./shared/shared-module";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
-import { RegisterComponent } from "./auth/register/register.component";
+import { RegisterTouristComponent } from "./auth/register-tourist/register-tourist.component";
 import { ChangePasswordComponent } from "./auth/change-password/change-password.component";
 import { Error404Component } from "./auth/error-404/error-404.component";
 import { Error500Component } from "./auth/error-500/error-500.component";
 import { ComingSoonComponent } from "./auth/coming-soon/coming-soon.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
-import { LoginComponent } from "./auth/login/login.component";
+import { LoginTouristComponent } from "./auth/login-tourist/login-tourist.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
+    LoginTouristComponent,
     ForgotPasswordComponent,
-    RegisterComponent,
+    RegisterTouristComponent,
     RegisterTouristEmailComponent,
     ChangePasswordComponent,
     Error404Component,
