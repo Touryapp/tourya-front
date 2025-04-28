@@ -15,14 +15,20 @@ import { ComingSoonComponent } from "./auth/coming-soon/coming-soon.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
 import { LoginTouristComponent } from "./auth/login-tourist/login-tourist.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
+import { LoginProviderComponent } from "./auth/login-provider/login-provider.component";
+import { RegisterProviderComponent } from "./auth/register-provider/register-provider.component";
+import { RegisterProviderEmailComponent } from "./auth/register-provider-email/register-provider-email.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginTouristComponent,
+    LoginProviderComponent,
     ForgotPasswordComponent,
     RegisterTouristComponent,
     RegisterTouristEmailComponent,
+    RegisterProviderComponent,
+    RegisterProviderEmailComponent,
     ChangePasswordComponent,
     Error404Component,
     Error500Component,

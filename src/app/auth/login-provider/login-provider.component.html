@@ -14,7 +14,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form [formGroup]="loginTouristForm" (ngSubmit)="submitForm()">
+                            <form [formGroup]="loginProviderForm" (ngSubmit)="submitForm()">
                                 <div class="mb-3">
                                     <label class="form-label" for="email">Correo</label>
                                     <div class="input-icon">
@@ -25,13 +25,13 @@
                                             class="form-control form-control-lg" placeholder="Ingresa tu correo">
                                     </div>
 
-                                    <div *ngIf="loginTouristForm.controls['email'].invalid && (loginTouristForm.controls['email'].dirty || loginTouristForm.controls['email'].touched)"
+                                    <div *ngIf="loginProviderForm.controls['email'].invalid && (loginProviderForm.controls['email'].dirty || loginProviderForm.controls['email'].touched)"
                                         class="text-danger">
 
-                                        <div *ngIf="loginTouristForm.controls['email'].errors?.['required']">
+                                        <div *ngIf="loginProviderForm.controls['email'].errors?.['required']">
                                             Correo es requerido
                                         </div>
-                                        <div *ngIf="loginTouristForm.controls['email'].errors?.['email']">
+                                        <div *ngIf="loginProviderForm.controls['email'].errors?.['email']">
                                             Correo no es válido
                                         </div>
                                     </div>
@@ -52,12 +52,12 @@
                                             tabindex="0"></span>
                                     </div>
 
-                                    <div *ngIf="loginTouristForm.controls['password'].invalid && (loginTouristForm.controls['password'].dirty || loginTouristForm.controls['password'].touched)"
+                                    <div *ngIf="loginProviderForm.controls['password'].invalid && (loginProviderForm.controls['password'].dirty || loginProviderForm.controls['password'].touched)"
                                         class="text-danger">
-                                        <div *ngIf="loginTouristForm.controls['password'].errors?.['required']">
+                                        <div *ngIf="loginProviderForm.controls['password'].errors?.['required']">
                                             Contraseña es requerida
                                         </div>
-                                        <div *ngIf="loginTouristForm.controls['password'].errors?.['minlength']">
+                                        <div *ngIf="loginProviderForm.controls['password'].errors?.['minlength']">
                                             Contraseña debe tener al menos 8 caracteres
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                                 <div class="mb-3">
                                     <button type="submit"
                                         class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
-                                        [disabled]="loading || (loginTouristForm.touched && loginTouristForm.invalid)">
+                                        [disabled]="loading || (loginProviderForm.touched && loginProviderForm.invalid)">
                                         <span>Iniciar sesión</span>
 
                                         <div *ngIf="loading" class="spinner-border spinner-border-sm">
@@ -101,7 +101,7 @@
                                     </a>
                                 </div>
                                 <div class="d-flex justify-content-center">
-                                    <p class="fs-14">No tienes cuenta aún? <a [routerLink]="'/register-tourist-email'"
+                                    <p class="fs-14">No tienes cuenta aún? <a [routerLink]="'/register-provider-email'"
                                             class="link-primary fw-medium">Regístrate</a></p>
                                 </div>
                             </form>
