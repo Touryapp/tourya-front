@@ -1,0 +1,223 @@
+<div class="main-wrapper authentication-wrapper">
+    <div class="container-fuild">
+
+        <!-- Register -->
+        <div class="w-100 overflow-hidden position-relative flex-wrap d-block vh-100">
+            <div class="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap ">
+                <div class="col-xxl-4 col-lg-6 col-md-6 col-11 mx-auto">
+                    <div class="p-4 text-center">
+                        <img src="assets/img/logo-dark.svg" alt="logo" class="img-fluid">
+                    </div>
+                    <div class="card authentication-card">
+                        <div class="card-header">
+                            <div class="text-center">
+                                <h5 class="mb-1">Crear Cuenta</h5>
+                                <p>Crea el tour de tus sueños</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup]="registerProviderForm" (ngSubmit)="submitForm()">
+                                <div class="mb-3">
+                                    <label class="form-label" for="names">Nombres</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-regular fa-user"></i>
+                                        </span>
+                                        <input type="text" id="names" formControlName="names"
+                                            class="form-control form-control-lg" placeholder="Ingresa tus nombres"
+                                            minlength="2" maxlength="50">
+                                    </div>
+
+                                    <div *ngIf="registerProviderForm.controls['names'].invalid && (registerProviderForm.controls['names'].dirty || registerProviderForm.controls['names'].touched)"
+                                        class="text-danger">
+                                        <div *ngIf="registerProviderForm.controls['names'].errors?.['required']">
+                                            Nombres es requerido
+                                        </div>
+                                        <div *ngIf="registerProviderForm.controls['names'].errors?.['minlength']">
+                                            Nombres debe tener al menos 2 caracteres
+                                        </div>
+                                        <div *ngIf="registerProviderForm.controls['names'].errors?.['maxlength']">
+                                            Nombres no puede tener más de 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="type_of_document">Tipo de documento</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-regular fa-id-card"></i>
+                                        </span>
+                                        <select id="type_of_document" formControlName="typeOfDocument"
+                                            class="form-control form-control-lg">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option *ngFor="let typeOfDocument of typeOfDocuments"
+                                                [value]="typeOfDocument.id">
+                                                {{ typeOfDocument.name }}
+                                        </select>
+                                    </div>
+
+                                    <div *ngIf="registerProviderForm.controls['typeOfDocument'].invalid && (registerProviderForm.controls['typeOfDocument'].dirty || registerProviderForm.controls['typeOfDocument'].touched)"
+                                        class="text-danger">
+
+                                        <div
+                                            *ngIf="registerProviderForm.controls['typeOfDocument'].errors?.['required']">
+                                            Tipo de documento es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="document_number">Documento</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-regular fa-id-card"></i>
+                                        </span>
+                                        <input type="text" id="document_number" formControlName="documentNumber"
+                                            class="form-control form-control-lg"
+                                            placeholder="Ingresa tu número de documento" maxlength="10"
+                                            (keypress)="onKeyPressDocumentNumber($event)">
+                                    </div>
+
+                                    <div *ngIf="registerProviderForm.controls['documentNumber'].invalid && (registerProviderForm.controls['documentNumber'].dirty || registerProviderForm.controls['documentNumber'].touched)"
+                                        class="text-danger">
+                                        <div
+                                            *ngIf="registerProviderForm.controls['documentNumber'].errors?.['required']">
+                                            Documento es requerido
+                                        </div>
+                                        <div
+                                            *ngIf="registerProviderForm.controls['documentNumber'].errors?.['minlength']">
+                                            Documento debe tener al menos 7 caracteres
+                                        </div>
+                                        <div
+                                            *ngIf="registerProviderForm.controls['documentNumber'].errors?.['maxlength']">
+                                            Documento no puede tener más de 10 caracteres
+                                        </div>
+                                        <div
+                                            *ngIf="registerProviderForm.controls['documentNumber'].errors?.['onlyNumber']">
+                                            Documento solo puede contener números
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="city">Ciudad</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-solid fa-city"></i>
+                                        </span>
+                                        <input type="text" id="city" formControlName="city"
+                                            class="form-control form-control-lg" placeholder="Ingresa tu ciudad"
+                                            minlength="2" maxlength="50">
+                                    </div>
+
+                                    <div *ngIf="registerProviderForm.controls['city'].invalid && (registerProviderForm.controls['city'].dirty || registerProviderForm.controls['city'].touched)"
+                                        class="text-danger">
+                                        <div *ngIf="registerProviderForm.controls['city'].errors?.['required']">
+                                            Ciudad es requerido
+                                        </div>
+                                        <div *ngIf="registerProviderForm.controls['city'].errors?.['minlength']">
+                                            Ciudad debe tener al menos 2 caracteres
+                                        </div>
+                                        <div *ngIf="registerProviderForm.controls['city'].errors?.['maxlength']">
+                                            Ciudad no puede tener más de 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="address">Dirección</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-regular fa-address-card"></i>
+                                        </span>
+
+                                        <textarea id="address" formControlName="address"
+                                            class="form-control form-control-lg" placeholder="Ingresa tu dirección"
+                                            minlength="2" maxlength="50"></textarea>
+
+                                    </div>
+
+                                    <div *ngIf="registerProviderForm.controls['address'].invalid && (registerProviderForm.controls['address'].dirty || registerProviderForm.controls['address'].touched)"
+                                        class="text-danger">
+                                        <div *ngIf="registerProviderForm.controls['address'].errors?.['required']">
+                                            Dirección es requerido
+                                        </div>
+                                        <div *ngIf="registerProviderForm.controls['address'].errors?.['minlength']">
+                                            Dirección debe tener al menos 2 caracteres
+                                        </div>
+                                        <div *ngIf="registerProviderForm.controls['address'].errors?.['maxlength']">
+                                            Dirección no puede tener más de 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="type_of_document">Tipo de servicio</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-regular fa-id-card"></i>
+                                        </span>
+                                        <select id="type_of_document" formControlName="typeOfService"
+                                            class="form-control form-control-lg">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option *ngFor="let typeOfService of typeOfServices"
+                                                [value]="typeOfService.id">
+                                                {{ typeOfService.name }}
+                                        </select>
+                                    </div>
+
+                                    <div *ngIf="registerProviderForm.controls['typeOfDocument'].invalid && (registerProviderForm.controls['typeOfDocument'].dirty || registerProviderForm.controls['typeOfDocument'].touched)"
+                                        class="text-danger">
+
+                                        <div
+                                            *ngIf="registerProviderForm.controls['typeOfDocument'].errors?.['required']">
+                                            Tipo de documento es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <button type="submit"
+                                        class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
+                                        [disabled]="loading || (registerProviderForm.touched && registerProviderForm.invalid)">
+                                        <span>Registrarme</span>
+                                        <div *ngIf="loading" class="spinner-border spinner-border-sm">
+                                        </div>
+                                    </button>
+                                </div>
+
+                                <div class="login-or mb-3">
+                                    <span class="span-or">O</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <a href="javascript:void(0);"
+                                        class="btn btn-light flex-fill d-flex align-items-center justify-content-center me-2">
+                                        <img src="assets/img/icons/google-icon.svg" class="me-2" alt="Img">Google
+                                    </a>
+                                    <a href="javascript:void(0);"
+                                        class="btn btn-light flex-fill d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/icons/fb-icon.svg" class="me-2" alt="Img">Facebook
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <p class="fs-14">Ya tienes cuenta? <a [routerLink]="'/login-provider'"
+                                            class="link-primary fw-medium">Iniciar Sesión</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /Register -->
+
+    </div>
+    <div class="coprright-footer">
+        <p class="fs-14">Copyright &copy; 2025. All Rights Reserved, <a href="javascript:void(0);"
+                class="text-primary fw-medium">DreamsTour</a></p>
+    </div>
+</div>
