@@ -33,14 +33,15 @@ $secondary:#f89201;
 $secondary-hover: color.adjust($secondary, $lightness: 10%);
 $success: #04BD6C;
 $success-hover: color.adjust($success, $lightness: 10%);
-$info: #155EEF;
+//$info: #155EEF;
+$info: #2dcecf;
 $info-hover: color.adjust($info, $lightness: 10%);
 $warning: #FFCA18;
 $warning-hover: color.adjust($warning, $lightness: 10%);
 $danger: #FF0000;
 $danger-hover: color.adjust($danger, $lightness: 10%);
-$dark: #f89201;
-//$dark: #212E47;
+//$dark: #f89201;
+$dark: #212E47;
 $light: #E4EBF1;
 $light-hover: color.adjust($light, $lightness: 10%);
 $white: #FFF;
@@ -73,22 +74,17 @@ $primary-005: #3f92a3;
 
 
 // Secondary
-$secondary-100: #F1F7ED;
-$secondary-200: #E2F0DB;
-$secondary-300: #D4E8C9;
-$secondary-400: #C6E0B7;
-$secondary-500: #B8D8A5;
-$secondary-600: #AAD092;
-$secondary-700: #9CC880;
-$secondary-800: #8EC06D;
-$secondary-900: #80B859;
 
-$secondary-001:#f89201;                                              
-$secondary-002:#faa633;
-$secondary-003:#fbb466;       
-$secondary-004:#fcc299;
-$secondary-005:#fdd0cc;
-$secondary-006:#d17a01;
+$secondary-100: #fddbb5;
+$secondary-200: #fbc88a;
+$secondary-300: #f9b55f;
+$secondary-400: #f7a234;
+$secondary-500: #f89201; // color base
+$secondary-600: #df8301;
+$secondary-700: #c67301;
+$secondary-800: #ad6401;
+$secondary-900: #945401;
+
 
 // terceros
 $terceros-001:#2dcecf;
@@ -144,15 +140,17 @@ $gray-800: #242B3A;
 $gray-900: #111827;
 
 // Info
-$info-100: #E7F0FF;
-$info-200: #D0E1FF;
-$info-300: #B9D2FF;
-$info-400: #A2C3FE;
-$info-500: #8CB4FD;
-$info-600: #75A4FB;
-$info-700: #5F94F9;
-$info-800: #4883F6;
-$info-900: #3171F3;
+
+$info-100: #b3ecec;
+$info-200: #99e4e4;
+$info-300: #80dbdb;
+$info-400: #66d3d3;
+$info-500: #4ccaca;
+$info-600: #33c2c2;
+$info-700: #2dcecf; // color base
+$info-800: #29b8b8;
+$info-900: #249f9f;
+
 
 // Success
 $success-100: #EDF9F0;
