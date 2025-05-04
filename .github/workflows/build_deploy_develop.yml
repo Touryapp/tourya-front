@@ -42,12 +42,12 @@ jobs:
         port: 22
         script: |
           # Descargar la última imagen desde Docker Hub
-          docker pull ${{ secrets.DOCKER_USERNAME }}/tourya-front:latest
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/tourya-front:latest
           
           # Detener y eliminar el contenedor existente (si lo hay)
-          docker stop tourya-front || true
-          docker rm tourya-front || true
+          sudo docker stop tourya-front || true
+          sudo docker rm tourya-front || true
           
           # Ejecutar el nuevo contenedor
-          docker run -d --name tourya-front -p 8080:80 \
+          sudo docker run -d --name tourya-front -p 8080:80 \
             ${{ secrets.DOCKER_USERNAME }}/tourya-front:latest
