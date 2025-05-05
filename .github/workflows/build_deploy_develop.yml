@@ -49,5 +49,4 @@ jobs:
           sudo docker rm tourya-front || true
           
           # Ejecutar el nuevo contenedor
-          sudo docker run -d --name tourya-front -p 8080:80 \        
-            ${{ secrets.DOCKER_USERNAME }}/tourya-front:latest
+          sudo docker run -d --name tourya-front -p 8080:80 danielowkin/tourya-front:latest
