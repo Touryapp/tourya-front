@@ -18,6 +18,61 @@
                         <div class="card-body">
                             <form [formGroup]="registerTouristEmailForm" (ngSubmit)="submitForm()">
                                 <div class="mb-3">
+                                    <label class="form-label" for="first_name">Nombre</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-regular fa-user"></i>
+                                        </span>
+                                        <input type="text" id="first_name" formControlName="firstName"
+                                            class="form-control form-control-lg" placeholder="Ingresa tu nombre"
+                                            minlength="2" maxlength="50">
+                                    </div>
+
+                                    <div *ngIf="registerTouristEmailForm.controls['firstName'].invalid && (registerTouristEmailForm.controls['firstName'].dirty || registerTouristEmailForm.controls['firstName'].touched)"
+                                        class="text-danger">
+                                        <div
+                                            *ngIf="registerTouristEmailForm.controls['firstName'].errors?.['required']">
+                                            Nombre es requerido
+                                        </div>
+                                        <div
+                                            *ngIf="registerTouristEmailForm.controls['firstName'].errors?.['minlength']">
+                                            Nombre debe tener al menos 2 caracteres
+                                        </div>
+                                        <div
+                                            *ngIf="registerTouristEmailForm.controls['firstName'].errors?.['maxlength']">
+                                            Nombre no puede tener más de 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="last_name">Apellido</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-regular fa-user"></i>
+                                        </span>
+                                        <input type="text" id="last_name" formControlName="lastName"
+                                            class="form-control form-control-lg" placeholder="Ingresa tus nombres"
+                                            minlength="2" maxlength="50">
+                                    </div>
+
+                                    <div *ngIf="registerTouristEmailForm.controls['lastName'].invalid && (registerTouristEmailForm.controls['lastName'].dirty || registerTouristEmailForm.controls['lastName'].touched)"
+                                        class="text-danger">
+                                        <div *ngIf="registerTouristEmailForm.controls['lastName'].errors?.['required']">
+                                            Apellido es requerido
+                                        </div>
+                                        <div
+                                            *ngIf="registerTouristEmailForm.controls['lastName'].errors?.['minlength']">
+                                            Apellido debe tener al menos 2 caracteres
+                                        </div>
+                                        <div
+                                            *ngIf="registerTouristEmailForm.controls['lastName'].errors?.['maxlength']">
+                                            Apellido no puede tener más de 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
                                     <label class="form-label" for="email">Correo</label>
                                     <div class="input-icon">
                                         <span class="input-icon-addon">
@@ -126,6 +181,13 @@
                                         </div>
                                     </button>
                                 </div>
+
+                                <div *ngIf="errorMessage" class="mb-3">
+                                    <p class="text-danger text-center">
+                                        {{ errorMessage }}
+                                    </p>
+                                </div>
+
                                 <div class="login-or mb-3">
                                     <span class="span-or">O</span>
                                 </div>
