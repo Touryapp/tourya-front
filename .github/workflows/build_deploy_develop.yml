@@ -49,9 +49,5 @@ jobs:
           sudo docker rm tourya-front || true
           
           # Ejecutar el nuevo contenedor
-          sudo docker run -d --name tourya-front -p 8080:80 \
-            --log-driver=awslogs \
-            --log-opt awslogs-group=tourya-front-logs \
-            --log-opt awslogs-region=us-east-1 \
-            --log-opt awslogs-stream=tourya-front-container \          
+          sudo docker run -d --name tourya-front -p 8080:80 \        
             ${{ secrets.DOCKER_USERNAME }}/tourya-front:latest
