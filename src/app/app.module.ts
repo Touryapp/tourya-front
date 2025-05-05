@@ -6,6 +6,13 @@ import { AppComponent } from "./app.component";
 import { SharedModule } from "./shared/shared-module";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { NgScrollbarModule } from "ngx-scrollbar";
+
+// Importaciones para Firebase
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { environment } from '../environments/environment';
+
+// Componentes
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 import { RegisterTouristComponent } from "./auth/register-tourist/register-tourist.component";
 import { ChangePasswordComponent } from "./auth/change-password/change-password.component";
@@ -18,6 +25,10 @@ import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/reg
 import { LoginProviderComponent } from "./auth/login-provider/login-provider.component";
 import { RegisterProviderComponent } from "./auth/register-provider/register-provider.component";
 import { RegisterProviderEmailComponent } from "./auth/register-provider-email/register-provider-email.component";
+
+// Inicializar Firebase
+const app = initializeApp(environment.firebaseConfig);
+export const auth = getAuth(app);
 
 @NgModule({
   declarations: [
@@ -35,8 +46,15 @@ import { RegisterProviderEmailComponent } from "./auth/register-provider-email/r
     ComingSoonComponent,
     UnderMaintenanceComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, NgScrollbarModule],
-  providers: [provideAnimationsAsync()],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    NgScrollbarModule
+  ],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

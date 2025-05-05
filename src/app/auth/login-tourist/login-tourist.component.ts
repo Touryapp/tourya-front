@@ -2,8 +2,7 @@ import { Component, NgZone, Renderer2 } from "@angular/core";
 import { routes } from "../../shared/routes/routes";
 import { Router } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AuthService } from "../auth.service";
-import { th } from "intl-tel-input/i18n";
+import { AuthService } from "../../core/services/auth.service";
 
 @Component({
   selector: "app-login-tourist",
@@ -17,6 +16,8 @@ export class LoginTouristComponent {
 
   loading: boolean = false;
   errorMessage: string = "";
+  googleLoading: boolean = false;
+  facebookLoading: boolean = false;
 
   loginTouristForm: FormGroup;
 
@@ -26,6 +27,7 @@ export class LoginTouristComponent {
   constructor(
     private router: Router,
     private renderer: Renderer2,
+    private ngZone: NgZone,
     private authService: AuthService
   ) {
     this.loginTouristForm = new FormGroup({
@@ -85,6 +87,72 @@ export class LoginTouristComponent {
     } else {
       this.loginTouristForm.markAllAsTouched();
       this.loading = false;
+    }
+  }
+
+  // Método para iniciar sesión con Google
+  async signInWithGoogle(): Promise<void> {
+    try {
+      this.googleLoading = true;
+      const result = await this.authService.loginWithGoogle();
+      
+      // Obtener datos del usuario
+      const user = result.user;
+      console.log('Usuario de Google:', user);
+      
+      // Datos básicos del usuario que podemos usar
+      const userData = {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid,
+      };
+      
+      // Obtener token de autenticación
+      const token = await user.getIdToken();
+      console.log('Token:', token);
+      
+      // Navegar a la página principal
+      this.ngZone.run(() => {
+        this.googleLoading = false;
+        this.router.navigate(["home"]);
+      });
+    } catch (error) {
+      console.error('Error en autenticación con Google:', error);
+      this.googleLoading = false;
+    }
+  }
+
+  // Método para iniciar sesión con Facebook
+  async signInWithFacebook(): Promise<void> {
+    try {
+      this.facebookLoading = true;
+      const result = await this.authService.loginWithFacebook();
+      
+      // Obtener datos del usuario
+      const user = result.user;
+      console.log('Usuario de Facebook:', user);
+      
+      // Datos básicos del usuario
+      const userData = {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid,
+      };
+      
+      // Obtener token de autenticación
+      const token = await user.getIdToken();
+      console.log('Token de Facebook:', token);
+      
+      // Navegar a la página principal
+      this.ngZone.run(() => {
+        this.facebookLoading = false;
+        this.router.navigate(["home"]);
+      });
+    } catch (error) {
+      console.error('Error en autenticación con Facebook:', error);
+      this.facebookLoading = false;
     }
   }
 }

@@ -98,13 +98,19 @@
                                     <span class="span-or">O</span>
                                 </div>
                                 <div class="d-flex align-items-center mb-3">
-                                    <a href="javascript:void(0);"
+                                    <a href="javascript:void(0);" (click)="signInWithGoogle()"
                                         class="btn btn-light flex-fill d-flex align-items-center justify-content-center me-2">
-                                        <img src="assets/img/icons/google-icon.svg" class="me-2" alt="Img">Google
+                                        <img src="assets/img/icons/google-icon.svg" class="me-2" alt="Img">
+                                        <span *ngIf="!googleLoading">Google</span>
+                                        <div *ngIf="googleLoading" class="spinner-border spinner-border-sm">
+                                        </div>
                                     </a>
-                                    <a href="javascript:void(0);"
+                                    <a href="javascript:void(0);" (click)="signInWithFacebook()"
                                         class="btn btn-light flex-fill d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/icons/fb-icon.svg" class="me-2" alt="Img">Facebook
+                                        <img src="assets/img/icons/fb-icon.svg" class="me-2" alt="Img">
+                                        <span *ngIf="!facebookLoading">Facebook</span>
+                                        <div *ngIf="facebookLoading" class="spinner-border spinner-border-sm">
+                                        </div>
                                     </a>
                                 </div>
                                 <div class="d-flex justify-content-center">
