@@ -50,6 +50,7 @@ jobs:
           
           # Ejecutar el nuevo contenedor
           sudo docker run -d --name tourya-front -p 8080:80 \ 
+          --env DB_USER=user \
           --log-driver=awslogs \
           --log-opt awslogs-group=tourya-front-logs \
           --log-opt awslogs-region=us-east-1 \
