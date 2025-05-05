@@ -2,6 +2,8 @@ import { Component, NgZone, Renderer2 } from "@angular/core";
 import { routes } from "../../shared/routes/routes";
 import { Router } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AuthService } from "../auth.service";
+import { th } from "intl-tel-input/i18n";
 
 @Component({
   selector: "app-login-tourist",
@@ -14,6 +16,7 @@ export class LoginTouristComponent {
   password: boolean[] = [false, false]; // Add more as needed
 
   loading: boolean = false;
+  errorMessage: string = "";
 
   loginTouristForm: FormGroup;
 
@@ -23,7 +26,7 @@ export class LoginTouristComponent {
   constructor(
     private router: Router,
     private renderer: Renderer2,
-    private ngZone: NgZone
+    private authService: AuthService
   ) {
     this.loginTouristForm = new FormGroup({
       email: new FormControl("", [Validators.required, Validators.email]),
@@ -47,13 +50,37 @@ export class LoginTouristComponent {
 
   submitForm() {
     this.loading = true;
+    this.errorMessage = "";
 
     if (this.loginTouristForm.valid) {
-      this.ngZone.run(() => {
-        setTimeout(() => {
+      const data = {
+        email: this.loginTouristForm.get("email")?.value,
+        password: this.loginTouristForm.get("password")?.value,
+      };
+
+      this.authService.login(data).subscribe({
+        next: (response) => {
           this.loading = false;
-          this.router.navigate(["home"]);
-        }, 3000);
+
+          if (response && response.token) {
+            this.authService.setToken(response.token);
+            this.authService.setUser({
+              fullName: response.fullName,
+              email: response.email,
+              roles: response.roles,
+            });
+            this.router.navigate(["home"]);
+          } else {
+            this.errorMessage =
+              "Ha ocurrido un error, por favor intente de nuevo";
+          }
+        },
+        error: (err) => {
+          this.loading = false;
+
+          this.errorMessage =
+            "Ha ocurrido un error, por favor intente de nuevo";
+        },
       });
     } else {
       this.loginTouristForm.markAllAsTouched();
