@@ -12,6 +12,11 @@ const routes: Routes = [
         path: "home",
         component: HomeComponent,
       },
+      {
+        path: "tours",
+        loadChildren: () =>
+          import("./tours/tour.module").then((m) => m.TourModule),
+      },
       { path: "", redirectTo: "home", pathMatch: "full" },
     ],
   },
