@@ -79,7 +79,6 @@ export class LoginTouristComponent {
         },
         error: (err) => {
           this.loading = false;
-
           this.errorMessage =
             "Ha ocurrido un error, por favor intente de nuevo";
         },
@@ -100,22 +99,30 @@ export class LoginTouristComponent {
       const user = result.user;
       console.log('Usuario de Google:', user);
       
+       // Obtener token de autenticación
+       const token = await user.getIdToken();
+       console.log('Token:', token);
       // Datos básicos del usuario que podemos usar
       const userData = {
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
         uid: user.uid,
+        idToken: token,
       };
       
-      // Obtener token de autenticación
-      const token = await user.getIdToken();
-      console.log('Token:', token);
-      
-      // Navegar a la página principal
-      this.ngZone.run(() => {
-        this.googleLoading = false;
-        this.router.navigate(["home"]);
+      await this.authService.authenticateGoogle({ idToken: token }).subscribe({
+        next: (response) => {
+          console.log('Respuesta de Google:', response)
+          this.ngZone.run(() => {
+            this.googleLoading = false;
+            this.router.navigate(["home"]);
+          });
+        },
+        error: (err) => {
+          console.error('Error en autenticación con Google:', err);
+          this.googleLoading = false;
+        }
       });
     } catch (error) {
       console.error('Error en autenticación con Google:', error);
@@ -132,24 +139,33 @@ export class LoginTouristComponent {
       // Obtener datos del usuario
       const user = result.user;
       console.log('Usuario de Facebook:', user);
-      
+      // Obtener token de autenticación
+      const token = await user.getIdToken();
+      console.log('Token de Facebook:', token);
       // Datos básicos del usuario
       const userData = {
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
         uid: user.uid,
+        idToken: token,
       };
       
-      // Obtener token de autenticación
-      const token = await user.getIdToken();
-      console.log('Token de Facebook:', token);
-      
-      // Navegar a la página principal
-      this.ngZone.run(() => {
-        this.facebookLoading = false;
-        this.router.navigate(["home"]);
+      await this.authService.authenticateFacebook({ idToken: token }).subscribe({
+        next: (response) => {
+          // Navegar a la página principal
+          console.log('Respuesta de Facebook:', response)
+          this.ngZone.run(() => {
+            this.facebookLoading = false;
+            this.router.navigate(["home"]);
+          });
+        },
+        error: (err) => {
+          console.error('Error en autenticación con Facebook:', err);
+          this.facebookLoading = false;
+        }
       });
+      
     } catch (error) {
       console.error('Error en autenticación con Facebook:', error);
       this.facebookLoading = false;

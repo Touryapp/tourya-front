@@ -9,24 +9,17 @@ import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.
 import { RegisterTouristComponent } from "./auth/register-tourist/register-tourist.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
-import { LoginProviderComponent } from "./auth/login-provider/login-provider.component";
-import { RegisterProviderComponent } from "./auth/register-provider/register-provider.component";
-import { RegisterProviderEmailComponent } from "./auth/register-provider-email/register-provider-email.component";
 
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "/home",
+    redirectTo: "/home-client",
     pathMatch: "full",
   },
 
   {
-    path: "login-tourist",
+    path: "login",
     component: LoginTouristComponent,
-  },
-  {
-    path: "login-provider",
-    component: LoginProviderComponent,
   },
   {
     path: "forgot-password",
@@ -39,14 +32,6 @@ const routes: Routes = [
   {
     path: "register-tourist-email",
     component: RegisterTouristEmailComponent,
-  },
-  {
-    path: "register-provider",
-    component: RegisterProviderComponent,
-  },
-  {
-    path: "register-provider-email",
-    component: RegisterProviderEmailComponent,
   },
   {
     path: "change-password",

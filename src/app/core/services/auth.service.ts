@@ -103,6 +103,15 @@ export class AuthService {
     return signInWithPopup(auth, provider);
   }
 
+  authenticateGoogle(data: {
+    idToken: string;
+  }): Observable<RegisterResponseDto> {
+
+    return this.http.post<RegisterResponseDto>(
+      `${this.baseUrl}/google-auth`,
+      data
+    );
+  }
   // Iniciar sesión con Facebook
   async loginWithFacebook(): Promise<UserCredential> {
     const provider = new FacebookAuthProvider();
@@ -110,6 +119,16 @@ export class AuthService {
     provider.addScope('email');
     provider.addScope('public_profile');
     return signInWithPopup(auth, provider);
+  }
+
+  authenticateFacebook(data: {
+    idToken: string;
+  }): Observable<RegisterResponseDto> {
+
+    return this.http.post<RegisterResponseDto>(
+      `${this.baseUrl}/facebook-auth`,
+      data
+    );
   }
 
   // Obtener datos del usuario actual

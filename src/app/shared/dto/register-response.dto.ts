@@ -10,11 +10,11 @@ export class RegisterResponseDto {
     firstName: string,
     email: string,
     roles: RoleDto[],
-    password: string
+    token: string
   ) {
     this.fullName = firstName;
     this.email = email;
     this.roles = roles;
-    this.token = password;
+    this.token = token;
   }
 }
