@@ -41,7 +41,7 @@ export class ForgotPasswordComponent {
       this.ngZone.run(() => {
         setTimeout(() => {
           this.loading = false;
-          this.router.navigate(["home"]);
+          this.router.navigate(["change-password"]);
         }, 3000);
       });
     } else {
