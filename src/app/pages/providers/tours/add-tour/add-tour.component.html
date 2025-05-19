@@ -1,743 +1,1035 @@
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">Add Tours</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Add Tours</li>
-                        </ol>
-                    </nav>
-                </div>
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Add Tours</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Tours</li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
-    <!-- /Breadcrumb -->
+</div>
+<!-- /Breadcrumb -->
 
-    <!-- Page Wrapper -->
-    <div class="content">
-        <div class="container">
-            <div class="row">
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <div class="row">
 
-                <!-- Sidebar -->
-                <div class="col-lg-3 ">
-                    <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
-                        <div class="card-body">
-                            <div>
-                                <h5 class="mb-3">Add Tour</h5>
-                                <ul class="add-tab-list">
-                                    <li *ngFor="let tab of tabs">
-                                        <a 
-                                        href="javascript:void(0);" 
-                                        [class.active]="activeTab === tab.id"
-                                        (click)="scrollTo(tab.id)"
-                                        >
-                                          {{ tab.label }}
-                                        </a>
-                                      </li>
-                                </ul>
-                            </div>
+            <!-- Sidebar -->
+            <div class="col-lg-3 ">
+                <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="mb-3">Add Tour</h5>
+                            <ul class="add-tab-list">
+                                <li *ngFor="let tab of tabs">
+                                    <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
+                                        (click)="scrollTo(tab.id)">
+                                        {{ tab.label }}
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <!-- /Sidebar -->
+            </div>
+            <!-- /Sidebar -->
 
-                <!-- Add Tour -->
-                <div class="col-lg-9">
-                    <form (ngSubmit)="onSubmit()">
-                        <div class="card shadow-none" id="basic_info">
-                            <div class="card-header">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h5 class="fs-18">Tour Details</h5>
-                                </div>
+            <!-- Add Tour -->
+            <div class="col-lg-9">
+                <form [formGroup]="tourForm" (ngSubmit)="onSubmit()">
+                    <div class="card shadow-none" id="basic_info">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Tour Details</h5>
                             </div>
-                            <div class="card-body pb-1">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Tour Name</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Category</label>
-                                            <mat-select class="custom-mat-select select" placeholder="Select">
-                                                <mat-option value="1">Select</mat-option>
-                                                <mat-option value="1">Ecotourism</mat-option>
-                                                <mat-option value="1">Adventure Tour</mat-option>
-                                                <mat-option value="1">Group Tours</mat-option>
-                                                <mat-option value="1">Beach Tours</mat-option>
-                                                <mat-option value="1">Historical Tours</mat-option>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Start Date</label>
-                                            <div class="input-icon-end position-relative">
-                                                <input
-                                                type="text"
-                                                class="form-control datetimepicker"
-                                                bsDatepicker
-                                                [bsConfig]="{ adaptivePosition: true }"
-                                                placeholder="21-10-2024"
-                                                [bsValue]="bsValue"
-                                                [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
-                                                />
-                                                <span class="input-icon-addon">
-                                                    <i class="isax isax-calendar"></i>
-                                                </span>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" formControlName="name"
+                                            (blur)="onNameBlur($event)">
+                                        <div *ngIf="tourForm.controls['name'].invalid && (tourForm.controls['name'].dirty || tourForm.controls['name'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['name'].errors?.['required']">
+                                                Name is required
+                                            </div>
+                                            <div *ngIf="tourForm.controls['name'].errors?.['minlength']">
+                                                Name must be at least 3 characters long
+                                            </div>
+                                            <div *ngIf="tourForm.controls['name'].errors?.['maxlength']">
+                                                Name cannot be more than 50 characters long
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">End Date</label>
-                                            <div class="input-icon-end position-relative">
-                                                <input
-                                                    type="text"
-                                                    class="form-control datetimepicker"
-                                                    bsDatepicker
-                                                    [bsConfig]="{ adaptivePosition: true }"
-                                                    placeholder="21-10-2024"
-                                                    [bsValue]="bsValue"
-                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
-                                                    />
-                                                <span class="input-icon-addon">
-                                                    <i class="isax isax-calendar"></i>
-                                                </span>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Category</label>
+                                        <mat-select class="custom-mat-select select" placeholder="Select"
+                                            formControlName="category">
+                                            <mat-option [value]="Category.AQUATIC">Aquatic</mat-option>
+                                            <mat-option [value]="Category.LAND">Land</mat-option>
+                                            <mat-option [value]="Category.ADVENTURE">Adventure</mat-option>
+                                            <mat-option [value]="Category.NIGHT">Night</mat-option>
+                                            <mat-option [value]="Category.EXPERIENCES">Experiences</mat-option>
+                                            <mat-option [value]="Category.CULTURAL">Cultural</mat-option>
+                                            <mat-option [value]="Category.TRANSPORT_RENTAL">
+                                                Transport Rental
+                                            </mat-option>
+                                        </mat-select>
+
+                                        <div *ngIf="tourForm.controls['category'].invalid && (tourForm.controls['category'].dirty || tourForm.controls['category'].touched)"
+                                            class="text-danger">
+
+                                            <div *ngIf="tourForm.controls['category'].errors?.['required']">
+                                                Category is required
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Destination</label>
-                                            <input type="text" class="form-control">
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Duration</label>
+                                        <input type="text" class="form-control" formControlName="duration"
+                                            (blur)="onDurationBlur($event)">
+                                        <div *ngIf="tourForm.controls['duration'].invalid && (tourForm.controls['duration'].dirty || tourForm.controls['duration'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['duration'].errors?.['required']">
+                                                Duration is required
+                                            </div>
+                                            <div *ngIf="tourForm.controls['duration'].errors?.['minlength']">
+                                                Duration must be at least 3 characters
+                                            </div>
+                                            <div *ngIf="tourForm.controls['duration'].errors?.['maxlength']">
+                                                Duration cannot be more than 50 characters
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Duration (Days)</label>
-                                            <mat-select class="custom-mat-select select" placeholder="Select">
-                                                <mat-option value="1">Select</mat-option>
-                                                <mat-option value="1">4 Days</mat-option>
-                                                <mat-option value="1">5 Days</mat-option>
-                                                <mat-option value="1">6 Days</mat-option>
-                                            </mat-select>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Total Number Of Peoples</label>
+                                        <input type="number" class="form-control" formControlName="totalNumberOfPeoples"
+                                            min="1" (keypress)="onKeyPressTotalNumberOfPeople($event)">
+                                        <div *ngIf="tourForm.controls['totalNumberOfPeoples'].invalid && (tourForm.controls['totalNumberOfPeoples'].dirty || tourForm.controls['totalNumberOfPeoples'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['totalNumberOfPeoples'].errors?.['required']">
+                                                Total Number Of Peoples is required
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Duration (Nights)</label>
-                                            <mat-select class="custom-mat-select select" placeholder="Select">
-                                                <mat-option value="1">Select</mat-option>
-                                                <mat-option value="1">3 Nights</mat-option>
-                                                <mat-option value="1">4 Nights</mat-option>
-                                                <mat-option value="1">5 Nights</mat-option>
-                                            </mat-select>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Pricing (USD)</label>
+                                        <input type="number" class="form-control" formControlName="price" min="0"
+                                            (keypress)="onKeyPressPrice($event)">
+                                        <div *ngIf="tourForm.controls['price'].invalid && (tourForm.controls['price'].dirty || tourForm.controls['price'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['price'].errors?.['required']">
+                                                Price is required
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Total Number Of Peoples Alloted</label>
-                                            <input type="text" class="form-control">
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Min Age </label>
+                                        <input type="number" class="form-control" formControlName="minAge" min="0"
+                                            (keypress)="onKeyPressMinAge($event)">
+                                        <div *ngIf="tourForm.controls['minAge'].invalid && (tourForm.controls['minAge'].dirty || tourForm.controls['minAge'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['minAge'].errors?.['required']">
+                                                Min age is required
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Pricing (USD)</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Offer Price (USD)</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Min Age </label>
-                                            <input type="text" class="form-control">
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Highlight</label>
+                                        <textarea type="text" class="form-control" rows="3" formControlName="highlight"
+                                            (blur)="onHighlightBlur($event)"></textarea>
+
+                                        <div *ngIf="tourForm.controls['highlight'].invalid && (tourForm.controls['highlight'].dirty || tourForm.controls['highlight'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['highlight'].errors?.['required']">
+                                                Highlight is required
+                                            </div>
+                                            <div *ngIf="tourForm.controls['highlight'].errors?.['minlength']">
+                                                Highlight must be at least 3 characters long
+                                            </div>
+                                            <div *ngIf="tourForm.controls['highlight'].errors?.['maxlength']">
+                                                Highlight cannot be more than 50 characters long
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow-none" id="location">
-                            <div class="card-header">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h5 class="fs-18">Location</h5>
-                                </div>
+                    </div>
+
+
+                    <div class="card shadow-none" id="location">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Location</h5>
                             </div>
-                            <div class="card-body pb-1">
-                                <div class="row">
-                                    <div class="col-xl-3 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Country</label>
-                                            <mat-select class="custom-mat-select select" placeholder="Select">
-                                                <mat-option value="1">Select</mat-option>
-                                                <mat-option value="1">United States</mat-option>
-                                                <mat-option value="1">Canada</mat-option>
-                                                <mat-option value="1">United Kingdom</mat-option>
-                                            </mat-select>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Type of Address</label>
+
+                                        <mat-select class="custom-mat-select select" placeholder="Select"
+                                            formControlName="typeOfAddress">
+                                            <mat-option [value]=" TypeOfAddress.MEETING_POINT">
+                                                Meeting Point
+                                            </mat-option>
+                                            <mat-option [value]="TypeOfAddress.END_POINT">End Point</mat-option>
+                                            <mat-option [value]="TypeOfAddress.PICK_UP_POINT">
+                                                Pick Up Point
+                                            </mat-option>
+                                        </mat-select>
+
+                                        <div *ngIf="tourForm.controls['typeOfAddress'].invalid && (tourForm.controls['typeOfAddress'].dirty || tourForm.controls['typeOfAddress'].touched)"
+                                            class="text-danger">
+
+                                            <div *ngIf="tourForm.controls['typeOfAddress'].errors?.['required']">
+                                                Type of address is required
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-3 col-md-6">
+
+                                </div>
+
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Country</label>
+                                        <input type="text" class="form-control" formControlName="country"
+                                            (blur)="onCountryBlur($event)">
+                                        <div *ngIf="tourForm.controls['country'].invalid && (tourForm.controls['country'].dirty || tourForm.controls['country'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['country'].errors?.['required']">
+                                                Country is required
+                                            </div>
+                                            <div *ngIf="tourForm.controls['country'].errors?.['minlength']">
+                                                Country must be at least 3 characters long
+                                            </div>
+                                            <div *ngIf="tourForm.controls['country'].errors?.['maxlength']">
+                                                Country cannot be more than 50 characters long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Department</label>
+                                        <input type="text" class="form-control" formControlName="department"
+                                            (blur)="onDepartmentBlur($event)">
+                                        <div *ngIf="tourForm.controls['department'].invalid && (tourForm.controls['department'].dirty || tourForm.controls['department'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['department'].errors?.['required']">
+                                                Department is required
+                                            </div>
+                                            <div *ngIf="tourForm.controls['department'].errors?.['minlength']">
+                                                Department must be at least 3 characters long
+                                            </div>
+                                            <div *ngIf="tourForm.controls['department'].errors?.['maxlength']">
+                                                Department cannot be more than 50 characters long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
                                         <div class="mb-3">
                                             <label class="form-label">City</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" formControlName="city"
+                                                (blur)="onCityBlur($event)">
+                                            <div *ngIf="tourForm.controls['city'].invalid && (tourForm.controls['city'].dirty || tourForm.controls['city'].touched)"
+                                                class="text-danger">
+                                                <div *ngIf="tourForm.controls['city'].errors?.['required']">
+                                                    City is required
+                                                </div>
+                                                <div *ngIf="tourForm.controls['city'].errors?.['minlength']">
+                                                    City must be at least 3 characters long
+                                                </div>
+                                                <div *ngIf="tourForm.controls['city'].errors?.['maxlength']">
+                                                    City cannot be more than 50 characters long
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-3 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">State</label>
-                                            <input type="text" class="form-control">
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Latitude</label>
+                                        <input type="number" class="form-control" formControlName="latitude"
+                                            (blur)="onLatitudeBlur($event)">
+                                        <div *ngIf="tourForm.controls['latitude'].invalid && (tourForm.controls['latitude'].dirty || tourForm.controls['latitude'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['latitude'].errors?.['required']">
+                                                Latitude is required
+                                            </div>
+                                            <div *ngIf="tourForm.controls['latitude'].errors?.['pattern']">
+                                                Invalid format
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-3 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Zip Code</label>
-                                            <input type="text" class="form-control">
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Longitude</label>
+                                        <input type="number" class="form-control" formControlName="longitude"
+                                            (blur)="onLongitudeBlur($event)">
+                                        <div *ngIf="tourForm.controls['longitude'].invalid && (tourForm.controls['longitude'].dirty || tourForm.controls['longitude'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['longitude'].errors?.['required']">
+                                                Longitude is required
+                                            </div>
+                                            <div *ngIf="tourForm.controls['longitude'].errors?.['pattern']">
+                                                Invalid format
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Address</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Address 1</label>
-                                            <input type="text" class="form-control">
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Address</label>
+                                        <textarea class="form-control" minlength="2" maxlength="50"
+                                            formControlName="address" (blur)="onAddressBlur($event)">
+                                        </textarea>
+
+                                        <div *ngIf="tourForm.controls['address'].invalid && (tourForm.controls['address'].dirty || tourForm.controls['address'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['address'].errors?.['required']">
+                                                Address is required
+                                            </div>
+
+                                            <div *ngIf="tourForm.controls['address'].errors?.['minlength']">
+                                                Address must be at least 3 characters long
+                                            </div>
+                                            <div *ngIf="tourForm.controls['address'].errors?.['maxlength']">
+                                                Address cannot be more than 50 characters long
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow-none" id="highlights">
-                            <div class="card-header">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h5 class="fs-18">Highlights</h5>
-                                </div>
+                    </div>
+
+
+                    <div class="card shadow-none" id="activities">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Main Attractions</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="row add-highlight-info">
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Highlights</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <ng-container  *ngFor="let item of formData; let i = index; trackBy: trackByIndex">
+                        </div>
+                        <div class="card-body">
+                            <div formArrayName="mainAttractions">
+                                <ng-container *ngFor="let attraction of mainAttractions.controls; let i=index"
+                                    [formGroupName]="i">
                                     <div class="row add-highlight-info">
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Highlights</label>
+                                                <label class="form-label">Attraction</label>
                                                 <div class="d-flex align-items-center">
-                                                    <input type="text" class="form-control">
-                                                    <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3" (click)="removeRow(i)">
+                                                    <input type="text" class="form-control" formControlName="name"
+                                                        (blur)="onMainAttractionNameBlur($event, i)">
+
+                                                    <a *ngIf="i > 0"
+                                                        class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                        (click)="removeAttraction(i)">
                                                         <i class="isax isax-trash"></i>
                                                     </a>
+                                                </div>
+
+                                                <div *ngIf="attraction.get('name')?.invalid && (attraction.get('name')?.touched || attraction.get('name')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="attraction.get('name')?.errors?.['required']">
+                                                        Attraction is required.
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </ng-container>
                                 <div>
-                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight" (click)="addNewRow()"><i class="isax isax-add-circle me-1"></i>Add New</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card shadow-none" id="room_types">
-                            <div class="card-header">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h5 class="fs-18">Activities</h5>
-                                </div>
-                            </div>
-                            <div class="card-body pb-1">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-1">
-                                                <label class="form-check-label ms-2" for="service-1">
-                                                    Cultural Experiences
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-2">
-                                                <label class="form-check-label ms-2" for="service-2">
-                                                    Culinary Tours
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-3">
-                                                <label class="form-check-label ms-2" for="service-3">
-                                                    Sightseeing
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-4">
-                                                <label class="form-check-label ms-2" for="service-4">
-                                                    Hiking & Nature Walks
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-5">
-                                                <label class="form-check-label ms-2" for="service-5">
-                                                    Water Sports
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-6">
-                                                <label class="form-check-label ms-2" for="service-6">
-                                                    Wildlife Safaris
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-7">
-                                                <label class="form-check-label ms-2" for="service-7">
-                                                    Adventure Sports
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-8">
-                                                <label class="form-check-label ms-2" for="service-8">
-                                                    Wine & Brewery Tours
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-9">
-                                                <label class="form-check-label ms-2" for="service-9">
-                                                    Historical Site Visits
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-10">
-                                                <label class="form-check-label ms-2" for="service-10">
-                                                    Boat Tours
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-11">
-                                                <label class="form-check-label ms-2" for="service-11">
-                                                    Photography
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-12">
-                                                <label class="form-check-label ms-2" for="service-12">
-                                                    Spa & Wellness
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-13">
-                                                <label class="form-check-label ms-2" for="service-13">
-                                                    Cycling
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-14">
-                                                <label class="form-check-label ms-2" for="service-14">
-                                                    Volunteering
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-15">
-                                                <label class="form-check-label ms-2" for="service-15">
-                                                    Historical Site Visits
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" type="checkbox" id="service-16">
-                                                <label class="form-check-label ms-2" for="service-16">
-                                                    Museum & Art Gallery
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="card shadow-none" id="popular_amenities">
-                                    <div class="card-header">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-18">Includes</h5>
-                                        </div>
-                                    </div>
-                                    <div class="card-body pb-1">
-                                        <div>
-                                            <div class="mb-3">
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-1">
-                                                    <label class="form-check-label ms-2" for="amenities-1">
-                                                        Exclusive Merchandise
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-2">
-                                                    <label class="form-check-label ms-2" for="amenities-2">
-                                                        Early Venue Access
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-3">
-                                                    <label class="form-check-label ms-2" for="amenities-3">
-                                                        Acoustic Performance
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-4">
-                                                    <label class="form-check-label ms-2" for="amenities-4">
-                                                        Transportation (if applicable)
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-5">
-                                                    <label class="form-check-label ms-2" for="amenities-5">
-                                                        Wildlife Safaris
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-6">
-                                                    <label class="form-check-label ms-2" for="amenities-6">
-                                                        Culinary Tours
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="card shadow-none" id="excludes">
-                                    <div class="card-header">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h5 class="fs-18">Excludes</h5>
-                                        </div>
-                                    </div>
-                                    <div class="card-body pb-1">
-                                        <div>
-                                            <div class="mb-3">
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-1">
-                                                    <label class="form-check-label ms-2" for="amenities-1">
-                                                        Travel Expenses
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-2">
-                                                    <label class="form-check-label ms-2" for="amenities-2">
-                                                        Travel Expenses
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-3">
-                                                    <label class="form-check-label ms-2" for="amenities-3">
-                                                        Accommodation
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-4">
-                                                    <label class="form-check-label ms-2" for="amenities-4">
-                                                        Food and Beverage   
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-5">
-                                                    <label class="form-check-label ms-2" for="amenities-5">
-                                                        Parking Fees
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" id="amenities-6">
-                                                    <label class="form-check-label ms-2" for="amenities-6">
-                                                        Personal Expenses
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card shadow-none" id="itenary">
-                            <div class="card-header">
-                                <h5 class="fs-18">Itenary</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="card shadow-none mb-3">
-                                    <div class="card-body px-3 py-2">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                            <h6><a href="javascript:void(0);">Day 1, Kickoff in Los Angeles</a></h6>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_itenary" class="rounded-edit d-flex align-items-center justify-content-center me-2">
-                                                    <i class="isax isax-edit-2"></i>
-                                                </a>
-                                                <a href="javascript:void(0);" class="trash-icon d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete_modal">
-                                                    <i class="isax isax-trash text-danger"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add_itenary">
-                                        <i class="isax isax-add-circle me-1"></i>Add New
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                        (click)="addAttraction()">
+                                        <i class="isax isax-add-circle me-1"></i>
+                                        Add New
                                     </a>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card shadow-none" id="faq">
-                            <div class="card-header">
-                                <h5 class="fs-18">FAQ</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="card shadow-none mb-3">
-                                    <div class="card-body px-3 py-2">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                            <h6><a href="javascript:void(0);">Does offer free cancellation for a full refund?</a></h6>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_faq" class="rounded-edit d-flex align-items-center justify-content-center me-2">
-                                                    <i class="isax isax-edit-2"></i>
-                                                </a>
-                                                <a href="javascript:void(0);" class="trash-icon d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete_modal">
-                                                    <i class="isax isax-trash text-danger"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card shadow-none mb-3">
-                                    <div class="card-body px-3 py-2">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                            <h6><a href="javascript:void(0);">Is there a pool?</a></h6>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_faq" class="rounded-edit d-flex align-items-center justify-content-center me-2">
-                                                    <i class="isax isax-edit-2"></i>
-                                                </a>
-                                                <a href="javascript:void(0);" class="trash-icon d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#delete_modal">
-                                                    <i class="isax isax-trash text-danger"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add_faq">
-                                        <i class="isax isax-add-circle me-1"></i>Add New
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card shadow-none" id="gallery">
-                            <div class="card-header">
-                                <h5 class="fs-18">Gallery</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
-                                    <span class="upload-img d-block mb-2"><i class="isax isax-document-upload fs-24"></i></span>
-                                    <h6 class="mb-1">Upload Gallery Images</h6>
-                                    <p class="mb-0">Upload Feature Image First, Image size should below 5MB</p>
-                                    <input type="file" accept="video/image">
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[0]?'none':'block'}">
-                                        <img src="assets/img/uploads/upload-01.jpg" alt="Img">
-                                        <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(0)"><i class="isax isax-trash"></i></span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[1]?'none':'block'}">
-                                        <img src="assets/img/uploads/upload-02.jpg" alt="Img">
-                                        <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(1)"><i class="isax isax-trash"></i></span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[2]?'none':'block'}">
-                                        <img src="assets/img/uploads/upload-03.jpg" alt="Img">
-                                        <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(2)"><i class="isax isax-trash"></i></span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[3]?'none':'block'}">
-                                        <img src="assets/img/uploads/upload-04.jpg" alt="Img">
-                                        <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(3)"><i class="isax isax-trash"></i></span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="gallery-upload-img me-2" [ngStyle]="{'display':isDelete[4]?'none':'block'}">
-                                        <img src="assets/img/uploads/upload-05.jpg" alt="Img">
-                                        <span class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash" (click)="onDelete(4)"><i class="isax isax-trash"></i></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card shadow-none" id="description">
-                            <div class="card-header">
-                                <h5 class="fs-18">Description</h5>
-                            </div>
-                            <div class="card-body text-editor">
-                                <ngx-editor [editor]="editor">
-                                    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
-                                    </ngx-editor-menu>
-                                  </ngx-editor>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <button type="button" class="btn btn-light me-2">Reset</button>
-                            <button type="submit" class="btn btn-primary">Add New Tour</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /Add Tour -->
 
-            </div>
-        </div>
-    </div>
-    <!-- /Page Wrapper -->
-
-    <!-- Iternary Modal -->
-    <div class="modal fade" id="add_itenary" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Add New Itenary</h5>
-                    <button data-bs-dismiss="modal" aria-label="close" class="btn-close"></button>
-                </div>
-                <form>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Itenary <span class="text-danger"> *</span></label>
-                            <input type="text" class="form-control">
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <div class="d-flex align-items-center justify-content-end m-0">
-                            <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-light me-2">Cancel</button>
-                            <button type="submit" data-bs-dismiss="modal" class="btn btn-sm btn-primary">Add Itenary</button>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card shadow-none" id="includes">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h5 class="fs-18">Includes</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body pb-1">
+                                    <div formArrayName="includes">
+                                        <div class="mb-3">
+                                            <ng-container *ngFor="let include of includes.controls; let i=index"
+                                                [formGroupName]="i">
+                                                <div class="row add-highlight-info">
+                                                    <div class="col-md-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Include</label>
+                                                            <div class="d-flex align-items-center">
+                                                                <input type="text" class="form-control"
+                                                                    formControlName="name"
+                                                                    (blur)="onIncludeNameBlur($event, i)">
+                                                                <a *ngIf="i > 0"
+                                                                    class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                    (click)="removeInclude(i)">
+                                                                    <i class="isax isax-trash"></i>
+                                                                </a>
+                                                            </div>
+
+                                                            <div *ngIf="include.get('name')?.invalid && (include.get('name')?.touched || include.get('name')?.dirty)"
+                                                                class="text-danger">
+                                                                <div *ngIf="include.get('name')?.errors?.['required']">
+                                                                    Include is required.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                            <div>
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-primary btn-sm add-highlight"
+                                                    (click)="addInclude()"><i class="isax isax-add-circle me-1"></i>
+                                                    Add New
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card shadow-none" id="excludes">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h5 class="fs-18">Excludes</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body pb-1">
+                                    <div formArrayName="excludes">
+                                        <div class="mb-3">
+                                            <ng-container *ngFor="let exclude of excludes.controls; let i=index"
+                                                [formGroupName]="i">
+                                                <div class="row add-highlight-info">
+                                                    <div class="col-md-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Exclude</label>
+                                                            <div class="d-flex align-items-center">
+                                                                <input type="text" class="form-control"
+                                                                    formControlName="name"
+                                                                    (blur)="onExcludeNameBlur($event, i)">
+                                                                <a *ngIf="i > 0"
+                                                                    class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                    (click)="removeExclude(i)">
+                                                                    <i class="isax isax-trash"></i>
+                                                                </a>
+                                                            </div>
+
+                                                            <div *ngIf="exclude.get('name')?.invalid && (exclude.get('name')?.touched || exclude.get('name')?.dirty)"
+                                                                class="text-danger">
+                                                                <div *ngIf="exclude.get('name')?.errors?.['required']">
+                                                                    Exclude is required.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                            <div>
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-primary btn-sm add-highlight" (click)="addExclude()">
+                                                    <i class="isax isax-add-circle me-1"></i>
+                                                    Add New
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- /Iternary Modal -->
 
-        <!-- Edit Itenary -->
-        <div class="modal fade" id="edit_itenary">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5>Edit Itenary</h5>
-                        <button data-bs-dismiss="modal" aria-label="close" class="btn-close"></button>
-                    </div>
-                    <form>
-                        <div class="modal-body">
+                    <div class="card shadow-none" id="itinerary">
+                        <div class="card-header">
+                            <h5 class="fs-18">Itinerary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div formArrayName="itinerary">
+                                <ng-container *ngFor="let it of itinerary.controls; let i=index" [formGroupName]="i">
+                                    <div class="card shadow-none mb-3">
+                                        <div class="card-body px-3 py-2">
+
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                                                <h6><a href="javascript:void(0);">{{it.get('title')?.value}}</a></h6>
+                                                <div class="d-flex align-items-center">
+                                                    <a href="javascript:void(0);"
+                                                        class="rounded-edit d-flex align-items-center justify-content-center me-2"
+                                                        (click)="openModal(itineraryModal,'itinerary', i)">
+                                                        <i class="isax isax-edit-2"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0);"
+                                                        class="trash-icon d-flex align-items-center justify-content-center"
+                                                        (click)="removeItinerary(i)">
+                                                        <i class="isax isax-trash text-danger"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
                             <div>
-                                <label class="form-label">Itenary</label>
-                                <input type="text" class="form-control" value="Day 1, Kickoff in Los Angeles">
+                                <a href="javascript:void(0);" class="btn btn-primary btn-sm"
+                                    (click)="openModal(itineraryModal)">
+                                    <i class="isax isax-add-circle me-1"></i>
+                                    Add New
+                                </a>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <div class="d-flex align-items-center justify-content-end m-0">
-                                <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-light me-2">Cancel</button>
-                                <button type="submit" data-bs-dismiss="modal" class="btn btn-sm btn-primary">Save Itenary</button>
+                    </div>
+
+                    <div class="card shadow-none" id="faq">
+                        <div class="card-header">
+                            <h5 class="fs-18">FAQ</h5>
+                        </div>
+                        <div class="card-body">
+                            <div formArrayName="faq">
+                                <ng-container *ngFor="let faq of faq.controls; let i=index" [formGroupName]="i">
+                                    <div class="card shadow-none mb-3">
+                                        <div class="card-body px-3 py-2">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                                                <h6><a href="javascript:void(0);">{{faq.get('question')?.value}}</a>
+                                                </h6>
+                                                <div class="d-flex align-items-center">
+                                                    <a href="javascript:void(0);"
+                                                        class="rounded-edit d-flex align-items-center justify-content-center me-2"
+                                                        (click)="openModal(faqModal, 'faq', i)">
+                                                        <i class="isax isax-edit-2"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0);"
+                                                        class="trash-icon d-flex align-items-center justify-content-center"
+                                                        (click)="removeFaq(i)">
+                                                        <i class="isax isax-trash text-danger"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div>
+                                <a href="javascript:void(0);" class="btn btn-primary btn-sm"
+                                    (click)="openModal(faqModal)">
+                                    <i class="isax isax-add-circle me-1"></i>Add New
+                                </a>
                             </div>
                         </div>
-                    </form>
+                    </div>
+
+                    <div class="card shadow-none" id="gallery">
+                        <div class="card-header">
+                            <h5 class="fs-18">Gallery</h5>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
+                                <span class="upload-img d-block mb-2"><i
+                                        class="isax isax-document-upload fs-24"></i></span>
+                                <h6 class="mb-1">Upload Gallery Images</h6>
+                                <p class="mb-0">Upload Feature Image First, Image size should below 5MB</p>
+                                <input type="file" accept="image/*" (change)="onFileSelected($event)" multiple>
+                            </div>
+                            <div *ngIf="imageUrls.length > 0">
+
+                                <div class="d-flex align-items-center">
+                                    <ng-container *ngFor="let imageUrl of imageUrls; let i=index">
+                                        <a href="javascript:void(0);" class="gallery-upload-img of list m-2">
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2">
+                                                <img [src]="imageUrl" alt="Img">
+                                                <span
+                                                    class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash"
+                                                    (click)="onDeleteImage(i)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                        </a>
+                                    </ng-container>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-none" id="prices">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Pricing</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div formArrayName="prices">
+                                <ng-container *ngFor="let price of prices.controls; let i=index" [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                Price #{{i + 1}}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Type of person</label>
+                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                    formControlName="typeOfPerson">
+                                                    <mat-option [value]="TypeOfPerson.ADULT"
+                                                        [disabled]="typeOfPersonIsSelected(TypeOfPerson.ADULT, i)">Adult</mat-option>
+                                                    <mat-option [value]="TypeOfPerson.CHILD"
+                                                        [disabled]="typeOfPersonIsSelected(TypeOfPerson.CHILD, i)">Child</mat-option>
+                                                    <mat-option [value]="TypeOfPerson.BABY"
+                                                        [disabled]="typeOfPersonIsSelected(TypeOfPerson.BABY, i)">Baby</mat-option>
+                                                </mat-select>
+
+                                                <div *ngIf="price.get('typeOfPerson')?.invalid && (price.get('typeOfPerson')?.dirty || price.get('typeOfPerson')?.touched)"
+                                                    class="text-danger">
+
+
+                                                    <div *ngIf="price.get('typeOfPerson')?.errors?.['required']">
+                                                        Type of person is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=" col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Min Age</label>
+                                                <input type="number" class="form-control" min="0"
+                                                    formControlName="minAge" (keypress)="onKeyPressPriceMinAge($event)">
+
+                                                <div *ngIf="price.get('minAge')?.invalid && (price.get('minAge')?.dirty || price.get('minAge')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="price.get('minAge')?.errors?.['required']">
+                                                        Min age is required
+                                                    </div>
+                                                    <div *ngIf="price.get('minAge')?.errors?.['min']">
+                                                        Min age is 0
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Max Age</label>
+                                                <input type="number" class="form-control" formControlName="maxAge"
+                                                    [min]="price.get('minAge')?.value || 0"
+                                                    (keypress)="onKeyPressPriceMaxAge($event)">
+                                                <div *ngIf="price.get('maxAge')?.invalid && (price.get('maxAge')?.dirty || price.get('maxAge')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="price.get('maxAge')?.errors?.['required']">
+                                                        Min age is required
+                                                    </div>
+                                                    <div *ngIf="price.get('maxAge')?.errors?.['min']">
+                                                        Min max age is {{price.get('minAge')?.value || 0}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Pricing (USD)</label>
+                                                <input type="number" class="form-control" formControlName="price"
+                                                    min="0">
+
+                                                <div *ngIf="price.get('price')?.invalid && (price.get('price')?.dirty || price.get('price')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="price.get('price')?.errors?.['required']">
+                                                        Price is required
+                                                    </div>
+                                                    <div *ngIf="price.get('price')?.errors?.['min']">
+                                                        Min price is 0
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6" *ngIf="i > 0">
+                                            <div class="mb-3">
+                                                <a href="javascript:void(0);"
+                                                    class="trash-icon d-flex align-items-center justify-content-center"
+                                                    (click)="removePrice(i)">
+                                                    <i class="isax isax-trash text-danger"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </ng-container>
+                                <div>
+                                    <div class="row" *ngIf="prices.length < 3">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-primary btn-sm add-highlight" (click)="addPrice()">
+                                                    <i class="isax isax-add-circle me-1"></i>
+                                                    Add New
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-none" id="refund">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Refund</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Full refund hours before</label>
+                                        <input type="number" class="form-control"
+                                            formControlName="fullRefundHoursBefore"
+                                            (keypress)="onKeyPressFullRefundHoursBefore($event)" min="0">
+
+                                        <div *ngIf="tourForm.controls['fullRefundHoursBefore'].invalid && (tourForm.controls['fullRefundHoursBefore'].dirty || tourForm.controls['fullRefundHoursBefore'].touched)"
+                                            class="text-danger">
+                                            <div
+                                                *ngIf="tourForm.controls['fullRefundHoursBefore'].errors?.['required']">
+                                                Full refund hours before is required
+                                            </div>
+
+                                            <div *ngIf="tourForm.controls['fullRefundHoursBefore'].errors?.['min']">
+                                                Min full refund hours before is 0
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Partial refund hours before</label>
+                                        <input type="number" class="form-control"
+                                            formControlName="partialRefundHoursBefore"
+                                            (keypress)="onKeyPressPartialRefundHoursBefore($event)" min="0">
+
+                                        <div *ngIf="tourForm.controls['partialRefundHoursBefore'].invalid && (tourForm.controls['partialRefundHoursBefore'].dirty || tourForm.controls['partialRefundHoursBefore'].touched)"
+                                            class="text-danger">
+                                            <div
+                                                *ngIf="tourForm.controls['partialRefundHoursBefore'].errors?.['required']">
+                                                Partial refund hours before is required
+                                            </div>
+
+                                            <div *ngIf="tourForm.controls['partialRefundHoursBefore'].errors?.['min']">
+                                                Min partial refound hours before is 0
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Partial refund percentage</label>
+                                        <input type="number" class="form-control"
+                                            formControlName="partialRefundPercentage" min="0" max="100"
+                                            (keypress)="onKeyPressPartialRefundPercentage($event)">
+
+                                        <div *ngIf="tourForm.controls['partialRefundPercentage'].invalid && (tourForm.controls['partialRefundPercentage'].dirty || tourForm.controls['partialRefundPercentage'].touched)"
+                                            class="text-danger">
+                                            <div
+                                                *ngIf="tourForm.controls['partialRefundPercentage'].errors?.['required']">
+                                                Partial refund percentage is required
+                                            </div>
+
+                                            <div *ngIf="tourForm.controls['partialRefundPercentage'].errors?.['min']">
+                                                Min partial refund percentage is 0
+                                            </div>
+
+                                            <div *ngIf="tourForm.controls['partialRefundPercentage'].errors?.['max']">
+                                                Max partial refund percentage is 100
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Allows weather reimbursement</label>
+                                        <mat-slide-toggle
+                                            formControlName="allowsWeatherReimbursement"></mat-slide-toggle>
+
+                                        <div *ngIf="tourForm.controls['allowsWeatherReimbursement'].invalid && (tourForm.controls['allowsWeatherReimbursement'].dirty || tourForm.controls['allowsWeatherReimbursement'].touched)"
+                                            class="text-danger">
+                                            <div
+                                                *ngIf="tourForm.controls['allowsWeatherReimbursement'].errors?.['required']">
+                                                Allows weather reimbursement is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Other conditions</label>
+                                        <textarea class="form-control" rows="3" formControlName="otherConditions"
+                                            maxlength="255" (blur)="onOtherConditionsBlur($event)"></textarea>
+
+                                        <div *ngIf="tourForm.controls['otherConditions'].invalid && (tourForm.controls['otherConditions'].dirty || tourForm.controls['otherConditions'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['otherConditions'].errors?.['maxlength']">
+                                                Other conditions cannot be more than 255 characters long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-none" id="description">
+                        <div class="card-header">
+                            <h5 class="fs-18">Description</h5>
+                        </div>
+                        <div class="card-body text-editor">
+                            <ngx-editor [editor]="editor" formControlName="description"
+                                (focusOut)="onDescriptionBlur($event)">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                                </ngx-editor-menu>
+                            </ngx-editor>
+
+                            <div *ngIf="tourForm.controls['description'].invalid && (tourForm.controls['description'].dirty || tourForm.controls['description'].touched)"
+                                class="text-danger">
+                                <div *ngIf="tourForm.controls['description'].errors?.['required']">
+                                    Description is required
+                                </div>
+                                <div *ngIf="tourForm.controls['description'].errors?.['minlength']">
+                                    Description must be at least 3 characters long
+                                </div>
+                                <div *ngIf="tourForm.controls['description'].errors?.['maxlength']">
+                                    Description cannot be more than 5000 characters long
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <!-- <button type="button" class="btn btn-light me-2">Reset</button> -->
+                        <button type="submit" class="btn btn-primary"
+                            [disabled]="loading || (tourForm.touched && tourForm.invalid)">
+                            <span>Add new tour</span>
+                            <div *ngIf="loading" class="spinner-border spinner-border-sm">
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /Add Tour -->
+
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+<!-- Itinerary Modal -->
+<ng-template #itineraryModal id="itinerary_modal">
+    <div class="modal-header">
+        <h5>{{ itineraryIndex >= 0 ? "Edit itinerary" : "Add new itinerary" }}</h5>
+        <button aria-label="close" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <form [formGroup]="itineraryForm" (ngSubmit)="onSubmitItinerary()">
+        <div class="modal-body">
+            <div>
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" formControlName="title" (blur)="onItineraryTitleBlur($event)">
+                <div *ngIf="itineraryForm.controls['title'].invalid && (itineraryForm.controls['title'].dirty || itineraryForm.controls['title'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['title'].errors?.['required']">
+                        Title is required
+                    </div>
+
+                    <div *ngIf="itineraryForm.controls['title'].errors?.['minlength']">
+                        Title must be at least 3 characters long
+                    </div>
+                    <div *ngIf="itineraryForm.controls['title'].errors?.['maxlength']">
+                        Title cannot be more than 50 characters long
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">Day</label>
+                <input type="number" class="form-control" formControlName="day" min="1"
+                    (keypress)="onKeyPressDay($event)">
+                <div *ngIf="itineraryForm.controls['day'].invalid && (itineraryForm.controls['day'].dirty || itineraryForm.controls['day'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['day'].errors?.['required']">
+                        Day is required
+                    </div>
+                    <div *ngIf="itineraryForm.controls['day'].errors?.['min']">
+                        Min day is 1
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">Time</label>
+                <input type="time" class="form-control" formControlName="time">
+                <div *ngIf="itineraryForm.controls['time'].invalid && (itineraryForm.controls['time'].dirty || itineraryForm.controls['time'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['time'].errors?.['required']">
+                        Time is required
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3" formControlName="description"
+                    (blur)="onItineraryDescriptionBlur($event)"></textarea>
+                <div *ngIf="itineraryForm.controls['description'].invalid && (itineraryForm.controls['description'].dirty || itineraryForm.controls['description'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['description'].errors?.['required']">
+                        Description is required
+                    </div>
+                    <div *ngIf="itineraryForm.controls['description'].errors?.['minlength']">
+                        Description must be at least 3 characters long
+                    </div>
+                    <div *ngIf="itineraryForm.controls['description'].errors?.['maxlength']">
+                        Description cannot be more than 255 characters long
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- /Edit Itenary -->  
+        <div class="modal-footer">
+            <div class="d-flex align-items-center justify-content-end m-0">
+                <button type="button" class="btn btn-sm btn-light me-2" (click)="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-sm btn-primary">
+                    {{ itineraryIndex >= 0 ? "Edit itinerary" : " Add itinerary"}}
+                </button>
+            </div>
+        </div>
+    </form>
 
-         <!-- Add New FAQ -->
-    <div class="modal fade" id="add_faq" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Add New FAQ</h5>
-                    <button data-bs-dismiss="modal" aria-label="close" class="btn-close"></button>
-                </div>
-                <form >
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Question <span class="text-danger"> *</span></label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <div>
-                            <label class="form-label">Answer <span class="text-danger"> *</span></label>
-                            <input type="text" class="form-control">
-                        </div>
+
+</ng-template>
+<!-- /Itinerary Modal -->
+
+<!-- FAQ Modal -->
+<ng-template #faqModal id="faq_modal">
+
+    <div class="modal-header">
+        <h5>{{ faqIndex >= 0 ? "Edit FAQ" : "Add new FAQ" }}</h5>
+        <button aria-label="close" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <form [formGroup]="faqForm" (ngSubmit)="onSubmitFaq()">
+        <div class="modal-body">
+            <div class="mb-3">
+                <label class="form-label">Question</label>
+                <input type="text" class="form-control" formControlName="question" (blur)="onQuestionBlur($event)">
+
+                <div *ngIf="faqForm.controls['question'].invalid && (faqForm.controls['question'].dirty || faqForm.controls['question'].touched)"
+                    class="text-danger">
+                    <div *ngIf="faqForm.controls['question'].errors?.['required']">
+                        Question is required
                     </div>
-                    <div class="modal-footer">
-                        <div class="d-flex align-items-center justify-content-end m-0">
-                            <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-light me-2">Cancel</button>
-                            <button type="submit" data-bs-dismiss="modal" class="btn btn-sm btn-primary">Add FAQ</button>
+
+                    <div *ngIf="faqForm.controls['question'].errors?.['minlength']">
+                        Question must be at least 3 characters long
+                    </div>
+                    <div *ngIf="faqForm.controls['question'].errors?.['maxlength']">
+                        Question cannot be more than 50 characters long
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">Answer</label>
+                <textarea type="text" class="form-control" formControlName="answer"
+                    (blur)="onAnswerBlur($event)"></textarea>
+                <div *ngIf="faqForm.controls['answer'].invalid && (faqForm.controls['answer'].dirty || faqForm.controls['answer'].touched)"
+                    class="text-danger">
+                    <div *ngIf="faqForm.controls['answer'].errors?.['required']">
+                        Answer is required
+                    </div>
+
+                    <div *ngIf="faqForm.controls['answer'].errors?.['minlength']">
+                        Answer must be at least 3 characters long
+                    </div>
+                    <div *ngIf="faqForm.controls['answer'].errors?.['maxlength']">
+                        Answer cannot be more than 255 characters long
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="d-flex align-items-center justify-content-end m-0">
+                <button type="button" class="btn btn-sm btn-light me-2" (click)="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-sm btn-primary">
+                    {{ faqIndex >= 0 ? "Edit FAQ" :"Add FAQ"}}</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<!-- / FAQ Modal -->
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete_modal">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form>
+                    <div class="text-center">
+                        <h5 class="mb-3">Confirm Delete</h5>
+                        <p class="mb-3">Are you sure you want to delete this item?</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <a href="javascript:void(0);" class="btn btn-light me-2">No</a>
+                            <button type="submit" class="btn btn-primary">Yes</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- /Add New FAQ -->    
-
-    <!-- Faq Modal -->
-    <div class="modal fade" id="edit_faq" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Edit FAQ</h5>
-                    <button data-bs-dismiss="modal" aria-label="close" class="btn-close"></button>
-                </div>
-                <form >
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Question <span class="text-danger"> *</span></label>
-                            <input type="text" class="form-control" value="Does offer free cancellation for a full refund?">
-                        </div>
-                        <div>
-                            <label class="form-label">Answer <span class="text-danger"> *</span></label>
-                            <input type="text" class="form-control" value="yes">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="d-flex align-items-center justify-content-end m-0">
-                            <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-light me-2">Cancel</button>
-                            <button type="submit" data-bs-dismiss="modal" class="btn btn-sm btn-primary">Save FAQ</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- /Faq Modal -->
-
-    <!-- Delete Modal -->
-    <div class="modal fade" id="delete_modal">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form>
-                        <div class="text-center">
-                            <h5 class="mb-3">Confirm Delete</h5>
-                            <p class="mb-3">Are you sure you want to delete this item?</p>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">No</a>
-                                <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Yes</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Delete Modal -->
+</div>
+<!-- /Delete Modal -->
