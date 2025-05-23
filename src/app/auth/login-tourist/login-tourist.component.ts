@@ -3,6 +3,7 @@ import { routes } from "../../shared/routes/routes";
 import { Router } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
+import { SocialLoginDto } from "../../shared/dto/social-login.dto";
 
 @Component({
   selector: "app-login-tourist",
@@ -69,7 +70,7 @@ export class LoginTouristComponent {
             this.authService.setUser({
               fullName: response.fullName,
               email: response.email,
-              roles: response.roles,
+              roles: response.roleList,
             });
             this.router.navigate(["home"]);
           } else {
@@ -103,21 +104,24 @@ export class LoginTouristComponent {
        const token = await user.getIdToken();
        console.log('Token:', token);
       // Datos básicos del usuario que podemos usar
-      const userData = {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        uid: user.uid,
-        idToken: token,
+      const userData:SocialLoginDto = {
+        firstname: user.displayName || '',
+        lastname: '',
+        email: user.email || '',
+        uuidSocial: user.uid || '',
       };
       
-      await this.authService.authenticateGoogle({ idToken: token }).subscribe({
+      await this.authService.authenticateSocial(userData).subscribe({
         next: (response) => {
           console.log('Respuesta de Google:', response)
-          this.ngZone.run(() => {
-            this.googleLoading = false;
-            this.router.navigate(["home"]);
+          this.authService.setToken(response.token);
+          this.authService.setUser({
+            fullName: response.fullName,
+            email: response.email,
+            roles: response.roleList,
           });
+          this.googleLoading = false;
+          this.router.navigate(["home"]);
         },
         error: (err) => {
           console.error('Error en autenticación con Google:', err);
@@ -143,22 +147,25 @@ export class LoginTouristComponent {
       const token = await user.getIdToken();
       console.log('Token de Facebook:', token);
       // Datos básicos del usuario
-      const userData = {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        uid: user.uid,
-        idToken: token,
+      const userData:SocialLoginDto = {
+        firstname: user.displayName || '',
+        lastname: '',
+        email: user.email || '',
+        uuidSocial: user.uid || '',
       };
       
-      await this.authService.authenticateFacebook({ idToken: token }).subscribe({
+      await this.authService.authenticateSocial(userData).subscribe({
         next: (response) => {
           // Navegar a la página principal
           console.log('Respuesta de Facebook:', response)
-          this.ngZone.run(() => {
-            this.facebookLoading = false;
-            this.router.navigate(["home"]);
+          this.authService.setToken(response.token);
+          this.authService.setUser({
+            fullName: response.fullName,
+            email: response.email,
+            roles: response.roleList,
           });
+          this.facebookLoading = false;
+          this.router.navigate(["home"]);
         },
         error: (err) => {
           console.error('Error en autenticación con Facebook:', err);

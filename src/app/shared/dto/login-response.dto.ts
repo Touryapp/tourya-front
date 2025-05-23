@@ -3,18 +3,18 @@ import { RoleDto } from "./role.dto";
 export class LoginResponseDto {
   fullName: string;
   email: string;
-  roles: RoleDto[];
+  roleList: RoleDto[];
   token: string;
 
   constructor(
     firstName: string,
     email: string,
-    roles: RoleDto[],
+    roleList: RoleDto[],
     password: string
   ) {
     this.fullName = firstName;
     this.email = email;
-    this.roles = roles;
+    this.roleList = roleList;
     this.token = password;
   }
 }

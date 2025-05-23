@@ -16,6 +16,8 @@ import { LoginResponseDto } from '../../shared/dto/login-response.dto';
 import { RegisterResponseDto } from '../../shared/dto/register-response.dto';
 import { RegisterDto } from '../../shared/dto/register.dto';
 import { v4 as uuidv4 } from "uuid";
+import { SocialResponseDto } from '../../shared/dto/social-responose.dto';
+import { SocialLoginDto } from '../../shared/dto/social-login.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -153,5 +155,13 @@ export class AuthService {
   // Verificar si el usuario está autenticado
   isAuthenticatedSocial(): boolean {
     return !!auth.currentUser;
+  }
+
+  authenticateSocial(data: SocialLoginDto): Observable<SocialResponseDto> {
+
+    return this.http.post<SocialResponseDto>(
+      `${this.baseUrl}/social-auth`,
+      data
+    );
   }
 } 

@@ -187,6 +187,11 @@
                                         {{ errorMessage }}
                                     </p>
                                 </div>
+                                <div *ngIf="successMessage" class="mb-3">
+                                    <p class="text-success text-center">
+                                        {{ successMessage }}
+                                    </p>
+                                </div>
                                 <div class="d-flex justify-content-center">
                                     <p class="fs-14">¿Ya tienes cuenta? <a [routerLink]="'/login-tourist'"
                                             class="link-primary fw-medium">Iniciar Sesión</a></p>

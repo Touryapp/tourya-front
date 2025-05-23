@@ -1,7 +1,18 @@
 export class RoleDto {
-  rol: string;
+  createdDate: string;
+  id: number;
+  lastModifiedDate: string;
+  name: string;
 
-  constructor(rol: string) {
-    this.rol = rol;
+  constructor(
+    createdDate: string,
+    id: number,
+    lastModifiedDate: string,
+    name: string
+  ) {
+    this.createdDate = createdDate;
+    this.id = id;
+    this.lastModifiedDate = lastModifiedDate;
+    this.name = name;
   }
 }
