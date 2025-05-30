@@ -1,11 +1,12 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { SharedModule } from "./shared/shared-module";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { NgScrollbarModule } from "ngx-scrollbar";
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 // Importaciones para Firebase
 import { initializeApp } from 'firebase/app';
@@ -22,9 +23,6 @@ import { ComingSoonComponent } from "./auth/coming-soon/coming-soon.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
 import { LoginTouristComponent } from "./auth/login-tourist/login-tourist.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
-import { LoginProviderComponent } from "./auth/login-provider/login-provider.component";
-import { RegisterProviderComponent } from "./auth/register-provider/register-provider.component";
-import { RegisterProviderEmailComponent } from "./auth/register-provider-email/register-provider-email.component";
 
 // Inicializar Firebase
 const app = initializeApp(environment.firebaseConfig);
@@ -34,12 +32,9 @@ export const auth = getAuth(app);
   declarations: [
     AppComponent,
     LoginTouristComponent,
-    LoginProviderComponent,
     ForgotPasswordComponent,
     RegisterTouristComponent,
     RegisterTouristEmailComponent,
-    RegisterProviderComponent,
-    RegisterProviderEmailComponent,
     ChangePasswordComponent,
     Error404Component,
     Error500Component,
@@ -50,10 +45,16 @@ export const auth = getAuth(app);
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    NgScrollbarModule
+    NgScrollbarModule,
+    HttpClientModule
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
 })

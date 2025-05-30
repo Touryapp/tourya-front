@@ -16,6 +16,7 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
 
   loading: boolean = false;
   errorMessage: string = "";
+  successMessage: string = "";
   password: boolean[] = [false, false]; // Add more as needed
 
   registerTouristEmailForm: FormGroup;
@@ -67,6 +68,7 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
   submitForm() {
     this.loading = true;
     this.errorMessage = "";
+    this.successMessage = "";
 
     if (this.registerTouristEmailForm.valid) {
       const data = {
@@ -79,18 +81,12 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
       this.authService.register(data).subscribe({
         next: (response) => {
           this.loading = false;
-          if (response && response.token) {
-            this.authService.setToken(response.token);
-            this.authService.setUser({
-              fullName: response.fullName,
-              email: response.email,
-              roles: response.roles,
-            });
-            this.router.navigate(["home"]);
-          } else {
-            this.errorMessage =
-              "Ha ocurrido un error, por favor intente de nuevo";
-          }
+          
+            this.successMessage = "¡Registro exitoso! Se ha enviado un correo electrónico para confirmar tu cuenta.";
+            setTimeout(() => {
+              this.router.navigate(["login"]);
+            }, 3000);
+          
         },
         error: (error) => {
           this.loading = false;
