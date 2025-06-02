@@ -6,7 +6,6 @@ export interface CreateTourDto {
   tourCategoryId: number;
   duration: string;
   maxPeople: number;
-  highlight: number;
   locations: Location[];
   mainAttractions: MainAttraction[];
   includes: Include[];

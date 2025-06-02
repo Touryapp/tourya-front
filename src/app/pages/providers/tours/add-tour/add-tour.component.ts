@@ -128,14 +128,6 @@ export class AddTourComponent {
           Validators.pattern("^[0-9]*$"),
         ],
       ],
-      highlight: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
-        ],
-      ],
       locations: this.fb.array([]),
       mainAttractions: this.fb.array([]),
       includes: this.fb.array([]),
@@ -395,12 +387,6 @@ export class AddTourComponent {
   onPriceBlur(event: FocusEvent) {}
 
   onMinAgeBlur(event: FocusEvent) {}
-
-  onHighlightBlur(event: FocusEvent) {
-    this.tourForm
-      .get("highlight")
-      ?.setValue((event.target as HTMLInputElement).value.trim());
-  }
 
   onDescriptionBlur(event: any) {
     this.tourForm
@@ -816,7 +802,6 @@ export class AddTourComponent {
       category,
       duration,
       totalNumberOfPeoples,
-      highlight,
       locations,
       mainAttractions,
       includes,
@@ -854,7 +839,6 @@ export class AddTourComponent {
       tourCategoryId: +category,
       duration,
       maxPeople: totalNumberOfPeoples,
-      highlight: highlight,
       locations: locationMap,
       mainAttractions,
       includes,
