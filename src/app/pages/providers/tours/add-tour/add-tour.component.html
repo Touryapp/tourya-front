@@ -76,7 +76,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Category</label>
                                         <mat-select class="custom-mat-select select" placeholder="Select"
-                                            formControlName="category">
+                                            formControlName="category" (blur)="onCategoryBlur($event)">
                                             <mat-option [value]="Category.AQUATIC">Aquatic</mat-option>
                                             <mat-option [value]="Category.LAND">Land</mat-option>
                                             <mat-option [value]="Category.ADVENTURE">Adventure</mat-option>
@@ -121,7 +121,8 @@
                                     <div class="mb-3">
                                         <label class="form-label">Total Number Of Peoples</label>
                                         <input type="number" class="form-control" formControlName="totalNumberOfPeoples"
-                                            min="1" (keypress)="onKeyPressTotalNumberOfPeople($event)">
+                                            min="1" (keypress)="onKeyPressTotalNumberOfPeople($event)"
+                                            (blur)="onTotalNumberOfPeopleBlur($event)">
                                         <div *ngIf="tourForm.controls['totalNumberOfPeoples'].invalid && (tourForm.controls['totalNumberOfPeoples'].dirty || tourForm.controls['totalNumberOfPeoples'].touched)"
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['totalNumberOfPeoples'].errors?.['required']">
@@ -135,7 +136,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Pricing (USD)</label>
                                         <input type="number" class="form-control" formControlName="price" min="0"
-                                            (keypress)="onKeyPressPrice($event)">
+                                            (keypress)="onKeyPressPrice($event)" (blur)="onPriceBlur($event)">
                                         <div *ngIf="tourForm.controls['price'].invalid && (tourForm.controls['price'].dirty || tourForm.controls['price'].touched)"
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['price'].errors?.['required']">
@@ -149,7 +150,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Min Age </label>
                                         <input type="number" class="form-control" formControlName="minAge" min="0"
-                                            (keypress)="onKeyPressMinAge($event)">
+                                            (keypress)="onKeyPressMinAge($event)" (blur)="onMinAgeBlur($event)">
                                         <div *ngIf="tourForm.controls['minAge'].invalid && (tourForm.controls['minAge'].dirty || tourForm.controls['minAge'].touched)"
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['minAge'].errors?.['required']">
@@ -183,157 +184,205 @@
                         </div>
                     </div>
 
-
-                    <div class="card shadow-none" id="location">
+                    <div class="card shadow-none" id="description">
                         <div class="card-header">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h5 class="fs-18">Location</h5>
+                            <h5 class="fs-18">Description</h5>
+                        </div>
+                        <div class="card-body text-editor">
+                            <ngx-editor [editor]="editor" formControlName="description"
+                                (focusOut)="onDescriptionBlur($event)">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                                </ngx-editor-menu>
+                            </ngx-editor>
+
+                            <div *ngIf="tourForm.controls['description'].invalid && (tourForm.controls['description'].dirty || tourForm.controls['description'].touched)"
+                                class="text-danger">
+                                <div *ngIf="tourForm.controls['description'].errors?.['required']">
+                                    Description is required
+                                </div>
+                                <div *ngIf="tourForm.controls['description'].errors?.['minlength']">
+                                    Description must be at least 3 characters long
+                                </div>
+                                <div *ngIf="tourForm.controls['description'].errors?.['maxlength']">
+                                    Description cannot be more than 5000 characters long
+                                </div>
                             </div>
                         </div>
+
+
+                    </div>
+
+                    <div class="card shadow-none" id="locations">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Locations</h5>
+                            </div>
+                        </div>
+
                         <div class="card-body pb-1">
-                            <div class="row">
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Type of Address</label>
+                            <div formArrayName="locations">
+                                <ng-container *ngFor="let location of locations.controls; let i=index"
+                                    [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
 
-                                        <mat-select class="custom-mat-select select" placeholder="Select"
-                                            formControlName="typeOfAddress">
-                                            <mat-option [value]=" TypeOfAddress.MEETING_POINT">
-                                                Meeting Point
-                                            </mat-option>
-                                            <mat-option [value]="TypeOfAddress.END_POINT">End Point</mat-option>
-                                            <mat-option [value]="TypeOfAddress.PICK_UP_POINT">
-                                                Pick Up Point
-                                            </mat-option>
-                                        </mat-select>
+                                                <label class="form-label">Type of Address</label>
 
-                                        <div *ngIf="tourForm.controls['typeOfAddress'].invalid && (tourForm.controls['typeOfAddress'].dirty || tourForm.controls['typeOfAddress'].touched)"
-                                            class="text-danger">
+                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                    formControlName="typeOfAddress">
+                                                    <mat-option
+                                                        [disabled]="typeOfAddressIsSelected(TypeOfAddress.MEETING_POINT, i)"
+                                                        [value]="TypeOfAddress.MEETING_POINT">
+                                                        Meeting Point
+                                                    </mat-option>
+                                                    <mat-option
+                                                        [disabled]="typeOfAddressIsSelected(TypeOfAddress.END_POINT, i)"
+                                                        [value]="TypeOfAddress.END_POINT">End Point</mat-option>
+                                                    <mat-option
+                                                        [disabled]="typeOfAddressIsSelected(TypeOfAddress.PICK_UP_POINT, i)"
+                                                        [value]="TypeOfAddress.PICK_UP_POINT">
+                                                        Pick Up Point
+                                                    </mat-option>
+                                                </mat-select>
 
-                                            <div *ngIf="tourForm.controls['typeOfAddress'].errors?.['required']">
-                                                Type of address is required
-                                            </div>
-                                        </div>
-                                    </div>
+                                                <div *ngIf="location.get('typeOfAddress')?.invalid && (location.get('typeOfAddress')?.dirty || location.get('typeOfAddress')?.touched)"
+                                                    class="text-danger">
 
-                                </div>
-
-
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Country</label>
-                                        <input type="text" class="form-control" formControlName="country"
-                                            (blur)="onCountryBlur($event)">
-                                        <div *ngIf="tourForm.controls['country'].invalid && (tourForm.controls['country'].dirty || tourForm.controls['country'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['country'].errors?.['required']">
-                                                Country is required
-                                            </div>
-                                            <div *ngIf="tourForm.controls['country'].errors?.['minlength']">
-                                                Country must be at least 3 characters long
-                                            </div>
-                                            <div *ngIf="tourForm.controls['country'].errors?.['maxlength']">
-                                                Country cannot be more than 50 characters long
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Department</label>
-                                        <input type="text" class="form-control" formControlName="department"
-                                            (blur)="onDepartmentBlur($event)">
-                                        <div *ngIf="tourForm.controls['department'].invalid && (tourForm.controls['department'].dirty || tourForm.controls['department'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['department'].errors?.['required']">
-                                                Department is required
-                                            </div>
-                                            <div *ngIf="tourForm.controls['department'].errors?.['minlength']">
-                                                Department must be at least 3 characters long
-                                            </div>
-                                            <div *ngIf="tourForm.controls['department'].errors?.['maxlength']">
-                                                Department cannot be more than 50 characters long
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="mb-3">
-                                        <div class="mb-3">
-                                            <label class="form-label">City</label>
-                                            <input type="text" class="form-control" formControlName="city"
-                                                (blur)="onCityBlur($event)">
-                                            <div *ngIf="tourForm.controls['city'].invalid && (tourForm.controls['city'].dirty || tourForm.controls['city'].touched)"
-                                                class="text-danger">
-                                                <div *ngIf="tourForm.controls['city'].errors?.['required']">
-                                                    City is required
-                                                </div>
-                                                <div *ngIf="tourForm.controls['city'].errors?.['minlength']">
-                                                    City must be at least 3 characters long
-                                                </div>
-                                                <div *ngIf="tourForm.controls['city'].errors?.['maxlength']">
-                                                    City cannot be more than 50 characters long
+                                                    <div *ngIf="location.get('typeOfAddress')?.errors?.['required']">
+                                                        Type of address is required
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Latitude</label>
-                                        <input type="number" class="form-control" formControlName="latitude"
-                                            (blur)="onLatitudeBlur($event)">
-                                        <div *ngIf="tourForm.controls['latitude'].invalid && (tourForm.controls['latitude'].dirty || tourForm.controls['latitude'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['latitude'].errors?.['required']">
-                                                Latitude is required
-                                            </div>
-                                            <div *ngIf="tourForm.controls['latitude'].errors?.['pattern']">
-                                                Invalid format
+
+
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Country</label>
+                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                    formControlName="country"
+                                                    (valueChange)="onCountryChange($event, i)">
+                                                    <mat-option *ngFor="let country of countries"
+                                                        [value]="country.id">{{country.name}}</mat-option>
+                                                </mat-select>
+
+                                                <div *ngIf="location.get('country')?.invalid && (location.get('country')?.dirty || location.get('country')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('country')?.errors?.['required']">
+                                                        Country is required
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Longitude</label>
-                                        <input type="number" class="form-control" formControlName="longitude"
-                                            (blur)="onLongitudeBlur($event)">
-                                        <div *ngIf="tourForm.controls['longitude'].invalid && (tourForm.controls['longitude'].dirty || tourForm.controls['longitude'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['longitude'].errors?.['required']">
-                                                Longitude is required
-                                            </div>
-                                            <div *ngIf="tourForm.controls['longitude'].errors?.['pattern']">
-                                                Invalid format
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Department</label>
+                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                    formControlName="department"
+                                                    (valueChange)=" onDepartmentChange($event, i)">
+                                                    <mat-option *ngFor="let department of departments[i]"
+                                                        [value]="department.id">{{department.name}}</mat-option>
+                                                </mat-select>
+
+                                                <div *ngIf="location.get('department')?.invalid && (location.get('department')?.dirty || location.get('department')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('department')?.errors?.['required']">
+                                                        Department is required
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">City</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="Select"
+                                                        formControlName="city">
+                                                        <mat-option *ngFor="let city of cities[i]"
+                                                            [value]="city.id">{{city.name}}</mat-option>
+                                                    </mat-select>
+                                                    <div *ngIf="location.get('city')?.invalid && (location.get('city')?.dirty || location.get('city')?.touched)"
+                                                        class="text-danger">
+                                                        <div *ngIf="location.get('city')?.errors?.['required']">
+                                                            City is required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Latitude</label>
+                                                <input type="number" class="form-control" formControlName="latitude"
+                                                    (blur)="onLatitudeBlur($event, i)">
+                                                <div *ngIf="location.get('latitude')?.invalid && (location.get('latitude')?.dirty || location.get('latitude')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('latitude')?.errors?.['required']">
+                                                        Latitude is required
+                                                    </div>
+                                                    <div *ngIf="location.get('latitude')?.errors?.['pattern']">
+                                                        Invalid format
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Address</label>
-                                        <textarea class="form-control" minlength="2" maxlength="50"
-                                            formControlName="address" (blur)="onAddressBlur($event)">
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Longitude</label>
+                                                <input type="number" class="form-control" formControlName="longitude"
+                                                    (blur)="onLongitudeBlur($event, i)">
+                                                <div *ngIf="location.get('longitude')?.invalid && (location.get('longitude')?.dirty || location.get('longitude')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('longitude')?.errors?.['required']">
+                                                        Longitude is required
+                                                    </div>
+                                                    <div *ngIf="location.get('longitude')?.errors?.['pattern']">
+                                                        Invalid format
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Address</label>
+                                                <textarea class="form-control" minlength="2" maxlength="50"
+                                                    formControlName="address" (blur)="onAddressBlur($event, i)">
                                         </textarea>
 
-                                        <div *ngIf="tourForm.controls['address'].invalid && (tourForm.controls['address'].dirty || tourForm.controls['address'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['address'].errors?.['required']">
-                                                Address is required
-                                            </div>
+                                                <div *ngIf="location.get('address')?.invalid && (location.get('address')?.dirty || location.get('address')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('address')?.errors?.['required']">
+                                                        Address is required
+                                                    </div>
 
-                                            <div *ngIf="tourForm.controls['address'].errors?.['minlength']">
-                                                Address must be at least 3 characters long
-                                            </div>
-                                            <div *ngIf="tourForm.controls['address'].errors?.['maxlength']">
-                                                Address cannot be more than 50 characters long
+                                                    <div *ngIf="location.get('address')?.errors?.['minlength']">
+                                                        Address must be at least 3 characters long
+                                                    </div>
+                                                    <div *ngIf="location.get('address')?.errors?.['maxlength']">
+                                                        Address cannot be more than 50 characters long
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <a *ngIf="i > 0"
+                                            class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                            (click)="removeLocation(i)">
+                                            <i class="isax isax-trash"></i>
+                                        </a>
                                     </div>
+                                </ng-container>
+
+                                <div class="mt-3">
+                                    <a *ngIf="locations.length < 3" href="javascript:void(0);"
+                                        class="btn btn-primary btn-sm add-highlight" (click)="addLocation()">
+                                        <i class="isax isax-add-circle me-1"></i>
+                                        Add New
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -355,8 +404,9 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Attraction</label>
                                                 <div class="d-flex align-items-center">
-                                                    <input type="text" class="form-control" formControlName="name"
-                                                        (blur)="onMainAttractionNameBlur($event, i)">
+                                                    <input type="text" class="form-control"
+                                                        formControlName="description"
+                                                        (blur)="onMainAttractionDescriptionBlur($event, i)">
 
                                                     <a *ngIf="i > 0"
                                                         class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
@@ -365,9 +415,9 @@
                                                     </a>
                                                 </div>
 
-                                                <div *ngIf="attraction.get('name')?.invalid && (attraction.get('name')?.touched || attraction.get('name')?.dirty)"
+                                                <div *ngIf="attraction.get('description')?.invalid && (attraction.get('description')?.touched || attraction.get('description')?.dirty)"
                                                     class="text-danger">
-                                                    <div *ngIf="attraction.get('name')?.errors?.['required']">
+                                                    <div *ngIf="attraction.get('description')?.errors?.['required']">
                                                         Attraction is required.
                                                     </div>
                                                 </div>
@@ -406,8 +456,8 @@
                                                             <label class="form-label">Include</label>
                                                             <div class="d-flex align-items-center">
                                                                 <input type="text" class="form-control"
-                                                                    formControlName="name"
-                                                                    (blur)="onIncludeNameBlur($event, i)">
+                                                                    formControlName="description"
+                                                                    (blur)="onIncludeDescriptionBlur($event, i)">
                                                                 <a *ngIf="i > 0"
                                                                     class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
                                                                     (click)="removeInclude(i)">
@@ -415,9 +465,10 @@
                                                                 </a>
                                                             </div>
 
-                                                            <div *ngIf="include.get('name')?.invalid && (include.get('name')?.touched || include.get('name')?.dirty)"
+                                                            <div *ngIf="include.get('description')?.invalid && (include.get('description')?.touched || include.get('description')?.dirty)"
                                                                 class="text-danger">
-                                                                <div *ngIf="include.get('name')?.errors?.['required']">
+                                                                <div
+                                                                    *ngIf="include.get('description')?.errors?.['required']">
                                                                     Include is required.
                                                                 </div>
                                                             </div>
@@ -455,8 +506,8 @@
                                                             <label class="form-label">Exclude</label>
                                                             <div class="d-flex align-items-center">
                                                                 <input type="text" class="form-control"
-                                                                    formControlName="name"
-                                                                    (blur)="onExcludeNameBlur($event, i)">
+                                                                    formControlName="description"
+                                                                    (blur)="onExcludeDescriptionBlur($event, i)">
                                                                 <a *ngIf="i > 0"
                                                                     class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
                                                                     (click)="removeExclude(i)">
@@ -464,9 +515,10 @@
                                                                 </a>
                                                             </div>
 
-                                                            <div *ngIf="exclude.get('name')?.invalid && (exclude.get('name')?.touched || exclude.get('name')?.dirty)"
+                                                            <div *ngIf="exclude.get('description')?.invalid && (exclude.get('description')?.touched || exclude.get('description')?.dirty)"
                                                                 class="text-danger">
-                                                                <div *ngIf="exclude.get('name')?.errors?.['required']">
+                                                                <div
+                                                                    *ngIf="exclude.get('description')?.errors?.['required']">
                                                                     Exclude is required.
                                                                 </div>
                                                             </div>
@@ -830,35 +882,8 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-none" id="description">
-                        <div class="card-header">
-                            <h5 class="fs-18">Description</h5>
-                        </div>
-                        <div class="card-body text-editor">
-                            <ngx-editor [editor]="editor" formControlName="description"
-                                (focusOut)="onDescriptionBlur($event)">
-                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
-                                </ngx-editor-menu>
-                            </ngx-editor>
 
-                            <div *ngIf="tourForm.controls['description'].invalid && (tourForm.controls['description'].dirty || tourForm.controls['description'].touched)"
-                                class="text-danger">
-                                <div *ngIf="tourForm.controls['description'].errors?.['required']">
-                                    Description is required
-                                </div>
-                                <div *ngIf="tourForm.controls['description'].errors?.['minlength']">
-                                    Description must be at least 3 characters long
-                                </div>
-                                <div *ngIf="tourForm.controls['description'].errors?.['maxlength']">
-                                    Description cannot be more than 5000 characters long
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
                     <div class="d-flex align-items-center justify-content-center">
-                        <!-- <button type="button" class="btn btn-light me-2">Reset</button> -->
                         <button type="submit" class="btn btn-primary"
                             [disabled]="loading || (tourForm.touched && tourForm.invalid)">
                             <span>Add new tour</span>
@@ -866,6 +891,14 @@
                             </div>
                         </button>
                     </div>
+
+
+                    <div *ngIf="errorMessage" class="mt-3">
+                        <p class="text-danger text-center">
+                            {{ errorMessage }}
+                        </p>
+                    </div>
+
                 </form>
             </div>
             <!-- /Add Tour -->

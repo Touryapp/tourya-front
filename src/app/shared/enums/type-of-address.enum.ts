@@ -1,5 +1,5 @@
 export enum TypeOfAddress {
-  MEETING_POINT = 1,
-  END_POINT = 2,
-  PICK_UP_POINT = 3,
+  MEETING_POINT = "Meeting Point",
+  END_POINT = "End Point",
+  PICK_UP_POINT = "Pick-up Point",
 }

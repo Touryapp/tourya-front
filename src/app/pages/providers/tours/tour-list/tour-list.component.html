@@ -455,7 +455,7 @@
 
             <div class="col-xl-9 col-lg-9">
                 <div class="d-flex align-items-center justify-content-between flex-wrap">
-                    <h6 class="mb-3">1920 Tours Found on Your Search</h6>
+                    <h6 class="mb-3">{{totalElements}} Tours Found on Your Search</h6>
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="list-item d-flex align-items-center mb-3">
 
@@ -519,7 +519,7 @@
                                     <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
                                         <ng-template carouselSlide>
                                             <div class="slide-images">
-                                                <a [routerLink]="routes.tourDetails">
+                                                <a [routerLink]="[routes.tourDetails, tour.id]">
                                                     <img src="assets/img/tours/tours-07.jpg" class="img-fluid"
                                                         alt="img">
                                                 </a>
@@ -527,7 +527,7 @@
                                         </ng-template>
                                         <ng-template carouselSlide>
                                             <div class="slide-images">
-                                                <a [routerLink]="routes.tourDetails">
+                                                <a [routerLink]="[routes.tourDetails, tour.id]">
                                                     <img src="assets/img/tours/tours-08.jpg" class="img-fluid "
                                                         alt="img">
                                                 </a>
@@ -535,7 +535,7 @@
                                         </ng-template>
                                         <ng-template carouselSlide>
                                             <div class="slide-images">
-                                                <a [routerLink]="routes.tourDetails">
+                                                <a [routerLink]="[routes.tourDetails, tour.id]">
                                                     <img src="assets/img/tours/tours-09.jpg" class="img-fluid "
                                                         alt="img">
                                                 </a>
@@ -543,7 +543,7 @@
                                         </ng-template>
                                         <ng-template carouselSlide>
                                             <div class="slide-images">
-                                                <a [routerLink]="routes.tourDetails">
+                                                <a [routerLink]="[routes.tourDetails, tour.id]">
                                                     <img src="assets/img/tours/tours-10.jpg" class="img-fluid"
                                                         alt="img">
                                                 </a>
@@ -566,7 +566,7 @@
                                         <div>
                                             <h5 class="mb-1 text-truncate"><a
                                                     [routerLink]="[routes.tourDetails, tour.id]">
-                                                    Rainbow Mountain Valley
+                                                    {{tour.name }}
                                                 </a>
                                             </h5>
                                             <p class="fs-14 d-flex align-items-center"><i
@@ -577,15 +577,16 @@
                                         <div class="d-flex align-items-center">
                                             <p class="fs-14 text-gray-9  border-end pe-2 me-2 mb-0">
                                                 <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                Ecotourism
+                                                {{tour?.tourCategory?.name}}
                                             </p>
                                             <span
                                                 class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">5.0</span>
                                             <p class="fs-14">(105 Reviews)</p>
                                         </div>
                                     </div>
-                                    <p class="fs-14 border-bottom pb-3 mb-3">Journey through majestic peaks and serene
-                                        valleys, where nature’s beauty surrounds you at every turn.</p>
+                                    <p class="fs-14 border-bottom pb-3 mb-3"
+                                        [innerHTML]="displayTourDescription(tour) | slice:0:100 | safeHtml ">
+                                    </p>
                                     <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
                                         <div class="d-flex align-items-center">
                                             <span class="me-2"><i

@@ -7,6 +7,15 @@ import { TypeOfAddress } from "../../../../shared/enums/type-of-address.enum";
 import { TypeOfPerson } from "../../../../shared/enums/type-of-person.enum";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
+import { TourService } from "../tour.service";
+import { Tour } from "../../../../shared/dto/tour-response.dto";
+import { CountryService } from "../../../../shared/services/country.service";
+import { Country } from "../../../../shared/dto/country.dto";
+import { DepartmentService } from "../../../../shared/services/department.service";
+import { CityService } from "../../../../shared/services/city.service";
+import { Department } from "../../../../shared/dto/department.dto";
+
+import { City } from "../../../../shared/dto/city.dto";
 
 @Component({
   selector: "app-add-tour",
@@ -41,7 +50,8 @@ export class AddTourComponent {
 
   tabs = [
     { id: "basic_info", label: "Basic Info" },
-    { id: "location", label: "Locations" },
+    { id: "description", label: "Description" },
+    { id: "locations", label: "Locations" },
     { id: "activities", label: "Main Attractions" },
     { id: "includes", label: "Includes" },
     { id: "excludes", label: "Excludes" },
@@ -50,19 +60,31 @@ export class AddTourComponent {
     { id: "gallery", label: "Gallery" },
     { id: "prices", label: "Pricing" },
     { id: "refund", label: "Refund" },
-    { id: "description", label: "Description" },
   ];
 
   activeTab: string = this.tabs[0].id; // Default to the first tab
 
-  readonly Category = Category; // Expose the enum to the template
+  readonly Category = Category;
   readonly TypeOfAddress = TypeOfAddress;
   readonly TypeOfPerson = TypeOfPerson;
+
+  tourId: number = 0;
+  tour: Tour | null = null;
+
+  countries: Country[] = [];
+  departments: Department[][] = [];
+  cities: City[][] = [];
+
+  errorMessage: string = "";
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private tourService: TourService,
+    private countryService: CountryService,
+    private departmentService: DepartmentService,
+    private cityService: CityService
   ) {
     this.tourForm = this.fb.group({
       name: [
@@ -114,55 +136,7 @@ export class AddTourComponent {
           Validators.maxLength(50),
         ],
       ],
-      typeOfAddress: ["", [Validators.required]],
-      country: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
-        ],
-      ],
-      department: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
-        ],
-      ],
-      city: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
-        ],
-      ],
-      latitude: [
-        "",
-        [
-          Validators.required,
-          Validators.pattern("^-?([0-8]?[0-9]|90)(.[0-9]{1,10})$"),
-        ],
-      ],
-      longitude: [
-        "",
-        [
-          Validators.required,
-          Validators.pattern(
-            "^-?(?:180(?:\\.0+)?|(?:1[0-7]\\d|\\d{1,2})(?:\\.\\d+)?)$"
-          ),
-        ],
-      ],
-      address: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
-        ],
-      ],
+      locations: this.fb.array([]),
       mainAttractions: this.fb.array([]),
       includes: this.fb.array([]),
       excludes: this.fb.array([]),
@@ -201,10 +175,13 @@ export class AddTourComponent {
     this.itineraryForm = this.newItinerary();
     this.faqForm = this.newFaq();
 
+    this.addLocation();
     this.addAttraction();
     this.addInclude();
     this.addExclude();
     this.addPrice();
+
+    this.getCountries();
   }
 
   @HostListener("window:scroll", [])
@@ -256,19 +233,12 @@ export class AddTourComponent {
     this.loading = true;
     this.tourForm.markAllAsTouched();
 
-    console.log(
-      "🚀 ~ AddTourComponent ~ onSubmit ~ this.tourForm:",
-      this.tourForm
-    );
-
     if (this.tourForm.valid) {
-      console.log(
-        "🚀 ~ AddTourComponent ~ onSubmit ~ this.tourForm.valid:",
-        this.tourForm.valid
-      );
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
+      if (this.tourId > 0) {
+        this.updateTour();
+      } else {
+        this.saveTourDetails();
+      }
     } else {
       this.loading = false;
     }
@@ -325,10 +295,10 @@ export class AddTourComponent {
   }
 
   get isValidTypeOfAddress(): boolean {
-    const typeOfAddressValue = +this.tourForm.get("typeOfAddress")?.value;
+    const typeOfAddressValue = this.tourForm.get("typeOfAddress")?.value;
 
     const typeOfAddresses = Object.values(TypeOfAddress).filter(
-      (value) => typeof value === "number"
+      (value) => typeof value === "string"
     );
 
     const found = typeOfAddresses.find(
@@ -412,11 +382,19 @@ export class AddTourComponent {
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
+  onCategoryBlur(event: FocusEvent) {}
+
   onDurationBlur(event: FocusEvent) {
     this.tourForm
       .get("duration")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
+
+  onTotalNumberOfPeopleBlur(event: FocusEvent) {}
+
+  onPriceBlur(event: FocusEvent) {}
+
+  onMinAgeBlur(event: FocusEvent) {}
 
   onHighlightBlur(event: FocusEvent) {
     this.tourForm
@@ -424,60 +402,83 @@ export class AddTourComponent {
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onCountryBlur(event: FocusEvent) {
+  onDescriptionBlur(event: any) {
     this.tourForm
+      .get("description")
+      ?.setValue(this.tourForm.get("description")?.value.trim());
+  }
+
+  onCountryChange(value: any, index: number) {
+    this.departments[index] = [];
+    this.cities[index] = [];
+    this.getDepartments(+value, index);
+  }
+
+  onCountryBlur(event: FocusEvent, index: number) {
+    this.locations
+      .at(index)
       .get("country")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onDepartmentBlur(event: FocusEvent) {
-    this.tourForm
+  onDepartmentChange(value: any, index: number) {
+    this.cities[index] = [];
+    this.getCities(+value, index);
+  }
+
+  onDepartmentBlur(event: FocusEvent, index: number) {
+    this.locations
+      .at(index)
       .get("department")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onCityBlur(event: FocusEvent) {
-    this.tourForm
+  onCityBlur(event: FocusEvent, index: number) {
+    this.locations
+      .at(index)
       .get("city")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onLatitudeBlur(event: FocusEvent) {
-    this.tourForm
+  onLatitudeBlur(event: FocusEvent, index: number) {
+    this.locations
+      .at(index)
       .get("latitude")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onLongitudeBlur(event: FocusEvent) {
-    this.tourForm
+  onLongitudeBlur(event: FocusEvent, index: number) {
+    this.locations
+      .at(index)
       .get("longitude")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onAddressBlur(event: FocusEvent) {
-    this.tourForm
+  onAddressBlur(event: FocusEvent, index: number) {
+    this.locations
+      .at(index)
       .get("address")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onMainAttractionNameBlur(event: FocusEvent, index: number) {
+  onMainAttractionDescriptionBlur(event: FocusEvent, index: number) {
     this.mainAttractions
       .at(index)
-      .get("name")
+      .get("description")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onIncludeNameBlur(event: FocusEvent, index: number) {
+  onIncludeDescriptionBlur(event: FocusEvent, index: number) {
     this.includes
       .at(index)
-      .get("name")
+      .get("description")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onExcludeNameBlur(event: FocusEvent, index: number) {
+  onExcludeDescriptionBlur(event: FocusEvent, index: number) {
     this.excludes
       .at(index)
-      .get("name")
+      .get("description")
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
@@ -511,10 +512,53 @@ export class AddTourComponent {
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onDescriptionBlur(event: any) {
-    this.tourForm
-      .get("description")
-      ?.setValue(this.tourForm.get("description")?.value.trim());
+  get locations(): FormArray {
+    return this.tourForm.get("locations") as FormArray;
+  }
+
+  newLocation(): FormGroup {
+    return this.fb.group({
+      typeOfAddress: ["", [Validators.required]],
+      country: ["", [Validators.required]],
+      department: ["", [Validators.required]],
+      city: ["", [Validators.required]],
+      latitude: [
+        "",
+        [
+          Validators.required,
+          Validators.pattern("^-?([0-8]?[0-9]|90)(.[0-9]{1,10})$"),
+        ],
+      ],
+      longitude: [
+        "",
+        [
+          Validators.required,
+          Validators.pattern(
+            "^-?(?:180(?:\\.0+)?|(?:1[0-7]\\d|\\d{1,2})(?:\\.\\d+)?)$"
+          ),
+        ],
+      ],
+      address: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+    });
+  }
+
+  addLocation() {
+    if (this.locations.valid) {
+      this.locations.push(this.newLocation());
+    } else {
+      this.locations.markAllAsTouched();
+    }
+  }
+
+  removeLocation(index: number) {
+    this.locations.removeAt(index);
   }
 
   get mainAttractions(): FormArray {
@@ -523,7 +567,7 @@ export class AddTourComponent {
 
   newAttraction(): FormGroup {
     return this.fb.group({
-      name: ["", Validators.required],
+      description: ["", Validators.required],
     });
   }
 
@@ -545,7 +589,8 @@ export class AddTourComponent {
 
   newInclude(): FormGroup {
     return this.fb.group({
-      name: ["", Validators.required],
+      description: ["", Validators.required],
+      type: ["Include", Validators.required],
     });
   }
 
@@ -567,7 +612,8 @@ export class AddTourComponent {
 
   newExclude(): FormGroup {
     return this.fb.group({
-      name: ["", Validators.required],
+      description: ["", Validators.required],
+      type: ["Exclude", Validators.required],
     });
   }
 
@@ -701,10 +747,21 @@ export class AddTourComponent {
     this.prices.removeAt(index);
   }
 
+  typeOfAddressIsSelected(typeOfAddress: TypeOfAddress, i: number): boolean {
+    const typeOfAddresses = this.locations.controls
+      .map((control, index) => {
+        if (index !== i) {
+          return (control as FormGroup).get("typeOfAddress")?.value;
+        }
+      })
+      .filter((v) => v);
+
+    return typeOfAddresses.includes(typeOfAddress);
+  }
+
   typeOfPersonIsSelected(typeOfPerson: TypeOfPerson, i: number): boolean {
     const typeOfPersons = this.prices.controls
       .map((control, index) => {
-        // Assuming each control in the FormArray is a FormGroup
         if (index !== i) {
           return (control as FormGroup).get("typeOfPerson")?.value;
         }
@@ -750,6 +807,134 @@ export class AddTourComponent {
       this.faqForm.reset();
       this.closeModal();
     }
+  }
+
+  saveTourDetails() {
+    const {
+      name,
+      description,
+      category,
+      duration,
+      totalNumberOfPeoples,
+      highlight,
+      locations,
+      mainAttractions,
+      includes,
+      excludes,
+      itinerary,
+      faq,
+      prices,
+    } = this.tourForm.value;
+
+    const locationMap = locations.map((location: any) => {
+      const {
+        typeOfAddress,
+        country,
+        department,
+        city,
+        latitude,
+        longitude,
+        address,
+      } = location;
+
+      return {
+        countryId: +country,
+        stateId: +department,
+        cityId: +city,
+        latitude: +latitude,
+        longitude: +longitude,
+        address,
+        addressType: typeOfAddress,
+      };
+    });
+
+    const body = {
+      name,
+      description,
+      tourCategoryId: +category,
+      duration,
+      maxPeople: totalNumberOfPeoples,
+      highlight: highlight,
+      locations: locationMap,
+      mainAttractions,
+      includes,
+      excludes,
+      faq,
+    };
+
+    this.tourService.saveTourDetails(body).subscribe({
+      next: (data) => {
+        this.loading = false;
+
+        if (data) {
+          this.router.navigate([routes.tourList], {
+            queryParams: { added: true },
+          });
+        }
+
+        this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error("Error saving tour.");
+        console.error(err);
+
+        this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
+      },
+    });
+  }
+
+  updateTour() {}
+
+  getCountries() {
+    this.countryService.getCountries().subscribe({
+      next: (data) => {
+        if (data) {
+          this.countries = data;
+        } else {
+          this.countries = [];
+        }
+      },
+      error: (err) => {
+        console.error("Error getting countries.");
+        console.error(err);
+        this.countries = [];
+      },
+    });
+  }
+
+  getDepartments(countryId: number, index: number) {
+    this.departmentService.getDepartmentsByCountryId(countryId).subscribe({
+      next: (data) => {
+        if (data) {
+          this.departments[index] = data;
+        } else {
+          this.departments[index] = [];
+        }
+      },
+      error: (err) => {
+        console.error("Error getting departments.");
+        console.error(err);
+        this.departments[index] = [];
+      },
+    });
+  }
+
+  getCities(departmentId: number, index: number) {
+    this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
+      next: (data) => {
+        if (data) {
+          this.cities[index] = data;
+        } else {
+          this.cities[index] = [];
+        }
+      },
+      error: (err) => {
+        console.error("Error getting cities.");
+        console.error(err);
+        this.cities[index] = [];
+      },
+    });
   }
 
   onFileSelected(event: any): void {

@@ -33,6 +33,8 @@ import { GoogleMapsModule } from "@angular/google-maps";
 import { UserDashboardComponent } from "../feature-module/common/user-dashboard/user-dashboard.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { BsModalService, ModalModule } from "ngx-bootstrap/modal";
+import { SafeHtmlPipe } from "./pipe/safe-html.pipe";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -68,6 +70,8 @@ import { BsModalService, ModalModule } from "ngx-bootstrap/modal";
     SlickCarouselModule,
     MatSlideToggleModule,
     ModalModule,
+    SafeHtmlPipe,
+    MatSnackBarModule,
   ],
   exports: [
     CommonModule,
@@ -99,6 +103,8 @@ import { BsModalService, ModalModule } from "ngx-bootstrap/modal";
     SlickCarouselModule,
     MatSlideToggleModule,
     ModalModule,
+    SafeHtmlPipe,
+    MatSnackBarModule,
   ],
   providers: [
     provideNgxMask(),

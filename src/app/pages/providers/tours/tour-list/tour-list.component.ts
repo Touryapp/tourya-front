@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { OwlOptions } from "ngx-owl-carousel-o";
 import { TourService } from "../tour.service";
 import { Tour } from "../../../../shared/dto/tour-response.dto";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-tour-list",
@@ -19,39 +20,28 @@ export class TourListComponent implements OnInit {
   tours: Tour[] = [];
   page: number = 0;
   size: number = 10;
+  totalElements: number = 0;
   totalPages: number = 0;
 
-  tourTest: Tour = {
-    id: 1,
-    name: "string",
-    description: "description",
-    duration: "string",
-    maxPeople: 1,
-    highlight: true,
-    tourCategory: {
-      id: 1,
-      name: "string",
-      description: "string",
-    },
-    provider: {
-      id: 1,
-      nombre: "string",
-      numeroDocumento: "string",
-      tipoDocumento: "string",
-      tipoServicio: "string",
-      pais: "string",
-      departamento: "string",
-      ciudad: "string",
-      direccion: "string",
-      telefono: "string",
-      status: "string",
-    },
-  };
-
-  constructor(private router: Router, private tourService: TourService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private tourService: TourService,
+    private _snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.getTours();
+    const added = !!this.route.snapshot.queryParamMap.get("added");
+    const edited = !!this.route.snapshot.queryParamMap.get("edited");
+
+    if (added) {
+      this.openSnackBar("Tour added");
+    } else if (edited) {
+      this.openSnackBar("Tour edited");
+    }
+
+    this.router.navigate([], { queryParams: null });
   }
 
   isMore: boolean[] = [false];
@@ -123,17 +113,24 @@ export class TourListComponent implements OnInit {
       next: (data) => {
         if (data && data.content) {
           this.tours = data.content;
+          this.totalElements = data.totalElements;
           this.totalPages = data.totalPages;
         } else {
-          this.tours = [{ ...this.tourTest }];
+          this.tours = [];
+          this.totalElements = 0;
           this.totalPages = 1;
         }
       },
       error: () => {
-        this.tours = [{ ...this.tourTest }];
+        this.tours = [];
+        this.totalElements = 0;
         this.totalPages = 1;
       },
     });
+  }
+
+  displayTourDescription(tour: Tour): string {
+    return tour?.description || "";
   }
 
   get pages(): number[] {
@@ -161,5 +158,11 @@ export class TourListComponent implements OnInit {
     if (this.page !== 0) {
       this.setPage(this.page - 1);
     }
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "", {
+      duration: 5000,
+    });
   }
 }
