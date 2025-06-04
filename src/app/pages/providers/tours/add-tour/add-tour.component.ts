@@ -1,4 +1,11 @@
-import { Component, HostListener, TemplateRef } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  QueryList,
+  TemplateRef,
+  ViewChildren,
+} from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { Router } from "@angular/router";
 import { Editor, Toolbar } from "ngx-editor";
@@ -74,6 +81,8 @@ export class AddTourComponent {
   countries: Country[] = [];
   departments: Department[][] = [];
   cities: City[][] = [];
+
+  @ViewChildren("addressInput") addressInputs!: QueryList<ElementRef>;
 
   errorMessage: string = "";
 
@@ -508,6 +517,7 @@ export class AddTourComponent {
       country: ["", [Validators.required]],
       department: ["", [Validators.required]],
       city: ["", [Validators.required]],
+      location: ["", [Validators.required]],
       latitude: [
         "",
         [
@@ -538,6 +548,9 @@ export class AddTourComponent {
   addLocation() {
     if (this.locations.valid) {
       this.locations.push(this.newLocation());
+      setTimeout(() => {
+        this.initAutocomplete(this.locations.length - 1);
+      }, 0); // U
     } else {
       this.locations.markAllAsTouched();
     }
@@ -941,6 +954,38 @@ export class AddTourComponent {
 
   onDeleteImage(index: number): void {
     this.imageUrls.splice(index, 1);
+  }
+
+  initAutocomplete(index: number): void {
+    // Find the specific input element for the current address index
+    const inputElement = this.addressInputs.toArray()[index].nativeElement;
+
+    if (inputElement && google && google.maps && google.maps.places) {
+      const autocomplete = new google.maps.places.Autocomplete(inputElement, {
+        types: ["address"], // Restrict to address predictions
+        componentRestrictions: { country: ["COL"] }, // Optional: Restrict to a specific country
+      });
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+          // Extract address components and update the form control
+          const locationGroup = this.locations.at(index) as FormGroup;
+          this.fillAddressFields(locationGroup, place);
+        } else {
+          // Handle case where place.geometry is not available (e.g., user types a non-place)
+          console.warn("No geometry for selected place:", place);
+        }
+      });
+    }
+  }
+
+  fillAddressFields(locationGroup: FormGroup, place: any): void {
+    // Reset all address fields
+    locationGroup.patchValue({
+      latitude: place.geometry.location.lat(),
+      longitude: place.geometry.location.lng(),
+    });
   }
 
   openModal(template: TemplateRef<any>, modal = "", index = -1) {
