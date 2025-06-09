@@ -3,10 +3,10 @@ import { CommonModule } from "@angular/common";
 
 import { AddTourRoutingModule } from "./add-tour-routing.module";
 import { AddTourComponent } from "./add-tour.component";
-import { SharedModule } from "../../../shared/shared-module";
+import { SharedModule } from "../../../../shared/shared-module";
 
 @NgModule({
   declarations: [AddTourComponent],
-  imports: [CommonModule, SharedModule, AddTourRoutingModule],
+  imports: [CommonModule, AddTourRoutingModule, SharedModule],
 })
 export class AddTourModule {}

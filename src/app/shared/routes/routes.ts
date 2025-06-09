@@ -155,27 +155,33 @@ export class routes {
   public static get cruiseBookingConfirmation(): string {
     return this.cruise + "/cruise-booking-confirmation";
   }
+
+  public static get providers(): string {
+    return this.baseUrl + "/providers";
+  }
+
   public static get tour(): string {
-    return this.baseUrl + "/tour";
+    return this.providers + "/tours";
   }
   public static get tourGrid(): string {
-    return this.tour + "/tour-grid";
+    return this.tour + "/grid";
   }
   public static get tourMap(): string {
-    return this.tour + "/tour-map";
+    return this.tour + "/map";
   }
   public static get tourList(): string {
-    return this.tour + "/tour-list";
+    return this.tour + "/list";
   }
   public static get tourDetails(): string {
-    return this.tour + "/tour-details";
+    return this.tour + "/details";
   }
   public static get addTour(): string {
-    return this.tour + "/add-tour";
+    return this.tour + "/add";
   }
   public static get editTour(): string {
-    return this.tour + "/edit-tour";
+    return this.tour + "/edit";
   }
+
   public static get tourBookingConfirmation(): string {
     return this.tour + "/tour-booking-confirmation";
   }

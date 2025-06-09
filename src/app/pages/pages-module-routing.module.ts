@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: "",
     component: PagesModuleComponent,
-    canActivate: [AuthGuard],
+    canActivate: [],
     children: [
       {
         path: "home",
