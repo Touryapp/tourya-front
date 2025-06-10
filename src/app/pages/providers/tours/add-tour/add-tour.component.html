@@ -496,13 +496,13 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-none" id="itinerary">
+                    <div class="card shadow-none" id="itineraries">
                         <div class="card-header">
                             <h5 class="fs-18">Itinerary</h5>
                         </div>
                         <div class="card-body">
-                            <div formArrayName="itinerary">
-                                <ng-container *ngFor="let it of itinerary.controls; let i=index" [formGroupName]="i">
+                            <div formArrayName="itineraries">
+                                <ng-container *ngFor="let it of itineraries.controls; let i=index" [formGroupName]="i">
                                     <div class="card shadow-none mb-3">
                                         <div class="card-body px-3 py-2">
 
@@ -575,7 +575,7 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-none" id="gallery">
+                    <div class="card shadow-none" id="galleries">
                         <div class="card-header">
                             <h5 class="fs-18">Gallery</h5>
                         </div>
