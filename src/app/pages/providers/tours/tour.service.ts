@@ -28,12 +28,12 @@ export class TourService {
     });
   }
 
-  saveTourDetails(imageUrls: string[], body: CreateTourDto): Observable<any> {
+  saveTourDetails(imageFiles: File[], body: CreateTourDto): Observable<any> {
     const formData = new FormData();
 
-    if (imageUrls && imageUrls.length > 0) {
-      imageUrls.forEach((image) => {
-        formData.append(`files[]`, image);
+    if (imageFiles && imageFiles.length > 0) {
+      imageFiles.forEach((file) => {
+        formData.append("files", file);
       });
     }
 

@@ -45,6 +45,7 @@ export class AddTourComponent {
   faqIndex: number = -1;
 
   imageUrls: string[] = [];
+  imageFiles: File[] = [];
 
   editor!: Editor;
 
@@ -891,7 +892,7 @@ export class AddTourComponent {
       galleries,
     };
 
-    this.tourService.saveTourDetails(this.imageUrls, body).subscribe({
+    this.tourService.saveTourDetails(this.imageFiles, body).subscribe({
       next: (data) => {
         this.loading = false;
 
@@ -973,7 +974,10 @@ export class AddTourComponent {
       for (let i = 0; i < files.length; i++) {
         const file = files.item(i);
         if (file) {
-          // Create a FileReader to read the file as Data URL
+          // Store the actual file for upload
+          this.imageFiles.push(file);
+          
+          // Create a FileReader to read the file as Data URL for preview
           const reader = new FileReader();
           reader.onload = (e: any) => {
             this.imageUrls.push(e.target.result);
@@ -994,6 +998,7 @@ export class AddTourComponent {
 
   onDeleteImage(index: number): void {
     this.imageUrls.splice(index, 1);
+    this.imageFiles.splice(index, 1);
     this.galleries.removeAt(index);
 
     this.galleries.controls.forEach((control, i) => {
