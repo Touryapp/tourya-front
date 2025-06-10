@@ -28,7 +28,18 @@ export class TourService {
     });
   }
 
-  saveTourDetails(body: CreateTourDto): Observable<any> {
-    return this.http.post<Tour>(`${this.baseUrl}/user/saveAll`, body);
+  saveTourDetails(imageUrls: string[], body: CreateTourDto): Observable<any> {
+    const formData = new FormData();
+
+    if (imageUrls && imageUrls.length > 0) {
+      imageUrls.forEach((image) => {
+        formData.append(`files[]`, image);
+      });
+    }
+
+    const metadata = JSON.stringify(body);
+    formData.append("metadata", metadata);
+
+    return this.http.post<Tour>(`${this.baseUrl}/user/saveAll`, formData);
   }
 }

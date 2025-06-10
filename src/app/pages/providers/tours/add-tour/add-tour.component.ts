@@ -62,9 +62,9 @@ export class AddTourComponent {
     { id: "activities", label: "Main Attractions" },
     { id: "includes", label: "Includes" },
     { id: "excludes", label: "Excludes" },
-    { id: "itinerary", label: "Itenary" },
+    { id: "itineraries", label: "Itinerary" },
     { id: "faq", label: "FAQ" },
-    { id: "gallery", label: "Gallery" },
+    { id: "galleries", label: "Galleries" },
     { id: "prices", label: "Pricing" },
     { id: "refund", label: "Refund" },
   ];
@@ -141,8 +141,9 @@ export class AddTourComponent {
       mainAttractions: this.fb.array([]),
       includes: this.fb.array([]),
       excludes: this.fb.array([]),
-      itinerary: this.fb.array([]),
+      itineraries: this.fb.array([]),
       faq: this.fb.array([]),
+      galleries: this.fb.array([]),
       prices: this.fb.array([]),
       fullRefundHoursBefore: [
         "",
@@ -628,8 +629,8 @@ export class AddTourComponent {
     this.excludes.removeAt(index);
   }
 
-  get itinerary(): FormArray {
-    return this.tourForm.get("itinerary") as FormArray;
+  get itineraries(): FormArray {
+    return this.tourForm.get("itineraries") as FormArray;
   }
 
   newItinerary(): FormGroup {
@@ -663,13 +664,13 @@ export class AddTourComponent {
   }
 
   addItinerary() {
-    if (this.itinerary.valid) {
-      this.itinerary.push(this.newItinerary());
+    if (this.itineraries.valid) {
+      this.itineraries.push(this.newItinerary());
     }
   }
 
   removeItinerary(index: number) {
-    this.itinerary.removeAt(index);
+    this.itineraries.removeAt(index);
   }
 
   get faq(): FormArray {
@@ -746,6 +747,29 @@ export class AddTourComponent {
     this.prices.removeAt(index);
   }
 
+  get galleries(): FormArray {
+    return this.tourForm.get("galleries") as FormArray;
+  }
+
+  newGallery(): FormGroup {
+    return this.fb.group({
+      id: [],
+      // imageUrl: ["", [Validators.required]],
+      description: ["", [Validators.required]],
+      orderIndex: ["", [Validators.required]],
+    });
+  }
+
+  addGallery() {
+    if (this.galleries.valid) {
+      this.galleries.push(this.newGallery());
+    }
+  }
+
+  removeGallery(index: number) {
+    this.galleries.removeAt(index);
+  }
+
   typeOfAddressIsSelected(typeOfAddress: TypeOfAddress, i: number): boolean {
     const typeOfAddresses = this.locations.controls
       .map((control, index) => {
@@ -774,7 +798,7 @@ export class AddTourComponent {
     this.itineraryForm.markAllAsTouched();
 
     if (this.itineraryForm.valid) {
-      const index = this.itineraryIndex || this.itinerary.length - 1;
+      const index = this.itineraryIndex || this.itineraries.length - 1;
 
       if (this.itineraryIndex >= 0) {
         this.itineraryIndex = -1;
@@ -782,7 +806,7 @@ export class AddTourComponent {
         this.addItinerary();
       }
 
-      this.itinerary.at(index).patchValue(this.itineraryForm.value);
+      this.itineraries.at(index).patchValue(this.itineraryForm.value);
 
       this.itineraryForm.reset();
       this.closeModal();
@@ -814,14 +838,17 @@ export class AddTourComponent {
       description,
       category,
       duration,
+      price,
+      minAge,
       totalNumberOfPeoples,
       locations,
       mainAttractions,
       includes,
       excludes,
-      itinerary,
+      itineraries,
       faq,
       prices,
+      galleries,
     } = this.tourForm.value;
 
     const locationMap = locations.map((location: any) => {
@@ -842,6 +869,7 @@ export class AddTourComponent {
         latitude: +latitude,
         longitude: +longitude,
         address,
+        location: location.location,
         addressType: typeOfAddress,
       };
     });
@@ -852,14 +880,18 @@ export class AddTourComponent {
       tourCategoryId: +category,
       duration,
       maxPeople: totalNumberOfPeoples,
+      price: +price,
+      minAge: +minAge,
       locations: locationMap,
       mainAttractions,
       includes,
       excludes,
       faq,
+      itineraries,
+      galleries,
     };
 
-    this.tourService.saveTourDetails(body).subscribe({
+    this.tourService.saveTourDetails(this.imageUrls, body).subscribe({
       next: (data) => {
         this.loading = false;
 
@@ -945,6 +977,14 @@ export class AddTourComponent {
           const reader = new FileReader();
           reader.onload = (e: any) => {
             this.imageUrls.push(e.target.result);
+
+            this.addGallery();
+
+            this.galleries.at(this.galleries.length - 1).patchValue({
+              // imageUrl: e.target.result,
+              orderIndex: this.galleries.length,
+              description: file.name,
+            });
           };
           reader.readAsDataURL(file);
         }
@@ -954,6 +994,13 @@ export class AddTourComponent {
 
   onDeleteImage(index: number): void {
     this.imageUrls.splice(index, 1);
+    this.galleries.removeAt(index);
+
+    this.galleries.controls.forEach((control, i) => {
+      control.patchValue({
+        orderIndex: i + 1,
+      });
+    });
   }
 
   initAutocomplete(index: number): void {
@@ -993,7 +1040,7 @@ export class AddTourComponent {
       case "itinerary": {
         if (index >= 0) {
           this.itineraryIndex = index;
-          this.itineraryForm.patchValue(this.itinerary.at(index).value);
+          this.itineraryForm.patchValue(this.itineraries.at(index).value);
         }
         break;
       }
