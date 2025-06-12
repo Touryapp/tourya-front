@@ -1,0 +1,34 @@
+.dashboard-container {
+  .card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .card-title {
+      color: #6c757d;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .display-4 {
+      color: #007bff;
+      font-weight: bold;
+    }
+  }
+  
+  h3 {
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  p {
+    color: #6c757d;
+    margin-bottom: 30px;
+  }
+} 

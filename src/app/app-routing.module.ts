@@ -13,7 +13,7 @@ import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/reg
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "/home-client",
+    redirectTo: "/home",
     pathMatch: "full",
   },
 

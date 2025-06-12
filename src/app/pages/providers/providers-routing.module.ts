@@ -17,6 +17,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("./tours/tour.module").then((m) => m.TourModule),
       },
+      {
+        path: "requestproviders",
+        loadChildren: () =>
+          import("./requestproviders/requestproviders.module").then((m) => m.RequestprovidersModule),
+      },
       { path: "", redirectTo: "home", pathMatch: "full" },
     ],
   },

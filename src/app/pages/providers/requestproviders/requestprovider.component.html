@@ -1,0 +1,329 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Request Provider</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Request Provider</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <div class="row">
+
+            <!-- Sidebar -->
+            <div class="col-lg-3 ">
+                <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="mb-3">Request Provider</h5>
+                            <ul class="add-tab-list">
+                                <li *ngFor="let tab of tabs">
+                                    <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
+                                        (click)="scrollTo(tab.id)">
+                                        {{ tab.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Sidebar -->
+
+            <!-- Request Provider Form -->
+            <div class="col-lg-9">
+                <form [formGroup]="requestProviderForm" (ngSubmit)="onSubmit()">
+                    <div class="card shadow-none" id="basic_info">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Provider Details</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+                                <!-- Name -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" formControlName="name"
+                                            placeholder="Enter your full name">
+                                        <div *ngIf="requestProviderForm.controls['name'].invalid && (requestProviderForm.controls['name'].dirty || requestProviderForm.controls['name'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['name'].errors?.['required']">
+                                                Name is required
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['name'].errors?.['minlength']">
+                                                Name must be at least 3 characters long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Document Number -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Document Number</label>
+                                        <input type="text" class="form-control" formControlName="documentNumber"
+                                            placeholder="Enter your document number">
+                                        <div *ngIf="requestProviderForm.controls['documentNumber'].invalid && (requestProviderForm.controls['documentNumber'].dirty || requestProviderForm.controls['documentNumber'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['documentNumber'].errors?.['required']">
+                                                Document number is required
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['documentNumber'].errors?.['minlength']">
+                                                Document number must be at least 6 characters long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Document Type -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Document Type</label>
+                                        <select class="form-control" formControlName="documentType">
+                                            <option value="">Select document type</option>
+                                            <option value="cedula">Cédula de Ciudadanía</option>
+                                            <option value="cedula_extranjeria">Cédula de Extranjería</option>
+                                            <option value="pasaporte">Pasaporte</option>
+                                            <option value="nit">NIT</option>
+                                            <option value="rut">RUT</option>
+                                        </select>
+                                        <div *ngIf="requestProviderForm.controls['documentType'].invalid && (requestProviderForm.controls['documentType'].dirty || requestProviderForm.controls['documentType'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['documentType'].errors?.['required']">
+                                                Document type is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Service Type -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Service Type</label>
+                                        <select class="form-control" formControlName="serviceType">
+                                            <option value="">Select service type</option>
+                                            <option value="tours">Tours & Experiences</option>
+                                            <option value="accommodation">Accommodation</option>
+                                            <option value="transportation">Transportation</option>
+                                            <option value="gastronomy">Gastronomy</option>
+                                            <option value="adventure">Adventure Sports</option>
+                                            <option value="cultural">Cultural Activities</option>
+                                            <option value="wellness">Wellness & Spa</option>
+                                        </select>
+                                        <div *ngIf="requestProviderForm.controls['serviceType'].invalid && (requestProviderForm.controls['serviceType'].dirty || requestProviderForm.controls['serviceType'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['serviceType'].errors?.['required']">
+                                                Service type is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Country -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Country</label>
+                                        <mat-select class="custom-mat-select select" placeholder="Select"
+                                            formControlName="country"
+                                            (valueChange)="onCountryChange($event)">
+                                            <mat-option *ngFor="let country of countries"
+                                                [value]="country.id">{{country.name}}</mat-option>
+                                        </mat-select>
+
+                                        <div *ngIf="requestProviderForm.controls['country'].invalid && (requestProviderForm.controls['country'].dirty || requestProviderForm.controls['country'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['country'].errors?.['required']">
+                                                Country is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Department</label>
+                                        <mat-select class="custom-mat-select select" placeholder="Select"
+                                            formControlName="department"
+                                            (valueChange)="onDepartmentChange($event)">
+                                            <mat-option *ngFor="let department of departments"
+                                                [value]="department.id">{{department.name}}</mat-option>
+                                        </mat-select>
+
+                                        <!-- <div *ngIf="location.get('department')?.invalid && (location.get('department')?.dirty || location.get('department')?.touched)"
+                                            class="text-danger">
+                                            <div *ngIf="location.get('department')?.errors?.['required']">
+                                                Department is required
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">City</label>
+                                            <mat-select class="custom-mat-select select" placeholder="Select"
+                                                formControlName="city">
+                                                <mat-option *ngFor="let city of cities"
+                                                    [value]="city.id">{{city.name}}</mat-option>
+                                            </mat-select>
+                                            <!-- <div *ngIf="location.get('city')?.invalid && (location.get('city')?.dirty || location.get('city')?.touched)"
+                                                class="text-danger">
+                                                <div *ngIf="location.get('city')?.errors?.['required']">
+                                                    City is required
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Department
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Department</label>
+                                        <select class="form-control" formControlName="department">
+                                            <option value="">Select department</option>
+                                            <option value="antioquia">Antioquia</option>
+                                            <option value="atlantico">Atlántico</option>
+                                            <option value="bolivar">Bolívar</option>
+                                            <option value="boyaca">Boyacá</option>
+                                            <option value="caldas">Caldas</option>
+                                            <option value="cundinamarca">Cundinamarca</option>
+                                            <option value="magdalena">Magdalena</option>
+                                            <option value="quindio">Quindío</option>
+                                            <option value="risaralda">Risaralda</option>
+                                            <option value="santander">Santander</option>
+                                            <option value="valle_del_cauca">Valle del Cauca</option>
+                                        </select>
+                                        <div *ngIf="requestProviderForm.controls['department'].invalid && (requestProviderForm.controls['department'].dirty || requestProviderForm.controls['department'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['department'].errors?.['required']">
+                                                Department is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <!-- Phone -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" class="form-control" formControlName="phone"
+                                            placeholder="Enter your phone number">
+                                        <div *ngIf="requestProviderForm.controls['phone'].invalid && (requestProviderForm.controls['phone'].dirty || requestProviderForm.controls['phone'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['phone'].errors?.['required']">
+                                                Phone is required
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['phone'].errors?.['minlength']">
+                                                Phone must be at least 10 digits long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Address</label>
+                                        <textarea class="form-control" rows="3" formControlName="address"
+                                            placeholder="Enter your complete address"></textarea>
+                                        <div *ngIf="requestProviderForm.controls['address'].invalid && (requestProviderForm.controls['address'].dirty || requestProviderForm.controls['address'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['address'].errors?.['required']">
+                                                Address is required
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['address'].errors?.['minlength']">
+                                                Address must be at least 10 characters long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-none" id="gallery">
+                        <div class="card-header">
+                            <h5 class="fs-18">Gallery</h5>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
+                                <span class="upload-img d-block mb-2"><i
+                                        class="isax isax-document-upload fs-24"></i></span>
+                                <h6 class="mb-1">Upload Gallery Images</h6>
+                                <p class="mb-0">Upload Feature Image First, Image size should below 5MB</p>
+                                <input type="file" accept="image/*" (change)="onFileSelected($event)" multiple>
+                            </div>
+                            <div *ngIf="imageUrls.length > 0">
+
+                                <div class="d-flex align-items-center">
+                                    <ng-container *ngFor="let imageUrl of imageUrls; let i=index">
+                                        <a href="javascript:void(0);" class="gallery-upload-img of list m-2">
+                                            <a href="javascript:void(0);" class="gallery-upload-img me-2">
+                                                <img [src]="imageUrl" alt="Img">
+                                                <span
+                                                    class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash"
+                                                    (click)="onDeleteImage(i)"><i class="isax isax-trash"></i></span>
+                                            </a>
+                                        </a>
+                                    </ng-container>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="save">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="loading || (requestProviderForm.touched && requestProviderForm.invalid)">
+                                <span>Submit Request</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div *ngIf="successMessage" class="mt-3">
+                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                            <i class="isax isax-tick-circle5 me-2"></i>
+                            {{ successMessage }}
+                        </div>
+                    </div>
+
+                    <div *ngIf="errorMessage" class="mt-3">
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="isax isax-close-circle me-2"></i>
+                            {{ errorMessage }}
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <!-- /Request Provider Form -->
+
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+
+
