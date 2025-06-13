@@ -1,52 +1,130 @@
-<div class="dashboard-container">
-  <div class="row">
-    <div class="col-12">
-      <h3>Dashboard de Administración</h3>
-      <p>Bienvenido al panel de administración de Tourya</p>
+<div class="row">
+  <!-- Sidebar de administración -->
+  <div class="col-xl-3 col-lg-4 admin-sidebar">
+    <div class="card user-sidebar mb-4 mb-lg-0 theiaStickySidebar">
+      <div class="card-header user-sidebar-header text-center bg-gray-transparent">
+        <div class="agent-profile d-inline-flex">
+          <img src="assets/img/iconAct.jpg" alt="image" class="img-fluid rounded-circle">
+          <a href="#" class="avatar avatar-sm rounded-circle btn btn-primary d-flex align-items-center justify-content-center p-0"><i class="isax isax-edit-2 fs-14"></i></a>
+        </div>
+        <h6 class="fs-16">Administrador</h6>
+        <p class="fs-14 mb-2">Desde 10 May 2025</p>
+      </div>
+      <div class="card-body user-sidebar-body">
+        <ul>
+          <li><span class="fs-14 text-gray-3 fw-medium mb-2">Main</span></li>
+          <li>
+            <a href="#" class="d-flex align-items-center active"><i class="isax isax-grid-55"></i> Dashboard</a>
+          </li>
+          <li>
+            <a href="#" class="d-flex align-items-center"><i class="isax isax-user"></i> Lista de Solicitudes</a>
+          </li>
+          <li>
+            <a href="#" class="d-flex align-items-center"><i class="isax isax-briefcase"></i> Proveedores</a>
+          </li>
+          <li>
+            <a href="#" class="d-flex align-items-center"><i class="isax isax-calendar-tick5"></i> Reservas</a>
+          </li>
+          <li>
+            <a href="#" class="d-flex align-items-center"><i class="isax isax-dollar-circle"></i> Ingresos</a>
+          </li>
+          <li><span class="fs-14 text-gray-3 fw-medium mb-2 mt-3">Account</span></li>
+          <li>
+            <a href="#" class="d-flex align-items-center"><i class="isax isax-setting-25"></i> Configuración</a>
+          </li>
+          <li class="logout-link">
+            <a href="#" class="d-flex align-items-center"><i class="isax isax-logout"></i> Cerrar sesión</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-  
-  <div class="row">
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Usuarios Totales</h5>
-          <p class="card-text">
-            <span class="display-4">0</span>
-          </p>
+  <!-- Fin Sidebar -->
+
+  <!-- Contenido principal -->
+  <div class="col-xl-9 col-lg-8">
+    <div class="dashboard-container">
+      <div class="row">
+        <div class="col-12">
+          <h3>Dashboard de Administración</h3>
+          <p>Bienvenido al panel de administración de Tourya</p>
         </div>
       </div>
-    </div>
-    
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Proveedores Activos</h5>
-          <p class="card-text">
-            <span class="display-4">0</span>
-          </p>
+      
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Usuarios Totales</h5>
+              <p class="card-text">
+                <span class="display-4">0</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Proveedores Activos</h5>
+              <p class="card-text">
+                <span class="display-4">0</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Reservas del Mes</h5>
+              <p class="card-text">
+                <span class="display-4">0</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Ingresos</h5>
+              <p class="card-text">
+                <span class="display-4">$0</span>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Reservas del Mes</h5>
-          <p class="card-text">
-            <span class="display-4">0</span>
-          </p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Ingresos</h5>
-          <p class="card-text">
-            <span class="display-4">$0</span>
-          </p>
+
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Lista de Solicitudes de Proveedores</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let req of requestProviders">
+                      <td>#{{ req.id }}</td>
+                      <td>{{ req.provider.name }}</td>
+                      <td>
+                        <button class="btn btn-primary d-inline-flex align-items-center btn-sm">Ver</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

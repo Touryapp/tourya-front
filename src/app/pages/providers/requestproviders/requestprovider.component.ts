@@ -31,7 +31,7 @@ export class RequestproviderComponent implements OnInit {
 
   tabs = [
     { id: "basic_info", label: "Basic Info" },
-    { id: "gallery", label: "Gallery" },
+    { id: "gallery", label: "Documents" },
   ];
 
   activeTab: string = this.tabs[0].id;
