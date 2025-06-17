@@ -10,6 +10,8 @@ import { DepartmentService } from '../../../shared/services/department.service';
 import { CityService } from '../../../shared/services/city.service';
 import { RequestProvidersService } from './request-providers.service';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
+import { ProviderDocumentType } from '../../../shared/enums/provider-document-type.enum';
+import { ProviderDocumentTypeDto } from '../../../shared/dto/provider-document-type.dt';
 
 @Component({
   selector: 'app-requestprovider',
@@ -26,7 +28,11 @@ export class RequestproviderComponent implements OnInit {
   departments: Department[] = [];
   cities: City[] = [];
   imageUrls: string[] = [];
-
+  documentTypes: ProviderDocumentTypeDto[] = [
+    { id: ProviderDocumentType.DNI, description: 'Cédula de Ciudadanía' },
+    { id: ProviderDocumentType.NIT, description: 'NIT' },
+    { id: ProviderDocumentType.PASSPORT, description: 'Pasaporte' },
+  ];
   public routes = routes;
 
   tabs = [

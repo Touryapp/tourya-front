@@ -1,4 +1,4 @@
-import { Component,HostListener  } from '@angular/core';
+import { Component,HostListener, inject  } from '@angular/core';
 import { MainMenu, Menu, SideBar } from '../../../shared/models/models';
 import { DataService } from '../../../shared/data/data.service';
 import { CommonService } from '../../../shared/common/common.service';
@@ -7,6 +7,7 @@ import { SideBarService } from '../../../shared/side-bar/side-bar.service';
 import { routes } from '../../../shared/routes/routes';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SettingService } from '../../../shared/settings/settings.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { SettingService } from '../../../shared/settings/settings.service';
     standalone: false
 })
 export class DefaultHeaderComponent {
-  
+  authService = inject(AuthService);
   header: Array<SideBar> = [];
   base = 'dashboard';
   public page = '';
@@ -156,5 +157,12 @@ export class DefaultHeaderComponent {
     }
     onSubmit0():void{
       this.router.navigateByUrl('/index')
+    }
+    get isAuthenticated(): boolean {
+      return this.authService.isAuthenticated();
+    }
+    logout():void{
+      this.authService.logout();
+      this.router.navigateByUrl('/login');
     }
 }
