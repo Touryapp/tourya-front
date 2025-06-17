@@ -114,13 +114,9 @@
                                         <label class="form-label">Service Type</label>
                                         <select class="form-control" formControlName="serviceType">
                                             <option value="">Select service type</option>
-                                            <option value="tours">Tours & Experiences</option>
-                                            <option value="accommodation">Accommodation</option>
-                                            <option value="transportation">Transportation</option>
-                                            <option value="gastronomy">Gastronomy</option>
-                                            <option value="adventure">Adventure Sports</option>
-                                            <option value="cultural">Cultural Activities</option>
-                                            <option value="wellness">Wellness & Spa</option>
+                                            <option *ngFor="let serviceType of serviceTypes" [value]="serviceType">
+                                                {{ serviceType }}
+                                            </option>
                                         </select>
                                         <div *ngIf="requestProviderForm.controls['serviceType'].invalid && (requestProviderForm.controls['serviceType'].dirty || requestProviderForm.controls['serviceType'].touched)"
                                             class="text-danger">

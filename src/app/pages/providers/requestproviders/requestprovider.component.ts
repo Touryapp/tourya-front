@@ -12,6 +12,7 @@ import { RequestProvidersService } from './request-providers.service';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
 import { ProviderDocumentType } from '../../../shared/enums/provider-document-type.enum';
 import { ProviderDocumentTypeDto } from '../../../shared/dto/provider-document-type.dt';
+import { ProviderServiceType } from '../../../shared/enums/provider-document-type.enum';
 
 @Component({
   selector: 'app-requestprovider',
@@ -29,9 +30,16 @@ export class RequestproviderComponent implements OnInit {
   cities: City[] = [];
   imageUrls: string[] = [];
   documentTypes: ProviderDocumentTypeDto[] = [
-    { id: ProviderDocumentType.DNI, description: 'Cédula de Ciudadanía' },
+    // { id: ProviderDocumentType.DNI, description: 'Cédula de Ciudadanía' },
     { id: ProviderDocumentType.NIT, description: 'NIT' },
-    { id: ProviderDocumentType.PASSPORT, description: 'Pasaporte' },
+    { id: ProviderDocumentType.RNT, description: 'RNT' },
+    // { id: ProviderDocumentType.PASSPORT, description: 'Pasaporte' },
+  ];
+  serviceTypes: ProviderServiceType[] = [
+    ProviderServiceType.TOUR,
+    ProviderServiceType.TRANSPORT,
+    ProviderServiceType.MEALS_FOOD_BEVERAGE,
+    ProviderServiceType.ACCOMMODATION_LODGING
   ];
   public routes = routes;
 
