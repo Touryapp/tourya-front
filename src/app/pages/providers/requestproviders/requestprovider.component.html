@@ -95,11 +95,9 @@
                                         <label class="form-label">Document Type</label>
                                         <select class="form-control" formControlName="documentType">
                                             <option value="">Select document type</option>
-                                            <option value="cedula">Cédula de Ciudadanía</option>
-                                            <option value="cedula_extranjeria">Cédula de Extranjería</option>
-                                            <option value="pasaporte">Pasaporte</option>
-                                            <option value="nit">NIT</option>
-                                            <option value="rut">RUT</option>
+                                            <option *ngFor="let documentType of documentTypes" [value]="documentType.id">
+                                                {{ documentType.description }}
+                                            </option>
                                         </select>
                                         <div *ngIf="requestProviderForm.controls['documentType'].invalid && (requestProviderForm.controls['documentType'].dirty || requestProviderForm.controls['documentType'].touched)"
                                             class="text-danger">

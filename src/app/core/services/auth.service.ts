@@ -148,7 +148,7 @@ export class AuthService {
   }
 
   // Cerrar sesión
-  async logout(): Promise<void> {
+  async logoutSocial(): Promise<void> {
     return signOut(auth);
   }
 
@@ -163,5 +163,10 @@ export class AuthService {
       `${this.baseUrl}/social-auth`,
       data
     );
+  }
+
+  logout(): void {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   }
 } 
