@@ -8,6 +8,11 @@ import { RequestProvider } from '../../../shared/dto/requestProvider-response.dt
   standalone: false
 })
 export class DashboardComponent implements OnInit {
+  showModal = false;
+  showRequestInfoModal = false;
+  selectedProvider: RequestProvider | null = null;
+  requestInfoMessage: string = '';
+
   // Lista simulada de solicitudes de proveedores
   requestProviders: RequestProvider[] = [
     {
@@ -71,4 +76,66 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openProviderModal(provider: RequestProvider): void {
+    this.selectedProvider = provider;
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+    this.selectedProvider = null;
+  }
+
+  aprobarSolicitud(): void {
+    if (this.selectedProvider) {
+      // Aquí iría la lógica para aprobar la solicitud
+      this.selectedProvider.status = 'Approved';
+      // Actualizar la lista de solicitudes
+      const index = this.requestProviders.findIndex(p => p.id === this.selectedProvider?.id);
+      if (index !== -1) {
+        this.requestProviders[index].status = 'Approved';
+      }
+      this.closeModal();
+    }
+  }
+
+  rechazarSolicitud(): void {
+    if (this.selectedProvider) {
+      // Aquí iría la lógica para rechazar la solicitud
+      this.selectedProvider.status = 'Rejected';
+      // Actualizar la lista de solicitudes
+      const index = this.requestProviders.findIndex(p => p.id === this.selectedProvider?.id);
+      if (index !== -1) {
+        this.requestProviders[index].status = 'Rejected';
+      }
+      this.closeModal();
+    }
+  }
+
+  solicitarInformacion(): void {
+    if (this.selectedProvider) {
+      // Aquí iría la lógica para solicitar más información
+      // Por ejemplo, abrir otro modal o enviar una notificación
+      alert('Se ha enviado una solicitud de información adicional al proveedor.');
+      this.closeModal();
+    }
+  }
+
+  openRequestInfoModal() {
+    this.showRequestInfoModal = true;
+  }
+
+  closeRequestInfoModal() {
+    this.showRequestInfoModal = false;
+    this.requestInfoMessage = '';
+  }
+
+  sendRequestInfo() {
+    if (this.requestInfoMessage.trim()) {
+      // Aquí puedes implementar la lógica para enviar el mensaje
+      console.log('Mensaje enviado:', this.requestInfoMessage);
+      // TODO: Implementar el envío del mensaje al backend
+      this.closeRequestInfoModal();
+    }
+  }
 } 

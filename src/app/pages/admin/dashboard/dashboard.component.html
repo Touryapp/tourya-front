@@ -117,7 +117,9 @@
                       <td>#{{ req.id }}</td>
                       <td>{{ req.provider.name }}</td>
                       <td>
-                        <button class="btn btn-primary d-inline-flex align-items-center btn-sm">Ver</button>
+                        <button class="btn btn-primary d-inline-flex align-items-center btn-sm" (click)="openProviderModal(req)">
+                          <i class="isax isax-eye me-1"></i> Ver
+                        </button>
                       </td>
                     </tr>
                   </tbody>
@@ -129,4 +131,139 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<!-- Modal de Detalles del Proveedor -->
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalles del Proveedor</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedProvider">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Nombre:</label>
+              <p>{{ selectedProvider.provider.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Número de Documento:</label>
+              <p>{{ selectedProvider.provider.documentNumber }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tipo de Documento:</label>
+              <p>{{ selectedProvider.provider.documentType }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tipo de Servicio:</label>
+              <p>{{ selectedProvider.provider.serviceType }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">País:</label>
+              <p>{{ selectedProvider.provider.country.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Ciudad:</label>
+              <p>{{ selectedProvider.provider.city.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Estado/Provincia:</label>
+              <p>{{ selectedProvider.provider.state.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Departamento:</label>
+              <p>{{ selectedProvider.provider.department }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Teléfono:</label>
+              <p>{{ selectedProvider.provider.phone }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Estado:</label>
+              <p>
+                <span [ngClass]="{
+                  'badge bg-warning': selectedProvider.status === 'Pending',
+                  'badge bg-success': selectedProvider.status === 'Approved',
+                  'badge bg-danger': selectedProvider.status === 'Rejected'
+                }">
+                  {{ selectedProvider.status }}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Dirección:</label>
+              <p>{{ selectedProvider.provider.address }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-success me-2" (click)="aprobarSolicitud()">
+          <i class="isax isax-tick-circle me-1"></i> Aprobado
+        </button>
+        <button type="button" class="btn btn-danger me-2" (click)="rechazarSolicitud()">
+          <i class="isax isax-close-circle me-1"></i> Rechazado
+        </button>
+        <button type="button" class="btn btn-warning" (click)="openRequestInfoModal()">
+          <i class="isax isax-info-circle me-1"></i> Solicitar más información
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Solicitud de Información -->
+<div class="modal fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Respuesta a la solicitud</h5>
+        <button type="button" class="btn-close" (click)="closeRequestInfoModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="requestInfo" class="form-label">Mensaje para el proveedor</label>
+          <textarea 
+            class="form-control" 
+            id="requestInfo" 
+            rows="4" 
+            [(ngModel)]="requestInfoMessage"
+            placeholder="Escriba aquí el mensaje para solicitar más información al proveedor...">
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeRequestInfoModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="sendRequestInfo()">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Request Info -->
+<div class="modal-backdrop fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'"></div> 
