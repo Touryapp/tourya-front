@@ -109,15 +109,16 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nombre</th>
+                      <th>Nombre del Proveedor</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let req of requestProviders">
+                    <tr *ngFor="let req of requestProviders.content">
                       <td>#{{ req.id }}</td>
                       <td>{{ req.provider.name }}</td>
-                      <td>
-                        <button class="btn btn-primary d-inline-flex align-items-center btn-sm" (click)="openProviderModal(req)">
+                      <td class="text-end">
+                        <button class="btn btn-warning text-white" (click)="openProviderModal(req)">
                           <i class="isax isax-eye me-1"></i> Ver
                         </button>
                       </td>
