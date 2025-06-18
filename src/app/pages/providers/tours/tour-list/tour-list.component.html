@@ -604,10 +604,12 @@
                                                 <span
                                                     class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$789</span>
                                             </h6>
-                                            <a href="javascript:void(0);" class="avatar avatar-sm flex-shrink-0">
+                                            <!-- <a href="javascript:void(0);" class="avatar avatar-sm flex-shrink-0">
                                                 <img src="assets/img/users/user-08.jpg" class="rounded-circle"
                                                     alt="img">
-                                            </a>
+                                            </a> -->
+
+                                            <a [routerLink]="[routes.editTour, tour.id]">Edit tour</a>
                                         </div>
                                     </div>
                                 </div>

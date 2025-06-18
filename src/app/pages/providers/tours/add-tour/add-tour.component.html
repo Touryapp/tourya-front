@@ -3,12 +3,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Add Tours</h2>
+                <h2 class="breadcrumb-title mb-2">{{tourId ? 'Edit Tours' : 'Add Tours' }}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Add Tours</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{tourId ? 'Edit Tours' : 'Add Tours' }}
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -132,19 +134,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Pricing (USD)</label>
-                                        <input type="number" class="form-control" formControlName="price" min="0"
-                                            (keypress)="onKeyPressPrice($event)" (blur)="onPriceBlur($event)">
-                                        <div *ngIf="tourForm.controls['price'].invalid && (tourForm.controls['price'].dirty || tourForm.controls['price'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['price'].errors?.['required']">
-                                                Price is required
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div class="col-lg-4 col-md-6">
                                     <div class="mb-3">
@@ -176,9 +165,6 @@
 
                             <div *ngIf="tourForm.controls['description'].invalid && (tourForm.controls['description'].dirty || tourForm.controls['description'].touched)"
                                 class="text-danger">
-                                <div *ngIf="tourForm.controls['description'].errors?.['required']">
-                                    Description is required
-                                </div>
                                 <div *ngIf="tourForm.controls['description'].errors?.['minlength']">
                                     Description must be at least 3 characters long
                                 </div>
@@ -297,7 +283,17 @@
                                                 <label class="form-label">Location</label>
                                                 <input #addressInput type="text" formControlName="location"
                                                     class="form-control" placeholder="Enter full address"
-                                                    (blur)="initAutocomplete(i)" />
+                                                    (blur)="initAutocomplete(i)"
+                                                    (change)="onLocationChange($event,i)" />
+
+                                                <div *ngIf="(location.get('location')?.invalid || location.get('latitude')?.invalid || location.get('longitude')?.invalid) && (location.get('location')?.dirty || location.get('location')?.touched)"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="location.get('location')?.errors?.['required'] || location.get('latitude')?.errors?.['required'] || location.get('longitude')?.errors?.['required']">
+                                                        Location is required
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
 
@@ -605,60 +601,69 @@
                                 </div>
                             </div>
                         </div>
+                        <div *ngIf="submitted && imageUrls.length === 0" class="text-danger">
+                            Gallery is required
+                        </div>
                     </div>
 
-                    <div class="card shadow-none" id="prices">
+                    <div class="card shadow-none" id="cancellationPolicies">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h5 class="fs-18">Pricing</h5>
+                                <h5 class="fs-18">Cancellation Policies</h5>
                             </div>
                         </div>
                         <div class="card-body pb-1">
-                            <div formArrayName="prices">
-                                <ng-container *ngFor="let price of prices.controls; let i=index" [formGroupName]="i">
+                            <div formArrayName="cancellationPolicies">
+                                <ng-container
+                                    *ngFor="let cancellationPolicy of cancellationPolicies.controls; let i=index"
+                                    [formGroupName]="i">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                Price #{{i + 1}}
-                                            </div>
-                                        </div>
-
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Type of person</label>
+
+                                                <label class="form-label">Cancellation policy type</label>
+
                                                 <mat-select class="custom-mat-select select" placeholder="Select"
-                                                    formControlName="typeOfPerson">
-                                                    <mat-option [value]="TypeOfPerson.ADULT"
-                                                        [disabled]="typeOfPersonIsSelected(TypeOfPerson.ADULT, i)">Adult</mat-option>
-                                                    <mat-option [value]="TypeOfPerson.CHILD"
-                                                        [disabled]="typeOfPersonIsSelected(TypeOfPerson.CHILD, i)">Child</mat-option>
-                                                    <mat-option [value]="TypeOfPerson.BABY"
-                                                        [disabled]="typeOfPersonIsSelected(TypeOfPerson.BABY, i)">Baby</mat-option>
+                                                    formControlName="cancellationPolicyType"
+                                                    (blur)="onCancellationPolicyTypeBlur($event, i)">
+                                                    <mat-option [value]="CancellationPolicyType.FLEXIBLE">
+                                                        Flexible
+                                                    </mat-option>
+                                                    <mat-option
+                                                        [value]="CancellationPolicyType.MODERATE">Moderate</mat-option>
+                                                    <mat-option [value]="CancellationPolicyType.NON_REFUNDABLE">
+                                                        Non refundable
+                                                    </mat-option>
                                                 </mat-select>
 
-                                                <div *ngIf="price.get('typeOfPerson')?.invalid && (price.get('typeOfPerson')?.dirty || price.get('typeOfPerson')?.touched)"
+                                                <div *ngIf="cancellationPolicy.get('cancellationPolicyType')?.invalid && (cancellationPolicy.get('cancellationPolicyType')?.dirty || cancellationPolicy.get('cancellationPolicyType')?.touched)"
                                                     class="text-danger">
 
-
-                                                    <div *ngIf="price.get('typeOfPerson')?.errors?.['required']">
-                                                        Type of person is required
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('cancellationPolicyType')?.errors?.['required']">
+                                                        Cancellation policy type is required
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class=" col-lg-4 col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Min Age</label>
-                                                <input type="number" class="form-control" min="0"
-                                                    formControlName="minAge" (keypress)="onKeyPressPriceMinAge($event)">
 
-                                                <div *ngIf="price.get('minAge')?.invalid && (price.get('minAge')?.dirty || price.get('minAge')?.touched)"
+
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Observations</label>
+                                                <textarea class="form-control" rows="3" formControlName="observations"
+                                                    maxlength="255" (blur)="onObservationsBlur($event, i)"></textarea>
+
+                                                <div *ngIf="cancellationPolicy.get('observations')?.invalid && (cancellationPolicy.get('observations')?.touched || cancellationPolicy.get('observations')?.dirty)"
                                                     class="text-danger">
-                                                    <div *ngIf="price.get('minAge')?.errors?.['required']">
-                                                        Min age is required
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('observations')?.errors?.['required']">
+                                                        Observations is required
                                                     </div>
-                                                    <div *ngIf="price.get('minAge')?.errors?.['min']">
-                                                        Min age is 0
+
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('observations')?.errors?.['maxlength']">
+                                                        Observations cannot be more than 255 characters long
                                                     </div>
                                                 </div>
                                             </div>
@@ -666,17 +671,14 @@
 
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Max Age</label>
-                                                <input type="number" class="form-control" formControlName="maxAge"
-                                                    [min]="price.get('minAge')?.value || 0"
-                                                    (keypress)="onKeyPressPriceMaxAge($event)">
-                                                <div *ngIf="price.get('maxAge')?.invalid && (price.get('maxAge')?.dirty || price.get('maxAge')?.touched)"
+                                                <label class="form-label">Allows rain refund</label>
+                                                <mat-slide-toggle formControlName="allowsRainRefund"></mat-slide-toggle>
+
+                                                <div *ngIf="cancellationPolicy.get('allowsRainRefund')?.invalid && (cancellationPolicy.get('allowsRainRefund')?.touched || cancellationPolicy.get('allowsRainRefund')?.dirty)"
                                                     class="text-danger">
-                                                    <div *ngIf="price.get('maxAge')?.errors?.['required']">
-                                                        Min age is required
-                                                    </div>
-                                                    <div *ngIf="price.get('maxAge')?.errors?.['min']">
-                                                        Min max age is {{price.get('minAge')?.value || 0}}
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('allowsRainRefund')?.errors?.['required']">
+                                                        Allows rain refund is required
                                                     </div>
                                                 </div>
                                             </div>
@@ -684,166 +686,32 @@
 
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Pricing (USD)</label>
-                                                <input type="number" class="form-control" formControlName="price"
-                                                    min="0">
+                                                <label class="form-label">Allows rescheduling</label>
+                                                <mat-slide-toggle
+                                                    formControlName="allowsRescheduling"></mat-slide-toggle>
 
-                                                <div *ngIf="price.get('price')?.invalid && (price.get('price')?.dirty || price.get('price')?.touched)"
+                                                <div *ngIf="cancellationPolicy.get('allowsRescheduling')?.invalid && (cancellationPolicy.get('allowsRescheduling')?.touched || cancellationPolicy.get('allowsRescheduling')?.dirty)"
                                                     class="text-danger">
-                                                    <div *ngIf="price.get('price')?.errors?.['required']">
-                                                        Price is required
-                                                    </div>
-                                                    <div *ngIf="price.get('price')?.errors?.['min']">
-                                                        Min price is 0
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('allowsRescheduling')?.errors?.['required']">
+                                                        Allows rescheduling is required
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-lg-4 col-md-6" *ngIf="prices.length > 1">
-                                            <div class="mb-3">
-                                                <a href="javascript:void(0);"
-                                                    class="trash-icon d-flex align-items-center justify-content-center"
-                                                    (click)="removePrice(i)">
-                                                    <i class="isax isax-trash text-danger"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-
-
                                     </div>
                                 </ng-container>
-                                <div>
-                                    <div class="row" *ngIf="prices.length < 3">
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <a href="javascript:void(0);"
-                                                    class="btn btn-primary btn-sm add-highlight" (click)="addPrice()">
-                                                    <i class="isax isax-add-circle me-1"></i>
-                                                    Add New
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="card shadow-none" id="refund">
-                        <div class="card-header">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h5 class="fs-18">Refund</h5>
-                            </div>
-                        </div>
-                        <div class="card-body pb-1">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Full refund hours before</label>
-                                        <input type="number" class="form-control"
-                                            formControlName="fullRefundHoursBefore"
-                                            (keypress)="onKeyPressFullRefundHoursBefore($event)" min="0">
-
-                                        <div *ngIf="tourForm.controls['fullRefundHoursBefore'].invalid && (tourForm.controls['fullRefundHoursBefore'].dirty || tourForm.controls['fullRefundHoursBefore'].touched)"
-                                            class="text-danger">
-                                            <div
-                                                *ngIf="tourForm.controls['fullRefundHoursBefore'].errors?.['required']">
-                                                Full refund hours before is required
-                                            </div>
-
-                                            <div *ngIf="tourForm.controls['fullRefundHoursBefore'].errors?.['min']">
-                                                Min full refund hours before is 0
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Partial refund hours before</label>
-                                        <input type="number" class="form-control"
-                                            formControlName="partialRefundHoursBefore"
-                                            (keypress)="onKeyPressPartialRefundHoursBefore($event)" min="0">
-
-                                        <div *ngIf="tourForm.controls['partialRefundHoursBefore'].invalid && (tourForm.controls['partialRefundHoursBefore'].dirty || tourForm.controls['partialRefundHoursBefore'].touched)"
-                                            class="text-danger">
-                                            <div
-                                                *ngIf="tourForm.controls['partialRefundHoursBefore'].errors?.['required']">
-                                                Partial refund hours before is required
-                                            </div>
-
-                                            <div *ngIf="tourForm.controls['partialRefundHoursBefore'].errors?.['min']">
-                                                Min partial refound hours before is 0
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Partial refund percentage</label>
-                                        <input type="number" class="form-control"
-                                            formControlName="partialRefundPercentage" min="0" max="100"
-                                            (keypress)="onKeyPressPartialRefundPercentage($event)">
-
-                                        <div *ngIf="tourForm.controls['partialRefundPercentage'].invalid && (tourForm.controls['partialRefundPercentage'].dirty || tourForm.controls['partialRefundPercentage'].touched)"
-                                            class="text-danger">
-                                            <div
-                                                *ngIf="tourForm.controls['partialRefundPercentage'].errors?.['required']">
-                                                Partial refund percentage is required
-                                            </div>
-
-                                            <div *ngIf="tourForm.controls['partialRefundPercentage'].errors?.['min']">
-                                                Min partial refund percentage is 0
-                                            </div>
-
-                                            <div *ngIf="tourForm.controls['partialRefundPercentage'].errors?.['max']">
-                                                Max partial refund percentage is 100
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Allows weather reimbursement</label>
-                                        <mat-slide-toggle
-                                            formControlName="allowsWeatherReimbursement"></mat-slide-toggle>
-
-                                        <div *ngIf="tourForm.controls['allowsWeatherReimbursement'].invalid && (tourForm.controls['allowsWeatherReimbursement'].dirty || tourForm.controls['allowsWeatherReimbursement'].touched)"
-                                            class="text-danger">
-                                            <div
-                                                *ngIf="tourForm.controls['allowsWeatherReimbursement'].errors?.['required']">
-                                                Allows weather reimbursement is required
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Other conditions</label>
-                                        <textarea class="form-control" rows="3" formControlName="otherConditions"
-                                            maxlength="255" (blur)="onOtherConditionsBlur($event)"></textarea>
-
-                                        <div *ngIf="tourForm.controls['otherConditions'].invalid && (tourForm.controls['otherConditions'].dirty || tourForm.controls['otherConditions'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['otherConditions'].errors?.['maxlength']">
-                                                Other conditions cannot be more than 255 characters long
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
 
 
-                    <div class="save">
+                    <div class="save" *ngIf="!tourId || tourId && tour">
                         <div class="d-flex align-items-center justify-content-end">
                             <button type="submit" class="btn btn-primary"
-                                [disabled]="loading || (tourForm.touched && tourForm.invalid)">
-                                <span>Add new tour</span>
+                                [disabled]="loading || (submitted && tourForm.touched && tourForm.invalid)">
+                                <span>{{tourId? "Edit tour" : "Add new tour"}}</span>
                                 <div *ngIf="loading" class="spinner-border spinner-border-sm">
                                 </div>
                             </button>

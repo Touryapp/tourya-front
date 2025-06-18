@@ -28,7 +28,13 @@ export class TourService {
     });
   }
 
-  saveTourDetails(imageFiles: File[], body: CreateTourDto): Observable<any> {
+  getTourById(tourId: number): Observable<Tour> {
+    return this.http.get<Tour>(
+      `${this.baseUrl}/user/consultDataTourById/${tourId}`
+    );
+  }
+
+  saveTourDetails(body: CreateTourDto, imageFiles: File[]): Observable<any> {
     const formData = new FormData();
 
     if (imageFiles && imageFiles.length > 0) {

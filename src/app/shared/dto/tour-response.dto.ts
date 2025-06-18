@@ -2,19 +2,30 @@ export interface Tour {
   id?: number;
   name?: string;
   description?: string;
+  tourCategoryId?: number;
   duration?: string;
   maxPeople?: number;
-  highlight?: boolean;
-  tourCategory?: TourCategory;
-  tourCategoryId?: number;
+  highlight?: number;
+  price?: 0;
+  minAge?: number;
+  rating?: 0;
+  status?: string;
   locations?: Location[];
+  mainAttractions?: MainAttraction[];
+  includes?: Include[];
+  excludes?: Exclude[];
+  faq?: FAQ[];
+  itineraries?: Itinerary[];
+  cancellationPolicies?: CancellationPolicy[];
+  galleries?: Gallery[];
+  tourCategory?: TourCategory;
   provider?: Provider;
 }
 
 interface TourCategory {
   id?: number;
-  name?: string;
-  description?: string;
+  name: string;
+  description: string;
 }
 
 interface Provider {
@@ -33,11 +44,58 @@ interface Provider {
 
 interface Location {
   id?: number;
-  address?: string;
-  addressType?: string;
-  countryId?: number;
-  stateId?: number;
-  cityId?: number;
-  latitude?: number;
-  longitude?: number;
+  address: string;
+  location: string;
+  addressType: string;
+  countryId: number;
+  stateId: number;
+  cityId: number;
+  latitude: number;
+  longitude: number;
+}
+
+interface MainAttraction {
+  id?: number;
+  description: string;
+}
+
+interface Include {
+  id?: number;
+  description: string;
+  type: string;
+}
+
+interface Exclude {
+  id?: number;
+  description: string;
+  type: string;
+}
+
+interface FAQ {
+  id?: number;
+  question: string;
+  answer: string;
+}
+
+interface Itinerary {
+  id?: number;
+  title: string;
+  day: number;
+  time: string;
+  description: string;
+}
+
+interface CancellationPolicy {
+  id?: number;
+  observations: string;
+  allowsRainRefund: boolean;
+  allowsRescheduling: boolean;
+  cancellationPolicyType: string;
+}
+
+interface Gallery {
+  id?: number;
+  imageUrl: string;
+  description: string;
+  orderIndex: number;
 }

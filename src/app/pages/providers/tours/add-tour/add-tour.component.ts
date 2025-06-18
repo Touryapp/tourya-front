@@ -7,7 +7,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Editor, Toolbar } from "ngx-editor";
 import { Category } from "../../../../shared/enums/category.enum";
 import { TypeOfAddress } from "../../../../shared/enums/type-of-address.enum";
@@ -21,8 +21,9 @@ import { Country } from "../../../../shared/dto/country.dto";
 import { DepartmentService } from "../../../../shared/services/department.service";
 import { CityService } from "../../../../shared/services/city.service";
 import { Department } from "../../../../shared/dto/department.dto";
-
 import { City } from "../../../../shared/dto/city.dto";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { CancellationPolicyType } from "../../../../shared/enums/cancellation-policy-type";
 
 @Component({
   selector: "app-add-tour",
@@ -66,8 +67,7 @@ export class AddTourComponent {
     { id: "itineraries", label: "Itinerary" },
     { id: "faq", label: "FAQ" },
     { id: "galleries", label: "Galleries" },
-    { id: "prices", label: "Pricing" },
-    { id: "refund", label: "Refund" },
+    { id: "cancellationPolicies", label: "Cancellation Policies" },
   ];
 
   activeTab: string = this.tabs[0].id; // Default to the first tab
@@ -75,9 +75,12 @@ export class AddTourComponent {
   readonly Category = Category;
   readonly TypeOfAddress = TypeOfAddress;
   readonly TypeOfPerson = TypeOfPerson;
+  readonly CancellationPolicyType = CancellationPolicyType;
 
   tourId: number = 0;
   tour: Tour | null = null;
+
+  submitted: boolean = false;
 
   countries: Country[] = [];
   departments: Department[][] = [];
@@ -94,8 +97,12 @@ export class AddTourComponent {
     private tourService: TourService,
     private countryService: CountryService,
     private departmentService: DepartmentService,
-    private cityService: CityService
+    private cityService: CityService,
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {
+    this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
+
     this.tourForm = this.fb.group({
       name: [
         "",
@@ -122,14 +129,6 @@ export class AddTourComponent {
           Validators.pattern("^[0-9]*$"),
         ],
       ],
-      price: [
-        "",
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.pattern("^[0-9]*$"),
-        ],
-      ],
       minAge: [
         "",
         [
@@ -138,6 +137,7 @@ export class AddTourComponent {
           Validators.pattern("^[0-9]*$"),
         ],
       ],
+      description: ["", [Validators.maxLength(5000)]],
       locations: this.fb.array([]),
       mainAttractions: this.fb.array([]),
       includes: this.fb.array([]),
@@ -145,46 +145,20 @@ export class AddTourComponent {
       itineraries: this.fb.array([]),
       faq: this.fb.array([]),
       galleries: this.fb.array([]),
-      prices: this.fb.array([]),
-      fullRefundHoursBefore: [
-        "",
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.pattern("^[0-9]*$"),
-        ],
-      ],
-      partialRefundHoursBefore: [
-        "",
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.pattern("^[0-9]*$"),
-        ],
-      ],
-      partialRefundPercentage: [
-        "",
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.pattern("^[0-9]*$"),
-        ],
-      ],
-      allowsWeatherReimbursement: [false, [Validators.required]],
-      otherConditions: ["", [Validators.maxLength(255)]],
-      description: ["", [Validators.required, Validators.maxLength(5000)]],
+      cancellationPolicies: this.fb.array([]),
     });
 
     this.itineraryForm = this.newItinerary();
     this.faqForm = this.newFaq();
 
     this.addLocation();
-    this.addAttraction();
-    this.addInclude();
-    this.addExclude();
-    this.addPrice();
+    this.addCancellationPolicy();
 
     this.getCountries();
+
+    if (this.tourId > 0) {
+      this.getTour();
+    }
   }
 
   @HostListener("window:scroll", [])
@@ -234,14 +208,11 @@ export class AddTourComponent {
 
   onSubmit() {
     this.loading = true;
+    this.submitted = true;
     this.tourForm.markAllAsTouched();
 
-    if (this.tourForm.valid) {
-      if (this.tourId > 0) {
-        this.updateTour();
-      } else {
-        this.saveTourDetails();
-      }
+    if (this.tourForm.valid && this.imageFiles.length > 0) {
+      this.saveTourDetails();
     } else {
       this.loading = false;
     }
@@ -255,28 +226,6 @@ export class AddTourComponent {
         if (!this.isValidCategory) {
           this.tourForm.get("category")?.setValue("");
         }
-      }
-    });
-
-    this.tourForm.get("typeOfAddress")?.valueChanges.subscribe((value) => {
-      if (value) {
-        if (!this.isValidTypeOfAddress) {
-          this.tourForm.get("typeOfAddress")?.setValue("");
-        }
-      }
-    });
-
-    this.prices.valueChanges.subscribe((value) => {
-      if (value.length > 0) {
-        this.prices.controls.forEach((control, index) => {
-          control.get("typeOfPerson")?.valueChanges.subscribe((value) => {
-            if (value) {
-              if (!this.isValidTypeOfPerson(index)) {
-                control.get("typeOfPerson")?.setValue("");
-              }
-            }
-          });
-        });
       }
     });
   }
@@ -311,27 +260,7 @@ export class AddTourComponent {
     return !!found;
   }
 
-  isValidTypeOfPerson(index: number): boolean {
-    const typeOfPersonValue = +this.prices.at(index).get("typeOfPerson")?.value;
-
-    const typesOfPeople = Object.values(TypeOfPerson).filter(
-      (value) => typeof value === "number"
-    );
-
-    const found = typesOfPeople.find(
-      (typeOfPerson) => typeOfPerson === typeOfPersonValue
-    );
-
-    return !!found;
-  }
-
   onKeyPressTotalNumberOfPeople(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onKeyPressPrice(event: KeyboardEvent): void {
     if (/[^0-9]/.test(event.key)) {
       event.preventDefault();
     }
@@ -344,36 +273,6 @@ export class AddTourComponent {
   }
 
   onKeyPressDay(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onKeyPressPriceMinAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onKeyPressPriceMaxAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onKeyPressFullRefundHoursBefore(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onKeyPressPartialRefundHoursBefore(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onKeyPressPartialRefundPercentage(event: KeyboardEvent): void {
     if (/[^0-9]/.test(event.key)) {
       event.preventDefault();
     }
@@ -394,8 +293,6 @@ export class AddTourComponent {
   }
 
   onTotalNumberOfPeopleBlur(event: FocusEvent) {}
-
-  onPriceBlur(event: FocusEvent) {}
 
   onMinAgeBlur(event: FocusEvent) {}
 
@@ -503,10 +400,20 @@ export class AddTourComponent {
       ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
-  onOtherConditionsBlur(event: FocusEvent) {
-    this.tourForm
-      .get("otherConditions")
+  onCancellationPolicyTypeBlur(event: FocusEvent, index: number) {}
+
+  onObservationsBlur(event: FocusEvent, index: number) {
+    this.cancellationPolicies
+      .at(index)
+      .get("observations")
       ?.setValue((event.target as HTMLInputElement).value.trim());
+  }
+
+  onLocationChange(event: any, index: number) {
+    this.locations.at(index).patchValue({
+      latitude: null,
+      longitude: null,
+    });
   }
 
   get locations(): FormArray {
@@ -552,7 +459,7 @@ export class AddTourComponent {
       this.locations.push(this.newLocation());
       setTimeout(() => {
         this.initAutocomplete(this.locations.length - 1);
-      }, 0); // U
+      }, 0);
     } else {
       this.locations.markAllAsTouched();
     }
@@ -709,45 +616,6 @@ export class AddTourComponent {
     this.faq.removeAt(index);
   }
 
-  get prices(): FormArray {
-    return this.tourForm.get("prices") as FormArray;
-  }
-
-  newPrice(): FormGroup {
-    return this.fb.group({
-      typeOfPerson: ["", [Validators.required]],
-      minAge: [
-        "",
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.pattern("^[0-9]*$"),
-        ],
-      ],
-      maxAge: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
-      price: [
-        "",
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.pattern("^[0-9]*$"),
-        ],
-      ],
-    });
-  }
-
-  addPrice() {
-    if (this.prices.valid && this.prices.length < 3) {
-      this.prices.push(this.newPrice());
-    } else {
-      this.prices.markAllAsTouched();
-    }
-  }
-
-  removePrice(index: number) {
-    this.prices.removeAt(index);
-  }
-
   get galleries(): FormArray {
     return this.tourForm.get("galleries") as FormArray;
   }
@@ -771,6 +639,35 @@ export class AddTourComponent {
     this.galleries.removeAt(index);
   }
 
+  get cancellationPolicies(): FormArray {
+    return this.tourForm.get("cancellationPolicies") as FormArray;
+  }
+
+  newCancellationPolicy(): FormGroup {
+    return this.fb.group({
+      id: [],
+      observations: ["", [Validators.maxLength(255)]],
+      allowsRainRefund: [false, [Validators.required]],
+      allowsRescheduling: [false, [Validators.required]],
+      cancellationPolicyType: ["", [Validators.required]],
+    });
+  }
+
+  addCancellationPolicy() {
+    if (
+      this.cancellationPolicies.valid &&
+      this.cancellationPolicies.length < 1
+    ) {
+      this.cancellationPolicies.push(this.newCancellationPolicy());
+    } else {
+      this.cancellationPolicies.markAllAsTouched();
+    }
+  }
+
+  removeCancellationPolicies(index: number) {
+    this.cancellationPolicies.removeAt(index);
+  }
+
   typeOfAddressIsSelected(typeOfAddress: TypeOfAddress, i: number): boolean {
     const typeOfAddresses = this.locations.controls
       .map((control, index) => {
@@ -781,18 +678,6 @@ export class AddTourComponent {
       .filter((v) => v);
 
     return typeOfAddresses.includes(typeOfAddress);
-  }
-
-  typeOfPersonIsSelected(typeOfPerson: TypeOfPerson, i: number): boolean {
-    const typeOfPersons = this.prices.controls
-      .map((control, index) => {
-        if (index !== i) {
-          return (control as FormGroup).get("typeOfPerson")?.value;
-        }
-      })
-      .filter((v) => v);
-
-    return typeOfPersons.includes(typeOfPerson);
   }
 
   onSubmitItinerary(): void {
@@ -839,7 +724,6 @@ export class AddTourComponent {
       description,
       category,
       duration,
-      price,
       minAge,
       totalNumberOfPeoples,
       locations,
@@ -848,8 +732,8 @@ export class AddTourComponent {
       excludes,
       itineraries,
       faq,
-      prices,
       galleries,
+      cancellationPolicies,
     } = this.tourForm.value;
 
     const locationMap = locations.map((location: any) => {
@@ -876,12 +760,12 @@ export class AddTourComponent {
     });
 
     const body = {
+      id: this.tourId || undefined,
       name,
       description,
       tourCategoryId: +category,
       duration,
       maxPeople: totalNumberOfPeoples,
-      price: +price,
       minAge: +minAge,
       locations: locationMap,
       mainAttractions,
@@ -890,16 +774,23 @@ export class AddTourComponent {
       faq,
       itineraries,
       galleries,
+      cancellationPolicies,
     };
 
-    this.tourService.saveTourDetails(this.imageFiles, body).subscribe({
+    this.tourService.saveTourDetails(body, this.imageFiles).subscribe({
       next: (data) => {
         this.loading = false;
 
         if (data) {
-          this.router.navigate([routes.tourList], {
-            queryParams: { added: true },
-          });
+          if (this.tourId) {
+            this.router.navigate([routes.tourList], {
+              queryParams: { edited: true },
+            });
+          } else {
+            this.router.navigate([routes.tourList], {
+              queryParams: { added: true },
+            });
+          }
         }
 
         this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
@@ -913,8 +804,6 @@ export class AddTourComponent {
       },
     });
   }
-
-  updateTour() {}
 
   getCountries() {
     this.countryService.getCountries().subscribe({
@@ -967,6 +856,131 @@ export class AddTourComponent {
     });
   }
 
+  getTour() {
+    this.tourService.getTourById(this.tourId).subscribe({
+      next: (data: Tour) => {
+        if (data) {
+          this.tour = data;
+
+          this.tourForm.patchValue({
+            id: this.tour?.id,
+            name: this.tour?.name,
+            category: this.tour?.tourCategoryId,
+            duration: this.tour?.duration,
+            totalNumberOfPeoples: this.tour?.maxPeople,
+            minAge: this.tour?.minAge,
+            description: this.tour?.description,
+          });
+
+          this.tour?.locations?.map((location, index) => {
+            if (index >= 1) {
+              this.addLocation();
+            }
+
+            this.getDepartments(location.countryId, index);
+            this.getCities(location.stateId, index);
+
+            this.locations.at(index).patchValue({
+              id: location.id,
+              typeOfAddress: location.addressType,
+              country: location.countryId,
+              department: location.stateId,
+              city: location.cityId,
+              location: location.location,
+              latitude: location.latitude,
+              longitude: location.longitude,
+              address: location.address,
+            });
+          });
+
+          this.tour?.mainAttractions?.map((mainAttraction, index) => {
+            this.addAttraction();
+
+            this.mainAttractions.at(index).patchValue({
+              id: mainAttraction?.id,
+              description: mainAttraction?.description,
+            });
+          });
+
+          this.tour?.includes?.map((include, index) => {
+            this.addInclude();
+
+            this.includes.at(index).patchValue({
+              id: include?.id,
+              description: include?.description,
+              type: include?.type,
+            });
+          });
+
+          this.tour?.excludes?.map((exclude, index) => {
+            this.addExclude();
+
+            this.excludes.at(index).patchValue({
+              id: exclude?.id,
+              description: exclude?.description,
+              type: exclude?.type,
+            });
+          });
+
+          this.tour?.itineraries?.map((itinerary, index) => {
+            this.addItinerary();
+
+            this.itineraries.at(index).patchValue({
+              id: itinerary?.id,
+              title: itinerary?.title,
+              day: itinerary?.day,
+              time: itinerary?.time,
+              description: itinerary?.description,
+            });
+          });
+
+          this.tour?.faq?.map((faq, index) => {
+            this.addFaq();
+
+            this.faq.at(index).patchValue({
+              id: faq?.id,
+              question: faq?.question,
+              answer: faq?.answer,
+            });
+          });
+
+          this.tour?.galleries?.map((gallery, index) => {
+            this.addGallery();
+
+            this.imageUrls.push(gallery?.imageUrl || "");
+
+            this.galleries.at(index).patchValue({
+              id: gallery?.id,
+              description: gallery?.description,
+              orderIndex: gallery?.orderIndex,
+            });
+          });
+
+          this.tour?.cancellationPolicies?.map((cancellationPolicy, index) => {
+            this.addCancellationPolicy();
+
+            this.cancellationPolicies.at(index).patchValue({
+              id: cancellationPolicy?.id,
+              observations: cancellationPolicy?.observations,
+              allowsRainRefund: cancellationPolicy?.allowsRainRefund,
+              allowsRescheduling: cancellationPolicy?.allowsRescheduling,
+              cancellationPolicyType:
+                cancellationPolicy?.cancellationPolicyType,
+            });
+          });
+        } else {
+          this.tour = {};
+          this.openSnackBar("Error getting tour.");
+        }
+      },
+      error: (err) => {
+        console.error("Error getting tour.");
+        console.error(err);
+        this.openSnackBar("Error getting tour.");
+      },
+    });
+  }
+
   onFileSelected(event: any): void {
     const files: FileList = event.target.files;
 
@@ -976,7 +990,7 @@ export class AddTourComponent {
         if (file) {
           // Store the actual file for upload
           this.imageFiles.push(file);
-          
+
           // Create a FileReader to read the file as Data URL for preview
           const reader = new FileReader();
           reader.onload = (e: any) => {
@@ -1011,7 +1025,6 @@ export class AddTourComponent {
   initAutocomplete(index: number): void {
     // Find the specific input element for the current address index
     const inputElement = this.addressInputs.toArray()[index].nativeElement;
-
     if (inputElement && google && google.maps && google.maps.places) {
       const autocomplete = new google.maps.places.Autocomplete(inputElement, {
         types: ["address"], // Restrict to address predictions
@@ -1020,11 +1033,15 @@ export class AddTourComponent {
 
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
+        const locationGroup = this.locations.at(index) as FormGroup;
         if (place.geometry) {
           // Extract address components and update the form control
-          const locationGroup = this.locations.at(index) as FormGroup;
           this.fillAddressFields(locationGroup, place);
         } else {
+          locationGroup.patchValue({
+            latitude: null,
+            longitude: null,
+          });
           // Handle case where place.geometry is not available (e.g., user types a non-place)
           console.warn("No geometry for selected place:", place);
         }
@@ -1069,5 +1086,11 @@ export class AddTourComponent {
     this.itineraryForm.reset();
     this.faqForm.reset();
     this.modalRef?.hide();
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "", {
+      duration: 5000,
+    });
   }
 }
