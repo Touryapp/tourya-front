@@ -221,10 +221,14 @@
         </div>
       </div>
       <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-success me-2" (click)="aprobarSolicitud()">
+        <button type="button" class="btn btn-success me-2" 
+                (click)="openConfirmModal()"
+                [disabled]="selectedProvider?.status !== 'Pending'">
           <i class="isax isax-tick-circle me-1"></i> Aprobado
         </button>
-        <button type="button" class="btn btn-danger me-2" (click)="rechazarSolicitud()">
+        <button type="button" class="btn btn-danger me-2" 
+                (click)="openDeclineConfirmModal()"
+                [disabled]="selectedProvider?.status !== 'Pending'">
           <i class="isax isax-close-circle me-1"></i> Rechazado
         </button>
         <button type="button" class="btn btn-warning" (click)="openRequestInfoModal()">
@@ -267,4 +271,48 @@
 </div>
 
 <!-- Modal Backdrop para Request Info -->
-<div class="modal-backdrop fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'"></div> 
+<div class="modal-backdrop fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Aprobación</h5>
+        <button type="button" class="btn-close" (click)="closeConfirmModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Realmente quieres aprobar esta solicitud?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeConfirmModal()">No</button>
+        <button type="button" class="btn btn-success" (click)="aprobarSolicitud()">Sí</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación -->
+<div class="modal-backdrop fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Confirmación para Rechazar -->
+<div class="modal fade" [class.show]="showDeclineConfirmModal" [style.display]="showDeclineConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Rechazo</h5>
+        <button type="button" class="btn-close" (click)="closeDeclineConfirmModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Realmente quieres rechazar esta solicitud?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeDeclineConfirmModal()">No</button>
+        <button type="button" class="btn btn-danger" (click)="rechazarSolicitud()">Sí</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación de Rechazo -->
+<div class="modal-backdrop fade" [class.show]="showDeclineConfirmModal" [style.display]="showDeclineConfirmModal ? 'block' : 'none'"></div> 

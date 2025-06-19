@@ -11,6 +11,8 @@ import { RequestProvidersService } from '../../providers/requestproviders/reques
 export class DashboardComponent implements OnInit {
   showModal = false;
   showRequestInfoModal = false;
+  showConfirmModal = false;
+  showDeclineConfirmModal = false;
   selectedProvider: RequestProvider | null = null;
   requestInfoMessage: string = '';
   requestProviders: any = { content: [] };
@@ -56,12 +58,29 @@ export class DashboardComponent implements OnInit {
     this.selectedProvider = null;
   }
 
+  openConfirmModal(): void {
+    this.showConfirmModal = true;
+  }
+
+  closeConfirmModal(): void {
+    this.showConfirmModal = false;
+  }
+
+  openDeclineConfirmModal(): void {
+    this.showDeclineConfirmModal = true;
+  }
+
+  closeDeclineConfirmModal(): void {
+    this.showDeclineConfirmModal = false;
+  }
+
   aprobarSolicitud(): void {
     if (this.selectedProvider) {
       this.requestProvidersService.approveRequest(this.selectedProvider.id).subscribe({
         next: () => {
           this.cargarSolicitudes(); // Recargar la lista después de aprobar
           this.closeModal();
+          this.closeConfirmModal();
         },
         error: (error) => {
           console.error('Error al aprobar la solicitud:', error);
@@ -76,6 +95,7 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.cargarSolicitudes(); // Recargar la lista después de rechazar
           this.closeModal();
+          this.closeDeclineConfirmModal();
         },
         error: (error) => {
           console.error('Error al rechazar la solicitud:', error);

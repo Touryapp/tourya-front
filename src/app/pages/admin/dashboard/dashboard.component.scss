@@ -148,6 +148,23 @@
       color: #000;
     }
   }
+
+  // Estilos para botones deshabilitados en la modal
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .btn-success:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+
+  .btn-danger:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
 }
 
 // Estilos para los badges de estado
