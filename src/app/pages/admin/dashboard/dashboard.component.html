@@ -110,13 +110,16 @@
                     <tr>
                       <th>ID</th>
                       <th>Nombre del Proveedor</th>
-                      <th></th>
+                      <th>Tipo de Servicio</th>
+                      <th>Telefono</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let req of requestProviders.content">
                       <td>#{{ req.id }}</td>
                       <td>{{ req.provider.name }}</td>
+                      <td>{{ req.provider.serviceType }}</td>
+                      <td>{{ req.provider.phone }}</td>
                       <td class="text-end">
                         <button class="btn btn-warning text-white" (click)="openProviderModal(req)">
                           <i class="isax isax-eye me-1"></i> Ver
