@@ -360,8 +360,7 @@
                                                         formControlName="description"
                                                         (blur)="onMainAttractionDescriptionBlur($event, i)">
 
-                                                    <a *ngIf="mainAttractions.length > 1"
-                                                        class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                    <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
                                                         (click)="removeAttraction(i)">
                                                         <i class="isax isax-trash"></i>
                                                     </a>
@@ -410,8 +409,7 @@
                                                                 <input type="text" class="form-control"
                                                                     formControlName="description"
                                                                     (blur)="onIncludeDescriptionBlur($event, i)">
-                                                                <a *ngIf="includes.length > 1"
-                                                                    class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
                                                                     (click)="removeInclude(i)">
                                                                     <i class="isax isax-trash"></i>
                                                                 </a>
@@ -460,8 +458,7 @@
                                                                 <input type="text" class="form-control"
                                                                     formControlName="description"
                                                                     (blur)="onExcludeDescriptionBlur($event, i)">
-                                                                <a *ngIf="excludes.length > 0"
-                                                                    class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
                                                                     (click)="removeExclude(i)">
                                                                     <i class="isax isax-trash"></i>
                                                                 </a>
@@ -672,7 +669,8 @@
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Allows rain refund</label>
-                                                <mat-slide-toggle formControlName="allowsRainRefund"></mat-slide-toggle>
+                                                <mat-slide-toggle class="mat-slide-toogle"
+                                                    formControlName="allowsRainRefund"></mat-slide-toggle>
 
                                                 <div *ngIf="cancellationPolicy.get('allowsRainRefund')?.invalid && (cancellationPolicy.get('allowsRainRefund')?.touched || cancellationPolicy.get('allowsRainRefund')?.dirty)"
                                                     class="text-danger">
@@ -687,7 +685,7 @@
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Allows rescheduling</label>
-                                                <mat-slide-toggle
+                                                <mat-slide-toggle class="mat-slide-toogle"
                                                     formControlName="allowsRescheduling"></mat-slide-toggle>
 
                                                 <div *ngIf="cancellationPolicy.get('allowsRescheduling')?.invalid && (cancellationPolicy.get('allowsRescheduling')?.touched || cancellationPolicy.get('allowsRescheduling')?.dirty)"

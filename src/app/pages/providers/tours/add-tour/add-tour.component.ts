@@ -211,7 +211,7 @@ export class AddTourComponent {
     this.submitted = true;
     this.tourForm.markAllAsTouched();
 
-    if (this.tourForm.valid && this.imageFiles.length > 0) {
+    if (this.tourForm.valid && this.galleries.length > 0) {
       this.saveTourDetails();
     } else {
       this.loading = false;
@@ -626,6 +626,7 @@ export class AddTourComponent {
       // imageUrl: ["", [Validators.required]],
       description: ["", [Validators.required]],
       orderIndex: ["", [Validators.required]],
+      added: [false, [Validators.required]],
     });
   }
 
@@ -693,6 +694,7 @@ export class AddTourComponent {
       }
 
       this.itineraries.at(index).patchValue(this.itineraryForm.value);
+      this.itineraries.at(index).markAsDirty();
 
       this.itineraryForm.reset();
       this.closeModal();
@@ -712,6 +714,7 @@ export class AddTourComponent {
       }
 
       this.faq.at(index).patchValue(this.faqForm.value);
+      this.faq.at(index).markAsDirty();
 
       this.faqForm.reset();
       this.closeModal();
@@ -759,6 +762,25 @@ export class AddTourComponent {
       };
     });
 
+    const galleryMap = galleries
+      .filter((gallery: any) => gallery.added)
+      .map((gallery: any) => {
+        return { ...gallery, added: undefined };
+      });
+
+    const modifiedArrayList = this.tourId
+      ? {
+          updatedLocations: this.locations.dirty,
+          updatedMainAttractions: this.mainAttractions.dirty,
+          updatedIncludes: this.includes.dirty,
+          updatedExcludes: this.excludes.dirty,
+          updatedItineraries: this.itineraries.dirty,
+          updatedFaq: this.faq.dirty,
+          updatedCancellationPolicies: this.cancellationPolicies.dirty,
+          updatedGalleries: this.galleries.dirty,
+        }
+      : undefined;
+
     const body = {
       id: this.tourId || undefined,
       name,
@@ -773,8 +795,9 @@ export class AddTourComponent {
       excludes,
       faq,
       itineraries,
-      galleries,
       cancellationPolicies,
+      galleries: galleryMap,
+      modifiedArrayList,
     };
 
     this.tourService.saveTourDetails(body, this.imageFiles).subscribe({
@@ -1002,7 +1025,10 @@ export class AddTourComponent {
               // imageUrl: e.target.result,
               orderIndex: this.galleries.length,
               description: file.name,
+              added: true,
             });
+
+            this.galleries.markAsDirty();
           };
           reader.readAsDataURL(file);
         }
