@@ -53,7 +53,13 @@ const routes: Routes = [
         loadChildren: () =>
           import("./edit-tour/edit-tour.module").then((m) => m.EditTourModule),
       },
-
+      {
+        path: "galleries",
+        loadChildren: () =>
+          import("./tour-gallery/tour-gallery.module").then(
+            (m) => m.TourGalleryModule
+          ),
+      },
       {
         path: "",
         redirectTo: "list",

@@ -568,40 +568,6 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-none" id="galleries">
-                        <div class="card-header">
-                            <h5 class="fs-18">Gallery</h5>
-                        </div>
-                        <div class="card-body">
-                            <div
-                                class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
-                                <span class="upload-img d-block mb-2"><i
-                                        class="isax isax-document-upload fs-24"></i></span>
-                                <h6 class="mb-1">Upload Gallery Images</h6>
-                                <p class="mb-0">Upload Feature Image First, Image size should below 5MB</p>
-                                <input type="file" accept="image/*" (change)="onFileSelected($event)" multiple>
-                            </div>
-                            <div *ngIf="imageUrls.length > 0">
-
-                                <div class="d-flex align-items-center">
-                                    <ng-container *ngFor="let imageUrl of imageUrls; let i=index">
-                                        <a href="javascript:void(0);" class="gallery-upload-img of list m-2">
-                                            <a href="javascript:void(0);" class="gallery-upload-img me-2">
-                                                <img [src]="imageUrl" alt="Img">
-                                                <span
-                                                    class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash"
-                                                    (click)="onDeleteImage(i)"><i class="isax isax-trash"></i></span>
-                                            </a>
-                                        </a>
-                                    </ng-container>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="submitted && imageUrls.length === 0" class="text-danger">
-                            Gallery is required
-                        </div>
-                    </div>
 
                     <div class="card shadow-none" id="cancellationPolicies">
                         <div class="card-header">

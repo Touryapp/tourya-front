@@ -66,7 +66,6 @@ export class AddTourComponent {
     { id: "excludes", label: "Excludes" },
     { id: "itineraries", label: "Itinerary" },
     { id: "faq", label: "FAQ" },
-    { id: "galleries", label: "Galleries" },
     { id: "cancellationPolicies", label: "Cancellation Policies" },
   ];
 
@@ -144,7 +143,6 @@ export class AddTourComponent {
       excludes: this.fb.array([]),
       itineraries: this.fb.array([]),
       faq: this.fb.array([]),
-      galleries: this.fb.array([]),
       cancellationPolicies: this.fb.array([]),
     });
 
@@ -211,7 +209,7 @@ export class AddTourComponent {
     this.submitted = true;
     this.tourForm.markAllAsTouched();
 
-    if (this.tourForm.valid && this.galleries.length > 0) {
+    if (this.tourForm.valid) {
       this.saveTourDetails();
     } else {
       this.loading = false;
@@ -616,30 +614,6 @@ export class AddTourComponent {
     this.faq.removeAt(index);
   }
 
-  get galleries(): FormArray {
-    return this.tourForm.get("galleries") as FormArray;
-  }
-
-  newGallery(): FormGroup {
-    return this.fb.group({
-      id: [],
-      // imageUrl: ["", [Validators.required]],
-      description: ["", [Validators.required]],
-      orderIndex: ["", [Validators.required]],
-      added: [false, [Validators.required]],
-    });
-  }
-
-  addGallery() {
-    if (this.galleries.valid) {
-      this.galleries.push(this.newGallery());
-    }
-  }
-
-  removeGallery(index: number) {
-    this.galleries.removeAt(index);
-  }
-
   get cancellationPolicies(): FormArray {
     return this.tourForm.get("cancellationPolicies") as FormArray;
   }
@@ -735,7 +709,6 @@ export class AddTourComponent {
       excludes,
       itineraries,
       faq,
-      galleries,
       cancellationPolicies,
     } = this.tourForm.value;
 
@@ -762,12 +735,6 @@ export class AddTourComponent {
       };
     });
 
-    const galleryMap = galleries
-      .filter((gallery: any) => gallery.added)
-      .map((gallery: any) => {
-        return { ...gallery, added: undefined };
-      });
-
     const modifiedArrayList = this.tourId
       ? {
           updatedLocations: this.locations.dirty,
@@ -777,7 +744,6 @@ export class AddTourComponent {
           updatedItineraries: this.itineraries.dirty,
           updatedFaq: this.faq.dirty,
           updatedCancellationPolicies: this.cancellationPolicies.dirty,
-          updatedGalleries: this.galleries.dirty,
         }
       : undefined;
 
@@ -796,11 +762,10 @@ export class AddTourComponent {
       faq,
       itineraries,
       cancellationPolicies,
-      galleries: galleryMap,
       modifiedArrayList,
     };
 
-    this.tourService.saveTourDetails(body, this.imageFiles).subscribe({
+    this.tourService.saveTourDetails(body).subscribe({
       next: (data) => {
         this.loading = false;
 
@@ -967,18 +932,6 @@ export class AddTourComponent {
             });
           });
 
-          this.tour?.galleries?.map((gallery, index) => {
-            this.addGallery();
-
-            this.imageUrls.push(gallery?.imageUrl || "");
-
-            this.galleries.at(index).patchValue({
-              id: gallery?.id,
-              description: gallery?.description,
-              orderIndex: gallery?.orderIndex,
-            });
-          });
-
           this.tour?.cancellationPolicies?.map((cancellationPolicy, index) => {
             this.addCancellationPolicy();
 
@@ -1001,50 +954,6 @@ export class AddTourComponent {
         console.error(err);
         this.openSnackBar("Error getting tour.");
       },
-    });
-  }
-
-  onFileSelected(event: any): void {
-    const files: FileList = event.target.files;
-
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files.item(i);
-        if (file) {
-          // Store the actual file for upload
-          this.imageFiles.push(file);
-
-          // Create a FileReader to read the file as Data URL for preview
-          const reader = new FileReader();
-          reader.onload = (e: any) => {
-            this.imageUrls.push(e.target.result);
-
-            this.addGallery();
-
-            this.galleries.at(this.galleries.length - 1).patchValue({
-              // imageUrl: e.target.result,
-              orderIndex: this.galleries.length,
-              description: file.name,
-              added: true,
-            });
-
-            this.galleries.markAsDirty();
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-    }
-  }
-
-  onDeleteImage(index: number): void {
-    this.imageUrls.splice(index, 1);
-    this.imageFiles.splice(index, 1);
-    this.galleries.removeAt(index);
-
-    this.galleries.controls.forEach((control, i) => {
-      control.patchValue({
-        orderIndex: i + 1,
-      });
     });
   }
 

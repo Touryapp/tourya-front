@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
 import { Tour } from "../../../shared/dto/tour-response.dto";
 import { CreateTourDto } from "../../../shared/dto/create-tour.dto";
+import { Gallery } from "../../../shared/dto/gallery";
 
 @Injectable({
   providedIn: "root",
@@ -34,18 +35,33 @@ export class TourService {
     );
   }
 
-  saveTourDetails(body: CreateTourDto, imageFiles: File[]): Observable<any> {
-    const formData = new FormData();
+  getTourGalleries(tourId: number): Observable<Gallery[]> {
+    return this.http.get<Gallery[]>(
+      `${environment.apiUrl}/tours/${tourId}/gallery`
+    );
+  }
 
-    if (imageFiles && imageFiles.length > 0) {
-      imageFiles.forEach((file) => {
-        formData.append("files", file);
+  saveTourDetails(body: CreateTourDto): Observable<any> {
+    return this.http.post<Tour>(`${this.baseUrl}/user/saveAll`, body);
+  }
+
+  saveTourGallery(
+    tourId: number,
+    files: File[],
+    metadata: Gallery[]
+  ): Observable<Gallery[]> {
+    const formData = new FormData();
+    formData.append("galleryData", JSON.stringify(metadata));
+
+    if (files && files.length > 0) {
+      files.forEach((file) => {
+        formData.append("newFiles", file);
       });
     }
 
-    const metadata = JSON.stringify(body);
-    formData.append("metadata", metadata);
-
-    return this.http.post<Tour>(`${this.baseUrl}/user/saveAll`, formData);
+    return this.http.post<Gallery[]>(
+      `${environment.apiUrl}/tours/${tourId}/gallery/sync`,
+      formData
+    );
   }
 }
