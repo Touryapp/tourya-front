@@ -16,6 +16,8 @@ export class DashboardComponent implements OnInit {
   selectedProvider: RequestProvider | null = null;
   requestInfoMessage: string = '';
   requestProviders: any = { content: [] };
+  mostrarSolicitudes: boolean = false;
+  declinedReason: string = '';
 
   constructor(private requestProvidersService: RequestProvidersService) { }
 
@@ -91,11 +93,12 @@ export class DashboardComponent implements OnInit {
 
   rechazarSolicitud(): void {
     if (this.selectedProvider) {
-      this.requestProvidersService.declineRequest(this.selectedProvider.id).subscribe({
+      this.requestProvidersService.declineRequest(this.selectedProvider.id, this.declinedReason).subscribe({
         next: () => {
           this.cargarSolicitudes(); // Recargar la lista después de rechazar
           this.closeModal();
           this.closeDeclineConfirmModal();
+          this.declinedReason = '';
         },
         error: (error) => {
           console.error('Error al rechazar la solicitud:', error);
@@ -123,9 +126,17 @@ export class DashboardComponent implements OnInit {
   }
 
   sendRequestInfo() {
-    if (this.requestInfoMessage.trim()) {
-      console.log('Mensaje enviado:', this.requestInfoMessage);
-      this.closeRequestInfoModal();
+    if (this.requestInfoMessage.trim() && this.selectedProvider) {
+      this.requestProvidersService.incompleteRequest(this.selectedProvider.id, this.requestInfoMessage).subscribe({
+        next: () => {
+          this.cargarSolicitudes();
+          this.closeRequestInfoModal();
+          this.requestInfoMessage = '';
+        },
+        error: (error) => {
+          console.error('Error al solicitar información:', error);
+        }
+      });
     }
   }
 } 

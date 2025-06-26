@@ -1,6 +1,8 @@
 export interface RequestProvider {
     id: number;
     status: string;
+    declinedReason: string;
+    incompleteReason: string;
     provider: Provider;
   }
   export interface Country {
@@ -28,4 +30,6 @@ export interface RequestProvider {
     address: string;
     phone: string;
     status: string;
+    
   }
+  

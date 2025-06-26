@@ -40,7 +40,12 @@ export class RequestProvidersService {
   }
 
   // Endpoint para rechazar solicitud (admin)
-  declineRequest(requestProviderById: number): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/admin/decline/${requestProviderById}`, {});
+  declineRequest(requestProviderById: number, declinedReason: string): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/admin/decline/${requestProviderById}`, { declinedReason: declinedReason });
+  }
+
+  // Endpoint para solicitar información adicional (admin)
+  incompleteRequest(requestProviderById: number, incompleteReason: string): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/admin/incomplete/${requestProviderById}`, { incompleteReason: incompleteReason });
   }
 }
