@@ -1,6 +1,7 @@
 import { TypeOfAddress } from "../enums/type-of-address.enum";
 
 export interface CreateTourDto {
+  id?: number;
   name: string;
   description: string;
   tourCategoryId: number;
@@ -14,6 +15,7 @@ export interface CreateTourDto {
 }
 
 export interface Location {
+  id?: number;
   countryId: number;
   stateId: number;
   cityId: number;
@@ -24,20 +26,24 @@ export interface Location {
 }
 
 export interface MainAttraction {
+  id?: number;
   description: string;
 }
 
 export interface Include {
+  id?: number;
   description: string;
   type: "Include";
 }
 
 export interface Exclude {
+  id?: number;
   description: string;
   type: "Exclude";
 }
 
 export interface Faq {
+  id?: number;
   question: string;
   answer: string;
 }

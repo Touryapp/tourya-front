@@ -35,6 +35,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { BsModalService, ModalModule } from "ngx-bootstrap/modal";
 import { SafeHtmlPipe } from "./pipe/safe-html.pipe";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     ModalModule,
     SafeHtmlPipe,
     MatSnackBarModule,
+    DragDropModule,
   ],
   exports: [
     CommonModule,
@@ -105,6 +107,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     ModalModule,
     SafeHtmlPipe,
     MatSnackBarModule,
+    DragDropModule,
   ],
   providers: [
     provideNgxMask(),

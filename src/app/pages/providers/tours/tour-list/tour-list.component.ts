@@ -36,9 +36,9 @@ export class TourListComponent implements OnInit {
     const edited = !!this.route.snapshot.queryParamMap.get("edited");
 
     if (added) {
-      this.openSnackBar("Tour added");
+      this.openSnackBar("Tour added successfully");
     } else if (edited) {
-      this.openSnackBar("Tour edited");
+      this.openSnackBar("Tour successfully edited");
     }
 
     this.router.navigate([], { queryParams: null });
@@ -131,6 +131,10 @@ export class TourListComponent implements OnInit {
 
   displayTourDescription(tour: Tour): string {
     return tour?.description || "";
+  }
+
+  profilePicture(tour: Tour) {
+    return tour?.profilePicture?.imageUrl || "assets/img/tours/tours-07.jpg";
   }
 
   get pages(): number[] {

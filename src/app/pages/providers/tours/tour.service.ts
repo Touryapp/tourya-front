@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
-import { Tour } from "../../../shared/dto/tour-response.dto";
+import { Gallery, Tour } from "../../../shared/dto/tour-response.dto";
 import { CreateTourDto } from "../../../shared/dto/create-tour.dto";
 
 @Injectable({
@@ -28,18 +28,39 @@ export class TourService {
     });
   }
 
-  saveTourDetails(imageFiles: File[], body: CreateTourDto): Observable<any> {
-    const formData = new FormData();
+  getTourById(tourId: number): Observable<Tour> {
+    return this.http.get<Tour>(
+      `${this.baseUrl}/user/consultDataTourById/${tourId}`
+    );
+  }
 
-    if (imageFiles && imageFiles.length > 0) {
-      imageFiles.forEach((file) => {
-        formData.append("files", file);
+  getTourGalleries(tourId: number): Observable<Gallery[]> {
+    return this.http.get<Gallery[]>(
+      `${environment.apiUrl}/tours/${tourId}/gallery`
+    );
+  }
+
+  saveTourDetails(body: CreateTourDto): Observable<any> {
+    return this.http.post<Tour>(`${this.baseUrl}/user/saveAll`, body);
+  }
+
+  saveTourGallery(
+    tourId: number,
+    files: File[],
+    metadata: Gallery[]
+  ): Observable<Gallery[]> {
+    const formData = new FormData();
+    formData.append("galleryData", JSON.stringify(metadata));
+
+    if (files && files.length > 0) {
+      files.forEach((file) => {
+        formData.append("newFiles", file);
       });
     }
 
-    const metadata = JSON.stringify(body);
-    formData.append("metadata", metadata);
-
-    return this.http.post<Tour>(`${this.baseUrl}/user/saveAll`, formData);
+    return this.http.post<Gallery[]>(
+      `${environment.apiUrl}/tours/${tourId}/gallery/sync`,
+      formData
+    );
   }
 }
