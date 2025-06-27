@@ -17,9 +17,9 @@ export interface Tour {
   faq?: FAQ[];
   itineraries?: Itinerary[];
   cancellationPolicies?: CancellationPolicy[];
-  galleries?: Gallery[];
   tourCategory?: TourCategory;
   provider?: Provider;
+  profilePicture?: Gallery;
 }
 
 interface TourCategory {
@@ -93,9 +93,9 @@ interface CancellationPolicy {
   cancellationPolicyType: string;
 }
 
-interface Gallery {
+export interface Gallery {
   id?: number;
-  imageUrl: string;
-  description: string;
-  orderIndex: number;
+  imageUrl?: string;
+  description?: string;
+  orderIndex?: number;
 }

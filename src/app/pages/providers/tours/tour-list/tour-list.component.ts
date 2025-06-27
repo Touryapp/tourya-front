@@ -133,6 +133,10 @@ export class TourListComponent implements OnInit {
     return tour?.description || "";
   }
 
+  profilePicture(tour: Tour) {
+    return tour?.profilePicture?.imageUrl || "assets/img/tours/tours-07.jpg";
+  }
+
   get pages(): number[] {
     return Array(this.totalPages)
       .fill(0)

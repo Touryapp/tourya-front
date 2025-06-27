@@ -520,12 +520,11 @@
                                         <ng-template carouselSlide>
                                             <div class="slide-images">
                                                 <a [routerLink]="[routes.tourDetails, tour.id]">
-                                                    <img src="assets/img/tours/tours-07.jpg" class="img-fluid"
-                                                        alt="img">
+                                                    <img [src]="profilePicture(tour)" class="img-fluid" alt="img">
                                                 </a>
                                             </div>
                                         </ng-template>
-                                        <ng-template carouselSlide>
+                                        <!-- <ng-template carouselSlide>
                                             <div class="slide-images">
                                                 <a [routerLink]="[routes.tourDetails, tour.id]">
                                                     <img src="assets/img/tours/tours-08.jpg" class="img-fluid "
@@ -548,7 +547,7 @@
                                                         alt="img">
                                                 </a>
                                             </div>
-                                        </ng-template>
+                                        </ng-template> -->
                                     </owl-carousel-o>
 
                                     <div class="fav-item">
@@ -609,11 +608,14 @@
                                                     alt="img">
                                             </a> -->
 
-                                            <a [routerLink]="['/providers/tours/galleries', tour.id]">
-                                                Add/Edit Gallery
+                                            <a class="me-2" [routerLink]="[routes.editTour, tour.id]">Edit tour</a>
+
+                                            <a class="me-2" [routerLink]="['/providers/tours/galleries', tour.id]">
+                                                Edit Gallery
                                             </a>
-                                            <a [routerLink]="[routes.editTour, tour.id]">Edit tour</a>
                                         </div>
+
+
                                     </div>
                                 </div>
                             </div>

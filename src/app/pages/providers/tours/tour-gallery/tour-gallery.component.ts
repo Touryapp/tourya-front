@@ -3,9 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TourService } from "../tour.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { Gallery } from "../../../../shared/dto/gallery";
-import { id } from "intl-tel-input/i18n";
-import { Tour } from "../../../../shared/dto/tour-response.dto";
+import { Gallery, Tour } from "../../../../shared/dto/tour-response.dto";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({

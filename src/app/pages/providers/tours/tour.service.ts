@@ -2,9 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
-import { Tour } from "../../../shared/dto/tour-response.dto";
+import { Gallery, Tour } from "../../../shared/dto/tour-response.dto";
 import { CreateTourDto } from "../../../shared/dto/create-tour.dto";
-import { Gallery } from "../../../shared/dto/gallery";
 
 @Injectable({
   providedIn: "root",
