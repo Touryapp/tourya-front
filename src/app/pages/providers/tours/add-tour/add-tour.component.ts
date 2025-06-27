@@ -45,9 +45,6 @@ export class AddTourComponent {
   itineraryIndex: number = -1;
   faqIndex: number = -1;
 
-  imageUrls: string[] = [];
-  imageFiles: File[] = [];
-
   editor!: Editor;
 
   toolbar: Toolbar = [
@@ -465,6 +462,7 @@ export class AddTourComponent {
 
   removeLocation(index: number) {
     this.locations.removeAt(index);
+    this.locations.markAsDirty();
   }
 
   get mainAttractions(): FormArray {
@@ -487,6 +485,7 @@ export class AddTourComponent {
 
   removeAttraction(index: number) {
     this.mainAttractions.removeAt(index);
+    this.mainAttractions.markAsDirty();
   }
 
   get includes(): FormArray {
@@ -510,6 +509,7 @@ export class AddTourComponent {
 
   removeInclude(index: number) {
     this.includes.removeAt(index);
+    this.includes.markAsDirty();
   }
 
   get excludes(): FormArray {
@@ -533,6 +533,7 @@ export class AddTourComponent {
 
   removeExclude(index: number) {
     this.excludes.removeAt(index);
+    this.excludes.markAsDirty();
   }
 
   get itineraries(): FormArray {
@@ -577,6 +578,7 @@ export class AddTourComponent {
 
   removeItinerary(index: number) {
     this.itineraries.removeAt(index);
+    this.itineraries.markAsDirty();
   }
 
   get faq(): FormArray {
@@ -612,6 +614,7 @@ export class AddTourComponent {
 
   removeFaq(index: number) {
     this.faq.removeAt(index);
+    this.faq.markAsDirty();
   }
 
   get cancellationPolicies(): FormArray {
@@ -641,6 +644,7 @@ export class AddTourComponent {
 
   removeCancellationPolicies(index: number) {
     this.cancellationPolicies.removeAt(index);
+    this.cancellationPolicies.markAsDirty();
   }
 
   typeOfAddressIsSelected(typeOfAddress: TypeOfAddress, i: number): boolean {
