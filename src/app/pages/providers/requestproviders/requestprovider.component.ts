@@ -49,7 +49,9 @@ export class RequestproviderComponent implements OnInit {
   ];
 
   activeTab: string = this.tabs[0].id;
-
+  documentosFiles: File[] = [];
+  agregarGaleria :{addedGalleries: any[], deletedGalleries: any[]} = {addedGalleries: [], deletedGalleries: []}
+  dataRequestProvider: any = {};
   constructor(
     private fb: FormBuilder,
     private countryService: CountryService,
@@ -59,6 +61,7 @@ export class RequestproviderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    //consultar data del usuario
     this.initializeForm();
     this.getCountries();
   }

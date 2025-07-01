@@ -48,4 +48,17 @@ export class RequestProvidersService {
   incompleteRequest(requestProviderById: number, incompleteReason: string): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/admin/incomplete/${requestProviderById}`, { incompleteReason: incompleteReason });
   }
+
+  // Endpoint para guardar galeria de documentos
+  saveGallery(requestProviderById: number, documentosFiles: File[], addedGalleries: any): Observable<any> {
+    //armar formdata
+    const formData = new FormData();
+    documentosFiles.forEach(file => {
+      formData.append('files', file);
+    });
+    
+    formData.append('metadata', JSON.stringify(addedGalleries));
+
+    return this.http.post<any>(`${this.baseUrl}/requestProvider/${requestProviderById}/gallery`, formData);
+  }
 }
