@@ -64,6 +64,6 @@ export class RequestProvidersService {
   }
 
   typeDocuments(): Observable<RequestProviderDocumentType[]> {
-    return this.http.get<RequestProviderDocumentType[]>(`${this.baseUrl}/requestProviderDocumentType/user/getAllRequestProviderDocumentTypeList`);
+    return this.http.get<RequestProviderDocumentType[]>(`${environment.apiUrl}/requestProviderDocumentType/user/getAllRequestProviderDocumentTypeList`);
   }
 }

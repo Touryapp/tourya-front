@@ -4,6 +4,8 @@ export interface RequestProvider {
     declinedReason: string;
     incompleteReason: string;
     provider: Provider;
+    requestProviderGalleryList: RequestProviderGallery[];
+
   }
   export interface Country {
     id: number;
@@ -32,4 +34,13 @@ export interface RequestProvider {
     status: string;
     
   }
+  export interface RequestProviderGallery {
+    description: string;
+    documentTypeId: number;
+    documentTypeName: string;
+    id: number;
+    imageUrl: string;
+    orderIndex: number;
+  }
+  
   

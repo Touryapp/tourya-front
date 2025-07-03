@@ -9,10 +9,11 @@ import { CountryService } from '../../../shared/services/country.service';
 import { DepartmentService } from '../../../shared/services/department.service';
 import { CityService } from '../../../shared/services/city.service';
 import { RequestProvidersService } from './request-providers.service';
-import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
+import { RequestProvider, RequestProviderGallery } from '../../../shared/dto/requestProvider-response.dto';
 import { ProviderDocumentType } from '../../../shared/enums/provider-document-type.enum';
 import { ProviderDocumentTypeDto } from '../../../shared/dto/provider-document-type.dt';
 import { ProviderServiceType } from '../../../shared/enums/provider-document-type.enum';
+import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
 
 
 @Component({
@@ -42,6 +43,9 @@ export class RequestproviderComponent implements OnInit {
     ProviderServiceType.MEALS_FOOD_BEVERAGE,
     ProviderServiceType.ACCOMMODATION_LODGING
   ];
+  
+  // Lista dinámica de tipos de documentos para request provider
+  requestProviderDocumentTypes: RequestProviderDocumentType[] = [];
   public routes = routes;
 
   tabs = [
@@ -51,16 +55,15 @@ export class RequestproviderComponent implements OnInit {
 
   activeTab: string = this.tabs[0].id;
   documentosFiles: File[] = [];
-  agregarGaleria :{addedGalleries: any[], deletedGalleries: any[]} = {addedGalleries: [], deletedGalleries: []}
+  agregarGaleria: {addedGalleries: any[], deletedGalleries: any[]} = {addedGalleries: [], deletedGalleries: []}
   dataRequestProvider: any = {};
   isExistingData = false;
   
-  // Variables para los 3 tipos de documentos específicos
-  documentFiles: { [key: number]: File | null } = {
-    1: null, // NIT
-    2: null, // RNT  
-    3: null  // Other
-  };
+  // Variables para los archivos dinámicos basados en tipos de documentos
+  documentFiles: { [key: number]: File | null } = {};
+  
+  // Variables para manejar archivos existentes
+  existingFiles: { [key: number]: any } = {}; // Archivos ya cargados en el servidor
   
   // Variable para almacenar el ID del request provider
   requestProviderById: number | null = null;
@@ -76,7 +79,7 @@ export class RequestproviderComponent implements OnInit {
     this.consultaData();
     this.initializeForm();
     this.getCountries();
-    
+    this.loadRequestProviderDocumentTypes();
   }
 
   private initializeForm(): void {
@@ -165,7 +168,7 @@ export class RequestproviderComponent implements OnInit {
      // Recopilar todos los archivos cargados
      const documentosFiles: File[] = [];
      const addedGalleries: any[] = [];
-     const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
+     let orderIndex = 0;
 
      Object.keys(this.documentFiles).forEach(key => {
        const documentId = parseInt(key);
@@ -173,12 +176,14 @@ export class RequestproviderComponent implements OnInit {
        
        if (file) {
          documentosFiles.push(file);
+         
+         // Buscar el nombre del documento en la lista de tipos
+         const documentType = this.requestProviderDocumentTypes.find(type => type.id === documentId);
+         
          addedGalleries.push({
-           documentTypeId: documentId,
-           documentTypeName: documentNames[documentId as keyof typeof documentNames],
-           fileName: file.name,
-           fileSize: file.size,
-           uploadedAt: new Date().toISOString()
+           description: documentType?.name || `Documento ${documentId}`,
+           orderIndex: orderIndex++,
+           documentTypeId: documentId
          });
        }
      });
@@ -188,16 +193,34 @@ export class RequestproviderComponent implements OnInit {
        return;
      }
 
+     // Actualizar el objeto agregarGaleria con la estructura correcta
+     this.agregarGaleria.addedGalleries = addedGalleries;
+
      console.log(`🚀 Enviando ${documentosFiles.length} documentos al servidor...`);
+     console.log('Estructura addedGalleries:', this.agregarGaleria);
+     console.log('Archivos eliminados:', this.agregarGaleria.deletedGalleries);
 
      this.requestProviderService.saveGallery(
        this.requestProviderById,
        documentosFiles,
-       addedGalleries
-     ).subscribe({
-       next: (response: any) => {
-         console.log('✅ Todos los documentos enviados exitosamente al servidor:', response);
-         alert('¡Documentos enviados exitosamente al servidor!');
+       this.agregarGaleria
+            ).subscribe({
+         next: (response: any) => {
+           console.log('✅ Todos los documentos enviados exitosamente al servidor:', response);
+           alert('¡Documentos enviados exitosamente al servidor!');
+           
+           // Limpiar archivos nuevos después de envío exitoso
+           this.documentFiles = {};
+           this.requestProviderDocumentTypes.forEach(docType => {
+             this.documentFiles[docType.id] = null;
+           });
+           
+           // Limpiar lista de eliminados y agregados
+           this.agregarGaleria.deletedGalleries = [];
+           this.agregarGaleria.addedGalleries = [];
+           
+           // Recargar datos para actualizar archivos existentes
+           this.consultaData();
        },
        error: (error: any) => {
          console.error('❌ Error al enviar los documentos al servidor:', error);
@@ -332,10 +355,55 @@ export class RequestproviderComponent implements OnInit {
             });
             // Deshabilitar el formulario
             this.requestProviderForm.disable();
+            
+            // Cargar archivos existentes si existen
+            this.loadExistingFiles(data);
           }
         },
       error: (err: any) => {
         console.error('Error:', err);
+      }
+    });
+  }
+
+  loadExistingFiles(data: RequestProvider) {
+    // Limpiar archivos existentes anteriores
+    this.existingFiles = {};
+    
+    // Cargar archivos existentes desde requestProviderGalleryList
+    if (data.requestProviderGalleryList && data.requestProviderGalleryList.length > 0) {
+      data.requestProviderGalleryList.forEach((gallery: RequestProviderGallery) => {
+        if (gallery.documentTypeId) {
+          this.existingFiles[gallery.documentTypeId] = {
+            id: gallery.id,
+            fileName: gallery.documentTypeName || 'Archivo sin nombre',
+            fileUrl: gallery.imageUrl,
+            documentTypeId: gallery.documentTypeId,
+            documentTypeName: gallery.documentTypeName,
+            description: gallery.description,
+            orderIndex: gallery.orderIndex,
+            isExisting: true
+          };
+        }
+      });
+      
+      console.log('Archivos existentes cargados:', this.existingFiles);
+    }
+  }
+
+  loadRequestProviderDocumentTypes() {
+    this.requestProviderService.typeDocuments().subscribe({
+      next: (data: RequestProviderDocumentType[]) => {
+        this.requestProviderDocumentTypes = data;
+        // Inicializar el objeto documentFiles con los IDs dinámicos
+        this.documentFiles = {};
+        data.forEach(docType => {
+          this.documentFiles[docType.id] = null;
+        });
+        console.log('Tipos de documentos cargados:', this.requestProviderDocumentTypes);
+      },
+      error: (err: any) => {
+        console.error('Error al cargar tipos de documentos:', err);
       }
     });
   }
@@ -405,29 +473,40 @@ export class RequestproviderComponent implements OnInit {
       // Guardar el archivo temporalmente (solo localmente)
       this.documentFiles[documentId] = file;
       
-      // Obtener el nombre del documento según el ID
-      const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
-      console.log(`📎 Archivo cargado localmente para ${documentNames[documentId as keyof typeof documentNames]}:`, {
+      // Obtener el nombre del documento según el ID de la lista dinámica
+      const documentType = this.requestProviderDocumentTypes.find(type => type.id === documentId);
+      const documentName = documentType?.name || `Documento ${documentId}`;
+      
+      console.log(`📎 Archivo cargado localmente para ${documentName}:`, {
         fileName: file.name,
         fileSize: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
         fileType: file.type
       });
 
       // NO llamar a saveGallery automáticamente - solo guardar localmente
-      console.log(`💾 Archivo ${documentNames[documentId as keyof typeof documentNames]} guardado localmente. Usa "Guardar todos los documentos" para enviarlo al servidor.`);
+      console.log(`💾 Archivo ${documentName} guardado localmente. Usa "Guardar todos los documentos" para enviarlo al servidor.`);
     }
   }
 
-  // Función para eliminar un archivo
+  // Función para eliminar un archivo (nuevo o existente)
   removeDocumentFile(documentId: number): void {
-    this.documentFiles[documentId] = null;
-    const inputElement = document.getElementById(`document-file-${documentId}`) as HTMLInputElement;
-    if (inputElement) {
-      inputElement.value = '';
+    // Si hay un archivo nuevo, eliminarlo
+    if (this.documentFiles[documentId]) {
+      this.documentFiles[documentId] = null;
+      const inputElement = document.getElementById(`document-file-${documentId}`) as HTMLInputElement;
+      if (inputElement) {
+        inputElement.value = '';
+      }
     }
     
-    const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
-    console.log(`🗑️ Archivo eliminado para ${documentNames[documentId as keyof typeof documentNames]}`);
+    // Si hay un archivo existente, eliminarlo
+    if (this.existingFiles[documentId]) {
+      this.removeExistingFile(documentId);
+    }
+    
+    const documentType = this.requestProviderDocumentTypes.find(type => type.id === documentId);
+    const documentName = documentType?.name || `Documento ${documentId}`;
+    console.log(`🗑️ Archivo eliminado para ${documentName}`);
   }
 
   // Función para guardar un documento específico usando saveGallery
@@ -441,30 +520,33 @@ export class RequestproviderComponent implements OnInit {
     const documentosFiles: File[] = [file];
     
     // Preparar los metadatos según la estructura esperada
-    const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
-    const addedGalleries = [{
-      documentTypeId: documentId,
-      documentTypeName: documentNames[documentId as keyof typeof documentNames],
-      fileName: file.name,
-      fileSize: file.size,
-      uploadedAt: new Date().toISOString()
-    }];
+    const documentType = this.requestProviderDocumentTypes.find(type => type.id === documentId);
+    const documentName = documentType?.name || `Documento ${documentId}`;
+    
+    const galleryData = {
+      addedGalleries: [{
+        description: documentName,
+        orderIndex: 0,
+        documentTypeId: documentId
+      }],
+      deletedGalleries: []
+    };
 
-    console.log(`🚀 Guardando ${documentNames[documentId as keyof typeof documentNames]} en el servidor...`);
+    console.log(`🚀 Guardando ${documentName} en el servidor...`);
 
     // Llamar al servicio saveGallery
     this.requestProviderService.saveGallery(
       this.requestProviderById, 
       documentosFiles, 
-      addedGalleries
+      galleryData
     ).subscribe({
       next: (response: any) => {
-        console.log(`✅ ${documentNames[documentId as keyof typeof documentNames]} guardado exitosamente:`, response);
+        console.log(`✅ ${documentName} guardado exitosamente:`, response);
         // Aquí puedes agregar notificación de éxito al usuario
-        // Por ejemplo: this.showSuccessMessage(`${documentNames[documentId]} cargado correctamente`);
+        // Por ejemplo: this.showSuccessMessage(`${documentName} cargado correctamente`);
       },
       error: (error: any) => {
-        console.error(`❌ Error al guardar ${documentNames[documentId as keyof typeof documentNames]}:`, error);
+        console.error(`❌ Error al guardar ${documentName}:`, error);
         // Revertir el archivo en caso de error
         this.documentFiles[documentId] = null;
         const inputElement = document.getElementById(`document-file-${documentId}`) as HTMLInputElement;
@@ -472,9 +554,121 @@ export class RequestproviderComponent implements OnInit {
           inputElement.value = '';
         }
         // Mostrar mensaje de error al usuario
-        alert(`Error al guardar el archivo ${documentNames[documentId as keyof typeof documentNames]}. Por favor, inténtalo de nuevo.`);
+        alert(`Error al guardar el archivo ${documentName}. Por favor, inténtalo de nuevo.`);
       }
     });
+  }
+
+  // Métodos para calcular totales dinámicamente
+  getTotalDocumentTypes(): number {
+    return this.requestProviderDocumentTypes.length;
+  }
+
+  getTotalLoadedDocuments(): number {
+    const newFiles = Object.values(this.documentFiles).filter(file => file !== null).length;
+    const existingFiles = Object.keys(this.existingFiles).length;
+    return newFiles + existingFiles;
+  }
+
+  getTotalMandatoryPending(): number {
+    return this.requestProviderDocumentTypes.filter(docType => 
+      docType.mandatory && !this.documentFiles[docType.id] && !this.existingFiles[docType.id]
+    ).length;
+  }
+
+  getTotalReadyToSend(): number {
+    return Object.values(this.documentFiles).filter(file => file !== null).length;
+  }
+
+  getDocumentStatusMessage(): string {
+    const mandatoryPending = this.getTotalMandatoryPending();
+    const newFiles = Object.values(this.documentFiles).filter(file => file !== null).length;
+    const deletedFiles = this.agregarGaleria.deletedGalleries.length;
+    
+    if (mandatoryPending > 0) {
+      return `Faltan ${mandatoryPending} documento(s) obligatorio(s) por cargar`;
+    } else if (newFiles === 0 && deletedFiles === 0) {
+      return 'No hay cambios pendientes';
+    } else {
+      let message = '';
+      if (newFiles > 0) {
+        message += `${newFiles} archivo(s) nuevo(s)`;
+      }
+      if (deletedFiles > 0) {
+        if (message) message += ' y ';
+        message += `${deletedFiles} archivo(s) eliminado(s)`;
+      }
+      return `${message} listo(s) para enviar`;
+    }
+  }
+
+  canSendDocuments(): boolean {
+    const hasNewFiles = Object.values(this.documentFiles).some(file => file !== null);
+    const hasDeletedFiles = this.agregarGaleria.deletedGalleries.length > 0;
+    const mandatoryPending = this.getTotalMandatoryPending() === 0;
+    
+    return (hasNewFiles || hasDeletedFiles) && mandatoryPending;
+  }
+
+  getFileSizeInMB(docTypeId: number): string {
+    const file = this.documentFiles[docTypeId];
+    if (!file) return '0';
+    return (file.size / 1024 / 1024).toFixed(2);
+  }
+
+  // Verifica si existe un archivo (nuevo o existente) para un tipo de documento
+  hasFile(docTypeId: number): boolean {
+    return this.documentFiles[docTypeId] !== null || this.existingFiles[docTypeId] !== undefined;
+  }
+
+  // Verifica si existe un archivo existente para un tipo de documento
+  hasExistingFile(docTypeId: number): boolean {
+    return this.existingFiles[docTypeId] !== undefined;
+  }
+
+  // Verifica si existe un archivo nuevo para un tipo de documento
+  hasNewFile(docTypeId: number): boolean {
+    return this.documentFiles[docTypeId] !== null;
+  }
+
+  // Obtiene el nombre del archivo (nuevo o existente)
+  getFileName(docTypeId: number): string {
+    if (this.documentFiles[docTypeId]) {
+      return this.documentFiles[docTypeId]!.name;
+    }
+    if (this.existingFiles[docTypeId]) {
+      return this.existingFiles[docTypeId].fileName;
+    }
+    return '';
+  }
+
+  // Elimina un archivo existente
+  removeExistingFile(docTypeId: number): void {
+    if (this.existingFiles[docTypeId]) {
+      const existingFile = this.existingFiles[docTypeId];
+      
+      // Agregar a la lista de archivos eliminados con la misma estructura que addedGalleries
+      this.agregarGaleria.deletedGalleries.push({
+        description: existingFile.description,
+        orderIndex: existingFile.orderIndex,
+        documentTypeId: docTypeId
+      });
+      
+      // Eliminar de la lista de archivos existentes
+      delete this.existingFiles[docTypeId];
+      
+      const documentType = this.requestProviderDocumentTypes.find(type => type.id === docTypeId);
+      const documentName = documentType?.name || `Documento ${docTypeId}`;
+      console.log(`🗑️ Archivo existente eliminado para ${documentName}`);
+    }
+  }
+
+  // Obtiene la URL del archivo existente
+  getFileUrl(docTypeId: number): string {
+    if (this.existingFiles[docTypeId]) {
+      return this.existingFiles[docTypeId].fileUrl;
+    }
+    return '';
   }
 
   
