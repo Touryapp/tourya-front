@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from "../../../../environments/environment";
 import { CreateRequestProviderDto } from '../../../shared/dto/create-request-provider.dto';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
+import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
 
 
 @Injectable({
@@ -59,6 +60,10 @@ export class RequestProvidersService {
     
     formData.append('metadata', JSON.stringify(addedGalleries));
 
-    return this.http.post<any>(`${this.baseUrl}/requestProvider/${requestProviderById}/gallery`, formData);
+    return this.http.post<any>(`${this.baseUrl}/${requestProviderById}/gallery`, formData);
+  }
+
+  typeDocuments(): Observable<RequestProviderDocumentType[]> {
+    return this.http.get<RequestProviderDocumentType[]>(`${this.baseUrl}/requestProviderDocumentType/user/getAllRequestProviderDocumentTypeList`);
   }
 }

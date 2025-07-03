@@ -14,6 +14,7 @@ import { ProviderDocumentType } from '../../../shared/enums/provider-document-ty
 import { ProviderDocumentTypeDto } from '../../../shared/dto/provider-document-type.dt';
 import { ProviderServiceType } from '../../../shared/enums/provider-document-type.enum';
 
+
 @Component({
   selector: 'app-requestprovider',
   standalone: false,
@@ -52,6 +53,17 @@ export class RequestproviderComponent implements OnInit {
   documentosFiles: File[] = [];
   agregarGaleria :{addedGalleries: any[], deletedGalleries: any[]} = {addedGalleries: [], deletedGalleries: []}
   dataRequestProvider: any = {};
+  isExistingData = false;
+  
+  // Variables para los 3 tipos de documentos específicos
+  documentFiles: { [key: number]: File | null } = {
+    1: null, // NIT
+    2: null, // RNT  
+    3: null  // Other
+  };
+  
+  // Variable para almacenar el ID del request provider
+  requestProviderById: number | null = null;
   constructor(
     private fb: FormBuilder,
     private countryService: CountryService,
@@ -61,9 +73,10 @@ export class RequestproviderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //consultar data del usuario
+    this.consultaData();
     this.initializeForm();
     this.getCountries();
+    
   }
 
   private initializeForm(): void {
@@ -138,9 +151,60 @@ export class RequestproviderComponent implements OnInit {
         if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
           this.activeTab = tab.id;
         }
-      }
-    });
-  }
+             }
+     });
+   }
+
+   // Función para guardar todos los documentos cargados
+   saveAllDocumentsToGallery(): void {
+     if (!this.requestProviderById) {
+       console.warn('No hay requestProviderById disponible');
+       return;
+     }
+
+     // Recopilar todos los archivos cargados
+     const documentosFiles: File[] = [];
+     const addedGalleries: any[] = [];
+     const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
+
+     Object.keys(this.documentFiles).forEach(key => {
+       const documentId = parseInt(key);
+       const file = this.documentFiles[documentId];
+       
+       if (file) {
+         documentosFiles.push(file);
+         addedGalleries.push({
+           documentTypeId: documentId,
+           documentTypeName: documentNames[documentId as keyof typeof documentNames],
+           fileName: file.name,
+           fileSize: file.size,
+           uploadedAt: new Date().toISOString()
+         });
+       }
+     });
+
+     if (documentosFiles.length === 0) {
+       console.warn('No hay archivos para guardar');
+       return;
+     }
+
+     console.log(`🚀 Enviando ${documentosFiles.length} documentos al servidor...`);
+
+     this.requestProviderService.saveGallery(
+       this.requestProviderById,
+       documentosFiles,
+       addedGalleries
+     ).subscribe({
+       next: (response: any) => {
+         console.log('✅ Todos los documentos enviados exitosamente al servidor:', response);
+         alert('¡Documentos enviados exitosamente al servidor!');
+       },
+       error: (error: any) => {
+         console.error('❌ Error al enviar los documentos al servidor:', error);
+         alert('Error al enviar los documentos al servidor. Por favor, inténtalo de nuevo.');
+       }
+     });
+   }
 
   scrollTo(id: string): void {
     const element = document.getElementById(id);
@@ -236,4 +300,183 @@ export class RequestproviderComponent implements OnInit {
   onDeleteImage(index: number): void {
     this.imageUrls.splice(index, 1);
   }
+
+  consultaData(){
+    this.requestProviderService.consultData().subscribe({
+              next: async (data: RequestProvider) => {
+          if (data && data.id && data.provider) {
+            this.isExistingData = true;
+            // Guardar el ID del request provider para usar en saveGallery
+            this.requestProviderById = data.id;
+            
+            // Cargar departamentos y ciudades antes de llenar el formulario
+            await new Promise((resolve) => {
+              this.getDepartments(data.provider.country.id);
+              // Esperar un pequeño tiempo para que los departamentos se carguen
+              setTimeout(resolve, 300);
+            });
+            await new Promise((resolve) => {
+              this.getCities(data.provider.state.id);
+              setTimeout(resolve, 300);
+            });
+            this.requestProviderForm.patchValue({
+              name: data.provider.name,
+              documentNumber: data.provider.documentNumber,
+              documentType: data.provider.documentType,
+              serviceType: data.provider.serviceType,
+              country: data.provider.country.id,
+              department: data.provider.state.id,
+              city: data.provider.city.id,
+              address: data.provider.address,
+              phone: data.provider.phone
+            });
+            // Deshabilitar el formulario
+            this.requestProviderForm.disable();
+          }
+        },
+      error: (err: any) => {
+        console.error('Error:', err);
+      }
+    });
+  }
+
+  // Función para activar el input file específico
+  triggerFileInput(documentId: number): void {
+    console.log(`🖱️ Haciendo clic en botón para documento ID: ${documentId}`);
+    
+    const inputElement = document.getElementById(`document-file-${documentId}`) as HTMLInputElement;
+    
+    if (inputElement) {
+      console.log(`✅ Disparando click en input file para documento ${documentId}`);
+      inputElement.click();
+    } else {
+      console.error(`❌ No se encontró el elemento input con ID: document-file-${documentId}`);
+    }
+  }
+
+  // Función alternativa para debug - sin depender de disabled
+  testFileInput(documentId: number): void {
+    console.log(`🧪 TEST: Probando input para documento ${documentId}`);
+    
+    // Crear un input temporal para probar
+    const tempInput = document.createElement('input');
+    tempInput.type = 'file';
+    tempInput.accept = '.pdf,.jpg,.jpeg,.png,.doc,.docx';
+    tempInput.style.display = 'none';
+    
+    tempInput.onchange = (event: any) => {
+      console.log(`🎯 Archivo seleccionado en test:`, event.target.files[0]);
+      this.onDocumentFileSelected(event, documentId);
+      document.body.removeChild(tempInput);
+    };
+    
+    document.body.appendChild(tempInput);
+    tempInput.click();
+  }
+
+  // Función para manejar la selección de archivos
+  onDocumentFileSelected(event: any, documentId: number): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validar tamaño del archivo (máximo 10MB)
+      const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSizeInBytes) {
+        alert('El archivo es demasiado grande. El tamaño máximo permitido es 10MB.');
+        event.target.value = '';
+        return;
+      }
+
+      // Validar tipo de archivo
+      const allowedTypes = [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg', 
+        'image/png',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ];
+      
+      if (!allowedTypes.includes(file.type)) {
+        alert('Tipo de archivo no permitido. Solo se aceptan: PDF, JPG, JPEG, PNG, DOC, DOCX');
+        event.target.value = '';
+        return;
+      }
+
+      // Guardar el archivo temporalmente (solo localmente)
+      this.documentFiles[documentId] = file;
+      
+      // Obtener el nombre del documento según el ID
+      const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
+      console.log(`📎 Archivo cargado localmente para ${documentNames[documentId as keyof typeof documentNames]}:`, {
+        fileName: file.name,
+        fileSize: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+        fileType: file.type
+      });
+
+      // NO llamar a saveGallery automáticamente - solo guardar localmente
+      console.log(`💾 Archivo ${documentNames[documentId as keyof typeof documentNames]} guardado localmente. Usa "Guardar todos los documentos" para enviarlo al servidor.`);
+    }
+  }
+
+  // Función para eliminar un archivo
+  removeDocumentFile(documentId: number): void {
+    this.documentFiles[documentId] = null;
+    const inputElement = document.getElementById(`document-file-${documentId}`) as HTMLInputElement;
+    if (inputElement) {
+      inputElement.value = '';
+    }
+    
+    const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
+    console.log(`🗑️ Archivo eliminado para ${documentNames[documentId as keyof typeof documentNames]}`);
+  }
+
+  // Función para guardar un documento específico usando saveGallery
+  saveDocumentToGallery(documentId: number, file: File): void {
+    if (!this.requestProviderById) {
+      console.warn('No hay requestProviderById disponible para guardar el documento');
+      return;
+    }
+
+    // Preparar los archivos para enviar
+    const documentosFiles: File[] = [file];
+    
+    // Preparar los metadatos según la estructura esperada
+    const documentNames = { 1: 'NIT', 2: 'RNT', 3: 'Other' };
+    const addedGalleries = [{
+      documentTypeId: documentId,
+      documentTypeName: documentNames[documentId as keyof typeof documentNames],
+      fileName: file.name,
+      fileSize: file.size,
+      uploadedAt: new Date().toISOString()
+    }];
+
+    console.log(`🚀 Guardando ${documentNames[documentId as keyof typeof documentNames]} en el servidor...`);
+
+    // Llamar al servicio saveGallery
+    this.requestProviderService.saveGallery(
+      this.requestProviderById, 
+      documentosFiles, 
+      addedGalleries
+    ).subscribe({
+      next: (response: any) => {
+        console.log(`✅ ${documentNames[documentId as keyof typeof documentNames]} guardado exitosamente:`, response);
+        // Aquí puedes agregar notificación de éxito al usuario
+        // Por ejemplo: this.showSuccessMessage(`${documentNames[documentId]} cargado correctamente`);
+      },
+      error: (error: any) => {
+        console.error(`❌ Error al guardar ${documentNames[documentId as keyof typeof documentNames]}:`, error);
+        // Revertir el archivo en caso de error
+        this.documentFiles[documentId] = null;
+        const inputElement = document.getElementById(`document-file-${documentId}`) as HTMLInputElement;
+        if (inputElement) {
+          inputElement.value = '';
+        }
+        // Mostrar mensaje de error al usuario
+        alert(`Error al guardar el archivo ${documentNames[documentId as keyof typeof documentNames]}. Por favor, inténtalo de nuevo.`);
+      }
+    });
+  }
+
+  
 } 
+

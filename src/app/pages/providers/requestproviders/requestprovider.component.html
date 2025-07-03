@@ -31,7 +31,8 @@
                             <ul class="add-tab-list">
                                 <li *ngFor="let tab of tabs">
                                     <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
-                                        (click)="scrollTo(tab.id)">
+                                        (click)="scrollTo(tab.id)" 
+                                        *ngIf="tab.id !== 'gallery' || isExistingData">
                                         {{ tab.label }}
                                     </a>
                                 </li>
@@ -185,33 +186,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Department
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Department</label>
-                                        <select class="form-control" formControlName="department">
-                                            <option value="">Select department</option>
-                                            <option value="antioquia">Antioquia</option>
-                                            <option value="atlantico">Atlántico</option>
-                                            <option value="bolivar">Bolívar</option>
-                                            <option value="boyaca">Boyacá</option>
-                                            <option value="caldas">Caldas</option>
-                                            <option value="cundinamarca">Cundinamarca</option>
-                                            <option value="magdalena">Magdalena</option>
-                                            <option value="quindio">Quindío</option>
-                                            <option value="risaralda">Risaralda</option>
-                                            <option value="santander">Santander</option>
-                                            <option value="valle_del_cauca">Valle del Cauca</option>
-                                        </select>
-                                        <div *ngIf="requestProviderForm.controls['department'].invalid && (requestProviderForm.controls['department'].dirty || requestProviderForm.controls['department'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="requestProviderForm.controls['department'].errors?.['required']">
-                                                Department is required
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-
                                 <!-- Phone -->
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -251,32 +225,316 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-none" id="gallery">
+                    <div class="card shadow-none" id="gallery" *ngIf="isExistingData">
                         <div class="card-header">
                             <h5 class="fs-18">Documents</h5>
                         </div>
                         <div class="card-body">
-                            <div
-                                class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
-                                <span class="upload-img d-block mb-2"><i
-                                        class="isax isax-document-upload fs-24"></i></span>
-                                <h6 class="mb-1">Upload Gallery Images</h6>
-                                <p class="mb-0">Upload Feature Image First, Image size should below 5MB</p>
-                                <input type="file" accept="image/*" (change)="onFileSelected($event)" multiple>
-                            </div>
-                            <div *ngIf="imageUrls.length > 0">
+                            <!-- 3 Botones de carga de archivos según estructura JSON -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6 class="mb-4">Required Documents</h6>
+                                    
+                                    <!-- Información del flujo de trabajo -->
+                                    <div class="alert alert-info mb-3">
+                                        <h6><i class="isax isax-info-circle me-2"></i>Flujo de trabajo:</h6>
+                                        <ol class="mb-0">
+                                            <li>Carga los documentos usando los botones de abajo</li>
+                                            <li>Los documentos se guardan temporalmente en tu navegador</li>
+                                            <li>Presiona "Guardar todos los documentos" para enviarlos al servidor</li>
+                                        </ol>
+                                    </div>
 
-                                <div class="d-flex align-items-center">
-                                    <ng-container *ngFor="let imageUrl of imageUrls; let i=index">
-                                        <a href="javascript:void(0);" class="gallery-upload-img of list m-2">
-                                            <a href="javascript:void(0);" class="gallery-upload-img me-2">
-                                                <img [src]="imageUrl" alt="Img">
-                                                <span
-                                                    class="trash-icon d-flex align-items-center justify-content-center text-danger gallery-trash"
-                                                    (click)="onDeleteImage(i)"><i class="isax isax-trash"></i></span>
-                                            </a>
-                                        </a>
-                                    </ng-container>
+                                    <!-- Grid de 3 botones de carga -->
+                                    <div class="row g-4">
+                                        
+                                        <!-- BOTÓN 1: NIT (ID: 1, Obligatorio) -->
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="card h-100 border-2 position-relative"
+                                                 [class.border-success]="documentFiles[1]"
+                                                 [class.border-danger]="!documentFiles[1]"
+                                                 [class.bg-light]="documentFiles[1]">
+                                                
+                                                <!-- Badge de estado -->
+                                                <div class="position-absolute top-0 end-0 p-2">
+                                                    <span *ngIf="!documentFiles[1]" class="badge bg-danger">
+                                                        <i class="isax isax-danger me-1"></i>Obligatorio
+                                                    </span>
+                                                    <span *ngIf="documentFiles[1]" class="badge bg-success">
+                                                        <i class="isax isax-tick-circle me-1"></i>Cargado
+                                                    </span>
+                                                </div>
+
+                                                <div class="card-body text-center p-4">
+                                                    <!-- Sin archivo cargado -->
+                                                    <div *ngIf="!documentFiles[1]">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4 text-danger"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-danger mb-2">NIT</h5>
+                                                        <p class="card-text text-muted mb-3">
+                                                            NIT personal document
+                                                        </p>
+                                                        <button 
+                                                            type="button" 
+                                                            class="btn btn-danger w-100 mb-2"
+                                                            (click)="triggerFileInput(1)">
+                                                            <i class="isax isax-document-upload me-2"></i>
+                                                            Cargar NIT
+                                                        </button>
+                                                        <small class="text-muted">PDF, JPG, PNG, DOC (Max 10MB)</small>
+                                                    </div>
+
+                                                    <!-- Con archivo cargado -->
+                                                    <div *ngIf="documentFiles[1]">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4 text-success"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-success mb-2">NIT</h5>
+                                                        <div class="file-info mb-3">
+                                                            <p class="mb-1 fw-bold">{{ documentFiles[1]?.name }}</p>
+                                                            <small class="text-muted">
+                                                                {{ documentFiles[1] ? (documentFiles[1].size / 1024 / 1024).toFixed(2) : '0' }} MB
+                                                            </small>
+                                                        </div>
+                                                        <div class="d-grid gap-2">
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-primary"
+                                                                (click)="triggerFileInput(1)">
+                                                                <i class="isax isax-refresh me-1"></i>
+                                                                Cambiar NIT
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-danger"
+                                                                (click)="removeDocumentFile(1)">
+                                                                <i class="isax isax-trash me-1"></i>
+                                                                Eliminar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Input file oculto -->
+                                                    <input 
+                                                        type="file" 
+                                                        class="d-none"
+                                                        id="document-file-1"
+                                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                                        (change)="onDocumentFileSelected($event, 1)">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- BOTÓN 2: RNT (ID: 2, Obligatorio) -->
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="card h-100 border-2 position-relative"
+                                                 [class.border-success]="documentFiles[2]"
+                                                 [class.border-danger]="!documentFiles[2]"
+                                                 [class.bg-light]="documentFiles[2]">
+                                                
+                                                <!-- Badge de estado -->
+                                                <div class="position-absolute top-0 end-0 p-2">
+                                                    <span *ngIf="!documentFiles[2]" class="badge bg-danger">
+                                                        <i class="isax isax-danger me-1"></i>Obligatorio
+                                                    </span>
+                                                    <span *ngIf="documentFiles[2]" class="badge bg-success">
+                                                        <i class="isax isax-tick-circle me-1"></i>Cargado
+                                                    </span>
+                                                </div>
+
+                                                <div class="card-body text-center p-4">
+                                                    <!-- Sin archivo cargado -->
+                                                    <div *ngIf="!documentFiles[2]">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4 text-danger"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-danger mb-2">RNT</h5>
+                                                        <p class="card-text text-muted mb-3">
+                                                            RNT personal document
+                                                        </p>
+                                                        <button 
+                                                            type="button" 
+                                                            class="btn btn-danger w-100 mb-2"
+                                                            (click)="triggerFileInput(2)">
+                                                            <i class="isax isax-document-upload me-2"></i>
+                                                            Cargar RNT
+                                                        </button>
+                                                        <small class="text-muted">PDF, JPG, PNG, DOC (Max 10MB)</small>
+                                                    </div>
+
+                                                    <!-- Con archivo cargado -->
+                                                    <div *ngIf="documentFiles[2]">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4 text-success"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-success mb-2">RNT</h5>
+                                                        <div class="file-info mb-3">
+                                                            <p class="mb-1 fw-bold">{{ documentFiles[2]?.name }}</p>
+                                                            <small class="text-muted">
+                                                                {{ documentFiles[2] ? (documentFiles[2].size / 1024 / 1024).toFixed(2) : '0' }} MB
+                                                            </small>
+                                                        </div>
+                                                        <div class="d-grid gap-2">
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-primary"
+                                                                (click)="triggerFileInput(2)">
+                                                                <i class="isax isax-refresh me-1"></i>
+                                                                Cambiar RNT
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-danger"
+                                                                (click)="removeDocumentFile(2)">
+                                                                <i class="isax isax-trash me-1"></i>
+                                                                Eliminar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Input file oculto -->
+                                                    <input 
+                                                        type="file" 
+                                                        class="d-none"
+                                                        id="document-file-2"
+                                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                                        (change)="onDocumentFileSelected($event, 2)">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- BOTÓN 3: Other (ID: 3, Opcional) -->
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="card h-100 border-2 position-relative"
+                                                 [class.border-success]="documentFiles[3]"
+                                                 [class.border-secondary]="!documentFiles[3]"
+                                                 [class.bg-light]="documentFiles[3]">
+                                                
+                                                <!-- Badge de estado -->
+                                                <div class="position-absolute top-0 end-0 p-2">
+                                                    <span *ngIf="!documentFiles[3]" class="badge bg-secondary">
+                                                        <i class="isax isax-info-circle me-1"></i>Opcional
+                                                    </span>
+                                                    <span *ngIf="documentFiles[3]" class="badge bg-success">
+                                                        <i class="isax isax-tick-circle me-1"></i>Cargado
+                                                    </span>
+                                                </div>
+
+                                                <div class="card-body text-center p-4">
+                                                    <!-- Sin archivo cargado -->
+                                                    <div *ngIf="!documentFiles[3]">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4 text-secondary"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-secondary mb-2">Other</h5>
+                                                        <p class="card-text text-muted mb-3">
+                                                            Other documents
+                                                        </p>
+                                                        <button 
+                                                            type="button" 
+                                                            class="btn btn-secondary w-100 mb-2"
+                                                            (click)="triggerFileInput(3)">
+                                                            <i class="isax isax-document-upload me-2"></i>
+                                                            Cargar Other
+                                                        </button>
+                                                        <small class="text-muted">PDF, JPG, PNG, DOC (Max 10MB)</small>
+                                                    </div>
+
+                                                    <!-- Con archivo cargado -->
+                                                    <div *ngIf="documentFiles[3]">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4 text-success"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-success mb-2">Other</h5>
+                                                        <div class="file-info mb-3">
+                                                            <p class="mb-1 fw-bold">{{ documentFiles[3]?.name }}</p>
+                                                            <small class="text-muted">
+                                                                {{ documentFiles[3] ? (documentFiles[3].size / 1024 / 1024).toFixed(2) : '0' }} MB
+                                                            </small>
+                                                        </div>
+                                                        <div class="d-grid gap-2">
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-primary"
+                                                                (click)="triggerFileInput(3)">
+                                                                <i class="isax isax-refresh me-1"></i>
+                                                                Cambiar Other
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-danger"
+                                                                (click)="removeDocumentFile(3)">
+                                                                <i class="isax isax-trash me-1"></i>
+                                                                Eliminar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Input file oculto -->
+                                                    <input 
+                                                        type="file" 
+                                                        class="d-none"
+                                                        id="document-file-3"
+                                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                                        (change)="onDocumentFileSelected($event, 3)">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Panel de resumen -->
+                                    <div class="mt-4">
+                                        <div class="card bg-light border-0">
+                                            <div class="card-body">
+                                                <div class="row text-center">
+                                                    <div class="col-3">
+                                                        <div class="h4 mb-1 text-primary">3</div>
+                                                        <small class="text-muted">Total disponibles</small>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="h4 mb-1 text-success">
+                                                            {{ (documentFiles[1] ? 1 : 0) + (documentFiles[2] ? 1 : 0) + (documentFiles[3] ? 1 : 0) }}
+                                                        </div>
+                                                        <small class="text-muted">Cargados localmente</small>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="h4 mb-1 text-warning">
+                                                            {{ (!documentFiles[1] ? 1 : 0) + (!documentFiles[2] ? 1 : 0) }}
+                                                        </div>
+                                                        <small class="text-muted">Obligatorios pendientes</small>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="h4 mb-1 text-info">
+                                                            {{ (documentFiles[1] ? 1 : 0) + (documentFiles[2] ? 1 : 0) + (documentFiles[3] ? 1 : 0) }}
+                                                        </div>
+                                                        <small class="text-muted">Listos para enviar</small>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Botón para guardar todos los documentos -->
+                                                <div class="row mt-3">
+                                                    <div class="col-12 text-center">
+                                                        <button 
+                                                            type="button" 
+                                                            class="btn btn-success"
+                                                            (click)="saveAllDocumentsToGallery()"
+                                                            [disabled]="!documentFiles[1] && !documentFiles[2] && !documentFiles[3]">
+                                                            <i class="isax isax-cloud-add me-2"></i>
+                                                            Enviar documentos al servidor
+                                                        </button>
+                                                        <div class="mt-2">
+                                                            <small class="text-muted">
+                                                                Los documentos están guardados localmente. 
+                                                                Presiona este botón para enviarlos al servidor
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
