@@ -225,218 +225,17 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-none" id="gallery" *ngIf="isExistingData">
-                        <div class="card-header">
-                            <h5 class="fs-18">Documents</h5>
+                    <!-- Mostrar motivo de rechazo o solicitud de información antes del botón Submit Request -->
+                    <div *ngIf="dataRequestProvider.status === 'Declined' && dataRequestProvider.declinedReason" class="mt-3">
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="isax isax-close-circle me-2"></i>
+                            <span class="fw-bold">Motivo del rechazo:</span>&nbsp;{{ dataRequestProvider.declinedReason }}
                         </div>
-                        <div class="card-body">
-                            <!-- 3 Botones de carga de archivos según estructura JSON -->
-                            <div class="row">
-                                <div class="col-12">
-                                    <h6 class="mb-4">Required Documents</h6>
-                                    
-                                    <!-- Información del flujo de trabajo -->
-                                    <div class="alert alert-info mb-3">
-                                        <h6><i class="isax isax-info-circle me-2"></i>Flujo de trabajo:</h6>
-                                        <ol class="mb-0">
-                                            <li>Carga los documentos usando los botones de abajo</li>
-                                            <li>Los documentos se guardan temporalmente en tu navegador</li>
-                                            <li>Presiona "Guardar todos los documentos" para enviarlos al servidor</li>
-                                        </ol>
-                                    </div>
-
-                                                        <!-- Grid de botones de carga dinámicos -->
-                    <div class="row g-4">
-                        
-                        <!-- BOTÓN DINÁMICO: Se genera uno por cada tipo de documento -->
-                        <div class="col-lg-4 col-md-6" *ngFor="let docType of requestProviderDocumentTypes">
-                            <div class="card h-100 border-2 position-relative"
-                                 [class.border-success]="hasFile(docType.id)"
-                                 [class.border-danger]="!hasFile(docType.id) && docType.mandatory"
-                                 [class.border-secondary]="!hasFile(docType.id) && !docType.mandatory"
-                                 [class.bg-light]="hasFile(docType.id)">
-                                
-                                <!-- Badge de estado -->
-                                <div class="position-absolute top-0 end-0 p-2">
-                                    <span *ngIf="!hasFile(docType.id) && docType.mandatory" class="badge bg-danger">
-                                        <i class="isax isax-danger me-1"></i>Obligatorio
-                                    </span>
-                                    <span *ngIf="!hasFile(docType.id) && !docType.mandatory" class="badge bg-secondary">
-                                        <i class="isax isax-info-circle me-1"></i>Opcional
-                                    </span>
-                                    <span *ngIf="hasNewFile(docType.id)" class="badge bg-success">
-                                        <i class="isax isax-tick-circle me-1"></i>Nuevo
-                                    </span>
-                                    <span *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)" class="badge bg-primary">
-                                        <i class="isax isax-document me-1"></i>Existente
-                                    </span>
-                                </div>
-
-                                <div class="card-body text-center p-4">
-                                    <!-- Sin archivo cargado -->
-                                    <div *ngIf="!hasFile(docType.id)">
-                                        <div class="mb-3">
-                                            <i class="isax isax-document-text display-4" 
-                                               [class.text-danger]="docType.mandatory"
-                                               [class.text-secondary]="!docType.mandatory"></i>
-                                        </div>
-                                        <h5 class="card-title mb-2" 
-                                            [class.text-danger]="docType.mandatory"
-                                            [class.text-secondary]="!docType.mandatory">
-                                            {{ docType.name }}
-                                        </h5>
-                                        <p class="card-text text-muted mb-3">
-                                            {{ docType.description }}
-                                        </p>
-                                        <button 
-                                            type="button" 
-                                            class="btn w-100 mb-2"
-                                            [class.btn-danger]="docType.mandatory"
-                                            [class.btn-secondary]="!docType.mandatory"
-                                            (click)="triggerFileInput(docType.id)">
-                                            <i class="isax isax-document-upload me-2"></i>
-                                            Cargar {{ docType.name }}
-                                        </button>
-                                        <small class="text-muted">PDF, JPG, PNG, DOC (Max 10MB)</small>
-                                    </div>
-
-                                    <!-- Con archivo cargado (nuevo o existente) -->
-                                    <div *ngIf="hasFile(docType.id)">
-                                        <div class="mb-3">
-                                            <i class="isax isax-document-text display-4"
-                                               [class.text-success]="hasNewFile(docType.id)"
-                                               [class.text-primary]="hasExistingFile(docType.id) && !hasNewFile(docType.id)"></i>
-                                        </div>
-                                        <h5 class="card-title mb-2"
-                                            [class.text-success]="hasNewFile(docType.id)"
-                                            [class.text-primary]="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
-                                            {{ docType.name }}
-                                        </h5>
-                                        <div class="file-info mb-3">
-                                            <p class="mb-1 fw-bold">{{ getFileName(docType.id) }}</p>
-                                            <small class="text-muted" *ngIf="hasNewFile(docType.id)">
-                                                {{ getFileSizeInMB(docType.id) }} MB
-                                            </small>
-                                            <small class="text-muted" *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
-                                                Archivo existente
-                                            </small>
-                                        </div>
-                                        
-                                        <!-- Botones para archivo existente -->
-                                        <div class="d-grid gap-2" *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-outline-info"
-                                                (click)="openFile(docType.id)">
-                                                <i class="isax isax-eye me-1"></i>
-                                                Ver archivo
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-outline-primary"
-                                                (click)="triggerFileInput(docType.id)">
-                                                <i class="isax isax-refresh me-1"></i>
-                                                Cambiar {{ docType.name }}
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-outline-danger"
-                                                (click)="removeDocumentFile(docType.id)">
-                                                <i class="isax isax-trash me-1"></i>
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                        
-                                        <!-- Botones para archivo nuevo -->
-                                        <div class="d-grid gap-2" *ngIf="hasNewFile(docType.id)">
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-outline-primary"
-                                                (click)="triggerFileInput(docType.id)">
-                                                <i class="isax isax-refresh me-1"></i>
-                                                Cambiar {{ docType.name }}
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-outline-danger"
-                                                (click)="removeDocumentFile(docType.id)">
-                                                <i class="isax isax-trash me-1"></i>
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Input file oculto -->
-                                    <input 
-                                        type="file" 
-                                        class="d-none"
-                                        id="document-file-{{ docType.id }}"
-                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                                        (change)="onDocumentFileSelected($event, docType.id)">
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-
-                                    <!-- Panel de resumen -->
-                                    <div class="mt-4">
-                                        <div class="card bg-light border-0">
-                                            <div class="card-body">
-                                                                                <div class="row text-center">
-                                    <div class="col-3">
-                                        <div class="h4 mb-1 text-primary">{{ getTotalDocumentTypes() }}</div>
-                                        <small class="text-muted">Total disponibles</small>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="h4 mb-1 text-success">{{ getTotalLoadedDocuments() }}</div>
-                                        <small class="text-muted">Con archivos</small>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="h4 mb-1 text-warning">{{ getTotalMandatoryPending() }}</div>
-                                        <small class="text-muted">Obligatorios pendientes</small>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="h4 mb-1 text-info">{{ getTotalReadyToSend() }}</div>
-                                        <small class="text-muted">Nuevos para enviar</small>
-                                    </div>
-                                </div>
-                                
-                                <!-- Información adicional sobre archivos eliminados -->
-                                <div class="row mt-2" *ngIf="agregarGaleria.deletedGalleries.length > 0">
-                                    <div class="col-12 text-center">
-                                        <small class="text-danger">
-                                            <i class="isax isax-trash me-1"></i>
-                                            {{ agregarGaleria.deletedGalleries.length }} archivo(s) marcado(s) para eliminar
-                                        </small>
-                                    </div>
-                                </div>
-                                                
-                                                <!-- Botón para guardar todos los documentos -->
-                                                <div class="row mt-3">
-                                                    <div class="col-12 text-center">
-                                                                                                <button 
-                                            type="button" 
-                                            class="btn btn-success"
-                                            (click)="saveAllDocumentsToGallery()"
-                                            [disabled]="!canSendDocuments()">
-                                            <i class="isax isax-cloud-add me-2"></i>
-                                            Enviar documentos al servidor
-                                        </button>
-                                                                                                <div class="mt-2">
-                                            <small class="text-muted">
-                                                {{ getDocumentStatusMessage() }}. 
-                                                Presiona este botón para enviarlos al servidor
-                                            </small>
-                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                    <div *ngIf="dataRequestProvider.status === 'Incomplete' && dataRequestProvider.incompleteReason" class="mt-3">
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="isax isax-info-circle me-2"></i>
+                            <span class="fw-bold">Motivo de solicitud de información:</span>&nbsp;{{ dataRequestProvider.incompleteReason }}
                         </div>
                     </div>
 
@@ -467,6 +266,222 @@
                         </div>
                     </div>
 
+                    <!-- Panel de carga de archivos solo si isExistingData es true y status es Pending o Incomplete -->
+                    <div class="card shadow-none" id="gallery" *ngIf="isExistingData && (dataRequestProvider.status === 'Pending' || dataRequestProvider.status === 'Incomplete')">
+                        <div class="card-header">
+                            <h5 class="fs-18">Documents</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- 3 Botones de carga de archivos según estructura JSON -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6 class="mb-4">Required Documents</h6>
+                                    <!-- Información del flujo de trabajo -->
+                                    <div class="alert alert-info mb-3">
+                                        <h6><i class="isax isax-info-circle me-2"></i>Flujo de trabajo:</h6>
+                                        <ol class="mb-0">
+                                            <li>Carga los documentos usando los botones de abajo</li>
+                                            <li>Los documentos se guardan temporalmente en tu navegador</li>
+                                            <li>Presiona "Guardar todos los documentos" para enviarlos al servidor</li>
+                                        </ol>
+                                    </div>
+                                    <!-- Grid de botones de carga dinámicos -->
+                                    <div class="row g-4">
+                                        <!-- BOTÓN DINÁMICO: Se genera uno por cada tipo de documento -->
+                                        <div class="col-lg-4 col-md-6" *ngFor="let docType of requestProviderDocumentTypes">
+                                            <div class="card h-100 border-2 position-relative"
+                                                 [class.border-success]="hasFile(docType.id)"
+                                                 [class.border-danger]="!hasFile(docType.id) && docType.mandatory"
+                                                 [class.border-secondary]="!hasFile(docType.id) && !docType.mandatory"
+                                                 [class.bg-light]="hasFile(docType.id)">
+                                                
+                                                <!-- Badge de estado -->
+                                                <div class="position-absolute top-0 end-0 p-2">
+                                                    <span *ngIf="!hasFile(docType.id) && docType.mandatory" class="badge bg-danger">
+                                                        <i class="isax isax-danger me-1"></i>Obligatorio
+                                                    </span>
+                                                    <span *ngIf="!hasFile(docType.id) && !docType.mandatory" class="badge bg-secondary">
+                                                        <i class="isax isax-info-circle me-1"></i>Opcional
+                                                    </span>
+                                                    <span *ngIf="hasNewFile(docType.id)" class="badge bg-success">
+                                                        <i class="isax isax-tick-circle me-1"></i>Nuevo
+                                                    </span>
+                                                    <span *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)" class="badge bg-primary">
+                                                        <i class="isax isax-document me-1"></i>Existente
+                                                    </span>
+                                                </div>
+
+                                                <div class="card-body text-center p-4">
+                                                    <!-- Sin archivo cargado -->
+                                                    <div *ngIf="!hasFile(docType.id)">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4" 
+                                                               [class.text-danger]="docType.mandatory"
+                                                               [class.text-secondary]="!docType.mandatory"></i>
+                                                        </div>
+                                                        <h5 class="card-title mb-2" 
+                                                            [class.text-danger]="docType.mandatory"
+                                                            [class.text-secondary]="!docType.mandatory">
+                                                            {{ docType.name }}
+                                                        </h5>
+                                                        <p class="card-text text-muted mb-3">
+                                                            {{ docType.description }}
+                                                        </p>
+                                                        <button 
+                                                            type="button" 
+                                                            class="btn w-100 mb-2"
+                                                            [class.btn-danger]="docType.mandatory"
+                                                            [class.btn-secondary]="!docType.mandatory"
+                                                            (click)="triggerFileInput(docType.id)"
+                                                            [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                            <i class="isax isax-document-upload me-2"></i>
+                                                            Cargar {{ docType.name }}
+                                                        </button>
+                                                        <small class="text-muted">PDF, JPG, PNG, DOC (Max 10MB)</small>
+                                                    </div>
+
+                                                    <!-- Con archivo cargado (nuevo o existente) -->
+                                                    <div *ngIf="hasFile(docType.id)">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4"
+                                                               [class.text-success]="hasNewFile(docType.id)"
+                                                               [class.text-primary]="hasExistingFile(docType.id) && !hasNewFile(docType.id)"></i>
+                                                        </div>
+                                                        <h5 class="card-title mb-2"
+                                                            [class.text-success]="hasNewFile(docType.id)"
+                                                            [class.text-primary]="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
+                                                            {{ docType.name }}
+                                                        </h5>
+                                                        <div class="file-info mb-3">
+                                                            <p class="mb-1 fw-bold">{{ getFileName(docType.id) }}</p>
+                                                            <small class="text-muted" *ngIf="hasNewFile(docType.id)">
+                                                                {{ getFileSizeInMB(docType.id) }} MB
+                                                            </small>
+                                                            <small class="text-muted" *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
+                                                                Archivo existente
+                                                            </small>
+                                                        </div>
+                                                        
+                                                        <!-- Botones para archivo existente -->
+                                                        <div class="d-grid gap-2" *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-info"
+                                                                (click)="openFile(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                <i class="isax isax-eye me-1"></i>
+                                                                Ver archivo
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-primary"
+                                                                (click)="triggerFileInput(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                <i class="isax isax-refresh me-1"></i>
+                                                                Cambiar {{ docType.name }}
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-danger"
+                                                                (click)="removeDocumentFile(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                <i class="isax isax-trash me-1"></i>
+                                                                Eliminar
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <!-- Botones para archivo nuevo -->
+                                                        <div class="d-grid gap-2" *ngIf="hasNewFile(docType.id)">
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-primary"
+                                                                (click)="triggerFileInput(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                <i class="isax isax-refresh me-1"></i>
+                                                                Cambiar {{ docType.name }}
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                class="btn btn-outline-danger"
+                                                                (click)="removeDocumentFile(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                <i class="isax isax-trash me-1"></i>
+                                                                Eliminar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Input file oculto -->
+                                                    <input 
+                                                        type="file" 
+                                                        class="d-none"
+                                                        id="document-file-{{ docType.id }}"
+                                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                                        (change)="onDocumentFileSelected($event, docType.id)"
+                                                        [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Panel de resumen -->
+                            <div class="mt-4">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-primary">{{ getTotalDocumentTypes() }}</div>
+                                                <small class="text-muted">Total disponibles</small>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-success">{{ getTotalLoadedDocuments() }}</div>
+                                                <small class="text-muted">Con archivos</small>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-warning">{{ getTotalMandatoryPending() }}</div>
+                                                <small class="text-muted">Obligatorios pendientes</small>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-info">{{ getTotalReadyToSend() }}</div>
+                                                <small class="text-muted">Nuevos para enviar</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Información adicional sobre archivos eliminados -->
+                                        <div class="row mt-2" *ngIf="agregarGaleria.deletedGalleries.length > 0">
+                                            <div class="col-12 text-center">
+                                                <small class="text-danger">
+                                                    <i class="isax isax-trash me-1"></i>
+                                                    {{ agregarGaleria.deletedGalleries.length }} archivo(s) marcado(s) para eliminar
+                                                </small>
+                                            </div>
+                                        </div>
+                                                
+                                        <!-- Botón para guardar todos los documentos -->
+                                        <div class="row mt-3">
+                                            <div class="col-12 text-center">
+                                                <button 
+                                                    type="button" 
+                                                    class="btn btn-success"
+                                                    (click)="saveAllDocumentsToGallery()"
+                                                    [disabled]="!canSendDocuments()">
+                                                    <i class="isax isax-cloud-add me-2"></i>
+                                                    Enviar documentos al servidor
+                                                </button>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">
+                                                        {{ getDocumentStatusMessage() }}. 
+                                                        Presiona este botón para enviarlos al servidor
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <!-- /Request Provider Form -->

@@ -238,6 +238,36 @@
               <p class="text-incomplete">{{ selectedProvider.incompleteReason }}</p>
             </div>
           </div>
+          <div class="col-12" *ngIf="selectedProvider.requestProviderGalleryList && selectedProvider.requestProviderGalleryList.length > 0">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Archivos Subidos:</label>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm align-middle">
+                  <thead>
+                    <tr>
+                      <th>Tipo de Documento</th>
+                      <th>Descripción</th>
+                      <th>Archivo</th>
+                      <th>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let doc of selectedProvider.requestProviderGalleryList">
+                      <td>{{ doc.documentTypeName }}</td>
+                      <td>{{ doc.description }}</td>
+                      <td>{{ doc.imageUrl ? (doc.imageUrl | slice:0:40) + (doc.imageUrl.length > 40 ? '...' : '') : 'No disponible' }}</td>
+                      <td>
+                        <button *ngIf="doc.imageUrl" class="btn btn-outline-primary btn-sm" (click)="openFile(doc.imageUrl, '_blank')">
+                          <i class="isax isax-eye"></i> Ver
+                        </button>
+                        <span *ngIf="!doc.imageUrl" class="text-muted">No disponible</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer justify-content-center">

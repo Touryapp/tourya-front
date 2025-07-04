@@ -66,4 +66,9 @@ export class RequestProvidersService {
   typeDocuments(): Observable<RequestProviderDocumentType[]> {
     return this.http.get<RequestProviderDocumentType[]>(`${environment.apiUrl}/requestProviderDocumentType/user/getAllRequestProviderDocumentTypeList`);
   }
-}
+
+  // Endpoint para consultar datos del proveedor (admin)
+  consultDataByIdProviderAdmin(requestProviderById: number): Observable<RequestProvider> {
+    return this.http.get<RequestProvider>(`${this.baseUrl}/admin/consultDataById/${requestProviderById}`);
+  }
+ }

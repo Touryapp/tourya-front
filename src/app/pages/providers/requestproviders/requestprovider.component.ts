@@ -329,6 +329,9 @@ export class RequestproviderComponent implements OnInit {
               next: async (data: RequestProvider) => {
           if (data && data.id && data.provider) {
             this.isExistingData = true;
+            this.dataRequestProvider.status = data.status;
+            this.dataRequestProvider.declinedReason = data.declinedReason;
+            this.dataRequestProvider.incompleteReason = data.incompleteReason;
             // Guardar el ID del request provider para usar en saveGallery
             this.requestProviderById = data.id;
             

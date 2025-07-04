@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
 import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
+import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +25,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarSolicitudes();
+    this.showGalleryFiles();
   }
+
 
   cargarSolicitudes(): void {
     this.requestProvidersService.findAll().subscribe({
@@ -51,8 +55,15 @@ export class DashboardComponent implements OnInit {
   // }
 
   openProviderModal(provider: RequestProvider): void {
-    this.selectedProvider = provider;
-    this.showModal = true;
+    this.requestProvidersService.consultDataById(provider.id).subscribe({
+      next: (data) => {
+        this.selectedProvider = data;
+        this.showModal = true;
+      },
+      error: (error) => {
+        console.error('Error al cargar detalles del proveedor:', error);
+      }
+    });
   }
 
   closeModal(): void {
@@ -139,4 +150,30 @@ export class DashboardComponent implements OnInit {
       });
     }
   }
+
+  openFile(url: string, target: string = '_blank') {
+    if (url) {
+      window.open(url, target);
+    }
+  }
+
+  showGalleryFiles(): void {
+    if (!this.requestProviders || !Array.isArray(this.requestProviders.content)) {
+      console.log('No hay lista de solicitudes cargada.');
+      return;
+    }
+    this.requestProviders.content.forEach((item: any) => {
+      const providerId = item.id;
+      this.requestProvidersService.consultDataByIdProviderAdmin(providerId).subscribe({
+        next: (data) => {
+          console.log(`Respuesta del servicio para proveedor ID ${providerId}:`, data);
+        },
+        error: (error) => {
+          console.error(`[Proveedor ID ${providerId}] Error al consultar galería:`, error);
+        }
+      });
+    });
+  }
+
 } 
+
