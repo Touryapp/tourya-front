@@ -123,6 +123,10 @@ export class RequestproviderComponent implements OnInit {
           this.loading = false;
           this.successMessage = 'Provider request submitted successfully. We will contact you soon.';
           this.requestProviderForm.reset();
+          // Refrescar la página después de 3 segundos
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         },
         error: (err: any) => {
           console.error('Error saving data:', err);
@@ -130,11 +134,6 @@ export class RequestproviderComponent implements OnInit {
           this.errorMessage = 'Error saving data. Please try again.';
         }
       });
-      // setTimeout(() => {
-      //   this.loading = false;
-      //   this.successMessage = 'Provider request submitted successfully. We will contact you soon.';
-      //   this.requestProviderForm.reset();
-      // }, 2000);
     } else {
       this.errorMessage = 'Please fill in all required fields correctly.';
     }
