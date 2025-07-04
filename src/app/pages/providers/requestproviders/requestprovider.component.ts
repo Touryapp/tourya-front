@@ -384,6 +384,13 @@ export class RequestproviderComponent implements OnInit {
             orderIndex: gallery.orderIndex,
             isExisting: true
           };
+          
+          console.log(`📁 Archivo existente cargado - ${gallery.documentTypeName}:`, {
+            id: gallery.id,
+            fileName: gallery.documentTypeName,
+            fileUrl: gallery.imageUrl,
+            documentTypeId: gallery.documentTypeId
+          });
         }
       });
       
@@ -649,6 +656,7 @@ export class RequestproviderComponent implements OnInit {
       
       // Agregar a la lista de archivos eliminados con la misma estructura que addedGalleries
       this.agregarGaleria.deletedGalleries.push({
+        id: existingFile.id,
         description: existingFile.description,
         orderIndex: existingFile.orderIndex,
         documentTypeId: docTypeId
@@ -669,6 +677,35 @@ export class RequestproviderComponent implements OnInit {
       return this.existingFiles[docTypeId].fileUrl;
     }
     return '';
+  }
+
+  // Abre el archivo en una nueva pestaña
+  openFile(docTypeId: number): void {
+    console.log(`🔍 Intentando abrir archivo para documentTypeId: ${docTypeId}`);
+    console.log('📊 Archivos existentes disponibles:', this.existingFiles);
+    
+    const existingFile = this.existingFiles[docTypeId];
+    if (!existingFile) {
+      console.warn(`⚠️ No se encontró archivo existente para documentTypeId: ${docTypeId}`);
+      alert('No se encontró el archivo.');
+      return;
+    }
+    
+    const fileUrl = existingFile.fileUrl;
+    console.log(`🔗 URL encontrada: ${fileUrl}`);
+    
+    if (fileUrl && fileUrl.trim() !== '') {
+      try {
+        window.open(fileUrl, '_blank');
+        console.log(`✅ Archivo abierto exitosamente: ${fileUrl}`);
+      } catch (error) {
+        console.error(`❌ Error al abrir archivo:`, error);
+        alert('Error al abrir el archivo.');
+      }
+    } else {
+      console.warn(`⚠️ URL vacía o inválida para el documento ${docTypeId}: "${fileUrl}"`);
+      alert('La URL del archivo no está disponible o es inválida.');
+    }
   }
 
   
