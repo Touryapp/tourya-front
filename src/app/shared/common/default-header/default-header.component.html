@@ -1,159 +1,7 @@
-<div class="main-header"
-    [ngClass]="{'main-header-four':base==='index-2' || base==='index-4' || base==='index-6' || base === 'home-clients' || base === 'home-providers'}">
+<div class="main-header main-header-four">
 
     <!-- Header Topbar-->
-    <div [hidden]="base === 'index-2' || base === 'index-3' || base === 'index-4' || base === 'index-5' || base === 'index-6' || base === 'home-clients' || base === 'home-providers' || page==='index-rtl'"
-        class="header-topbar text-center bg-transparent">
-        <div class="container">
-            <div class="d-flex align-items-center justify-content-between flex-wrap">
-                <p class="d-flex align-items-center fw-medium fs-14 mb-2"><i class="isax isax-call5 me-2"></i>Toll Free
-                    : +1 56565 56594</p>
-                <div class="d-flex align-items-center">
-                    <p class="mb-2 me-3 d-flex align-items-center fw-medium fs-14"><i
-                            class="isax isax-message-text-15 me-2"></i>Email : info&#64;example.com</p>
-                    <div class="dropdown flag-dropdown mb-2 me-3">
-                        <a href="javascript:void(0);" class="dropdown-toggle d-inline-flex align-items-center"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="assets/img/flags/us-flag.svg" class="me-2" alt="flag">ENG
-                        </a>
-                        <ul class="dropdown-menu p-2 mt-2">
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/us-flag.svg" class="me-2" alt="flag">ENG
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/arab-flag.svg" class="me-2" alt="flag">ARA
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/france-flag.svg" class="me-2" alt="flag">FRE
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="dropdown mb-2 me-3">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            USD
-                        </a>
-                        <ul class="dropdown-menu p-2 mt-2">
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">USD</a></li>
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">YEN</a></li>
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">EURO</a></li>
-                        </ul>
-                    </div>
-                    <div class="fav-dropdown mb-2">
-                        <a [routerLink]="routes.wishlist" class="position-relative">
-                            <i class="isax isax-heart"></i><span class="count-icon bg-secondary text-gray-9">0</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="page==='index-rtl'" class="header-topbar text-center bg-transparent">
-        <div class="container">
-            <div class="d-flex align-items-center justify-content-between flex-wrap">
-                <p class="d-flex align-items-center fw-medium fs-14 mb-2"><i class="isax isax-call5 me-2"></i>Toll Free
-                    : +1 56565 56594</p>
-                <div class="d-flex align-items-center">
-                    <p class="mb-2 ms-3 d-flex align-items-center fw-medium fs-14"><i
-                            class="isax isax-message-text-15 ms-2"></i>Email : info&#64;example.com</p>
-                    <div class="dropdown flag-dropdown mb-2 ms-3">
-                        <a href="javascript:void(0);" class="dropdown-toggle d-inline-flex align-items-center"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="assets/img/flags/us-flag.svg" class="ms-2" alt="flag">ENG
-                        </a>
-                        <ul class="dropdown-menu p-2 mt-2">
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/us-flag.svg" class="ms-2" alt="flag">ENG
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/arab-flag.svg" class="ms-2" alt="flag">ARA
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/france-flag.svg" class="ms-2" alt="flag">FRE
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="dropdown mb-2 ms-3">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            USD
-                        </a>
-                        <ul class="dropdown-menu p-2 mt-2">
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">USD</a></li>
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">YEN</a></li>
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">EURO</a></li>
-                        </ul>
-                    </div>
-                    <div class="fav-dropdown mb-2">
-                        <a [routerLink]="routes.wishlist" class="position-relative">
-                            <i class="isax isax-heart"></i><span class="count-icon bg-secondary text-gray-9">0</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="base==='index-4'" class="header-topbar topbar-four text-center bg-transparent">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between flex-wrap">
-                <div class="d-flex align-items-center flex-wrap">
-                    <p class="d-flex align-items-center fs-14 mb-2 me-3 "><i class="isax isax-call5 me-2"></i>Toll Free
-                        : +1 56565 56594</p>
-                    <p class="mb-2 d-flex align-items-center fs-14"><i class="isax isax-message-text-15 me-2"></i>Email
-                        : info&#64;example.com</p>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="dropdown flag-dropdown mb-2 me-3">
-                        <a href="javascript:void(0);" class="dropdown-toggle d-inline-flex align-items-center"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="assets/img/flags/us-flag.svg" class="me-2" alt="flag">ENG
-                        </a>
-                        <ul class="dropdown-menu p-2 mt-2">
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/us-flag.svg" class="me-2" alt="flag">ENG
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/arab-flag.svg" class="me-2" alt="flag">ARA
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);">
-                                    <img src="assets/img/flags/france-flag.svg" class="me-2" alt="flag">FRA
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="dropdown mb-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            USD
-                        </a>
-                        <ul class="dropdown-menu p-2 mt-2">
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">USD</a></li>
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">YEN</a></li>
-                            <li><a class="dropdown-item rounded" href="javascript:void(0);">EURO</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="base==='index-6' || base === 'home-clients' || base === 'home-providers'"
+    <div
         class="header-topbar header-top-six text-center bg-transparent">
         <div class="container">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
@@ -164,10 +12,10 @@
                         : info&#64;example.com</p>
                 </div>
                 <div class="navbar-logo mb-2">
-                    <a class="logo-dark header-logo" [routerLink]="routes.index">
+                    <a class="logo-dark header-logo" [routerLink]="'/home'">
                         <img src="assets/img/logo-white.svg" class="logo" alt="Logo">
                     </a>
-                    <a class="logo-white header-logo" [routerLink]="routes.index">
+                    <a class="logo-white header-logo" [routerLink]="'/home'">
                         <img src="assets/img/logo.svg" class="logo" alt="Logo">
                     </a>
                 </div>
@@ -201,8 +49,8 @@
                         </a>
                     </div>
                     <div>
-                        <a href="javascript:void(0);" class="text-white btn btn-secondary w-100 mb-2"
-                            data-bs-toggle="modal" data-bs-target="#login-modal">Iniciar Sesion</a>
+                        <a [routerLink]="routes.login" class="text-white btn btn-secondary w-100 mb-2" *ngIf="!isAuthenticated">Iniciar Sesion</a>
+                        <a [routerLink]="'/providers/requestproviders'" class="text-white btn btn-secondary w-100 mb-2" *ngIf="isAuthenticated">Perfil Proveedor</a>
                     </div>
                 </div>
             </div>
@@ -210,9 +58,9 @@
     </div>
     <!-- /Header Topbar-->
 
-    <header
-        [ngClass]="{ 'header-three': base === 'index-3', 'header-four': base === 'index-4'|| base === 'index-2', 'header-five': base === 'index-5' , 'header-six': base === 'index-6' || base === 'home-clients' || base === 'home-providers','fixed': isFixed }">
-        <div [ngClass]="base ==='index-4' ? 'container-fluid' : 'container'">
+    <header class="header-six"
+        [ngClass]="{ 'fixed': isFixed }">
+        <div class="container">
             <div class="offcanvas-info" [ngClass]="{ 'show': show }">
                 <div class="offcanvas-wrap">
                     <div class="offcanvas-detail">
@@ -429,13 +277,13 @@
                 <div class="main-menu-wrapper">
                     <div class="navbar-logo">
                         <a class="logo-white header-logo" [routerLink]="routes.index">
-                            <img [src]=" base==='index-2' || base==='index-3' || base==='index-4' || base==='index-5'? 'assets/img/logo-white.svg' :'assets/img/logo-blue.svg'"
+                            <img [src]="'assets/img/logo-blue.svg'"
                                 class="logo" alt="Logo">
                         </a>
-                        <a [hidden]="base==='index-6' || base==='home-clients' || base==='home-providers' "
+                        <!-- <a [hidden]="base==='index-6' || base==='home-clients' || base==='home-providers' "
                             class="logo-dark header-logo" [routerLink]="routes.index">
                             <img src="assets/img/logo-white.svg" class="logo" alt="Logo">
-                        </a>
+                        </a> -->
                     </div>
                     <nav id="mobile-menu">
                         <ul class="main-nav" [ngClass]="{ 'active': isHovered }">
@@ -556,23 +404,7 @@
 
                         </ul>
                     </nav>
-                    <!-- <div *ngIf="page === 'index-rtl' " class="header-btn d-flex align-items-center">
-                        <div class="me-3">
-                            <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle" [ngClass]="{'activate' : isdark}" (click)="darkMode()" (click)="settings.changeThemeColor('1')">
-                                <i class="isax isax-moon"></i>
-                            </a>
-                            <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle" [ngClass]="{'activate' : islight}" (click)="darkMode()" (click)="settings.changeThemeColor('2')">
-                                <i class="isax isax-sun-1"></i>
-                            </a>
-                        </div>
-                        <div><a href="javascript:void(0);" class="btn btn-white me-3" data-bs-toggle="modal" data-bs-target="#login-modal">Iniciar Sesion</a></div>
-                        <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary me-0">Become Expert</a>
-                        <div class="header__hamburger d-xl-none my-auto">
-                            <div class="sidebar-menu" (click)="addmenu()">
-                                <i class="isax isax-menu5"></i>
-                            </div>
-                        </div>
-                    </div> -->
+                    
                     <span
                         *ngIf="['index', 'index-2', 'index-3', 'index-4', 'index-5', 'index-6','pages'].includes(base) ; else defaultheader">
                         <div *ngIf="base === 'index'" class="header-btn d-flex align-items-center">
@@ -597,197 +429,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="page==='index-rtl'" class="header-btn d-flex align-items-center">
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
-                            <div class="btn btn-white ms-3"><a href="javascript:void(0);" data-bs-toggle="modal"
-                                    data-bs-target="#login-modal">Iniciar Sesion</a> / <a href="javascript:void(0);"
-                                    data-bs-toggle="modal" data-bs-target="#register-modal">Sign Up</a></div>
-                            <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary me-0">Become Expert</a>
-                            <div class="header__hamburger d-xl-none my-auto">
-                                <div class="sidebar-menu">
-                                    <i class="isax isax-menu5"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="base === 'index-2'" class="header-btn d-flex align-items-center">
-                            <div class="dropdown flag-dropdown me-3">
-                                <a href="javascript:void(0);" class="d-inline-flex align-items-center"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="assets/img/flags/us-flag.svg" alt="flag">
-                                </a>
-                                <ul class="dropdown-menu p-2 mt-2">
-                                    <li>
-                                        <a class="dropdown-item rounded d-flex align-items-center"
-                                            href="javascript:void(0);">
-                                            <img src="assets/img/flags/us-flag.svg" class="me-2" alt="flag">ENG
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item rounded d-flex align-items-center"
-                                            href="javascript:void(0);">
-                                            <img src="assets/img/flags/arab-flag.svg" class="me-2" alt="flag">ARA
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item rounded d-flex align-items-center"
-                                            href="javascript:void(0);">
-                                            <img src="assets/img/flags/france-flag.svg" class="me-2" alt="flag">FRE
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="dropdown me-3">
-                                <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    USD
-                                </a>
-                                <ul class="dropdown-menu p-2 mt-2">
-                                    <li><a class="dropdown-item rounded" href="javascript:void(0);">USD</a></li>
-                                    <li><a class="dropdown-item rounded" href="javascript:void(0);">YEN</a></li>
-                                    <li><a class="dropdown-item rounded" href="javascript:void(0);">EURO</a></li>
-                                </ul>
-                            </div>
-                            <div class="me-3">
-                                <a [routerLink]="routes.userDashboard">
-                                    <i class="isax isax-user"></i>
-                                </a>
-                            </div>
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
-                            <div class="fav-dropdown me-3">
-                                <a [routerLink]="routes.wishlist" class="position-relative">
-                                    <i class="isax isax-heart"></i><span
-                                        class="count-icon bg-secondary text-gray-9">0</span>
-                                </a>
-                            </div>
-                            <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary">Become Expert</a>
-                            <div class="header__hamburger d-xl-none my-auto">
-                                <div class="sidebar-menu" (click)="addmenu()">
-                                    <i class="isax isax-menu5"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="base === 'index-3' || base === 'index-5'"
-                            class="header-btn d-flex align-items-center">
-                            <div class="cart-dropdown me-3">
-                                <a [routerLink]="routes.userDashboard" class="position-relative">
-                                    <i class="isax isax-user"></i>
-                                </a>
-                            </div>
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
-                            <div class="fav-dropdown me-3">
-                                <a [routerLink]="routes.wishlist" class="position-relative">
-                                    <i class="isax isax-heart"></i><span
-                                        class="count-icon bg-secondary text-gray-9">0</span>
-                                </a>
-                            </div>
-                            <div><a href="javascript:void(0);" class="text-white fs-13 btn btn-secondary btn-md"
-                                    data-bs-toggle="modal" data-bs-target="#login-modal">Iniciar Sesion</a></div>
-                            <div class="header__hamburger d-xl-none my-auto">
-                                <div class="sidebar-menu" (click)="addmenu()">
-                                    <i class="isax isax-menu5"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="base === 'index-4'" class="header-btn d-flex align-items-center">
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
-                            <div class="fav-dropdown me-3">
-                                <a [routerLink]="routes.wishlist" class="position-relative">
-                                    <i class="isax isax-heart"></i><span
-                                        class="count-icon bg-secondary text-gray-9">0</span>
-                                </a>
-                            </div>
-                            <a [routerLink]="routes.addFlight"
-                                class="btn btn-secondary d-inline-flex align-items-center me-3"><i
-                                    class="isax isax-lock me-2"></i>Add Your Listing</a>
-                            <a [routerLink]="routes.register"
-                                class="btn btn-secondary d-inline-flex align-items-center me-0"><i
-                                    class="isax isax-lock me-2"></i>Sign Up</a>
-                            <div class="header__hamburger d-xl-none my-auto">
-                                <div class="sidebar-menu" (click)="addmenu()">
-                                    <i class="isax isax-menu5"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="base === 'index-6','flex':isFixed" class="header-btn align-items-center">
-                            <div class="dropdown me-3">
-                                <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    USD
-                                </a>
-                                <ul class="dropdown-menu p-2 mt-2">
-                                    <li><a class="dropdown-item rounded" href="javascript:void(0);">USD</a></li>
-                                    <li><a class="dropdown-item rounded" href="javascript:void(0);">YEN</a></li>
-                                    <li><a class="dropdown-item rounded" href="javascript:void(0);">EURO</a></li>
-                                </ul>
-                            </div>
-                            <div class="me-3">
-                                <a [routerLink]="routes.userDashboard">
-                                    <i class="isax isax-user"></i>
-                                </a>
-                            </div>
-                            <div class="fav-dropdown  me-3">
-                                <a [routerLink]="routes.wishlist" class="position-relative">
-                                    <i class="isax isax-heart"></i><span
-                                        class="count-icon bg-secondary text-gray-9">0</span>
-                                </a>
-                            </div>
-                            <div>
-                                <a href="javascript:void(0);" class="text-white btn btn-secondary w-100 mb-2"
-                                    data-bs-toggle="modal" data-bs-target="#register-modal">Iniciar Sesion</a>
-                            </div>
-                        </div>
-                        <div *ngIf="base === 'index-6'" class="header__hamburger d-xl-none my-auto">
+                        
+                        
+                        
+                        <div class="header__hamburger d-xl-none my-auto">
                             <div class="sidebar-menu" (click)="addmenu()">
                                 <i class="isax isax-menu5"></i>
                             </div>
                         </div>
                     </span>
                     <ng-template #defaultheader>
-                        <div *ngIf="base !== 'index' || page !=='index-rtl'"
+                        <div
                             class="header-btn d-flex align-items-center">
                             <div class="me-3">
                                 <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
@@ -831,7 +483,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.login">Logout</a>
+                                            (click)="logout()">Logout</a>
                                     </li>
                                 </ul>
                             </div>

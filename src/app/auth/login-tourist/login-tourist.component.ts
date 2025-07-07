@@ -80,6 +80,7 @@ export class LoginTouristComponent {
         },
         error: (err) => {
           this.loading = false;
+
           this.errorMessage =
             "Ha ocurrido un error, por favor intente de nuevo";
         },

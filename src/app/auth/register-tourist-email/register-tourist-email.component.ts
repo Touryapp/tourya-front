@@ -3,8 +3,7 @@ import { Router } from "@angular/router";
 import { routes } from "../../shared/routes/routes";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { passwordMatchValidator } from "../../shared/validators/password-match.validator";
-import { AuthService } from "../auth.service";
-import { RoleDto } from "../../shared/dto/role.dto";
+import { AuthService } from "../../core/services/auth.service";
 @Component({
   selector: "app-register-tourist-email",
   standalone: false,

@@ -10,14 +10,14 @@ const routes: Routes = [
     canActivate: [],
     children: [
       {
-        path: "home",
+        path: "home-clients",
         loadChildren: () =>
           import("../feature-module/home/home.module").then(
             (m) => m.HomeModule
           ),
       },
       {
-        path: "home-clients",
+        path: "home",
         loadChildren: () =>
           import("./clients/home-clients/home-clients.module").then(
             (m) => m.HomeClientsModule
@@ -27,6 +27,11 @@ const routes: Routes = [
         path: "providers",
         loadChildren: () =>
           import("./providers/providers.module").then((m) => m.ProvidersModule),
+      },
+      {
+        path: "admin",
+        loadChildren: () =>
+          import("./admin/admin.module").then((m) => m.AdminModule),
       },
     ],
   },
