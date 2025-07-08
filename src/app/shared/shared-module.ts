@@ -36,6 +36,7 @@ import { BsModalService, ModalModule } from "ngx-bootstrap/modal";
 import { SafeHtmlPipe } from "./pipe/safe-html.pipe";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
     SafeHtmlPipe,
     MatSnackBarModule,
     DragDropModule,
+    TranslateModule,
   ],
   exports: [
     CommonModule,
@@ -108,6 +110,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
     SafeHtmlPipe,
     MatSnackBarModule,
     DragDropModule,
+    TranslateModule,
   ],
   providers: [
     provideNgxMask(),
