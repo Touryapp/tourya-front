@@ -189,7 +189,7 @@ export class routes {
   // page routes
 
   public static get index(): string {
-    return this.baseUrl + "/index";
+    return this.baseUrl + "/home";
   }
 
   //pages
