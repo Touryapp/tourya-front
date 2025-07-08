@@ -1,8 +1,7 @@
 <div class="main-header main-header-four">
 
     <!-- Header Topbar-->
-    <div
-        class="header-topbar header-top-six text-center bg-transparent">
+    <div class="header-topbar header-top-six text-center bg-transparent">
         <div class="container">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
                 <div class="d-flex align-items-center flex-wrap">
@@ -20,6 +19,23 @@
                     </a>
                 </div>
                 <div class="d-flex align-items-center">
+                    <div class="dropdown flag-dropdown mb-2 me-3">
+                        <a href="javascript:void(0);" class="dropdown-toggle d-inline-flex align-items-center"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img [src]="getLanguageImg(selectedLanguage)" class="me-2" alt="flag">{{selectedLanguage |
+                            uppercase}}
+                        </a>
+                        <ul class="dropdown-menu p-2 mt-2">
+                            <li *ngFor="let language of languages">
+                                <a class="dropdown-item rounded d-flex align-items-center" href="javascript:void(0);"
+                                    (click)="useLanguage(language)">
+                                    <img [src]="getLanguageImg(language)" class="me-2" alt="flag">
+                                    {{language | uppercase}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="dropdown mb-2 me-3">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -49,8 +65,10 @@
                         </a>
                     </div>
                     <div>
-                        <a [routerLink]="routes.login" class="text-white btn btn-secondary w-100 mb-2" *ngIf="!isAuthenticated">Iniciar Sesion</a>
-                        <a [routerLink]="'/providers/requestproviders'" class="text-white btn btn-secondary w-100 mb-2" *ngIf="isAuthenticated">Perfil Proveedor</a>
+                        <a [routerLink]="routes.login" class="text-white btn btn-secondary w-100 mb-2"
+                            *ngIf="!isAuthenticated">Iniciar Sesion</a>
+                        <a [routerLink]="'/providers/requestproviders'" class="text-white btn btn-secondary w-100 mb-2"
+                            *ngIf="isAuthenticated">Perfil Proveedor</a>
                     </div>
                 </div>
             </div>
@@ -58,8 +76,7 @@
     </div>
     <!-- /Header Topbar-->
 
-    <header class="header-six"
-        [ngClass]="{ 'fixed': isFixed }">
+    <header class="header-six" [ngClass]="{ 'fixed': isFixed }">
         <div class="container">
             <div class="offcanvas-info" [ngClass]="{ 'show': show }">
                 <div class="offcanvas-wrap">
@@ -277,8 +294,7 @@
                 <div class="main-menu-wrapper">
                     <div class="navbar-logo">
                         <a class="logo-white header-logo" [routerLink]="routes.index">
-                            <img [src]="'assets/img/logo-blue.svg'"
-                                class="logo" alt="Logo">
+                            <img [src]="'assets/img/logo-blue.svg'" class="logo" alt="Logo">
                         </a>
                         <!-- <a [hidden]="base==='index-6' || base==='home-clients' || base==='home-providers' "
                             class="logo-dark header-logo" [routerLink]="routes.index">
@@ -404,7 +420,7 @@
 
                         </ul>
                     </nav>
-                    
+
                     <span
                         *ngIf="['index', 'index-2', 'index-3', 'index-4', 'index-5', 'index-6','pages'].includes(base) ; else defaultheader">
                         <div *ngIf="base === 'index'" class="header-btn d-flex align-items-center">
@@ -429,9 +445,9 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        
-                        
+
+
+
                         <div class="header__hamburger d-xl-none my-auto">
                             <div class="sidebar-menu" (click)="addmenu()">
                                 <i class="isax isax-menu5"></i>
@@ -439,8 +455,7 @@
                         </div>
                     </span>
                     <ng-template #defaultheader>
-                        <div
-                            class="header-btn d-flex align-items-center">
+                        <div class="header-btn d-flex align-items-center">
                             <div class="me-3">
                                 <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
                                     [ngClass]="{'activate' : isdark}" (click)="darkMode()"

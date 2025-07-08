@@ -5,13 +5,13 @@ import { AppComponent } from "./app.component";
 import { SharedModule } from "./shared/shared-module";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { NgScrollbarModule } from "ngx-scrollbar";
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { AuthInterceptor } from "./core/interceptors/auth.interceptor";
 
 // Importaciones para Firebase
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { environment } from '../environments/environment';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { environment } from "../environments/environment";
 
 // Componentes
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
@@ -23,6 +23,15 @@ import { ComingSoonComponent } from "./auth/coming-soon/coming-soon.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
 import { LoginTouristComponent } from "./auth/login-tourist/login-tourist.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
+
+// import ngx-translate and the http loader
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import {
+  HttpClient,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
 // Inicializar Firebase
 const app = initializeApp(environment.firebaseConfig);
@@ -46,16 +55,29 @@ export const auth = getAuth(app);
     AppRoutingModule,
     SharedModule,
     NgScrollbarModule,
-    HttpClientModule
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [
     provideAnimationsAsync(),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, "./i18n/", ".json");
+}

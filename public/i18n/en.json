@@ -1,0 +1,63 @@
+{
+  "home": {
+    "title": "Book the Best Tours in San Andres at the Best Price.",
+    "subtitle": "Enjoy the island with 24/7 attention, secure shopping and flexible cancellations.",
+    "top-tours": {
+      "title": "Top Tours in San Andres Island",
+      "subtitle": "Tourya was designed to connect tourists with the best experiences on the island of San Andres."
+    },
+    "how-it-works": {
+      "title": "How to book your tour on Tourya?",
+      "step1": {
+        "title": "Check availability",
+        "description": "Filter by tour type, check reviews and make sure the tour is available on your travel dates."
+      },
+      "step2": {
+        "title": "Choose and pay",
+        "description": "Select the tours that best suit your tastes, interests and travel pace. Pay easily and securely with your favorite payment method."
+      },
+      "step3": {
+        "title": "Receive your QR and Enjoy",
+        "description": "Receive a QR code on your cell phone. Show it to the provider and live the experience without complications!"
+      }
+    },
+    "carousel": {
+      "title": "Why book with us? Why book with us? Chat and calls 24/7, main office in San Andres, 100% secure purchase, flexible cancellations."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "one": {
+        "question": "What is the most popular tour in San Andres?",
+        "answer": "The most requested tour by tourists is the Johnny Cay + Aquarium Tour, which includes marine transportation, entrance fees and local guide. It is ideal to get to know two of the most iconic places of the island in one day. There are other tours that are in high demand such as Parasail, snorkeling and white night."
+      },
+      "two": {
+        "question": "What happens if it rains the day of the tour?",
+        "answer": "There are tours that offer cancellation due to bad weather. In those cases if the tour is cancelled due to bad weather, we will offer you free rescheduling or full refund. Our priority is your safety and experience."
+      },
+      "three": {
+        "question": "How can I pay for the tours?",
+        "answer": "You can pay by credit card, debit card, PSE, Nequi, Daviplata or cash at our office on the island. All transactions are protected with security certificates."
+      },
+      "four": {
+        "question": "Do the tours include transportation?",
+        "answer": "We have some tours where transportation is included in the cost. In case the tour does not include transportation and you require this service, one of our partners can pick you up at your accommodation and take you to the meeting point of the tour."
+      },
+      "five": {
+        "question": "Can I cancel or change the date of a tour?",
+        "answer": "Yes, most of our tours can be cancelled up to 24 hours before the tour starts without penalty. You can also change the date by contacting our 24/7 customer service team. We recommend you to check the cancellation policy before booking the tour."
+      },
+      "six": {
+        "question": "What should I bring to a tour in San Andres?",
+        "answer": "We recommend you bring a bathing suit, sunscreen, hat, towel and a bottle of water. Some tours also require water shoes or identification."
+      },
+      "seven": {
+        "question": "Are the tours suitable for children or seniors?",
+        "answer": "Many tours are family friendly and safe for all ages. Check the specific recommendations on each activity page."
+      },
+      "eight": {
+        "question": "Where is your office in San Andres?",
+        "answer": "Our main office is in downtown San Andres (Newpoint Shopping Center Local 227), a few meters from the tourist pier, and is open every day. We also attend by WhatsApp and calls 24/7."
+      }
+    }
+  }
+}

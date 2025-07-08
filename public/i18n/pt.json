@@ -1,0 +1,63 @@
+{
+  "home": {
+    "title": "Reserve os melhores passeios em San Andrés com o melhor preço.",
+    "subtitle": "Aproveite a ilha com atenção 24 horas por dia, 7 dias por semana, compras seguras e cancelamentos flexíveis.",
+    "top-tours": {
+      "title": "Principais passeios em San Andrés",
+      "subtitle": "A Tourya foi criada para conectar os turistas com as melhores experiências na ilha de San Andrés."
+    },
+    "how-it-works": {
+      "title": "¿ Como reservar sua excursão na Tourya?",
+      "step1": {
+        "title": "Verifique a disponibilidade",
+        "description": "Filtre por tipo de excursão, verifique as avaliações e certifique-se de que a excursão está disponível nas datas de sua viagem."
+      },
+      "step2": {
+        "title": "Escolha e pague",
+        "description": "Selecione as excursões que melhor se adaptam a seus gostos, interesses e ritmo de viagem. Pague de forma fácil e segura com seu método de pagamento favorito."
+      },
+      "step3": {
+        "title": "Receba seu QR e aproveite",
+        "description": "Receba um código QR em seu celular. Mostre-o ao fornecedor e aproveite a experiência sem complicações!"
+      }
+    },
+    "carousel": {
+      "title": "¿ Por que reservar conosco? Chat e chamadas 24 horas por dia, 7 dias por semana, escritório em San Andrés, compra 100% segura, cancelamentos flexíveis."
+    },
+    "faq": {
+      "title": "Perguntas frequentes",
+      "one": {
+        "question": "¿Qual é o passeio mais popular em San Andres?",
+        "answer": "O passeio mais solicitado pelos turistas é o Johnny Cay + Aquarium Tour, que inclui transporte de barco, taxas de entrada e guia local. É ideal para conhecer dois dos lugares mais icônicos da ilha em um dia. Há outros passeios que são muito procurados, como Parasailing, mergulho com snorkel e White Night"
+      },
+      "two": {
+        "question": "¿O que acontece se chover no dia do passeio?",
+        "answer": "Há passeios que oferecem cancelamento devido ao mau tempo. Nesses casos, se o passeio for cancelado devido ao mau tempo, ofereceremos reagendamento gratuito ou reembolso total. Nossa prioridade é sua segurança e experiência."
+      },
+      "three": {
+        "question": "¿Como posso pagar pelos passeios?",
+        "answer": "Você pode pagar com cartão de crédito, cartão de débito, PSE, Nequi, Daviplata ou dinheiro em nosso escritório na ilha. Todas as transações são protegidas por certificados de segurança."
+      },
+      "four": {
+        "question": "¿Os passeios incluem transporte?",
+        "answer": "Temos alguns passeios em que o transporte está incluído no custo. Caso o passeio não inclua transporte e você precise desse serviço, um de nossos parceiros poderá buscá-lo em sua acomodação e levá-lo ao ponto de encontro do passeio."
+      },
+      "five": {
+        "question": "¿Posso cancelar ou remarcar um passeio?",
+        "answer": "Sim, a maioria dos nossos passeios pode ser cancelada até 24 horas antes do início do passeio sem penalidade. Você também pode alterar a data entrando em contato com nossa equipe de suporte 24 horas por dia, 7 dias por semana. Recomendamos que você verifique a política de cancelamento antes de reservar o passeio."
+      },
+      "six": {
+        "question": "¿O que devo levar em um passeio em San Andres?",
+        "answer": "Recomendamos que você traga um traje de banho, protetor solar, chapéu, toalha e uma garrafa de água. Alguns passeios também exigem calçados aquáticos ou identificação."
+      },
+      "seven": {
+        "question": "¿Os passeios são adequados para crianças ou idosos?",
+        "answer": "Muitos passeios são adequados para famílias e seguros para todas as idades. Verifique as recomendações específicas na página de cada atividade."
+      },
+      "eight": {
+        "question": "¿Onde fica o escritório de vocês em San Andrés?",
+        "answer": "Nosso escritório principal fica no centro de San Andrés (Centro comercial Newpoint Local 227), a poucos metros do píer turístico, e está aberto todos os dias. Também atendemos por WhatsApp e ligações 24 horas por dia, 7 dias por semana."
+      }
+    }
+  }
+}

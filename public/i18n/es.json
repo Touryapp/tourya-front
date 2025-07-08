@@ -1,0 +1,63 @@
+{
+  "home": {
+    "title": "Reserva los Mejores Tours en San Andrés al Mejor Precio",
+    "subtitle": "Disfruta de la isla con atención 24/7, compra segura y cancelaciones flexibles.",
+    "top-tours": {
+      "title": "Top Tours en San Andrés ",
+      "subtitle": "Tourya es un Marketplace diseñada para conectar turistas con las mejores experiencias en la isla de san Andrés."
+    },
+    "how-it-works": {
+      "title": "¿Como reservar tu tour en Tourya?",
+      "step1": {
+        "title": "Verifica disponibilidad",
+        "description": "Filtra por tipo de tour, revisa opiniones y asegúrate de que el tour esté disponible en las fechas de tu viaje."
+      },
+      "step2": {
+        "title": "Elige y paga",
+        "description": "Selecciona los tours que mejor se adaptan a tus gustos, intereses y ritmo de viaje. Paga fácil y seguro con tu método favorito."
+      },
+      "step3": {
+        "title": "Recibe tu QR y Disfruta",
+        "description": "Recibe un código QR en tu celular. Muéstralo al proveedor y ¡vive la experiencia sin complicaciones!"
+      }
+    },
+    "carousel": {
+      "title": "¿Por qué reservar con nosotros? Chat y llamadas 24/7, oficina en san Andrés, Compra 100% segura, Cancelaciones flexibles."
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "one": {
+        "question": "¿Cuál es el tour más popular en San Andrés?",
+        "answer": "El tour más solicitado por los turistas es el Tour Johnny Cay + Acuario, que incluye transporte marítimo, entradas y guía local. Es ideal para conocer dos de los lugares más icónicos de la isla en un solo día. Hay otros tours que son muy solicitados como el Parasail, el buceo y la noche blanca."
+      },
+      "two": {
+        "question": "¿Qué pasa si llueve el día del tour?",
+        "answer": "Hay tours que ofrecen cancelación por mal clima. En esos casos si el tour se cancela por mal clima, te ofreceremos reprogramación gratuita o reembolso total. Nuestra prioridad es tu seguridad y experiencia."
+      },
+      "three": {
+        "question": "¿Cómo puedo pagar los tours?",
+        "answer": "Puedes pagar con tarjeta de crédito, débito, PSE, Nequi, Daviplata o en efectivo en nuestra oficina en la isla. Todas las transacciones están protegidas con certificados de seguridad."
+      },
+      "four": {
+        "question": "¿Los tours incluyen transporte?",
+        "answer": "Tenemos algunos tours donde el transporte está incluido dentro del costo. En caso de que el tour no incluya transporte y requieras de este servicio, uno de nuestros aliados puede recogerte en tu sitio de hospedaje y llevarte hasta el punto de encuentro del tour."
+      },
+      "five": {
+        "question": "¿Puedo cancelar o cambiar la fecha de un tour?",
+        "answer": "Sí, la mayoría de nuestros tours los puedes cancelar hasta 24 horas antes del inicio del tour sin penalización. También puedes cambiar la fecha contactando a nuestro equipo de atención 24/7. Te recomendamos revisar la política de cancelación antes de reservar el tour."
+      },
+      "six": {
+        "question": "¿Qué debo llevar a un tour en San Andrés?",
+        "answer": "Te recomendamos llevar traje de baño, bloqueador solar, gorra, toalla y una botella de agua. Algunos tours también requieren zapatos de agua o identificación."
+      },
+      "seven": {
+        "question": "¿Los tours son aptos para niños o adultos mayores?",
+        "answer": "Muchos tours son familiares y seguros para todas las edades. Verifica las recomendaciones específicas en la página de cada actividad."
+      },
+      "eight": {
+        "question": "¿Dónde queda su oficina en San Andrés?",
+        "answer": "Nuestra oficina principal está en el centro de San Andrés (Centro comercial Newpoint Local 227), a pocos metros del muelle turístico, y está abierta todos los días. También atendemos por WhatsApp y llamadas 24/7."
+      }
+    }
+  }
+}
