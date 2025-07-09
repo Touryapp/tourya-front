@@ -24,6 +24,34 @@ const routes: Routes = [
           ),
       },
       {
+        path: "clients/list-tours",
+        loadChildren: () =>
+          import("./clients/list-tours/list-tours.module").then(
+            (m) => m.ListToursModule
+          ),
+      },
+      {
+        path: "clients/tours-detail",
+        loadChildren: () =>
+          import("./clients/tours-detail/tours-detail.module").then(
+            (m) => m.ToursDetailModule
+          ),
+      },
+      {
+        path: "clients/booking-tours",
+        loadChildren: () =>
+          import("./clients/booking-tours/booking-tours.module").then(
+            (m) => m.BookingToursModule
+          ),
+      },
+      {
+        path: "clients/booking-confirm",
+        loadChildren: () =>
+          import("./clients/booking-confirm/booking-confirm.module").then(
+            (m) => m.BookingConfirmModule
+          ),
+      },
+      {
         path: "providers",
         loadChildren: () =>
           import("./providers/providers.module").then((m) => m.ProvidersModule),
