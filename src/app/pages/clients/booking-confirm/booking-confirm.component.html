@@ -1,0 +1,158 @@
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title mb-2">Booking Confirmation</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item">Tours</li>
+                            <li class="breadcrumb-item active" aria-current="page">Confirmation</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <!-- Success Message -->
+                    <div class="card text-center mb-4">
+                        <div class="card-body py-5">
+                            <div class="success-icon mb-4">
+                                <i class="isax isax-tick-circle text-success" style="font-size: 4rem;"></i>
+                            </div>
+                            <h3 class="text-success mb-3">Booking Confirmed!</h3>
+                            <p class="text-muted mb-4">Your tour booking has been successfully confirmed. You will receive a confirmation email shortly.</p>
+                            <div class="booking-id">
+                                <strong>Booking ID:</strong> {{ bookingData.bookingId }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Details -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Booking Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Tour Name:</label>
+                                        <p>{{ bookingData.tourName }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Location:</label>
+                                        <p>{{ bookingData.location }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Duration:</label>
+                                        <p>{{ bookingData.duration }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Travel Dates:</label>
+                                        <p>{{ bookingData.fromDate }} - {{ bookingData.toDate }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Adults:</label>
+                                        <p>{{ bookingData.adults }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Children:</label>
+                                        <p>{{ bookingData.children }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Infants:</label>
+                                        <p>{{ bookingData.infants }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Total Amount:</label>
+                                        <p class="text-primary fw-bold">${{ bookingData.totalAmount }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Information -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Customer Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Name:</label>
+                                        <p>{{ bookingData.customerName }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Email:</label>
+                                        <p>{{ bookingData.customerEmail }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Phone:</label>
+                                        <p>{{ bookingData.customerPhone }}</p>
+                                    </div>
+                                    <div class="detail-item mb-3">
+                                        <label class="fw-bold">Payment Method:</label>
+                                        <p>{{ bookingData.paymentMethod }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <button class="btn btn-outline-primary w-100" (click)="downloadInvoice()">
+                                        <i class="isax isax-document-download me-2"></i>Download Invoice
+                                    </button>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <button class="btn btn-outline-secondary w-100" (click)="printBooking()">
+                                        <i class="isax isax-printer me-2"></i>Print Booking
+                                    </button>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <button class="btn btn-primary w-100" (click)="goToHome()">
+                                        <i class="isax isax-home5 me-2"></i>Back to Home
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Important Information -->
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h6 class="card-title text-warning">
+                                <i class="isax isax-info-circle me-2"></i>Important Information
+                            </h6>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Please arrive 30 minutes before the tour start time</li>
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Bring comfortable walking shoes and weather-appropriate clothing</li>
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Don't forget to bring your booking confirmation</li>
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Contact us 24 hours before if you need to make changes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper --> 
