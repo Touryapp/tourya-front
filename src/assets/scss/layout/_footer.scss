@@ -3,7 +3,8 @@
 ============================*/
 
 footer {
-    background: $light-500;
+    background: #1b6475;
+    color: #FFF !important;
     .footer-top {
         padding: 40px 0 0;
         .footer-widget {
@@ -27,9 +28,9 @@ footer {
                     margin-bottom: 8px;
                     a {
                         position: relative;
-                        color: $text-color;
+                        color: #FFF;
                         &:hover {
-                            color: $primary;
+                            color: #FFF;
                         }
                     }
                     &:last-child {
@@ -46,10 +47,16 @@ footer {
         margin: 20px 0 24px;
     }
     .footer-bottom {
-        background: $light;
+        background: #1b6475;
         padding-top: 10px;
         p {
             margin-bottom: 10px;
+        }
+
+        a {
+            &:hover {
+                color: #FFF;
+            }
         }
         .card-links {
             -webkit-box-align: center;
@@ -64,7 +71,6 @@ footer {
                 a {
                     position: relative;
                     margin-right: 8px;
-                    color: $gray-700;
                 }
                 &:last-child {
                     a {
@@ -100,7 +106,7 @@ footer {
         a {
             color: $gray-900;
             &:hover {
-                color: $primary;
+                color: #FFF;
             }
         }
         &:last-child {

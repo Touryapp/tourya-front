@@ -6,7 +6,7 @@ import { routes } from '../../../shared/routes/routes';
 
 
 @Component({
-    selector: 'app-footer',
+    selector: 'app-footer-shared',
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
     standalone: false

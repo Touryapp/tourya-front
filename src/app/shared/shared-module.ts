@@ -24,7 +24,6 @@ import { CalendarModule } from "primeng/calendar";
 import { NgxEditorModule } from "ngx-editor";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { DateRangePickerModule } from "../feature-module/common/date-range-picker/date-range-picker.module";
-import { FooterComponent } from "../feature-module/common/footer/footer.component";
 import { FullCalendarModule } from "@fullcalendar/angular";
 import { SlickCarouselModule } from "ngx-slick-carousel";
 import { CommonCounterComponent } from "../feature-module/common/common-counter/common-counter.component";
@@ -37,6 +36,7 @@ import { SafeHtmlPipe } from "./pipe/safe-html.pipe";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { TranslateModule } from "@ngx-translate/core";
+import { FooterComponent } from "./common/footer/footer.component";
 
 @NgModule({
   declarations: [
