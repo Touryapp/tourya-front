@@ -25,183 +25,36 @@
             <div class="card">
                 <div class="card-body">
                     <div class="banner-form">
-                        <form class="d-lg-flex">
-                            <div class="d-flex  form-info">
-                                <div class="form-item dropdown">
-                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
-                                        <label class="form-label fs-14 text-default mb-1">Where would like to go?</label>
-                                        <input type="text" class="form-control" value="Newyork">
-                                        <p class="fs-12 mb-0">USA</p>
-                                    </div>
-                                    <div class="dropdown-menu dropdown-md p-0">
-                                        <div class="input-search p-3 border-bottom">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Search for City, Property name or Location">
-                                                <span class="input-group-text px-2 border-start-0"><i class="isax isax-search-normal"></i></span>
-                                            </div>
-                                        </div>
-                                        <ul>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">USA</h6>
-                                                    <p>2000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Japan</h6>
-                                                    <p>3000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Singapore</h6>
-                                                    <p>8000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Russia</h6>
-                                                    <p>8000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Germany</h6>
-                                                    <p>2000 Properties</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                        <form class="d-lg-flex" (ngSubmit)="onSearch()">
+                            <div class="d-flex form-info">
+                                <!-- Select Ciudad -->
                                 <div class="form-item">
-                                    <label class="form-label fs-14 text-default mb-1">Dates</label>
-                                    <input type="text" class="form-control" placeholder="21-10-2024">
-                                    <p class="fs-12 mb-0">Monday</p>
+                                    <label class="form-label fs-14 text-default mb-1">Ciudad</label>
+                                    <select class="form-control" [(ngModel)]="selectedCity" name="city" required>
+                                        <option value="" disabled>Selecciona ciudad</option>
+                                        <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+                                    </select>
                                 </div>
+                                <!-- Select Categoría -->
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Categoría</label>
+                                    <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
+                                        <option value="" disabled>Selecciona categoría</option>
+                                        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                                    </select>
+                                </div>
+                                <!-- Check In -->
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                    <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn" required>
+                                </div>
+                                <!-- Check Out -->
                                 <div class="form-item">
                                     <label class="form-label fs-14 text-default mb-1">Check Out</label>
-                                    <input type="text" class="form-control" placeholder="21-10-2024">
-                                    <p class="fs-12 mb-0">Monday</p>
-                                </div>
-                                <div class="form-item dropdown">
-                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
-                                        <label class="form-label fs-14 text-default mb-1">Travellers </label>
-                                        <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
-                                        <p class="fs-12 mb-0">2 Adult</p>
-                                    </div>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-xl">
-                                        <h5 class="mb-3">Select Travelers &  Class</h5>
-                                        <div class="mb-3 border br-10 info-item pb-1">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Rooms</label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">1</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Adults</label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">2</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Children <span class="text-default fw-normal">( 2-12 Yrs )</span></label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">0</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 0-12 Yrs )</span></label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">0</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 border br-10 info-item pb-1">
-                                            <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room1" checked>
-                                                    <label class="form-check-label" for="room1">
-                                                        Single
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room2">
-                                                    <label class="form-check-label" for="room2">
-                                                        Double
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room3">
-                                                    <label class="form-check-label" for="room3">
-                                                        Delux
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room4">
-                                                    <label class="form-check-label" for="room4">
-                                                        Suite
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 border br-10 info-item pb-1">
-                                            <h6 class="fs-16 fw-medium mb-2">Property Type</h6>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property1" checked>
-                                                    <label class="form-check-label" for="property1">
-                                                        Villa
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property2">
-                                                    <label class="form-check-label" for="property2">
-                                                        Condo
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property3">
-                                                    <label class="form-check-label" for="property3">
-                                                        Cabin
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property4">
-                                                    <label class="form-check-label" for="property4">
-                                                        Apartments
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end">
-                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Cancel</a>
-                                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                                        </div>
-                                    </div>
+                                    <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary search-btn rounded">Search</button>
+                            <button type="submit" class="btn btn-primary search-btn rounded ms-2">Searchs</button>
                         </form>
                     </div>
                 </div>
@@ -1063,7 +916,7 @@
                                             </div>
                                         </div>
                                         <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Enchanted Forest</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>King’s Road, Chelsea</p>
+                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>King's Road, Chelsea</p>
                                         <div class="mb-3">
                                             <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$550</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$600</span></h6>
                                         </div>

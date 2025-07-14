@@ -3,6 +3,14 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { routes } from '../../../shared/routes/routes';
+// IMPORTS DE SERVICIOS Y DTOS PARA PAÍS, DEPARTAMENTO Y CIUDAD
+
+import { CountryService } from '../../../shared/services/country.service';
+import { DepartmentService } from '../../../shared/services/department.service';
+import { CityService } from '../../../shared/services/city.service';
+import { Country } from '../../../shared/dto/country.dto';
+import { Department } from '../../../shared/dto/department.dto';
+import { City } from '../../../shared/dto/city.dto';
 
 @Component({
   selector: 'app-home-clients',
@@ -14,7 +22,28 @@ import { routes } from '../../../shared/routes/routes';
 export class HomeClientsComponent {
   public routes =routes;
   time: Date | null = null; // Bind this to the p-calendar
-  constructor(private router: Router) {
+  // Variables para selectores de país, departamento y ciudad
+  countries: Country[] = [];
+  departments: Department[] = [];
+  cities: string[] = ['Argentina', 'Brasil', 'Chile', 'Uruguay', 'Perú'];
+  selectedCountry: number | null = null;
+  selectedDepartment: number | null = null;
+  selectedCity: string = '';
+  // Variables para capturar los datos del formulario
+  travelDestination: string = '';
+  startDate: Date | string = '';
+  endDate: Date | string = '';
+  // Eliminar duplicados y unificar tipos para el formulario de búsqueda
+  public categories: string[] = ['Playa', 'Río', 'Desierto', 'Nieve', 'Rural'];
+  public selectedCategory: string = '';
+  public checkIn: string = '';
+  public checkOut: string = '';
+  constructor(
+    private router: Router,
+    private countryService: CountryService,
+    private departmentService: DepartmentService,
+    private cityService: CityService
+  ) {
   }
   bsValue=new Date();
   isChecked=false;
@@ -176,7 +205,10 @@ onSubmit4() :void {
 this.router.navigateByUrl('/cruise/cruise-grid'); 
 }
 onSubmit5() :void { 
-this.router.navigateByUrl('/tour/tour-grid'); 
+  localStorage.setItem('travelDestination', this.travelDestination);
+  localStorage.setItem('startDate', this.startDate ? this.startDate.toString() : '');
+  localStorage.setItem('endDate', this.endDate ? this.endDate.toString() : '');
+  this.router.navigateByUrl('/clients/list-tours'); 
 } 
 onCheck() :void{
   this.isChecked2=false;
@@ -218,6 +250,11 @@ ngOnInit(): void {
   const defaultTime = new Date();
   defaultTime.setHours(10, 30, 0, 0); // Set hours, minutes, seconds, milliseconds
   this.time = defaultTime;
+  // Cargar países al iniciar el componente
+  this.getCountries();
+  this.travelDestination = localStorage.getItem('travelDestination') || '';
+  this.startDate = localStorage.getItem('startDate') || '';
+  this.endDate = localStorage.getItem('endDate') || '';
 }
 toggleClass(index: number){
   this.isClassAdded[index] = !this.isClassAdded[index]
@@ -225,4 +262,79 @@ toggleClass(index: number){
 selectClass(index:number):void{
  this.isSelected[index]=!this.isSelected[index];
 }
+// Obtener lista de países
+getCountries() {
+  this.countryService.getCountries().subscribe({
+    next: (data: Country[]) => {
+      this.countries = data;
+    },
+    error: (err: any) => {
+      console.error('Error al obtener países', err);
+      this.countries = [];
+    }
+  });
+}
+// Cuando el usuario selecciona un país
+onCountryChange(countryId: number) {
+  this.selectedCountry = countryId;
+  this.departments = [];
+  this.cities = [];
+  this.selectedDepartment = null;
+  this.selectedCity = '';
+  this.getDepartments(countryId);
+}
+// Obtener departamentos por país
+getDepartments(countryId: number) {
+  this.departmentService.getDepartmentsByCountryId(countryId).subscribe({
+    next: (data: Department[]) => {
+      this.departments = data;
+    },
+    error: (err: any) => {
+      console.error('Error al obtener departamentos', err);
+      this.departments = [];
+    }
+  });
+}
+// Cuando el usuario selecciona un departamento
+onDepartmentChange(departmentId: number) {
+  this.selectedDepartment = departmentId;
+  this.cities = [];
+  this.selectedCity = '';
+  this.getCities(departmentId);
+}
+// Obtener ciudades por departamento
+getCities(departmentId: number) {
+  this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
+    next: (data: City[]) => {
+      this.cities = data.map(city => city.name); // Convertir a string[]
+    },
+    error: (err: any) => {
+      console.error('Error al obtener ciudades', err);
+      this.cities = [];
+    }
+  });
+}
+// Cuando el usuario selecciona una ciudad
+onCityChange(cityName: string) {
+  this.selectedCity = cityName;
+}
+onStartDateChange(date: Date) {
+  console.log('Fecha de inicio seleccionada:', date);
+  this.startDate = date;
+}
+onEndDateChange(date: Date) {
+  console.log('Fecha de fin seleccionada:', date);
+  this.endDate = date;
+}
+
+onSearch(): void {
+  const params = [
+    `city=${encodeURIComponent(this.selectedCity)}`,
+    `category=${encodeURIComponent(this.selectedCategory)}`,
+    `checkIn=${encodeURIComponent(this.checkIn)}`,
+    `checkOut=${encodeURIComponent(this.checkOut)}`
+  ].join('&');
+  this.router.navigateByUrl(`/clients/list-tours?${params}`);
+}
+
 }

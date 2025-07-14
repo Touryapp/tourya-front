@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { HostListener } from '@angular/core';
 import { routes } from "../../../shared/routes/routes";
+import { ActivatedRoute } from '@angular/router';
+import { SearchTourListDto, TourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
+import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
 
 @Component({
   selector: 'app-list-tours',
@@ -86,187 +89,31 @@ export class ListToursComponent implements OnInit {
     }
   ];
 
-  // Tours data
-  tours = [
-    {
-      id: 1,
-      name: 'Rainbow Mountain Valley',
-      location: 'Ciutat Vella, Barcelona',
-      type: 'Ecotourism',
-      rating: 5.0,
-      reviews: 105,
-      price: 500,
-      originalPrice: 789,
-      duration: '4 Day,3 Night',
-      guests: 14,
-      guide: 'assets/img/users/user-08.jpg',
-      images: [
-        'assets/img/tours/tours-07.jpg',
-        'assets/img/tours/tours-08.jpg',
-        'assets/img/tours/tours-09.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 2,
-      name: 'Mystic Falls',
-      location: 'Oxford Street, London',
-      type: 'Adventure Tour',
-      rating: 4.7,
-      reviews: 110,
-      price: 600,
-      originalPrice: 700,
-      duration: '3 Day, 2 Night',
-      guests: 12,
-      guide: 'assets/img/users/user-09.jpg',
-      images: [
-        'assets/img/tours/tours-08.jpg',
-        'assets/img/tours/tours-09.jpg',
-        'assets/img/tours/tours-10.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 3,
-      name: 'Crystal Lake',
-      location: 'Princes Street, Edinburgh',
-      type: 'Summer Trip',
-      rating: 4.7,
-      reviews: 180,
-      price: 300,
-      originalPrice: 500,
-      duration: '5 Day, 4 Night',
-      guests: 16,
-      guide: 'assets/img/users/user-10.jpg',
-      images: [
-        'assets/img/tours/tours-09.jpg',
-        'assets/img/tours/tours-10.jpg',
-        'assets/img/tours/tours-11.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 4,
-      name: 'Majestic Peaks',
-      location: 'Deansgate, Manchester',
-      type: 'Adventure Tour',
-      rating: 4.9,
-      reviews: 300,
-      price: 400,
-      originalPrice: 480,
-      duration: '3 Day, 2 Night',
-      guests: 10,
-      guide: 'assets/img/users/user-11.jpg',
-      images: [
-        'assets/img/tours/tours-10.jpg',
-        'assets/img/tours/tours-11.jpg',
-        'assets/img/tours/tours-12.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 5,
-      name: 'Enchanted Forest',
-      location: 'King\'s Road, Chelsea',
-      type: 'Group Tours',
-      rating: 4.3,
-      reviews: 250,
-      price: 550,
-      originalPrice: 600,
-      duration: '2 Day, 1 Night',
-      guests: 17,
-      guide: 'assets/img/users/user-12.jpg',
-      images: [
-        'assets/img/tours/tours-11.jpg',
-        'assets/img/tours/tours-12.jpg',
-        'assets/img/tours/tours-13.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 6,
-      name: 'Serene Bay',
-      location: 'Bold Street, Liverpool',
-      type: 'Beach Tours',
-      rating: 4.1,
-      reviews: 280,
-      price: 450,
-      originalPrice: 520,
-      duration: '3 D2 Night',
-      guests: 8,
-      guide: 'assets/img/users/user-13.jpg',
-      images: [
-        'assets/img/tours/tours-12.jpg',
-        'assets/img/tours/tours-13.jpg',
-        'assets/img/tours/tours-14.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 7,
-      name: 'Ancient Ruins',
-      location: 'Broad Street, Bristol',
-      type: 'Historical Tours',
-      rating: 4.6,
-      reviews: 400,
-      price: 350,
-      originalPrice: 400,
-      duration: '2 Day, 1 Night',
-      guests: 10,
-      guide: 'assets/img/users/user-14.jpg',
-      images: [
-        'assets/img/tours/tours-13.jpg',
-        'assets/img/tours/tours-14.jpg',
-        'assets/img/tours/tours-15.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 8,
-      name: 'Mystical Caves',
-      location: 'Chapel Street, Salford',
-      type: 'Adventure Tour',
-      rating: 4.2,
-      reviews: 350,
-      price: 700,
-      originalPrice: 800,
-      duration: '3 Day, 2 Night',
-      guests: 14,
-      guide: 'assets/img/users/user-15.jpg',
-      images: [
-        'assets/img/tours/tours-14.jpg',
-        'assets/img/tours/tours-15.jpg',
-        'assets/img/tours/tours-11.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 9,
-      name: 'Frosted Peaks',
-      location: 'Castle Street, Cambridge',
-      type: 'Adventure Tour',
-      rating: 4.8,
-      reviews: 220,
-      price: 650,
-      originalPrice: 720,
-      duration: '6 Day, 5 Night',
-      guests: 14,
-      guide: 'assets/img/users/user-16.jpg',
-      images: [
-        'assets/img/tours/tours-15.jpg',
-        'assets/img/tours/tours-11.jpg',
-        'assets/img/tours/tours-12.jpg'
-      ],
-      trending: true
-    }
-  ];
+  // Tours data (ahora será llenado por la API)
+  tours: TourScheduleResponseDto[] = [];
+
+  public cities: string[] = ['Argentina', 'Brasil', 'Chile', 'Uruguay', 'Perú'];
+  public categories: string[] = ['Playa', 'Río', 'Desierto', 'Nieve', 'Rural'];
+
+  public selectedCity: string = '';
+  public selectedCategory: string = '';
+  public checkIn: string = '';
+  public checkOut: string = '';
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder, 
+    private route: ActivatedRoute,
+    private requestProvidersService: RequestProvidersService
   ) {}
 
   ngOnInit(): void {
-    // Component initialization
+    this.route.queryParams.subscribe(params => {
+      this.selectedCity = params['city'] || '';
+      this.selectedCategory = params['category'] || '';
+      this.checkIn = params['checkIn'] || '';
+      this.checkOut = params['checkOut'] || '';
+      this.searchToursList();
+    });
   }
 
   // Show more/less functionality
@@ -316,5 +163,39 @@ export class ListToursComponent implements OnInit {
   resetFilters(): void {
     console.log('Reseteando filtros...');
     // Reset all filters
+  }
+
+  onSearch(): void {
+    const params = [
+      `city=${encodeURIComponent(this.selectedCity)}`,
+      `category=${encodeURIComponent(this.selectedCategory)}`,
+      `checkIn=${encodeURIComponent(this.checkIn)}`,
+      `checkOut=${encodeURIComponent(this.checkOut)}`
+    ].join('&');
+    window.location.href = `/clients/list-tours?${params}`;
+  }
+
+  searchToursList(): void {
+    const searchData: SearchTourListDto = {
+      "providerStateId": 1,
+      "providerCityId": 1,
+      "categoryId": 1,
+      "page": 0,
+      "size": 10
+    
+      
+    };
+  
+    this.requestProvidersService.searchTours(searchData).subscribe({
+      next: (response: TourScheduleResponseDto[]) => {
+        console.log('Respuesta completa de searchTours:', response);
+        console.log('Cantidad de resultados:', response ? response.length : 0);
+        this.tours = response || [];
+      },
+      error: (error: any) => {
+        console.error('Error al buscar tours:', error);
+        this.tours = [];
+      }
+    });
   }
 } 
