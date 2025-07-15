@@ -4,8 +4,13 @@ export interface SearchTourListDto {
     categoryId: number,
     page: number,
     size: number
-  
-   
+    startDate: string,
+    endDate: string,
+    duration: string,
+    ageType: string,
+    minPrice: number,
+    maxPrice: number,
+    search: string
 }
 
 export interface ScheduleDto {
@@ -53,6 +58,14 @@ export interface TourScheduleResponseDto {
     address: AddressDto;
     gallery: GalleryDto[];
     prices: PriceDto[] | null;
+}
+
+export interface PaginatedTourScheduleResponseDto {
+    content: TourScheduleResponseDto[];
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
 }
 
 

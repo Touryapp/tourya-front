@@ -6,10 +6,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { ListToursRoutingModule } from './list-tours-routing.module';
 import { ListToursComponent } from './list-tours.component';
 import { SharedModule } from '../../../shared/shared-module';
+import { TourListViewComponent } from './tour-list-view/tour-list-view.component';
+import { TourGridViewComponent } from './tour-grid-view/tour-grid-view.component';
 
 @NgModule({
   declarations: [
-    ListToursComponent
+    ListToursComponent,
+    TourListViewComponent,
+    TourGridViewComponent
   ],
   imports: [
     CommonModule,

@@ -1110,9 +1110,9 @@
                                             <!-- Select Ciudad -->
                                             <div class="form-item">
                                               <label class="form-label fs-14 text-default mb-1">Ciudad</label>
-                                              <select class="form-control" [(ngModel)]="selectedCity" name="city" required>
+                                              <select class="form-control" [(ngModel)]="selectedState" name="state" required>
                                                 <option value="" disabled selected>Selecciona ciudad</option>
-                                                <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+                                                <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
                                               </select>
                                             </div>
                                             <!-- Select Categoría -->
@@ -1120,7 +1120,7 @@
                                               <label class="form-label fs-14 text-default mb-1">Categoría</label>
                                               <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
                                                 <option value="" disabled selected>Selecciona categoría</option>
-                                                <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                                                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
                                               </select>
                                             </div>
                                             <!-- Check In -->

@@ -25,14 +25,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="banner-form">
-                        <form class="d-lg-flex" (ngSubmit)="onSearch()">
+                        <form class="d-lg-flex" >
                             <div class="d-flex form-info">
                                 <!-- Select Ciudad -->
                                 <div class="form-item">
                                     <label class="form-label fs-14 text-default mb-1">Ciudad</label>
-                                    <select class="form-control" [(ngModel)]="selectedCity" name="city" required>
+                                    <select class="form-control" [(ngModel)]="selectedState" name="state" required>
                                         <option value="" disabled>Selecciona ciudad</option>
-                                        <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+                                        <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
                                     </select>
                                 </div>
                                 <!-- Select Categoría -->
@@ -40,7 +40,7 @@
                                     <label class="form-label fs-14 text-default mb-1">Categoría</label>
                                     <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
                                         <option value="" disabled>Selecciona categoría</option>
-                                        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                                        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
                                     </select>
                                 </div>
                                 <!-- Check In -->
@@ -54,7 +54,7 @@
                                     <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary search-btn rounded ms-2">Searchs</button>
+                            <button (click)="onSearch()" class="btn btn-primary search-btn rounded ms-2">Searchs</button>
                         </form>
                     </div>
                 </div>
@@ -512,12 +512,21 @@
                 <div class="col-xl-9 col-lg-8">
                     <div class="theiaStickySidebar">
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <h6 class="mb-3">1920 Tours Found on Your Search</h6>
+                            <h6 class="mb-3">{{ tours.length }} Tours Found on Your Search</h6>
                             <div class="d-flex align-items-center flex-wrap">
                                 <div class="list-item d-flex align-items-center mb-3">
-                                    <a [routerLink]="routes.tourGrid" class="list-icon active me-2"><i class="isax isax-grid-1"></i></a>
-                                    <a [routerLink]="routes.tourList" class="list-icon me-2"><i class="isax isax-firstline"></i></a>
-                                    <a [routerLink]="routes.tourMap" class="list-icon me-2"><i class="isax isax-map-1"></i></a>
+                                    <a href="javascript:void(0);" 
+                                       class="list-icon me-2" 
+                                       [ngClass]="{ active: viewMode === 'grid' }"
+                                       (click)="setViewMode('grid')">
+                                        <i class="isax isax-grid-1"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" 
+                                       class="list-icon me-2" 
+                                       [ngClass]="{ active: viewMode === 'list' }"
+                                       (click)="setViewMode('list')">
+                                        <i class="isax isax-firstline"></i>
+                                    </a>
                                 </div>
                                 <div class="dropdown mb-3">
                                     <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -559,710 +568,73 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-info br-10 p-3 pb-2 mb-4">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                <p class="fs-14 fw-medium mb-2 d-inline-flex align-items-center"><i class="isax isax-info-circle me-2"></i>Save an average of 15% on thousands of hotels when you're signed in</p>
-                                <a [routerLink]="routes.login" class="btn btn-white btn-sm mb-2">Sign In</a>
-                            </div>
+                        
+                        
+                        
+                        
+                        
+                        
+                        <!-- Grid View -->
+                        <div *ngIf="viewMode === 'grid'">
+                            <app-tour-grid-view
+                                [tours]="tours"
+                                [loading]="loading"
+                                [totalItems]="totalItems"
+                                [totalPages]="totalPages"
+                                [currentPage]="currentPage"
+                                [size]="size"
+                                (toggleFavorite)="onToggleFavoriteFromGrid($event)"
+                                (goToPage)="onGoToPageFromGrid($event)"
+                                (goToPreviousPage)="onGoToPreviousPageFromGrid()"
+                                (goToNextPage)="onGoToNextPageFromGrid()">
+                            </app-tour-grid-view>
                         </div>
-                        <div class="row justify-content-center">
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-07.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-08.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-09.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[1] }" (click)="toggleClass(1)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9">Ecotourism</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">5.0</span>
-                                                <p class="fs-14">(105 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Rainbow Mountain Valley</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Ciutat Vella, Barcelona</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$500</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$789</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">4 Day,3 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>14 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-08.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-08.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-09.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-10.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[0] }" (click)="toggleClass(0)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.7</span>
-                                                <p class="fs-14">(110 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Mystic Falls</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Oxford Street, London</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$600</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$700</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 Day, 2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>12 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-09.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-09.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-10.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[1] }" (click)="toggleClass(1)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Summer Trip</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.7</span>
-                                                <p class="fs-14">(180 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Crystal Lake</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Princes Street, Edinburgh</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$300</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$500</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">5 Day, 4 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>16 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-10.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-10.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[2] }" (click)="toggleClass(2)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.9</span>
-                                                <p class="fs-14">(300 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Majestic Peaks</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Deansgate, Manchester</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$400</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$480</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 Day, 2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>10 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-11.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-13.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[3] }" (click)="toggleClass(3)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Group Tours</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.3</span>
-                                                <p class="fs-14">(250 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Enchanted Forest</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>King's Road, Chelsea</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$550</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$600</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">2 Day, 1 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>17 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-12.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-13.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-14.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[4] }" (click)="toggleClass(4)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Beach Tours</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.1</span>
-                                                <p class="fs-14">(280 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Serene Bay</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Bold Street, Liverpool</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$450</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$520</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 D2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>08 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-13.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                            <div class="slide-images">
-                                                <a [routerLink]="routes.tourDetails">
-                                                    <img src="assets/img/tours/tours-13.jpg" class="img-fluid" alt="img">
-                                                </a>
-                                            </div>
-                                        </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-14.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                                <ng-template carouselSlide>
-                                                    <div class="slide-images">
-                                                        <a [routerLink]="routes.tourDetails">
-                                                            <img src="assets/img/tours/tours-15.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[5] }" (click)="toggleClass(5)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Historical Tours</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.6</span>
-                                                <p class="fs-14">(400 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Ancient Ruins</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Broad Street, Bristol</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$350</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$400</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">2 Day, 1 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>10 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-14.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-14.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-15.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[6] }" (click)="toggleClass(6)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.2</span>
-                                                <p class="fs-14">(350 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Mystical Caves</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Chapel Street, Salford</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$700</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$800</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 Day, 2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>14 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-15.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-15.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[7] }" (click)="toggleClass(7)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.8</span>
-                                                <p class="fs-14">(220 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Frosted Peaks</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Castle Street, Cambridge</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$650</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$720</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">6 Day, 5 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>14 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-16.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
+
+                        <!-- List View -->
+                        <div *ngIf="viewMode === 'list'">
+                            <app-tour-list-view
+                                [tours]="tours"
+                                [loading]="loading"
+                                [totalItems]="totalItems"
+                                [totalPages]="totalPages"
+                                [currentPage]="currentPage"
+                                [size]="size"
+                                (toggleFavorite)="onToggleFavorite($event)"
+                                (goToPage)="onGoToPageFromList($event)"
+                                (goToPreviousPage)="onGoToPreviousPageFromList()"
+                                (goToNextPage)="onGoToNextPageFromList()">
+                            </app-tour-list-view>
                         </div>
     
                         <!-- Pagination -->
-                        <nav class="pagination-nav">
+                        <nav class="pagination-nav" *ngIf="totalPages > 1">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                                <!-- Botón Anterior -->
+                                <li class="page-item" [ngClass]="{ disabled: isFirstPage() }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()" aria-label="Previous">
                                         <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
                                     </a>
                                 </li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
-                                <li class="page-item active"><a class="page-link" href="javascript:void(0);">4</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">5</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                                
+                                <!-- Números de página -->
+                                <li class="page-item" *ngFor="let pageNum of getPageNumbers()" [ngClass]="{ active: pageNum === currentPage }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="goToPage(pageNum)">{{ pageNum }}</a>
+                                </li>
+                                
+                                <!-- Botón Siguiente -->
+                                <li class="page-item" [ngClass]="{ disabled: isLastPage() }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()" aria-label="Next">
                                         <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
                                     </a>
                                 </li>
                             </ul>
+                            
+                            <!-- Información de paginación -->
+                            <div class="text-center mt-2">
+                                <small class="text-muted">
+                                    Mostrando {{ (currentPage - 1) * size + 1 }} - {{ Math.min(currentPage * size, totalItems) }} de {{ totalItems }} tours
+                                </small>
+                            </div>
                         </nav>
                         <!-- /Pagination -->
                     </div>

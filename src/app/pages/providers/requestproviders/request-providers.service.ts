@@ -73,7 +73,7 @@ export class RequestProvidersService {
   }
 
   // Endpoint para buscar tours por horarios
-  searchTours(body: SearchTourListDto): Observable<any> {
+  searchTours(body: Partial<SearchTourListDto>): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/public/tours/schedule/search`, body);
   }
 

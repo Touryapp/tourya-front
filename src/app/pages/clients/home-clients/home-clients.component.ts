@@ -11,6 +11,8 @@ import { CityService } from '../../../shared/services/city.service';
 import { Country } from '../../../shared/dto/country.dto';
 import { Department } from '../../../shared/dto/department.dto';
 import { City } from '../../../shared/dto/city.dto';
+import { State } from '../../../shared/dto/requestProvider-response.dto';
+import { TourCategory } from '../../../shared/dto/tour-response.dto';
 
 @Component({
   selector: 'app-home-clients',
@@ -25,16 +27,22 @@ export class HomeClientsComponent {
   // Variables para selectores de país, departamento y ciudad
   countries: Country[] = [];
   departments: Department[] = [];
-  cities: string[] = ['Argentina', 'Brasil', 'Chile', 'Uruguay', 'Perú'];
+  public states: State[] =  [{id: 1, name: 'Bogota'}];
+public categories: TourCategory[] = [
+  {
+    "id": 1,
+    "name": "Categoria 1",
+    "description": "Descripcion de la categoria"
+  }
+]
   selectedCountry: number | null = null;
   selectedDepartment: number | null = null;
-  selectedCity: string = '';
+  selectedState: string = '';
   // Variables para capturar los datos del formulario
   travelDestination: string = '';
   startDate: Date | string = '';
   endDate: Date | string = '';
   // Eliminar duplicados y unificar tipos para el formulario de búsqueda
-  public categories: string[] = ['Playa', 'Río', 'Desierto', 'Nieve', 'Rural'];
   public selectedCategory: string = '';
   public checkIn: string = '';
   public checkOut: string = '';
@@ -278,9 +286,9 @@ getCountries() {
 onCountryChange(countryId: number) {
   this.selectedCountry = countryId;
   this.departments = [];
-  this.cities = [];
+  this.states = [];
   this.selectedDepartment = null;
-  this.selectedCity = '';
+  this.selectedState = '';
   this.getDepartments(countryId);
 }
 // Obtener departamentos por país
@@ -296,27 +304,27 @@ getDepartments(countryId: number) {
   });
 }
 // Cuando el usuario selecciona un departamento
-onDepartmentChange(departmentId: number) {
-  this.selectedDepartment = departmentId;
-  this.cities = [];
-  this.selectedCity = '';
-  this.getCities(departmentId);
-}
+// onDepartmentChange(departmentId: number) {
+  // this.selectedDepartment = departmentId;
+  // this.states = [];
+  // this.selectedState = '';
+  // this.getCities(departmentId);
+// }
 // Obtener ciudades por departamento
-getCities(departmentId: number) {
-  this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
-    next: (data: City[]) => {
-      this.cities = data.map(city => city.name); // Convertir a string[]
-    },
-    error: (err: any) => {
-      console.error('Error al obtener ciudades', err);
-      this.cities = [];
-    }
-  });
-}
+// getCities(departmentId: number) {
+  // this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
+    // next: (data: City[]) => {
+      // this.states = data.map(state => state.name); // Convertir a string[]
+    // },
+    // error: (err: any) => {
+      // console.error('Error al obtener ciudades', err);
+      // this.states = [];
+    // }
+  // });
+// }
 // Cuando el usuario selecciona una ciudad
 onCityChange(cityName: string) {
-  this.selectedCity = cityName;
+  this.selectedState = cityName;
 }
 onStartDateChange(date: Date) {
   console.log('Fecha de inicio seleccionada:', date);
@@ -329,7 +337,7 @@ onEndDateChange(date: Date) {
 
 onSearch(): void {
   const params = [
-    `city=${encodeURIComponent(this.selectedCity)}`,
+    `state=${encodeURIComponent(this.selectedState)}`,
     `category=${encodeURIComponent(this.selectedCategory)}`,
     `checkIn=${encodeURIComponent(this.checkIn)}`,
     `checkOut=${encodeURIComponent(this.checkOut)}`

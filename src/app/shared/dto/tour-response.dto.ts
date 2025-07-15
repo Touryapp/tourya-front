@@ -22,7 +22,7 @@ export interface Tour {
   profilePicture?: Gallery;
 }
 
-interface TourCategory {
+export interface TourCategory {
   id?: number;
   name: string;
   description: string;
