@@ -5,7 +5,7 @@ import { environment } from "../../../../environments/environment";
 import { CreateRequestProviderDto } from '../../../shared/dto/create-request-provider.dto';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
-
+import { SearchTourListDto } from '../../../shared/dto/search-tour-response.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -71,4 +71,10 @@ export class RequestProvidersService {
   consultDataByIdProviderAdmin(requestProviderById: number): Observable<RequestProvider> {
     return this.http.get<RequestProvider>(`${this.baseUrl}/admin/consultDataById/${requestProviderById}`);
   }
+
+  // Endpoint para buscar tours por horarios
+  searchTours(body: Partial<SearchTourListDto>): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/public/tours/schedule/search`, body);
+  }
+
  }

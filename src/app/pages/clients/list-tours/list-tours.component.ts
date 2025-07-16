@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { HostListener } from '@angular/core';
 import { routes } from "../../../shared/routes/routes";
+import { ActivatedRoute } from '@angular/router';
+import { SearchTourListDto, TourScheduleResponseDto, PaginatedTourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
+import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
+import { State } from '../../../shared/dto/requestProvider-response.dto';
+import { TourCategory } from '../../../shared/dto/tour-response.dto';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-list-tours',
@@ -11,6 +17,7 @@ import { routes } from "../../../shared/routes/routes";
 })
 export class ListToursComponent implements OnInit {
   public routes = routes;
+  public Math = Math; // Para usar Math en el template
   
   // Date picker
   bsValue = new Date();
@@ -26,31 +33,7 @@ export class ListToursComponent implements OnInit {
   isSelected: boolean[] = [false, false, false, false, false, false, false, false, false];
   isClassAdded: boolean[] = [false, false, false, false, false, false, false, false];
   
-  // Image slider options
-  imageSlider = {
-    loop: true,
-    mouseDrag: true,
-    touchDrag: true,
-    pullDrag: true,
-    dots: false,
-    navSpeed: 700,
-    navText: ['', ''],
-    responsive: {
-      0: {
-        items: 1
-      },
-      400: {
-        items: 1
-      },
-      740: {
-        items: 1
-      },
-      940: {
-        items: 1
-      }
-    },
-    nav: true
-  };
+
 
   // Tour types data
   tourTypes = [
@@ -86,187 +69,66 @@ export class ListToursComponent implements OnInit {
     }
   ];
 
-  // Tours data
-  tours = [
-    {
-      id: 1,
-      name: 'Rainbow Mountain Valley',
-      location: 'Ciutat Vella, Barcelona',
-      type: 'Ecotourism',
-      rating: 5.0,
-      reviews: 105,
-      price: 500,
-      originalPrice: 789,
-      duration: '4 Day,3 Night',
-      guests: 14,
-      guide: 'assets/img/users/user-08.jpg',
-      images: [
-        'assets/img/tours/tours-07.jpg',
-        'assets/img/tours/tours-08.jpg',
-        'assets/img/tours/tours-09.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 2,
-      name: 'Mystic Falls',
-      location: 'Oxford Street, London',
-      type: 'Adventure Tour',
-      rating: 4.7,
-      reviews: 110,
-      price: 600,
-      originalPrice: 700,
-      duration: '3 Day, 2 Night',
-      guests: 12,
-      guide: 'assets/img/users/user-09.jpg',
-      images: [
-        'assets/img/tours/tours-08.jpg',
-        'assets/img/tours/tours-09.jpg',
-        'assets/img/tours/tours-10.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 3,
-      name: 'Crystal Lake',
-      location: 'Princes Street, Edinburgh',
-      type: 'Summer Trip',
-      rating: 4.7,
-      reviews: 180,
-      price: 300,
-      originalPrice: 500,
-      duration: '5 Day, 4 Night',
-      guests: 16,
-      guide: 'assets/img/users/user-10.jpg',
-      images: [
-        'assets/img/tours/tours-09.jpg',
-        'assets/img/tours/tours-10.jpg',
-        'assets/img/tours/tours-11.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 4,
-      name: 'Majestic Peaks',
-      location: 'Deansgate, Manchester',
-      type: 'Adventure Tour',
-      rating: 4.9,
-      reviews: 300,
-      price: 400,
-      originalPrice: 480,
-      duration: '3 Day, 2 Night',
-      guests: 10,
-      guide: 'assets/img/users/user-11.jpg',
-      images: [
-        'assets/img/tours/tours-10.jpg',
-        'assets/img/tours/tours-11.jpg',
-        'assets/img/tours/tours-12.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 5,
-      name: 'Enchanted Forest',
-      location: 'King\'s Road, Chelsea',
-      type: 'Group Tours',
-      rating: 4.3,
-      reviews: 250,
-      price: 550,
-      originalPrice: 600,
-      duration: '2 Day, 1 Night',
-      guests: 17,
-      guide: 'assets/img/users/user-12.jpg',
-      images: [
-        'assets/img/tours/tours-11.jpg',
-        'assets/img/tours/tours-12.jpg',
-        'assets/img/tours/tours-13.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 6,
-      name: 'Serene Bay',
-      location: 'Bold Street, Liverpool',
-      type: 'Beach Tours',
-      rating: 4.1,
-      reviews: 280,
-      price: 450,
-      originalPrice: 520,
-      duration: '3 D2 Night',
-      guests: 8,
-      guide: 'assets/img/users/user-13.jpg',
-      images: [
-        'assets/img/tours/tours-12.jpg',
-        'assets/img/tours/tours-13.jpg',
-        'assets/img/tours/tours-14.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 7,
-      name: 'Ancient Ruins',
-      location: 'Broad Street, Bristol',
-      type: 'Historical Tours',
-      rating: 4.6,
-      reviews: 400,
-      price: 350,
-      originalPrice: 400,
-      duration: '2 Day, 1 Night',
-      guests: 10,
-      guide: 'assets/img/users/user-14.jpg',
-      images: [
-        'assets/img/tours/tours-13.jpg',
-        'assets/img/tours/tours-14.jpg',
-        'assets/img/tours/tours-15.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 8,
-      name: 'Mystical Caves',
-      location: 'Chapel Street, Salford',
-      type: 'Adventure Tour',
-      rating: 4.2,
-      reviews: 350,
-      price: 700,
-      originalPrice: 800,
-      duration: '3 Day, 2 Night',
-      guests: 14,
-      guide: 'assets/img/users/user-15.jpg',
-      images: [
-        'assets/img/tours/tours-14.jpg',
-        'assets/img/tours/tours-15.jpg',
-        'assets/img/tours/tours-11.jpg'
-      ],
-      trending: true
-    },
-    {
-      id: 9,
-      name: 'Frosted Peaks',
-      location: 'Castle Street, Cambridge',
-      type: 'Adventure Tour',
-      rating: 4.8,
-      reviews: 220,
-      price: 650,
-      originalPrice: 720,
-      duration: '6 Day, 5 Night',
-      guests: 14,
-      guide: 'assets/img/users/user-16.jpg',
-      images: [
-        'assets/img/tours/tours-15.jpg',
-        'assets/img/tours/tours-11.jpg',
-        'assets/img/tours/tours-12.jpg'
-      ],
-      trending: true
-    }
-  ];
+  // Tours data (ahora será llenado por la API)
+  tours: TourScheduleResponseDto[] = [];
+  loading: boolean = false;
 
+  public states: State[] =  [{id: 1, name: 'Bogota'}];
+  public categories: TourCategory[] = [
+    {
+      "id": 1,
+      "name": "Categoria 1",
+      "description": "Descripcion de la categoria"
+    }
+  ]
+
+  public selectedState: string = '';
+  public selectedCategory: string = '';
+  public checkIn: string = '';
+  public checkOut: string = '';
+  
+  // Nuevas propiedades para filtros basados en SearchTourListDto
+  public selectedDuration: string = '';
+  public selectedAgeType: string = '';
+  public minPrice: number = 100;
+  public maxPrice: number = 5000;
+  public searchText: string = '';
+  
+  // Opciones para los filtros
+  public durationOptions = [
+    { value: '1-3', label: '1-3 días' },
+    { value: '4-7', label: '4-7 días' },
+    { value: '8-14', label: '8-14 días' },
+    { value: '15+', label: '15+ días' }
+  ];
+  
+  public ageTypeOptions = [
+    { value: 'ADULT', label: 'Adulto' },
+    { value: 'CHILD', label: 'Niño' },
+    { value: 'INFANT', label: 'Infante' },
+    { value: 'SENIOR', label: 'Senior' }
+  ];
+  
+  public page: number = 1;
+  public size: number = 10;
+  public totalItems: number = 0;
+  public totalPages: number = 0;
+  public currentPage: number = 1;
+  public viewMode: 'grid' | 'list' = 'grid';
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder, 
+    private route: ActivatedRoute,
+    private requestProvidersService: RequestProvidersService
   ) {}
 
   ngOnInit(): void {
-    // Component initialization
+    this.route.queryParams.subscribe(params => {
+      this.selectedState = params['state'] || '';
+      this.selectedCategory = params['category'] || '';
+      this.checkIn = params['checkIn'] || '';
+      this.checkOut = params['checkOut'] || '';
+      this.searchToursList();
+    });
   }
 
   // Show more/less functionality
@@ -315,6 +177,259 @@ export class ListToursComponent implements OnInit {
   // Reset filters
   resetFilters(): void {
     console.log('Reseteando filtros...');
-    // Reset all filters
+    this.selectedState = '';
+    this.selectedCategory = '';
+    this.checkIn = '';
+    this.checkOut = '';
+    this.selectedDuration = '';
+    this.selectedAgeType = '';
+    this.minPrice = 100;
+    this.maxPrice = 5000;
+    this.searchText = '';
+    this.currentPage = 1;
+    this.page = 1;
+    this.searchToursList();
+  }
+
+
+
+  // Pagination functions
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxVisiblePages = 5;
+    
+    if (this.totalPages <= maxVisiblePages) {
+      // Si hay pocas páginas, mostrar todas
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Si hay muchas páginas, mostrar un rango alrededor de la página actual
+      let start = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+      let end = Math.min(this.totalPages, start + maxVisiblePages - 1);
+      
+      // Ajustar el inicio si estamos cerca del final
+      if (end - start < maxVisiblePages - 1) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+      }
+      
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.currentPage = page;
+      this.page = page;
+      this.searchToursList();
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  isFirstPage(): boolean {
+    return this.currentPage === 1;
+  }
+
+  isLastPage(): boolean {
+    return this.currentPage === this.totalPages;
+  }
+
+  // View mode methods
+  setViewMode(mode: 'grid' | 'list'): void {
+    this.viewMode = mode;
+  }
+
+  // Event handlers for tour-list-view component
+  onToggleFavorite(index: number): void {
+    this.toggleClass(index);
+  }
+
+  onGoToPageFromList(page: number): void {
+    this.goToPage(page);
+  }
+
+  onGoToPreviousPageFromList(): void {
+    this.goToPreviousPage();
+  }
+
+  onGoToNextPageFromList(): void {
+    this.goToNextPage();
+  }
+
+  // Event handlers for tour-grid-view component
+  onToggleFavoriteFromGrid(index: number): void {
+    this.toggleClass(index);
+  }
+
+  onGoToPageFromGrid(page: number): void {
+    this.goToPage(page);
+  }
+
+  onGoToPreviousPageFromGrid(): void {
+    this.goToPreviousPage();
+  }
+
+  onGoToNextPageFromGrid(): void {
+    this.goToNextPage();
+  }
+
+  onSearch(): void {
+    this.currentPage = 1;
+    this.page = 1;
+    this.searchToursList();
+  }
+
+  // Método para búsqueda desde filtros del sidebar
+  onSearchFromFilters(): void {
+    console.log('=== BÚSQUEDA DESDE FILTROS ===');
+    console.log('Estado seleccionado:', this.selectedState);
+    console.log('Categoría seleccionada:', this.selectedCategory);
+    console.log('Fecha de entrada:', this.checkIn);
+    console.log('Fecha de salida:', this.checkOut);
+    console.log('Duración seleccionada:', this.selectedDuration);
+    console.log('Tipo de edad seleccionado:', this.selectedAgeType);
+    console.log('Precio mínimo:', this.minPrice);
+    console.log('Precio máximo:', this.maxPrice);
+    console.log('Texto de búsqueda:', this.searchText);
+    
+    // Resetear a la primera página
+    this.currentPage = 1;
+    this.page = 1;
+    
+    // Ejecutar búsqueda con todos los filtros
+    this.searchToursList();
+  }
+
+  // Método de prueba para verificar datos
+  testSearchData(): void {
+    console.log('=== PRUEBA DE DATOS DE BÚSQUEDA ===');
+    const testData: Partial<SearchTourListDto> = {
+      "providerStateId": Number(this.selectedState) || undefined,
+      "providerCityId": 1,
+      "categoryId": Number(this.selectedCategory) || undefined,
+      "page": this.page,
+      "size": this.size,
+      "startDate": this.checkIn || undefined,
+      "endDate": this.checkOut || undefined,
+      "duration": this.selectedDuration || undefined,
+      "ageType": this.selectedAgeType || undefined,
+      "minPrice": this.minPrice || undefined,
+      "maxPrice": this.maxPrice || undefined,
+      "search": this.searchText || undefined
+    };
+    
+    console.log('Datos de prueba que se enviarían a la API:', testData);
+    console.log('URL del endpoint:', `${environment.apiUrl}/public/tours/schedule/search`);
+  }
+
+  // Métodos para manejar cambios en los sliders de precio
+  onMinPriceChange(event: any): void {
+    const value = Number(event.target.value);
+    this.minPrice = value;
+    
+    // Asegurar que el precio mínimo no sea mayor que el máximo
+    if (this.minPrice > this.maxPrice) {
+      this.maxPrice = this.minPrice;
+    }
+    
+    console.log('Precio mínimo actualizado:', this.minPrice);
+  }
+
+  onMaxPriceChange(event: any): void {
+    const value = Number(event.target.value);
+    this.maxPrice = value;
+    
+    // Asegurar que el precio máximo no sea menor que el mínimo
+    if (this.maxPrice < this.minPrice) {
+      this.minPrice = this.maxPrice;
+    }
+    
+    console.log('Precio máximo actualizado:', this.maxPrice);
+  }
+
+
+  searchToursList(): void {
+    this.loading = true;
+    
+    // Construir objeto de búsqueda con todos los filtros
+    const searchData: Partial<SearchTourListDto> = {
+      "providerStateId": Number(this.selectedState) || undefined,
+      "providerCityId": 1,
+      "categoryId": Number(this.selectedCategory) || undefined,
+      "page": this.page,
+      "size": this.size,
+      "startDate": this.checkIn || undefined,
+      "endDate": this.checkOut || undefined,
+      "duration": this.selectedDuration || undefined,
+      "ageType": this.selectedAgeType || undefined,
+      "minPrice": this.minPrice || undefined,
+      "maxPrice": this.maxPrice || undefined,
+      "search": this.searchText || undefined
+    };
+
+    console.log('=== DATOS ENVIADOS A LA API ===');
+    console.log('Objeto completo de búsqueda:', searchData);
+    console.log('URL de la petición:', 'searchTours endpoint');
+  
+    this.requestProvidersService.searchTours(searchData).subscribe({
+      next: (response: any) => {
+        console.log('=== RESPUESTA DE LA API ===');
+        console.log('Respuesta completa de searchTours:', response);
+        
+        // Manejar tanto respuesta paginada como array simple
+        if (response && response.content) {
+          // Respuesta paginada
+          this.tours = response.content || [];
+          this.totalItems = response.totalElements || 0;
+          this.totalPages = response.totalPages || 0;
+          this.currentPage = response.number + 1; // La API usa base 0, nosotros base 1
+        } else if (Array.isArray(response)) {
+          // Respuesta como array simple
+          this.tours = response;
+          this.totalItems = response.length;
+          this.totalPages = Math.ceil(response.length / this.size);
+          this.currentPage = 1;
+        } else {
+          // Respuesta vacía o inválida
+          this.tours = [];
+          this.totalItems = 0;
+          this.totalPages = 0;
+          this.currentPage = 1;
+        }
+        
+        console.log('=== RESULTADOS PROCESADOS ===');
+        console.log('Cantidad de resultados:', this.tours.length);
+        console.log('Total de elementos:', this.totalItems);
+        console.log('Total de páginas:', this.totalPages);
+        console.log('Página actual:', this.currentPage);
+        
+        this.loading = false;
+      },
+      error: (error: any) => {
+        console.error('=== ERROR EN LA BÚSQUEDA ===');
+        console.error('Error al buscar tours:', error);
+        console.error('Detalles del error:', error.message);
+        this.tours = [];
+        this.totalItems = 0;
+        this.totalPages = 0;
+        this.currentPage = 1;
+        this.loading = false;
+      }
+    });
   }
 } 

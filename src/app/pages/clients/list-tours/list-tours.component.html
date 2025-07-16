@@ -25,183 +25,36 @@
             <div class="card">
                 <div class="card-body">
                     <div class="banner-form">
-                        <form class="d-lg-flex">
-                            <div class="d-flex  form-info">
-                                <div class="form-item dropdown">
-                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
-                                        <label class="form-label fs-14 text-default mb-1">Where would like to go?</label>
-                                        <input type="text" class="form-control" value="Newyork">
-                                        <p class="fs-12 mb-0">USA</p>
-                                    </div>
-                                    <div class="dropdown-menu dropdown-md p-0">
-                                        <div class="input-search p-3 border-bottom">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Search for City, Property name or Location">
-                                                <span class="input-group-text px-2 border-start-0"><i class="isax isax-search-normal"></i></span>
-                                            </div>
-                                        </div>
-                                        <ul>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">USA</h6>
-                                                    <p>2000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Japan</h6>
-                                                    <p>3000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Singapore</h6>
-                                                    <p>8000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li class="border-bottom">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Russia</h6>
-                                                    <p>8000 Properties</p>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <h6 class="fs-16 fw-medium">Germany</h6>
-                                                    <p>2000 Properties</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                        <form class="d-lg-flex" >
+                            <div class="d-flex form-info">
+                                <!-- Select Ciudad -->
                                 <div class="form-item">
-                                    <label class="form-label fs-14 text-default mb-1">Dates</label>
-                                    <input type="text" class="form-control" placeholder="21-10-2024">
-                                    <p class="fs-12 mb-0">Monday</p>
+                                    <label class="form-label fs-14 text-default mb-1">Ciudad</label>
+                                    <select class="form-control" [(ngModel)]="selectedState" name="state" required>
+                                        <option value="" disabled>Selecciona ciudad</option>
+                                        <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+                                    </select>
                                 </div>
+                                <!-- Select Categoría -->
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Categoría</label>
+                                    <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
+                                        <option value="" disabled>Selecciona categoría</option>
+                                        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                                    </select>
+                                </div>
+                                <!-- Check In -->
+                                <div class="form-item">
+                                    <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                    <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn" required>
+                                </div>
+                                <!-- Check Out -->
                                 <div class="form-item">
                                     <label class="form-label fs-14 text-default mb-1">Check Out</label>
-                                    <input type="text" class="form-control" placeholder="21-10-2024">
-                                    <p class="fs-12 mb-0">Monday</p>
-                                </div>
-                                <div class="form-item dropdown">
-                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
-                                        <label class="form-label fs-14 text-default mb-1">Travellers </label>
-                                        <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
-                                        <p class="fs-12 mb-0">2 Adult</p>
-                                    </div>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-xl">
-                                        <h5 class="mb-3">Select Travelers &  Class</h5>
-                                        <div class="mb-3 border br-10 info-item pb-1">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Rooms</label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">1</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Adults</label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">2</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Children <span class="text-default fw-normal">( 2-12 Yrs )</span></label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">0</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 0-12 Yrs )</span></label>
-                                                        <div class="d-flex align-items-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">-</button>
-                                                            <span class="mx-3">0</span>
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 border br-10 info-item pb-1">
-                                            <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room1" checked>
-                                                    <label class="form-check-label" for="room1">
-                                                        Single
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room2">
-                                                    <label class="form-check-label" for="room2">
-                                                        Double
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room3">
-                                                    <label class="form-check-label" for="room3">
-                                                        Delux
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-3">
-                                                    <input class="form-check-input" type="radio" name="room" id="room4">
-                                                    <label class="form-check-label" for="room4">
-                                                        Suite
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 border br-10 info-item pb-1">
-                                            <h6 class="fs-16 fw-medium mb-2">Property Type</h6>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property1" checked>
-                                                    <label class="form-check-label" for="property1">
-                                                        Villa
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property2">
-                                                    <label class="form-check-label" for="property2">
-                                                        Condo
-                                                    </label>
-                                                </div>
-                                                <div class="form-check me-3 mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property3">
-                                                    <label class="form-check-label" for="property3">
-                                                        Cabin
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-3">
-                                                    <input class="form-check-input" type="radio" name="property" id="property4">
-                                                    <label class="form-check-label" for="property4">
-                                                        Apartments
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end">
-                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Cancel</a>
-                                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                                        </div>
-                                    </div>
+                                    <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary search-btn rounded">Search</button>
+                            <button (click)="onSearch()" class="btn btn-primary search-btn rounded ms-2">Search</button>
                         </form>
                     </div>
                 </div>
@@ -296,12 +149,16 @@
                         <div class="card-body p-0">
                             <form>
                                 <div class="p-3 border-bottom">
-                                    <label class="form-label fs-16">Search by Tour Type</label>
+                                    <label class="form-label fs-16">Búsqueda General</label>
                                     <div class="input-icon">
                                         <span class="input-icon-addon">
 											<i class="isax isax-search-normal"></i>
 										</span>
-                                        <input type="text" class="form-control" placeholder="Search by Tour Type">
+                                        <input type="text" 
+                                               class="form-control" 
+                                               placeholder="Buscar tours..."
+                                               [(ngModel)]="searchText"
+                                               [ngModelOptions]="{standalone: true}">
                                     </div>
                                 </div>
                                 <div class="accordion accordion-list">
@@ -343,27 +200,165 @@
                                     <div class="accordion-item border-bottom p-3">
                                         <div class="accordion-header">
                                             <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-popular" aria-expanded="true" aria-controls="accordion-popular" role="button">
-                                                <i class="isax isax-coin me-2 text-primary"></i>Price Per Night
+                                                <i class="isax isax-coin me-2 text-primary"></i>Rango de Precio
                                             </div>
                                         </div>
                                         <div id="accordion-popular" class="accordion-collapse collapse show">
                                             <div class="accordion-body">
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <span class="badge badge-xs badge-light text-gray-4">$200</span>
-                                                    <span class="badge badge-xs badge-light text-gray-4">$5695</span>
+                                                    <span class="badge badge-xs badge-light text-gray-4">${{ minPrice }}</span>
+                                                    <span class="badge badge-xs badge-light text-gray-4">${{ maxPrice }}</span>
                                                 </div>
                                                 <div class="filter-range">
                                                     <div class="d-flex align-items-center">
-                                                        <input type="range" class="form-range" min="200" max="5000" step="500" [value]="startValue">
-                                                        <span class="ms-2">${{ startValue }}</span>
+                                                        <input type="range" 
+                                                               class="form-range" 
+                                                               min="100" 
+                                                               max="10000" 
+                                                               step="100" 
+                                                               [(ngModel)]="minPrice"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               (input)="onMinPriceChange($event)"
+                                                               (change)="onMinPriceChange($event)">
+                                                        <span class="ms-2">${{ minPrice }}</span>
                                                     </div>
                                                     <div class="d-flex align-items-center mt-2">
-                                                        <input type="range" class="form-range" min="200" max="5000" step="500" [value]="endValue">
-                                                        <span class="ms-2">${{ endValue }}</span>
+                                                        <input type="range" 
+                                                               class="form-range" 
+                                                               min="100" 
+                                                               max="10000" 
+                                                               step="100" 
+                                                               [(ngModel)]="maxPrice"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               (input)="onMaxPriceChange($event)"
+                                                               (change)="onMaxPriceChange($event)">
+                                                        <span class="ms-2">${{ maxPrice }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="filter-range-amount">
-                                                    <p class="fs-14">Range : <span class="text-gray-9 fw-medium">$200 - $800</span></p>
+                                                    <p class="fs-14">Rango: <span class="text-gray-9 fw-medium">${{ minPrice }} - ${{ maxPrice }}</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-duration" aria-expanded="true" aria-controls="accordion-duration" role="button">
+                                                <i class="isax isax-clock me-2 text-primary"></i>Duración del Tour
+                                            </div>
+                                        </div>
+                                        <div id="accordion-duration" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="duration" 
+                                                               type="radio" 
+                                                               id="duration1" 
+                                                               value="1-3"
+                                                               [(ngModel)]="selectedDuration"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="duration1">
+                                                            1-3 días
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="duration" 
+                                                               type="radio" 
+                                                               id="duration2" 
+                                                               value="4-7"
+                                                               [(ngModel)]="selectedDuration"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="duration2">
+                                                            4-7 días
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="duration" 
+                                                               type="radio" 
+                                                               id="duration3" 
+                                                               value="8-14"
+                                                               [(ngModel)]="selectedDuration"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="duration3">
+                                                            8-14 días
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="duration" 
+                                                               type="radio" 
+                                                               id="duration4" 
+                                                               value="15+"
+                                                               [(ngModel)]="selectedDuration"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="duration4">
+                                                            15+ días
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item border-bottom p-3">
+                                        <div class="accordion-header">
+                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-age" aria-expanded="true" aria-controls="accordion-age" role="button">
+                                                <i class="isax isax-profile-2user me-2 text-primary"></i>Tipo de Edad
+                                            </div>
+                                        </div>
+                                        <div id="accordion-age" class="accordion-collapse collapse show">
+                                            <div class="accordion-body">
+                                                <div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="ageType" 
+                                                               type="radio" 
+                                                               id="age1" 
+                                                               value="ADULT"
+                                                               [(ngModel)]="selectedAgeType"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="age1">
+                                                            Adulto
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="ageType" 
+                                                               type="radio" 
+                                                               id="age2" 
+                                                               value="CHILD"
+                                                               [(ngModel)]="selectedAgeType"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="age2">
+                                                            Niño
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="ageType" 
+                                                               type="radio" 
+                                                               id="age3" 
+                                                               value="INFANT"
+                                                               [(ngModel)]="selectedAgeType"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="age3">
+                                                            Infante
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                        <input class="form-check-input ms-0 mt-0" 
+                                                               name="ageType" 
+                                                               type="radio" 
+                                                               id="age4" 
+                                                               value="SENIOR"
+                                                               [(ngModel)]="selectedAgeType"
+                                                               [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label ms-2" for="age4">
+                                                            Senior
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -650,6 +645,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <!-- Botón de búsqueda -->
+                                <div class="p-3 border-top">
+                                    <button type="button" 
+                                            class="btn btn-primary w-100" 
+                                            (click)="onSearchFromFilters()">
+                                        <i class="isax isax-search-normal me-2"></i>
+                                        Buscar Tours
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -659,12 +664,21 @@
                 <div class="col-xl-9 col-lg-8">
                     <div class="theiaStickySidebar">
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <h6 class="mb-3">1920 Tours Found on Your Search</h6>
+                            <h6 class="mb-3">{{ tours.length }} Tours Found on Your Search</h6>
                             <div class="d-flex align-items-center flex-wrap">
                                 <div class="list-item d-flex align-items-center mb-3">
-                                    <a [routerLink]="routes.tourGrid" class="list-icon active me-2"><i class="isax isax-grid-1"></i></a>
-                                    <a [routerLink]="routes.tourList" class="list-icon me-2"><i class="isax isax-firstline"></i></a>
-                                    <a [routerLink]="routes.tourMap" class="list-icon me-2"><i class="isax isax-map-1"></i></a>
+                                    <a href="javascript:void(0);" 
+                                       class="list-icon me-2" 
+                                       [ngClass]="{ active: viewMode === 'grid' }"
+                                       (click)="setViewMode('grid')">
+                                        <i class="isax isax-grid-1"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" 
+                                       class="list-icon me-2" 
+                                       [ngClass]="{ active: viewMode === 'list' }"
+                                       (click)="setViewMode('list')">
+                                        <i class="isax isax-firstline"></i>
+                                    </a>
                                 </div>
                                 <div class="dropdown mb-3">
                                     <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -706,710 +720,73 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-info br-10 p-3 pb-2 mb-4">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                <p class="fs-14 fw-medium mb-2 d-inline-flex align-items-center"><i class="isax isax-info-circle me-2"></i>Save an average of 15% on thousands of hotels when you're signed in</p>
-                                <a [routerLink]="routes.login" class="btn btn-white btn-sm mb-2">Sign In</a>
-                            </div>
+                        
+                        
+                        
+                        
+                        
+                        
+                        <!-- Grid View -->
+                        <div *ngIf="viewMode === 'grid'">
+                            <app-tour-grid-view
+                                [tours]="tours"
+                                [loading]="loading"
+                                [totalItems]="totalItems"
+                                [totalPages]="totalPages"
+                                [currentPage]="currentPage"
+                                [size]="size"
+                                (toggleFavorite)="onToggleFavoriteFromGrid($event)"
+                                (goToPage)="onGoToPageFromGrid($event)"
+                                (goToPreviousPage)="onGoToPreviousPageFromGrid()"
+                                (goToNextPage)="onGoToNextPageFromGrid()">
+                            </app-tour-grid-view>
                         </div>
-                        <div class="row justify-content-center">
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-07.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-08.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-09.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[1] }" (click)="toggleClass(1)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9">Ecotourism</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">5.0</span>
-                                                <p class="fs-14">(105 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Rainbow Mountain Valley</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Ciutat Vella, Barcelona</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$500</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$789</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">4 Day,3 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>14 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-08.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-08.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-09.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-10.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[0] }" (click)="toggleClass(0)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.7</span>
-                                                <p class="fs-14">(110 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Mystic Falls</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Oxford Street, London</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$600</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$700</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 Day, 2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>12 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-09.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-09.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-10.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[1] }" (click)="toggleClass(1)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Summer Trip</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.7</span>
-                                                <p class="fs-14">(180 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Crystal Lake</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Princes Street, Edinburgh</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$300</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$500</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">5 Day, 4 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>16 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-10.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-10.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[2] }" (click)="toggleClass(2)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.9</span>
-                                                <p class="fs-14">(300 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Majestic Peaks</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Deansgate, Manchester</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$400</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$480</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 Day, 2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>10 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-11.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-13.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[3] }" (click)="toggleClass(3)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Group Tours</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.3</span>
-                                                <p class="fs-14">(250 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Enchanted Forest</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>King’s Road, Chelsea</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$550</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$600</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">2 Day, 1 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>17 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-12.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-13.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-14.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[4] }" (click)="toggleClass(4)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Beach Tours</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.1</span>
-                                                <p class="fs-14">(280 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Serene Bay</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Bold Street, Liverpool</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$450</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$520</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 D2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>08 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-13.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                            <div class="slide-images">
-                                                <a [routerLink]="routes.tourDetails">
-                                                    <img src="assets/img/tours/tours-13.jpg" class="img-fluid" alt="img">
-                                                </a>
-                                            </div>
-                                        </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-14.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                                <ng-template carouselSlide>
-                                                    <div class="slide-images">
-                                                        <a [routerLink]="routes.tourDetails">
-                                                            <img src="assets/img/tours/tours-15.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[5] }" (click)="toggleClass(5)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Historical Tours</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.6</span>
-                                                <p class="fs-14">(400 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Ancient Ruins</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Broad Street, Bristol</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$350</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$400</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">2 Day, 1 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>10 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-14.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-14.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-15.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[6] }" (click)="toggleClass(6)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.2</span>
-                                                <p class="fs-14">(350 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Mystical Caves</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Chapel Street, Salford</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$700</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$800</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">3 Day, 2 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>14 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-15.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
-                            <!-- Tours Grid -->
-                            <div class="col-xxl-4 col-md-6 d-flex">
-                                <div class="place-item mb-4 flex-fill">
-                                    <div class="place-img">
-                                        <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-15.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-11.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                            <ng-template carouselSlide>
-                                                <div class="slide-images">
-                                                    <a [routerLink]="routes.tourDetails">
-                                                        <img src="assets/img/tours/tours-12.jpg" class="img-fluid" alt="img">
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </owl-carousel-o>
-                                        <div class="fav-item">
-                                            <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[7] }" (click)="toggleClass(7)">
-                                                <i class="isax isax-heart5"></i>
-                                            </a>
-                                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Trending</span>
-                                        </div>
-                                    </div>
-                                    <div class="place-content">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                                                <p class="fs-14 text-gray-9 text-truncate">Adventure Tour</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="d-flex align-items-center flex-wrap">
-                                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">4.8</span>
-                                                <p class="fs-14">(220 Reviews)</p>
-                                            </div>
-                                        </div>
-                                        <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Frosted Peaks</a></h5>
-                                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>Castle Street, Cambridge</p>
-                                        <div class="mb-3">
-                                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span class="ms-1 fs-18 fw-semibold text-primary">$650</span><span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">$720</span></h6>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                                            <div class="d-flex flex-wrap align-items-center me-2">
-                                                <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                                                <p class="fs-14 text-gray-9">6 Day, 5 Night</p>
-                                            </div>
-                                            <span class="d-inline-block border vertical-splits">
-                                                <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                                            </span>
-                                            <div class="ms-2 d-flex align-items-center">
-                                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                    <i class="isax isax-profile-2user me-1"></i>14 Guests
-                                                </p>
-                                                <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                                                    <img src="assets/img/users/user-16.jpg" class="rounded-circle" alt="img">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Tours Grid -->
-    
+
+                        <!-- List View -->
+                        <div *ngIf="viewMode === 'list'">
+                            <app-tour-list-view
+                                [tours]="tours"
+                                [loading]="loading"
+                                [totalItems]="totalItems"
+                                [totalPages]="totalPages"
+                                [currentPage]="currentPage"
+                                [size]="size"
+                                (toggleFavorite)="onToggleFavorite($event)"
+                                (goToPage)="onGoToPageFromList($event)"
+                                (goToPreviousPage)="onGoToPreviousPageFromList()"
+                                (goToNextPage)="onGoToNextPageFromList()">
+                            </app-tour-list-view>
                         </div>
     
                         <!-- Pagination -->
-                        <nav class="pagination-nav">
+                        <nav class="pagination-nav" *ngIf="totalPages > 1">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                                <!-- Botón Anterior -->
+                                <li class="page-item" [ngClass]="{ disabled: isFirstPage() }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()" aria-label="Previous">
                                         <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
                                     </a>
                                 </li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
-                                <li class="page-item active"><a class="page-link" href="javascript:void(0);">4</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">5</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                                
+                                <!-- Números de página -->
+                                <li class="page-item" *ngFor="let pageNum of getPageNumbers()" [ngClass]="{ active: pageNum === currentPage }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="goToPage(pageNum)">{{ pageNum }}</a>
+                                </li>
+                                
+                                <!-- Botón Siguiente -->
+                                <li class="page-item" [ngClass]="{ disabled: isLastPage() }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()" aria-label="Next">
                                         <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
                                     </a>
                                 </li>
                             </ul>
+                            
+                            <!-- Información de paginación -->
+                            <div class="text-center mt-2">
+                                <small class="text-muted">
+                                    Mostrando {{ (currentPage - 1) * size + 1 }} - {{ Math.min(currentPage * size, totalItems) }} de {{ totalItems }} tours
+                                </small>
+                            </div>
                         </nav>
                         <!-- /Pagination -->
                     </div>

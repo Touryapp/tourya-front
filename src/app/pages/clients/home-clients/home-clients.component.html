@@ -11,30 +11,6 @@
                     <div class="banner-form-tab-six">
                         <ul class="nav">
                             <li>
-                                <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#flight">
-                                    <i class="fa-solid fa-plane-up me-2"></i>Flights
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#Hotels">
-                                    <i class="fa-solid fa-hotel me-2"></i>Hotels
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#Cars">
-                                    <i class="fa-solid fa-car me-2"></i>Cars
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#Cruise">
-                                    <i class="fa-solid fa-ship me-2"></i>Cruise
-                                </a>
-                            </li>
-                            <li>
                                 <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab"
                                     data-bs-target="#Tour">
                                     <i class="fa-solid fa-camera me-2"></i>Tour
@@ -46,7 +22,7 @@
                         <div class="card-body">
                             <div>
                                 <div class="tab-content">
-                                    <div class="tab-pane fade" id="flight">
+                                    <div class="tab-pane fade" id="flight" style="display: none;">
                                         <form (ngSubmit)="onSubmit2()">
                                             <div
                                                 class="d-flex align-items-center justify-content-between flex-wrap mb-2">
@@ -456,7 +432,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="tab-pane fade" id="Hotels">
+                                    <div class="tab-pane fade" id="Hotels" style="display: none;">
                                         <form (ngSubmit)="onSubmit()">
                                             <div
                                                 class="d-flex align-items-center justify-content-between flex-wrap mb-2">
@@ -709,7 +685,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="tab-pane fade" id="Cars">
+                                    <div class="tab-pane fade" id="Cars" style="display: none;">
                                         <form (ngSubmit)="onSubmit3()">
                                             <div
                                                 class="d-flex align-items-center justify-content-between flex-wrap mb-2">
@@ -960,7 +936,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="tab-pane fade" id="Cruise">
+                                    <div class="tab-pane fade" id="Cruise" style="display: none;">
                                         <form (ngSubmit)="onSubmit4()">
                                             <div
                                                 class="d-flex align-items-center justify-content-between flex-wrap mb-2">
@@ -1129,132 +1105,36 @@
                                         </form>
                                     </div>
                                     <div class="tab-pane fade active show" id="Tour">
-                                        <form (ngSubmit)="onSubmit5()">
-                                            <div
-                                                class="d-flex align-items-center justify-content-between flex-wrap mb-2">
-                                                <h6 class="fw-medium fs-16 mb-2">Search holiday packages & trips</h6>
+                                        <form class="d-lg-flex" (ngSubmit)="onSearch()">
+                                          <div class="d-flex form-info">
+                                            <!-- Select Ciudad -->
+                                            <div class="form-item">
+                                              <label class="form-label fs-14 text-default mb-1">Ciudad</label>
+                                              <select class="form-control" [(ngModel)]="selectedState" name="state" required>
+                                                <option value="" disabled selected>Selecciona ciudad</option>
+                                                <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+                                              </select>
                                             </div>
-                                            <div class="d-lg-flex">
-                                                <div class="d-flex  form-info">
-                                                    <div class="form-item dropdown">
-                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                                                            aria-expanded="false" role="menu">
-                                                            <label class="form-label fs-14 text-default mb-1">Where
-                                                                would like to go?</label>
-                                                            <input type="text" class="form-control" value="Newyork">
-                                                            <p class="fs-12 mb-0">USA</p>
-                                                        </div>
-                                                        <div class="dropdown-menu dropdown-md p-0">
-                                                            <div class="input-search p-3 border-bottom">
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="Search for City, Property name or Location">
-                                                                    <span
-                                                                        class="input-group-text px-2 border-start-0"><i
-                                                                            class="isax isax-search-normal"></i></span>
-                                                                </div>
-                                                            </div>
-                                                            <ul>
-                                                                <li class="border-bottom">
-                                                                    <a class="dropdown-item" href="javascript:void(0);">
-                                                                        <h6 class="fs-16 fw-medium">USA</h6>
-                                                                        <p>200 Places</p>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="border-bottom">
-                                                                    <a class="dropdown-item" href="javascript:void(0);">
-                                                                        <h6 class="fs-16 fw-medium">Japan</h6>
-                                                                        <p>300 Places</p>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="border-bottom">
-                                                                    <a class="dropdown-item" href="javascript:void(0);">
-                                                                        <h6 class="fs-16 fw-medium">Singapore</h6>
-                                                                        <p>80 Places</p>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="border-bottom">
-                                                                    <a class="dropdown-item" href="javascript:void(0);">
-                                                                        <h6 class="fs-16 fw-medium">Russia</h6>
-                                                                        <p>500 Places</p>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="dropdown-item" href="javascript:void(0);">
-                                                                        <h6 class="fs-16 fw-medium">Germany</h6>
-                                                                        <p>150 Places</p>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-item">
-                                                        <label class="form-label fs-14 text-default mb-1">Dates</label>
-                                                        <input type="text" class="form-control datetimepicker"
-                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
-                                                            placeholder="21-10-2024" [bsValue]="bsValue"
-                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
-                                                        <p class="fs-12 mb-0">Monday</p>
-                                                    </div>
-                                                    <div class="form-item">
-                                                        <label class="form-label fs-14 text-default mb-1">Check
-                                                            Out</label>
-                                                        <input type="text" class="form-control datetimepicker"
-                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
-                                                            placeholder="21-10-2024" [bsValue]="bsValue"
-                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
-                                                        <p class="fs-12 mb-0">Wednesday</p>
-                                                    </div>
-                                                    <div class="form-item dropdown">
-                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                                                            aria-expanded="false" role="menu">
-                                                            <label
-                                                                class="form-label fs-14 text-default mb-1">Travellers</label>
-                                                            <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
-                                                            <p class="fs-12 mb-0">2 Adult</p>
-                                                        </div>
-                                                        <div class="dropdown-menu dropdown-menu-end dropdown-xl">
-                                                            <h5 class="mb-3">Select Travelers</h5>
-                                                            <div class="mb-3 border br-10 info-item pb-1">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div
-                                                                            class="mb-3 d-flex align-items-center justify-content-between">
-                                                                            <label
-                                                                                class="form-label text-gray-9 mb-2">Adult</label>
-                                                                            <app-common-counter />
-                                                                        </div>
-                                                                        <div
-                                                                            class="mb-3 d-flex align-items-center justify-content-between">
-                                                                            <label
-                                                                                class="form-label text-gray-9 mb-2">Childrens
-                                                                                <span class="text-default fw-normal">(
-                                                                                    12+ Yrs )</span></label>
-                                                                            <app-common-counter />
-                                                                        </div>
-                                                                        <div
-                                                                            class="mb-3 d-flex align-items-center justify-content-between">
-                                                                            <label
-                                                                                class="form-label text-gray-9 mb-2">Infants
-                                                                                <span class="text-default fw-normal">(
-                                                                                    12+ Yrs )</span></label>
-                                                                            <app-common-counter />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-end">
-                                                                <a href="javascript:void(0);"
-                                                                    class="btn btn-light btn-sm me-2">Cancel</a>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary btn-sm">Apply</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <button type="submit"
-                                                    class="btn btn-primary search-btn rounded">Search</button>
+                                            <!-- Select Categoría -->
+                                            <div class="form-item">
+                                              <label class="form-label fs-14 text-default mb-1">Categoría</label>
+                                              <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
+                                                <option value="" disabled selected>Selecciona categoría</option>
+                                                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                                              </select>
                                             </div>
+                                            <!-- Check In -->
+                                            <div class="form-item">
+                                              <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                              <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn" required>
+                                            </div>
+                                            <!-- Check Out -->
+                                            <div class="form-item">
+                                              <label class="form-label fs-14 text-default mb-1">Check Out</label>
+                                              <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
+                                            </div>
+                                          </div>
+                                          <button type="submit" class="btn btn-primary search-btn rounded ms-2">Searchs</button>
                                         </form>
                                     </div>
                                 </div>
@@ -1679,7 +1559,7 @@
                             </div>
                         </div>
                         <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">Enchanted Forest</a></h5>
-                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>King’s Road,
+                        <p class="d-flex align-items-center mb-3"><i class="isax isax-location5 me-2"></i>King's Road,
                             Chelsea</p>
                         <div class="mb-3">
                             <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">Starts From <span

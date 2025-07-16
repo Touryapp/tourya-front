@@ -266,8 +266,8 @@
                         </div>
                     </div>
 
-                    <!-- Panel de carga de archivos solo si isExistingData es true y status es Pending o Incomplete -->
-                    <div class="card shadow-none" id="gallery" *ngIf="isExistingData && (dataRequestProvider.status === 'Pending' || dataRequestProvider.status === 'Incomplete')">
+                    <!-- Panel de carga de archivos solo si isExistingData es true y status es Pending o Incomplete (dataRequestProvider.status === 'Pending' || dataRequestProvider.status === 'Incomplete')-->
+                    <div class="card shadow-none" id="gallery" *ngIf="isExistingData">
                         <div class="card-header">
                             <h5 class="fs-18">Documents</h5>
                         </div>
@@ -333,7 +333,7 @@
                                                             [class.btn-danger]="docType.mandatory"
                                                             [class.btn-secondary]="!docType.mandatory"
                                                             (click)="triggerFileInput(docType.id)"
-                                                            [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                            >
                                                             <i class="isax isax-document-upload me-2"></i>
                                                             Cargar {{ docType.name }}
                                                         </button>
@@ -418,7 +418,7 @@
                                                         id="document-file-{{ docType.id }}"
                                                         accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                                                         (change)="onDocumentFileSelected($event, docType.id)"
-                                                        [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                        >
                                                 </div>
                                             </div>
                                         </div>

@@ -45,7 +45,7 @@
       <div *ngIf="!mostrarSolicitudes">
         <div class="row">
           <div class="col-12">
-            <h3>Dashboard de Administración</h3>>
+            <h3>Dashboard de Administración</h3>
           </div>
         </div>
         
@@ -254,32 +254,105 @@
           </div>
           <div class="col-12" *ngIf="selectedProvider.requestProviderGalleryList && selectedProvider.requestProviderGalleryList.length > 0">
             <div class="mb-3">
-              <label class="form-label fw-bold">Archivos Subidos:</label>
-              <div class="table-responsive">
-                <table class="table table-bordered table-sm align-middle">
-                  <thead>
-                    <tr>
-                      <th>Tipo de Documento</th>
-                      <th>Descripción</th>
-                      <th>Archivo</th>
-                      <th>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let doc of selectedProvider.requestProviderGalleryList">
-                      <td>{{ doc.documentTypeName }}</td>
-                      <td>{{ doc.description }}</td>
-                      <td>{{ doc.imageUrl ? (doc.imageUrl | slice:0:40) + (doc.imageUrl.length > 40 ? '...' : '') : 'No disponible' }}</td>
-                      <td>
-                        <button *ngIf="doc.imageUrl" class="btn btn-outline-primary btn-sm" (click)="openFile(doc.imageUrl, '_blank')">
-                          <i class="isax isax-eye"></i> Ver
-                        </button>
-                        <span *ngIf="!doc.imageUrl" class="text-muted">No disponible</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <label class="form-label fw-bold">Documentos Subidos:</label>
+              <div class="row g-3">
+                <!-- Primer recuadro: Documentos principales -->
+                <div class="col-md-6">
+                  <div class="card h-100 border-primary">
+                    <div class="card-header bg-primary text-white">
+                      <h6 class="mb-0"><i class="isax isax-document me-2"></i>Documentos Principales</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-2">
+                        <div class="col-12" *ngFor="let doc of getFirstHalfDocuments()">
+                          <div class="document-item p-2 border rounded" *ngIf="doc.imageUrl">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <div class="d-flex align-items-center">
+                                <div class="document-icon me-2">
+                                  <i [class]="getFileIcon(doc.imageUrl)" [ngClass]="{'text-primary': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
+                                </div>
+                                <div>
+                                  <div class="fw-medium small">{{ doc.documentTypeName }}</div>
+                                  <div class="text-muted small">{{ doc.description }}</div>
+                                  <div class="text-muted small">
+                                    <i class="isax isax-info-circle me-1"></i>
+                                    {{ getFileType(doc.imageUrl).toUpperCase() }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="d-flex gap-1">
+                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
+                                  <i class="isax isax-gallery"></i>
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
+                                  <i class="isax isax-eye"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Segundo recuadro: Documentos adicionales -->
+                <div class="col-md-6">
+                  <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                      <h6 class="mb-0"><i class="isax isax-gallery me-2"></i>Documentos Adicionales</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-2">
+                        <div class="col-12" *ngFor="let doc of getSecondHalfDocuments()">
+                          <div class="document-item p-2 border rounded" *ngIf="doc.imageUrl">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <div class="d-flex align-items-center">
+                                <div class="document-icon me-2">
+                                  <i [class]="getFileIcon(doc.imageUrl)" [ngClass]="{'text-success': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
+                                </div>
+                                <div>
+                                  <div class="fw-medium small">{{ doc.documentTypeName }}</div>
+                                  <div class="text-muted small">{{ doc.description }}</div>
+                                  <div class="text-muted small">
+                                    <i class="isax isax-info-circle me-1"></i>
+                                    {{ getFileType(doc.imageUrl).toUpperCase() }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="d-flex gap-1">
+                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
+                                  <i class="isax isax-gallery"></i>
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
+                                  <i class="isax isax-eye"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+              
+              <!-- Información adicional -->
+              <div class="mt-3">
+                <div class="alert alert-info">
+                  <i class="isax isax-info-circle me-2"></i>
+                  <strong>Total de documentos:</strong> {{ selectedProvider.requestProviderGalleryList.length }} 
+                  | <strong>Documentos con archivo:</strong> {{ getGalleryWithImageCount() }}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mensaje cuando no hay documentos -->
+          <div class="col-12" *ngIf="!selectedProvider.requestProviderGalleryList || selectedProvider.requestProviderGalleryList.length === 0">
+            <div class="alert alert-warning">
+              <i class="isax isax-warning-2 me-2"></i>
+              <strong>No hay documentos subidos</strong> - El proveedor aún no ha cargado ningún documento.
             </div>
           </div>
         </div>
