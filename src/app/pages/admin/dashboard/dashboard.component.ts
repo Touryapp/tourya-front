@@ -153,8 +153,85 @@ export class DashboardComponent implements OnInit {
 
   openFile(url: string, target: string = '_blank') {
     if (url) {
-      window.open(url, target);
+      // Verificar si la URL es válida
+      if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+        window.open(url, target);
+      } else {
+        // Si es una ruta relativa, construir la URL completa
+        const fullUrl = url.startsWith('/') ? url : `/${url}`;
+        window.open(fullUrl, target);
+      }
     }
+  }
+
+  // Función para obtener el tipo de archivo basado en la extensión
+  getFileType(url: string): string {
+    if (!url) return 'unknown';
+    
+    const extension = url.split('.').pop()?.toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return 'pdf';
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+      case 'webp':
+        return 'image';
+      case 'doc':
+      case 'docx':
+        return 'document';
+      default:
+        return 'unknown';
+    }
+  }
+
+  // Función para obtener el icono apropiado según el tipo de archivo
+  getFileIcon(url: string): string {
+    const fileType = this.getFileType(url);
+    switch (fileType) {
+      case 'pdf':
+        return 'isax isax-document-text';
+      case 'image':
+        return 'isax isax-gallery';
+      case 'document':
+        return 'isax isax-document';
+      default:
+        return 'isax isax-document-text';
+    }
+  }
+
+  // Función para verificar si una URL es una imagen
+  isImage(url: string): boolean {
+    return this.getFileType(url) === 'image';
+  }
+
+  // Función para obtener la cantidad de documentos con imagen
+  getGalleryWithImageCount(): number {
+    if (!this.selectedProvider || !this.selectedProvider.requestProviderGalleryList) {
+      return 0;
+    }
+    return this.selectedProvider.requestProviderGalleryList.filter(doc => doc.imageUrl).length;
+  }
+
+  // Función para obtener la mitad superior de los documentos (para el primer recuadro)
+  getFirstHalfDocuments(): any[] {
+    if (!this.selectedProvider || !this.selectedProvider.requestProviderGalleryList) {
+      return [];
+    }
+    const totalLength = this.selectedProvider.requestProviderGalleryList.length;
+    const halfIndex = Math.ceil(totalLength / 2);
+    return this.selectedProvider.requestProviderGalleryList.slice(0, halfIndex);
+  }
+
+  // Función para obtener la mitad inferior de los documentos (para el segundo recuadro)
+  getSecondHalfDocuments(): any[] {
+    if (!this.selectedProvider || !this.selectedProvider.requestProviderGalleryList) {
+      return [];
+    }
+    const totalLength = this.selectedProvider.requestProviderGalleryList.length;
+    const halfIndex = Math.ceil(totalLength / 2);
+    return this.selectedProvider.requestProviderGalleryList.slice(halfIndex);
   }
 
   showGalleryFiles(): void {

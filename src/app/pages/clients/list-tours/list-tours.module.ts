@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { ListToursRoutingModule } from './list-tours-routing.module';
@@ -18,6 +18,7 @@ import { TourGridViewComponent } from './tour-grid-view/tour-grid-view.component
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatSelectModule,
     MatOptionModule,
     SharedModule,

@@ -277,3 +277,99 @@
   background: #fd9503ec !important;
   color: #000 !important;
 }
+
+// Estilos para los recuadros de documentos
+.document-item {
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef !important;
+  
+  &:hover {
+    background: #e9ecef;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .document-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13, 110, 253, 0.1);
+    border-radius: 6px;
+    
+    i {
+      font-size: 1.2em;
+    }
+  }
+}
+
+// Estilos específicos para el segundo recuadro
+.card.border-success .document-item .document-icon {
+  background: rgba(25, 135, 84, 0.1);
+}
+
+.card.border-success .document-item .document-icon i {
+  color: #198754;
+}
+
+// Estilos para las cards de documentos
+.card.border-primary,
+.card.border-success {
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  
+  .card-header {
+    border-bottom: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+// Estilos para el botón de ver documento
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-info {
+  transition: all 0.2s ease;
+  border-width: 1px;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  i {
+    font-size: 0.9em;
+  }
+}
+
+// Estilos específicos para el botón de previsualización
+.btn-outline-info {
+  color: #0dcaf0;
+  border-color: #0dcaf0;
+  
+  &:hover {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #fff;
+  }
+}
+
+// Estilos para la información adicional
+.alert-info {
+  background: rgba(13, 202, 240, 0.1);
+  border: 1px solid rgba(13, 202, 240, 0.2);
+  color: #055160;
+  
+  i {
+    color: #0dcaf0;
+  }
+}

@@ -7,6 +7,7 @@ import { SearchTourListDto, TourScheduleResponseDto, PaginatedTourScheduleRespon
 import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
 import { State } from '../../../shared/dto/requestProvider-response.dto';
 import { TourCategory } from '../../../shared/dto/tour-response.dto';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-list-tours',
@@ -85,6 +86,29 @@ export class ListToursComponent implements OnInit {
   public selectedCategory: string = '';
   public checkIn: string = '';
   public checkOut: string = '';
+  
+  // Nuevas propiedades para filtros basados en SearchTourListDto
+  public selectedDuration: string = '';
+  public selectedAgeType: string = '';
+  public minPrice: number = 100;
+  public maxPrice: number = 5000;
+  public searchText: string = '';
+  
+  // Opciones para los filtros
+  public durationOptions = [
+    { value: '1-3', label: '1-3 días' },
+    { value: '4-7', label: '4-7 días' },
+    { value: '8-14', label: '8-14 días' },
+    { value: '15+', label: '15+ días' }
+  ];
+  
+  public ageTypeOptions = [
+    { value: 'ADULT', label: 'Adulto' },
+    { value: 'CHILD', label: 'Niño' },
+    { value: 'INFANT', label: 'Infante' },
+    { value: 'SENIOR', label: 'Senior' }
+  ];
+  
   public page: number = 1;
   public size: number = 10;
   public totalItems: number = 0;
@@ -157,6 +181,11 @@ export class ListToursComponent implements OnInit {
     this.selectedCategory = '';
     this.checkIn = '';
     this.checkOut = '';
+    this.selectedDuration = '';
+    this.selectedAgeType = '';
+    this.minPrice = 100;
+    this.maxPrice = 5000;
+    this.searchText = '';
     this.currentPage = 1;
     this.page = 1;
     this.searchToursList();
@@ -265,21 +294,101 @@ export class ListToursComponent implements OnInit {
     this.searchToursList();
   }
 
+  // Método para búsqueda desde filtros del sidebar
+  onSearchFromFilters(): void {
+    console.log('=== BÚSQUEDA DESDE FILTROS ===');
+    console.log('Estado seleccionado:', this.selectedState);
+    console.log('Categoría seleccionada:', this.selectedCategory);
+    console.log('Fecha de entrada:', this.checkIn);
+    console.log('Fecha de salida:', this.checkOut);
+    console.log('Duración seleccionada:', this.selectedDuration);
+    console.log('Tipo de edad seleccionado:', this.selectedAgeType);
+    console.log('Precio mínimo:', this.minPrice);
+    console.log('Precio máximo:', this.maxPrice);
+    console.log('Texto de búsqueda:', this.searchText);
+    
+    // Resetear a la primera página
+    this.currentPage = 1;
+    this.page = 1;
+    
+    // Ejecutar búsqueda con todos los filtros
+    this.searchToursList();
+  }
 
+  // Método de prueba para verificar datos
+  testSearchData(): void {
+    console.log('=== PRUEBA DE DATOS DE BÚSQUEDA ===');
+    const testData: Partial<SearchTourListDto> = {
+      "providerStateId": Number(this.selectedState) || undefined,
+      "providerCityId": 1,
+      "categoryId": Number(this.selectedCategory) || undefined,
+      "page": this.page,
+      "size": this.size,
+      "startDate": this.checkIn || undefined,
+      "endDate": this.checkOut || undefined,
+      "duration": this.selectedDuration || undefined,
+      "ageType": this.selectedAgeType || undefined,
+      "minPrice": this.minPrice || undefined,
+      "maxPrice": this.maxPrice || undefined,
+      "search": this.searchText || undefined
+    };
+    
+    console.log('Datos de prueba que se enviarían a la API:', testData);
+    console.log('URL del endpoint:', `${environment.apiUrl}/public/tours/schedule/search`);
+  }
+
+  // Métodos para manejar cambios en los sliders de precio
+  onMinPriceChange(event: any): void {
+    const value = Number(event.target.value);
+    this.minPrice = value;
+    
+    // Asegurar que el precio mínimo no sea mayor que el máximo
+    if (this.minPrice > this.maxPrice) {
+      this.maxPrice = this.minPrice;
+    }
+    
+    console.log('Precio mínimo actualizado:', this.minPrice);
+  }
+
+  onMaxPriceChange(event: any): void {
+    const value = Number(event.target.value);
+    this.maxPrice = value;
+    
+    // Asegurar que el precio máximo no sea menor que el mínimo
+    if (this.maxPrice < this.minPrice) {
+      this.minPrice = this.maxPrice;
+    }
+    
+    console.log('Precio máximo actualizado:', this.maxPrice);
+  }
 
 
   searchToursList(): void {
     this.loading = true;
+    
+    // Construir objeto de búsqueda con todos los filtros
     const searchData: Partial<SearchTourListDto> = {
-      "providerStateId": Number(this.selectedState),
+      "providerStateId": Number(this.selectedState) || undefined,
       "providerCityId": 1,
-      "categoryId": Number(this.selectedCategory),
+      "categoryId": Number(this.selectedCategory) || undefined,
       "page": this.page,
-      "size": this.size
+      "size": this.size,
+      "startDate": this.checkIn || undefined,
+      "endDate": this.checkOut || undefined,
+      "duration": this.selectedDuration || undefined,
+      "ageType": this.selectedAgeType || undefined,
+      "minPrice": this.minPrice || undefined,
+      "maxPrice": this.maxPrice || undefined,
+      "search": this.searchText || undefined
     };
+
+    console.log('=== DATOS ENVIADOS A LA API ===');
+    console.log('Objeto completo de búsqueda:', searchData);
+    console.log('URL de la petición:', 'searchTours endpoint');
   
     this.requestProvidersService.searchTours(searchData).subscribe({
       next: (response: any) => {
+        console.log('=== RESPUESTA DE LA API ===');
         console.log('Respuesta completa de searchTours:', response);
         
         // Manejar tanto respuesta paginada como array simple
@@ -303,6 +412,7 @@ export class ListToursComponent implements OnInit {
           this.currentPage = 1;
         }
         
+        console.log('=== RESULTADOS PROCESADOS ===');
         console.log('Cantidad de resultados:', this.tours.length);
         console.log('Total de elementos:', this.totalItems);
         console.log('Total de páginas:', this.totalPages);
@@ -311,7 +421,9 @@ export class ListToursComponent implements OnInit {
         this.loading = false;
       },
       error: (error: any) => {
+        console.error('=== ERROR EN LA BÚSQUEDA ===');
         console.error('Error al buscar tours:', error);
+        console.error('Detalles del error:', error.message);
         this.tours = [];
         this.totalItems = 0;
         this.totalPages = 0;
