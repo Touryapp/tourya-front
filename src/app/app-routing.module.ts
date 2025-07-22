@@ -12,12 +12,6 @@ import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/reg
 
 const routes: Routes = [
   {
-    path: "",
-    redirectTo: "/home",
-    pathMatch: "full",
-  },
-
-  {
     path: "login",
     component: LoginTouristComponent,
   },

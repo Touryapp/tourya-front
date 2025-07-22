@@ -4,6 +4,10 @@ import { Router } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
 import { SocialLoginDto } from "../../shared/dto/social-login.dto";
+import { Roles } from "../../shared/enums/roles.enum";
+import { RoleDto } from "../../shared/dto/role.dto";
+import { RequestProvidersService } from "../../pages/providers/requestproviders/request-providers.service";
+import { RequestsProvidersStatus } from "../../shared/enums/requests-providers-status.enum";
 
 @Component({
   selector: "app-login-tourist",
@@ -29,7 +33,8 @@ export class LoginTouristComponent {
     private router: Router,
     private renderer: Renderer2,
     private ngZone: NgZone,
-    private authService: AuthService
+    private authService: AuthService,
+    private requestProviderService: RequestProvidersService
   ) {
     this.loginTouristForm = new FormGroup({
       email: new FormControl("", [Validators.required, Validators.email]),
@@ -72,7 +77,8 @@ export class LoginTouristComponent {
               email: response.email,
               roles: response.roleList,
             });
-            this.router.navigate(["home"]);
+            this.getConsultData();
+            this.redirectByRole(response.roleList);
           } else {
             this.errorMessage =
               "Ha ocurrido un error, por favor intente de nuevo";
@@ -122,7 +128,8 @@ export class LoginTouristComponent {
             roles: response.roleList,
           });
           this.googleLoading = false;
-          this.router.navigate(["home"]);
+          this.getConsultData();
+          this.redirectByRole(response.roleList);
         },
         error: (err) => {
           console.error('Error en autenticación con Google:', err);
@@ -166,7 +173,8 @@ export class LoginTouristComponent {
             roles: response.roleList,
           });
           this.facebookLoading = false;
-          this.router.navigate(["home"]);
+          this.getConsultData();
+          this.redirectByRole(response.roleList);
         },
         error: (err) => {
           console.error('Error en autenticación con Facebook:', err);
@@ -178,5 +186,30 @@ export class LoginTouristComponent {
       console.error('Error en autenticación con Facebook:', error);
       this.facebookLoading = false;
     }
+  }
+
+  redirectByRole(role: RoleDto[]) {
+    if (role.some(r => r.id === Roles.ADMIN)) {
+      this.router.navigate(["admin"]);
+    }else if (role.some(r => r.id === Roles.USER)) {
+      this.router.navigate(["home"]);
+    }
+  }
+
+  getConsultData(){
+    this.requestProviderService.consultData().subscribe({
+      next: (response) => {
+        console.log(response);
+        if(response){
+          this.authService.setRequestProviderStatus(response.status as RequestsProvidersStatus);
+        }else{
+          this.authService.setRequestProviderStatus(RequestsProvidersStatus.PENDING);
+        }
+      },
+      error: (error) => {
+        this.authService.setRequestProviderStatus(RequestsProvidersStatus.PENDING);
+        console.error('Error al obtener los datos del usuario:', error);
+      }
+    })
   }
 }

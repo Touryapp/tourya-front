@@ -67,8 +67,7 @@
                     <div>
                         <a [routerLink]="routes.login" class="text-white btn btn-secondary w-100 mb-2"
                             *ngIf="!isAuthenticated">Iniciar Sesion</a>
-                        <a [routerLink]="'/providers/requestproviders'" class="text-white btn btn-secondary w-100 mb-2"
-                            *ngIf="isAuthenticated">Perfil Proveedor</a>
+                        <a href="javascript:void(0);" *ngIf="isAuthenticated && !isAdmin" (click)="redirectByRole()" class="text-white btn btn-secondary w-100 mb-2">Perfil Proveedor</a>
                     </div>
                 </div>
             </div>
@@ -477,26 +476,26 @@
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end p-3">
-                                    <li>
+                                    <li *ngIf="isAdmin">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             [routerLink]="routes.userDashboard">Dashboard</a>
                                     </li>
-                                    <li>
+                                    <li *ngIf="isUser">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             [routerLink]="routes.customerHotelBooking">My Booking</a>
                                     </li>
-                                    <li>
+                                    <li *ngIf="isUser">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             [routerLink]="routes.myProfile">My Profile</a>
                                     </li>
-                                    <li>
+                                    <li *ngIf="isAdmin || isUser || isProvider">
                                         <hr class="dropdown-divider my-2">
                                     </li>
-                                    <li>
+                                    <li *ngIf="isAdmin || isUser || isProvider">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             [routerLink]="routes.profileSettings">Settings</a>
                                     </li>
-                                    <li>
+                                    <li *ngIf="isAuthenticated">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             (click)="logout()">Logout</a>
                                     </li>
