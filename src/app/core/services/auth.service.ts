@@ -18,6 +18,9 @@ import { RegisterDto } from '../../shared/dto/register.dto';
 import { v4 as uuidv4 } from "uuid";
 import { SocialResponseDto } from '../../shared/dto/social-responose.dto';
 import { SocialLoginDto } from '../../shared/dto/social-login.dto';
+import { RoleDto } from '../../shared/dto/role.dto';
+import { Roles } from '../../shared/enums/roles.enum';
+import { RequestsProvidersStatus } from '../../shared/enums/requests-providers-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -168,5 +171,39 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("requestProviderStatus");
+  }
+
+  isAdmin(): boolean {
+    const user = this.getUser();
+    if (!user) return false;
+    
+    const roleList: RoleDto[] = user.roleList || user.roles || [];
+    return roleList.some((r: RoleDto) => r.id === Roles.ADMIN);
+  }
+
+  isProvider(): boolean {
+    const user = this.getUser();
+    if (!user) return false;
+    
+    const roleList: RoleDto[] = user.roleList || user.roles || [];
+    return roleList.some((r: RoleDto) => r.id === Roles.PROVIDER);
+  }
+
+  isUser(): boolean {
+    const user = this.getUser();
+    if (!user) return false;
+    
+    const roleList: RoleDto[] = user.roleList || user.roles || [];
+    return roleList.some((r: RoleDto) => r.id === Roles.USER);
+  } 
+
+  setRequestProviderStatus(status: RequestsProvidersStatus): void {
+    localStorage.setItem("requestProviderStatus", status);
+  }
+
+  getRequestProviderStatus(): RequestsProvidersStatus | null {
+    const status = localStorage.getItem("requestProviderStatus");
+    return status as RequestsProvidersStatus || null;
   }
 } 

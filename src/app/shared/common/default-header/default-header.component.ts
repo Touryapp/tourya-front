@@ -9,6 +9,8 @@ import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { SettingService } from "../../../shared/settings/settings.service";
 import { AuthService } from "../../../core/services/auth.service";
 import { TranslateService } from "@ngx-translate/core";
+import { Roles } from "../../enums/roles.enum";
+import { RequestsProvidersStatus } from "../../enums/requests-providers-status.enum";
 
 @Component({
   selector: "app-default-header",
@@ -197,5 +199,23 @@ export class DefaultHeaderComponent {
   logout(): void {
     this.authService.logout();
     this.router.navigateByUrl("/login");
+  }
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+  get isProvider(): boolean {
+    return this.authService.isProvider();
+  }
+  get isUser(): boolean {
+    return this.authService.isUser();
+  }
+
+  redirectByRole() {
+    const requestProviderStatus = this.authService.getRequestProviderStatus();
+    if (this.isUser && !this.isProvider && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
+      this.router.navigate(["/providers/requestproviders"]);
+    } else if (this.isProvider && requestProviderStatus === RequestsProvidersStatus.APPROVED) {
+      this.router.navigate(["providers"]);
+    }
   }
 }
