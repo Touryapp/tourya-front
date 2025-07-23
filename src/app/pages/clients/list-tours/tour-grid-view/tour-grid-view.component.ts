@@ -57,7 +57,7 @@ export class TourGridViewComponent {
   // Helper functions
   getLowestPrice(prices: any[] | null): string {
     if (!prices || prices.length === 0) {
-      return 'N/A';
+      return '100';
     }
     const lowestPrice = Math.min(...prices.map(p => p.price));
     return `$${lowestPrice}`;
@@ -125,5 +125,12 @@ export class TourGridViewComponent {
 
   isLastPage(): boolean {
     return this.currentPage === this.totalPages;
+  }
+
+  // Devuelve un array para mostrar estrellas según el rating
+  getStars(rating: number | string | null | undefined): any[] {
+    const value = typeof rating === 'number' ? rating : parseFloat(rating || '0');
+    const stars = Math.round(value) || 0;
+    return Array(stars).fill(0);
   }
 }
