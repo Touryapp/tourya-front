@@ -3,9 +3,11 @@
   <div class="col-xl-3 col-lg-4 admin-sidebar">
     <div class="card user-sidebar mb-4 mb-lg-0 theiaStickySidebar">
       <!-- Card de perfil -->
-      <div class="card mb-4 p-3 d-flex flex-row align-items-center justify-content-between" style="border-radius: 2rem; border: 1px solid #e3e6ef;">
+      <div class="card mb-4 p-3 d-flex flex-row align-items-center justify-content-between"
+        style="border-radius: 2rem; border: 1px solid #e3e6ef;">
         <div class="d-flex align-items-center">
-          <img src="assets/img/user-01.webp" alt="Proveedor" class="rounded-circle me-3" style="width:48px;height:48px;object-fit:cover;">
+          <img src="assets/img/user-01.webp" alt="Proveedor" class="rounded-circle me-3"
+            style="width:48px;height:48px;object-fit:cover;">
           <div>
             <div class="fw-bold">Jeffrey Wilson</div>
             <div class="text-muted small">Since 10 May 2025</div>
@@ -63,7 +65,8 @@
             <div class="card">
               <div class="card-body d-flex align-items-center">
                 <span class="dashboard-icon icongreen me-3">
-                  <img src="assets/img/icongreen.png" alt="icono verde" class="img-fluid" style="width:75px;height:75px;">
+                  <img src="assets/img/icongreen.png" alt="icono verde" class="img-fluid"
+                    style="width:75px;height:75px;">
                 </span>
                 <div>
                   <h5 class="mb-0">$5.3K</h5>
@@ -76,7 +79,8 @@
             <div class="card">
               <div class="card-body d-flex align-items-center">
                 <span class="dashboard-icon iconpurple me-3">
-                  <img src="assets/img/iconpurple.png" alt="icono morado" class="img-fluid" style="width:75px;height:75px;">
+                  <img src="assets/img/iconpurple.png" alt="icono morado" class="img-fluid"
+                    style="width:75px;height:75px;">
                 </span>
                 <div>
                   <h5 class="mb-0">$5965</h5>
@@ -90,8 +94,18 @@
         <!-- Aquí puedes poner el contenido personalizado cuando mostrarTours sea true -->
       </div>
       <div *ngIf="mostrarTours">
+        <div class="d-flex justify-content-end">
+          <a class="btn btn-primary mb-3" [routerLink]="routes.addTour">
+            Create tour
+          </a>
+        </div>
         <!-- Lista de tours o tu contenido personalizado -->
+
+        <app-tour-list-view-provider [tours]="tours" [loading]="loading" [totalItems]="totalItems"
+          [totalPages]="totalPages" [currentPage]="currentPage" [size]="size" (goToPage)="onGoToPageFromList($event)"
+          (goToPreviousPage)="onGoToPreviousPageFromList()" (goToNextPage)="onGoToNextPageFromList()">
+        </app-tour-list-view-provider>
       </div>
     </div>
   </div>
-</div> 
+</div>

@@ -13,7 +13,7 @@ export class TourService {
 
   constructor(private http: HttpClient) {}
 
-  getTours(
+  getToursProvider(
     data: { page: number; size: number } = { page: 0, size: 10 }
   ): Observable<any> {
     return this.http.get<{

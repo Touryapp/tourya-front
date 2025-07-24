@@ -109,24 +109,26 @@ export class TourListComponent implements OnInit {
   }
 
   getTours() {
-    this.tourService.getTours({ page: this.page, size: this.size }).subscribe({
-      next: (data) => {
-        if (data && data.content) {
-          this.tours = data.content;
-          this.totalElements = data.totalElements;
-          this.totalPages = data.totalPages;
-        } else {
+    this.tourService
+      .getToursProvider({ page: this.page, size: this.size })
+      .subscribe({
+        next: (data) => {
+          if (data && data.content) {
+            this.tours = data.content;
+            this.totalElements = data.totalElements;
+            this.totalPages = data.totalPages;
+          } else {
+            this.tours = [];
+            this.totalElements = 0;
+            this.totalPages = 1;
+          }
+        },
+        error: () => {
           this.tours = [];
           this.totalElements = 0;
           this.totalPages = 1;
-        }
-      },
-      error: () => {
-        this.tours = [];
-        this.totalElements = 0;
-        this.totalPages = 1;
-      },
-    });
+        },
+      });
   }
 
   displayTourDescription(tour: Tour): string {

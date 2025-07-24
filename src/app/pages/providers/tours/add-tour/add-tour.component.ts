@@ -775,12 +775,12 @@ export class AddTourComponent {
 
         if (data) {
           if (this.tourId) {
-            this.router.navigate([routes.tourList], {
-              queryParams: { edited: true },
+            this.router.navigate(["/providers/provider-panel"], {
+              queryParams: { editedTour: true },
             });
           } else {
-            this.router.navigate([routes.tourList], {
-              queryParams: { added: true },
+            this.router.navigate(["/providers/provider-panel"], {
+              queryParams: { addedTour: true },
             });
           }
         }

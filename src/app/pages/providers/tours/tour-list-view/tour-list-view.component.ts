@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
-import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
 import { OwlOptions } from "ngx-owl-carousel-o";
+import { Tour } from "../../../../shared/dto/tour-response.dto";
 
 @Component({
-  selector: "app-tour-list-view",
+  selector: "app-tour-list-view-provider",
   standalone: false,
   templateUrl: "./tour-list-view.component.html",
   styleUrls: ["./tour-list-view.component.scss"],
@@ -13,7 +13,7 @@ export class TourListViewComponent {
   public routes = routes;
   public Math = Math;
 
-  @Input() tours: TourScheduleResponseDto[] = [];
+  @Input() tours: Tour[] = [];
   @Input() loading: boolean = false;
   @Input() totalItems: number = 0;
   @Input() totalPages: number = 0;
@@ -128,5 +128,13 @@ export class TourListViewComponent {
 
   isLastPage(): boolean {
     return this.currentPage === this.totalPages;
+  }
+
+  displayTourDescription(tour: Tour): string {
+    return tour?.description || "";
+  }
+
+  profilePicture(tour: Tour) {
+    return tour?.profilePicture?.imageUrl || "assets/img/tours/tours-07.jpg";
   }
 }
