@@ -60,13 +60,6 @@ export interface TourScheduleResponseDto {
     prices: PriceDto[] | null;
 }
 
-export interface PaginatedTourScheduleResponseDto {
-    content: TourScheduleResponseDto[];
-    totalElements: number;
-    totalPages: number;
-    size: number;
-    number: number;
-}
 
 
 

@@ -626,7 +626,8 @@
                                 (toggleFavorite)="onToggleFavoriteFromGrid($event)"
                                 (goToPage)="onGoToPageFromGrid($event)"
                                 (goToPreviousPage)="onGoToPreviousPageFromGrid()"
-                                (goToNextPage)="onGoToNextPageFromGrid()">
+                                (goToNextPage)="onGoToNextPageFromGrid()"
+                                (selectTour)="selectTour($event)">
                             </app-tour-grid-view>
                         </div>
 
@@ -642,7 +643,8 @@
                                 (toggleFavorite)="onToggleFavorite($event)"
                                 (goToPage)="onGoToPageFromList($event)"
                                 (goToPreviousPage)="onGoToPreviousPageFromList()"
-                                (goToNextPage)="onGoToNextPageFromList()">
+                                (goToNextPage)="onGoToNextPageFromList()"
+                                (selectTour)="selectTour($event)">
                             </app-tour-list-view>
                         </div>
     
@@ -684,3 +686,26 @@
         </div>
     </div>
     <!-- /Page Wrapper -->
+
+    <!-- Floating Cart -->
+    <!-- Debug temporal -->
+    <!-- <div *ngIf="checkIn && checkOut" style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: red; color: white; padding: 10px; font-size: 12px;">
+      Cart Visible: {{ isCartVisible }}<br>
+      CheckIn: {{ checkIn }}<br>
+      CheckOut: {{ checkOut }}<br>
+      Days: {{ daySelections.length }}<br>
+      Items: {{ cartSummary?.totalItems || 0 }}
+    </div> -->
+
+    <app-floating-cart
+        [isVisible]="isCartVisible"
+        (daySelected)="onDaySelected($event)"
+        (cartToggled)="onCartToggled($event)"
+        (clearCart)="onCartCleared()">
+    </app-floating-cart>
+
+    <!-- Tour Slot Selection Modal -->
+    <app-tour-slot-selection-modal
+        (tourAdded)="onTourAddedToCart($event)"
+        (modalClosed)="onModalClosed()">
+    </app-tour-slot-selection-modal>
