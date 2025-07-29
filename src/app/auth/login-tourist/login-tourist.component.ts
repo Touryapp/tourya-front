@@ -203,11 +203,11 @@ export class LoginTouristComponent {
         if(response){
           this.authService.setRequestProviderStatus(response.status as RequestsProvidersStatus);
         }else{
-          this.authService.setRequestProviderStatus(RequestsProvidersStatus.PENDING);
+          this.authService.setRequestProviderStatus(RequestsProvidersStatus.CREATED);
         }
       },
       error: (error) => {
-        this.authService.setRequestProviderStatus(RequestsProvidersStatus.PENDING);
+        this.authService.setRequestProviderStatus(RequestsProvidersStatus.CREATED);
         console.error('Error al obtener los datos del usuario:', error);
       }
     })

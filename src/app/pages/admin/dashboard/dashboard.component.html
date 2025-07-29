@@ -129,12 +129,7 @@
                       <td>{{ req.provider.phone }}</td>
                       <td>
                         <span class="badge rounded-pill"
-                          [ngClass]="{
-                            'bg-warning text-dark': req.status === 'Pending',
-                            'bg-success': req.status === 'Approved',
-                            'bg-danger': req.status === 'Declined',
-                            'bg-incomplete': req.status === 'Incomplete'
-                          }">
+                          [ngClass]="getStatusBadgeClass(req.status)">
                           {{ req.status }}
                         </span>
                       </td>
@@ -164,6 +159,20 @@
         <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="selectedProvider">
+        <!-- Información del flujo de estados -->
+        <div class="alert alert-info mb-3">
+          <i class="isax isax-info-circle me-2"></i>
+          <strong>Flujo de Estados:</strong>
+          <ul class="mb-0 mt-2">
+            <li><strong>Created:</strong> Solicitud creada, pendiente de pre-aprobación</li>
+            <li><strong>Pre-Approved:</strong> Solicitud pre-aprobada, el proveedor puede cargar documentos</li>
+            <li><strong>Document-Sent:</strong> Documentos cargados, pendiente de revisión final</li>
+            <li><strong>Approved:</strong> Solicitud completamente aprobada</li>
+            <li><strong>Incomplete Information:</strong> Se requiere información adicional</li>
+            <li><strong>Cancelled:</strong> Solicitud rechazada</li>
+          </ul>
+        </div>
+        
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
@@ -223,12 +232,7 @@
             <div class="mb-3">
               <label class="form-label fw-bold">Estado:</label>
               <p>
-                <span [ngClass]="{
-                  'badge bg-warning': selectedProvider.status === 'Pending',
-                  'badge bg-success': selectedProvider.status === 'Approved',
-                  'badge bg-danger': selectedProvider.status === 'Declined',
-                  'badge bg-incomplete': selectedProvider.status === 'Incomplete'
-                }">
+                <span [ngClass]="getStatusBadgeClass(selectedProvider.status)">
                   {{ selectedProvider.status }}
                 </span>
               </p>
@@ -240,16 +244,16 @@
               <p>{{ selectedProvider.provider.address }}</p>
             </div>
           </div>
-          <div class="col-12" *ngIf="selectedProvider.status === 'Declined' && selectedProvider.declinedReason">
+          <div class="col-12" *ngIf="selectedProvider.status === 'Cancelled' && selectedProvider.declinedReason">
             <div class="mb-3">
               <label class="form-label fw-bold text-danger">Motivo del rechazo:</label>
               <p class="text-danger">{{ selectedProvider.declinedReason }}</p>
             </div>
           </div>
-          <div class="col-12" *ngIf="selectedProvider.status === 'Incomplete' && selectedProvider.incompleteReason">
+          <div class="col-12" *ngIf="selectedProvider.status === 'Incomplete Information' && selectedProvider.incompleteReason">
             <div class="mb-3">
-              <label class="form-label fw-bold text-incomplete">Motivo de solicitud de información:</label>
-              <p class="text-incomplete">{{ selectedProvider.incompleteReason }}</p>
+              <label class="form-label fw-bold text-warning">Motivo de solicitud de información:</label>
+              <p class="text-warning">{{ selectedProvider.incompleteReason }}</p>
             </div>
           </div>
           <div class="col-12" *ngIf="selectedProvider.requestProviderGalleryList && selectedProvider.requestProviderGalleryList.length > 0">
@@ -358,17 +362,27 @@
         </div>
       </div>
       <div class="modal-footer justify-content-center">
+        <!-- Botón Pre-Approved: solo visible cuando el estado es Created -->
+        <button type="button" class="btn btn-info me-2" 
+                (click)="openPreApproveConfirmModal()"
+                [disabled]="!canPreApprove()">
+          <i class="isax isax-tick-circle me-1"></i> Pre-Aprobar
+        </button>
+        
+        <!-- Botones de acción principal: solo visibles cuando el estado es Document-Sent -->
         <button type="button" class="btn btn-success me-2" 
                 (click)="openConfirmModal()"
-                [disabled]="selectedProvider?.status !== 'Pending' && selectedProvider?.status !== 'Incomplete'">
-          <i class="isax isax-tick-circle me-1"></i> Aprobado
+                [disabled]="!canApprove()">
+          <i class="isax isax-tick-circle me-1"></i> Aprobar
         </button>
         <button type="button" class="btn btn-danger me-2" 
                 (click)="openDeclineConfirmModal()"
-                [disabled]="selectedProvider?.status !== 'Pending' && selectedProvider?.status !== 'Incomplete'">
-          <i class="isax isax-close-circle me-1"></i> Rechazado
+                [disabled]="!canDecline()">
+          <i class="isax isax-close-circle me-1"></i> Rechazar
         </button>
-        <button type="button" class="btn btn-warning" (click)="openRequestInfoModal()">
+        <button type="button" class="btn btn-warning" 
+                (click)="openRequestInfoModal()"
+                [disabled]="!canRequestInfo()">
           <i class="isax isax-info-circle me-1"></i> Solicitar más información
         </button>
       </div>
@@ -420,6 +434,10 @@
       </div>
       <div class="modal-body">
         <p>¿Realmente quieres aprobar esta solicitud?</p>
+        <div class="alert alert-success">
+          <i class="isax isax-tick-circle me-2"></i>
+          <strong>Nota:</strong> Al aprobar, el proveedor será completamente habilitado en la plataforma.
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success me-2" (click)="aprobarSolicitud()">Sí</button>
@@ -442,6 +460,10 @@
       </div>
       <div class="modal-body">
         <p>¿Realmente quieres rechazar esta solicitud?</p>
+        <div class="alert alert-danger">
+          <i class="isax isax-close-circle me-2"></i>
+          <strong>Nota:</strong> Al rechazar, la solicitud será cancelada permanentemente.
+        </div>
         <div class="mb-3">
           <label for="declineReason" class="form-label">Motivo del rechazo</label>
           <textarea id="declineReason" class="form-control" rows="3" [(ngModel)]="declinedReason" placeholder="Explica el motivo del rechazo..."></textarea>
@@ -456,4 +478,30 @@
 </div>
 
 <!-- Modal Backdrop para Confirmación de Rechazo -->
-<div class="modal-backdrop fade" [class.show]="showDeclineConfirmModal" [style.display]="showDeclineConfirmModal ? 'block' : 'none'"></div> 
+<div class="modal-backdrop fade" [class.show]="showDeclineConfirmModal" [style.display]="showDeclineConfirmModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Confirmación para Pre-Aprobar -->
+<div class="modal fade" [class.show]="showPreApproveConfirmModal" [style.display]="showPreApproveConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Pre-Aprobación</h5>
+        <button type="button" class="btn-close" (click)="closePreApproveConfirmModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Realmente quieres pre-aprobar esta solicitud?</p>
+        <div class="alert alert-info">
+          <i class="isax isax-info-circle me-2"></i>
+          <strong>Nota:</strong> Al pre-aprobar, el proveedor podrá cargar documentos para completar su solicitud.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info me-2" (click)="preAprobarSolicitud()">Sí, Pre-Aprobar</button>
+        <button type="button" class="btn btn-secondary" (click)="closePreApproveConfirmModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación de Pre-Aprobación -->
+<div class="modal-backdrop fade" [class.show]="showPreApproveConfirmModal" [style.display]="showPreApproveConfirmModal ? 'block' : 'none'"></div> 

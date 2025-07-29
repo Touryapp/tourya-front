@@ -681,6 +681,11 @@ export class RequestproviderComponent implements OnInit {
     return '';
   }
 
+  // Verifica si se debe mostrar el panel de carga de archivos
+  shouldShowGalleryPanel(): boolean {
+    return this.isExistingData && this.dataRequestProvider.status === 'Pre-Approved';
+  }
+
   // Abre el archivo en una nueva pestaña
   openFile(docTypeId: number): void {
     console.log(`🔍 Intentando abrir archivo para documentTypeId: ${docTypeId}`);

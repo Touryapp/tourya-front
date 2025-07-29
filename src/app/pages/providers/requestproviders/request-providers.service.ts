@@ -40,6 +40,11 @@ export class RequestProvidersService {
     return this.http.put<any>(`${this.baseUrl}/admin/approve/${requestProviderById}`, {});
   }
 
+  // Endpoint para pre-aprobar solicitud (admin)
+  preApproveRequest(requestProviderById: number): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/admin/pre-approve/${requestProviderById}`, {});
+  }
+
   // Endpoint para rechazar solicitud (admin)
   declineRequest(requestProviderById: number, declinedReason: string): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/admin/decline/${requestProviderById}`, { declinedReason: declinedReason });
