@@ -55,7 +55,7 @@ export class AddTourComponent {
   ];
 
   tabs = [
-    { id: "basic_info", label: "Basic Info" },
+    { id: "basic_info", label: "Tour Details" },
     { id: "description", label: "Description" },
     { id: "locations", label: "Locations" },
     { id: "activities", label: "Main Attractions" },

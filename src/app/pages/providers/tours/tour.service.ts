@@ -4,6 +4,8 @@ import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
 import { Gallery, Tour } from "../../../shared/dto/tour-response.dto";
 import { CreateTourDto } from "../../../shared/dto/create-tour.dto";
+import { TourSchedule } from "../../../shared/dto/tour-schedule.response.dto";
+import { CreateTourSchedule } from "../../../shared/dto/create-tour-schedule.dto";
 
 @Injectable({
   providedIn: "root",
@@ -61,6 +63,46 @@ export class TourService {
     return this.http.post<Gallery[]>(
       `${environment.apiUrl}/tours/${tourId}/gallery/sync`,
       formData
+    );
+  }
+
+  getSchedulesByTourId(tourId: number): Observable<{
+    content: TourSchedule[];
+    totalElements: number;
+    totalPages: number;
+  }> {
+    return this.http.get<{
+      content: TourSchedule[];
+      totalElements: number;
+      totalPages: number;
+    }>(`${environment.apiUrl}/tour-schedules/by-tour/${tourId}`, {
+      params: {
+        page: "0",
+        size: "10",
+      },
+    });
+  }
+
+  getScheduleById(configId: number): Observable<TourSchedule> {
+    return this.http.get<TourSchedule>(
+      `${environment.apiUrl}/tour-schedules/${configId}`
+    );
+  }
+
+  saveTourSchedule(body: CreateTourSchedule): Observable<any> {
+    return this.http.post<TourSchedule>(
+      `${environment.apiUrl}/tour-schedules`,
+      body
+    );
+  }
+
+  updateTourSchedule(
+    configId: number,
+    body: CreateTourSchedule
+  ): Observable<any> {
+    return this.http.put<TourSchedule>(
+      `${environment.apiUrl}/tour-schedules/${configId}`,
+      body
     );
   }
 }

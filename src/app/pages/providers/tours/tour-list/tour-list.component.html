@@ -6,9 +6,9 @@
                 <h2 class="breadcrumb-title mb-2">Tours</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a>
+                        <li class="breadcrumb-item"><a [routerLink]="'/'"><i class="isax isax-home5"></i></a>
                         </li>
-                        <li class="breadcrumb-item">Tours</li>
+                        <li class="breadcrumb-item"><a [routerLink]="'/providers/tours'">Tours</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Tour List</li>
                     </ol>
                 </nav>
@@ -92,7 +92,7 @@
                                     <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
                                         <ng-template carouselSlide>
                                             <div class="slide-images">
-                                                <a [routerLink]="[routes.tourDetails, tour.id]">
+                                                <a [routerLink]="[routes.editTour, tour.id]">
                                                     <img [src]="profilePicture(tour)" class="img-fluid" alt="img">
                                                 </a>
                                             </div>
@@ -136,8 +136,7 @@
                                     <div
                                         class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
                                         <div>
-                                            <h5 class="mb-1 text-truncate"><a
-                                                    [routerLink]="[routes.tourDetails, tour.id]">
+                                            <h5 class="mb-1 text-truncate"><a [routerLink]="[routes.editTour, tour.id]">
                                                     {{tour.name }}
                                                 </a>
                                             </h5>
@@ -187,6 +186,12 @@
                                             <a class="me-2" [routerLink]="['/providers/tours/galleries', tour.id]">
                                                 Edit Gallery
                                             </a>
+
+                                            <a class="me-2"
+                                                [routerLink]="['/providers/tours/' + tour.id + '/tour-schedule-list']">
+                                                List Schedule
+                                            </a>
+
                                         </div>
 
 

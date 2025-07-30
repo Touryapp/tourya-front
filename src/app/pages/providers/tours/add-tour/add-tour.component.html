@@ -8,6 +8,8 @@
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
                         </li>
+                        <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'">Providers Panel</a>
+                        </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {{tourId ? 'Edit Tours' : 'Add Tours' }}
                         </li>
@@ -29,7 +31,7 @@
                 <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
                     <div class="card-body">
                         <div>
-                            <h5 class="mb-3">Add Tour</h5>
+                            <h5 class="mb-3">{{tourId ? 'Edit Tour' : 'Add Tour' }}</h5>
                             <ul class="add-tab-list">
                                 <li *ngFor="let tab of tabs">
                                     <a href="javascript:void(0);" [class.active]="activeTab === tab.id"

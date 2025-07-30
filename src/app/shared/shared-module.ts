@@ -37,6 +37,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { TranslateModule } from "@ngx-translate/core";
 import { FooterComponent } from "./common/footer/footer.component";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { FooterComponent } from "./common/footer/footer.component";
     MatSnackBarModule,
     DragDropModule,
     TranslateModule,
+    MatCheckboxModule,
   ],
   exports: [
     CommonModule,
@@ -111,6 +113,7 @@ import { FooterComponent } from "./common/footer/footer.component";
     MatSnackBarModule,
     DragDropModule,
     TranslateModule,
+    MatCheckboxModule,
   ],
   providers: [
     provideNgxMask(),
