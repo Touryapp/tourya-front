@@ -242,12 +242,31 @@
                     <!-- Submit Button -->
                     <div class="save">
                         <div class="d-flex align-items-center justify-content-end">
+                            <!-- Botón Submit Request (solo cuando no hay datos existentes) -->
                             <button type="submit" class="btn btn-primary"
-                                [disabled]="loading || (requestProviderForm.touched && requestProviderForm.invalid)">
+                                [disabled]="loading || (requestProviderForm.touched && requestProviderForm.invalid)"
+                                *ngIf="!isExistingData">
                                 <span>Submit Request</span>
                                 <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
                                 </div>
                             </button>
+                            
+                            <!-- Botón Submitted (cuando el status es Created) -->
+                            <button type="button" class="btn btn-success"
+                                (click)="changeToSubmitted()"
+                                [disabled]="loading || !canChangeToSubmitted"
+                                *ngIf="isExistingData && canChangeToSubmitted">
+                                <span>Submitted</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
+                                </div>
+                            </button>
+                            
+                            <!-- Mensaje cuando ya está Submitted -->
+                            <div *ngIf="isExistingData && !canChangeToSubmitted && dataRequestProvider.status === 'Submitted'" 
+                                 class="alert alert-success mb-0">
+                                <i class="isax isax-tick-circle me-2"></i>
+                                <strong>Status: Submitted</strong> - Tu solicitud ha sido enviada correctamente.
+                            </div>
                         </div>
                     </div>
 

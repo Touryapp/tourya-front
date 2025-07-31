@@ -168,7 +168,9 @@ export class DashboardComponent implements OnInit {
 
   // Métodos para verificar el estado y mostrar botones apropiados
   canPreApprove(): boolean {
-    return this.selectedProvider?.status === RequestsProvidersStatus.CREATED;
+    const canPreApprove = this.selectedProvider?.status === 'Submitted';
+    console.log('canPreApprove:', canPreApprove, 'Status:', this.selectedProvider?.status, 'Expected: Submitted');
+    return canPreApprove;
   }
 
   canApprove(): boolean {
@@ -188,6 +190,8 @@ export class DashboardComponent implements OnInit {
     switch (status) {
       case RequestsProvidersStatus.CREATED:
         return 'bg-secondary';
+      case RequestsProvidersStatus.SUBMITTED:
+        return 'bg-primary';
       case RequestsProvidersStatus.PRE_APPROVED:
         return 'bg-info';
       case RequestsProvidersStatus.DOCUMENT_SENT:

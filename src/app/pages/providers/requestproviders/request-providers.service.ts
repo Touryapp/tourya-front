@@ -82,4 +82,9 @@ export class RequestProvidersService {
     return this.http.post<any>(`${environment.apiUrl}/public/tours/schedule/search`, body);
   }
 
+  // Endpoint para cambiar status a Submitted
+  submittedRequest(requestProviderById: number): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/user/send`, { requestProviderById: requestProviderById });
+  }
+
  }
