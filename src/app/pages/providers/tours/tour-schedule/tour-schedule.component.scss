@@ -11,3 +11,20 @@
 .mat-slide-toogle {
   margin-left: 8px
 }
+
+/* Ensure these styles are global or use ViewEncapsulation.None */
+.cal-cell.cal-selected-range {
+  background-color: #e0f2f7 !important;
+  /* Light blue background for selected range */
+}
+
+/* Style for the start and end of the range */
+.cal-cell.cal-selected-range:first-child {
+  border-left: 2px solid #2196f3;
+  /* Example border */
+}
+
+.cal-cell.cal-selected-range:last-child {
+  border-right: 2px solid #2196f3;
+  /* Example border */
+}

@@ -26,28 +26,49 @@
     <div class="container">
         <div class="row">
 
-            <!-- Sidebar -->
-            <div class="col-lg-3 ">
+            <!-- Calendar -->
+            <div class="col-lg-8 ">
                 <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
                     <div class="card-body">
-                        <div>
-                            <h5 class="mb-3">Add tour schedule</h5>
-                            <ul class="add-tab-list">
-                                <li *ngFor="let tab of tabs">
-                                    <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
-                                        (click)="scrollTo(tab.id)">
-                                        {{ tab.label }}
-                                    </a>
-                                </li>
-                            </ul>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary btn-disabled" mwlCalendarPreviousView [view]="view"
+                                        [disabled]="!monthIsAfterToday()" [(viewDate)]="viewDate"
+                                        (viewDateChange)="closeOpenMonthViewDay()">
+                                        Previous
+                                    </button>
+                                    <button class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+                                        Today
+                                    </button>
+                                    <button class="btn btn-primary" mwlCalendarNextView [view]="view"
+                                        [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+                            </div>
                         </div>
+
+                        <div class="mt-3">
+                            <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                                [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+                                (eventClicked)="handleEvent('Clicked', $event.event)"
+                                (eventTimesChanged)="eventTimesChanged($event)" [cellTemplate]="monthCellTemplate">
+                            </mwl-calendar-month-view>
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <!-- /Sidebar -->
+            <!-- /Calendar -->
 
             <!-- Add Tour Schedule -->
-            <div class="col-lg-9">
+            <div class="col-lg-4">
                 <form [formGroup]="tourScheduleForm" (ngSubmit)="onSubmit()">
                     <div class="card shadow-none" id="basic_info">
                         <div class="card-header">
@@ -77,7 +98,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="birthdate">Start Date</label>
                                         <div class=" input-icon">
@@ -112,7 +133,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="birthdate">End date</label>
                                         <div class=" input-icon">
@@ -153,7 +174,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Unlimited capacity</label>
                                         <mat-slide-toggle class="mat-slide-toogle"
@@ -170,7 +191,7 @@
                                 </div>
 
 
-                                <div class="col-lg-4 col-md-6">
+                                <div class="col-md-6">
                                     <div class="mb-3 checkbox-group">
                                         <label class="form-label">Days of the week</label>
 
@@ -224,7 +245,7 @@
                                             </a>
                                         </div>
 
-                                        <div class="col-lg-4 col-md-6">
+                                        <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Start time</label>
                                                 <input type="text" type="time" class="form-control"
@@ -240,7 +261,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-4 col-md-6">
+                                        <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">End time</label>
                                                 <input type="text" type="time" class="form-control"
@@ -259,7 +280,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-4 col-md-6">
+                                        <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Min capacity</label>
                                                 <input type="text" type="number" class="form-control"
@@ -279,7 +300,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-4 col-md-6"
+                                        <div class="col-md-6"
                                             *ngIf="!tourScheduleForm.get('isUnlimitedCapacity')?.value">
                                             <div class="mb-3">
                                                 <label class="form-label">Max capacity</label>
@@ -333,12 +354,28 @@
                                                                 </a>
                                                             </div>
 
-                                                            <div class="col-lg-4 col-md-6">
+                                                            <div class="col-md-6">
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Age type</label>
-                                                                    <input type="text" class="form-control"
-                                                                        formControlName="ageType"
-                                                                        (blur)="onAgeTypeBlur(i, j, $event)">
+
+                                                                    <mat-select class="custom-mat-select select"
+                                                                        placeholder="Select" formControlName="ageType">
+                                                                        <mat-option
+                                                                            [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ADULT, i, j)"
+                                                                            [value]="TypeOfPersonLabel.ADULT">
+                                                                            ADULT
+                                                                        </mat-option>
+                                                                        <mat-option
+                                                                            [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.CHILD, i, j)"
+                                                                            [value]="TypeOfPersonLabel.CHILD">
+                                                                            CHILD
+                                                                        </mat-option>
+                                                                        <mat-option
+                                                                            [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.INFANT, i, j)"
+                                                                            [value]="TypeOfPersonLabel.INFANT">
+                                                                            INFANT
+                                                                        </mat-option>
+                                                                    </mat-select>
 
                                                                     <div *ngIf=" price.get('ageType')?.invalid && (price.get('ageType')?.touched || price.get('ageType')?.dirty)"
                                                                         class="text-danger">
@@ -350,7 +387,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-lg-4 col-md-6">
+                                                            <div class="col-md-6">
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Min age</label>
                                                                     <input type="text" type="number"
@@ -371,7 +408,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-lg-4 col-md-6">
+                                                            <div class="col-md-6">
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Max age</label>
                                                                     <input type="text" type="number"
@@ -394,14 +431,15 @@
 
                                                                         <div
                                                                             *ngIf="price.get('maxAge')?.errors?.['min']">
-                                                                            Max age must be greater than or equal to
+                                                                            Max age must be greater than or
+                                                                            equal to
                                                                             {{price.get('minAge')?.value}}
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-lg-4 col-md-6">
+                                                            <div class="col-md-6">
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Price</label>
                                                                     <input type="text" type="number"
@@ -448,13 +486,6 @@
                         </div>
                     </div>
 
-                    <pre>
-                        {{ tourScheduleForm.value | json}}
-                    </pre>
-                    <pre>
-                        {{ tourScheduleForm.errors | json}}
-                    </pre>
-
                     <div class="save" *ngIf="!tourScheduleId || (tourScheduleId && tourSchedule)">
                         <div class="d-flex align-items-center justify-content-end">
                             <button type="submit" class="btn btn-primary"
@@ -481,3 +512,21 @@
     </div>
 </div>
 <!-- /Page Wrapper -->
+
+
+<!-- MontCellTemplate -->
+<ng-template #monthCellTemplate let-day="day">
+    <div class="cal-cell" [class.cal-today]="day.isToday" [class.cal-weekend]="day.isWeekend"
+        [class.cal-in-month]="day.inMonth" [class.cal-out-month]="!day.inMonth"
+        [class.cal-selected-range]="isDateInSelectedRange(day.date)">
+        <div class="cal-cell-top">
+            <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+            <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber' }}</span>
+        </div>
+        <div class="cal-events">
+            <div class="cal-event" *ngFor="let event of day.events" [style.backgroundColor]="event.color?.primary">
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- /MontCellTemplate -->

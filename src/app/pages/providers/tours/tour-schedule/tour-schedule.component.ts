@@ -1,7 +1,7 @@
 import { Component, HostListener } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { ActivatedRoute, Router } from "@angular/router";
-import { TypeOfPerson } from "../../../../shared/enums/type-of-person.enum";
+import { TypeOfPersonLabel } from "../../../../shared/enums/type-of-person.enum";
 import {
   AbstractControl,
   FormArray,
@@ -17,6 +17,13 @@ import { TourSchedule } from "../../../../shared/dto/tour-schedule.response.dto"
 import { dayjsDateValidator } from "../../../../shared/validators/date-format.validator";
 import { onlyNumberValidator } from "../../../../shared/validators/only-number.validator";
 import dayjs from "dayjs";
+import { endOfDay, isSameDay, isSameMonth, startOfDay } from "date-fns";
+import {
+  CalendarEvent,
+  CalendarEventTimesChangedEvent,
+  CalendarView,
+} from "angular-calendar";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "app-tour-schedule",
@@ -26,19 +33,9 @@ import dayjs from "dayjs";
 })
 export class TourScheduleComponent {
   public routes = routes;
-
   loading = false;
-
   tourScheduleForm: FormGroup;
-
-  tabs = [
-    { id: "basic_info", label: "Tour Schedule Config" },
-    { id: "slots", label: "Slots" },
-  ];
-
-  activeTab: string = this.tabs[0].id; // Default to the first tab
-
-  readonly TypeOfPerson = TypeOfPerson;
+  readonly TypeOfPersonLabel = TypeOfPersonLabel;
 
   tourId: number = 0;
   tour: Tour | null = null;
@@ -57,14 +54,20 @@ export class TourScheduleComponent {
   maxDateEndDate: Date | undefined = undefined;
 
   DAYS_OF_WEEK = [
-    { label: "SUNDAY", value: "SUNDAY" },
-    { label: "MONDAY", value: "MONDAY" },
-    { label: "TUESDAY", value: "TUESDAY" },
-    { label: "WEDNESDAY", value: "WEDNESDAY" },
-    { label: "THURSDAY", value: "THURSDAY" },
-    { label: "FRIDAY", value: "FRIDAY" },
-    { label: "SATURDAY", value: "SATURDAY" },
+    { label: "SUNDAY", value: "SUNDAY", day: 0 },
+    { label: "MONDAY", value: "MONDAY", day: 1 },
+    { label: "TUESDAY", value: "TUESDAY", day: 2 },
+    { label: "WEDNESDAY", value: "WEDNESDAY", day: 3 },
+    { label: "THURSDAY", value: "THURSDAY", day: 4 },
+    { label: "FRIDAY", value: "FRIDAY", day: 5 },
+    { label: "SATURDAY", value: "SATURDAY", day: 6 },
   ];
+
+  view: CalendarView = CalendarView.Month;
+  viewDate: Date = dayjs().hour(0).minute(0).second(0).millisecond(0).toDate();
+  events: CalendarEvent[] = [];
+  activeDayIsOpen: boolean = true;
+  refresh = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -100,36 +103,6 @@ export class TourScheduleComponent {
     }
   }
 
-  @HostListener("window:scroll", [])
-  onScroll(): void {
-    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-
-    this.tabs.forEach((tab) => {
-      const element = document.getElementById(tab.id);
-      if (element) {
-        const sectionTop = element.offsetTop - 100; // Adjust offset for fixed headers
-        const sectionBottom = sectionTop + element.offsetHeight;
-
-        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-          this.activeTab = tab.id;
-        }
-      }
-    });
-  }
-
-  scrollTo(id: string): void {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-
-      this.activeTab = id; // Update the active tab
-
-      setTimeout(() => {
-        window.scrollTo(0, element.offsetTop - 75);
-      }, 0);
-    }
-  }
-
   onSubmit() {
     this.loading = true;
     this.submitted = true;
@@ -150,19 +123,19 @@ export class TourScheduleComponent {
     this.tourScheduleForm
       .get("startDate")
       ?.valueChanges.subscribe((startDate) => {
-        const startDateDayjs = dayjs(startDate);
+        const startDateDayJs = dayjs(startDate);
         this.minDateEndDate = startDate;
 
-        const lastDayOfMonth = startDateDayjs.endOf("month");
+        const lastDayOfMonth = startDateDayJs.endOf("month");
         this.maxDateEndDate = lastDayOfMonth.toDate();
 
         const endDateControl = this.tourScheduleForm.get("endDate");
         const endDate = endDateControl?.value;
-        const endDateDayjs = dayjs(endDate);
+        const endDateDayJs = dayjs(endDate);
 
         if (
-          (endDate && startDateDayjs.isAfter(endDateDayjs)) ||
-          endDateDayjs.isAfter(lastDayOfMonth)
+          (endDate && startDateDayJs.isAfter(endDateDayJs)) ||
+          endDateDayJs.isAfter(lastDayOfMonth)
         ) {
           endDateControl?.setErrors({
             invalidRangeDate: true,
@@ -183,7 +156,7 @@ export class TourScheduleComponent {
           this.slots.controls.forEach((control, index) => {
             const maxCapacityControl = control.get("maxCapacity");
 
-            maxCapacityControl?.setValidators([onlyNumberValidator()]);
+            maxCapacityControl?.setValidators([]);
             maxCapacityControl?.updateValueAndValidity();
           });
         } else {
@@ -284,13 +257,6 @@ export class TourScheduleComponent {
 
   onEndTimeBlur(index: number) {
     this.checkTimeRange(index);
-  }
-
-  onAgeTypeBlur(indexSlot: number, indexPrice: number, event: FocusEvent) {
-    this.prices(indexSlot)
-      .at(indexPrice)
-      .get("ageType")
-      ?.setValue((event.target as HTMLInputElement).value.trim());
   }
 
   onKeypressStartDatePicker(event: KeyboardEvent) {
@@ -447,11 +413,15 @@ export class TourScheduleComponent {
     );
   }
 
-  typeOfPersonIsSelected(typeOfPerson: TypeOfPerson, i: number): boolean {
-    const typesOfPeople = this.slots.controls
-      .map((control, index) => {
-        if (index !== i) {
-          return (control as FormGroup).get("typeOfPerson")?.value;
+  typeOfPersonIsSelected(
+    typeOfPerson: TypeOfPersonLabel,
+    indexSlot: number,
+    indexPrice: number
+  ): boolean {
+    const typesOfPeople = this.prices(indexSlot)
+      .controls.map((control, index) => {
+        if (index !== indexPrice) {
+          return (control as FormGroup).get("ageType")?.value;
         }
       })
       .filter((v) => v);
@@ -463,12 +433,12 @@ export class TourScheduleComponent {
     const startDate = this.tourScheduleForm.get("startDate")?.value;
     const endDate = this.tourScheduleForm.get("endDate")?.value;
 
-    const startDateDayjs = dayjs(startDate);
-    const endDateDayjs = dayjs(endDate);
+    const startDateDayJs = dayjs(startDate);
+    const endDateDayJs = dayjs(endDate);
 
     if (startDate && endDate) {
-      const startDateFormatted = startDateDayjs.format("YYYY-MM-DD");
-      const endDateFormatted = endDateDayjs.format("YYYY-MM-DD");
+      const startDateFormatted = startDateDayJs.format("YYYY-MM-DD");
+      const endDateFormatted = endDateDayJs.format("YYYY-MM-DD");
 
       const found = this.tourSchedules.find((schedule) => {
         return (
@@ -545,6 +515,7 @@ export class TourScheduleComponent {
     this.submitted = false;
     this.errorMessage = "";
   }
+
   saveTourSchedule() {
     const {
       label,
@@ -660,6 +631,64 @@ export class TourScheduleComponent {
       }) => {
         if (data && data.content) {
           this.tourSchedules = data.content;
+          const events: any[] = this.tourSchedules
+            .map((schedule) => {
+              const startDateDayJs = dayjs(schedule.startDate, "YYYY-MM-DD");
+              const endDateDayJs = dayjs(schedule.endDate, "YYYY-MM-DD");
+
+              const daysDifference = endDateDayJs.diff(startDateDayJs, "day");
+              let acc: any[] = [];
+
+              const color = {
+                primary: this.getRandomHexColor(),
+                secondary: this.getRandomHexColor(),
+              };
+              for (let i = 0; i <= daysDifference; i++) {
+                const newStartDate = startDateDayJs.add(i, "day");
+                const newEndDate = startDateDayJs.add(i, "day");
+                const day = newStartDate.day();
+
+                const isDayOfWeekSelected = schedule.daysOfWeek.find(
+                  (dayOfWeek) => {
+                    return dayOfWeek === this.DAYS_OF_WEEK[day].value;
+                  }
+                );
+
+                if (
+                  isDayOfWeekSelected &&
+                  newStartDate.isValid() &&
+                  newEndDate.isValid()
+                ) {
+                  acc = [
+                    ...acc,
+                    {
+                      start: new Date(newStartDate.toISOString()),
+                      end: new Date(newEndDate.toISOString()),
+                      title: schedule.label,
+                      draggable: false,
+                      color: {
+                        ...color,
+                      },
+                      allDay: true,
+                    },
+                  ];
+                }
+              }
+
+              return acc.length > 0 ? acc : null;
+            })
+            .filter((v) => v);
+
+          const events2 = events.reduce((acc, current, value, index) => {
+            if (current) {
+              acc = [...acc, ...current];
+            }
+            return acc;
+          }, []);
+
+          this.events = events2;
+
+          this.refresh.next();
         } else {
           this.tourSchedules = [];
           this.openSnackBar("Error getting tour schedules.");
@@ -680,6 +709,127 @@ export class TourScheduleComponent {
     });
   }
 
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd,
+  }: CalendarEventTimesChangedEvent): void {
+    this.events = this.events.map((iEvent) => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd,
+        };
+      }
+      return iEvent;
+    });
+    this.handleEvent("Dropped or resized", event);
+  }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    console.log(action, event);
+  }
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    const today = dayjs().hour(0).minute(0).second(0).millisecond(0);
+    const dateDayJs = dayjs(date);
+
+    const startDateControl = this.tourScheduleForm.get("startDate");
+    const endDateControl = this.tourScheduleForm.get("endDate");
+
+    const startDateValue = startDateControl?.value;
+    const endDateValue = endDateControl?.value;
+
+    const startDateDayJs = dayjs(startDateValue);
+    const endDateDayJs = dayjs(endDateValue);
+
+    if (dateDayJs.isValid() && !dateDayJs.isBefore(today)) {
+      if (!startDateValue) {
+        startDateControl?.setValue(date);
+      } else {
+        if (
+          startDateDayJs.isSame(endDateDayJs) &&
+          startDateDayJs.isSame(dateDayJs)
+        ) {
+          startDateControl?.setValue(null);
+          endDateControl?.setValue(null);
+        } else if (endDateDayJs.isSame(dateDayJs)) {
+          endDateControl?.setValue(null);
+        } else {
+          if (dateDayJs.isSame(startDateDayJs, "month")) {
+            if (dateDayJs.isBefore(startDateDayJs)) {
+              startDateControl?.setValue(date);
+              endDateControl?.setValue(startDateValue);
+            } else {
+              startDateControl?.setValue(startDateValue);
+              endDateControl?.setValue(date);
+            }
+          } else {
+            startDateControl?.setValue(date);
+            endDateControl?.setValue(null);
+          }
+        }
+      }
+    }
+
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
+  }
+
+  monthIsAfterToday() {
+    const todayMonth = dayjs()
+      .date(1)
+      .hour(0)
+      .minute(0)
+      .second(0)
+      .millisecond(0);
+
+    const monthView = dayjs(this.viewDate)
+      .date(1)
+      .hour(0)
+      .minute(0)
+      .second(0)
+      .millisecond(0);
+
+    return monthView.isAfter(todayMonth);
+  }
+
+  isDateInSelectedRange(date: Date): boolean {
+    const startDateControl = this.tourScheduleForm.get("startDate");
+    const endDateControl = this.tourScheduleForm.get("endDate");
+
+    const startDateValue = startDateControl?.value;
+    const endDateValue = endDateControl?.value;
+
+    if (startDateValue && endDateValue) {
+      return (
+        date >= startOfDay(startDateValue) && date <= endOfDay(endDateValue)
+      );
+    } else if (startDateValue && !endDateValue) {
+      return isSameDay(date, startDateValue);
+    }
+    return false;
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+  }
+
+  getRandomHexColor() {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + randomColor.padStart(6, "0");
+  }
+
   openSnackBarWithAction(
     message: string,
     action: string,
@@ -690,8 +840,8 @@ export class TourScheduleComponent {
     });
 
     snackBarRef.onAction().subscribe(() => {
-      this.loadConfig(tourScheduleId);
       // Perform your action here (e.g., undo the archived message)
+      this.loadConfig(tourScheduleId);
     });
   }
 }

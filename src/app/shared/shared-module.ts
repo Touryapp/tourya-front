@@ -38,7 +38,12 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { TranslateModule } from "@ngx-translate/core";
 import { FooterComponent } from "./common/footer/footer.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-
+// Calendar
+import {
+  CalendarModule as CalendarAngularCalendarModule,
+  DateAdapter,
+} from "angular-calendar";
+import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 @NgModule({
   declarations: [
     FooterComponent,
@@ -78,6 +83,10 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     DragDropModule,
     TranslateModule,
     MatCheckboxModule,
+    CalendarAngularCalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ],
   exports: [
     CommonModule,
@@ -114,6 +123,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     DragDropModule,
     TranslateModule,
     MatCheckboxModule,
+    CalendarAngularCalendarModule,
   ],
   providers: [
     provideNgxMask(),
