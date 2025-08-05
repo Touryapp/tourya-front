@@ -155,10 +155,12 @@ export class TourScheduleComponent {
           });
         }
 
+        this.checkAllMonthSelected();
         this.checkTourScheduleByStartDateAndEndDate();
       });
 
     this.tourScheduleForm.get("endDate")?.valueChanges.subscribe((endDate) => {
+      this.checkAllMonthSelected();
       this.checkTourScheduleByStartDateAndEndDate();
     });
 
@@ -879,6 +881,33 @@ export class TourScheduleComponent {
     return "#" + randomColor.padStart(6, "0");
   }
 
+  checkAllMonthSelected() {
+    const minDateStartDate = dayjs(this.minDateStartDate)
+      .hour(0)
+      .minute(0)
+      .second(0)
+      .millisecond(0);
+
+    const startDateControl = this.tourScheduleForm.get("startDate");
+    const startDate = startDateControl?.value;
+    const startDateDayJs = dayjs(startDate);
+
+    const endDateControl = this.tourScheduleForm.get("endDate");
+    const endDate = endDateControl?.value;
+    const endDateDayJs = dayjs(endDate);
+
+    if (
+      endDateDayJs.isSame(startDateDayJs, "month") &&
+      endDateDayJs.date() === endDateDayJs.daysInMonth() &&
+      (startDateDayJs.isSame(minDateStartDate, "day") ||
+        startDateDayJs.day() === 1)
+    ) {
+      this.allMonthSelected = true;
+    } else {
+      this.allMonthSelected = false;
+    }
+  }
+
   toggleAllMonth() {
     this.allMonthSelected = !this.allMonthSelected;
 
@@ -889,10 +918,7 @@ export class TourScheduleComponent {
     const endDateControl = this.tourScheduleForm.get("endDate");
 
     if (this.allMonthSelected) {
-      if (
-        viewDateDayJs.isSame(today, "year") &&
-        viewDateDayJs.isSame(today, "month")
-      ) {
+      if (viewDateDayJs.isSame(today, "month")) {
         startDateControl?.setValue(today.toDate());
         endDateControl?.setValue(viewDateDayJs.endOf("month").toDate());
       } else {
