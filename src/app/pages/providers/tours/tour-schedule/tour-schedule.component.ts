@@ -49,7 +49,12 @@ export class TourScheduleComponent {
 
   bsValueStartDate = undefined;
   bsValueEndDate = undefined;
-  minDateStartDate: Date = new Date();
+  minDateStartDate: Date = dayjs()
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toDate();
   minDateEndDate: Date | undefined = undefined;
   maxDateEndDate: Date | undefined = undefined;
 
@@ -68,6 +73,8 @@ export class TourScheduleComponent {
   events: CalendarEvent[] = [];
   activeDayIsOpen: boolean = true;
   refresh = new Subject<void>();
+
+  allMonthSelected: boolean = false;
 
   constructor(
     private router: Router,
@@ -107,6 +114,12 @@ export class TourScheduleComponent {
     this.loading = true;
     this.submitted = true;
     this.tourScheduleForm.markAllAsTouched();
+    this.daysOfWeek.markAllAsTouched();
+    this.daysOfWeek.markAsDirty();
+
+    if (this.daysOfWeek.length === 0) {
+      this.tourScheduleForm.get("daysOfWeek")?.setErrors({ required: true });
+    }
 
     if (this.tourScheduleForm.valid) {
       if (this.tourScheduleId) {
@@ -156,6 +169,7 @@ export class TourScheduleComponent {
           this.slots.controls.forEach((control, index) => {
             const maxCapacityControl = control.get("maxCapacity");
 
+            maxCapacityControl?.setValue("");
             maxCapacityControl?.setValidators([]);
             maxCapacityControl?.updateValueAndValidity();
           });
@@ -176,16 +190,16 @@ export class TourScheduleComponent {
     this.slots.valueChanges.subscribe((value) => {
       this.slots.controls.forEach((control, index) => {
         // Check min capacity
-        const minCapacityControl = control.get("minCapacity");
-        const maxCapacityControl = control.get("maxCapacity");
+        if (!this.tourScheduleForm.get("isUnlimitedCapacity")?.value) {
+          const minCapacityControl = control.get("minCapacity");
+          const maxCapacityControl = control.get("maxCapacity");
 
-        const minCapacityValue = +(minCapacityControl?.value || 0);
-        const maxCapacityValue = +(maxCapacityControl?.value || 0);
+          const minCapacityValue = +(minCapacityControl?.value || 0);
+          const maxCapacityValue = +(maxCapacityControl?.value || 0);
 
-        if (minCapacityValue > maxCapacityValue) {
-          maxCapacityControl?.setErrors({ min: true });
-        } else {
-          maxCapacityControl?.setErrors(null);
+          if (minCapacityValue > maxCapacityValue) {
+            maxCapacityControl?.setErrors({ min: true });
+          }
         }
 
         // Check min age
@@ -200,8 +214,6 @@ export class TourScheduleComponent {
             maxAgeControl?.setErrors({
               min: true,
             });
-          } else {
-            maxAgeControl?.setErrors(null);
           }
         });
       });
@@ -328,10 +340,9 @@ export class TourScheduleComponent {
       "isUnlimitedCapacity"
     )?.value;
 
-    const maxCapacityValidators = [
-      isUnlimitedCapacityValue ? Validators.required : undefined,
-      onlyNumberValidator(),
-    ].filter((v) => v);
+    const maxCapacityValidators = isUnlimitedCapacityValue
+      ? []
+      : [Validators.required, onlyNumberValidator()];
 
     return this.fb.group({
       id: ["", []],
@@ -395,6 +406,9 @@ export class TourScheduleComponent {
   }
 
   onDayChange(day: string, event: any): void {
+    this.daysOfWeek.markAllAsTouched();
+    this.daysOfWeek.markAsDirty();
+
     if (event.checked) {
       this.daysOfWeek.push(new FormControl(day));
     } else {
@@ -404,6 +418,10 @@ export class TourScheduleComponent {
           return;
         }
       });
+
+      if (this.daysOfWeek.length === 0) {
+        this.tourScheduleForm.get("daysOfWeek")?.setErrors({ required: true });
+      }
     }
   }
 
@@ -529,8 +547,8 @@ export class TourScheduleComponent {
     const body = {
       tourId: this.tourId,
       label,
-      startDate,
-      endDate,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
       daysOfWeek,
       isUnlimitedCapacity,
       slots,
@@ -572,8 +590,8 @@ export class TourScheduleComponent {
     const body = {
       tourId: this.tourId,
       label,
-      startDate,
-      endDate,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
       daysOfWeek,
       isUnlimitedCapacity,
       slots,
@@ -670,6 +688,15 @@ export class TourScheduleComponent {
                         ...color,
                       },
                       allDay: true,
+                      meta: {
+                        tourScheduleId: schedule.id,
+                        tourId: this.tourId,
+                        startDate: schedule.startDate,
+                        endDate: schedule.endDate,
+                        daysOfWeek: schedule.daysOfWeek,
+                        isUnlimitedCapacity: schedule.isUnlimitedCapacity,
+                        slots: schedule.slots,
+                      },
                     },
                   ];
                 }
@@ -804,6 +831,24 @@ export class TourScheduleComponent {
     return monthView.isAfter(todayMonth);
   }
 
+  monthIsTodayMonth() {
+    const todayMonth = dayjs()
+      .date(1)
+      .hour(0)
+      .minute(0)
+      .second(0)
+      .millisecond(0);
+
+    const monthView = dayjs(this.viewDate)
+      .date(1)
+      .hour(0)
+      .minute(0)
+      .second(0)
+      .millisecond(0);
+
+    return monthView.isSame(todayMonth, "month");
+  }
+
   isDateInSelectedRange(date: Date): boolean {
     const startDateControl = this.tourScheduleForm.get("startDate");
     const endDateControl = this.tourScheduleForm.get("endDate");
@@ -823,11 +868,41 @@ export class TourScheduleComponent {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+
+    if (this.allMonthSelected) {
+      this.toggleAllMonth();
+    }
   }
 
   getRandomHexColor() {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
     return "#" + randomColor.padStart(6, "0");
+  }
+
+  toggleAllMonth() {
+    this.allMonthSelected = !this.allMonthSelected;
+
+    const today = dayjs().hour(0).minute(0).second(0).millisecond(0);
+    const viewDateDayJs = dayjs(this.viewDate);
+
+    const startDateControl = this.tourScheduleForm.get("startDate");
+    const endDateControl = this.tourScheduleForm.get("endDate");
+
+    if (this.allMonthSelected) {
+      if (
+        viewDateDayJs.isSame(today, "year") &&
+        viewDateDayJs.isSame(today, "month")
+      ) {
+        startDateControl?.setValue(today.toDate());
+        endDateControl?.setValue(viewDateDayJs.endOf("month").toDate());
+      } else {
+        startDateControl?.setValue(viewDateDayJs.startOf("month").toDate());
+        endDateControl?.setValue(viewDateDayJs.endOf("month").toDate());
+      }
+    } else {
+      startDateControl?.setValue("");
+      endDateControl?.setValue("");
+    }
   }
 
   openSnackBarWithAction(
