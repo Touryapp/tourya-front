@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
 import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
+import { RequestsProvidersStatus } from '../../../shared/enums/requests-providers-status.enum';
 
 
 @Component({
@@ -15,11 +16,15 @@ export class DashboardComponent implements OnInit {
   showRequestInfoModal = false;
   showConfirmModal = false;
   showDeclineConfirmModal = false;
+  showPreApproveConfirmModal = false;
   selectedProvider: RequestProvider | null = null;
   requestInfoMessage: string = '';
   requestProviders: any = { content: [] };
   mostrarSolicitudes: boolean = false;
   declinedReason: string = '';
+
+  // Referencia al enum para usar en el template
+  readonly StatusEnum = RequestsProvidersStatus;
 
   constructor(private requestProvidersService: RequestProvidersService) { }
 
@@ -27,7 +32,6 @@ export class DashboardComponent implements OnInit {
     this.cargarSolicitudes();
     this.showGalleryFiles();
   }
-
 
   cargarSolicitudes(): void {
     this.requestProvidersService.findAll().subscribe({
@@ -41,18 +45,6 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-
-  // cargarSolicitudes(): void {
-  //   this.requestProvidersService.findAll().subscribe({
-  //     next: (solicitudes) => {
-  //       this.requestProviders = solicitudes;
-  //       console.log(this.requestProviders);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error al cargar las solicitudes:', error);
-  //     }
-  //   });
-  // }
 
   openProviderModal(provider: RequestProvider): void {
     this.requestProvidersService.consultDataById(provider.id).subscribe({
@@ -85,6 +77,29 @@ export class DashboardComponent implements OnInit {
 
   closeDeclineConfirmModal(): void {
     this.showDeclineConfirmModal = false;
+  }
+
+  openPreApproveConfirmModal(): void {
+    this.showPreApproveConfirmModal = true;
+  }
+
+  closePreApproveConfirmModal(): void {
+    this.showPreApproveConfirmModal = false;
+  }
+
+  preAprobarSolicitud(): void {
+    if (this.selectedProvider) {
+      this.requestProvidersService.preApproveRequest(this.selectedProvider.id).subscribe({
+        next: () => {
+          this.cargarSolicitudes(); // Recargar la lista después de pre-aprobar
+          this.closeModal();
+          this.closePreApproveConfirmModal();
+        },
+        error: (error) => {
+          console.error('Error al pre-aprobar la solicitud:', error);
+        }
+      });
+    }
   }
 
   aprobarSolicitud(): void {
@@ -148,6 +163,47 @@ export class DashboardComponent implements OnInit {
           console.error('Error al solicitar información:', error);
         }
       });
+    }
+  }
+
+  // Métodos para verificar el estado y mostrar botones apropiados
+  canPreApprove(): boolean {
+    const canPreApprove = this.selectedProvider?.status === 'Submitted';
+    console.log('canPreApprove:', canPreApprove, 'Status:', this.selectedProvider?.status, 'Expected: Submitted');
+    return canPreApprove;
+  }
+
+  canApprove(): boolean {
+    return this.selectedProvider?.status === RequestsProvidersStatus.DOCUMENT_SENT;
+  }
+
+  canDecline(): boolean {
+    return this.selectedProvider?.status === RequestsProvidersStatus.DOCUMENT_SENT;
+  }
+
+  canRequestInfo(): boolean {
+    return this.selectedProvider?.status === RequestsProvidersStatus.DOCUMENT_SENT;
+  }
+
+  // Método para obtener la clase CSS del badge según el estado
+  getStatusBadgeClass(status: string): string {
+    switch (status) {
+      case RequestsProvidersStatus.CREATED:
+        return 'bg-secondary';
+      case RequestsProvidersStatus.SUBMITTED:
+        return 'bg-primary';
+      case RequestsProvidersStatus.PRE_APPROVED:
+        return 'bg-info';
+      case RequestsProvidersStatus.DOCUMENT_SENT:
+        return 'bg-warning text-dark';
+      case RequestsProvidersStatus.APPROVED:
+        return 'bg-success';
+      case RequestsProvidersStatus.INCOMPLETE_INFORMATION:
+        return 'bg-warning';
+      case RequestsProvidersStatus.CANCELLED:
+        return 'bg-danger';
+      default:
+        return 'bg-secondary';
     }
   }
 

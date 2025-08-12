@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
 import { OwlOptions } from "ngx-owl-carousel-o";
+import { SearchToursDto } from "../../../../shared/dto/search-tours.dto";
 
 @Component({
   selector: "app-tour-list-view",
@@ -13,7 +14,7 @@ export class TourListViewComponent {
   public routes = routes;
   public Math = Math;
 
-  @Input() tours: TourScheduleResponseDto[] = [];
+  @Input() tours: SearchToursDto[] = [];
   @Input() loading: boolean = false;
   @Input() totalItems: number = 0;
   @Input() totalPages: number = 0;
@@ -24,6 +25,7 @@ export class TourListViewComponent {
   @Output() goToPage = new EventEmitter<number>();
   @Output() goToPreviousPage = new EventEmitter<void>();
   @Output() goToNextPage = new EventEmitter<void>();
+  @Output() selectTour = new EventEmitter<SearchToursDto>();
 
   // Favorites functionality
   isClassAdded: boolean[] = [];
@@ -55,7 +57,8 @@ export class TourListViewComponent {
   };
 
   // Helper functions
-  getLowestPrice(prices: any[] | null): string {
+  getLowestPrice(tour: SearchToursDto): string {
+    const prices = tour.slots[0].prices;
     if (!prices || prices.length === 0) {
       return "N/A";
     }
@@ -128,5 +131,10 @@ export class TourListViewComponent {
 
   isLastPage(): boolean {
     return this.currentPage === this.totalPages;
+  }
+
+  // Maneja la selección de un tour para agregarlo al carrito
+  onSelectTour(tour: SearchToursDto): void {
+    this.selectTour.emit(tour);
   }
 }

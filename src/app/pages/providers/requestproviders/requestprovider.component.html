@@ -232,7 +232,7 @@
                             <span class="fw-bold">Motivo del rechazo:</span>&nbsp;{{ dataRequestProvider.declinedReason }}
                         </div>
                     </div>
-                    <div *ngIf="dataRequestProvider.status === 'Incomplete' && dataRequestProvider.incompleteReason" class="mt-3">
+                    <div *ngIf="dataRequestProvider.status === 'Incomplete Information' && dataRequestProvider.incompleteReason" class="mt-3">
                         <div class="alert alert-warning d-flex align-items-center" role="alert">
                             <i class="isax isax-info-circle me-2"></i>
                             <span class="fw-bold">Motivo de solicitud de información:</span>&nbsp;{{ dataRequestProvider.incompleteReason }}
@@ -242,12 +242,31 @@
                     <!-- Submit Button -->
                     <div class="save">
                         <div class="d-flex align-items-center justify-content-end">
+                            <!-- Botón Submit Request (solo cuando no hay datos existentes) -->
                             <button type="submit" class="btn btn-primary"
-                                [disabled]="loading || (requestProviderForm.touched && requestProviderForm.invalid)">
+                                [disabled]="loading || (requestProviderForm.touched && requestProviderForm.invalid)"
+                                *ngIf="!isExistingData">
                                 <span>Submit Request</span>
                                 <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
                                 </div>
                             </button>
+                            
+                            <!-- Botón Submitted (cuando el status es Created) -->
+                            <button type="button" class="btn btn-success"
+                                (click)="changeToSubmitted()"
+                                [disabled]="loading || !canChangeToSubmitted"
+                                *ngIf="isExistingData && canChangeToSubmitted">
+                                <span>Submitted</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
+                                </div>
+                            </button>
+                            
+                            <!-- Mensaje cuando ya está Submitted -->
+                            <div *ngIf="isExistingData && !canChangeToSubmitted && dataRequestProvider.status === 'Submitted'" 
+                                 class="alert alert-success mb-0">
+                                <i class="isax isax-tick-circle me-2"></i>
+                                <strong>Status: Submitted</strong> - Tu solicitud ha sido enviada correctamente.
+                            </div>
                         </div>
                     </div>
 
@@ -266,8 +285,8 @@
                         </div>
                     </div>
 
-                    <!-- Panel de carga de archivos solo si isExistingData es true y status es Pending o Incomplete (dataRequestProvider.status === 'Pending' || dataRequestProvider.status === 'Incomplete')-->
-                    <div class="card shadow-none" id="gallery" *ngIf="isExistingData">
+                    <!-- Panel de carga de archivos solo si isExistingData es true y status es Pre-Approved -->
+                    <div class="card shadow-none" id="gallery" *ngIf="shouldShowGalleryPanel()">
                         <div class="card-header">
                             <h5 class="fs-18">Documents</h5>
                         </div>
@@ -333,6 +352,7 @@
                                                             [class.btn-danger]="docType.mandatory"
                                                             [class.btn-secondary]="!docType.mandatory"
                                                             (click)="triggerFileInput(docType.id)"
+                                                            [disabled]="dataRequestProvider.status !== 'Pre-Approved'"
                                                             >
                                                             <i class="isax isax-document-upload me-2"></i>
                                                             Cargar {{ docType.name }}
@@ -368,7 +388,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-info"
                                                                 (click)="openFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-eye me-1"></i>
                                                                 Ver archivo
                                                             </button>
@@ -376,7 +396,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-primary"
                                                                 (click)="triggerFileInput(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-refresh me-1"></i>
                                                                 Cambiar {{ docType.name }}
                                                             </button>
@@ -384,7 +404,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-danger"
                                                                 (click)="removeDocumentFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-trash me-1"></i>
                                                                 Eliminar
                                                             </button>
@@ -396,7 +416,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-primary"
                                                                 (click)="triggerFileInput(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-refresh me-1"></i>
                                                                 Cambiar {{ docType.name }}
                                                             </button>
@@ -404,7 +424,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-danger"
                                                                 (click)="removeDocumentFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pending' && dataRequestProvider.status !== 'Incomplete'">
+                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-trash me-1"></i>
                                                                 Eliminar
                                                             </button>

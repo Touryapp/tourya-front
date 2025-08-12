@@ -67,6 +67,10 @@ export class RequestproviderComponent implements OnInit {
   
   // Variable para almacenar el ID del request provider
   requestProviderById: number | null = null;
+  
+  // Variable para controlar si se puede cambiar a Submitted
+  canChangeToSubmitted: boolean = false;
+  
   constructor(
     private fb: FormBuilder,
     private countryService: CountryService,
@@ -333,6 +337,9 @@ export class RequestproviderComponent implements OnInit {
             this.dataRequestProvider.incompleteReason = data.incompleteReason;
             // Guardar el ID del request provider para usar en saveGallery
             this.requestProviderById = data.id;
+            
+            // Verificar si se puede cambiar a Submitted (solo cuando el status es Created)
+            this.canChangeToSubmitted = data.status === 'Created';
             
             // Cargar departamentos y ciudades antes de llenar el formulario
             await new Promise((resolve) => {
@@ -681,6 +688,11 @@ export class RequestproviderComponent implements OnInit {
     return '';
   }
 
+  // Verifica si se debe mostrar el panel de carga de archivos
+  shouldShowGalleryPanel(): boolean {
+    return this.isExistingData && this.dataRequestProvider.status === 'Pre-Approved';
+  }
+
   // Abre el archivo en una nueva pestaña
   openFile(docTypeId: number): void {
     console.log(`🔍 Intentando abrir archivo para documentTypeId: ${docTypeId}`);
@@ -708,6 +720,60 @@ export class RequestproviderComponent implements OnInit {
       console.warn(`⚠️ URL vacía o inválida para el documento ${docTypeId}: "${fileUrl}"`);
       alert('La URL del archivo no está disponible o es inválida.');
     }
+  }
+
+  // Método para cambiar el status a Submitted
+  changeToSubmitted(): void {
+    if (!this.requestProviderById) {
+      console.warn('No hay requestProviderById disponible');
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+
+    console.log(`🚀 Intentando cambiar status a Submitted para ID: ${this.requestProviderById}`);
+
+    // Llamar al servicio para cambiar el status a Submitted
+    this.requestProviderService.submittedRequest(this.requestProviderById).subscribe({
+      next: (response: any) => {
+        console.log('✅ Status cambiado a Submitted exitosamente:', response);
+        this.loading = false;
+        this.successMessage = 'Status cambiado a Submitted exitosamente.';
+        
+        // Actualizar el status local
+        this.dataRequestProvider.status = 'Submitted';
+        this.canChangeToSubmitted = false;
+        
+        // Recargar la página después de 2 segundos
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      },
+      error: (error: any) => {
+        console.error('❌ Error al cambiar status a Submitted:', error);
+        console.error('❌ Detalles del error:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          url: error.url,
+          body: error.error
+        });
+        
+        this.loading = false;
+        
+        // Mostrar mensaje de error más específico
+        if (error.status === 404) {
+          this.errorMessage = 'Endpoint no encontrado. Verifica que el backend tenga el endpoint /user/send';
+        } else if (error.status === 500) {
+          this.errorMessage = 'Error interno del servidor. Contacta al administrador.';
+        } else if (error.status === 403) {
+          this.errorMessage = 'No tienes permisos para realizar esta acción.';
+        } else {
+          this.errorMessage = `Error al cambiar el status (${error.status}): ${error.message || 'Error desconocido'}`;
+        }
+      }
+    });
   }
 
   

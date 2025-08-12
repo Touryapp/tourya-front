@@ -1,6 +1,9 @@
 export enum RequestsProvidersStatus {
-    PENDING = 'Pending',
+    CREATED = 'Created',
+    SUBMITTED = 'Submitted',
+    PRE_APPROVED = 'Pre-Approved',
+    DOCUMENT_SENT = 'Documents Sent',
     APPROVED = 'Approved',
-    DECLINED = 'Declined',
-    INCOMPLETE = 'Incomplete'
+    INCOMPLETE_INFORMATION = 'Incomplete Information',
+    CANCELLED = 'Cancelled'
 }

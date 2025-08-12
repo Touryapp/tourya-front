@@ -40,6 +40,11 @@ export class RequestProvidersService {
     return this.http.put<any>(`${this.baseUrl}/admin/approve/${requestProviderById}`, {});
   }
 
+  // Endpoint para pre-aprobar solicitud (admin)
+  preApproveRequest(requestProviderById: number): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/admin/pre-approve/${requestProviderById}`, {});
+  }
+
   // Endpoint para rechazar solicitud (admin)
   declineRequest(requestProviderById: number, declinedReason: string): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/admin/decline/${requestProviderById}`, { declinedReason: declinedReason });
@@ -75,6 +80,11 @@ export class RequestProvidersService {
   // Endpoint para buscar tours por horarios
   searchTours(body: Partial<SearchTourListDto>): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/public/tours/schedule/search`, body);
+  }
+
+  // Endpoint para cambiar status a Submitted
+  submittedRequest(requestProviderById: number): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/user/send`, { requestProviderById: requestProviderById });
   }
 
  }

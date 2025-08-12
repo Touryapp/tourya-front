@@ -8,12 +8,16 @@ import { ListToursComponent } from "./list-tours.component";
 import { SharedModule } from "../../../shared/shared-module";
 import { TourListViewComponent } from "./tour-list-view/tour-list-view.component";
 import { TourGridViewComponent } from "./tour-grid-view/tour-grid-view.component";
+import { TourSlotSelectionModalComponent } from "../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component";
+import { FloatingCartComponent } from "../../../shared/common/floating-cart/floating-cart.component";
 
 @NgModule({
   declarations: [
     ListToursComponent,
     TourListViewComponent,
     TourGridViewComponent,
+    TourSlotSelectionModalComponent,
+    FloatingCartComponent,
   ],
   imports: [
     CommonModule,

@@ -212,7 +212,7 @@ export class DefaultHeaderComponent {
 
   redirectByRole() {
     const requestProviderStatus = this.authService.getRequestProviderStatus();
-    if (this.isUser && !this.isProvider && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
+    if (this.isUser && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
       this.router.navigate(["/providers/requestproviders"]);
     } else if (this.isProvider && requestProviderStatus === RequestsProvidersStatus.APPROVED) {
       this.router.navigate(["providers"]);

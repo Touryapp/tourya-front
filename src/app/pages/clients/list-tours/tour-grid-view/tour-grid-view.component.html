@@ -12,96 +12,65 @@
 
     <!-- Tours Grid -->
     <div class="col-xxl-4 col-md-6 d-flex" *ngFor="let tour of tours; let i = index">
-        <div class="place-item mb-4 flex-fill">
-            <div class="place-img">
+        <div class="tour-card mb-4 flex-fill">
+            <div class="tour-card-img-wrapper">
                 <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
                     <ng-template carouselSlide *ngFor="let image of tour.gallery; let imgIndex = index">
                         <div class="slide-images">
                             <a [routerLink]="routes.tourDetails">
-                                <img [src]="image.imageUrl || 'assets/img/tours/tours-07.jpg'" class="img-fluid" [alt]="image.description || 'Tour image'">
+                                <img [src]="image.imageUrl || 'assets/img/tours/tours-07.jpg'" class="tour-card-img" [alt]="image.description || 'Tour image'">
                             </a>
                         </div>
                     </ng-template>
-                    <!-- Fallback image if no gallery -->
                     <ng-template carouselSlide *ngIf="!tour.gallery || tour.gallery.length === 0">
                         <div class="slide-images">
                             <a [routerLink]="routes.tourDetails">
-                                <img src="assets/img/tours/tours-07.jpg" class="img-fluid" alt="Tour image">
+                                <img src="assets/img/tours/tours-07.jpg" class="tour-card-img" alt="Tour image">
                             </a>
                         </div>
                     </ng-template>
                 </owl-carousel-o>
-                <div class="fav-item">
-                    <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[i] }" (click)="onToggleFavorite(i)">
-                        <i class="isax isax-heart5"></i>
-                    </a>
-                    <span class="badge bg-info d-inline-flex align-items-center" *ngIf="tour.schedule?.status === 'ACTIVE'">
-                        <i class="isax isax-ranking me-1"></i>Disponible
-                    </span>
-                </div>
+                <span class="tour-badge" *ngIf="tour.schedule?.status === 'ACTIVE'">Trending</span>
+                <button class="tour-fav-btn" [ngClass]="{ selected: isClassAdded[i] }" (click)="onToggleFavorite(i)"><i class="fa fa-heart"></i></button>
             </div>
-            <div class="place-content">
+            <div class="tour-card-body">
                 <div class="d-flex align-items-center justify-content-between mb-1">
                     <div class="d-flex flex-wrap align-items-center">
                         <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                        <p class="fs-14 text-gray-9">{{ tour.tour?.name || 'N/A' }}</p>
+                        <p class="fs-14 text-gray-9 mb-0">{{ tour.tour.name || 'N/A' }}</p>
                     </div>
-                    <span class="d-inline-block border vertical-splits">
-                        <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
-                    </span>
                     <div class="d-flex align-items-center flex-wrap">
-                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{ tour.tour?.rating || 'N/A' }}</span>
-                        <p class="fs-14">({{ tour.tour?.rating ? 'Reviews' : 'Sin reviews' }})</p>
+                        <span class="tour-card-rating">
+                            <i class="fa fa-star" *ngFor="let star of getStars(tour.tour.rating)"></i>
+                            <span>{{ tour.tour.rating || 'N/A' }}</span>
+                        </span>
                     </div>
                 </div>
-                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">{{ tour.tour?.name || 'N/A' }}</a></h5>
-                <p class="d-flex align-items-center mb-3">
-                    <i class="isax isax-location5 me-2"></i>
-                    {{ tour.address?.city || 'N/A' }}, {{ tour.address?.state || 'N/A' }}
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">{{ tour.tour.name || 'N/A' }}</a></h5>
+                <p class="d-flex align-items-center mb-3 tour-card-location">
+                    <i class="fa fa-map-marker-alt me-2"></i>
+                    {{ tour.address.city || 'N/A' }}, {{ tour.address.address || 'N/A' }}
                 </p>
-                <div class="mb-3">
+                <div class="mb-2">
                     <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">
                         Precio desde 
-                        <span class="ms-1 fs-18 fw-semibold text-primary">
-                            {{ getLowestPrice(tour.prices) }}
-                        </span>
+                        <span class="ms-1 fs-18 fw-semibold text-primary"> {{ getLowestPrice(tour) }}</span>
                     </h6>
                 </div>
-                <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                    <div class="d-flex flex-wrap align-items-center me-2">
-                        <span class="me-1"><i class="isax isax-calendar-tick text-gray-6"></i></span>
-                        <p class="fs-14 text-gray-9">{{ tour.tour?.duration || 'N/A' }}</p>
-                    </div>
-                    <span class="d-inline-block border vertical-splits">
-                        <span class="bglight text-light d-flex align-items-center justify-content-center"></span>
+                <div class="mb-3 tour-card-info">
+                    <span class="tour-card-date">
+                        <i class="fa fa-calendar-alt me-1"></i>
+                        {{ formatDate(tour.schedule.scheduleDate || null) }}
                     </span>
-                    <div class="ms-2 d-flex align-items-center">
-                        <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                            <i class="isax isax-profile-2user me-1"></i>
-                            {{ tour.schedule?.maxCapacity || 'N/A' }} Personas
-                        </p>
-                        <a href="javascript:void(0);" class="avatar avatar-sm ms-3">
-                            <img src="assets/img/users/user-08.jpg" class="rounded-circle" alt="img">
-                        </a>
-                    </div>
+                    <span class="tour-card-guests"><i class="fa fa-user-friends me-1"></i> {{ tour.schedule.maxCapacity || 'N/A' }}</span>
                 </div>
-                <!-- Información adicional del horario -->
-                <div class="mt-2 pt-2 border-top" *ngIf="tour.schedule">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">
-                            <i class="isax isax-clock me-1"></i>
-                            {{ formatTime(tour.schedule.startTime) }} - {{ formatTime(tour.schedule.endTime) }}
-                        </small>
-                        <small class="text-muted">
-                            <i class="isax isax-calendar me-1"></i>
-                            {{ formatDate(tour.schedule.scheduleDate) }}
-                        </small>
-                    </div>
-                    <div class="mt-1" *ngIf="tour.schedule.reservedCapacity !== null">
-                        <small class="text-muted">
-                            Reservados: {{ tour.schedule.reservedCapacity }}/{{ tour.schedule.maxCapacity || '∞' }}
-                        </small>
-                    </div>
+                <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
+                    <button type="button" 
+                            class="btn btn-primary btn-sm w-100"
+                            (click)="onSelectTour(tour)">
+                        <i class="isax isax-calendar-add me-1"></i>
+                        Agregar al Itinerario
+                    </button>
                 </div>
             </div>
         </div>

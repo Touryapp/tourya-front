@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { HostListener } from '@angular/core';
 import { routes } from "../../../shared/routes/routes";
 import { ActivatedRoute } from '@angular/router';
-import { SearchTourListDto, TourScheduleResponseDto, PaginatedTourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
-import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
+import { SearchTourListDto } from '../../../shared/dto/search-tour-response.dto';
 import { State } from '../../../shared/dto/requestProvider-response.dto';
 import { TourCategory } from '../../../shared/dto/tour-response.dto';
 import { environment } from '../../../../environments/environment';
+import { SearchToursDto } from '../../../shared/dto/search-tours.dto';
+import { PaginationDto } from '../../../shared/dto/pagination.dto';
+import { SearchToursService } from './search-tours.service';
+import { CartService } from '../../../shared/services/cart.service';
+import { CartItem, DaySelection, CartSummary } from '../../../shared/dto/cart.dto';
+import { TourSlotSelectionModalComponent } from '../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-list-tours',
@@ -15,9 +20,17 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './list-tours.component.html',
   styleUrl: './list-tours.component.scss'
 })
-export class ListToursComponent implements OnInit {
+export class ListToursComponent implements OnInit, OnDestroy {
+  @ViewChild(TourSlotSelectionModalComponent) slotModal!: TourSlotSelectionModalComponent;
+  
   public routes = routes;
   public Math = Math; // Para usar Math en el template
+  
+  // Cart functionality
+  private destroy$ = new Subject<void>();
+  isCartVisible: boolean = false;
+  cartSummary: CartSummary | null = null;
+  daySelections: DaySelection[] = [];
   
   // Date picker
   bsValue = new Date();
@@ -70,7 +83,7 @@ export class ListToursComponent implements OnInit {
   ];
 
   // Tours data (ahora será llenado por la API)
-  tours: TourScheduleResponseDto[] = [];
+  tours: SearchToursDto[] = [];
   loading: boolean = false;
 
   public states: State[] =  [{id: 1, name: 'Bogota'}];
@@ -118,17 +131,49 @@ export class ListToursComponent implements OnInit {
   constructor(
     private fb: FormBuilder, 
     private route: ActivatedRoute,
-    private requestProvidersService: RequestProvidersService
+    private searchToursService: SearchToursService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
+    this.initializeCartSubscriptions();
+    
     this.route.queryParams.subscribe(params => {
       this.selectedState = params['state'] || '';
       this.selectedCategory = params['category'] || '';
       this.checkIn = params['checkIn'] || '';
       this.checkOut = params['checkOut'] || '';
+      
+      // Initialize cart with dates if available
+      if (this.checkIn && this.checkOut) {
+        console.log('Inicializando carrito con fechas:', this.checkIn, this.checkOut);
+        this.cartService.initializeCart(this.checkIn, this.checkOut);
+        this.isCartVisible = true;
+      }
+      
       this.searchToursList();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initializeCartSubscriptions(): void {
+    // Subscribe to cart summary
+    this.cartService.cartSummary$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(summary => {
+        this.cartSummary = summary;
+      });
+
+    // Subscribe to day selections
+    this.cartService.daySelections$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(days => {
+        this.daySelections = days;
+      });
   }
 
   // Show more/less functionality
@@ -289,6 +334,19 @@ export class ListToursComponent implements OnInit {
   }
 
   onSearch(): void {
+    console.log('=== BÚSQUEDA PRINCIPAL ===');
+    console.log('Estado seleccionado:', this.selectedState);
+    console.log('Categoría seleccionada:', this.selectedCategory);
+    console.log('Fecha de entrada:', this.checkIn);
+    console.log('Fecha de salida:', this.checkOut);
+    
+    // Inicializar el carrito si hay fechas válidas
+    if (this.checkIn && this.checkOut) {
+      console.log('Inicializando carrito desde búsqueda principal');
+      this.cartService.initializeCart(this.checkIn, this.checkOut);
+      this.isCartVisible = true;
+    }
+    
     this.currentPage = 1;
     this.page = 1;
     this.searchToursList();
@@ -307,6 +365,9 @@ export class ListToursComponent implements OnInit {
     console.log('Precio máximo:', this.maxPrice);
     console.log('Texto de búsqueda:', this.searchText);
     
+    //setear el checkin y checkout en el carrito
+    this.cartService.initializeCart(this.checkIn, this.checkOut);
+    this.isCartVisible = true;
     // Resetear a la primera página
     this.currentPage = 1;
     this.page = 1;
@@ -386,31 +447,17 @@ export class ListToursComponent implements OnInit {
     console.log('Objeto completo de búsqueda:', searchData);
     console.log('URL de la petición:', 'searchTours endpoint');
   
-    this.requestProvidersService.searchTours(searchData).subscribe({
-      next: (response: any) => {
+    this.searchToursService.searchTours(searchData).subscribe({
+      next: (response: PaginationDto<SearchToursDto>) => {
         console.log('=== RESPUESTA DE LA API ===');
         console.log('Respuesta completa de searchTours:', response);
         
-        // Manejar tanto respuesta paginada como array simple
         if (response && response.content) {
-          // Respuesta paginada
           this.tours = response.content || [];
           this.totalItems = response.totalElements || 0;
           this.totalPages = response.totalPages || 0;
-          this.currentPage = response.number + 1; // La API usa base 0, nosotros base 1
-        } else if (Array.isArray(response)) {
-          // Respuesta como array simple
-          this.tours = response;
-          this.totalItems = response.length;
-          this.totalPages = Math.ceil(response.length / this.size);
-          this.currentPage = 1;
-        } else {
-          // Respuesta vacía o inválida
-          this.tours = [];
-          this.totalItems = 0;
-          this.totalPages = 0;
-          this.currentPage = 1;
-        }
+          this.currentPage = response.number + 1; 
+        } 
         
         console.log('=== RESULTADOS PROCESADOS ===');
         console.log('Cantidad de resultados:', this.tours.length);
@@ -419,6 +466,18 @@ export class ListToursComponent implements OnInit {
         console.log('Página actual:', this.currentPage);
         
         this.loading = false;
+        
+        // Update cart with available tours for each day
+        if (this.isCartVisible) {
+          console.log('Actualizando tours disponibles por día. Total tours:', this.tours.length);
+          this.cartService.updateAvailableToursForDays(this.tours);
+        } else if (this.checkIn && this.checkOut && this.tours.length > 0) {
+          // Si hay fechas y tours pero el carrito no es visible, forzar inicialización
+          console.log('Forzando inicialización del carrito desde searchToursList');
+          this.cartService.initializeCart(this.checkIn, this.checkOut);
+          this.isCartVisible = true;
+          this.cartService.updateAvailableToursForDays(this.tours);
+        }
       },
       error: (error: any) => {
         console.error('=== ERROR EN LA BÚSQUEDA ===');
@@ -431,5 +490,113 @@ export class ListToursComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  // ==================== CART FUNCTIONALITY ====================
+
+  /**
+   * Maneja la selección de un día en el carrito
+   */
+  onDaySelected(dayDate: string): void {
+    console.log('Día seleccionado:', dayDate);
+    
+    // Find tours available for this day
+    const toursForDay = this.tours.filter(tour => {
+      const tourDate = new Date(tour.schedule.scheduleDate).toISOString().split('T')[0];
+      return tourDate === dayDate;
+    });
+
+    if (toursForDay.length === 0) {
+      console.warn('No hay tours disponibles para el día seleccionado');
+      return;
+    }
+
+    // If there's only one tour, open modal directly
+    if (toursForDay.length === 1) {
+      this.openSlotSelectionModal(toursForDay[0], dayDate);
+      return;
+    }
+
+    // If multiple tours, you could show a tour selection step first
+    // For now, let's open modal with the first tour as an example
+    this.openSlotSelectionModal(toursForDay[0], dayDate);
+  }
+
+  /**
+   * Abre el modal para seleccionar slot de un tour
+   */
+  openSlotSelectionModal(tour: SearchToursDto, dayDate: string): void {
+    if (this.slotModal) {
+      this.slotModal.openModal(tour, dayDate);
+    } else {
+      console.warn('Modal component not available');
+    }
+  }
+
+  /**
+   * Maneja cuando se agrega un tour al carrito
+   */
+  onTourAddedToCart(cartItem: CartItem): void {
+    console.log('Tour agregado al carrito:', cartItem);
+    console.log('Estado del carrito visible:', this.isCartVisible);
+    
+    // Asegurar que el carrito sea visible
+    if (!this.isCartVisible && this.checkIn && this.checkOut) {
+      console.log('Forzando visibilidad del carrito');
+      this.isCartVisible = true;
+    }
+    
+    // Forzar actualización de datos del carrito después de agregar
+    setTimeout(() => {
+      if (this.isCartVisible) {
+        this.cartService.updateAvailableToursForDays(this.tours);
+      }
+      this.debugCartState();
+    }, 100);
+  }
+
+  /**
+   * Maneja el toggle del carrito
+   */
+  onCartToggled(isExpanded: boolean): void {
+    console.log('Carrito toggled:', isExpanded);
+  }
+
+  /**
+   * Maneja la limpieza del carrito
+   */
+  onCartCleared(): void {
+    console.log('Carrito limpiado');
+    // Aquí podríamos mostrar una notificación de confirmación
+  }
+
+  /**
+   * Selecciona un tour específico (método auxiliar para integración futura)
+   */
+  selectTour(tour: SearchToursDto): void {
+    const tourDate = new Date(tour.schedule.scheduleDate).toISOString().split('T')[0];
+    this.openSlotSelectionModal(tour, tourDate);
+  }
+
+  /**
+   * Maneja el cierre del modal
+   */
+  onModalClosed(): void {
+    console.log('Modal cerrado');
+    this.debugCartState();
+  }
+
+  /**
+   * Debug para verificar el estado del carrito
+   */
+  private debugCartState(): void {
+    console.log('=== DEBUG CART STATE ===');
+    console.log('isCartVisible:', this.isCartVisible);
+    console.log('checkIn:', this.checkIn);
+    console.log('checkOut:', this.checkOut);
+    console.log('daySelections:', this.daySelections);
+    console.log('cartSummary:', this.cartSummary);
+    console.log('tours length:', this.tours.length);
+    console.log('=========================');
   }
 } 
