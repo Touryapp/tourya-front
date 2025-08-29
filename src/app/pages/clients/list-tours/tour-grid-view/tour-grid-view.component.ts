@@ -1,19 +1,19 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { routes } from '../../../../shared/routes/routes';
-import { OwlOptions } from 'ngx-owl-carousel-o';
-import { SearchToursDto } from '../../../../shared/dto/search-tours.dto';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { routes } from "../../../../shared/routes/routes";
+import { OwlOptions } from "ngx-owl-carousel-o";
+import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
 
 @Component({
-  selector: 'app-tour-grid-view',
+  selector: "app-tour-grid-view",
   standalone: false,
-  templateUrl: './tour-grid-view.component.html',
-  styleUrls: ['./tour-grid-view.component.scss']
+  templateUrl: "./tour-grid-view.component.html",
+  styleUrls: ["./tour-grid-view.component.scss"],
 })
 export class TourGridViewComponent {
   public routes = routes;
   public Math = Math;
 
-  @Input() tours: SearchToursDto[] = [];
+  @Input() tours: TourScheduleResponseDto[] = [];
   @Input() loading: boolean = false;
   @Input() totalItems: number = 0;
   @Input() totalPages: number = 0;
@@ -24,7 +24,7 @@ export class TourGridViewComponent {
   @Output() goToPage = new EventEmitter<number>();
   @Output() goToPreviousPage = new EventEmitter<void>();
   @Output() goToNextPage = new EventEmitter<void>();
-  @Output() selectTour = new EventEmitter<SearchToursDto>();
+  @Output() selectTour = new EventEmitter<TourScheduleResponseDto>();
 
   // Favorites functionality
   isClassAdded: boolean[] = [];
@@ -37,46 +37,46 @@ export class TourGridViewComponent {
     pullDrag: true,
     dots: false,
     navSpeed: 700,
-    navText: ['', ''],
+    navText: ["", ""],
     responsive: {
       0: {
-        items: 1
+        items: 1,
       },
       400: {
-        items: 1
+        items: 1,
       },
       740: {
-        items: 1
+        items: 1,
       },
       940: {
-        items: 1
-      }
+        items: 1,
+      },
     },
-    nav: true
+    nav: true,
   };
 
   // Helper functions
-  getLowestPrice(tour: SearchToursDto): string {
-    const prices = tour.slots[0].prices;
+  getLowestPrice(tour: TourScheduleResponseDto): string {
+    const prices = tour.schedules;
     if (!prices || prices.length === 0) {
-      return 'N/A';
+      return "N/A";
     }
-    const lowestPrice = Math.min(...prices.map(p => p.price));
-    return `$${lowestPrice}`;
+    // const lowestPrice = Math.min(...prices.map((p) => p.price));
+    return `$$`;
   }
 
   formatDate(dateString: string | null): string {
-    if (!dateString) return 'N/A';
+    if (!dateString) return "N/A";
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES');
+      return date.toLocaleDateString("es-ES");
     } catch {
-      return 'N/A';
+      return "N/A";
     }
   }
 
   formatTime(timeString: string | null): string {
-    if (!timeString) return 'N/A';
+    if (!timeString) return "N/A";
     return timeString;
   }
 
@@ -100,24 +100,27 @@ export class TourGridViewComponent {
   getPageNumbers(): number[] {
     const pages: number[] = [];
     const maxVisiblePages = 5;
-    
+
     if (this.totalPages <= maxVisiblePages) {
       for (let i = 1; i <= this.totalPages; i++) {
         pages.push(i);
       }
     } else {
-      let start = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+      let start = Math.max(
+        1,
+        this.currentPage - Math.floor(maxVisiblePages / 2)
+      );
       let end = Math.min(this.totalPages, start + maxVisiblePages - 1);
-      
+
       if (end - start < maxVisiblePages - 1) {
         start = Math.max(1, end - maxVisiblePages + 1);
       }
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
     }
-    
+
     return pages;
   }
 
@@ -131,13 +134,14 @@ export class TourGridViewComponent {
 
   // Devuelve un array para mostrar estrellas según el rating
   getStars(rating: number | string | null | undefined): any[] {
-    const value = typeof rating === 'number' ? rating : parseFloat(rating || '0');
+    const value =
+      typeof rating === "number" ? rating : parseFloat(rating || "0");
     const stars = Math.round(value) || 0;
     return Array(stars).fill(0);
   }
 
   // Maneja la selección de un tour para agregarlo al carrito
-  onSelectTour(tour: SearchToursDto): void {
+  onSelectTour(tour: TourScheduleResponseDto): void {
     this.selectTour.emit(tour);
   }
 }

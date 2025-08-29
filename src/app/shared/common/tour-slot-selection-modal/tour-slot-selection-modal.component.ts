@@ -1,27 +1,44 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SearchToursDto } from '../../dto/search-tours.dto';
-import { CartItem, SlotWithPrices, ParticipantSelection } from '../../dto/cart.dto';
-import { CartService } from '../../services/cart.service';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+  Inject,
+} from "@angular/core";
+import {
+  CartItem,
+  SlotWithPrices,
+  ParticipantSelection,
+} from "../../dto/cart.dto";
+import { CartService } from "../../services/cart.service";
+import { OwlOptions } from "ngx-owl-carousel-o";
+import dayjs from "dayjs";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import {
+  SlotDto,
+  TourScheduleResponseDto,
+} from "../../dto/search-tour-response.dto";
+import { SearchToursService } from "../../../pages/clients/list-tours/search-tours.service";
 
 @Component({
-  selector: 'app-tour-slot-selection-modal',
+  selector: "app-tour-slot-selection-modal",
   standalone: false,
-  templateUrl: './tour-slot-selection-modal.component.html',
-  styleUrls: ['./tour-slot-selection-modal.component.scss']
+  templateUrl: "./tour-slot-selection-modal.component.html",
+  styleUrls: ["./tour-slot-selection-modal.component.scss"],
 })
-export class TourSlotSelectionModalComponent implements OnInit {
-  @Output() tourAdded = new EventEmitter<CartItem>();
-  @Output() modalClosed = new EventEmitter<void>();
-
+export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   // Modal state
   showModal: boolean = false;
 
   // Tour data
-  selectedTour: SearchToursDto | null = null;
-  selectedDay: string = '';
-  availableSlots: SlotWithPrices[] = [];
-  selectedSlot: SlotWithPrices | null = null;
+  selectedTour: TourScheduleResponseDto | null = null;
+  selectedDay: string = "";
+  availableSlots: SlotDto[] = [];
+  selectedSlot: SlotDto | null = null;
   participants: ParticipantSelection[] = [];
+  dates: Date[] = [];
+  selectedDate: Date | null = null;
 
   // Validation
   isValid: boolean = false;
@@ -29,30 +46,98 @@ export class TourSlotSelectionModalComponent implements OnInit {
   totalParticipants: number = 0;
   totalPrice: number = 0;
 
+  customOptions: OwlOptions = {
+    loop: false,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: true,
+    dots: false,
+    navSpeed: 700,
+    navText: [],
+    responsive: {
+      0: {
+        items: 1,
+      },
+      400: {
+        items: 2,
+      },
+      740: {
+        items: 3,
+      },
+      940: {
+        items: 4,
+      },
+    },
+    nav: false,
+  };
+
   constructor(
-    private cartService: CartService
-  ) {}
+    private cartService: CartService,
+    private readonly searchToursService: SearchToursService,
+    public dialogRef: MatDialogRef<TourSlotSelectionModalComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      tour: TourScheduleResponseDto;
+      dayDate: string;
+      checkIn: string;
+      checkOut: string;
+      tourAdded: (cartItem: CartItem) => void;
+    }
+  ) {
+    this.selectedTour = data.tour;
+    this.selectedDay = data.dayDate;
+    // this.availableSlots = this.cartService.convertToSlotsWithPrices(data.tour);
 
-  ngOnInit(): void {}
-
-  /**
-   * Abre el modal para seleccionar slot
-   */
-  openModal(tour: SearchToursDto, dayDate: string): void {
-    this.selectedTour = tour;
-    this.selectedDay = dayDate;
-    this.availableSlots = this.cartService.convertToSlotsWithPrices(tour);
     this.resetSelection();
     this.showModal = true;
   }
 
-  /**
-   * Cierra el modal
-   */
-  closeModal(): void {
-    this.showModal = false;
-    this.resetSelection();
-    this.modalClosed.emit();
+  ngOnInit(): void {
+    this.searchToursService
+      .searchTours({
+        tourId: this.selectedTour?.tour?.id,
+      })
+      .subscribe((data) => {
+        if (data && data.content) {
+          this.selectedTour = data.content[0];
+
+          const startDateDayjs = dayjs(this.data.checkIn, "YYYY-MM-DD");
+          const endDateDayjs = dayjs(this.data.checkOut, "YYYY-MM-DD");
+
+          if (startDateDayjs.isValid() && endDateDayjs.isValid()) {
+            this.dates = this.generateDateRange(
+              startDateDayjs.toDate(),
+              endDateDayjs.toDate()
+            );
+
+            const scheduleDates = this.selectedTour.schedules.map(
+              (schedule) => {
+                return dayjs(schedule.scheduleDate).format("YYYY-MM-DD");
+              }
+            );
+
+            this.dates = this.dates.filter((date) => {
+              const dateString = dayjs(date).format("YYYY-MM-DD");
+              return scheduleDates.includes(dateString);
+            });
+
+            this.selectedDate =
+              this.dates.find((date) => {
+                return dayjs(date).format("YYYY-MM-DD") === this.data.dayDate;
+              }) || this.dates[0]; // Set default selected date
+
+            this.updateAvailableSlots();
+          }
+        }
+      });
+  }
+
+  ngAfterViewInit() {
+    this.dialogRef.afterOpened().subscribe(() => {
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 0);
+    });
   }
 
   /**
@@ -68,19 +153,36 @@ export class TourSlotSelectionModalComponent implements OnInit {
   }
 
   /**
+   * Close modal
+   */
+  closeModal() {
+    this.dialogRef.close();
+  }
+
+  /**
    * Selecciona un slot
    */
-  selectSlot(slot: SlotWithPrices): void {
+  selectSlot(slot: SlotDto): void {
     this.selectedSlot = slot;
-    this.participants = this.cartService.createParticipantSelections(slot.prices);
+    if (slot.prices) {
+      this.participants = this.cartService.createParticipantSelections(
+        slot.prices
+      );
+    }
     this.updateValidation();
   }
 
   /**
    * Actualiza la cantidad de participantes
    */
-  updateParticipantQuantity(participant: ParticipantSelection, quantity: number): void {
-    participant.quantity = Math.max(0, Math.min(quantity, participant.maxQuantity));
+  updateParticipantQuantity(
+    participant: ParticipantSelection,
+    quantity: number
+  ): void {
+    participant.quantity = Math.max(
+      0,
+      Math.min(quantity, participant.maxQuantity)
+    );
     this.updateTotals();
     this.updateValidation();
   }
@@ -89,7 +191,10 @@ export class TourSlotSelectionModalComponent implements OnInit {
    * Incrementa la cantidad de participantes
    */
   incrementParticipant(participant: ParticipantSelection): void {
-    if (participant.quantity < participant.maxQuantity && this.canAddParticipant()) {
+    if (
+      participant.quantity < participant.maxQuantity &&
+      this.canAddParticipant()
+    ) {
       participant.quantity++;
       this.updateTotals();
       this.updateValidation();
@@ -119,7 +224,10 @@ export class TourSlotSelectionModalComponent implements OnInit {
    * Actualiza los totales
    */
   private updateTotals(): void {
-    this.totalParticipants = this.participants.reduce((sum, p) => sum + p.quantity, 0);
+    this.totalParticipants = this.participants.reduce(
+      (sum, p) => sum + p.quantity,
+      0
+    );
     this.totalPrice = this.cartService.calculateTotalPrice(this.participants);
   }
 
@@ -130,25 +238,32 @@ export class TourSlotSelectionModalComponent implements OnInit {
     this.validationErrors = [];
 
     if (!this.selectedSlot) {
-      this.validationErrors.push('Debe seleccionar un horario');
+      this.validationErrors.push("Debe seleccionar un horario");
       this.isValid = false;
       return;
     }
 
     if (this.totalParticipants === 0) {
-      this.validationErrors.push('Debe agregar al menos un participante');
+      this.validationErrors.push("Debe agregar al menos un participante");
       this.isValid = false;
       return;
     }
 
-    if (this.totalParticipants < this.selectedSlot.minCapacity) {
-      this.validationErrors.push(`Mínimo ${this.selectedSlot.minCapacity} participantes requeridos`);
+    if (
+      this.selectedSlot.minCapacity &&
+      this.totalParticipants < this.selectedSlot.minCapacity
+    ) {
+      this.validationErrors.push(
+        `Mínimo ${this.selectedSlot.minCapacity} participantes requeridos`
+      );
       this.isValid = false;
       return;
     }
 
     if (this.totalParticipants > this.selectedSlot.maxCapacity) {
-      this.validationErrors.push(`Máximo ${this.selectedSlot.maxCapacity} participantes permitidos`);
+      this.validationErrors.push(
+        `Máximo ${this.selectedSlot.maxCapacity} participantes permitidos`
+      );
       this.isValid = false;
       return;
     }
@@ -164,33 +279,40 @@ export class TourSlotSelectionModalComponent implements OnInit {
       return;
     }
 
+    const dayDate = this.selectedDate
+      ? dayjs(this.selectedDate).format("YYYY-MM-DD")
+      : "";
+
     const cartItem: CartItem = {
       id: this.cartService.generateCartItemId(),
-      dayDate: this.selectedDay,
-      tour: this.selectedTour.tour,
-      schedule: this.selectedTour.schedule,
+      dayDate,
+      tour: {
+        ...this.selectedTour.tour,
+        duration: this.selectedTour?.tour?.duration?.toString(),
+      },
+      schedule: this.selectedTour.schedules[0],
       selectedSlot: {
         slotId: this.selectedSlot.slotId,
         startTime: this.selectedSlot.startTime,
         endTime: this.selectedSlot.endTime,
         minCapacity: this.selectedSlot.minCapacity,
-        maxCapacity: this.selectedSlot.maxCapacity
+        maxCapacity: this.selectedSlot.maxCapacity,
       },
       participants: this.participants
-        .filter(p => p.quantity > 0)
-        .map(p => ({
+        .filter((p) => p.quantity > 0)
+        .map((p) => ({
           ageType: p.ageType,
           quantity: p.quantity,
-          price: p.price
+          price: p.price,
         })),
       totalPrice: this.totalPrice,
       totalParticipants: this.totalParticipants,
-      address: this.selectedTour.address,
-      gallery: this.selectedTour.gallery
+      address: this.selectedTour?.tour?.address,
+      gallery: this.selectedTour?.tour?.gallery,
     };
 
     this.cartService.addItemToCart(cartItem);
-    this.tourAdded.emit(cartItem);
+    this.data.tourAdded(cartItem);
     this.closeModal();
   }
 
@@ -198,10 +320,10 @@ export class TourSlotSelectionModalComponent implements OnInit {
    * Formatea el precio
    */
   formatPrice(price: number): string {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
     }).format(price);
   }
 
@@ -215,25 +337,25 @@ export class TourSlotSelectionModalComponent implements OnInit {
   /**
    * Obtiene la clase CSS para un slot
    */
-  getSlotClass(slot: SlotWithPrices): string {
-    let classes = 'slot-item';
-    
+  getSlotClass(slot: SlotDto): string {
+    let classes = "slot-item";
+
     if (this.selectedSlot?.slotId === slot.slotId) {
-      classes += ' selected';
+      classes += " selected";
     }
-    
-    if (slot.availableCapacity === 0) {
-      classes += ' full';
+
+    if (slot.maxCapacity === 0) {
+      classes += " full";
     }
-    
+
     return classes;
   }
 
   /**
    * Verifica si un slot está lleno
    */
-  isSlotFull(slot: SlotWithPrices): boolean {
-    return slot.availableCapacity === 0;
+  isSlotFull(slot: SlotDto): boolean {
+    return slot.maxCapacity === 0;
   }
 
   /**
@@ -250,7 +372,9 @@ export class TourSlotSelectionModalComponent implements OnInit {
    * Verifica si se puede incrementar un participante
    */
   canIncrement(participant: ParticipantSelection): boolean {
-    return participant.quantity < participant.maxQuantity && this.canAddParticipant();
+    return (
+      participant.quantity < participant.maxQuantity && this.canAddParticipant()
+    );
   }
 
   /**
@@ -264,40 +388,46 @@ export class TourSlotSelectionModalComponent implements OnInit {
    * Obtiene el nombre del tour de manera segura
    */
   getTourName(): string {
-    return this.selectedTour?.tour?.name || '';
+    return this.selectedTour?.tour?.name || "";
   }
 
   /**
    * Obtiene la primera imagen del tour de manera segura
    */
   getTourImage(): string {
-    if (this.selectedTour?.gallery && this.selectedTour.gallery.length > 0) {
-      return this.selectedTour.gallery[0]?.imageUrl || '';
+    if (
+      this.selectedTour?.tour?.gallery &&
+      this.selectedTour.tour.gallery.length > 0
+    ) {
+      return this.selectedTour.tour?.gallery[0]?.imageUrl || "";
     }
-    return '';
+    return "";
   }
 
   /**
    * Verifica si hay imágenes disponibles
    */
   hasImages(): boolean {
-    return !!(this.selectedTour?.gallery && this.selectedTour.gallery.length > 0);
+    return !!(
+      this.selectedTour?.tour?.gallery &&
+      this.selectedTour.tour.gallery.length > 0
+    );
   }
 
   /**
    * Obtiene la ubicación del tour de manera segura
    */
   getTourLocation(): string {
-    const city = this.selectedTour?.address?.city || '';
-    const state = this.selectedTour?.address?.state || '';
-    return city && state ? `${city}, ${state}` : city || state || '';
+    const city = this.selectedTour?.tour?.address?.city || "";
+    const state = this.selectedTour?.tour?.address?.state || "";
+    return city && state ? `${city}, ${state}` : city || state || "";
   }
 
   /**
    * Obtiene la duración del tour de manera segura
    */
   getTourDuration(): string {
-    return this.selectedTour?.tour?.duration || '';
+    return this.selectedTour?.tour?.duration?.toString() || "";
   }
 
   /**
@@ -311,13 +441,46 @@ export class TourSlotSelectionModalComponent implements OnInit {
    * Verifica si tiene rating
    */
   hasRating(): boolean {
-    return !!(this.selectedTour?.tour?.rating);
+    return !!this.selectedTour?.tour?.rating;
   }
 
   /**
    * Obtiene la descripción del tour de manera segura
    */
   getTourDescription(): string {
-    return this.selectedTour?.tour?.description || '';
+    return this.selectedTour?.tour?.description || "";
   }
-} 
+
+  generateDateRange(startDate: Date, endDate: Date) {
+    const dates = [];
+
+    for (
+      let d = new Date(startDate);
+      d <= endDate;
+      d.setDate(d.getDate() + 1)
+    ) {
+      dates.push(new Date(d));
+    }
+
+    return dates;
+  }
+
+  selectDate(date: Date) {
+    this.selectedDate = date;
+    this.resetSelection();
+    this.updateAvailableSlots();
+  }
+
+  updateAvailableSlots() {
+    const selectedDateDayjs = dayjs(this.selectedDate);
+
+    if (this.selectedTour && this.selectedDate) {
+      this.availableSlots = this.cartService.convertToSlotsWithPrices(
+        this.selectedTour,
+        selectedDateDayjs.format("YYYY-MM-DD")
+      );
+    } else {
+      this.availableSlots = [];
+    }
+  }
+}

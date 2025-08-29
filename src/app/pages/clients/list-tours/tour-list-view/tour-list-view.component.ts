@@ -1,8 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
-import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
 import { OwlOptions } from "ngx-owl-carousel-o";
-import { SearchToursDto } from "../../../../shared/dto/search-tours.dto";
+import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
 
 @Component({
   selector: "app-tour-list-view",
@@ -14,7 +13,7 @@ export class TourListViewComponent {
   public routes = routes;
   public Math = Math;
 
-  @Input() tours: SearchToursDto[] = [];
+  @Input() tours: TourScheduleResponseDto[] = [];
   @Input() loading: boolean = false;
   @Input() totalItems: number = 0;
   @Input() totalPages: number = 0;
@@ -25,7 +24,7 @@ export class TourListViewComponent {
   @Output() goToPage = new EventEmitter<number>();
   @Output() goToPreviousPage = new EventEmitter<void>();
   @Output() goToNextPage = new EventEmitter<void>();
-  @Output() selectTour = new EventEmitter<SearchToursDto>();
+  @Output() selectTour = new EventEmitter<TourScheduleResponseDto>();
 
   // Favorites functionality
   isClassAdded: boolean[] = [];
@@ -57,16 +56,16 @@ export class TourListViewComponent {
   };
 
   // Helper functions
-  getLowestPrice(tour: SearchToursDto): string {
-    const prices = tour.slots[0].prices;
+  getLowestPrice(tour: TourScheduleResponseDto): string {
+    const prices = tour.schedules;
     if (!prices || prices.length === 0) {
       return "N/A";
     }
-    const lowestPrice = Math.min(...prices.map((p) => p.price));
-    return `$${lowestPrice}`;
+    // const lowestPrice = Math.min(...prices.map((p) => p.price));
+    return `$$`;
   }
 
-  formatDate(dateString: string | null): string {
+  formatDate(dateString: string | null | undefined): string {
     if (!dateString) return "N/A";
     try {
       const date = new Date(dateString);
@@ -76,7 +75,7 @@ export class TourListViewComponent {
     }
   }
 
-  formatTime(timeString: string | null): string {
+  formatTime(timeString: string | null | undefined): string {
     if (!timeString) return "N/A";
     return timeString;
   }
@@ -134,7 +133,7 @@ export class TourListViewComponent {
   }
 
   // Maneja la selección de un tour para agregarlo al carrito
-  onSelectTour(tour: SearchToursDto): void {
+  onSelectTour(tour: TourScheduleResponseDto): void {
     this.selectTour.emit(tour);
   }
 }

@@ -1,10 +1,20 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { CartItem, DaySelection, CartSummary, SlotWithPrices, ParticipantSelection } from '../dto/cart.dto';
-import { SearchToursDto } from '../dto/search-tours.dto';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import {
+  CartItem,
+  DaySelection,
+  CartSummary,
+  SlotWithPrices,
+  ParticipantSelection,
+} from "../dto/cart.dto";
+import {
+  SlotDto,
+  TourScheduleResponseDto,
+} from "../dto/search-tour-response.dto";
+import dayjs from "dayjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
@@ -15,8 +25,8 @@ export class CartService {
   public daySelections$ = this.daySelectionsSubject.asObservable();
   public cartSummary$ = this.cartSummarySubject.asObservable();
 
-  private currentStartDate: string = '';
-  private currentEndDate: string = '';
+  private currentStartDate: string = "";
+  private currentEndDate: string = "";
 
   constructor() {}
 
@@ -26,7 +36,7 @@ export class CartService {
   initializeCart(startDate: string, endDate: string): void {
     this.currentStartDate = startDate;
     this.currentEndDate = endDate;
-    
+
     const days = this.calculateDaysBetweenDates(startDate, endDate);
     this.daySelectionsSubject.next(days);
     this.updateCartSummary();
@@ -35,29 +45,40 @@ export class CartService {
   /**
    * Calcula los días entre dos fechas
    */
-  private calculateDaysBetweenDates(startDate: string, endDate: string): DaySelection[] {
+  private calculateDaysBetweenDates(
+    startDate: string,
+    endDate: string
+  ): DaySelection[] {
     const days: DaySelection[] = [];
     const start = new Date(startDate);
     const end = new Date(endDate);
-    
+
     if (!startDate || !endDate || start >= end) {
       return days;
     }
 
-    const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const dayNames = [
+      "Domingo",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábado",
+    ];
     let current = new Date(start);
     let dayNumber = 1;
 
     while (current < end) {
-      const dateStr = current.toISOString().split('T')[0];
+      const dateStr = current.toISOString().split("T")[0];
       const dayName = dayNames[current.getDay()];
-      
+
       days.push({
         date: dateStr,
         dayName: dayName,
         dayNumber: dayNumber,
         isSelected: false,
-        availableTours: 0 // Se actualizará cuando se carguen los tours
+        availableTours: 0, // Se actualizará cuando se carguen los tours
       });
 
       current.setDate(current.getDate() + 1);
@@ -70,25 +91,31 @@ export class CartService {
   /**
    * Actualiza la cantidad de tours disponibles para cada día
    */
-  updateAvailableToursForDays(tours: SearchToursDto[]): void {
+  updateAvailableToursForDays(tours: TourScheduleResponseDto[]): void {
     const currentDays = this.daySelectionsSubject.getValue();
-    console.log('CartService: Actualizando tours disponibles. Días actuales:', currentDays.length);
-    
-    const updatedDays = currentDays.map(day => {
-      const toursForDay = tours.filter(tour => {
-        const tourDate = new Date(tour.schedule.scheduleDate).toISOString().split('T')[0];
-        return tourDate === day.date;
+
+    const updatedDays = currentDays.map((day) => {
+      const toursForDay = tours.filter((tour) => {
+        const tourDates = tour.schedules.map((schedule) => {
+          return new Date(schedule.scheduleDate || "")
+            .toISOString()
+            .split("T")[0];
+        });
+
+        return tourDates.includes(day.date);
       });
-      
-      console.log(`CartService: Día ${day.date} - Tours disponibles: ${toursForDay.length}`);
-      
+
+      console.log(
+        `CartService: Día ${day.date} - Tours disponibles: ${toursForDay.length}`
+      );
+
       return {
         ...day,
-        availableTours: toursForDay.length
+        availableTours: toursForDay.length,
       };
     });
 
-    console.log('CartService: Emitiendo días actualizados:', updatedDays);
+    console.log("CartService: Emitiendo días actualizados:", updatedDays);
     this.daySelectionsSubject.next(updatedDays);
   }
 
@@ -96,26 +123,37 @@ export class CartService {
    * Agrega un item al carrito
    */
   addItemToCart(cartItem: CartItem): void {
-    console.log('CartService: Agregando item al carrito:', cartItem);
+    console.log("CartService: Agregando item al carrito:", cartItem);
     const currentItems = this.cartItemsSubject.getValue();
-    
+
     // Verificar si ya existe un tour para ese día
-    const existingItemIndex = currentItems.findIndex(item => item.dayDate === cartItem.dayDate);
-    
+    const existingItemIndex = currentItems.findIndex(
+      (item) => item.dayDate === cartItem.dayDate
+    );
+
     if (existingItemIndex >= 0) {
       // Reemplazar el tour existente para ese día
-      console.log('CartService: Reemplazando tour existente para el día:', cartItem.dayDate);
+      console.log(
+        "CartService: Reemplazando tour existente para el día:",
+        cartItem.dayDate
+      );
       currentItems[existingItemIndex] = cartItem;
     } else {
       // Agregar nuevo item
-      console.log('CartService: Agregando nuevo tour para el día:', cartItem.dayDate);
+      console.log(
+        "CartService: Agregando nuevo tour para el día:",
+        cartItem.dayDate
+      );
       currentItems.push(cartItem);
     }
 
     this.cartItemsSubject.next([...currentItems]);
     this.updateDaySelection(cartItem.dayDate, cartItem);
     this.updateCartSummary();
-    console.log('CartService: Item agregado. Total items en carrito:', currentItems.length);
+    console.log(
+      "CartService: Item agregado. Total items en carrito:",
+      currentItems.length
+    );
   }
 
   /**
@@ -123,8 +161,10 @@ export class CartService {
    */
   removeItemFromCart(dayDate: string): void {
     const currentItems = this.cartItemsSubject.getValue();
-    const filteredItems = currentItems.filter(item => item.dayDate !== dayDate);
-    
+    const filteredItems = currentItems.filter(
+      (item) => item.dayDate !== dayDate
+    );
+
     this.cartItemsSubject.next(filteredItems);
     this.updateDaySelection(dayDate, undefined);
     this.updateCartSummary();
@@ -135,12 +175,12 @@ export class CartService {
    */
   private updateDaySelection(dayDate: string, cartItem?: CartItem): void {
     const currentDays = this.daySelectionsSubject.getValue();
-    const updatedDays = currentDays.map(day => {
+    const updatedDays = currentDays.map((day) => {
       if (day.date === dayDate) {
         return {
           ...day,
           isSelected: !!cartItem,
-          tourSelected: cartItem
+          tourSelected: cartItem,
         };
       }
       return day;
@@ -154,7 +194,7 @@ export class CartService {
    */
   private updateCartSummary(): void {
     const items = this.cartItemsSubject.getValue();
-    
+
     if (items.length === 0) {
       this.cartSummarySubject.next(null);
       return;
@@ -163,11 +203,14 @@ export class CartService {
     const summary: CartSummary = {
       totalItems: items.length,
       totalDays: items.length, // Un tour por día
-      totalParticipants: items.reduce((sum, item) => sum + item.totalParticipants, 0),
+      totalParticipants: items.reduce(
+        (sum, item) => sum + item.totalParticipants,
+        0
+      ),
       totalPrice: items.reduce((sum, item) => sum + item.totalPrice, 0),
       startDate: this.currentStartDate,
       endDate: this.currentEndDate,
-      items: items
+      items: items,
     };
 
     this.cartSummarySubject.next(summary);
@@ -178,7 +221,7 @@ export class CartService {
    */
   getItemByDate(dayDate: string): CartItem | undefined {
     const items = this.cartItemsSubject.getValue();
-    return items.find(item => item.dayDate === dayDate);
+    return items.find((item) => item.dayDate === dayDate);
   }
 
   /**
@@ -187,31 +230,35 @@ export class CartService {
   clearCart(): void {
     this.cartItemsSubject.next([]);
     this.cartSummarySubject.next(null);
-    
+
     // Resetear las selecciones de días
     const currentDays = this.daySelectionsSubject.getValue();
-    const resetDays = currentDays.map(day => ({
+    const resetDays = currentDays.map((day) => ({
       ...day,
       isSelected: false,
-      tourSelected: undefined
+      tourSelected: undefined,
     }));
-    
+
     this.daySelectionsSubject.next(resetDays);
   }
 
   /**
    * Convierte un SearchToursDto a SlotWithPrices
    */
-  convertToSlotsWithPrices(tour: SearchToursDto): SlotWithPrices[] {
-    return tour.slots.map(slot => ({
-      slotId: slot.slotId,
-      startTime: slot.startTime,
-      endTime: slot.endTime,
-      minCapacity: slot.minCapacity,
-      maxCapacity: slot.maxCapacity,
-      availableCapacity: slot.maxCapacity, // Por ahora asumimos capacidad completa
-      prices: slot.prices
-    }));
+  convertToSlotsWithPrices(
+    tour: TourScheduleResponseDto,
+    date: string
+  ): SlotDto[] {
+    const schedule = tour.schedules.find((schedule) => {
+      return (
+        dayjs(schedule.scheduleDate).format("YYYY-MM-DD") ===
+        dayjs(date).format("YYYY-MM-DD")
+      );
+    });
+
+    return schedule && schedule.config && schedule.config.slots
+      ? schedule.config.slots
+      : [];
   }
 
   /**
@@ -219,20 +266,20 @@ export class CartService {
    */
   createParticipantSelections(slotPrices: any[]): ParticipantSelection[] {
     const ageTypeLabels: { [key: string]: string } = {
-      'ADULT': 'Adulto',
-      'CHILD': 'Niño',
-      'INFANT': 'Infante',
-      'SENIOR': 'Senior'
+      ADULT: "Adulto",
+      CHILD: "Niño",
+      INFANT: "Infante",
+      SENIOR: "Senior",
     };
 
-    return slotPrices.map(price => ({
+    return slotPrices.map((price) => ({
       ageType: price.ageType,
       label: ageTypeLabels[price.ageType] || price.ageType,
       minAge: price.minAge,
       maxAge: price.maxAge,
       price: price.price,
       quantity: 0,
-      maxQuantity: 10 // Límite por defecto, se puede ajustar según la capacidad del slot
+      maxQuantity: 10, // Límite por defecto, se puede ajustar según la capacidad del slot
     }));
   }
 
@@ -240,14 +287,21 @@ export class CartService {
    * Genera un ID único para un item del carrito
    */
   generateCartItemId(): string {
-    return 'cart_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    return "cart_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
   }
 
   /**
    * Valida si la cantidad de participantes está dentro de los límites del slot
    */
-  validateParticipantQuantity(participants: ParticipantSelection[], minCapacity: number, maxCapacity: number): boolean {
-    const totalParticipants = participants.reduce((sum, p) => sum + p.quantity, 0);
+  validateParticipantQuantity(
+    participants: ParticipantSelection[],
+    minCapacity: number,
+    maxCapacity: number
+  ): boolean {
+    const totalParticipants = participants.reduce(
+      (sum, p) => sum + p.quantity,
+      0
+    );
     return totalParticipants >= minCapacity && totalParticipants <= maxCapacity;
   }
 
@@ -256,7 +310,7 @@ export class CartService {
    */
   calculateTotalPrice(participants: ParticipantSelection[]): number {
     return participants.reduce((total, participant) => {
-      return total + (participant.quantity * participant.price);
+      return total + participant.quantity * participant.price;
     }, 0);
   }
-} 
+}

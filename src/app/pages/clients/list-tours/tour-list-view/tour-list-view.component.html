@@ -15,7 +15,7 @@
             <div class="place-item mb-4" *ngFor="let tour of tours; let i = index">
                 <div class="place-img custom-item">
                     <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
-                        <ng-template carouselSlide *ngFor="let image of tour.gallery; let imgIndex = index">
+                        <ng-template carouselSlide *ngFor="let image of tour?.tour?.gallery; let imgIndex = index">
                             <div class="slide-images">
                                 <a [routerLink]="routes.tourDetails">
                                     <img [src]="image.imageUrl || 'assets/img/tours/tours-07.jpg'" class="img-fluid"
@@ -24,7 +24,7 @@
                             </div>
                         </ng-template>
                         <!-- Fallback image if no gallery -->
-                        <ng-template carouselSlide *ngIf="!tour.gallery || tour.gallery.length === 0">
+                        <ng-template carouselSlide *ngIf="!tour?.tour?.gallery || tour?.tour?.gallery?.length === 0">
                             <div class="slide-images">
                                 <a [routerLink]="routes.tourDetails">
                                     <img src="assets/img/tours/tours-07.jpg" class="img-fluid" alt="Tour image">
@@ -38,7 +38,7 @@
                             <i class="isax isax-heart5"></i>
                         </a>
                         <span class="badge bg-info d-inline-flex align-items-center"
-                            *ngIf="tour.schedule?.status === 'ACTIVE'">
+                            *ngIf="tour?.schedules?.at(0)?.status === 'ACTIVE'">
                             <i class="isax isax-ranking me-1"></i>Disponible
                         </span>
                     </div>
@@ -50,7 +50,7 @@
                                     'N/A' }}</a></h5>
                             <p class="fs-14 d-flex align-items-center">
                                 <i class="isax isax-location5 me-2"></i>
-                                {{ tour.address.city || 'N/A' }}, {{ tour.address.state || 'N/A' }}
+                                {{ tour?.tour?.address?.city || 'N/A' }}, {{ tour?.tour?.address?.state || 'N/A' }}
                             </p>
                         </div>
                         <div class="d-flex align-items-center">
@@ -68,10 +68,6 @@
                         <div class="d-flex align-items-center">
                             <span class="me-2"><i class="isax isax-calendar-tick text-gray-6"></i></span>
                             <p class="fs-14 text-gray-9 border-end pe-2 me-2 mb-0">{{ tour.tour.duration || 'N/A' }}</p>
-                            <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                <i class="isax isax-profile-2user me-1"></i>{{ tour.schedule.maxCapacity || 'N/A' }}
-                                Personas
-                            </p>
                         </div>
                         <div class="d-flex align-items-center">
                             <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
@@ -83,30 +79,12 @@
                             </a>
                         </div>
                     </div>
-                    <!-- Información adicional del horario -->
-                    <div class="mt-2 pt-2 border-top" *ngIf="tour.schedule">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">
-                                <i class="isax isax-clock me-1"></i>
-                                {{ formatTime(tour.schedule.startTime) }} - {{ formatTime(tour.schedule.endTime) }}
-                            </small>
-                            <small class="text-muted">
-                                <i class="isax isax-calendar me-1"></i>
-                                {{ formatDate(tour.schedule.scheduleDate) }}
-                            </small>
-                        </div>
-                        <div class="mt-1" *ngIf="tour.schedule.reservedCapacity !== null">
-                            <small class="text-muted">
-                                Reservados: {{ tour.schedule.reservedCapacity }}/{{ tour.schedule.maxCapacity || '∞' }}
-                            </small>
-                        </div>
-                    </div>
 
                     <!-- Botón de agregar al carrito -->
                     <div class="mt-3 pt-3 border-top">
                         <button type="button" class="btn btn-primary btn-sm" (click)="onSelectTour(tour)">
                             <i class="isax isax-calendar-add me-1"></i>
-                            Agregar al Itinerario
+                            Consultar disponibilidad
                         </button>
                     </div>
                 </div>
@@ -117,7 +95,7 @@
             <div class="col-12 text-center" *ngIf="tours.length === 0">
                 <div class="alert alert-info">
                     <i class="isax isax-search-normal me-2"></i>
-                    No se encontraron tours con los criterios de búsqueda especificados.
+                    No se encontraron tours con los criterios de búsqueda especificados. !!
                 </div>
             </div>
         </div>

@@ -1,213 +1,207 @@
 <!-- Modal -->
-<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" role="dialog">
-<div class="modal-dialog modal-lg" role="document">
-<div class="modal-content">
-  <div class="modal-header border-0 pb-0">
-    <div class="modal-title-section">
-      <h4 class="modal-title" id="slotModalLabel">
-        <i class="isax isax-calendar-add me-2 text-primary"></i>
-        Seleccionar Horario y Participantes
-      </h4>
-             <p class="modal-subtitle text-muted mb-0" *ngIf="selectedTour">
-         {{ getTourName() }}
-       </p>
-    </div>
-    <button type="button" 
-            class="btn-close" 
-            aria-label="Close" 
-            (click)="closeModal()">
-    </button>
-  </div>
-
-  <div class="modal-body p-0">
-    <!-- Tour Info Section -->
-    <div class="tour-info-section" *ngIf="selectedTour">
-      <div class="tour-header">
-                 <div class="tour-image" *ngIf="hasImages()">
-           <img [src]="getTourImage()" 
-                [alt]="getTourName()"
-                class="img-fluid rounded">
-         </div>
-        <div class="tour-details">
-                     <h5 class="tour-name">{{ getTourName() }}</h5>
-           <div class="tour-meta">
-             <span class="location">
-               <i class="isax isax-location me-1"></i>
-               {{ getTourLocation() }}
-             </span>
-             <span class="duration ms-3">
-               <i class="isax isax-clock me-1"></i>
-               {{ getTourDuration() }}
-             </span>
-             <span class="rating ms-3" *ngIf="hasRating()">
-               <i class="fas fa-star text-warning me-1"></i>
-               {{ getTourRating() }}
-             </span>
-           </div>
-           <p class="tour-description">{{ getTourDescription() }}</p>
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1"
+  role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <div class="modal-title-section">
+          <h4 class="modal-title" id="slotModalLabel">
+            <i class="isax isax-calendar-add me-2 text-primary"></i>
+            Seleccionar Horario y Participantes
+          </h4>
+          <p class="modal-subtitle text-muted mb-0" *ngIf="selectedTour">
+            {{ getTourName() }}
+          </p>
         </div>
-      </div>
-    </div>
-
-    <!-- Slots Selection Section -->
-    <div class="slots-section">
-      <div class="section-header">
-        <h6 class="section-title">
-          <i class="isax isax-timer-1 me-2"></i>
-          Horarios Disponibles
-        </h6>
-        <span class="section-subtitle">Selecciona el horario que prefieras</span>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()">
+        </button>
       </div>
 
-      <div class="slots-grid">
-        <div class="slot-item-wrapper" 
-             *ngFor="let slot of availableSlots"
-             [ngClass]="getSlotClass(slot)"
-             (click)="!isSlotFull(slot) && selectSlot(slot)">
-          
-          <div class="slot-card">
-            <div class="slot-time">
-              <span class="start-time">{{ formatTime(slot.startTime) }}</span>
-              <span class="separator">-</span>
-              <span class="end-time">{{ formatTime(slot.endTime) }}</span>
+      <div class="modal-body p-0">
+        <!-- Tour Info Section -->
+        <div class="tour-info-section" *ngIf="selectedTour">
+          <div class="tour-header">
+            <div class="tour-image" *ngIf="hasImages()">
+              <img [src]="getTourImage()" [alt]="getTourName()" class="img-fluid rounded">
             </div>
-            
-            <div class="slot-capacity">
-              <i class="isax isax-profile-2user me-1"></i>
-              <span *ngIf="!isSlotFull(slot)">
-                {{ slot.availableCapacity }} espacios disponibles
-              </span>
-              <span *ngIf="isSlotFull(slot)" class="text-danger">
-                Completo
-              </span>
+            <div class="tour-details">
+              <h5 class="tour-name">{{ getTourName() }}</h5>
+              <div class="tour-meta">
+                <span class="location">
+                  <i class="isax isax-location me-1"></i>
+                  {{ getTourLocation() }}
+                </span>
+                <span class="duration ms-3">
+                  <i class="isax isax-clock me-1"></i>
+                  {{ getTourDuration() }}
+                </span>
+                <span class="rating ms-3" *ngIf="hasRating()">
+                  <i class="fas fa-star text-warning me-1"></i>
+                  {{ getTourRating() }}
+                </span>
+              </div>
+              <p class="tour-description">{{ getTourDescription() }}</p>
             </div>
+          </div>
+        </div>
 
-            <div class="slot-price">
-              <span class="from-text">Desde</span>
-                             <span class="price">{{ formatPrice(slot.prices[0].price || 0) }}</span>
-            </div>
+        <!-- Date Carousel -->
+        <div class="date-carousel">
+          <owl-carousel-o [options]="customOptions">
+            <ng-template *ngFor="let date of dates" carouselSlide>
+              <div class="date-item" [ngClass]="{'selected': selectedDate === date}" (click)="selectDate(date)">
+                <span class="text">{{date | date: 'dd/MM/yyyy'}}</span>
+              </div>
+            </ng-template>
+          </owl-carousel-o>
+        </div>
 
-            <!-- Selected indicator -->
-            <div class="selected-indicator" *ngIf="selectedSlot?.slotId === slot.slotId">
-              <i class="isax isax-tick-circle"></i>
-            </div>
+        <!-- Slots Selection Section -->
+        <div class="slots-section">
+          <div class="section-header">
+            <h6 class="section-title">
+              <i class="isax isax-timer-1 me-2"></i>
+              Horarios Disponibles
+            </h6>
+            <span class="section-subtitle">Selecciona el horario que prefieras</span>
+          </div>
 
-            <!-- Full overlay -->
-            <div class="full-overlay" *ngIf="isSlotFull(slot)">
-              <i class="isax isax-close-circle"></i>
+          <div class="slots-container">
+            <div class="slot-item-wrapper" *ngFor="let slot of availableSlots" [ngClass]="getSlotClass(slot)"
+              (click)="!isSlotFull(slot) && selectSlot(slot)">
+
+              <div class="slot-card">
+                <div class="slot-time">
+                  <span class="start-time">{{ formatTime(slot.startTime) }}</span>
+                </div>
+
+                <div class="slot-capacity">
+                  <div class="separator"></div>
+                  <div class="available-capacity">
+                    <i class="isax isax-profile-2user me-1"></i>
+                    <span *ngIf="!isSlotFull(slot)">
+                      {{ slot.maxCapacity }} espacios disponibles
+                    </span>
+                    <span *ngIf="isSlotFull(slot)" class="text-danger">
+                      Completo
+                    </span>
+                  </div>
+                </div>
+                <div class="slot-time">
+                  <span class="end-time">{{ formatTime(slot.endTime) }}</span>
+                </div>
+
+                <div class="slot-price">
+                  <span class="from-text">Desde</span>
+                  <span class="price">{{ formatPrice(slot.prices.at(0)?.price || 0) }}</span>
+                </div>
+
+                <!-- Selected indicator -->
+                <div class="selected-indicator" *ngIf="selectedSlot?.slotId === slot.slotId">
+                  <i class="isax isax-tick-circle"></i>
+                </div>
+
+                <!-- Full overlay -->
+                <div class="full-overlay" *ngIf="isSlotFull(slot)">
+                  <i class="isax isax-close-circle"></i>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <!-- No slots available -->
+          <div class="no-slots" *ngIf="availableSlots.length === 0">
+            <div class="text-center py-4">
+              <i class="isax isax-timer-pause display-4 text-muted mb-3"></i>
+              <h6>No hay horarios disponibles</h6>
+              <p class="text-muted">Lo sentimos, no hay horarios disponibles para este tour en la fecha seleccionada.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Participants Selection Section -->
+        <div class="participants-section" *ngIf="selectedSlot">
+          <div class="section-header">
+            <h6 class="section-title">
+              <i class="isax isax-people me-2"></i>
+              Seleccionar Participantes
+            </h6>
+            <span class="section-subtitle">
+              Capacidad: {{ selectedSlot.minCapacity }} - {{ selectedSlot.maxCapacity }} personas
+            </span>
+          </div>
+
+          <div class="participants-list">
+            <div class="participant-item" *ngFor="let participant of participants">
+              <div class="participant-info">
+                <div class="participant-type">{{ participant.label }}</div>
+                <div class="participant-details">
+                  <span class="age-range">{{ getAgeRange(participant) }}</span>
+                  <span class="price">{{ formatPrice(participant.price) }} c/u</span>
+                </div>
+              </div>
+
+              <div class="quantity-controls">
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  [disabled]="!canDecrement(participant)" (click)="decrementParticipant(participant)">
+                  <i class="isax isax-minus"></i>
+                </button>
+
+                <input type="number" class="form-control quantity-input" [value]="participant.quantity" min="0"
+                  [max]="participant.maxQuantity"
+                  (input)="updateParticipantQuantity(participant, $any($event.target).value)" readonly>
+
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  [disabled]="!canIncrement(participant)" (click)="incrementParticipant(participant)">
+                  <i class="isax isax-add"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="selection-summary" *ngIf="totalParticipants > 0">
+            <div class="summary-card">
+              <div class="summary-item">
+                <span class="label">Total de Participantes:</span>
+                <span class="value">{{ totalParticipants }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Precio Total:</span>
+                <span class="value price">{{ formatPrice(totalPrice) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation Errors -->
+        <div class="validation-errors" *ngIf="validationErrors.length > 0">
+          <div class="alert alert-warning" role="alert">
+            <i class="isax isax-warning-2 me-2"></i>
+            <ul class="mb-0">
+              <li *ngFor="let error of validationErrors">{{ error }}</li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <!-- No slots available -->
-      <div class="no-slots" *ngIf="availableSlots.length === 0">
-        <div class="text-center py-4">
-          <i class="isax isax-timer-pause display-4 text-muted mb-3"></i>
-          <h6>No hay horarios disponibles</h6>
-          <p class="text-muted">Lo sentimos, no hay horarios disponibles para este tour en la fecha seleccionada.</p>
+      <div class="modal-footer border-0 pt-0">
+        <div class="footer-actions">
+          <button type="button" class="btn btn-outline-secondary me-2" (click)="closeModal()">
+            <i class="isax isax-close-square me-1"></i>
+            Cancelar
+          </button>
+
+          <button type="button" class="btn btn-primary" [disabled]="!isValid" (click)="confirmSelection()">
+            <i class="isax isax-add-circle me-1"></i>
+            Agregar al Itinerario
+            <span *ngIf="totalPrice > 0" class="ms-2">
+              ({{ formatPrice(totalPrice) }})
+            </span>
+          </button>
         </div>
       </div>
-    </div>
-
-    <!-- Participants Selection Section -->
-    <div class="participants-section" *ngIf="selectedSlot">
-      <div class="section-header">
-        <h6 class="section-title">
-          <i class="isax isax-people me-2"></i>
-          Seleccionar Participantes
-        </h6>
-                 <span class="section-subtitle">
-           Capacidad: {{ selectedSlot.minCapacity }} - {{ selectedSlot.maxCapacity }} personas
-         </span>
-      </div>
-
-      <div class="participants-list">
-        <div class="participant-item" *ngFor="let participant of participants">
-          <div class="participant-info">
-            <div class="participant-type">{{ participant.label }}</div>
-            <div class="participant-details">
-              <span class="age-range">{{ getAgeRange(participant) }}</span>
-              <span class="price">{{ formatPrice(participant.price) }} c/u</span>
-            </div>
-          </div>
-
-          <div class="quantity-controls">
-            <button type="button" 
-                    class="btn btn-outline-secondary btn-sm quantity-btn"
-                    [disabled]="!canDecrement(participant)"
-                    (click)="decrementParticipant(participant)">
-              <i class="isax isax-minus"></i>
-            </button>
-            
-            <input type="number" 
-                   class="form-control quantity-input"
-                   [value]="participant.quantity"
-                   min="0"
-                   [max]="participant.maxQuantity"
-                   (input)="updateParticipantQuantity(participant, $any($event.target).value)"
-                   readonly>
-            
-            <button type="button" 
-                    class="btn btn-outline-secondary btn-sm quantity-btn"
-                    [disabled]="!canIncrement(participant)"
-                    (click)="incrementParticipant(participant)">
-              <i class="isax isax-add"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Summary -->
-      <div class="selection-summary" *ngIf="totalParticipants > 0">
-        <div class="summary-card">
-          <div class="summary-item">
-            <span class="label">Total de Participantes:</span>
-            <span class="value">{{ totalParticipants }}</span>
-          </div>
-          <div class="summary-item">
-            <span class="label">Precio Total:</span>
-            <span class="value price">{{ formatPrice(totalPrice) }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Validation Errors -->
-    <div class="validation-errors" *ngIf="validationErrors.length > 0">
-      <div class="alert alert-warning" role="alert">
-        <i class="isax isax-warning-2 me-2"></i>
-        <ul class="mb-0">
-          <li *ngFor="let error of validationErrors">{{ error }}</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-footer border-0 pt-0">
-    <div class="footer-actions">
-      <button type="button" 
-              class="btn btn-outline-secondary me-2" 
-              (click)="closeModal()">
-        <i class="isax isax-close-square me-1"></i>
-        Cancelar
-      </button>
-      
-      <button type="button" 
-              class="btn btn-primary"
-              [disabled]="!isValid"
-              (click)="confirmSelection()">
-        <i class="isax isax-add-circle me-1"></i>
-        Agregar al Itinerario
-        <span *ngIf="totalPrice > 0" class="ms-2">
-          ({{ formatPrice(totalPrice) }})
-        </span>
-      </button>
     </div>
   </div>
 </div>
-</div>
-</div>
-
-<!-- Modal Backdrop -->
-<div class="modal-backdrop fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'"></div> 

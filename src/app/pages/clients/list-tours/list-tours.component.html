@@ -1,695 +1,701 @@
-      <!-- Breadcrumb -->
-      <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">Tours</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item">Tours</li>
-                            <li class="breadcrumb-item active" aria-current="page">Tour Grid</li>
-                        </ol>
-                    </nav>
-                </div>
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Tours</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item">Tours</li>
+                        <li class="breadcrumb-item active" aria-current="page">Tour Grid</li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
-    <!-- /Breadcrumb -->
+</div>
+<!-- /Breadcrumb -->
 
-    <!-- Page Wrapper -->
-    <div class="content">
-        <div class="container">
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
 
-            <!-- Tour Search -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="banner-form">
-                        <form class="d-lg-flex" >
-                            <div class="d-flex form-info">
-                                <!-- Select Ciudad -->
-                                <div class="form-item">
-                                    <label class="form-label fs-14 text-default mb-1">Ciudad</label>
-                                    <select class="form-control" [(ngModel)]="selectedState" name="state" required>
-                                        <option value="" disabled>Selecciona ciudad</option>
-                                        <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
-                                    </select>
-                                </div>
-                                <!-- Select Categoría -->
-                                <div class="form-item">
-                                    <label class="form-label fs-14 text-default mb-1">Categoría</label>
-                                    <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
-                                        <option value="" disabled>Selecciona categoría</option>
-                                        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-                                    </select>
-                                </div>
-                                <!-- Check In -->
-                                <div class="form-item">
-                                    <label class="form-label fs-14 text-default mb-1">Check In</label>
-                                    <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn" required>
-                                </div>
-                                <!-- Check Out -->
-                                <div class="form-item">
-                                    <label class="form-label fs-14 text-default mb-1">Check Out</label>
-                                    <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
+        <!-- Tour Search -->
+        <div class="card">
+            <div class="card-body">
+                <div class="banner-form">
+                    <form class="d-lg-flex">
+                        <div class="d-flex form-info">
+                            <!-- Select Ciudad -->
+                            <div class="form-item">
+                                <label class="form-label fs-14 text-default mb-1">Ciudad</label>
+                                <select class="form-control" [(ngModel)]="selectedState" name="state" required>
+                                    <option value="" disabled>Selecciona ciudad</option>
+                                    <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+                                </select>
+                            </div>
+                            <!-- Select Categoría -->
+                            <div class="form-item">
+                                <label class="form-label fs-14 text-default mb-1">Categoría</label>
+                                <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
+                                    <option value="" disabled>Selecciona categoría</option>
+                                    <option *ngFor="let category of categories" [value]="category.id">{{ category.name
+                                        }}</option>
+                                </select>
+                            </div>
+                            <!-- Check In -->
+                            <div class="form-item">
+                                <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn" required>
+                            </div>
+                            <!-- Check Out -->
+                            <div class="form-item">
+                                <label class="form-label fs-14 text-default mb-1">Check Out</label>
+                                <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
+                            </div>
+                        </div>
+                        <button (click)="onSearch()" class="btn btn-primary search-btn rounded ms-2">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Tour Search -->
+
+        <!-- Tour Types -->
+        <div class="mb-2">
+            <div class="mb-3">
+                <h5 class="mb-2">Choose type of Tours you are interested</h5>
+            </div>
+            <div class="row">
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-01.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Ecotourism</a></h6>
+                            <p class="fs-14">216 Hotels</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-02.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Adventure Tour</a></h6>
+                            <p class="fs-14">569 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-03.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Group Tours</a></h6>
+                            <p class="fs-14">129 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-04.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Beach Tours</a></h6>
+                            <p class="fs-14">600 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-05.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Historical Tours</a></h6>
+                            <p class="fs-14">200 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-06.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Summer Trip</a></h6>
+                            <p class="fs-14">200 tours</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Tour Types -->
+
+        <div class="row">
+
+            <!-- Sidebar -->
+            <div class="col-xl-3 col-lg-3 ">
+                <div class="card filter-sidebar mb-4 mb-lg-0 theiaStickySidebar">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5>Filters</h5>
+                        <a href="javascript:void(0);" class="fs-14 link-primary" (click)="resetFilters()">Reset</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <form>
+                            <div class="p-3 border-bottom">
+                                <label class="form-label fs-16">Búsqueda General</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-search-normal"></i>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Buscar tours..."
+                                        [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}">
                                 </div>
                             </div>
-                            <button (click)="onSearch()" class="btn btn-primary search-btn rounded ms-2">Search</button>
+                            <div class="accordion accordion-list">
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#s"
+                                            aria-expanded="true" aria-controls="accordion-populars" role="button">
+                                            <i class="isax isax-ranking me-2 text-primary"></i>Popular
+                                        </div>
+                                    </div>
+                                    <div id="accordion-populars" class="accordion-collapse collapse show">
+                                        <div class="accordion-body pt-2">
+                                            <div
+                                                class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                <input class="form-check-input ms-0 mt-0" name="popular1"
+                                                    type="checkbox" id="popular1">
+                                                <label class="form-check-label ms-2" for="popular1">
+                                                    Local Guide
+                                                </label>
+                                            </div>
+                                            <div
+                                                class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                <input class="form-check-input ms-0 mt-0" name="popular2"
+                                                    type="checkbox" id="popular2">
+                                                <label class="form-check-label ms-2" for="popular2">
+                                                    VIP Access
+                                                </label>
+                                            </div>
+                                            <div
+                                                class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                <input class="form-check-input ms-0 mt-0" name="popular3"
+                                                    type="checkbox" id="popular3">
+                                                <label class="form-check-label ms-2" for="popular3">
+                                                    Photographs
+                                                </label>
+                                            </div>
+                                            <div
+                                                class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
+                                                <input class="form-check-input ms-0 mt-0" name="popular4"
+                                                    type="checkbox" id="popular4">
+                                                <label class="form-check-label ms-2" for="popular4">
+                                                    Adventure Gears
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-popular" aria-expanded="true"
+                                            aria-controls="accordion-popular" role="button">
+                                            <i class="isax isax-coin me-2 text-primary"></i>Rango de Precio
+                                        </div>
+                                    </div>
+                                    <div id="accordion-popular" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="badge badge-xs badge-light text-gray-4">${{ minPrice
+                                                    }}</span>
+                                                <span class="badge badge-xs badge-light text-gray-4">${{ maxPrice
+                                                    }}</span>
+                                            </div>
+                                            <div class="filter-range">
+                                                <div class="d-flex align-items-center">
+                                                    <input type="range" class="form-range" min="100" max="10000"
+                                                        step="100" [(ngModel)]="minPrice"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="onMinPriceChange($event)"
+                                                        (change)="onMinPriceChange($event)">
+                                                    <span class="ms-2">${{ minPrice }}</span>
+                                                </div>
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <input type="range" class="form-range" min="100" max="10000"
+                                                        step="100" [(ngModel)]="maxPrice"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="onMaxPriceChange($event)"
+                                                        (change)="onMaxPriceChange($event)">
+                                                    <span class="ms-2">${{ maxPrice }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="filter-range-amount">
+                                                <p class="fs-14">Rango: <span class="text-gray-9 fw-medium">${{ minPrice
+                                                        }} - ${{ maxPrice }}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-duration" aria-expanded="true"
+                                            aria-controls="accordion-duration" role="button">
+                                            <i class="isax isax-clock me-2 text-primary"></i>Duración del Tour
+                                        </div>
+                                    </div>
+                                    <div id="accordion-duration" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="duration"
+                                                        type="radio" id="duration1" value="1-3"
+                                                        [(ngModel)]="selectedDuration"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="duration1">
+                                                        1-3 días
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="duration"
+                                                        type="radio" id="duration2" value="4-7"
+                                                        [(ngModel)]="selectedDuration"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="duration2">
+                                                        4-7 días
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="duration"
+                                                        type="radio" id="duration3" value="8-14"
+                                                        [(ngModel)]="selectedDuration"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="duration3">
+                                                        8-14 días
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                    <input class="form-check-input ms-0 mt-0" name="duration"
+                                                        type="radio" id="duration4" value="15+"
+                                                        [(ngModel)]="selectedDuration"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="duration4">
+                                                        15+ días
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-age" aria-expanded="true"
+                                            aria-controls="accordion-age" role="button">
+                                            <i class="isax isax-profile-2user me-2 text-primary"></i>Tipo de Edad
+                                        </div>
+                                    </div>
+                                    <div id="accordion-age" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="ageType"
+                                                        type="radio" id="age1" value="ADULT"
+                                                        [(ngModel)]="selectedAgeType"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="age1">
+                                                        Adulto
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="ageType"
+                                                        type="radio" id="age2" value="CHILD"
+                                                        [(ngModel)]="selectedAgeType"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="age2">
+                                                        Niño
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="ageType"
+                                                        type="radio" id="age3" value="INFANT"
+                                                        [(ngModel)]="selectedAgeType"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="age3">
+                                                        Infante
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                    <input class="form-check-input ms-0 mt-0" name="ageType"
+                                                        type="radio" id="age4" value="SENIOR"
+                                                        [(ngModel)]="selectedAgeType"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <label class="form-check-label ms-2" for="age4">
+                                                        Senior
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-hotel" aria-expanded="true"
+                                            aria-controls="accordion-hotel" role="button">
+                                            <i class="isax isax-buildings me-2 text-primary"></i>Tour Types
+                                        </div>
+                                    </div>
+                                    <div id="accordion-hotel" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div class="more-content" [ngStyle]="{'height':isMore[0]?'232px':'148px'}">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel1"
+                                                        type="checkbox" id="hotel1" checked>
+                                                    <label class="form-check-label ms-2" for="hotel1">
+                                                        Ecotourism
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel2"
+                                                        type="checkbox" id="hotel2" checked>
+                                                    <label class="form-check-label ms-2" for="hotel2">
+                                                        Adventure Tour
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel3"
+                                                        type="checkbox" id="hotel3" checked>
+                                                    <label class="form-check-label ms-2" for="hotel3">
+                                                        Group Tours
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel4"
+                                                        type="checkbox" id="hotel4" checked>
+                                                    <label class="form-check-label ms-2" for="hotel4">
+                                                        Beach Tours
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel5"
+                                                        type="checkbox" id="hotel5">
+                                                    <label class="form-check-label ms-2" for="hotel5">
+                                                        Honey Moon
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel6"
+                                                        type="checkbox" id="hotel6" checked>
+                                                    <label class="form-check-label ms-2" for="hotel6">
+                                                        Historical Tours
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel7"
+                                                        type="checkbox" id="hotel7" checked>
+                                                    <label class="form-check-label ms-2" for="hotel7">
+                                                        Summer Trip
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="hotel8"
+                                                        type="checkbox" id="hotel8">
+                                                    <label class="form-check-label ms-2" for="hotel8">
+                                                        City Trip
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <a href="javascript:void(0);" class="more-view text-primary fw-medium fs-14"
+                                                [ngStyle]="{'display':isMore[0]?'none':'block'}"
+                                                (click)="showMore(0)">Show More</a>
+                                            <a href="javascript:void(0);" class="more-view text-primary fw-medium fs-14"
+                                                [ngStyle]="{'display':isMore[0]?'block':'none'}"
+                                                (click)="showMore(0)">Show Less</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-cusine" aria-expanded="true"
+                                            aria-controls="accordion-cusine" role="button">
+                                            <i class="isax isax-activity me-2 text-primary"></i>Activities
+                                        </div>
+                                    </div>
+                                    <div id="accordion-cusine" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="cusine1"
+                                                        type="checkbox" id="cusine1">
+                                                    <label class="form-check-label ms-2" for="cusine1">
+                                                        Hiking
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="cusine2"
+                                                        type="checkbox" id="cusine2">
+                                                    <label class="form-check-label ms-2" for="cusine2">
+                                                        Sightseeing
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                    <input class="form-check-input ms-0 mt-0" name="cusine3"
+                                                        type="checkbox" id="cusine3">
+                                                    <label class="form-check-label ms-2" for="cusine3">
+                                                        Wildlife Safari
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                    <input class="form-check-input ms-0 mt-0" name="cusine4"
+                                                        type="checkbox" id="cusine4" checked>
+                                                    <label class="form-check-label ms-2" for="cusine4">
+                                                        Boat Tours
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-brand" aria-expanded="true"
+                                            aria-controls="accordion-brand" role="button">
+                                            <i class="isax isax-discount-shape me-2 text-primary"></i>Reviews
+                                        </div>
+                                    </div>
+                                    <div id="accordion-brand" class="accordion-collapse collapse show">
+                                        <div class="accordion-body">
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="review1" type="checkbox"
+                                                    id="review1">
+                                                <label class="form-check-label ms-2" for="review1">
+                                                    <span class="rating d-flex align-items-center">
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary"></i>
+                                                        <span class="ms-2">5 Star</span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="review2" type="checkbox"
+                                                    id="review2">
+                                                <label class="form-check-label ms-2" for="review2">
+                                                    <span class="rating d-flex align-items-center">
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary"></i>
+                                                        <span class="ms-2">4 Star</span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="review3" type="checkbox"
+                                                    id="review3">
+                                                <label class="form-check-label ms-2" for="review3">
+                                                    <span class="rating d-flex align-items-center">
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary"></i>
+                                                        <span class="ms-2">3 Star</span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                                <input class="form-check-input ms-0 mt-0" name="review4" type="checkbox"
+                                                    id="review4">
+                                                <label class="form-check-label ms-2" for="review4">
+                                                    <span class="rating d-flex align-items-center">
+                                                        <i class="fas fa-star filled text-primary me-1"></i>
+                                                        <i class="fas fa-star filled text-primary"></i>
+                                                        <span class="ms-2">2 Star</span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                                <input class="form-check-input ms-0 mt-0" name="review5" type="checkbox"
+                                                    id="review5">
+                                                <label class="form-check-label ms-2" for="review5">
+                                                    <span class="rating d-flex align-items-center">
+                                                        <i class="fas fa-star filled text-primary"></i>
+                                                        <span class="ms-2">1 Star</span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botón de búsqueda -->
+                            <div class="p-3 border-top">
+                                <button type="button" class="btn btn-primary w-100" (click)="onSearchFromFilters()">
+                                    <i class="isax isax-search-normal me-2"></i>
+                                    Buscar Tours
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <!-- /Tour Search -->
+            <!-- /Sidebar -->
 
-            <!-- Tour Types -->
-            <div class="mb-2">
-                <div class="mb-3">
-                    <h5 class="mb-2">Choose type of Tours you are interested</h5>
-                </div>
-                <div class="row">
-                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="d-flex align-items-center hotel-type-item mb-3">
-                            <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
-                                <img src="assets/img/tours/tours-01.jpg" class="rounded-circle" alt="img">
-                            </a>
-                            <div class="ms-2">
-                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Ecotourism</a></h6>
-                                <p class="fs-14">216 Hotels</p>
+            <div class="col-xl-9 col-lg-8">
+                <div class="theiaStickySidebar">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <h6 class="mb-3">{{ tours.length }} Tours Found on Your Search</h6>
+                        <div class="d-flex align-items-center flex-wrap">
+                            <div class="list-item d-flex align-items-center mb-3">
+                                <a href="javascript:void(0);" class="list-icon me-2"
+                                    [ngClass]="{ active: viewMode === 'grid' }" (click)="setViewMode('grid')">
+                                    <i class="isax isax-grid-1"></i>
+                                </a>
+                                <a href="javascript:void(0);" class="list-icon me-2"
+                                    [ngClass]="{ active: viewMode === 'list' }" (click)="setViewMode('list')">
+                                    <i class="isax isax-firstline"></i>
+                                </a>
+                            </div>
+                            <div class="dropdown mb-3">
+                                <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <span class="fw-medium text-gray-9">Sort By : </span>Recommended
+                                </a>
+                                <div class="dropdown-menu dropdown-sm">
+                                    <form>
+                                        <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend1" checked>
+                                            <label class="form-check-label ms-2" for="recommend1">Recommended</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend2">
+                                            <label class="form-check-label ms-2" for="recommend2">Price: low to
+                                                high</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend3">
+                                            <label class="form-check-label ms-2" for="recommend3">Price: high to
+                                                low</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend4">
+                                            <label class="form-check-label ms-2" for="recommend4">Newest</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend5">
+                                            <label class="form-check-label ms-2" for="recommend5">Ratings</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend6">
+                                            <label class="form-check-label ms-2" for="recommend6">Reviews</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
+                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
+                                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="d-flex align-items-center hotel-type-item mb-3">
-                            <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
-                                <img src="assets/img/tours/tours-02.jpg" class="rounded-circle" alt="img">
-                            </a>
-                            <div class="ms-2">
-                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Adventure Tour</a></h6>
-                                <p class="fs-14">569 tours</p>
-                            </div>
-                        </div>
+
+
+
+
+
+
+                    <!-- Grid View -->
+                    <div *ngIf="viewMode === 'grid'">
+                        <app-tour-grid-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
+                            [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
+                            (toggleFavorite)="onToggleFavoriteFromGrid($event)" (goToPage)="onGoToPageFromGrid($event)"
+                            (goToPreviousPage)="onGoToPreviousPageFromGrid()" (goToNextPage)="onGoToNextPageFromGrid()"
+                            (selectTour)="selectTour($event)">
+                        </app-tour-grid-view>
                     </div>
-                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="d-flex align-items-center hotel-type-item mb-3">
-                            <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
-                                <img src="assets/img/tours/tours-03.jpg" class="rounded-circle" alt="img">
-                            </a>
-                            <div class="ms-2">
-                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Group Tours</a></h6>
-                                <p class="fs-14">129 tours</p>
-                            </div>
-                        </div>
+
+                    <!-- List View -->
+                    <div *ngIf="viewMode === 'list'">
+                        <app-tour-list-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
+                            [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
+                            (toggleFavorite)="onToggleFavorite($event)" (goToPage)="onGoToPageFromList($event)"
+                            (goToPreviousPage)="onGoToPreviousPageFromList()" (goToNextPage)="onGoToNextPageFromList()"
+                            (selectTour)="selectTour($event)">
+                        </app-tour-list-view>
                     </div>
-                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="d-flex align-items-center hotel-type-item mb-3">
-                            <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
-                                <img src="assets/img/tours/tours-04.jpg" class="rounded-circle" alt="img">
-                            </a>
-                            <div class="ms-2">
-                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Beach Tours</a></h6>
-                                <p class="fs-14">600 tours</p>
-                            </div>
+
+                    <!-- Pagination -->
+                    <nav class="pagination-nav" *ngIf="totalPages > 1">
+                        <ul class="pagination justify-content-center">
+                            <!-- Botón Anterior -->
+                            <li class="page-item" [ngClass]="{ disabled: isFirstPage() }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                                </a>
+                            </li>
+
+                            <!-- Números de página -->
+                            <li class="page-item" *ngFor="let pageNum of getPageNumbers()"
+                                [ngClass]="{ active: pageNum === currentPage }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToPage(pageNum)">{{ pageNum
+                                    }}</a>
+                            </li>
+
+                            <!-- Botón Siguiente -->
+                            <li class="page-item" [ngClass]="{ disabled: isLastPage() }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()"
+                                    aria-label="Next">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Información de paginación -->
+                        <div class="text-center mt-2">
+                            <small class="text-muted">
+                                Mostrando {{ (currentPage - 1) * size + 1 }} - {{ Math.min(currentPage * size,
+                                totalItems) }} de {{ totalItems }} tours
+                            </small>
                         </div>
-                    </div>
-                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="d-flex align-items-center hotel-type-item mb-3">
-                            <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
-                                <img src="assets/img/tours/tours-05.jpg" class="rounded-circle" alt="img">
-                            </a>
-                            <div class="ms-2">
-                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Historical Tours</a></h6>
-                                <p class="fs-14">200 tours</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="d-flex align-items-center hotel-type-item mb-3">
-                            <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
-                                <img src="assets/img/tours/tours-06.jpg" class="rounded-circle" alt="img">
-                            </a>
-                            <div class="ms-2">
-                                <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Summer Trip</a></h6>
-                                <p class="fs-14">200 tours</p>
-                            </div>
-                        </div>
-                    </div>
+                    </nav>
+                    <!-- /Pagination -->
                 </div>
             </div>
-            <!-- /Tour Types -->
 
-            <div class="row">
-
-                <!-- Sidebar -->
-                <div class="col-xl-3 col-lg-3 ">
-                    <div class="card filter-sidebar mb-4 mb-lg-0 theiaStickySidebar">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5>Filters</h5>
-                            <a href="javascript:void(0);" class="fs-14 link-primary" (click)="resetFilters()">Reset</a>
-                        </div>
-                        <div class="card-body p-0">
-                            <form>
-                                <div class="p-3 border-bottom">
-                                    <label class="form-label fs-16">Búsqueda General</label>
-                                    <div class="input-icon">
-                                        <span class="input-icon-addon">
-											<i class="isax isax-search-normal"></i>
-										</span>
-                                        <input type="text" 
-                                               class="form-control" 
-                                               placeholder="Buscar tours..."
-                                               [(ngModel)]="searchText"
-                                               [ngModelOptions]="{standalone: true}">
-                                    </div>
-                                </div>
-                                <div class="accordion accordion-list">
-                                    <div class="accordion-item border-bottom p-3">
-                                        <div class="accordion-header">
-                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#s" aria-expanded="true" aria-controls="accordion-populars" role="button">
-                                                <i class="isax isax-ranking me-2 text-primary"></i>Popular
-                                            </div>
-                                        </div>
-                                        <div id="accordion-populars" class="accordion-collapse collapse show">
-                                            <div class="accordion-body pt-2">
-                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="popular1" type="checkbox" id="popular1">
-                                                    <label class="form-check-label ms-2" for="popular1">
-                                                        Local Guide
-                                                    </label>
-                                                </div>
-                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="popular2" type="checkbox" id="popular2">
-                                                    <label class="form-check-label ms-2" for="popular2">
-                                                        VIP Access
-                                                    </label>
-                                                </div>
-                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="popular3" type="checkbox" id="popular3">
-                                                    <label class="form-check-label ms-2" for="popular3">
-                                                        Photographs
-                                                    </label>
-                                                </div>
-                                                <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="popular4" type="checkbox" id="popular4">
-                                                    <label class="form-check-label ms-2" for="popular4">
-                                                        Adventure Gears
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item border-bottom p-3">
-                                        <div class="accordion-header">
-                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-popular" aria-expanded="true" aria-controls="accordion-popular" role="button">
-                                                <i class="isax isax-coin me-2 text-primary"></i>Rango de Precio
-                                            </div>
-                                        </div>
-                                        <div id="accordion-popular" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <span class="badge badge-xs badge-light text-gray-4">${{ minPrice }}</span>
-                                                    <span class="badge badge-xs badge-light text-gray-4">${{ maxPrice }}</span>
-                                                </div>
-                                                <div class="filter-range">
-                                                    <div class="d-flex align-items-center">
-                                                        <input type="range" 
-                                                               class="form-range" 
-                                                               min="100" 
-                                                               max="10000" 
-                                                               step="100" 
-                                                               [(ngModel)]="minPrice"
-                                                               [ngModelOptions]="{standalone: true}"
-                                                               (input)="onMinPriceChange($event)"
-                                                               (change)="onMinPriceChange($event)">
-                                                        <span class="ms-2">${{ minPrice }}</span>
-                                                    </div>
-                                                    <div class="d-flex align-items-center mt-2">
-                                                        <input type="range" 
-                                                               class="form-range" 
-                                                               min="100" 
-                                                               max="10000" 
-                                                               step="100" 
-                                                               [(ngModel)]="maxPrice"
-                                                               [ngModelOptions]="{standalone: true}"
-                                                               (input)="onMaxPriceChange($event)"
-                                                               (change)="onMaxPriceChange($event)">
-                                                        <span class="ms-2">${{ maxPrice }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="filter-range-amount">
-                                                    <p class="fs-14">Rango: <span class="text-gray-9 fw-medium">${{ minPrice }} - ${{ maxPrice }}</span></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item border-bottom p-3">
-                                        <div class="accordion-header">
-                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-duration" aria-expanded="true" aria-controls="accordion-duration" role="button">
-                                                <i class="isax isax-clock me-2 text-primary"></i>Duración del Tour
-                                            </div>
-                                        </div>
-                                        <div id="accordion-duration" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
-                                                <div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="duration" 
-                                                               type="radio" 
-                                                               id="duration1" 
-                                                               value="1-3"
-                                                               [(ngModel)]="selectedDuration"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="duration1">
-                                                            1-3 días
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="duration" 
-                                                               type="radio" 
-                                                               id="duration2" 
-                                                               value="4-7"
-                                                               [(ngModel)]="selectedDuration"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="duration2">
-                                                            4-7 días
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="duration" 
-                                                               type="radio" 
-                                                               id="duration3" 
-                                                               value="8-14"
-                                                               [(ngModel)]="selectedDuration"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="duration3">
-                                                            8-14 días
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="duration" 
-                                                               type="radio" 
-                                                               id="duration4" 
-                                                               value="15+"
-                                                               [(ngModel)]="selectedDuration"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="duration4">
-                                                            15+ días
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item border-bottom p-3">
-                                        <div class="accordion-header">
-                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-age" aria-expanded="true" aria-controls="accordion-age" role="button">
-                                                <i class="isax isax-profile-2user me-2 text-primary"></i>Tipo de Edad
-                                            </div>
-                                        </div>
-                                        <div id="accordion-age" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
-                                                <div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="ageType" 
-                                                               type="radio" 
-                                                               id="age1" 
-                                                               value="ADULT"
-                                                               [(ngModel)]="selectedAgeType"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="age1">
-                                                            Adulto
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="ageType" 
-                                                               type="radio" 
-                                                               id="age2" 
-                                                               value="CHILD"
-                                                               [(ngModel)]="selectedAgeType"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="age2">
-                                                            Niño
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="ageType" 
-                                                               type="radio" 
-                                                               id="age3" 
-                                                               value="INFANT"
-                                                               [(ngModel)]="selectedAgeType"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="age3">
-                                                            Infante
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                                        <input class="form-check-input ms-0 mt-0" 
-                                                               name="ageType" 
-                                                               type="radio" 
-                                                               id="age4" 
-                                                               value="SENIOR"
-                                                               [(ngModel)]="selectedAgeType"
-                                                               [ngModelOptions]="{standalone: true}">
-                                                        <label class="form-check-label ms-2" for="age4">
-                                                            Senior
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item border-bottom p-3">
-                                        <div class="accordion-header">
-                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-hotel" aria-expanded="true" aria-controls="accordion-hotel" role="button">
-                                                <i class="isax isax-buildings me-2 text-primary"></i>Tour Types
-                                            </div>
-                                        </div>
-                                        <div id="accordion-hotel" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
-                                                <div class="more-content" [ngStyle]="{'height':isMore[0]?'232px':'148px'}">
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel1" type="checkbox" id="hotel1" checked>
-                                                        <label class="form-check-label ms-2" for="hotel1">
-                                                            Ecotourism
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel2" type="checkbox" id="hotel2" checked>
-                                                        <label class="form-check-label ms-2" for="hotel2">
-                                                            Adventure Tour
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel3" type="checkbox" id="hotel3" checked>
-                                                        <label class="form-check-label ms-2" for="hotel3">
-                                                            Group Tours
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel4" type="checkbox" id="hotel4" checked>
-                                                        <label class="form-check-label ms-2" for="hotel4">
-                                                            Beach Tours
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel5" type="checkbox" id="hotel5">
-                                                        <label class="form-check-label ms-2" for="hotel5">
-                                                            Honey Moon
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel6" type="checkbox" id="hotel6" checked>
-                                                        <label class="form-check-label ms-2" for="hotel6">
-                                                            Historical Tours
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel7" type="checkbox" id="hotel7" checked>
-                                                        <label class="form-check-label ms-2" for="hotel7">
-                                                            Summer Trip
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="hotel8" type="checkbox" id="hotel8">
-                                                        <label class="form-check-label ms-2" for="hotel8">
-                                                            City Trip
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <a href="javascript:void(0);" class="more-view text-primary fw-medium fs-14" [ngStyle]="{'display':isMore[0]?'none':'block'}" (click)="showMore(0)">Show More</a>
-                                                <a href="javascript:void(0);" class="more-view text-primary fw-medium fs-14" [ngStyle]="{'display':isMore[0]?'block':'none'}" (click)="showMore(0)">Show Less</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="accordion-item border-bottom p-3">
-                                        <div class="accordion-header">
-                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-cusine" aria-expanded="true" aria-controls="accordion-cusine" role="button">
-                                                <i class="isax isax-activity me-2 text-primary"></i>Activities
-                                            </div>
-                                        </div>
-                                        <div id="accordion-cusine" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
-                                                <div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="cusine1" type="checkbox" id="cusine1">
-                                                        <label class="form-check-label ms-2" for="cusine1">
-                                                            Hiking
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="cusine2" type="checkbox" id="cusine2">
-                                                        <label class="form-check-label ms-2" for="cusine2">
-                                                            Sightseeing
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                        <input class="form-check-input ms-0 mt-0" name="cusine3" type="checkbox" id="cusine3">
-                                                        <label class="form-check-label ms-2" for="cusine3">
-                                                            Wildlife Safari
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                                        <input class="form-check-input ms-0 mt-0" name="cusine4" type="checkbox" id="cusine4" checked>
-                                                        <label class="form-check-label ms-2" for="cusine4">
-                                                            Boat Tours
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="accordion-item border-bottom p-3">
-                                        <div class="accordion-header">
-                                            <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-brand" aria-expanded="true" aria-controls="accordion-brand" role="button">
-                                                <i class="isax isax-discount-shape me-2 text-primary"></i>Reviews
-                                            </div>
-                                        </div>
-                                        <div id="accordion-brand" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="review1" type="checkbox" id="review1">
-                                                    <label class="form-check-label ms-2" for="review1">
-                                                        <span class="rating d-flex align-items-center">
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary"></i>
-                                                            <span class="ms-2">5 Star</span>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="review2" type="checkbox" id="review2">
-                                                    <label class="form-check-label ms-2" for="review2">
-                                                        <span class="rating d-flex align-items-center">
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary"></i>
-                                                            <span class="ms-2">4 Star</span>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="review3" type="checkbox" id="review3">
-                                                    <label class="form-check-label ms-2" for="review3">
-                                                        <span class="rating d-flex align-items-center">
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary"></i>
-                                                            <span class="ms-2">3 Star</span>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="review4" type="checkbox" id="review4">
-                                                    <label class="form-check-label ms-2" for="review4">
-                                                        <span class="rating d-flex align-items-center">
-                                                            <i class="fas fa-star filled text-primary me-1"></i>
-                                                            <i class="fas fa-star filled text-primary"></i>
-                                                            <span class="ms-2">2 Star</span>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                                    <input class="form-check-input ms-0 mt-0" name="review5" type="checkbox" id="review5">
-                                                    <label class="form-check-label ms-2" for="review5">
-                                                        <span class="rating d-flex align-items-center">
-                                                            <i class="fas fa-star filled text-primary"></i>
-                                                            <span class="ms-2">1 Star</span>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Botón de búsqueda -->
-                                <div class="p-3 border-top">
-                                    <button type="button" 
-                                            class="btn btn-primary w-100" 
-                                            (click)="onSearchFromFilters()">
-                                        <i class="isax isax-search-normal me-2"></i>
-                                        Buscar Tours
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Sidebar -->
-
-                <div class="col-xl-9 col-lg-8">
-                    <div class="theiaStickySidebar">
-                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <h6 class="mb-3">{{ tours.length }} Tours Found on Your Search</h6>
-                            <div class="d-flex align-items-center flex-wrap">
-                                <div class="list-item d-flex align-items-center mb-3">
-                                    <a href="javascript:void(0);" 
-                                       class="list-icon me-2" 
-                                       [ngClass]="{ active: viewMode === 'grid' }"
-                                       (click)="setViewMode('grid')">
-                                        <i class="isax isax-grid-1"></i>
-                                    </a>
-                                    <a href="javascript:void(0);" 
-                                       class="list-icon me-2" 
-                                       [ngClass]="{ active: viewMode === 'list' }"
-                                       (click)="setViewMode('list')">
-                                        <i class="isax isax-firstline"></i>
-                                    </a>
-                                </div>
-                                <div class="dropdown mb-3">
-                                    <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="fw-medium text-gray-9">Sort By : </span>Recommended
-                                    </a>
-                                    <div class="dropdown-menu dropdown-sm">
-                                        <form>
-                                            <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend1" checked>
-                                                <label class="form-check-label ms-2" for="recommend1">Recommended</label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend2">
-                                                <label class="form-check-label ms-2" for="recommend2">Price: low to high</label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend3">
-                                                <label class="form-check-label ms-2" for="recommend3">Price: high to low</label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend4">
-                                                <label class="form-check-label ms-2" for="recommend4">Newest</label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend5">
-                                                <label class="form-check-label ms-2" for="recommend5">Ratings</label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                                <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox" id="recommend6">
-                                                <label class="form-check-label ms-2" for="recommend6">Reviews</label>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
-                                                <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
-                                                <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
-                        
-                        
-                        
-                        
-                        <!-- Grid View -->
-                        <div *ngIf="viewMode === 'grid'">
-                            <app-tour-grid-view
-                                [tours]="tours"
-                                [loading]="loading"
-                                [totalItems]="totalItems"
-                                [totalPages]="totalPages"
-                                [currentPage]="currentPage"
-                                [size]="size"
-                                (toggleFavorite)="onToggleFavoriteFromGrid($event)"
-                                (goToPage)="onGoToPageFromGrid($event)"
-                                (goToPreviousPage)="onGoToPreviousPageFromGrid()"
-                                (goToNextPage)="onGoToNextPageFromGrid()"
-                                (selectTour)="selectTour($event)">
-                            </app-tour-grid-view>
-                        </div>
-
-                        <!-- List View -->
-                        <div *ngIf="viewMode === 'list'">
-                            <app-tour-list-view
-                                [tours]="tours"
-                                [loading]="loading"
-                                [totalItems]="totalItems"
-                                [totalPages]="totalPages"
-                                [currentPage]="currentPage"
-                                [size]="size"
-                                (toggleFavorite)="onToggleFavorite($event)"
-                                (goToPage)="onGoToPageFromList($event)"
-                                (goToPreviousPage)="onGoToPreviousPageFromList()"
-                                (goToNextPage)="onGoToNextPageFromList()"
-                                (selectTour)="selectTour($event)">
-                            </app-tour-list-view>
-                        </div>
-    
-                        <!-- Pagination -->
-                        <nav class="pagination-nav" *ngIf="totalPages > 1">
-                            <ul class="pagination justify-content-center">
-                                <!-- Botón Anterior -->
-                                <li class="page-item" [ngClass]="{ disabled: isFirstPage() }">
-                                    <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()" aria-label="Previous">
-                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
-                                    </a>
-                                </li>
-                                
-                                <!-- Números de página -->
-                                <li class="page-item" *ngFor="let pageNum of getPageNumbers()" [ngClass]="{ active: pageNum === currentPage }">
-                                    <a class="page-link" href="javascript:void(0);" (click)="goToPage(pageNum)">{{ pageNum }}</a>
-                                </li>
-                                
-                                <!-- Botón Siguiente -->
-                                <li class="page-item" [ngClass]="{ disabled: isLastPage() }">
-                                    <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()" aria-label="Next">
-                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
-                                    </a>
-                                </li>
-                            </ul>
-                            
-                            <!-- Información de paginación -->
-                            <div class="text-center mt-2">
-                                <small class="text-muted">
-                                    Mostrando {{ (currentPage - 1) * size + 1 }} - {{ Math.min(currentPage * size, totalItems) }} de {{ totalItems }} tours
-                                </small>
-                            </div>
-                        </nav>
-                        <!-- /Pagination -->
-                    </div>
-                </div>
-
-            </div>
         </div>
     </div>
-    <!-- /Page Wrapper -->
+</div>
+<!-- /Page Wrapper -->
 
-    <!-- Floating Cart -->
-    <!-- Debug temporal -->
-    <!-- <div *ngIf="checkIn && checkOut" style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: red; color: white; padding: 10px; font-size: 12px;">
+<!-- Floating Cart -->
+<!-- Debug temporal -->
+<!-- <div *ngIf="checkIn && checkOut" style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: red; color: white; padding: 10px; font-size: 12px;">
       Cart Visible: {{ isCartVisible }}<br>
       CheckIn: {{ checkIn }}<br>
       CheckOut: {{ checkOut }}<br>
@@ -697,15 +703,6 @@
       Items: {{ cartSummary?.totalItems || 0 }}
     </div> -->
 
-    <app-floating-cart
-        [isVisible]="isCartVisible"
-        (daySelected)="onDaySelected($event)"
-        (cartToggled)="onCartToggled($event)"
-        (clearCart)="onCartCleared()">
-    </app-floating-cart>
-
-    <!-- Tour Slot Selection Modal -->
-    <app-tour-slot-selection-modal
-        (tourAdded)="onTourAddedToCart($event)"
-        (modalClosed)="onModalClosed()">
-    </app-tour-slot-selection-modal>
+<app-floating-cart [isVisible]="isCartVisible" (daySelected)="onDaySelected($event)"
+    (cartToggled)="onCartToggled($event)" (clearCart)="onCartCleared()">
+</app-floating-cart>
