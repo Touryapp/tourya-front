@@ -1,13 +1,20 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { CartService } from '../../services/cart.service';
-import { DaySelection, CartSummary } from '../../dto/cart.dto';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
+import { CartService } from "../../services/cart.service";
+import { DaySelection, CartSummary } from "../../dto/cart.dto";
 
 @Component({
-  selector: 'app-floating-cart',
+  selector: "app-floating-cart",
   standalone: false,
-  templateUrl: './floating-cart.component.html',
-  styleUrls: ['./floating-cart.component.scss']
+  templateUrl: "./floating-cart.component.html",
+  styleUrls: ["./floating-cart.component.scss"],
 })
 export class FloatingCartComponent implements OnInit, OnDestroy {
   @Input() isVisible: boolean = false;
@@ -23,7 +30,10 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    console.log('FloatingCart: Inicializando componente. isVisible:', this.isVisible);
+    console.log(
+      "FloatingCart: Inicializando componente. isVisible:",
+      this.isVisible
+    );
     this.subscribeToCartData();
   }
 
@@ -36,16 +46,16 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
     // Suscribirse a las selecciones de días
     this.cartService.daySelections$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(days => {
-        console.log('FloatingCart: Días actualizados:', days);
+      .subscribe((days) => {
+        console.log("FloatingCart: Días actualizados:", days);
         this.daySelections = days;
       });
 
     // Suscribirse al resumen del carrito
     this.cartService.cartSummary$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(summary => {
-        console.log('FloatingCart: Resumen actualizado:', summary);
+      .subscribe((summary) => {
+        console.log("FloatingCart: Resumen actualizado:", summary);
         this.cartSummary = summary;
       });
   }
@@ -102,16 +112,16 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
    * Obtiene la clase CSS para un día
    */
   getDayClass(day: DaySelection): string {
-    let classes = 'day-item';
-    
+    let classes = "day-item";
+
     if (day.isSelected) {
-      classes += ' selected';
+      classes += " selected";
     }
-    
+
     if (day.availableTours === 0) {
-      classes += ' no-tours';
+      classes += " no-tours";
     }
-    
+
     return classes;
   }
 
@@ -120,7 +130,12 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
    */
   hasDaysAvailable(): boolean {
     const hasData = this.daySelections.length > 0;
-    console.log('FloatingCart: hasDaysAvailable ->', hasData, 'Días:', this.daySelections.length);
+    console.log(
+      "FloatingCart: hasDaysAvailable ->",
+      hasData,
+      "Días:",
+      this.daySelections.length
+    );
     return hasData;
   }
 
@@ -136,8 +151,10 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
    */
   getCompletionPercentage(): number {
     if (this.daySelections.length === 0) return 0;
-    
-    const selectedDays = this.daySelections.filter(day => day.isSelected).length;
+
+    const selectedDays = this.daySelections.filter(
+      (day) => day.isSelected
+    ).length;
     return Math.round((selectedDays / this.daySelections.length) * 100);
   }
 
@@ -145,21 +162,10 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
    * Formatea el precio
    */
   formatPrice(price: number): string {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
     }).format(price);
   }
-
-  /**
-   * Formatea la fecha para mostrar
-   */
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: 'short'
-    });
-  }
-} 
+}

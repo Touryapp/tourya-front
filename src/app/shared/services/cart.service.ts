@@ -66,10 +66,11 @@ export class CartService {
       "Viernes",
       "Sábado",
     ];
+
     let current = new Date(start);
     let dayNumber = 1;
 
-    while (current < end) {
+    while (current <= end) {
       const dateStr = current.toISOString().split("T")[0];
       const dayName = dayNames[current.getDay()];
 

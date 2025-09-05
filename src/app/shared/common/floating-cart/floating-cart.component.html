@@ -1,6 +1,6 @@
 <!-- Floating Cart Container -->
 <div class="floating-cart" *ngIf="isVisible && hasDaysAvailable()" [ngClass]="{ 'expanded': isExpanded }">
-  
+
   <!-- Cart Header - Siempre visible -->
   <div class="cart-header" (click)="toggleExpansion()">
     <div class="header-content">
@@ -12,8 +12,8 @@
         </div>
         <div class="cart-summary" *ngIf="hasToursSelected()">
           <small class="text-muted">
-            {{ cartSummary?.totalItems }} de {{ daySelections.length }} días • 
-            {{ cartSummary?.totalParticipants }} personas • 
+            {{ cartSummary?.totalItems }} de {{ daySelections.length }} días •
+            {{ cartSummary?.totalParticipants }} personas •
             {{ formatPrice(cartSummary?.totalPrice || 0) }}
           </small>
         </div>
@@ -23,7 +23,7 @@
           </small>
         </div>
       </div>
-      
+
       <div class="header-actions">
         <!-- Progreso visual -->
         <div class="progress-circle" *ngIf="daySelections.length > 0">
@@ -31,7 +31,7 @@
             <div class="progress-text">{{ getCompletionPercentage() }}%</div>
           </div>
         </div>
-        
+
         <!-- Botón expandir/colapsar -->
         <button class="btn btn-link p-0 ms-2" (click)="toggleExpansion()">
           <i class="isax" [ngClass]="isExpanded ? 'isax-arrow-down-1' : 'isax-arrow-up-1'"></i>
@@ -42,13 +42,11 @@
 
   <!-- Cart Body - Solo visible cuando está expandido -->
   <div class="cart-body" *ngIf="isExpanded">
-    
+
     <!-- Progress Bar -->
     <div class="progress-section" *ngIf="daySelections.length > 0">
       <div class="progress mb-2" style="height: 4px;">
-        <div class="progress-bar bg-primary" 
-             role="progressbar" 
-             [style.width.%]="getCompletionPercentage()">
+        <div class="progress-bar bg-primary" role="progressbar" [style.width.%]="getCompletionPercentage()">
         </div>
       </div>
       <div class="d-flex justify-content-between">
@@ -60,33 +58,29 @@
     <!-- Days List -->
     <div class="days-container">
       <h6 class="section-title">Días de Viaje</h6>
-      
+
       <div class="days-scroll">
-        <div class="day-item-wrapper" 
-             *ngFor="let day of daySelections; let i = index"
-             [ngClass]="getDayClass(day)"
-             (click)="onDayClick(day)">
-          
+        <div class="day-item-wrapper" *ngFor="let day of daySelections; let i = index" [ngClass]="getDayClass(day)"
+          (click)="onDayClick(day)">
+
           <div class="day-card">
             <!-- Day Header -->
             <div class="day-header">
               <div class="day-info">
                 <div class="day-number">Día {{ day.dayNumber }}</div>
                 <div class="day-details">
-                  <span class="day-name">{{ day.dayName }}</span>
-                  <span class="day-date">{{ formatDate(day.date) }}</span>
+                  <span class="day-name">{{ day.date | date: 'EEEE' }}</span>
+                  <span class="day-date">{{ day.date | date: 'dd MMM' }}</span>
                 </div>
               </div>
-              
+
               <div class="day-status">
-                <span class="status-badge" 
-                      [ngClass]="{ 
+                <span class="status-badge" [ngClass]="{ 
                         'selected': day.isSelected, 
                         'available': !day.isSelected && day.availableTours > 0,
                         'no-tours': day.availableTours === 0 
                       }">
-                  <i class="isax" 
-                     [ngClass]="{
+                  <i class="isax" [ngClass]="{
                        'isax-tick-circle': day.isSelected,
                        'isax-add-circle': !day.isSelected && day.availableTours > 0,
                        'isax-close-circle': day.availableTours === 0
@@ -99,6 +93,9 @@
             <div class="selected-tour" *ngIf="day.isSelected && day.tourSelected">
               <div class="tour-info">
                 <div class="tour-name">{{ day.tourSelected.tour.name }}</div>
+                <div class="tour-image">
+                  <img [src]="day.tourSelected.gallery.at(0)?.imageUrl" alt="{{ day.tourSelected.tour.name }}">
+                </div>
                 <div class="tour-details">
                   <span class="tour-time">
                     {{ day.tourSelected.selectedSlot.startTime }} - {{ day.tourSelected.selectedSlot.endTime }}
@@ -112,23 +109,22 @@
                   {{ formatPrice(day.tourSelected.totalPrice) }}
                 </div>
               </div>
-              
-              <button class="btn btn-sm btn-outline-danger remove-btn"
-                      (click)="removeTourFromDay(day, $event)"
-                      title="Remover tour">
+
+              <button class="btn btn-sm btn-outline-danger remove-btn" (click)="removeTourFromDay(day, $event)"
+                title="Remover tour">
                 <i class="isax isax-trash"></i>
               </button>
             </div>
 
             <!-- Available Tours Info -->
-            <div class="available-info" *ngIf="!day.isSelected">
+            <!-- <div class="available-info" *ngIf="!day.isSelected">
               <span class="text-muted" *ngIf="day.availableTours > 0">
                 {{ day.availableTours }} tours disponibles
               </span>
               <span class="text-muted" *ngIf="day.availableTours === 0">
                 No hay tours disponibles
               </span>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -140,11 +136,11 @@
         <div class="summary-info">
           <div class="total-price">{{ formatPrice(cartSummary?.totalPrice || 0) }}</div>
           <div class="total-details">
-            {{ cartSummary?.totalParticipants }} personas • {{ cartSummary?.totalItems }} tours
+            {{ cartSummary?.totalParticipants }} persona(s) • {{ cartSummary?.totalItems }} tour(s)
           </div>
         </div>
       </div>
-      
+
       <div class="action-buttons">
         <button class="btn btn-outline-secondary btn-sm me-2" (click)="onClearCart()">
           <i class="isax isax-trash me-1"></i>
@@ -171,7 +167,5 @@
 </div>
 
 <!-- Backdrop -->
-<div class="cart-backdrop" 
-     *ngIf="isVisible && isExpanded" 
-     (click)="closeCart()">
-</div> 
+<div class="cart-backdrop" *ngIf="isVisible && isExpanded" (click)="closeCart()">
+</div>

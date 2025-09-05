@@ -172,7 +172,6 @@ export class ListToursComponent implements OnInit, OnDestroy {
       // Initialize cart with dates if available
       if (this.checkIn && this.checkOut) {
         this.cartService.initializeCart(this.checkIn, this.checkOut);
-        this.isCartVisible = true;
       }
 
       this.searchToursList();
@@ -198,6 +197,11 @@ export class ListToursComponent implements OnInit, OnDestroy {
       .subscribe((days) => {
         this.daySelections = days;
       });
+
+    // Subscribe to day selections
+    this.cartService.cartItems$.subscribe((items) => {
+      this.isCartVisible = items.length > 0;
+    });
   }
 
   // Show more/less functionality
@@ -372,7 +376,6 @@ export class ListToursComponent implements OnInit, OnDestroy {
       });
       console.log("Inicializando carrito desde búsqueda principal");
       this.cartService.initializeCart(this.checkIn, this.checkOut);
-      this.isCartVisible = true;
     }
 
     this.currentPage = 1;
@@ -395,7 +398,6 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
     //setear el checkin y checkout en el carrito
     this.cartService.initializeCart(this.checkIn, this.checkOut);
-    this.isCartVisible = true;
     // Resetear a la primera página
     this.currentPage = 1;
     this.page = 1;
@@ -517,7 +519,6 @@ export class ListToursComponent implements OnInit, OnDestroy {
             "Forzando inicialización del carrito desde searchToursList"
           );
           this.cartService.initializeCart(this.checkIn, this.checkOut);
-          this.isCartVisible = true;
           this.cartService.updateAvailableToursForDays(this.tours);
         }
       },
@@ -599,7 +600,6 @@ export class ListToursComponent implements OnInit, OnDestroy {
     // Asegurar que el carrito sea visible
     if (!this.isCartVisible && this.checkIn && this.checkOut) {
       console.log("Forzando visibilidad del carrito");
-      this.isCartVisible = true;
     }
 
     // Forzar actualización de datos del carrito después de agregar

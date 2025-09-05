@@ -187,14 +187,14 @@
     transform: translateX(2px);
   }
 
-  &.no-tours {
-    cursor: not-allowed;
-    opacity: 0.6;
+  // &.no-tours {
+  //   cursor: not-allowed;
+  //   opacity: 0.6;
 
-    &:hover {
-      transform: none;
-    }
-  }
+  //   &:hover {
+  //     transform: none;
+  //   }
+  // }
 
   .day-card {
     background: #f8f9fa;
@@ -209,18 +209,18 @@
   }
 
   &.selected .day-card {
-    background: rgba(var(--bs-primary-rgb), 0.1);
-    border-color: var(--bs-primary);
+    border-color: #f89201 !important;
   }
+    
 
   &.available .day-card {
     border-color: rgba(var(--bs-success-rgb), 0.3);
   }
 
-  &.no-tours .day-card {
-    background: #f1f3f4;
-    border-color: rgba(var(--bs-secondary-rgb), 0.3);
-  }
+  // &.no-tours .day-card {
+  //   background: #f1f3f4;
+  //   border-color: rgba(var(--bs-secondary-rgb), 0.3);
+  // }
 }
 
 /* Day Header */
@@ -306,6 +306,16 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .tour-image {
+      img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 8px;
+      }
     }
 
     .tour-details {
