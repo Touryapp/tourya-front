@@ -24,6 +24,8 @@ import {
   CalendarView,
 } from "angular-calendar";
 import { Subject } from "rxjs";
+import { TemplateService } from "../../templates/template.service";
+import { AuthService } from "../../../../core/services/auth.service";
 
 @Component({
   selector: "app-tour-schedule",
@@ -76,12 +78,20 @@ export class TourScheduleComponent {
 
   allMonthSelected: boolean = false;
 
+  // Propiedades para templates
+  templates: TourSchedule[] = [];
+  selectedTemplateId: number | null = null;
+  selectedTemplate: TourSchedule | null = null;
+  templatesLoading = false;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private tourService: TourService,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private templateService: TemplateService,
+    private authService: AuthService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -105,6 +115,7 @@ export class TourScheduleComponent {
       this.getTour();
       this.getSchedules();
       this.addSlot();
+      this.loadTemplates();
     } else {
       this.router.navigate(["/providers/provider-panel"]);
     }
@@ -125,7 +136,15 @@ export class TourScheduleComponent {
       if (this.tourScheduleId) {
         this.updateTourSchedule();
       } else {
-        this.saveTourSchedule();
+        // Si hay fechas seleccionadas, usar batch save
+        const startDate = this.tourScheduleForm.get("startDate")?.value;
+        const endDate = this.tourScheduleForm.get("endDate")?.value;
+        
+        if (startDate && endDate) {
+          this.saveTourScheduleBatch();
+        } else {
+          this.saveTourSchedule();
+        }
       }
     } else {
       this.loading = false;
@@ -943,6 +962,200 @@ export class TourScheduleComponent {
     snackBarRef.onAction().subscribe(() => {
       // Perform your action here (e.g., undo the archived message)
       this.loadConfig(tourScheduleId);
+    });
+  }
+
+  // Métodos para manejo de templates
+  loadTemplates(): void {
+    this.templatesLoading = true;
+    this.templateService.getTemplates().subscribe({
+      next: (templates) => {
+        this.templates = templates;
+        this.templatesLoading = false;
+      },
+      error: (error) => {
+        console.error("Error loading templates:", error);
+        this.templatesLoading = false;
+        this.openSnackBar("Error al cargar los templates");
+      }
+    });
+  }
+
+  onTemplateSelectionChange(event: any): void {
+    this.selectedTemplateId = event.value;
+    this.selectedTemplate = this.templates.find(t => t.id === event.value) || null;
+  }
+
+  applyTemplate(): void {
+    if (!this.selectedTemplate) {
+      this.openSnackBar("Por favor selecciona un template");
+      return;
+    }
+
+    // Limpiar el formulario actual
+    this.resetForm();
+
+    // Aplicar los datos del template al formulario
+    this.tourScheduleForm.patchValue({
+      label: this.selectedTemplate.label,
+      isUnlimitedCapacity: this.selectedTemplate.isUnlimitedCapacity,
+    });
+
+    // Aplicar días de la semana
+    this.daysOfWeek.clear();
+    this.selectedTemplate.daysOfWeek.forEach((dayOfWeek) => {
+      this.daysOfWeek.push(new FormControl(dayOfWeek));
+    });
+
+    // Aplicar slots
+    this.slots.clear();
+    if (this.selectedTemplate.slots && this.selectedTemplate.slots.length > 0) {
+      this.selectedTemplate.slots.forEach((slot, slotIndex) => {
+        // Crear nuevo slot
+        const newSlot = this.fb.group({
+          id: [slot.id || ""],
+          startTime: [slot.startTime || ""],
+          endTime: [slot.endTime || ""],
+          minCapacity: [slot.minCapacity || ""],
+          maxCapacity: [slot.maxCapacity || ""],
+          prices: this.fb.array([]),
+        });
+
+        // Agregar el slot al FormArray
+        this.slots.push(newSlot);
+
+        // Procesar precios del slot
+        slot.prices?.forEach((price, priceIndex) => {
+          // Manejar ageType que puede venir como objeto o string
+          const ageTypeValue = typeof price.ageType === 'object' 
+            ? price.ageType.name 
+            : price.ageType;
+
+          // Crear nuevo precio
+          const newPrice = this.fb.group({
+            id: [price.id || ""],
+            ageType: [ageTypeValue || ""],
+            minAge: [price.minAge || ""],
+            maxAge: [price.maxAge || ""],
+            price: [price.price || ""],
+          });
+
+          // Agregar el precio al FormArray de precios del slot
+          this.prices(slotIndex).push(newPrice);
+        });
+      });
+    } else {
+      // Si no hay slots en el template, agregar uno por defecto
+      this.addSlot();
+    }
+
+    this.openSnackBar("Template aplicado correctamente");
+  }
+
+  // Método para guardar configuraciones por fecha usando batch
+  saveTourScheduleBatch(): void {
+    const startDate = this.tourScheduleForm.get("startDate")?.value;
+    const endDate = this.tourScheduleForm.get("endDate")?.value;
+    const daysOfWeek = this.tourScheduleForm.get("daysOfWeek")?.value;
+    const slots = this.tourScheduleForm.get("slots")?.value;
+
+    if (!startDate || !endDate || !daysOfWeek || daysOfWeek.length === 0) {
+      this.openSnackBar("Por favor completa todos los campos requeridos");
+      return;
+    }
+
+    this.loading = true;
+
+    // Generar fechas basadas en los días de la semana seleccionados
+    const startDateDayJs = dayjs(startDate);
+    const endDateDayJs = dayjs(endDate);
+    const daysDifference = endDateDayJs.diff(startDateDayJs, "day");
+    
+    const batchData: any[] = [];
+
+    for (let i = 0; i <= daysDifference; i++) {
+      const currentDate = startDateDayJs.add(i, "day");
+      const dayOfWeek = this.DAYS_OF_WEEK[currentDate.day()].value;
+
+      // Verificar si este día está en los días seleccionados
+      if (daysOfWeek.includes(dayOfWeek)) {
+        const scheduleDate = currentDate.format("YYYY-MM-DD");
+
+        // Crear entrada para cada slot
+        slots.forEach((slot: any) => {
+          const startTimeParts = slot.startTime.split(":");
+          const endTimeParts = slot.endTime.split(":");
+
+          const batchEntry = {
+            tourId: this.tourId,
+            scheduleDate: scheduleDate,
+            startTime: {
+              hour: parseInt(startTimeParts[0]),
+              minute: parseInt(startTimeParts[1]),
+              second: 0,
+              nano: 0
+            },
+            endTime: {
+              hour: parseInt(endTimeParts[0]),
+              minute: parseInt(endTimeParts[1]),
+              second: 0,
+              nano: 0
+            },
+            maxCapacity: slot.maxCapacity || 0,
+            reservedCapacity: 0,
+            isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+            status: "available",
+            config: {
+              tourId: this.tourId,
+              providerId: this.authService.getIdProvider(),
+              label: this.tourScheduleForm.get("label")?.value,
+              startDate: startDateDayJs.format("YYYY-MM-DD"),
+              endDate: endDateDayJs.format("YYYY-MM-DD"),
+              daysOfWeek: daysOfWeek,
+              isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+              isTemplate: false,
+              slots: slots.map((s: any) => ({
+                startTime: {
+                  hour: parseInt(s.startTime.split(":")[0]),
+                  minute: parseInt(s.startTime.split(":")[1]),
+                  second: 0,
+                  nano: 0
+                },
+                endTime: {
+                  hour: parseInt(s.endTime.split(":")[0]),
+                  minute: parseInt(s.endTime.split(":")[1]),
+                  second: 0,
+                  nano: 0
+                },
+                minCapacity: s.minCapacity,
+                maxCapacity: s.maxCapacity,
+                prices: s.prices.map((p: any) => ({
+                  ageType: p.ageType,
+                  minAge: p.minAge,
+                  maxAge: p.maxAge,
+                  price: p.price
+                }))
+              }))
+            }
+          };
+
+          batchData.push(batchEntry);
+        });
+      }
+    }
+
+    this.tourService.saveTourScheduleBatch(batchData).subscribe({
+      next: (data) => {
+        this.loading = false;
+        this.openSnackBar("Configuraciones guardadas correctamente");
+        this.getSchedules();
+        this.resetForm();
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error("Error saving batch tour schedules:", error);
+        this.openSnackBar("Error al guardar las configuraciones");
+      }
     });
   }
 }

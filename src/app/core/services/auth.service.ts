@@ -206,4 +206,13 @@ export class AuthService {
     const status = localStorage.getItem("requestProviderStatus");
     return status as RequestsProvidersStatus || null;
   }
+  // set id provider
+  setIdProvider(id: number): void {
+    localStorage.setItem("idProvider", id.toString());
+  }
+  // get id provider
+  getIdProvider(): number | null {
+    const id = localStorage.getItem("idProvider");
+    return id ? parseInt(id) : null;
+  }
 } 

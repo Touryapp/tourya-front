@@ -1,0 +1,46 @@
+.save {
+  position: sticky;
+  width: 100%;
+  bottom: 10vh;
+}
+
+.spinner-border {
+  margin-left: 5px;
+}
+
+.mat-slide-toogle {
+  margin-left: 8px;
+}
+
+.page-title-box {
+  margin-bottom: 1.5rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.page-title-right {
+  float: right;
+}
+
+.checkbox-group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.checkbox-group li {
+  margin-bottom: 0.5rem;
+}
+
+.trash-icon {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.trash-icon:hover {
+  opacity: 0.7;
+}

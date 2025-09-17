@@ -25,6 +25,7 @@ export class ProviderPanelComponent implements OnInit {
   requestInfoMessage: string = "";
   requestProviders: any = { content: [] };
   mostrarTours: boolean = false;
+  mostrarTemplates: boolean = false;
   declinedReason: string = "";
 
   tours: Tour[] = [];

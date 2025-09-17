@@ -202,6 +202,7 @@ export class LoginTouristComponent {
         console.log(response);
         if(response){
           this.authService.setRequestProviderStatus(response.status as RequestsProvidersStatus);
+          this.authService.setIdProvider(response.provider.id);
         }else{
           this.authService.setRequestProviderStatus(RequestsProvidersStatus.CREATED);
         }

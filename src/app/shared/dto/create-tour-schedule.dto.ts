@@ -8,6 +8,8 @@ export interface CreateTourSchedule {
   daysOfWeek: string[];
   isUnlimitedCapacity: boolean;
   slots: CreateTourScheduleSlot[];
+  isTemplate: boolean;
+  createdBy: number;
 }
 
 export interface CreateTourScheduleSlot {

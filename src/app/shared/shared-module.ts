@@ -37,6 +37,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { TranslateModule } from "@ngx-translate/core";
 import { FooterComponent } from "./common/footer/footer.component";
+import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 // Calendar
 import {
@@ -49,6 +50,7 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
     FooterComponent,
     CommonCounterComponent,
     UserDashboardComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -122,6 +124,7 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
     MatSnackBarModule,
     DragDropModule,
     TranslateModule,
+    ConfirmDialogComponent,
     MatCheckboxModule,
     CalendarAngularCalendarModule,
   ],

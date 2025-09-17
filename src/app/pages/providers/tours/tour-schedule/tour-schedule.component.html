@@ -76,6 +76,48 @@
 
             <!-- Add Tour Schedule -->
             <div class="col-lg-4">
+                <!-- Template Selection -->
+                <div class="card shadow-none mb-4" id="template_selection">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 class="fs-18">Seleccionar Template</h5>
+                        </div>
+                    </div>
+                    <div class="card-body pb-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Template</label>
+                                    <mat-select class="custom-mat-select select" 
+                                        placeholder="Seleccionar template" 
+                                        [(ngModel)]="selectedTemplateId"
+                                        (selectionChange)="onTemplateSelectionChange($event)"
+                                        [disabled]="templatesLoading">
+                                        <mat-option *ngIf="templatesLoading" disabled>
+                                            Cargando templates...
+                                        </mat-option>
+                                        <mat-option *ngFor="let template of templates" [value]="template.id">
+                                            {{ template.label }}
+                                        </mat-option>
+                                        <mat-option *ngIf="!templatesLoading && templates.length === 0" disabled>
+                                            No hay templates disponibles
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="selectedTemplateId">
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-success btn-sm" 
+                                        (click)="applyTemplate()">
+                                        <i class="isax isax-check me-1"></i>
+                                        Aplicar Template
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <form [formGroup]="tourScheduleForm" (ngSubmit)="onSubmit()">
                     <div class="card shadow-none" id="basic_info">
                         <div class="card-header">
@@ -214,7 +256,8 @@
 
                                         <ul>
                                             <li *ngFor="let day of DAYS_OF_WEEK">
-                                                <mat-checkbox [checked]="isDaySelected(day.value)"
+                                                <mat-checkbox 
+                                                    [checked]="isDaySelected(day.value)"
                                                     (change)="onDayChange(day.value, $event)">
                                                     {{ day.label }}
                                                 </mat-checkbox>

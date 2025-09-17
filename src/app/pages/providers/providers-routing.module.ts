@@ -27,6 +27,11 @@ const routes: Routes = [
         loadChildren: () =>
           import("./provider-panel/provider-panel.module").then((m) => m.ProviderPanelModule),
       },
+      {
+        path: "templates",
+        loadChildren: () =>
+          import("./templates/templates.module").then((m) => m.TemplatesModule),
+      },
       { path: "", redirectTo: "provider-panel", pathMatch: "full" },
     ],
   },

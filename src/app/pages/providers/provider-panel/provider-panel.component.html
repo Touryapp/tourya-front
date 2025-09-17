@@ -27,13 +27,18 @@
       <div class="card-body user-sidebar-body">
         <ul>
           <li>
-            <a href="#" class="d-flex align-items-center" (click)="mostrarTours = false">
+            <a href="#" class="d-flex align-items-center" (click)="mostrarTours = false; mostrarTemplates = false">
               <i class="isax isax-grid-55"></i> Dashboard
             </a>
           </li>
           <li>
-            <a class="d-flex align-items-center" (click)="mostrarTours = true">
+            <a class="d-flex align-items-center" (click)="mostrarTours = true; mostrarTemplates = false">
               <i class="isax isax-user"></i> Lista de Tour
+            </a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" (click)="mostrarTours = false; mostrarTemplates = true">
+              <i class="isax isax-document-text"></i> Templates de Horarios
             </a>
           </li>
         </ul>
@@ -45,7 +50,7 @@
   <!-- Contenido principal -->
   <div class="col-xl-9 col-lg-8">
     <div class="dashboard-container">
-      <div *ngIf="!mostrarTours">
+      <div *ngIf="!mostrarTours && !mostrarTemplates">
         <!-- Tarjetas de estadísticas -->
         <div class="row mb-4">
           <div class="col-md-4">
@@ -105,6 +110,10 @@
           [totalPages]="totalPages" [currentPage]="currentPage" [size]="size" (goToPage)="onGoToPageFromList($event)"
           (goToPreviousPage)="onGoToPreviousPageFromList()" (goToNextPage)="onGoToNextPageFromList()">
         </app-tour-list-view-provider>
+      </div>
+
+      <div *ngIf="mostrarTemplates">
+        <app-template-list></app-template-list>
       </div>
     </div>
   </div>

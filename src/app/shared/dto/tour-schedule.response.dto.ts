@@ -22,7 +22,7 @@ export interface TourScheduleSlot {
 
 export interface TourSchedulePrice {
   id?: number;
-  ageType: TypeOfPerson;
+  ageType: TypeOfPerson | { name: string };
   minAge: number;
   maxAge: number;
   price: number;
