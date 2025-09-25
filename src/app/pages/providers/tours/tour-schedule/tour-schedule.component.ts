@@ -26,7 +26,7 @@ import {
 import { Subject } from "rxjs";
 import { TemplateService } from "../../templates/template.service";
 import { AuthService } from "../../../../core/services/auth.service";
-
+import { TourScheduleConfigResponseDto } from "../../../../shared/dto/tour-schedule.response.dto";
 @Component({
   selector: "app-tour-schedule",
   standalone: false,
@@ -41,7 +41,7 @@ export class TourScheduleComponent {
 
   tourId: number = 0;
   tour: Tour | null = null;
-  tourSchedules: TourSchedule[] = [];
+  tourSchedules: TourScheduleConfigResponseDto[] = [];
   tourSchedule: TourSchedule | null = null;
   tourScheduleId: number = 0;
 
@@ -479,66 +479,84 @@ export class TourScheduleComponent {
       const startDateFormatted = startDateDayJs.format("YYYY-MM-DD");
       const endDateFormatted = endDateDayJs.format("YYYY-MM-DD");
 
+      // Buscar si hay schedules en el rango de fechas especificado
       const found = this.tourSchedules.find((schedule) => {
-        return (
-          schedule.startDate &&
-          schedule.endDate &&
-          schedule.startDate === startDateFormatted &&
-          schedule.endDate === endDateFormatted
-        );
+        const scheduleDate = dayjs(schedule.scheduleDate);
+        return (scheduleDate.isAfter(startDateDayJs) || scheduleDate.isSame(startDateDayJs)) && 
+               (scheduleDate.isBefore(endDateDayJs) || scheduleDate.isSame(endDateDayJs));
       });
 
-      if (found && found.id) {
+      if (found && found.configId) {
         this.openSnackBarWithAction(
           "There is a configuration that meets these dates. Would you like to edit the configuration?",
           "Edit",
-          found.id
+          found.configId
         );
       }
     }
   }
 
-  loadConfig(id: number) {
-    const found = this.tourSchedules.find((schedule) => schedule.id === id);
+  loadConfig(configId: number) {
+    // Buscar un schedule que tenga este configId
+    const found = this.tourSchedules.find((schedule) => schedule.configId === configId);
 
-    if (found && found.id) {
-      this.tourScheduleId = found.id;
-      this.tourSchedule = found;
+    if (found && found.config) {
+      this.tourScheduleId = found.configId;
+      this.tourSchedule = {
+        id: found.config.id,
+        tourId: found.tourId,
+        label: found.config.label,
+        startDate: found.scheduleDate, // Usar la fecha del schedule específico
+        endDate: found.scheduleDate,
+        daysOfWeek: found.config.daysOfWeek,
+        isUnlimitedCapacity: found.config.isUnlimitedCapacity,
+        slots: found.config.slots
+      };
 
       this.tourScheduleForm.patchValue({
-        label: found.label,
-        isUnlimitedCapacity: found.isUnlimitedCapacity,
+        label: found.config.label,
+        isUnlimitedCapacity: found.config.isUnlimitedCapacity,
       });
 
-      found.daysOfWeek.map((dayOfWeek) => {
+      found.config.daysOfWeek.map((dayOfWeek) => {
         this.daysOfWeek.push(new FormControl(dayOfWeek));
       });
 
-      found?.slots?.map((slot, index) => {
-        if (index >= 1) {
-          this.addSlot();
-        }
-
-        this.slots.at(index).patchValue({
-          id: slot.id,
-          startTime: slot.startTime,
-          endTime: slot.endTime,
-          minCapacity: slot.minCapacity,
-          maxCapacity: slot.maxCapacity,
+      // Limpiar slots existentes
+      this.slots.clear();
+      
+      found.config.slots?.forEach((slot, slotIndex) => {
+        // Crear nuevo slot
+        const newSlot = this.fb.group({
+          id: [slot.id || ""],
+          startTime: [slot.startTime || ""],
+          endTime: [slot.endTime || ""],
+          minCapacity: [slot.minCapacity || ""],
+          maxCapacity: [slot.maxCapacity || ""],
+          prices: this.fb.array([]),
         });
 
-        slot.prices?.map((price, indexPrice) => {
-          if (indexPrice >= 1) {
-            this.addPrice(index);
-          }
+        // Agregar el slot al FormArray
+        this.slots.push(newSlot);
 
-          this.prices(index).at(indexPrice).patchValue({
-            id: price.id,
-            ageType: price.ageType,
-            minAge: price.minAge,
-            maxAge: price.maxAge,
-            price: price.price,
+        // Procesar precios del slot
+        slot.prices?.forEach((price, priceIndex) => {
+          // Manejar ageType que puede venir como objeto o string
+          const ageTypeValue = typeof price.ageType === 'object' 
+            ? price.ageType.name 
+            : price.ageType;
+
+          // Crear nuevo precio
+          const newPrice = this.fb.group({
+            id: [price.id || ""],
+            ageType: [ageTypeValue || ""],
+            minAge: [price.minAge || ""],
+            maxAge: [price.maxAge || ""],
+            price: [price.price || ""],
           });
+
+          // Agregar el precio al FormArray de precios del slot
+          this.prices(slotIndex).push(newPrice);
         });
       });
     }
@@ -664,78 +682,49 @@ export class TourScheduleComponent {
   getSchedules() {
     this.tourService.getSchedulesByTourId(this.tourId).subscribe({
       next: (data: {
-        content: TourSchedule[];
+        content: TourScheduleConfigResponseDto[];
         totalElements: number;
         totalPages: number;
       }) => {
         if (data && data.content) {
           this.tourSchedules = data.content;
-          const events: any[] = this.tourSchedules
-            .map((schedule) => {
-              const startDateDayJs = dayjs(schedule.startDate, "YYYY-MM-DD");
-              const endDateDayJs = dayjs(schedule.endDate, "YYYY-MM-DD");
+          
+          // Agrupar por configId para crear eventos únicos por configuración
+          const groupedSchedules = this.groupSchedulesByConfig(data.content);
+          
+          const events: any[] = Object.values(groupedSchedules).map((group: any) => {
+            const firstSchedule = group[0];
+            const config = firstSchedule.config;
+            
+            // Crear evento para el rango de fechas de esta configuración
+            const startDateDayJs = dayjs(firstSchedule.scheduleDate);
+            const endDateDayJs = dayjs(group[group.length - 1].scheduleDate);
+            
+            const color = {
+              primary: this.getRandomHexColor(),
+              secondary: this.getRandomHexColor(),
+            };
 
-              const daysDifference = endDateDayJs.diff(startDateDayJs, "day");
-              let acc: any[] = [];
+            return {
+              start: new Date(startDateDayJs.toISOString()),
+              end: new Date(endDateDayJs.toISOString()),
+              title: config.label,
+              draggable: false,
+              color: color,
+              allDay: true,
+              meta: {
+                configId: config.id,
+                tourId: this.tourId,
+                label: config.label,
+                daysOfWeek: config.daysOfWeek,
+                isUnlimitedCapacity: config.isUnlimitedCapacity,
+                slots: config.slots,
+                schedules: group // Incluir todos los días de esta configuración
+              },
+            };
+          });
 
-              const color = {
-                primary: this.getRandomHexColor(),
-                secondary: this.getRandomHexColor(),
-              };
-              for (let i = 0; i <= daysDifference; i++) {
-                const newStartDate = startDateDayJs.add(i, "day");
-                const newEndDate = startDateDayJs.add(i, "day");
-                const day = newStartDate.day();
-
-                const isDayOfWeekSelected = schedule.daysOfWeek.find(
-                  (dayOfWeek) => {
-                    return dayOfWeek === this.DAYS_OF_WEEK[day].value;
-                  }
-                );
-
-                if (
-                  isDayOfWeekSelected &&
-                  newStartDate.isValid() &&
-                  newEndDate.isValid()
-                ) {
-                  acc = [
-                    ...acc,
-                    {
-                      start: new Date(newStartDate.toISOString()),
-                      end: new Date(newEndDate.toISOString()),
-                      title: schedule.label,
-                      draggable: false,
-                      color: {
-                        ...color,
-                      },
-                      allDay: true,
-                      meta: {
-                        tourScheduleId: schedule.id,
-                        tourId: this.tourId,
-                        startDate: schedule.startDate,
-                        endDate: schedule.endDate,
-                        daysOfWeek: schedule.daysOfWeek,
-                        isUnlimitedCapacity: schedule.isUnlimitedCapacity,
-                        slots: schedule.slots,
-                      },
-                    },
-                  ];
-                }
-              }
-
-              return acc.length > 0 ? acc : null;
-            })
-            .filter((v) => v);
-
-          const events2 = events.reduce((acc, current, value, index) => {
-            if (current) {
-              acc = [...acc, ...current];
-            }
-            return acc;
-          }, []);
-
-          this.events = events2;
-
+          this.events = events;
           this.refresh.next();
         } else {
           this.tourSchedules = [];
@@ -749,6 +738,18 @@ export class TourScheduleComponent {
         this.openSnackBar("Error getting tour schedules.");
       },
     });
+  }
+
+  // Método auxiliar para agrupar schedules por configId
+  private groupSchedulesByConfig(schedules: TourScheduleConfigResponseDto[]): { [key: number]: TourScheduleConfigResponseDto[] } {
+    return schedules.reduce((groups, schedule) => {
+      const configId = schedule.configId;
+      if (!groups[configId]) {
+        groups[configId] = [];
+      }
+      groups[configId].push(schedule);
+      return groups;
+    }, {} as { [key: number]: TourScheduleConfigResponseDto[] });
   }
 
   openSnackBar(message: string) {
@@ -1083,24 +1084,9 @@ export class TourScheduleComponent {
 
         // Crear entrada para cada slot
         slots.forEach((slot: any) => {
-          const startTimeParts = slot.startTime.split(":");
-          const endTimeParts = slot.endTime.split(":");
-
           const batchEntry = {
             tourId: this.tourId,
             scheduleDate: scheduleDate,
-            startTime: {
-              hour: parseInt(startTimeParts[0]),
-              minute: parseInt(startTimeParts[1]),
-              second: 0,
-              nano: 0
-            },
-            endTime: {
-              hour: parseInt(endTimeParts[0]),
-              minute: parseInt(endTimeParts[1]),
-              second: 0,
-              nano: 0
-            },
             maxCapacity: slot.maxCapacity || 0,
             reservedCapacity: 0,
             isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
@@ -1115,18 +1101,8 @@ export class TourScheduleComponent {
               isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
               isTemplate: false,
               slots: slots.map((s: any) => ({
-                startTime: {
-                  hour: parseInt(s.startTime.split(":")[0]),
-                  minute: parseInt(s.startTime.split(":")[1]),
-                  second: 0,
-                  nano: 0
-                },
-                endTime: {
-                  hour: parseInt(s.endTime.split(":")[0]),
-                  minute: parseInt(s.endTime.split(":")[1]),
-                  second: 0,
-                  nano: 0
-                },
+                startTime: s.startTime,
+                endTime: s.endTime,
                 minCapacity: s.minCapacity,
                 maxCapacity: s.maxCapacity,
                 prices: s.prices.map((p: any) => ({
@@ -1157,5 +1133,26 @@ export class TourScheduleComponent {
         this.openSnackBar("Error al guardar las configuraciones");
       }
     });
+  }
+
+  // Métodos auxiliares para el template
+  getDayAbbreviation(day: string): string {
+    const dayAbbreviations: { [key: string]: string } = {
+      'SUNDAY': 'DOM',
+      'MONDAY': 'LUN',
+      'TUESDAY': 'MAR',
+      'WEDNESDAY': 'MIÉ',
+      'THURSDAY': 'JUE',
+      'FRIDAY': 'VIE',
+      'SATURDAY': 'SÁB'
+    };
+    return dayAbbreviations[day] || day;
+  }
+
+  getAgeTypeDisplay(ageType: any): string {
+    if (typeof ageType === 'object' && ageType.name) {
+      return ageType.name;
+    }
+    return ageType || '';
   }
 }

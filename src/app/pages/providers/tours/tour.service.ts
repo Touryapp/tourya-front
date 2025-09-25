@@ -6,6 +6,7 @@ import { Gallery, Tour } from "../../../shared/dto/tour-response.dto";
 import { CreateTourDto } from "../../../shared/dto/create-tour.dto";
 import { TourSchedule } from "../../../shared/dto/tour-schedule.response.dto";
 import { CreateTourSchedule } from "../../../shared/dto/create-tour-schedule.dto";
+import { TourScheduleConfigResponseDto } from "../../../shared/dto/tour-schedule.response.dto";
 
 @Injectable({
   providedIn: "root",
@@ -67,20 +68,15 @@ export class TourService {
   }
 
   getSchedulesByTourId(tourId: number): Observable<{
-    content: TourSchedule[];
+    content: TourScheduleConfigResponseDto[];
     totalElements: number;
     totalPages: number;
   }> {
     return this.http.get<{
-      content: TourSchedule[];
+      content: TourScheduleConfigResponseDto[];
       totalElements: number;
       totalPages: number;
-    }>(`${environment.apiUrl}/tour-schedules/by-tour/${tourId}`, {
-      params: {
-        page: "0",
-        size: "10",
-      },
-    });
+    }>(`${environment.apiUrl}/tour-schedules/tours/${tourId}`);
   }
 
   getScheduleById(configId: number): Observable<TourSchedule> {
