@@ -118,7 +118,12 @@ export class ListToursComponent implements OnInit, OnDestroy {
   ];
 
   public selectedState: string = "";
-  public selectedCategory: string = "";
+  public travellersData = {
+    adults: 1,
+    children: 0,
+    infants: 0,
+    cabinClass: 'Economy'
+  };
   public checkIn: string = "";
   public checkOut: string = "";
 
@@ -165,7 +170,12 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe((params) => {
       this.selectedState = params["state"] || "";
-      this.selectedCategory = params["category"] || "";
+      this.travellersData = {
+        adults: Number(params["adults"]) || 1,
+        children: Number(params["children"]) || 0,
+        infants: Number(params["infants"]) || 0,
+        cabinClass: params["cabinClass"] || 'Economy'
+      };
       this.checkIn = params["checkIn"] || "";
       this.checkOut = params["checkOut"] || "";
 
@@ -251,7 +261,12 @@ export class ListToursComponent implements OnInit, OnDestroy {
   resetFilters(): void {
     console.log("Reseteando filtros...");
     this.selectedState = "";
-    this.selectedCategory = "";
+    this.travellersData = {
+      adults: 1,
+      children: 0,
+      infants: 0,
+      cabinClass: 'Economy'
+    };
     this.checkIn = "";
     this.checkOut = "";
     this.selectedDuration = "";
@@ -365,7 +380,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   onSearch(): void {
     console.log("=== BÚSQUEDA PRINCIPAL ===");
     console.log("Estado seleccionado:", this.selectedState);
-    console.log("Categoría seleccionada:", this.selectedCategory);
+    console.log("Datos de viajeros:", this.travellersData);
     console.log("Fecha de entrada:", this.checkIn);
     console.log("Fecha de salida:", this.checkOut);
 
@@ -387,7 +402,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   onSearchFromFilters(): void {
     console.log("=== BÚSQUEDA DESDE FILTROS ===");
     console.log("Estado seleccionado:", this.selectedState);
-    console.log("Categoría seleccionada:", this.selectedCategory);
+    console.log("Datos de viajeros:", this.travellersData);
     console.log("Fecha de entrada:", this.checkIn);
     console.log("Fecha de salida:", this.checkOut);
     console.log("Duración seleccionada:", this.selectedDuration);
@@ -412,7 +427,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     const testData: Partial<SearchTourListDto> = {
       providerStateId: Number(this.selectedState) || undefined,
       providerCityId: 1,
-      categoryId: Number(this.selectedCategory) || undefined,
+      // categoryId: 1, // Using default category since we replaced with travellers data
       page: this.page,
       size: this.size,
       startDate: this.checkIn || undefined,
@@ -422,9 +437,11 @@ export class ListToursComponent implements OnInit, OnDestroy {
       minPrice: this.minPrice || undefined,
       maxPrice: this.maxPrice || undefined,
       search: this.searchText || undefined,
+      // Note: travellers data is handled separately for now
     };
 
     console.log("Datos de prueba que se enviarían a la API:", testData);
+    console.log("Datos de viajeros:", this.travellersData);
     console.log(
       "URL del endpoint:",
       `${environment.apiUrl}/public/tours/schedule/search`
@@ -456,6 +473,42 @@ export class ListToursComponent implements OnInit, OnDestroy {
     console.log("Precio máximo actualizado:", this.maxPrice);
   }
 
+  // Methods to update travellers data
+  updateTravellersCount(type: 'adults' | 'children' | 'infants', count: number): void {
+    this.travellersData[type] = Math.max(0, count);
+    if (type === 'adults' && this.travellersData.adults < 1) {
+      this.travellersData.adults = 1; // At least one adult required
+    }
+  }
+
+  updateCabinClass(cabinClass: string): void {
+    this.travellersData.cabinClass = cabinClass;
+  }
+
+  getTotalPersons(): number {
+    return this.travellersData.adults + this.travellersData.children + this.travellersData.infants;
+  }
+
+  getTravellersDisplay(): string {
+    const total = this.getTotalPersons();
+    const persons = total === 1 ? 'Person' : 'Persons';
+    return `${total} ${persons}`;
+  }
+
+  getTravellersDetails(): string {
+    const details = [];
+    if (this.travellersData.adults > 0) {
+      details.push(`${this.travellersData.adults} Adult${this.travellersData.adults > 1 ? 's' : ''}`);
+    }
+    if (this.travellersData.children > 0) {
+      details.push(`${this.travellersData.children} Child${this.travellersData.children > 1 ? 'ren' : ''}`);
+    }
+    if (this.travellersData.infants > 0) {
+      details.push(`${this.travellersData.infants} Infant${this.travellersData.infants > 1 ? 's' : ''}`);
+    }
+    return `${details.join(', ')}, ${this.travellersData.cabinClass}`;
+  }
+
   searchToursList(): void {
     this.loading = true;
 
@@ -463,7 +516,6 @@ export class ListToursComponent implements OnInit, OnDestroy {
     const searchData: Partial<SearchTourListDto> = {
       // providerStateId: Number(this.selectedState) || undefined,
       // providerCityId: 1,
-      // categoryId: Number(this.selectedCategory) || undefined,
       // page: this.page,
       // size: this.size,
       // startDate: this.checkIn || undefined,
@@ -476,7 +528,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
       startDate: this.checkIn || undefined,
       endDate: this.checkOut || undefined,
       durationType: "HORAS",
-      categoryId: 1,
+      categoryId: 1, // Default category since we replaced with travellers data
       sort_by: "price",
       sort_dir: "DESC",
       // tourId: 13,

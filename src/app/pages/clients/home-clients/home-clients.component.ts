@@ -42,8 +42,13 @@ public categories: TourCategory[] = [
   travelDestination: string = '';
   startDate: Date | string = '';
   endDate: Date | string = '';
-  // Eliminar duplicados y unificar tipos para el formulario de búsqueda
-  public selectedCategory: string = '';
+  // Travellers data
+  public travellersData = {
+    adults: 1,
+    children: 0,
+    infants: 0,
+    cabinClass: 'Economy'
+  };
   public checkIn: string = '';
   public checkOut: string = '';
   constructor(
@@ -335,10 +340,49 @@ onEndDateChange(date: Date) {
   this.endDate = date;
 }
 
+// Methods to update travellers data
+updateTravellersCount(type: 'adults' | 'children' | 'infants', count: number): void {
+  this.travellersData[type] = Math.max(0, count);
+  if (type === 'adults' && this.travellersData.adults < 1) {
+    this.travellersData.adults = 1; // At least one adult required
+  }
+}
+
+updateCabinClass(cabinClass: string): void {
+  this.travellersData.cabinClass = cabinClass;
+}
+
+getTotalPersons(): number {
+  return this.travellersData.adults + this.travellersData.children + this.travellersData.infants;
+}
+
+getTravellersDisplay(): string {
+  const total = this.getTotalPersons();
+  const persons = total === 1 ? 'Person' : 'Persons';
+  return `${total} ${persons}`;
+}
+
+getTravellersDetails(): string {
+  const details = [];
+  if (this.travellersData.adults > 0) {
+    details.push(`${this.travellersData.adults} Adult${this.travellersData.adults > 1 ? 's' : ''}`);
+  }
+  if (this.travellersData.children > 0) {
+    details.push(`${this.travellersData.children} Child${this.travellersData.children > 1 ? 'ren' : ''}`);
+  }
+  if (this.travellersData.infants > 0) {
+    details.push(`${this.travellersData.infants} Infant${this.travellersData.infants > 1 ? 's' : ''}`);
+  }
+  return `${details.join(', ')}, ${this.travellersData.cabinClass}`;
+}
+
 onSearch(): void {
   const params = [
     `state=${encodeURIComponent(this.selectedState)}`,
-    `category=${encodeURIComponent(this.selectedCategory)}`,
+    `adults=${encodeURIComponent(this.travellersData.adults)}`,
+    `children=${encodeURIComponent(this.travellersData.children)}`,
+    `infants=${encodeURIComponent(this.travellersData.infants)}`,
+    `cabinClass=${encodeURIComponent(this.travellersData.cabinClass)}`,
     `checkIn=${encodeURIComponent(this.checkIn)}`,
     `checkOut=${encodeURIComponent(this.checkOut)}`
   ].join('&');
