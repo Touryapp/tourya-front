@@ -1116,13 +1116,16 @@
                                               </select>
                                             </div>
                                             <!-- Select Categoría -->
-                                            <div class="form-item">
+                                            <!-- <div class="form-item">
                                               <label class="form-label fs-14 text-default mb-1">Categoría</label>
                                               <select class="form-control" [(ngModel)]="selectedCategory" name="category" required>
                                                 <option value="" disabled selected>Selecciona categoría</option>
                                                 <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
                                               </select>
-                                            </div>
+                                            </div> -->
+                                            <!-- cant personas -->
+                                             
+                                             <!-- close cantidad de personas -->
                                             <!-- Check In -->
                                             <div class="form-item">
                                               <label class="form-label fs-14 text-default mb-1">Check In</label>
@@ -1134,7 +1137,7 @@
                                               <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
                                             </div>
                                           </div>
-                                          <button type="submit" class="btn btn-primary search-btn rounded ms-2">Searchs</button>
+                                          <button type="submit" class="btn btn-primary search-btn rounded ms-2">Buscar</button>
                                         </form>
                                     </div>
                                 </div>
@@ -1765,7 +1768,7 @@
 
 
 <!-- Benefit Section -->
-<section class="section work-section-six">
+<section class="section work-section-six-client">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-xxl-3 col-lg-4">

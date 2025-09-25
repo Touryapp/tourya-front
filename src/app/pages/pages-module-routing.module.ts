@@ -3,6 +3,8 @@ import { RouterModule, Routes } from "@angular/router";
 import { PagesModuleComponent } from "./pages-module.component";
 import { AuthGuard } from "../core/guards/auth.guard";
 import { AdminGuard } from "../core/guards/admin.guard";
+import { ContactanosComponent } from "./contactanos/contactanos.component";
+import { ConocenosComponent } from "./conocenos/conocenos.component";
 
 const routes: Routes = [
   {
@@ -27,6 +29,8 @@ const routes: Routes = [
           import("./admin/admin.module").then((m) => m.AdminModule),
         canActivate: [AdminGuard],
       },
+      { path: "contactanos", loadComponent: () => import('./contactanos/contactanos.component').then(m => m.ContactanosComponent) },
+      { path: "conocenos", loadComponent: () => import('./conocenos/conocenos.component').then(m => m.ConocenosComponent) },
 
     ],
   },
