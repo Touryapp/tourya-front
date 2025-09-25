@@ -592,41 +592,58 @@
 
 <!-- monthEventTitleTemplate -->
 <ng-template #monthEventTitleTemplate let-event="event" class="cal-event">
-    <span>{{ event.title }}</span>
     <div *ngIf="event.meta?.slots" class="mt-3 mb-3">
-        <span>Slots:</span>
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <span>Horary</span>
-            </div>
-            <div class="col-md-4">
-                <span>Capacity (min - max)</span>
-            </div>
-
-            <div class="col-md-4">
-                <span>Prices</span>
-            </div>
+        <div class="mb-2">
+            <strong>Configuración:</strong> {{ event.meta.label }}
         </div>
+        <div class="mb-2">
+            <strong>Días:</strong> 
+            <span *ngFor="let day of event.meta.daysOfWeek; let i = index">
+                {{ getDayAbbreviation(day) }}<span *ngIf="i < event.meta.daysOfWeek.length - 1">, </span>
+            </span>
+        </div>
+        <div class="mb-2">
+            <strong>Capacidad:</strong> 
+            <span *ngIf="event.meta.isUnlimitedCapacity" class="badge bg-success">Ilimitada</span>
+            <span *ngIf="!event.meta.isUnlimitedCapacity" class="badge bg-info">Limitada</span>
+        </div>
+        
+        <div class="mt-3">
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <span><strong>Horario</strong></span>
+                </div>
+                <div class="col-md-4">
+                    <span><strong>Capacidad (min - max)</strong></span>
+                </div>
+                <div class="col-md-4">
+                    <span><strong>Precios</strong></span>
+                </div>
+            </div>
 
-        <ul>
-            <li *ngFor="let slot of event.meta.slots">
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <span>{{ slot.startTime }} - {{ slot.endTime }}</span>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="badge bg-secondary">
-                            {{ slot.minCapacity }} - {{ event.meta?.isUnlimitedCapacity? "&infin;": slot.maxCapacity }}
-                        </span>
-                    </div>
-                    <div class="col-md-4">
-                        <div *ngFor="let price of slot.prices">
-                            <span class="badge bg-info">{{ price.ageType }}: {{ price.price | currency }}</span>
+            <ul class="list-unstyled">
+                <li *ngFor="let slot of event.meta.slots" class="mt-2">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <span class="badge bg-primary">{{ slot.startTime }} - {{ slot.endTime }}</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="badge bg-secondary">
+                                {{ slot.minCapacity }} - {{ event.meta.isUnlimitedCapacity ? "∞" : slot.maxCapacity }}
+                            </span>
+                        </div>
+                        <div class="col-md-4">
+                            <div *ngFor="let price of slot.prices" class="mb-1">
+                                <span class="badge bg-info me-1">
+                                    {{ getAgeTypeDisplay(price.ageType) }}: {{ price.price | currency }}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
+        </div>
+        
     </div>
     <hr>
 </ng-template>
