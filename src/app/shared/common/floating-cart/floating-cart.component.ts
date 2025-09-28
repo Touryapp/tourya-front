@@ -7,6 +7,7 @@ import {
   EventEmitter,
 } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
+import { Router } from "@angular/router";
 import { CartService } from "../../services/cart.service";
 import { DaySelection, CartSummary } from "../../dto/cart.dto";
 
@@ -27,7 +28,10 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   isExpanded: boolean = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     console.log(
@@ -167,5 +171,13 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
       currency: "COP",
       minimumFractionDigits: 0,
     }).format(price);
+  }
+
+  /**
+   * Navega al resumen completo del carrito
+   */
+  onContinue(): void {
+    console.log('FloatingCart: Navegando al carrito completo...');
+    this.router.navigate(['/clients/cart-summary']);
   }
 }
