@@ -45,6 +45,13 @@ const routes: Routes = [
             (m) => m.BookingConfirmModule
           ),
       },
+      {
+        path: "clients/cart-summary",
+        loadChildren: () =>
+          import("./cart-summary/cart-summary.module").then(
+            (m) => m.CartSummaryModule
+          ),
+      },
       { path: "", redirectTo: "home", pathMatch: "full" },
     ],
   },
