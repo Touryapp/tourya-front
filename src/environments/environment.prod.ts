@@ -10,5 +10,10 @@ export const environment = {
     messagingSenderId: "318643880116",
     appId: "1:318643880116:web:f969a728674b09bc3a17e1",
     measurementId: "G-9LTR442NCT"
+  },
+  wompi: {
+    publicKey: 'pub_prod_your_production_key_here', // TODO: Reemplazar con la clave real de producción
+    baseUrl: 'https://checkout.wompi.co',
+    scriptUrl: 'https://checkout.wompi.co/widget.js'
   }
 };

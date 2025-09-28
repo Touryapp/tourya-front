@@ -15,4 +15,9 @@ export const environment = {
     appId: "1:318643880116:web:f969a728674b09bc3a17e1",
     measurementId: "G-9LTR442NCT",
   },
+  wompi: {
+    publicKey: 'pub_test_your_public_key_here', // TODO: Reemplazar con la clave real de Wompi
+    baseUrl: 'https://checkout.wompi.co',
+    scriptUrl: 'https://checkout.wompi.co/widget.js'
+  }
 };
