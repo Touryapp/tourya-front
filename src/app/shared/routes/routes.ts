@@ -358,4 +358,18 @@ export class routes {
   public static get agentChat(): string {
     return this.agent + "/agent-chat";
   }
+
+  // Navigation placeholder routes
+  public static get tourPage(): string {
+    return this.baseUrl + "/tour";
+  }
+  public static get blogPage(): string {
+    return this.baseUrl + "/blog";
+  }
+  public static get legalPage(): string {
+    return this.baseUrl + "/legal";
+  }
+  public static get proveedoresPage(): string {
+    return this.baseUrl + "/proveedores";
+  }
 }
