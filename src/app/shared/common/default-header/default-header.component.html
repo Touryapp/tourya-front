@@ -303,120 +303,32 @@
                     <nav id="mobile-menu">
                         <ul class="main-nav" [ngClass]="{ 'active': isHovered }">
                             <ng-container *ngFor="let mainMenus of header">
-                                <ng-container *ngIf="mainMenus.separateRoute === true">
-                                    <li class="has-submenu megamenu"
-                                        [class.active]="base===mainMenus.base || base===mainMenus.base1 || base===mainMenus.base2 || base===mainMenus.base3 || base===mainMenus.base4 || base===mainMenus.base5 || base===mainMenus.base6"
-                                        (mouseenter)="isHovered = true" (mouseleave)="isHovered = false">
-                                        <a href="javascript:void(0);">{{mainMenus.tittle}} <i
-                                                [ngClass]="base==='index'? 'fa-solid fa-plus' : 'fa-solid fa-angle-down'"></i></a>
-                                        <ul class="submenu mega-submenu">
-                                            <li>
-                                                <div class="megamenu-wrapper">
-                                                    <div
-                                                        class="d-none d-lg-flex align-items-center justify-content-between flex-wrap">
-                                                        <h6 class="mb-3">Home Pages</h6>
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-secondary btn-md mb-3 text-white d-inline-block w-auto">Purchase
-                                                            Template</a>
-                                                    </div>
-                                                    <div class="row g-lg-4">
-                                                        <ng-container *ngFor="let menu of mainMenus.menu">
-                                                            <div class="col-lg-2">
-                                                                <div class="single-demo"
-                                                                    [class.active]="base === menu.base">
-                                                                    <div class="demo-img">
-                                                                        <a [routerLink]="menu.route"><img
-                                                                                [src]="menu.img" class="img-fluid"
-                                                                                alt="img" /></a>
-                                                                    </div>
-                                                                    <div class="demo-info">
-                                                                        <a
-                                                                            [routerLink]="menu.route">{{menu.homeName}}</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </ng-container>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                <!-- Menú simple sin submenús -->
+                                <ng-container *ngIf="!mainMenus.isSubMenu || mainMenus.menu.length === 0">
+                                    <li [class.active]="base === mainMenus.base">
+                                        <a [routerLink]="mainMenus.route">{{mainMenus.tittle}}</a>
+                                    </li>
+                                </ng-container>
+                                
+                                <!-- Menú con submenús -->
+                                <ng-container *ngIf="mainMenus.isSubMenu && mainMenus.menu.length > 0">
+                                    <li class="has-submenu" 
+                                        [class.active]="base === mainMenus.base"
+                                        (mouseenter)="isHovered = true" 
+                                        (mouseleave)="isHovered = false">
+                                        <a href="javascript:void(0);">{{mainMenus.tittle}} 
+                                            <i class="fa-solid fa-angle-down"></i>
+                                        </a>
+                                        <ul class="submenu">
+                                            <ng-container *ngFor="let menu of mainMenus.menu">
+                                                <li [class.active]="base === menu.base || page === menu.base">
+                                                    <a [routerLink]="menu.route">{{menu.menuValue}}</a>
+                                                </li>
+                                            </ng-container>
                                         </ul>
                                     </li>
                                 </ng-container>
-                                <ng-container *ngIf="mainMenus.separateRoute === false">
-                                    <ng-container *ngIf="mainMenus.twoTitle === false">
-                                        <li class="has-submenu mega-innermenu" [class.active]="base===mainMenus.base">
-                                            <a [routerLink]="mainMenus.route">{{mainMenus.tittle}} <i
-                                                    [ngClass]="base==='index'? 'fa-solid fa-plus' : 'fa-solid fa-angle-down'"></i></a>
-                                            <ul class="submenu mega-submenu">
-                                                <li>
-                                                    <div class="megamenu-wrapper">
-                                                        <div class="row">
-                                                            <div class="col-lg-6">
-                                                                <h6>{{mainMenus.subTitle}}</h6>
-                                                                <ul>
-                                                                    <ng-container *ngFor="let menu of mainMenus.menu">
-                                                                        <li
-                                                                            [class.active]="base===menu.base || page === menu.base">
-                                                                            <a
-                                                                                [routerLink]="menu.route">{{menu.menuValue}}</a>
-                                                                        </li>
-                                                                    </ng-container>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <div class="menu-img">
-                                                                    <img [src]="mainMenus.img" class="img-fluid"
-                                                                        alt="img">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ng-container>
-                                    <ng-container *ngIf="mainMenus.twoTitle === true">
-                                        <li class="has-submenu mega-innermenu"
-                                            [class.active]="base===mainMenus.base || base===mainMenus.base1 || base===mainMenus.base2">
-                                            <a href="javascript:void(0);">{{mainMenus.tittle}} <i
-                                                    [ngClass]="base==='index'? 'fa-solid fa-plus' : 'fa-solid fa-angle-down'"></i></a>
-                                            <ul class="submenu mega-submenu">
-                                                <li>
-                                                    <div class="megamenu-wrapper">
-                                                        <div class="row g-lg-4">
-                                                            <div class="col-lg-6">
-                                                                <h6>{{mainMenus.subTitle}}</h6>
-                                                                <ul>
-                                                                    <ng-container *ngFor="let menu of mainMenus.menu">
-                                                                        <ng-container *ngIf="menu.menuValue">
-                                                                            <li [class.active]="page===menu.base"><a
-                                                                                    [routerLink]="menu.route">{{menu.menuValue}}</a>
-                                                                            </li>
-                                                                        </ng-container>
-                                                                    </ng-container>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <h6>{{mainMenus.subTitle2}}</h6>
-                                                                <ul>
-                                                                    <ng-container *ngFor="let menu of mainMenus.menu">
-                                                                        <ng-container *ngIf="menu.menuValue2">
-                                                                            <li [class.active]="page===menu.base"><a
-                                                                                    [routerLink]="menu.route">{{menu.menuValue2}}</a>
-                                                                            </li>
-                                                                        </ng-container>
-                                                                    </ng-container>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ng-container>
-                                </ng-container>
                             </ng-container>
-
                         </ul>
                     </nav>
 

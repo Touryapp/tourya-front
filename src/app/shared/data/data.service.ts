@@ -468,6 +468,7 @@ export class DataService {
       separateRoute: false,
       twoTitle: false,
       menu: [],
+      isSubMenu: false,
     },
     {
       tittle: 'Blog',
@@ -477,6 +478,7 @@ export class DataService {
       separateRoute: false,
       twoTitle: false,
       menu: [],
+      isSubMenu: false,
     },
     {
       tittle: 'Contactenos',
@@ -486,6 +488,7 @@ export class DataService {
       separateRoute: false,
       twoTitle: false,
       menu: [],
+      isSubMenu: false,
     },
     {
       tittle: 'Legal',
@@ -494,7 +497,20 @@ export class DataService {
       showAsTab: false,
       separateRoute: false,
       twoTitle: false,
-      menu: [],
+      menu: [
+        {
+          menuValue: 'Legal',
+          route: routes.legalPage,
+          hasSubRoute: false,
+          showSubRoute: false,
+          base: 'legal',
+          page: '',
+          last: '',
+          subMenus: [],
+          icon:'isax-legal-55',
+        }
+      ],
+      isSubMenu: true,
     },
     {
       tittle: 'Proveedores',
@@ -504,6 +520,7 @@ export class DataService {
       separateRoute: false,
       twoTitle: false,
       menu: [],
+      isSubMenu: false,
     }
   ]
 }
