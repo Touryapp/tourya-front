@@ -230,6 +230,13 @@ export class routes {
   public static get contactUs(): string {
     return this.pages + "/contact-us";
   }
+  public static get contactanos(): string {
+    return this.baseUrl + "/contactanos";
+  }
+  public static get listTours(): string {
+    return this.baseUrl + "/clients/list-tours";
+  }
+  
   public static get destination(): string {
     return this.pages + "/destination";
   }

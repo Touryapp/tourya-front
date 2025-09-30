@@ -463,7 +463,7 @@ export class DataService {
     {
       tittle: 'Tour',
       base: 'tour',
-      route: routes.tourPage,
+      route: routes.listTours,
       showAsTab: false,
       separateRoute: false,
       twoTitle: false,
@@ -483,7 +483,7 @@ export class DataService {
     {
       tittle: 'Contactenos',
       base: 'contactenos',
-      route: routes.contactUs,
+      route: routes.contactanos,
       showAsTab: false,
       separateRoute: false,
       twoTitle: false,
@@ -499,7 +499,18 @@ export class DataService {
       twoTitle: false,
       menu: [
         {
-          menuValue: 'Legal',
+          menuValue: 'Terminos y Condiciones',
+          route: routes.contactanos,
+          hasSubRoute: false,
+          showSubRoute: false,
+          base: 'legal',
+          page: '',
+          last: '',
+          subMenus: [],
+          icon:'isax-legal-55',
+        },
+        {
+          menuValue: 'Políticas de privacidad y tratamiento de datos personales',
           route: routes.legalPage,
           hasSubRoute: false,
           showSubRoute: false,
@@ -508,7 +519,8 @@ export class DataService {
           last: '',
           subMenus: [],
           icon:'isax-legal-55',
-        }
+        },
+        
       ],
       isSubMenu: true,
     },

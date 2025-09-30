@@ -187,7 +187,7 @@ export class DefaultHeaderComponent {
         return "assets/img/flags/es.png";
       }
       case "pt": {
-        return "assets/img/flags/pt.png";
+        return "assets/img/flags/br.png";
       }
       default: {
         return "assets/img/flags/us-flag.svg";
