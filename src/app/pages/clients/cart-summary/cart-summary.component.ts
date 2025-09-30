@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, take } from 'rxjs';
 import { routes } from '../../../shared/routes/routes';
 import { CartService } from '../../../shared/services/cart.service';
 import { CartItem, CartSummary } from '../../../shared/dto/cart.dto';
@@ -203,14 +203,6 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log('CartSummary: Iniciando componente...');
     this.loadCartData();
-    
-    // Auto-load mock data after a short delay for demonstration
-    setTimeout(() => {
-      if ((!this.cartSummary || this.cartSummary.totalItems === 0) && this.cartItems.length === 0) {
-        console.log('CartSummary: Auto-cargando mock data para demostración...');
-        this.loadMockData();
-      }
-    }, 1000);
   }
 
   ngOnDestroy(): void {
@@ -224,29 +216,42 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   private loadCartData(): void {
     this.loading = true;
     
-    // Suscribirse a cambios en el carrito
-    this.cartService.cartSummary$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (summary: CartSummary | null) => {
-          // Si no hay datos reales, usar mock data para testing
-          if (!summary || summary.totalItems === 0) {
-            console.log('CartSummary: No hay datos reales, usando mock data para testing');
-            this.cartSummary = this.mockCartSummary;
-            this.cartItems = this.mockCartItems;
+    // Load cart data from backend API
+    this.cartService.loadCartFromBackend()
+      .then(() => {
+        // Subscribe to cart items from service
+        this.cartService.cartItems$.pipe(take(1)).subscribe(cartItems => {
+          this.cartItems = cartItems;
+          this.updateCartSummary();
+          
+          console.log('CartSummary: Datos del carrito cargados desde API:', cartItems.length, 'items');
+          
+          if (cartItems.length === 0) {
+            console.log('CartSummary: Carrito vacío');
+            this.handleEmptyCart();
           } else {
-            this.cartSummary = summary;
-            console.log('CartSummary: Datos reales del carrito cargados:', summary);
+            // Initialize traveler information for each cart item
+            this.initializeTravelersInfo();
           }
+          
           this.loading = false;
-        },
-        error: (error: any) => {
-          console.error('CartSummary: Error cargando datos, usando mock data:', error);
-          // En caso de error, usar mock data
-          this.cartSummary = this.mockCartSummary;
-          this.cartItems = this.mockCartItems;
-          this.loading = false;
+        });
+      })
+      .catch((error) => {
+        console.error('CartSummary: Error cargando datos del carrito:', error);
+        
+        // Show user-friendly error message
+        let errorMessage = 'Error cargando el carrito. Por favor, intenta de nuevo.';
+        if (error.status === 401) {
+          errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+          // Redirect to login or show login modal
         }
+        
+        alert(errorMessage); // TODO: Replace with proper toast/snackbar
+        
+        // Handle empty cart on error
+        this.handleEmptyCart();
+        this.loading = false;
       });
 
     // Obtener items del carrito
@@ -558,53 +563,70 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
    * Elimina un tour específico del carrito
    */
   removeCartItem(itemId: string): void {
-    console.log('Eliminando item del carrito:', itemId);
+    console.log('Eliminando item del carrito via API:', itemId);
     
     // Mostrar loading para el item específico
     this.processing = true;
     
-    // Encontrar el índice del item a eliminar
-    const itemIndex = this.cartItems.findIndex(item => item.id === itemId);
+    // Encontrar el item a eliminar para mostrar información
+    const itemToRemove = this.cartItems.find(item => item.id === itemId);
+    const tourName = itemToRemove ? itemToRemove.tour.name : 'Tour';
     
-    if (itemIndex !== -1) {
-      const removedItem = this.cartItems[itemIndex];
-      
-      // Remover del array local
-      this.cartItems.splice(itemIndex, 1);
-      
-      // Actualizar cartSummary
-      if (this.cartSummary) {
-        this.cartSummary.totalItems = this.cartItems.length;
-        this.cartSummary.totalParticipants = this.cartItems.reduce((sum, item) => sum + item.totalParticipants, 0);
-        this.cartSummary.totalPrice = this.cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
-        this.cartSummary.items = this.cartItems;
-      }
-      
-      // Eliminar información del viajero asociado
-      this.removeTravelerInfo(itemId);
-      
-      // Llamar al servicio para eliminar el item (cuando esté disponible)
-      // this.cartService.removeItem(itemId);
-      
-      console.log(`Tour "${removedItem.tour.name}" eliminado del carrito`);
+    // Convertir string ID a number para la API (el backend usa IDs numéricos)
+    const numericItemId = parseInt(itemId, 10);
+    
+    if (isNaN(numericItemId)) {
+      console.error('ID de item inválido:', itemId);
+      this.processing = false;
+      alert('Error: ID de item inválido');
+      return;
     }
     
-    // Resetear loading
-    this.processing = false;
-    
-    // Si no quedan items, mostrar estado vacío
-    if (this.cartItems.length === 0) {
-      console.log('Carrito vacío');
-      this.cartSummary = {
-        totalItems: 0,
-        totalDays: 0,
-        totalParticipants: 0,
-        totalPrice: 0,
-        startDate: '',
-        endDate: '',
-        items: []
-      };
-    }
+    // Llamar a la API para eliminar el item del backend
+    this.cartService.removeCartItemFromBackend(numericItemId)
+      .then(() => {
+        console.log('Item eliminado exitosamente del backend');
+        
+        // Reload cart data from backend to get updated state
+        return this.cartService.loadCartFromBackend();
+      })
+      .then(() => {
+        // Update local cart items from service
+        this.cartService.cartItems$.pipe(take(1)).subscribe(updatedItems => {
+          this.cartItems = updatedItems;
+          this.updateCartSummary();
+          
+          console.log(`Tour "${tourName}" eliminado del carrito`);
+          
+          // Si no quedan items, mostrar estado vacío
+          if (this.cartItems.length === 0) {
+            console.log('Carrito vacío después de eliminación');
+            this.handleEmptyCart();
+          }
+        });
+        
+        // Eliminar información del viajero asociado
+        this.removeTravelerInfo(itemId);
+      })
+      .catch((error) => {
+        console.error('Error eliminando item del carrito:', error);
+        
+        // Mostrar mensaje de error al usuario
+        let errorMessage = 'Error eliminando el tour. Por favor, intenta de nuevo.';
+        if (error.status === 401) {
+          errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+        } else if (error.status === 404) {
+          errorMessage = 'El tour ya no está en tu carrito.';
+          // Reload cart to sync with backend
+          this.loadCartData();
+        }
+        
+        alert(errorMessage); // TODO: Replace with proper toast/snackbar
+      })
+      .finally(() => {
+        // Resetear loading
+        this.processing = false;
+      });
   }
 
   /**
@@ -749,5 +771,66 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  /**
+   * Actualiza el resumen del carrito basado en los items actuales
+   */
+  private updateCartSummary(): void {
+    if (!this.cartSummary) {
+      this.cartSummary = {
+        totalItems: 0,
+        totalDays: 0,
+        totalParticipants: 0,
+        totalPrice: 0,
+        startDate: '',
+        endDate: '',
+        items: []
+      };
+    }
+
+    this.cartSummary.totalItems = this.cartItems.length;
+    this.cartSummary.totalParticipants = this.cartItems.reduce((sum, item) => sum + item.totalParticipants, 0);
+    this.cartSummary.totalPrice = this.cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
+    this.cartSummary.items = this.cartItems;
+
+    // Calculate total days and date range
+    if (this.cartItems.length > 0) {
+      const dates = this.cartItems.map(item => new Date(item.dayDate));
+      const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
+      const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
+      
+      this.cartSummary.startDate = minDate.toISOString().split('T')[0];
+      this.cartSummary.endDate = maxDate.toISOString().split('T')[0];
+      
+      // Calculate unique days
+      const uniqueDays = new Set(this.cartItems.map(item => item.dayDate));
+      this.cartSummary.totalDays = uniqueDays.size;
+    }
+  }
+
+  /**
+   * Maneja el estado cuando el carrito está vacío
+   */
+  private handleEmptyCart(): void {
+    console.log('Carrito vacío - mostrando estado vacío');
+    
+    this.cartSummary = {
+      totalItems: 0,
+      totalDays: 0,
+      totalParticipants: 0,
+      totalPrice: 0,
+      startDate: '',
+      endDate: '',
+      items: []
+    };
+    
+    // Clear traveler information
+    this.travelersInfo = [];
+    
+    // Optional: redirect to tours list after a delay
+    // setTimeout(() => {
+    //   this.router.navigate(['/clients/list-tours']);
+    // }, 2000);
   }
 }

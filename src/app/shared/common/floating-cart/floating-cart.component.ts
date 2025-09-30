@@ -6,7 +6,7 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil, take } from "rxjs";
 import { Router } from "@angular/router";
 import { CartService } from "../../services/cart.service";
 import { DaySelection, CartSummary } from "../../dto/cart.dto";
@@ -26,12 +26,20 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   daySelections: DaySelection[] = [];
   cartSummary: CartSummary | null = null;
   isExpanded: boolean = false;
+  processing: boolean = false; // Estado para loading del API
   private destroy$ = new Subject<void>();
 
   constructor(
     private cartService: CartService,
     private router: Router
   ) {}
+
+  /**
+   * Obtiene los items actuales del carrito
+   */
+  getCartItems() {
+    return this.cartService.cartItems$;
+  }
 
   ngOnInit(): void {
     console.log(
@@ -174,10 +182,67 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navega al resumen completo del carrito
+   * Carga el carrito desde la API y navega al resumen completo
    */
   onContinue(): void {
-    console.log('FloatingCart: Navegando al carrito completo...');
-    this.router.navigate(['/clients/cart-summary']);
+    console.log('FloatingCart: Cargando carrito desde backend...');
+    this.processing = true;
+    
+    this.cartService.loadCartFromBackend()
+      .then(() => {
+        // Get current cart items from observable
+        this.cartService.cartItems$.pipe(take(1)).subscribe(cartItems => {
+          console.log('Carrito cargado desde API:', cartItems.length, 'items');
+          
+          if (cartItems.length > 0) {
+            console.log('Navegando a cart-summary con', cartItems.length, 'tours...');
+            this.router.navigate(['/clients/cart-summary']);
+          } else {
+            console.log('Carrito vacío desde API');
+            this.handleEmptyCart();
+          }
+        });
+      })
+      .catch(error => {
+        console.error('Error cargando carrito desde API:', error);
+        this.handleCartError(error);
+      })
+      .finally(() => {
+        this.processing = false;
+      });
+  }
+
+  /**
+   * Maneja el caso cuando el carrito está vacío
+   */
+  private handleEmptyCart(): void {
+    console.log('Manejando carrito vacío - redirigiendo a tours');
+    // Por ahora redirigir a tours list
+    this.router.navigate(['/clients/list-tours']);
+    // TODO: Implementar cuando tengas POST API para crear carrito
+  }
+
+  /**
+   * Maneja errores al cargar el carrito
+   */
+  private handleCartError(error: any): void {
+    console.error('Error en carrito:', error);
+    
+    // Determinar tipo de error y mostrar mensaje apropiado
+    let errorMessage = 'Error cargando el carrito. Por favor, intenta de nuevo.';
+    
+    if (error.status === 401) {
+      errorMessage = 'Sesión expirada. Por favor, inicia sesión de nuevo.';
+      // TODO: Redirigir al login
+      // this.router.navigate(['/auth/login']);
+    } else if (error.status === 0) {
+      errorMessage = 'Error de conexión. Verifica tu conexión a internet.';
+    }
+    
+    // Mostrar mensaje de error al usuario
+    alert(errorMessage);
+    
+    // Opcional: Usar datos mock como fallback para testing
+    // this.useMockDataFallback();
   }
 }
