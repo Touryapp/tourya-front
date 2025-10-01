@@ -364,9 +364,145 @@ export class CartService {
         this.cartItemsSubject.next([]);
         this.updateCartSummary();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error cargando carrito desde backend:', error);
-      // Mantener estado actual en caso de error
+      
+      // Si es error 404, significa que el usuario no tiene carrito
+      if (error.status === 404) {
+        console.log('Usuario no tiene carrito (404) - estableciendo carrito vacío');
+        this.cartItemsSubject.next([]);
+        this.updateCartSummary();
+        // No throw error aquí, es un estado válido para usuarios nuevos
+      } else {
+        // Para otros errores, propagar el error
+        throw error;
+      }
+    }
+  }
+
+  /**
+   * Crea o agrega items al carrito en el backend
+   */
+  async createOrAddCartItems(items: any[]): Promise<void> {
+    try {
+      const headers = this.getAuthHeaders();
+      const body = { items };
+      
+      console.log('Creando/agregando items al carrito:', body);
+      
+      const response = await this.http.post(
+        `${environment.apiUrl}/shopping-cart/items`,
+        body,
+        { headers }
+      ).toPromise();
+
+      console.log('Items agregados al carrito exitosamente:', response);
+      
+      // Recargar carrito después de agregar items
+      await this.loadCartFromBackend();
+      
+    } catch (error: any) {
+      console.error('Error creando/agregando items al carrito:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Método helper para crear un item en el formato esperado por la API
+   */
+  createCartItemPayload(
+    productId: number,
+    scheduleDate: string,
+    tourScheduleId: number,
+    slotId: number,
+    ageConfigs: { ageType: string, quantity: number }[]
+  ): any {
+    return {
+      productId,
+      productType: "TOUR",
+      scheduleDate,
+      tourScheduleId,
+      slot: {
+        id: slotId,
+        configQuantity: ageConfigs
+      }
+    };
+  }
+
+  /**
+   * Ejemplo de uso para agregar un tour al carrito
+   * @param productId ID del producto/tour
+   * @param scheduleDate Fecha del tour (YYYY-MM-DD)
+   * @param tourScheduleId ID del schedule del tour
+   * @param slotId ID del slot
+   * @param adults Cantidad de adultos
+   * @param children Cantidad de niños (opcional)
+   */
+  async addTourToCart(
+    productId: number,
+    scheduleDate: string,
+    tourScheduleId: number,
+    slotId: number,
+    adults: number,
+    children: number = 0
+  ): Promise<void> {
+    const ageConfigs: { ageType: string, quantity: number }[] = [];
+    
+    if (adults > 0) {
+      ageConfigs.push({ ageType: "ADULT", quantity: adults });
+    }
+    
+    if (children > 0) {
+      ageConfigs.push({ ageType: "CHILD", quantity: children });
+    }
+
+    const tourItem = this.createCartItemPayload(
+      productId,
+      scheduleDate,
+      tourScheduleId,
+      slotId,
+      ageConfigs
+    );
+
+    await this.createOrAddCartItems([tourItem]);
+  }
+
+  /**
+   * Sincronizar carrito local con backend cuando backend está vacío
+   */
+  async syncLocalCartWithBackend(): Promise<void> {
+    try {
+      // Obtener items del carrito local
+      const localItems = this.cartItemsSubject.value;
+      
+      if (localItems.length === 0) {
+        console.log('No hay items locales para sincronizar');
+        return;
+      }
+      
+      console.log('Sincronizando', localItems.length, 'items locales con backend...');
+      
+      // Convertir items locales al formato de API
+      const apiItems = localItems.map(item => {
+        return this.createCartItemPayload(
+          item.tour.id,              // productId
+          item.dayDate,              // scheduleDate
+          item.schedule.id,          // tourScheduleId
+          item.selectedSlot.slotId,  // slotId
+          item.participants.map((p: any) => ({
+            ageType: p.ageType,
+            quantity: p.quantity
+          }))
+        );
+      });
+      
+      // Llamar POST API
+      await this.createOrAddCartItems(apiItems);
+      
+      console.log('Carrito local sincronizado exitosamente con backend');
+      
+    } catch (error) {
+      console.error('Error sincronizando carrito local con backend:', error);
       throw error;
     }
   }

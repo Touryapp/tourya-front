@@ -185,26 +185,31 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
    * Carga el carrito desde la API y navega al resumen completo
    */
   onContinue(): void {
-    console.log('FloatingCart: Cargando carrito desde backend...');
+    console.log('FloatingCart: Usuario hizo clic en Continuar - cargando carrito desde backend...');
     this.processing = true;
+    
+    // Primero verificar items locales para logging
+    this.cartService.cartItems$.pipe(take(1)).subscribe(localItems => {
+      console.log('Items en carrito local antes de cargar backend:', localItems.length);
+    });
     
     this.cartService.loadCartFromBackend()
       .then(() => {
         // Get current cart items from observable
         this.cartService.cartItems$.pipe(take(1)).subscribe(cartItems => {
-          console.log('Carrito cargado desde API:', cartItems.length, 'items');
+          console.log('Carrito cargado desde backend API:', cartItems.length, 'items');
           
           if (cartItems.length > 0) {
-            console.log('Navegando a cart-summary con', cartItems.length, 'tours...');
+            console.log('Carrito backend tiene items - navegando a cart-summary con', cartItems.length, 'tours...');
             this.router.navigate(['/clients/cart-summary']);
           } else {
-            console.log('Carrito vacío desde API');
+            console.log('Carrito backend está vacío - verificando items locales...');
             this.handleEmptyCart();
           }
         });
       })
       .catch(error => {
-        console.error('Error cargando carrito desde API:', error);
+        console.error('Error cargando carrito desde backend API:', error);
         this.handleCartError(error);
       })
       .finally(() => {
@@ -213,13 +218,37 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Maneja el caso cuando el carrito está vacío
+   * Maneja el caso cuando el carrito está vacío en backend
    */
   private handleEmptyCart(): void {
-    console.log('Manejando carrito vacío - redirigiendo a tours');
-    // Por ahora redirigir a tours list
-    this.router.navigate(['/clients/list-tours']);
-    // TODO: Implementar cuando tengas POST API para crear carrito
+    console.log('Carrito vacío en backend detectado');
+    
+    // Verificar si hay items en el carrito local (agregados desde el modal)
+    this.cartService.cartItems$.pipe(take(1)).subscribe(async (localCartItems) => {
+      if (localCartItems.length > 0) {
+        console.log(`Encontrados ${localCartItems.length} items en carrito local`);
+        console.log('Sincronizando carrito local con backend...');
+        
+        try {
+          this.processing = true;
+          
+          // Usar el método del CartService para sincronizar
+          await this.cartService.syncLocalCartWithBackend();
+          
+          console.log('Carrito sincronizado exitosamente, navegando a cart-summary...');
+          this.router.navigate(['/clients/cart-summary']);
+          
+        } catch (error) {
+          console.error('Error sincronizando carrito:', error);
+          this.handleCartError(error);
+        } finally {
+          this.processing = false;
+        }
+      } else {
+        console.log('No hay items locales - redirigiendo a tours para agregar items');
+        this.router.navigate(['/clients/list-tours']);
+      }
+    });
   }
 
   /**
@@ -237,12 +266,16 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
       // this.router.navigate(['/auth/login']);
     } else if (error.status === 0) {
       errorMessage = 'Error de conexión. Verifica tu conexión a internet.';
+    } else if (error.status === 400) {
+      errorMessage = 'Error en los datos del carrito. Verifica la información e intenta de nuevo.';
+    } else if (error.status === 500) {
+      errorMessage = 'Error del servidor. Por favor, intenta más tarde.';
     }
     
     // Mostrar mensaje de error al usuario
-    alert(errorMessage);
+    alert(errorMessage); // TODO: Replace with proper toast/snackbar
     
-    // Opcional: Usar datos mock como fallback para testing
-    // this.useMockDataFallback();
+    // En caso de error de sincronización, mantener los datos locales
+    console.log('Manteniendo datos locales del carrito tras error de sincronización');
   }
 }
