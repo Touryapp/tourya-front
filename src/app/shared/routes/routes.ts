@@ -242,6 +242,9 @@ export class routes {
   public static get legalSite(): string {
     return this.baseUrl + "/legal-site";
   }
+  public static get legalSitePrivacyPolicy(): string {
+    return this.baseUrl + "/legal-site-politics";
+  }
   public static get listTours(): string {
     return this.baseUrl + "/clients/list-tours";
   }

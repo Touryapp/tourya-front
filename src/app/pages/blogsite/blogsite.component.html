@@ -1,9 +1,274 @@
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquet mi ut condimentum mollis. Donec vitae ipsum dictum, dignissim neque ut, suscipit tortor. Proin ut nunc convallis, feugiat nisi vel, pellentesque lacus. Morbi tempor libero eros, eget mattis lorem elementum ac. Etiam quis blandit justo. Suspendisse quis sapien sodales magna finibus iaculis. Duis sed dignissim velit. Nam ac pellentesque orci. Fusce et gravida ipsum. Donec molestie ex dui, nec tincidunt justo pretium quis. Sed vulputate orci ut enim sagittis tincidunt. Phasellus a velit libero. Nullam faucibus luctus molestie. Nunc quis leo eu dui elementum dapibus vitae sit amet mauris. Fusce suscipit elementum erat eget egestas.
+ <!-- Breadcrumb -->
+ <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Blog Grid</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item">Pages</li>
+                        <li class="breadcrumb-item active" aria-current="page">Blog Grid</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
 
-    Nulla a posuere neque. Praesent vel porttitor arcu. In volutpat iaculis viverra. Nunc pulvinar, lacus a sollicitudin mollis, lorem nunc tempor ex, nec tincidunt augue augue non dui. Phasellus viverra tempor lorem id sodales. Phasellus iaculis lobortis massa. Duis placerat, orci id venenatis mollis, dui libero mattis mauris, pellentesque elementum metus tortor ut lectus. Mauris at enim in sapien porta eleifend at sed ante. Sed sagittis metus ac euismod sollicitudin. Nulla iaculis nunc sed est volutpat facilisis. Proin lobortis arcu lorem, in auctor orci accumsan a.
-    
-    Duis dapibus suscipit ligula vel lobortis. Fusce gravida, dolor eu sodales mollis, lectus lacus mollis urna, et tincidunt est tortor non enim. Aliquam in sem nec diam mattis consectetur. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum ex turpis, lobortis a risus vel, commodo convallis est. Proin lobortis enim eget pellentesque sollicitudin. Cras mollis elit placerat, fringilla justo quis, placerat nisl. Morbi quis nibh id lacus maximus bibendum ut at diam. In ac dapibus nibh. Vivamus ullamcorper id nulla et porttitor.
-    
-    Sed urna nunc, hendrerit malesuada varius vitae, vehicula consequat ante. Etiam eget accumsan arcu, id gravida nibh. Donec ac mollis ex. Integer ut tincidunt lectus. Suspendisse accumsan sapien quam, non accumsan tellus dictum at. Quisque finibus nisl sit amet ipsum cursus, tempor rutrum leo mattis. Duis eu velit at ante accumsan ullamcorper. Maecenas elementum facilisis efficitur. Sed sollicitudin tortor tortor. Vestibulum aliquam, ex sed vehicula porta, purus nulla auctor lectus, ac bibendum ante felis id est.
-    
-    Duis eget elementum orci, at dictum ligula. Cras placerat luctus dui. Cras sit amet scelerisque lectus, sed egestas erat. Aenean lacinia velit ut eros laoreet, eu pellentesque orci fringilla. Nulla sodales nunc non elit molestie varius. Phasellus a nunc pretium, porta purus in, mattis massa. Suspendisse et aliquet purus. Maecenas cursus dui a fermentum lobortis. Quisque tellus tortor, vehicula sed sollicitudin vitae, lobortis nec nisl. Aliquam quis lacus in erat maximus vehicula. Nam sit amet feugiat mauris. Maecenas lorem dolor, viverra at scelerisque ac, fringilla sed neque. Proin libero purus, facilisis porttitor nibh eu, tincidunt ultricies diam. Proin est quam, iaculis venenatis orci nec, sollicitudin luctus ante.</p>
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-01.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Travel</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-01.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Bryan Bradfield</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">Top 10 Hidden Gems places in Central Europe in 2025</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-02.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Guide</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-02.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Michell West</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>12 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">Exploring the World: Your Ultimate Dream Tour Itinerary</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-03.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Rental</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-03.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Patricia Hasbro</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">New York City, USA - The City That  Never Sleeps</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-09.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Travel</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-01.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Bryan Bradfield</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">How to Travel on a Budget: Affordable Destinations & Tips</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-05.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Guide</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-03.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Michell West</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>12 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">The Ultimate Guide to Solo Travel: Tips for First-Time Travelers</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-06.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Adventure</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-20.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Patricia Hasbro</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">Top 10 Breath taking Destinations You Must Visit in 2025</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-10.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Tips</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-01.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Bryan Bradfield</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">How to Plan the Perfect Weekend Getaway: Quick Travel Tips</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-08.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Vacation</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-02.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Michell West</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>12 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">Top 7 Beach Destinations for a Relaxing Summer Vacation</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Blog Item-->
+            <div class="col-xl-4 col-md-6">
+                <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a [routerLink]="routes.blogDetails" class="blog-img">
+                        <img src="assets/img/blog/blog-07.jpg" alt="img">
+                    </a>
+                    <span class="badge bg-primary fs-13 fw-medium">Flight Tours</span>
+                    <div class="blog-info text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center">
+                            <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                <a href="javascript:void(0);" class="d-flex align-items-center">
+                                    <span class="avatar avatar-sm me-2">
+                                        <img src="assets/img/users/user-18.jpg" class="rounded-circle border border-white" alt="img">
+                                    </span>
+                                    <p>Patricia Hasbro</p>
+                                </a>
+                            </div>
+                            <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>14 May 2025</p>
+                        </div>
+                        <h5><a [routerLink]="routes.blogDetails">The Best Flight Tours Over Iconic Landmarks You Have to Experience</a></h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Blog Item-->
+
+            <!-- Pagination -->
+            <nav class="pagination-nav">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                            <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+                    <li class="page-item active"><a class="page-link" href="javascript:void(0);">4</a></li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">5</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                            <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /Pagination -->
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->

@@ -500,7 +500,7 @@ export class DataService {
       menu: [
         {
           menuValue: 'Terminos y Condiciones',
-          route: routes.contactanos,
+          route: routes.legalSite,
           hasSubRoute: false,
           showSubRoute: false,
           base: 'legal',
@@ -511,7 +511,7 @@ export class DataService {
         },
         {
           menuValue: 'Políticas de privacidad y tratamiento de datos personales',
-          route: routes.legalSite,
+          route: routes.legalSitePrivacyPolicy,
           hasSubRoute: false,
           showSubRoute: false,
           base: 'legal',
