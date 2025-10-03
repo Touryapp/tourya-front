@@ -473,7 +473,7 @@ export class DataService {
     {
       tittle: 'Blog',
       base: 'blog',
-      route: routes.blogPage,
+      route: routes.blogsite,
       showAsTab: false,
       separateRoute: false,
       twoTitle: false,
@@ -493,7 +493,7 @@ export class DataService {
     {
       tittle: 'Legal',
       base: 'legal',
-      route: routes.legalPage,
+      route: routes.legalSite,
       showAsTab: false,
       separateRoute: false,
       twoTitle: false,
@@ -511,7 +511,7 @@ export class DataService {
         },
         {
           menuValue: 'Políticas de privacidad y tratamiento de datos personales',
-          route: routes.legalPage,
+          route: routes.legalSite,
           hasSubRoute: false,
           showSubRoute: false,
           base: 'legal',
@@ -527,7 +527,7 @@ export class DataService {
     {
       tittle: 'Proveedores',
       base: 'proveedores',
-      route: routes.proveedoresPage,
+      route: routes.contactanos,
       showAsTab: false,
       separateRoute: false,
       twoTitle: false,

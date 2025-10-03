@@ -233,6 +233,15 @@ export class routes {
   public static get contactanos(): string {
     return this.baseUrl + "/contactanos";
   }
+  public static get conocenos(): string {
+    return this.baseUrl + "/conocenos";
+  }
+  public static get blogsite(): string {
+    return this.baseUrl + "/blogsite";
+  }
+  public static get legalSite(): string {
+    return this.baseUrl + "/legal-site";
+  }
   public static get listTours(): string {
     return this.baseUrl + "/clients/list-tours";
   }

@@ -5,6 +5,8 @@ import { AuthGuard } from "../core/guards/auth.guard";
 import { AdminGuard } from "../core/guards/admin.guard";
 import { ContactanosComponent } from "./contactanos/contactanos.component";
 import { ConocenosComponent } from "./conocenos/conocenos.component";
+import { LegalSiteComponent } from "./legal-site/legal-site.component";
+import { BlogsiteComponent } from "./blogsite/blogsite.component";
 
 const routes: Routes = [
   {
@@ -31,6 +33,8 @@ const routes: Routes = [
       },
       { path: "contactanos", loadComponent: () => import('./contactanos/contactanos.component').then(m => m.ContactanosComponent) },
       { path: "conocenos", loadComponent: () => import('./conocenos/conocenos.component').then(m => m.ConocenosComponent) },
+      { path: "blogsite", loadComponent: () => import('./blogsite/blogsite.component').then(m => m.BlogsiteComponent) },
+      { path: "legal-site", loadComponent: () => import('./legal-site/legal-site.component').then(m => m.LegalSiteComponent) },
 
     ],
   },
