@@ -501,7 +501,7 @@ export class TourScheduleComponent {
     const found = this.tourSchedules.find((schedule) => schedule.configId === configId);
 
     if (found && found.config) {
-      this.tourScheduleId = found.configId;
+      this.tourScheduleId = found.config.id; // Usar el ID de la configuración, no el configId
       this.tourSchedule = {
         id: found.config.id,
         tourId: found.tourId,
@@ -617,47 +617,8 @@ export class TourScheduleComponent {
   }
 
   updateTourSchedule() {
-    const {
-      label,
-      startDate,
-      endDate,
-      daysOfWeek,
-      isUnlimitedCapacity,
-      slots,
-    } = this.tourScheduleForm.value;
-
-    const body = {
-      tourId: this.tourId,
-      label,
-      startDate: dayjs(startDate).format("YYYY-MM-DD"),
-      endDate: dayjs(endDate).format("YYYY-MM-DD"),
-      daysOfWeek,
-      isUnlimitedCapacity,
-      slots,
-      createdBy: 1,
-    };
-
-    this.tourService.updateTourSchedule(this.tourScheduleId, body).subscribe({
-      next: (data) => {
-        this.loading = false;
-
-        if (data) {
-          this.openSnackBar("Tour schedule edited successfully.");
-          this.getSchedules();
-          this.resetForm();
-        } else {
-          this.errorMessage =
-            "Ha ocurrido un error, por favor intente de nuevo";
-        }
-      },
-      error: (err) => {
-        this.loading = false;
-        console.error("Error updating tour schedule.");
-        console.error(err);
-
-        this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
-      },
-    });
+    // Siempre usar el método batch para actualizaciones (usar el mismo método que crear)
+    this.updateTourScheduleBatch();
   }
 
   getTour() {
@@ -1131,6 +1092,84 @@ export class TourScheduleComponent {
         this.loading = false;
         console.error("Error saving batch tour schedules:", error);
         this.openSnackBar("Error al guardar las configuraciones");
+      }
+    });
+  }
+
+  // Método para actualizar configuraciones por fecha usando batch
+  updateTourScheduleBatch(): void {
+    const startDate = this.tourScheduleForm.get("startDate")?.value;
+    const endDate = this.tourScheduleForm.get("endDate")?.value;
+    const daysOfWeek = this.tourScheduleForm.get("daysOfWeek")?.value;
+    const slots = this.tourScheduleForm.get("slots")?.value;
+
+    if (!startDate || !endDate || !daysOfWeek || daysOfWeek.length === 0) {
+      this.openSnackBar("Por favor completa todos los campos requeridos");
+      return;
+    }
+
+    this.loading = true;
+
+    // Generar fechas basadas en los días de la semana seleccionados
+    const startDateDayJs = dayjs(startDate);
+    const endDateDayJs = dayjs(endDate);
+    const daysDifference = endDateDayJs.diff(startDateDayJs, "day");
+    
+    const batchData: any[] = [];
+
+    for (let i = 0; i <= daysDifference; i++) {
+      const currentDate = startDateDayJs.add(i, "day");
+      const dayOfWeek = this.DAYS_OF_WEEK[currentDate.day()].value;
+
+      // Verificar si este día está en los días seleccionados
+      if (daysOfWeek.includes(dayOfWeek)) {
+        const scheduleDate = currentDate.format("YYYY-MM-DD");
+
+        // Crear una entrada por fecha (no por slot)
+        const batchEntry = {
+          tourId: this.tourId,
+          scheduleDate: scheduleDate,
+          maxCapacity: slots.reduce((sum: number, slot: any) => sum + (slot.maxCapacity || 0), 0),
+          reservedCapacity: 0,
+          isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+          status: "AVAILABLE",
+          config: {
+            id: this.tourScheduleId, // Incluir el ID de la configuración existente
+            label: this.tourScheduleForm.get("label")?.value,
+            daysOfWeek: daysOfWeek,
+            isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+            slots: slots.map((s: any) => ({
+              id: s.id || 0, // Incluir ID del slot si existe
+              startTime: s.startTime,
+              endTime: s.endTime,
+              minCapacity: s.minCapacity,
+              maxCapacity: s.maxCapacity,
+              prices: s.prices.map((p: any) => ({
+                id: p.id || 0, // Incluir ID del precio si existe
+                ageType: p.ageType,
+                minAge: p.minAge,
+                maxAge: p.maxAge,
+                price: p.price
+              }))
+            }))
+          }
+        };
+
+        batchData.push(batchEntry);
+      }
+    }
+
+    this.tourService.saveTourScheduleBatch(batchData).subscribe({
+      next: (data) => {
+        this.loading = false;
+        this.openSnackBar("Configuraciones actualizadas correctamente");
+        this.getSchedules();
+        this.resetForm();
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error("Error updating batch tour schedules:", error);
+        this.openSnackBar("Error al actualizar las configuraciones");
       }
     });
   }

@@ -92,15 +92,6 @@ export class TourService {
     );
   }
 
-  updateTourSchedule(
-    configId: number,
-    body: Partial<CreateTourSchedule>
-  ): Observable<any> {
-    return this.http.put<TourSchedule>(
-      `${environment.apiUrl}/tour-schedules/${configId}`,
-      body
-    );
-  }
 
   // Método para guardar múltiples configuraciones de tour schedule
   saveTourScheduleBatch(body: any[]): Observable<any> {
