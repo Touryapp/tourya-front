@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import * as CryptoJS from 'crypto-js';
+import { environment } from '../../../environments/environment';
+import { ReferenceGenerationResponseDto } from '../dto/payment.dto';
+import { AuthService } from '../../core/services/auth.service';
 
 // Interfaces para Wompi
 export interface WompiTransactionResult {
@@ -70,7 +75,10 @@ export class WompiService {
   // Observable para saber cuando el script está cargado
   public scriptLoaded$ = this.scriptLoadedSubject.asObservable();
 
-  constructor() {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
     this.loadWompiScript();
   }
 
@@ -269,5 +277,111 @@ export class WompiService {
    */
   centsToCop(amountInCents: number): number {
     return amountInCents / 100;
+  }
+
+  /**
+   * Calcula el signature de integridad para Wompi
+   * Fórmula: SHA256(reference + amountInCents + currency + integrityKey)
+   */
+  calculateIntegritySignature(reference: string, amountInCents: number, currency: string): string {
+    const integrityKey = environment.wompi.integrityKey;
+    
+    // Concatenar en el orden exacto que requiere Wompi
+    const dataToHash = `${reference}${amountInCents}${currency}${integrityKey}`;
+    
+    // Calcular SHA256
+    const signature = CryptoJS.SHA256(dataToHash).toString(CryptoJS.enc.Hex);
+    
+    console.log('🔐 Signature calculation:', {
+      reference,
+      amountInCents,
+      currency,
+      integrityKey: integrityKey.substring(0, 10) + '...',
+      dataToHash: dataToHash.substring(0, 50) + '...',
+      signature
+    });
+    
+    return signature;
+  }
+
+  /**
+   * Genera el objeto signature completo para Wompi
+   */
+  generateSignature(reference: string, amountInCents: number, currency: string): { integrity: string } {
+    const integrity = this.calculateIntegritySignature(reference, amountInCents, currency);
+    return { integrity };
+  }
+
+  /**
+   * Obtener headers de autenticación
+   */
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+  /**
+   * Generar referencia y hash usando endpoint del backend
+   */
+  async generateReferenceAndHash(amountInCents: number, currency: string = 'COP'): Promise<ReferenceGenerationResponseDto> {
+    try {
+      const headers = this.getAuthHeaders();
+      
+      const url = `${environment.apiUrl}/reference/generate`;
+      const params = new URLSearchParams({
+        amountInCents: amountInCents.toString(),
+        currency: currency
+      });
+
+      console.log('🔐 Generando referencia y hash desde backend:', {
+        amountInCents,
+        currency,
+        url: `${url}?${params.toString()}`
+      });
+
+      const response = await this.http.get<ReferenceGenerationResponseDto>(
+        `${url}?${params.toString()}`,
+        { headers }
+      ).toPromise();
+
+      console.log('✅ Referencia y hash generados desde backend:', response);
+      return response!;
+
+    } catch (error) {
+      console.error('❌ Error generando referencia y hash desde backend:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Generar referencia y signature usando endpoint del backend
+   */
+  async generateReferenceAndSignature(amountInCents: number, currency: string = 'COP'): Promise<{
+    reference: string;
+    signature: { integrity: string };
+  }> {
+    try {
+      // Llamar al endpoint del backend en lugar de generar localmente
+      const response = await this.generateReferenceAndHash(amountInCents, currency);
+      
+      return {
+        reference: response.reference,
+        signature: {
+          integrity: response.sha256_hash
+        }
+      };
+    } catch (error) {
+      console.error('❌ Error generando referencia y signature desde backend:', error);
+      console.warn('⚠️ Usando fallback - generando referencia y signature localmente');
+      
+      // Fallback a generación local si hay error
+      const reference = this.generateReference('TOURYA');
+      const signature = this.generateSignature(reference, amountInCents, currency);
+      
+      return { reference, signature };
+    }
   }
 }

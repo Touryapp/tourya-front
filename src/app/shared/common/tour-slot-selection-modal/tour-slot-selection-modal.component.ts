@@ -30,6 +30,7 @@ import { SearchToursService } from "../../../pages/clients/list-tours/search-tou
 export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   // Modal state
   showModal: boolean = false;
+  isProcessing: boolean = false; // Para mostrar loading mientras se guarda en backend
 
   // Tour data
   selectedTour: TourScheduleResponseDto | null = null;
@@ -274,7 +275,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   /**
    * Confirma la selección y agrega al carrito
    */
-  confirmSelection(): void {
+  async confirmSelection(): Promise<void> {
     if (!this.isValid || !this.selectedTour || !this.selectedSlot) {
       return;
     }
@@ -311,9 +312,45 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       gallery: this.selectedTour?.tour?.gallery,
     };
 
-    this.cartService.addItemToCart(cartItem);
-    this.data.tourAdded(cartItem);
-    this.closeModal();
+    // Activar estado de procesamiento
+    this.isProcessing = true;
+
+    try {
+      console.log("🛒 Agregando tour al carrito con backend...");
+      
+      // Agregar item al carrito con persistencia en backend
+      await this.cartService.addItemToCartWithBackend(cartItem);
+      
+      console.log("✅ Tour agregado exitosamente al carrito");
+      
+      // Notificar al componente padre que el tour fue agregado
+      this.data.tourAdded(cartItem);
+      
+      // Cerrar modal
+      this.closeModal();
+      
+    } catch (error: any) {
+      console.error("❌ Error agregando tour al carrito:", error);
+      
+      // Mostrar mensaje de error al usuario
+      let errorMessage = "Error agregando el tour al carrito. Por favor, intenta de nuevo.";
+      
+      if (error.status === 401) {
+        errorMessage = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.";
+      } else if (error.status === 400) {
+        errorMessage = "Datos inválidos. Por favor, verifica tu selección.";
+      } else if (error.status === 409) {
+        errorMessage = "Este tour ya existe en tu carrito para esta fecha.";
+      } else if (error.status === 500) {
+        errorMessage = "Error en el servidor. Por favor, contacta a soporte.";
+      }
+      
+      alert(errorMessage); // TODO: Reemplazar con un toast/snackbar más elegante
+      
+    } finally {
+      // Desactivar estado de procesamiento
+      this.isProcessing = false;
+    }
   }
 
   /**

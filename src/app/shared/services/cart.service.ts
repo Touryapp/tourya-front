@@ -127,10 +127,11 @@ export class CartService {
   }
 
   /**
-   * Agrega un item al carrito
+   * Agrega un item al carrito (solo local - sin persistencia en backend)
+   * @deprecated Use addItemToCartWithBackend for persistence
    */
   addItemToCart(cartItem: CartItem): void {
-    console.log("CartService: Agregando item al carrito:", cartItem);
+    console.log("CartService: Agregando item al carrito (solo local):", cartItem);
     const currentItems = this.cartItemsSubject.getValue();
 
     // Verificar si ya existe un tour para ese día
@@ -161,6 +162,62 @@ export class CartService {
       "CartService: Item agregado. Total items en carrito:",
       currentItems.length
     );
+  }
+
+  /**
+   * Agrega un item al carrito Y lo persiste en el backend
+   * Este es el método recomendado para usar en producción
+   */
+  async addItemToCartWithBackend(cartItem: CartItem): Promise<void> {
+    console.log("CartService: Agregando item al carrito con backend:", cartItem);
+    
+    try {
+      // 1. Convertir CartItem al formato esperado por la API
+      const apiItem = this.convertCartItemToApiFormat(cartItem);
+      
+      console.log("CartService: Item convertido al formato API:", apiItem);
+      
+      // 2. Agregar item localmente primero (para feedback inmediato en la UI)
+      this.addItemToCart(cartItem);
+      
+      // 3. Persistir en el backend
+      await this.createOrAddCartItems([apiItem]);
+      
+      console.log("CartService: Item agregado exitosamente al backend y carrito local");
+      
+    } catch (error: any) {
+      console.error("CartService: Error agregando item al carrito:", error);
+      
+      // Si falla el backend, remover del carrito local para mantener consistencia
+      this.removeItemFromCart(cartItem.dayDate);
+      
+      // Re-lanzar el error para que el componente lo maneje
+      throw error;
+    }
+  }
+
+  /**
+   * Convierte un CartItem del frontend al formato esperado por la API
+   */
+  private convertCartItemToApiFormat(cartItem: CartItem): any {
+    // Preparar configQuantity filtrando participantes con cantidad > 0
+    const configQuantity = cartItem.participants
+      .filter(p => p.quantity > 0)
+      .map(p => ({
+        ageType: p.ageType,
+        quantity: p.quantity
+      }));
+
+    return {
+      productId: cartItem.tour.id,
+      productType: "TOUR",
+      scheduleDate: cartItem.dayDate,
+      tourScheduleId: cartItem.schedule.id,
+      slot: {
+        id: cartItem.selectedSlot.slotId,
+        configQuantity: configQuantity
+      }
+    };
   }
 
   /**
@@ -595,4 +652,6 @@ export class CartService {
   async syncCartWithBackend(): Promise<void> {
     await this.loadCartFromBackend();
   }
+
+
 }

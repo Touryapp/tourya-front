@@ -5,6 +5,8 @@ import { routes } from '../../../shared/routes/routes';
 import { CartService } from '../../../shared/services/cart.service';
 import { CartItem, CartSummary } from '../../../shared/dto/cart.dto';
 import { WompiService, WompiCheckoutConfig, WompiTransactionResult } from '../../../shared/services/wompi.service';
+import { PaymentService } from '../../../shared/services/payment.service';
+import { PaymentResponseDto, WompiResponseDto, ShoppingCartResponseDto } from '../../../shared/dto/payment.dto';
 import { environment } from '../../../../environments/environment';
 
 // Interface for traveler information per tour
@@ -107,7 +109,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
           price: 45000
         }
       ],
-      totalPrice: 215000,
+      totalPrice: 2155000,
       totalParticipants: 3,
       address: {
         city: 'Cartagena',
@@ -158,7 +160,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
           price: 120000
         }
       ],
-      totalPrice: 240000,
+      totalPrice: 2400000,
       totalParticipants: 2,
       address: {
         city: 'Cartagena',
@@ -194,7 +196,8 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   constructor(
     private cartService: CartService,
     private router: Router,
-    private wompiService: WompiService
+    private wompiService: WompiService,
+    private paymentService: PaymentService
   ) {
     // Initialize mock data
     this.mockCartSummary.items = this.mockCartItems;
@@ -278,6 +281,52 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Sincronizar contactForm con userForm para compatibilidad legacy
+   */
+  private syncFormsData(): void {
+    console.log('🔄 Sincronizando contactForm → userForm...');
+    
+    // Sincronizar datos del formulario principal al legacy
+    if (this.contactForm) {
+      this.userForm.email = this.contactForm.email || this.userForm.email;
+      this.userForm.phone = this.contactForm.phone || this.userForm.phone;
+      this.userForm.firstName = this.contactForm.firstName || this.userForm.firstName;
+      this.userForm.lastName = this.contactForm.lastName || this.userForm.lastName;
+      
+      console.log('✅ Sincronización completada');
+      console.log('📧 Email sincronizado:', this.userForm.email);
+      console.log('📱 Phone sincronizado:', this.userForm.phone);
+    }
+  }
+
+  /**
+   * Debug method - imprimir estado completo del formulario
+   */
+  debugFormState(): void {
+    console.log('=== 🔍 DEBUG FORM STATE ===');
+    
+    console.log('📋 contactForm object:', this.contactForm);
+    console.log('📋 contactForm properties:');
+    Object.keys(this.contactForm || {}).forEach(key => {
+      const value = this.contactForm[key as keyof typeof this.contactForm];
+      console.log(`  ${key}: "${value}" (${typeof value}) [length: ${value?.toString().length || 0}]`);
+    });
+    
+    console.log('📋 userForm object (legacy):', this.userForm);
+    console.log('📋 userForm properties:');
+    Object.keys(this.userForm || {}).forEach(key => {
+      const value = this.userForm[key as keyof typeof this.userForm];
+      console.log(`  ${key}: "${value}" (${typeof value}) [length: ${value?.toString().length || 0}]`);
+    });
+
+    console.log('👥 travelersInfo:', this.travelersInfo);
+    console.log('👥 travelersInfo count:', this.travelersInfo.length);
+    console.log('👥 completed travelers:', this.getCompletedTravelersCount());
+    
+    console.log('========================');
+  }
+
+  /**
    * Validación del formulario antes de proceder al pago
    */
   private validateForm(): boolean {
@@ -300,52 +349,94 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     // Legacy validation for compatibility
     const requiredFields = ['email', 'phone', 'firstName', 'lastName'];
     
+    console.log('🔍 Validando campos obligatorios del userForm...');
     for (let field of requiredFields) {
-      if (!this.userForm[field as keyof typeof this.userForm]) {
-        console.error(`Campo requerido: ${field}`);
-        // TODO: Mostrar mensaje de error específico
+      const value = this.userForm[field as keyof typeof this.userForm];
+      console.log(`  Validando ${field}: "${value}" (${typeof value}) [empty: ${!value}]`);
+      
+      if (!value) {
+        console.error(`❌ Campo requerido faltante: ${field}`);
+        console.error(`❌ Valor actual: "${value}"`);
+        console.error('❌ userForm completo:', this.userForm);
+        alert(`Campo requerido: ${field}`);
         return false;
       }
     }
     
     // Validar formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.userForm.email)) {
-      console.error('Formato de email inválido');
+    const emailValue = this.userForm.email;
+    const emailValid = emailRegex.test(emailValue);
+    
+    console.log(`🔍 Validando formato de email: "${emailValue}"`);
+    console.log(`🔍 Email válido: ${emailValid}`);
+    
+    if (!emailValid) {
+      console.error('❌ Formato de email inválido:', emailValue);
+      alert('Por favor ingrese un email válido');
       return false;
     }
     
+    console.log('✅ Formulario validado exitosamente');
     return true;
   }
 
   /**
-   * Preparar datos para Wompi
+   * Preparar datos para Wompi usando endpoint del backend
    */
-  private prepareWompiData(): WompiCheckoutConfig {
-    const totalAmount = this.cartSummary?.totalPrice || 0;
-    
-    return {
-      currency: 'COP',
-      amountInCents: this.wompiService.copToCents(totalAmount),
-      reference: this.wompiService.generateReference('TOURYA'),
-      publicKey: environment.wompi.publicKey,
-      redirectUrl: `${window.location.origin}/clients/payment-confirmation`,
-      customerData: {
-        email: this.userForm.email,
-        fullName: `${this.userForm.firstName} ${this.userForm.lastName}`.trim(),
-        phoneNumber: this.userForm.phone.replace(/\D/g, ''), // Solo números
-        phoneNumberPrefix: '+57',
-        legalId: '123456789', // TODO: Agregar campo en el formulario
-        legalIdType: 'CC'
-      },
-      shippingAddress: {
-        addressLine1: this.userForm.address1 || 'N/A',
+  private async prepareWompiData(): Promise<WompiCheckoutConfig> {
+    try {
+      const totalAmount = this.cartSummary?.totalPrice || 0;
+      const amountInCents = this.wompiService.copToCents(totalAmount);
+      
+      console.log('🔐 Preparando datos de Wompi con backend...');
+      
+      // Generar referencia y signature desde el backend
+      const { reference, signature } = await this.wompiService.generateReferenceAndSignature(
+        amountInCents,
+        'COP'
+      );
+
+      // Preparar shippingAddress con validación
+      const shippingAddress = {
+        addressLine1: this.userForm.address1 || 'Calle 100 # 15-25, Zona Rosa',
         city: this.userForm.city || 'Bogotá',
         phoneNumber: this.userForm.phone.replace(/\D/g, ''),
         region: this.userForm.state || 'Cundinamarca',
         country: this.userForm.country || 'CO'
-      }
-    };
+      };
+
+      // Log para debug de shippingAddress
+      console.log('🏠 ShippingAddress preparado:');
+      Object.entries(shippingAddress).forEach(([key, value]) => {
+        console.log(`  ${key}: "${value}" [length: ${value.length}]`);
+      });
+
+      const wompiConfig: WompiCheckoutConfig = {
+        currency: 'COP',
+        amountInCents: amountInCents,
+        reference: reference,  // ← Desde backend
+        publicKey: environment.wompi.publicKey,
+        redirectUrl: `${window.location.origin}/clients/payment-confirmation`,
+        signature: signature,  // ← Desde backend
+        customerData: {
+          email: this.userForm.email,
+          fullName: `${this.userForm.firstName} ${this.userForm.lastName}`.trim(),
+          phoneNumber: this.userForm.phone.replace(/\D/g, ''), // Solo números
+          phoneNumberPrefix: '+57',
+          legalId: '123456789', // TODO: Agregar campo en el formulario
+          legalIdType: 'CC'
+        },
+        shippingAddress: shippingAddress
+      };
+
+      console.log('✅ Configuración Wompi preparada con datos del backend:', wompiConfig);
+      return wompiConfig;
+
+    } catch (error) {
+      console.error('❌ Error preparando datos de Wompi:', error);
+      throw error;
+    }
   }
 
   /**
@@ -372,6 +463,17 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   async proceedToPayment(): Promise<void> {
     console.log('CartSummary: Iniciando proceso de pago con Wompi...');
     
+    // 🔍 Debug: revisar estado del formulario antes de sincronizar
+    console.log('📋 Estado ANTES de sincronizar:');
+    this.debugFormState();
+    
+    // 🔄 Sincronizar formularios
+    this.syncFormsData();
+    
+    // 🔍 Debug: revisar estado después de sincronizar
+    console.log('📋 Estado DESPUÉS de sincronizar:');
+    this.debugFormState();
+    
     // 1. Validar formulario
     if (!this.validateForm()) {
       console.error('Formulario inválido, no se puede proceder al pago');
@@ -389,8 +491,9 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     this.processing = true;
     
     try {
-      // 3. Preparar datos para Wompi
-      const wompiConfig = this.prepareWompiData();
+      // 3. Preparar datos para Wompi usando endpoint del backend
+      console.log('🔐 Generando datos de pago con backend...');
+      const wompiConfig = await this.prepareWompiData();
       console.log('Configuración para Wompi:', wompiConfig);
       
       // 4. Validar configuración
@@ -439,17 +542,22 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     if (transaction.status === 'APPROVED') {
       console.log('✅ Pago aprobado:', transaction.id);
       
-      // TODO: Enviar datos al backend para crear la reserva
-      await this.createBooking(transaction);
-      
-      // Navegar a página de confirmación
-      this.router.navigate(['/clients/payment-confirmation'], {
-        queryParams: {
-          transactionId: transaction.id,
-          reference: transaction.reference,
-          status: transaction.status
-        }
-      });
+      try {
+        // Crear reserva en el backend usando PaymentService
+        const reservationData = await this.processPaymentWithBackend(transaction);
+        
+        // Navegar a página de confirmación con datos de la reserva
+        this.router.navigate(['/clients/tour-booking-confirmation'], {
+          state: { reservationData }
+        });
+        
+      } catch (error) {
+        console.error('❌ Error creando reserva:', error);
+        alert('El pago fue exitoso pero hubo un error creando la reserva. Por favor contacte soporte.');
+        
+        // Navegar a página de error o soporte
+        this.router.navigate(['/clients/list-tours']);
+      }
       
     } else if (transaction.status === 'DECLINED') {
       console.log('❌ Pago declinado:', transaction.id);
@@ -459,20 +567,77 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
       console.log('⏳ Pago pendiente:', transaction.id);
       alert('El pago está siendo procesado. Recibirá una confirmación pronto.');
       
-      // Navegar a página de estado pendiente
-      this.router.navigate(['/clients/payment-pending'], {
-        queryParams: {
-          transactionId: transaction.id,
-          reference: transaction.reference
-        }
-      });
+      // TODO: Crear página para pagos pendientes
+      this.router.navigate(['/clients/list-tours']);
     }
     
     this.processing = false;
   }
 
   /**
-   * Crear reserva en el backend después del pago exitoso
+   * Procesar pago con backend usando PaymentService
+   */
+  private async processPaymentWithBackend(transaction: any): Promise<PaymentResponseDto> {
+    try {
+      console.log('📝 Procesando pago con backend...');
+      
+      // 1. Convertir transaction de Wompi al formato WompiResponseDto
+      const wompiResponse: WompiResponseDto = {
+        id: transaction.id,
+        amount_in_cents: transaction.amount_in_cents,
+        currency: transaction.currency,
+        customer_email: transaction.customer_email || this.contactForm.email,
+        payment_method_type: transaction.payment_method_type,
+        status: transaction.status,
+        created_at: transaction.created_at,
+        finalized_at: transaction.finalized_at,
+        payment_method: transaction.payment_method,
+        // Incluir todos los datos adicionales de Wompi
+        ...transaction
+      };
+      
+      // 2. Obtener carrito actualizado del backend
+      const shoppingCart = await this.paymentService.getUserShoppingCart();
+      
+      // 3. Filtrar solo items ACTIVE para el pago
+      const activeItems = shoppingCart.items.filter(item => item.status === 'ACTIVE');
+      
+      if (activeItems.length === 0) {
+        throw new Error('No hay items activos en el carrito para procesar');
+      }
+      
+      // 4. Preparar información del pagador
+      const payerInfo = {
+        fullName: this.contactForm.firstName + ' ' + this.contactForm.lastName,
+        firstName: this.contactForm.firstName,
+        lastName: this.contactForm.lastName,
+        email: this.contactForm.email,
+        phone: this.contactForm.phone,
+        documentType: 'CC', // TODO: Obtener del formulario si está disponible
+        documentNumber: '00000000', // TODO: Obtener del formulario
+        address1: this.contactForm.address1,
+        city: this.contactForm.city,
+        country: this.contactForm.country
+      };
+      
+      // 5. Procesar pago con PaymentService
+      const reservationData = await this.paymentService.processPayment(
+        wompiResponse,
+        activeItems,
+        payerInfo
+      );
+      
+      console.log('✅ Reserva creada exitosamente:', reservationData);
+      return reservationData;
+      
+    } catch (error) {
+      console.error('❌ Error procesando pago con backend:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Crear reserva en el backend después del pago exitoso (LEGACY - mantener por compatibilidad)
    */
   private async createBooking(transaction: any): Promise<void> {
     try {
