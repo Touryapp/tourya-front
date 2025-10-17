@@ -939,6 +939,83 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Verifica si el formulario de contacto está completo
+   */
+  isContactFormComplete(): boolean {
+    return !!(
+      this.contactForm.firstName && 
+      this.contactForm.lastName && 
+      this.contactForm.email && 
+      this.contactForm.phone
+    );
+  }
+
+  /**
+   * Copia los datos del formulario de contacto a TODOS los viajeros
+   */
+  copyContactInfoToAllTravelers(): void {
+    if (!this.isContactFormComplete()) {
+      alert('Por favor completa primero la información de contacto (Nombre, Apellido, Email y Teléfono)');
+      return;
+    }
+
+    // Confirmar acción
+    const confirmed = confirm(
+      `¿Estás seguro de copiar tus datos a todos los ${this.travelersInfo.length} viajeros?\n\n` +
+      `Nombre: ${this.contactForm.firstName} ${this.contactForm.lastName}\n` +
+      `Email: ${this.contactForm.email}\n` +
+      `Teléfono: ${this.contactForm.phone}`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    // Copiar datos a todos los viajeros
+    this.travelersInfo.forEach((traveler, index) => {
+      traveler.firstName = this.contactForm.firstName;
+      traveler.lastName = this.contactForm.lastName;
+      traveler.email = this.contactForm.email;
+      traveler.phone = this.contactForm.phone;
+    });
+
+    console.log('✅ Datos de contacto copiados a todos los viajeros');
+    
+    // Mostrar notificación de éxito
+    // TODO: Reemplazar con toast/snackbar
+    alert(`✅ Tus datos fueron copiados exitosamente a los ${this.travelersInfo.length} viajeros`);
+  }
+
+  /**
+   * Copia los datos del formulario de contacto a UN viajero específico
+   */
+  copyContactInfoToTraveler(index: number): void {
+    if (!this.isContactFormComplete()) {
+      alert('Por favor completa primero la información de contacto (Nombre, Apellido, Email y Teléfono)');
+      return;
+    }
+
+    if (index < 0 || index >= this.travelersInfo.length) {
+      console.error('Índice de viajero inválido:', index);
+      return;
+    }
+
+    const traveler = this.travelersInfo[index];
+
+    // Copiar datos
+    traveler.firstName = this.contactForm.firstName;
+    traveler.lastName = this.contactForm.lastName;
+    traveler.email = this.contactForm.email;
+    traveler.phone = this.contactForm.phone;
+
+    console.log(`✅ Datos de contacto copiados al viajero del tour: ${traveler.tourName}`);
+    
+    // Mostrar notificación de éxito
+    // TODO: Reemplazar con toast/snackbar
+    alert(`✅ Tus datos fueron copiados exitosamente al viajero de "${traveler.tourName}"`);
+  }
+
+  /**
    * Actualiza el resumen del carrito basado en los items actuales
    */
   private updateCartSummary(): void {

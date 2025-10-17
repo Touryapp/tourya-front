@@ -116,14 +116,25 @@
                                         </span>
                                     </h6>
                                     <!-- Quick Actions -->
-                                    <div class="travelers-actions" *ngIf="travelersInfo.length > 1">
+                                    <div class="travelers-actions">
+                                        <!-- Botón para copiar datos de contacto a todos los viajeros -->
+                                        <button type="button" 
+                                                class="btn btn-sm btn-success me-2" 
+                                                (click)="copyContactInfoToAllTravelers()"
+                                                *ngIf="travelersInfo.length > 0 && isContactFormComplete()"
+                                                title="Copiar datos de contacto a todos los viajeros">
+                                            <i class="fas fa-copy me-1"></i>
+                                            Usar mis datos
+                                        </button>
                                         <button type="button" class="btn btn-sm btn-outline-primary me-2" 
                                                 (click)="expandAllTravelers()" 
+                                                *ngIf="travelersInfo.length > 1"
                                                 title="Expandir todos">
                                             <i class="fas fa-expand-arrows-alt"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" 
-                                                (click)="collapseAllTravelers()" 
+                                                (click)="collapseAllTravelers()"
+                                                *ngIf="travelersInfo.length > 1" 
                                                 title="Contraer todos">
                                             <i class="fas fa-compress-arrows-alt"></i>
                                         </button>
@@ -170,6 +181,22 @@
                                              [attr.aria-labelledby]="'heading' + i" 
                                              data-bs-parent="#travelersAccordion">
                                             <div class="accordion-body">
+                                                <!-- Botón para copiar datos de contacto a este viajero -->
+                                                <div class="alert alert-info d-flex align-items-center justify-content-between mb-3" 
+                                                     *ngIf="isContactFormComplete()">
+                                                    <div>
+                                                        <i class="fas fa-info-circle me-2"></i>
+                                                        <small>¿Eres tú quien viajará en este tour?</small>
+                                                    </div>
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-success" 
+                                                            (click)="copyContactInfoToTraveler(i)"
+                                                            title="Copiar mis datos a este viajero">
+                                                        <i class="fas fa-user-check me-1"></i>
+                                                        Usar mis datos
+                                                    </button>
+                                                </div>
+                                                
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
