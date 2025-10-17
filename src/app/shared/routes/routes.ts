@@ -230,6 +230,25 @@ export class routes {
   public static get contactUs(): string {
     return this.pages + "/contact-us";
   }
+  public static get contactanos(): string {
+    return this.baseUrl + "/contactanos";
+  }
+  public static get conocenos(): string {
+    return this.baseUrl + "/conocenos";
+  }
+  public static get blogsite(): string {
+    return this.baseUrl + "/blogsite";
+  }
+  public static get legalSite(): string {
+    return this.baseUrl + "/legal-site";
+  }
+  public static get legalSitePrivacyPolicy(): string {
+    return this.baseUrl + "/legal-site-politics";
+  }
+  public static get listTours(): string {
+    return this.baseUrl + "/clients/list-tours";
+  }
+  
   public static get destination(): string {
     return this.pages + "/destination";
   }
@@ -380,5 +399,19 @@ export class routes {
   }
   public static get clientsTourBookingConfirmation(): string {
     return this.clients + "/tour-booking-confirmation";
+  }
+
+  // Navigation placeholder routes
+  public static get tourPage(): string {
+    return this.baseUrl + "/tour";
+  }
+  public static get blogPage(): string {
+    return this.baseUrl + "/blog";
+  }
+  public static get legalPage(): string {
+    return this.baseUrl + "/legal";
+  }
+  public static get proveedoresPage(): string {
+    return this.baseUrl + "/proveedores";
   }
 }

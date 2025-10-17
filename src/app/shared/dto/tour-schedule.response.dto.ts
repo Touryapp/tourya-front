@@ -27,3 +27,23 @@ export interface TourSchedulePrice {
   maxAge: number;
   price: number;
 }
+
+export interface TourScheduleConfigResponseDto {
+  "id": number,
+  "tourId": number,
+  "scheduleDate": string,
+  "maxCapacity": number,
+  "reservedCapacity": number,
+  "isUnlimitedCapacity": boolean,
+  "status": string,
+  "configId": number,
+  "config": TourScheduleConfigDto
+}
+export interface TourScheduleConfigDto {
+  "id": number,
+  "providerId": number,
+  "label": string,
+  "daysOfWeek": string[],
+  "isUnlimitedCapacity": boolean,
+  "slots": TourScheduleSlot[]
+}
