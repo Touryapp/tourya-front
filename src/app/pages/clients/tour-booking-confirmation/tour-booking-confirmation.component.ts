@@ -22,40 +22,149 @@ export class TourBookingConfirmationComponent implements OnInit {
     private route: ActivatedRoute,
     public router: Router,
     private paymentService: PaymentService
-  ) { }
-
-  ngOnInit(): void {
-    // Obtener datos de la reservación desde navigation state
+  ) {
+    // Obtener datos de la navegación EN EL CONSTRUCTOR
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras?.state;
 
     if (state && state['reservationData']) {
       this.reservationData = state['reservationData'];
+      console.log('✅ Reservation data loaded from navigation state:', this.reservationData);
+    } else {
+      console.log('⚠️ No reservation data found in navigation state');
+    }
+  }
+
+  ngOnInit(): void {
+    // Procesar datos que ya se obtuvieron en el constructor
+    if (this.reservationData) {
       this.wompiData = this.parseWompiData();
       this.loading = false;
-      console.log('Reservation data loaded:', this.reservationData);
-      console.log('Wompi data parsed:', this.wompiData);
+      console.log('✅ Wompi data parsed:', this.wompiData);
+      
+      // Debug completo de la estructura de datos
+      this.debugReservationData();
     } else {
-      console.log('No reservation data found, loading mock data for testing');
-      // Cargar datos mock para testing/maquetación
+      console.log('⚠️ Loading mock data for testing');
       this.loadMockData();
       this.loading = false;
     }
   }
 
   /**
+   * Debug completo de la estructura de datos recibidos
+   */
+  private debugReservationData(): void {
+    console.log('=== 🔍 DEBUG RESERVATION DATA ===');
+    console.log('reservationData completo:', this.reservationData);
+    console.log('---');
+    console.log('paymentId:', this.reservationData?.paymentId);
+    console.log('transactionId:', this.reservationData?.transactionId);
+    console.log('createdDate:', this.reservationData?.createdDate);
+    console.log('---');
+    console.log('transactionData (string):', this.reservationData?.transactionData);
+    console.log('---');
+    
+    if (this.reservationData?.transactionData) {
+      try {
+        const parsed = JSON.parse(this.reservationData.transactionData);
+        console.log('transactionData (parsed):', parsed);
+        console.log('  - amount_in_cents:', parsed.amount_in_cents);
+        console.log('  - amountInCents:', parsed.amountInCents);
+        console.log('  - payment_method_type:', parsed.payment_method_type);
+        console.log('  - paymentMethodType:', parsed.paymentMethodType);
+        console.log('  - createdAt:', parsed.createdAt);
+        console.log('  - created_at:', parsed.created_at);
+        console.log('  - finalizedAt:', parsed.finalizedAt);
+        console.log('  - finalized_at:', parsed.finalized_at);
+      } catch (e) {
+        console.error('Error parseando transactionData:', e);
+      }
+    }
+    
+    console.log('---');
+    console.log('wompiData:', this.wompiData);
+    console.log('getTotalFromWompi():', this.getTotalFromWompi());
+    console.log('getPaymentMethod():', this.getPaymentMethod());
+    console.log('=== FIN DEBUG ===');
+  }
+
+  /**
    * Parsear transactionData de Wompi
    */
   private parseWompiData(): WompiResponseDto | null {
-    if (!this.reservationData?.transactionData) return null;
-    return this.paymentService.parseWompiTransactionData(this.reservationData.transactionData);
+    if (!this.reservationData?.transactionData) {
+      console.warn('⚠️ No hay transactionData en reservationData');
+      return null;
+    }
+    
+    try {
+      const parsed = this.paymentService.parseWompiTransactionData(this.reservationData.transactionData);
+      console.log('✅ Wompi data parseada exitosamente:', parsed);
+      
+      // Asegurar que las fechas están presentes en ambos formatos (camelCase y snake_case)
+      if (parsed) {
+        // Si tiene createdAt pero no created_at, agregar created_at
+        if ((parsed as any).createdAt && !(parsed as any).created_at) {
+          (parsed as any).created_at = (parsed as any).createdAt;
+        }
+        // Si tiene created_at pero no createdAt, agregar createdAt
+        if ((parsed as any).created_at && !(parsed as any).createdAt) {
+          (parsed as any).createdAt = (parsed as any).created_at;
+        }
+        
+        // Lo mismo para finalizedAt
+        if ((parsed as any).finalizedAt && !(parsed as any).finalized_at) {
+          (parsed as any).finalized_at = (parsed as any).finalizedAt;
+        }
+        if ((parsed as any).finalized_at && !(parsed as any).finalizedAt) {
+          (parsed as any).finalizedAt = (parsed as any).finalized_at;
+        }
+        
+        console.log('✅ Fechas normalizadas en wompiData:', {
+          createdAt: (parsed as any).createdAt,
+          created_at: (parsed as any).created_at,
+          finalizedAt: (parsed as any).finalizedAt,
+          finalized_at: (parsed as any).finalized_at
+        });
+      }
+      
+      return parsed;
+    } catch (error) {
+      console.error('❌ Error parseando Wompi data:', error);
+      console.error('transactionData recibido:', this.reservationData.transactionData);
+      return null;
+    }
   }
 
   /**
    * Formatear fecha para mostrar
    */
-  formatDate(dateString: string): string {
-    return this.paymentService.formatDate(dateString);
+  formatDate(dateString: string | undefined | null): string {
+    if (!dateString) {
+      console.warn('⚠️ dateString vacío, undefined o null:', dateString);
+      return 'Fecha no disponible';
+    }
+    
+    try {
+      // Si es una fecha ISO con zona horaria (ejemplo: "2025-10-18T00:12:17.017701382")
+      // O formato Wompi (ejemplo: "2025-10-18T00:12:13.500Z")
+      const date = new Date(dateString);
+      
+      // Verificar si la fecha es válida
+      if (isNaN(date.getTime())) {
+        console.error('❌ Fecha inválida después de parsear:', dateString);
+        return 'Fecha inválida';
+      }
+      
+      // Formatear la fecha usando el servicio
+      const formatted = this.paymentService.formatDate(dateString);
+      console.log('✅ Fecha formateada:', dateString, '->', formatted);
+      return formatted;
+    } catch (error) {
+      console.error('❌ Error formateando fecha:', dateString, error);
+      return 'Fecha inválida';
+    }
   }
 
   /**
@@ -144,9 +253,47 @@ export class TourBookingConfirmationComponent implements OnInit {
    * Obtener el total del pago desde Wompi data
    */
   getTotalFromWompi(): number {
-    if (this.wompiData?.amount_in_cents) {
-      return this.wompiData.amount_in_cents / 100; // Convertir centavos a pesos
+    console.log('🔍 getTotalFromWompi - wompiData:', this.wompiData);
+    
+    // Opción 1: Parsear directamente del transactionData (más confiable)
+    if (this.reservationData?.transactionData) {
+      try {
+        const data = JSON.parse(this.reservationData.transactionData);
+        console.log('🔍 transactionData parseado:', data);
+        
+        // Primero intentar amountInCents (camelCase)
+        if (data.amountInCents) {
+          const total = data.amountInCents / 100;
+          console.log('✅ Total desde transactionData.amountInCents:', total);
+          return total;
+        }
+        
+        // Luego intentar amount_in_cents (snake_case)
+        if (data.amount_in_cents) {
+          const total = data.amount_in_cents / 100;
+          console.log('✅ Total desde transactionData.amount_in_cents:', total);
+          return total;
+        }
+      } catch (e) {
+        console.error('❌ Error parseando transactionData para obtener total:', e);
+      }
     }
+    
+    // Opción 2: Desde wompiData parseado (amount_in_cents)
+    if (this.wompiData?.amount_in_cents) {
+      const total = this.wompiData.amount_in_cents / 100;
+      console.log('✅ Total desde wompiData.amount_in_cents:', total);
+      return total;
+    }
+    
+    // Opción 3: Desde amountInCents (formato alternativo)
+    if (this.wompiData && (this.wompiData as any).amountInCents) {
+      const total = (this.wompiData as any).amountInCents / 100;
+      console.log('✅ Total desde wompiData.amountInCents:', total);
+      return total;
+    }
+    
+    console.warn('⚠️ No se pudo obtener el total, devolviendo 0');
     return 0;
   }
 
@@ -154,16 +301,65 @@ export class TourBookingConfirmationComponent implements OnInit {
    * Obtener método de pago desde Wompi
    */
   getPaymentMethod(): string {
-    if (this.wompiData?.payment_method_type) {
-      const method = this.wompiData.payment_method_type;
-      switch (method.toLowerCase()) {
-        case 'card': return 'Tarjeta de Crédito/Débito';
-        case 'pse': return 'PSE';
-        case 'bancolombia_transfer': return 'Transferencia Bancolombia';
-        case 'nequi': return 'Nequi';
-        default: return method;
+    console.log('🔍 getPaymentMethod - wompiData:', this.wompiData);
+    
+    let paymentMethodType = null;
+    
+    // Opción 1: Parsear directamente del transactionData (más confiable)
+    if (this.reservationData?.transactionData) {
+      try {
+        const data = JSON.parse(this.reservationData.transactionData);
+        console.log('🔍 transactionData parseado para método:', data);
+        
+        // Primero intentar paymentMethodType (camelCase)
+        if (data.paymentMethodType) {
+          paymentMethodType = data.paymentMethodType;
+          console.log('✅ Método de pago desde transactionData.paymentMethodType:', paymentMethodType);
+        }
+        // Luego intentar payment_method_type (snake_case)
+        else if (data.payment_method_type) {
+          paymentMethodType = data.payment_method_type;
+          console.log('✅ Método de pago desde transactionData.payment_method_type:', paymentMethodType);
+        }
+      } catch (e) {
+        console.error('❌ Error parseando transactionData para obtener método:', e);
       }
     }
+    
+    // Opción 2: Desde wompiData parseado
+    if (!paymentMethodType && this.wompiData?.payment_method_type) {
+      paymentMethodType = this.wompiData.payment_method_type;
+      console.log('✅ Método de pago desde wompiData.payment_method_type:', paymentMethodType);
+    }
+    
+    // Opción 3: Desde paymentMethodType en wompiData
+    if (!paymentMethodType && this.wompiData && (this.wompiData as any).paymentMethodType) {
+      paymentMethodType = (this.wompiData as any).paymentMethodType;
+      console.log('✅ Método de pago desde wompiData.paymentMethodType:', paymentMethodType);
+    }
+    
+    // Convertir al formato legible
+    if (paymentMethodType) {
+      const method = paymentMethodType.toLowerCase();
+      switch (method) {
+        case 'card': 
+          return 'Tarjeta de Crédito/Débito';
+        case 'pse': 
+          return 'PSE';
+        case 'bancolombia_transfer':
+        case 'bancolombia_collect':
+          return 'Transferencia Bancolombia';
+        case 'nequi': 
+          return 'Nequi';
+        case 'daviplata':
+          return 'Daviplata';
+        default: 
+          // Capitalizar primera letra y reemplazar guiones bajos
+          return paymentMethodType.charAt(0).toUpperCase() + paymentMethodType.slice(1).replace(/_/g, ' ');
+      }
+    }
+    
+    console.warn('⚠️ No se pudo obtener el método de pago');
     return 'No especificado';
   }
 

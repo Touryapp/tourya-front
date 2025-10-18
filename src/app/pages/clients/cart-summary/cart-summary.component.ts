@@ -546,9 +546,19 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
         // Crear reserva en el backend usando PaymentService
         const reservationData = await this.processPaymentWithBackend(transaction);
         
+        console.log('📦 Datos de reserva a pasar al componente:', reservationData);
+        console.log('🔍 Tipo de reservationData:', typeof reservationData);
+        console.log('🔍 ¿Es null?', reservationData === null);
+        console.log('🔍 ¿Es undefined?', reservationData === undefined);
+        
         // Navegar a página de confirmación con datos de la reserva
         this.router.navigate(['/clients/tour-booking-confirmation'], {
           state: { reservationData }
+        }).then(success => {
+          console.log('✅ Navegación exitosa:', success);
+          console.log('📍 State enviado:', { reservationData });
+        }).catch(error => {
+          console.error('❌ Error en navegación:', error);
         });
         
       } catch (error) {

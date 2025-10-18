@@ -140,14 +140,31 @@ export class PaymentService {
    * Formatear fecha
    */
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    if (!dateString) {
+      console.warn('⚠️ formatDate: dateString vacío o undefined');
+      return 'Fecha no disponible';
+    }
+    
+    try {
+      const date = new Date(dateString);
+      
+      // Verificar si la fecha es válida
+      if (isNaN(date.getTime())) {
+        console.error('❌ formatDate: Fecha inválida -', dateString);
+        return 'Fecha inválida';
+      }
+      
+      return date.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      console.error('❌ formatDate: Error formateando fecha -', dateString, error);
+      return 'Error en fecha';
+    }
   }
 }

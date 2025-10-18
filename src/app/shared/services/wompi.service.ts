@@ -205,6 +205,11 @@ export class WompiService {
   generateReference(prefix: string = 'TOURYA'): string {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    console.log('🆔 Generando referencia:', {
+      prefix,
+      timestamp,
+      random
+    });
     return `${prefix}_${timestamp}_${random}`;
   }
 
