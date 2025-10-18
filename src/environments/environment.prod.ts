@@ -12,7 +12,10 @@ export const environment = {
     measurementId: "G-9LTR442NCT"
   },
   wompi: {
-    publicKey: 'pub_prod_your_production_key_here', // TODO: Reemplazar con la clave real de producción
+    publicKey: 'pub_test_bIOZLLlzg8Oel52ljFIp7Sd4FDEOo1da',
+    privateKey: 'prv_test_qSmhjc5VxZqkdTkkPPenk5zPPfnOKn4R',
+    integrityKey: 'test_integrity_PnLqXgX3tMbgvUqpXOKnZvfikb3oSV8y',
+    eventsKey: 'test_events_ChZirhWC9fePbdLnYT0CwavanHsjhVjv',
     baseUrl: 'https://checkout.wompi.co',
     scriptUrl: 'https://checkout.wompi.co/widget.js'
   }
