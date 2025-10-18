@@ -1,13 +1,5 @@
-<!-- Debug Controls (Remove in production) -->
-<div class="debug-controls bg-warning p-2 text-center" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999;">
-    <small><strong>DEBUG CONTROLS:</strong></small>
-    <button class="btn btn-sm btn-primary ms-2" (click)="loadMockData()">Load Mock Data</button>
-    <button class="btn btn-sm btn-secondary ms-2" (click)="clearMockData()">Clear Data (Empty Cart)</button>
-    <small class="ms-2">Items: {{cartItems.length}} | Total: {{formatPrice(cartSummary?.totalPrice || 0)}}</small>
-</div>
-
 <!-- Breadcrumb -->
-<div class="breadcrumb-bar breadcrumb-bg-05 text-center" style="margin-top: 50px;">
+<div class="breadcrumb-bar breadcrumb-bg-05 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">

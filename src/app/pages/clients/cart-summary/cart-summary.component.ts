@@ -72,136 +72,12 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   // Component lifecycle
   private destroy$ = new Subject<void>();
 
-  // Mock data for testing UI
-  private mockCartItems: CartItem[] = [
-    {
-      id: 'cart-item-1',
-      dayDate: '2025-10-15',
-      tour: {
-        id: 1,
-        name: 'City Tour por Cartagena Histórica',
-        description: 'Descubre la magia de la ciudad amurallada con un recorrido completo por los sitios más emblemáticos de Cartagena.',
-        duration: '4 horas',
-        rating: 4.8
-      },
-      schedule: {
-        id: 101,
-        scheduleDate: '2025-10-15',
-        startTime: '09:00',
-        endTime: '13:00'
-      },
-      selectedSlot: {
-        slotId: 201,
-        startTime: '09:00',
-        endTime: '13:00',
-        minCapacity: 4,
-        maxCapacity: 20
-      },
-      participants: [
-        {
-          ageType: 'ADULT',
-          quantity: 2,
-          price: 85000
-        },
-        {
-          ageType: 'CHILD',
-          quantity: 1,
-          price: 45000
-        }
-      ],
-      totalPrice: 2155000,
-      totalParticipants: 3,
-      address: {
-        city: 'Cartagena',
-        state: 'Bolívar',
-        country: 'Colombia',
-        address: 'Centro Histórico, Plaza de los Coches'
-      },
-      gallery: [
-        {
-          imageUrl: 'assets/img/tours/cartagena-tour-1.jpg',
-          description: 'Plaza de los Coches',
-          order: 1
-        },
-        {
-          imageUrl: 'assets/img/tours/cartagena-tour-2.jpg',
-          description: 'Murallas de Cartagena',
-          order: 2
-        }
-      ]
-    },
-    {
-      id: 'cart-item-2',
-      dayDate: '2025-10-16',
-      tour: {
-        id: 2,
-        name: 'Islas del Rosario - Tour Completo',
-        description: 'Excursión de día completo a las paradisíacas Islas del Rosario con snorkeling y almuerzo incluido.',
-        duration: '8 horas',
-        rating: 4.9
-      },
-      schedule: {
-        id: 102,
-        scheduleDate: '2025-10-16',
-        startTime: '07:30',
-        endTime: '17:30'
-      },
-      selectedSlot: {
-        slotId: 202,
-        startTime: '07:30',
-        endTime: '17:30',
-        minCapacity: 8,
-        maxCapacity: 30
-      },
-      participants: [
-        {
-          ageType: 'ADULT',
-          quantity: 2,
-          price: 120000
-        }
-      ],
-      totalPrice: 2400000,
-      totalParticipants: 2,
-      address: {
-        city: 'Cartagena',
-        state: 'Bolívar',
-        country: 'Colombia',
-        address: 'Muelle La Bodeguita, Centro Histórico'
-      },
-      gallery: [
-        {
-          imageUrl: 'assets/img/tours/rosario-islands-1.jpg',
-          description: 'Islas del Rosario',
-          order: 1
-        },
-        {
-          imageUrl: 'assets/img/tours/rosario-islands-2.jpg',
-          description: 'Snorkeling en aguas cristalinas',
-          order: 2
-        }
-      ]
-    }
-  ];
-
-  private mockCartSummary: CartSummary = {
-    totalItems: 2,
-    totalDays: 2,
-    totalParticipants: 5,
-    totalPrice: 455000,
-    startDate: '2025-10-15',
-    endDate: '2025-10-16',
-    items: [] // Will be populated with mockCartItems
-  };
-
   constructor(
     private cartService: CartService,
     private router: Router,
     private wompiService: WompiService,
     private paymentService: PaymentService
-  ) {
-    // Initialize mock data
-    this.mockCartSummary.items = this.mockCartItems;
-  }
+  ) {}
 
   ngOnInit(): void {
     console.log('CartSummary: Iniciando componente...');
@@ -265,17 +141,12 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
           if (items && items.length > 0) {
             this.cartItems = items;
             console.log('CartSummary: Items reales del carrito:', items);
-          } else {
-            // Si no hay items reales, usar mock data
-            this.cartItems = this.mockCartItems;
-            console.log('CartSummary: Usando mock items para testing');
           }
           // Inicializar información de viajeros
           this.initializeTravelersInfo();
         },
         error: (error: any) => {
           console.error('CartSummary: Error cargando items, usando mock data:', error);
-          this.cartItems = this.mockCartItems;
         }
       });
   }
@@ -698,40 +569,6 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
       currency: 'COP',
       minimumFractionDigits: 0,
     }).format(price);
-  }
-
-  /**
-   * Método para cargar mock data manualmente (útil para testing)
-   */
-  loadMockData(): void {
-    console.log('CartSummary: Cargando mock data manualmente');
-    this.loading = true;
-    
-    // Simular carga con delay
-    setTimeout(() => {
-      this.cartSummary = this.mockCartSummary;
-      this.cartItems = this.mockCartItems;
-      this.initializeTravelersInfo();
-      this.loading = false;
-      console.log('CartSummary: Mock data cargada:', this.cartSummary);
-    }, 500);
-  }
-
-  /**
-   * Método para limpiar datos (simular carrito vacío)
-   */
-  clearMockData(): void {
-    console.log('CartSummary: Limpiando datos (simular carrito vacío)');
-    this.cartSummary = {
-      totalItems: 0,
-      totalDays: 0,
-      totalParticipants: 0,
-      totalPrice: 0,
-      startDate: '',
-      endDate: '',
-      items: []
-    };
-    this.cartItems = [];
   }
 
   /**
