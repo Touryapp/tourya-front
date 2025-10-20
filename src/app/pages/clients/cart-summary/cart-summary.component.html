@@ -1,0 +1,442 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-05 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Resumen del Carrito</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="routes.tourList">Tours</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Carrito</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Wrapper -->
+<div class="content content-two">
+    <div class="container" *ngIf="!loading; else loadingTemplate">
+        <!-- Cart -->
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Secure Checkout - Datos del Usuario -->
+                <div class="card checkout-card">
+                    <div class="card-header">
+                        <h5>Checkout Seguro</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Información de Contacto (Quien realiza el pago) -->
+                        <div class="contact-info-section">
+                            <div class="checkout-title">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-user-tie me-2 text-primary"></i>
+                                    Información de Contacto (Quien realiza el pago)
+                                </h6>
+                            </div>
+                            <div class="checkout-details pb-3 border-bottom mb-4">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.firstName" placeholder="Juan" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Apellido</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.lastName" placeholder="Pérez" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Correo Electrónico</label>
+                                            <input type="email" class="form-control" [(ngModel)]="contactForm.email" placeholder="ejemplo@correo.com" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Teléfono</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.phone" placeholder="3001234567" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">País</label>
+                                            <select class="form-control" [(ngModel)]="contactForm.country">
+                                                <option value="">Seleccionar país</option>
+                                                <option value="CO">Colombia</option>
+                                                <option value="US">Estados Unidos</option>
+                                                <option value="ES">España</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Ciudad</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.city" placeholder="Bogotá">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Dirección</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.address1" placeholder="Calle 123 # 45-67">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-0">
+                                            <label class="form-label">Información Adicional</label>
+                                            <textarea class="form-control" rows="3" [(ngModel)]="contactForm.additionalInfo" placeholder="Información adicional, comentarios especiales..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información de Viajeros por Tour -->
+                        <div class="travelers-info-section">
+                            <div class="checkout-title">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-users me-2 text-primary"></i>
+                                        Información de Viajeros por Tour
+                                        <span class="badge bg-primary ms-2" *ngIf="travelersInfo.length > 0">
+                                            {{ getCompletedTravelersCount() }}/{{ travelersInfo.length }}
+                                        </span>
+                                    </h6>
+                                    <!-- Quick Actions -->
+                                    <div class="travelers-actions">
+                                        <!-- Botón para copiar datos de contacto a todos los viajeros -->
+                                        <button type="button" 
+                                                class="btn btn-sm btn-success me-2" 
+                                                (click)="copyContactInfoToAllTravelers()"
+                                                *ngIf="travelersInfo.length > 0 && isContactFormComplete()"
+                                                title="Copiar datos de contacto a todos los viajeros">
+                                            <i class="fas fa-copy me-1"></i>
+                                            Usar mis datos
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
+                                                (click)="expandAllTravelers()" 
+                                                *ngIf="travelersInfo.length > 1"
+                                                title="Expandir todos">
+                                            <i class="fas fa-expand-arrows-alt"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                                (click)="collapseAllTravelers()"
+                                                *ngIf="travelersInfo.length > 1" 
+                                                title="Contraer todos">
+                                            <i class="fas fa-compress-arrows-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Progress Bar -->
+                                <div class="travelers-progress" *ngIf="travelersInfo.length > 0">
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar bg-success" 
+                                             [style.width.%]="getTravelersCompletionPercentage()">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">
+                                        {{ getCompletedTravelersCount() }} de {{ travelersInfo.length }} viajeros completados
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Travelers Accordion with Scroll -->
+                            <div class="travelers-scroll-container" *ngIf="travelersInfo.length > 0">
+                                <div class="travelers-accordion">
+                                <div class="accordion" id="travelersAccordion">
+                                    <div class="accordion-item traveler-item" *ngFor="let traveler of travelersInfo; let i = index">
+                                        <h2 class="accordion-header" [id]="'heading' + i">
+                                            <button class="accordion-button collapsed" type="button" 
+                                                    data-bs-toggle="collapse" 
+                                                    [attr.data-bs-target]="'#collapse' + i" 
+                                                    [attr.aria-controls]="'collapse' + i">
+                                                <div class="traveler-header-content">
+                                                    <div class="traveler-title">
+                                                        <i class="fas fa-user-circle me-2"></i>
+                                                        <strong>Información del Viajero - {{ traveler.tourName }}</strong>
+                                                    </div>
+                                                    <div class="traveler-status">
+                                                        <span class="badge" 
+                                                              [class]="traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'bg-success' : 'bg-warning'">
+                                                            {{ traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'Completo' : 'Pendiente' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </h2>
+                                        <div [id]="'collapse' + i" class="accordion-collapse collapse" 
+                                             [attr.aria-labelledby]="'heading' + i" 
+                                             data-bs-parent="#travelersAccordion">
+                                            <div class="accordion-body">
+                                                <!-- Botón para copiar datos de contacto a este viajero -->
+                                                <div class="alert alert-info d-flex align-items-center justify-content-between mb-3" 
+                                                     *ngIf="isContactFormComplete()">
+                                                    <div>
+                                                        <i class="fas fa-info-circle me-2"></i>
+                                                        <small>¿Eres tú quien viajará en este tour?</small>
+                                                    </div>
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-success" 
+                                                            (click)="copyContactInfoToTraveler(i)"
+                                                            title="Copiar mis datos a este viajero">
+                                                        <i class="fas fa-user-check me-1"></i>
+                                                        Usar mis datos
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Nombre del Viajero</label>
+                                                            <input type="text" class="form-control" 
+                                                                   [(ngModel)]="traveler.firstName" 
+                                                                   placeholder="Juan" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Apellido del Viajero</label>
+                                                            <input type="text" class="form-control" 
+                                                                   [(ngModel)]="traveler.lastName" 
+                                                                   placeholder="Pérez" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Correo del Viajero</label>
+                                                            <input type="email" class="form-control" 
+                                                                   [(ngModel)]="traveler.email" 
+                                                                   placeholder="viajero@correo.com" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-0">
+                                                            <label class="form-label">Teléfono del Viajero</label>
+                                                            <input type="text" class="form-control" 
+                                                                   [(ngModel)]="traveler.phone" 
+                                                                   placeholder="3001234567" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Navigation for Multiple Travelers -->
+                            <div class="travelers-navigation" *ngIf="travelersInfo.length > 2">
+                                <div class="d-flex justify-content-center flex-wrap gap-2 mt-3">
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-info" 
+                                            *ngFor="let traveler of travelersInfo; let i = index"
+                                            (click)="scrollToTraveler(i)"
+                                            [title]="'Ir a ' + traveler.tourName">
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        Tour {{ i + 1 }}
+                                        <span class="ms-1" 
+                                              [class]="traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'text-success' : 'text-warning'">
+                                            <i class="fas" 
+                                               [class]="traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div class="empty-travelers" *ngIf="travelersInfo.length === 0">
+                            <div class="text-center py-4">
+                                <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
+                                <h6 class="text-muted">No hay tours en el carrito</h6>
+                                <p class="text-muted small">Agrega tours al carrito para completar la información de viajeros</p>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods - Wompi Integration -->
+                <div class="card checkout-card mt-4">
+                    <div class="card-header">
+                        <h5>Método de Pago</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="payment-wompi">
+                            <div class="d-flex align-items-center justify-content-center p-4 border rounded bg-light">
+                                <div class="text-center">
+                                    <div class="wompi-logo mb-3">
+                                        <i class="fas fa-credit-card fa-2x text-primary me-2"></i>
+                                        <i class="fas fa-university fa-2x text-info me-2"></i>
+                                        <i class="fas fa-mobile-alt fa-2x text-success"></i>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center mb-2">
+                                        <i class="fas fa-shield-alt text-success me-2"></i>
+                                        <strong class="text-dark">Pagos seguros procesados por Wompi</strong>
+                                    </div>
+                                    <small class="text-muted d-block">
+                                        Acepta <strong>tarjetas de crédito/débito</strong>, <strong>PSE</strong>, <strong>Nequi</strong> y más métodos de pago
+                                    </small>
+                                    <div class="mt-3">
+                                        <span class="badge bg-primary me-1">Visa</span>
+                                        <span class="badge bg-primary me-1">Mastercard</span>
+                                        <span class="badge bg-info me-1">PSE</span>
+                                        <span class="badge bg-success me-1">Nequi</span>
+                                        <span class="badge bg-warning">Bancolombia</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 p-3 bg-success bg-opacity-10 rounded">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-info-circle text-success me-2"></i>
+                                    <small class="text-success">
+                                        <strong>¿Cómo funciona?</strong> Al hacer clic en "Proceder al Pago", se abrirá la plataforma segura de Wompi donde podrás elegir tu método de pago preferido.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Order Details - Sidebar -->
+            <div class="col-lg-4">
+                <div class="card checkout-card">
+                    <div class="card-header">
+                        <h5>Resumen de tu Orden</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Cart Items Summary -->
+                        <div class="order-summary" *ngIf="hasItems">
+                            <div class="order-item position-relative" *ngFor="let item of cartItems; trackBy: trackByItemId; let i = index">
+                                <!-- Delete Button - Top Right -->
+                                <button 
+                                    type="button" 
+                                    class="btn btn-sm btn-outline-danger position-absolute delete-tour-btn"
+                                    (click)="confirmRemoveItem(item.id, item.tour.name)"
+                                    [disabled]="processing"
+                                    title="Eliminar tour del carrito">
+                                    <i class="fas fa-times" *ngIf="!processing"></i>
+                                    <i class="fas fa-spinner fa-spin" *ngIf="processing"></i>
+                                </button>
+
+                                <div class="d-flex align-items-start mb-3">
+                                    <img [src]="(item.gallery.length > 0 ? item.gallery[0].imageUrl : '') || 'assets/img/tours/default-tour.jpg'" 
+                                         [alt]="item.tour.name" class="tour-thumb me-3">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ item.tour.name }}</h6>
+                                        <div class="tour-details mb-2">
+                                            <p class="text-muted small mb-1">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                {{ item.dayDate | date:'fullDate':'es' }}
+                                            </p>
+                                            <p class="text-muted small mb-1">
+                                                <i class="fas fa-clock me-1"></i>
+                                                {{ item.schedule.startTime }} - {{ item.schedule.endTime }}
+                                            </p>
+                                            <p class="text-muted small mb-1">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                {{ item.address.city }}, {{ item.address.state }}
+                                            </p>
+                                            <p class="text-muted small mb-1">
+                                                <i class="fas fa-users me-1"></i>
+                                                {{ item.totalParticipants }} participantes
+                                            </p>
+                                        </div>
+                                        
+                                        <!-- Participants Breakdown -->
+                                        <div class="participants-breakdown">
+                                            <small class="text-muted d-block mb-1">Participantes:</small>
+                                            <div class="ms-2">
+                                                <div *ngFor="let participant of item.participants" class="d-flex justify-content-between align-items-center mb-1">
+                                                    <small>{{ getParticipantTypeLabel(participant.ageType) }}: {{ participant.quantity }}</small>
+                                                    <small class="text-muted">{{ participant.price | currency:'COP':'symbol':'1.0-0' }} c/u</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="text-end mt-2">
+                                            <div class="tour-price-display">
+                                                <strong class="tour-total-price">{{ formatPrice(item.totalPrice) }}</strong>
+                                                <small class="tour-price-label">Total por tour</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr *ngIf="i < cartItems.length - 1">
+                            </div>
+                        </div>
+
+                        <!-- Price Breakdown -->
+                        <div class="price-breakdown" *ngIf="cartSummary">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Total Items:</span>
+                                <span>{{ cartSummary.totalItems }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Total Participantes:</span>
+                                <span>{{ cartSummary.totalParticipants }}</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Total a Pagar:</strong>
+                                <strong class="text-primary">{{ formatPrice(cartSummary.totalPrice) }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="checkout-actions">
+                            <button class="btn btn-primary w-100 mb-2" 
+                                    [disabled]="!hasItems || processing"
+                                    (click)="proceedToPayment()">
+                                <span *ngIf="processing" class="spinner-border spinner-border-sm me-2"></span>
+                                Proceder al Pago
+                            </button>
+                            <button class="btn btn-outline-secondary w-100" (click)="continueShopping()">
+                                Continuar Comprando
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty Cart State -->
+        <div class="row" *ngIf="!hasItems">
+            <div class="col-12">
+                <div class="empty-cart text-center py-5">
+                    <div class="empty-cart-icon">
+                        <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+                    </div>
+                    <h4 class="mb-3">Tu carrito está vacío</h4>
+                    <p class="text-muted mb-4">¡Explora nuestros tours y encuentra tu próxima aventura!</p>
+                    <button class="btn btn-primary btn-lg" (click)="continueShopping()">
+                        Explorar Tours
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Template -->
+    <ng-template #loadingTemplate>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="loading-state text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <h5>Cargando tu carrito...</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>
+<!-- /Page Wrapper -->

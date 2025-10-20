@@ -378,6 +378,29 @@ export class routes {
     return this.agent + "/agent-chat";
   }
 
+  // Client routes
+  public static get clients(): string {
+    return this.baseUrl + "/clients";
+  }
+  public static get clientsListTours(): string {
+    return this.clients + "/list-tours";
+  }
+  public static get clientsToursDetail(): string {
+    return this.clients + "/tours-detail";
+  }
+  public static get clientsBookingTours(): string {
+    return this.clients + "/booking-tours";
+  }
+  public static get clientsBookingConfirm(): string {
+    return this.clients + "/booking-confirm";
+  }
+  public static get clientsCartSummary(): string {
+    return this.clients + "/cart-summary";
+  }
+  public static get clientsTourBookingConfirmation(): string {
+    return this.clients + "/tour-booking-confirmation";
+  }
+
   // Navigation placeholder routes
   public static get tourPage(): string {
     return this.baseUrl + "/tour";

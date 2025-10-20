@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from '../../core/services/auth.service';
+import { environment } from '../../../environments/environment';
 import {
   CartItem,
   DaySelection,
@@ -28,7 +31,10 @@ export class CartService {
   private currentStartDate: string = "";
   private currentEndDate: string = "";
 
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   /**
    * Inicializa el carrito con las fechas de búsqueda
@@ -121,10 +127,11 @@ export class CartService {
   }
 
   /**
-   * Agrega un item al carrito
+   * Agrega un item al carrito (solo local - sin persistencia en backend)
+   * @deprecated Use addItemToCartWithBackend for persistence
    */
   addItemToCart(cartItem: CartItem): void {
-    console.log("CartService: Agregando item al carrito:", cartItem);
+    console.log("CartService: Agregando item al carrito (solo local):", cartItem);
     const currentItems = this.cartItemsSubject.getValue();
 
     // Verificar si ya existe un tour para ese día
@@ -155,6 +162,62 @@ export class CartService {
       "CartService: Item agregado. Total items en carrito:",
       currentItems.length
     );
+  }
+
+  /**
+   * Agrega un item al carrito Y lo persiste en el backend
+   * Este es el método recomendado para usar en producción
+   */
+  async addItemToCartWithBackend(cartItem: CartItem): Promise<void> {
+    console.log("CartService: Agregando item al carrito con backend:", cartItem);
+    
+    try {
+      // 1. Convertir CartItem al formato esperado por la API
+      const apiItem = this.convertCartItemToApiFormat(cartItem);
+      
+      console.log("CartService: Item convertido al formato API:", apiItem);
+      
+      // 2. Agregar item localmente primero (para feedback inmediato en la UI)
+      this.addItemToCart(cartItem);
+      
+      // 3. Persistir en el backend
+      await this.createOrAddCartItems([apiItem]);
+      
+      console.log("CartService: Item agregado exitosamente al backend y carrito local");
+      
+    } catch (error: any) {
+      console.error("CartService: Error agregando item al carrito:", error);
+      
+      // Si falla el backend, remover del carrito local para mantener consistencia
+      this.removeItemFromCart(cartItem.dayDate);
+      
+      // Re-lanzar el error para que el componente lo maneje
+      throw error;
+    }
+  }
+
+  /**
+   * Convierte un CartItem del frontend al formato esperado por la API
+   */
+  private convertCartItemToApiFormat(cartItem: CartItem): any {
+    // Preparar configQuantity filtrando participantes con cantidad > 0
+    const configQuantity = cartItem.participants
+      .filter(p => p.quantity > 0)
+      .map(p => ({
+        ageType: p.ageType,
+        quantity: p.quantity
+      }));
+
+    return {
+      productId: cartItem.tour.id,
+      productType: "TOUR",
+      scheduleDate: cartItem.dayDate,
+      tourScheduleId: cartItem.schedule.id,
+      slot: {
+        id: cartItem.selectedSlot.slotId,
+        configQuantity: configQuantity
+      }
+    };
   }
 
   /**
@@ -314,4 +377,281 @@ export class CartService {
       return total + participant.quantity * participant.price;
     }, 0);
   }
+
+  // 🆕 API INTEGRATION METHODS
+  
+  /**
+   * Configurar headers de autenticación
+   */
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+  /**
+   * Cargar carrito desde el backend
+   */
+  async loadCartFromBackend(): Promise<void> {
+    try {
+      const headers = this.getAuthHeaders();
+      const response = await this.http.get<any>(
+        `${environment.apiUrl}/shopping-cart/user`,
+        { headers }
+      ).toPromise();
+
+      console.log('Shopping cart API response:', response);
+
+      if (response && response.items && response.items.length > 0) {
+        const activeItems = response.items.filter((item: any) => item.status === 'ACTIVE');
+        if (activeItems.length > 0) {
+          const mappedItems = this.mapApiResponseToCartItems(activeItems);
+          this.cartItemsSubject.next(mappedItems);
+          this.updateCartSummary();
+          console.log('Carrito cargado desde backend:', mappedItems.length, 'items activos');
+        } else {
+          console.log('No hay items activos en el carrito');
+          this.cartItemsSubject.next([]);
+          this.updateCartSummary();
+        }
+      } else {
+        console.log('Carrito vacío desde backend');
+        this.cartItemsSubject.next([]);
+        this.updateCartSummary();
+      }
+    } catch (error: any) {
+      console.error('Error cargando carrito desde backend:', error);
+      
+      // Si es error 404, significa que el usuario no tiene carrito
+      if (error.status === 404) {
+        console.log('Usuario no tiene carrito (404) - estableciendo carrito vacío');
+        this.cartItemsSubject.next([]);
+        this.updateCartSummary();
+        // No throw error aquí, es un estado válido para usuarios nuevos
+      } else {
+        // Para otros errores, propagar el error
+        throw error;
+      }
+    }
+  }
+
+  /**
+   * Crea o agrega items al carrito en el backend
+   */
+  async createOrAddCartItems(items: any[]): Promise<void> {
+    try {
+      const headers = this.getAuthHeaders();
+      const body = { items };
+      
+      console.log('Creando/agregando items al carrito:', body);
+      
+      const response = await this.http.post(
+        `${environment.apiUrl}/shopping-cart/items`,
+        body,
+        { headers }
+      ).toPromise();
+
+      console.log('Items agregados al carrito exitosamente:', response);
+      
+      // Recargar carrito después de agregar items
+      await this.loadCartFromBackend();
+      
+    } catch (error: any) {
+      console.error('Error creando/agregando items al carrito:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Método helper para crear un item en el formato esperado por la API
+   */
+  createCartItemPayload(
+    productId: number,
+    scheduleDate: string,
+    tourScheduleId: number,
+    slotId: number,
+    ageConfigs: { ageType: string, quantity: number }[]
+  ): any {
+    return {
+      productId,
+      productType: "TOUR",
+      scheduleDate,
+      tourScheduleId,
+      slot: {
+        id: slotId,
+        configQuantity: ageConfigs
+      }
+    };
+  }
+
+  /**
+   * Ejemplo de uso para agregar un tour al carrito
+   * @param productId ID del producto/tour
+   * @param scheduleDate Fecha del tour (YYYY-MM-DD)
+   * @param tourScheduleId ID del schedule del tour
+   * @param slotId ID del slot
+   * @param adults Cantidad de adultos
+   * @param children Cantidad de niños (opcional)
+   */
+  async addTourToCart(
+    productId: number,
+    scheduleDate: string,
+    tourScheduleId: number,
+    slotId: number,
+    adults: number,
+    children: number = 0
+  ): Promise<void> {
+    const ageConfigs: { ageType: string, quantity: number }[] = [];
+    
+    if (adults > 0) {
+      ageConfigs.push({ ageType: "ADULT", quantity: adults });
+    }
+    
+    if (children > 0) {
+      ageConfigs.push({ ageType: "CHILD", quantity: children });
+    }
+
+    const tourItem = this.createCartItemPayload(
+      productId,
+      scheduleDate,
+      tourScheduleId,
+      slotId,
+      ageConfigs
+    );
+
+    await this.createOrAddCartItems([tourItem]);
+  }
+
+  /**
+   * Sincronizar carrito local con backend cuando backend está vacío
+   */
+  async syncLocalCartWithBackend(): Promise<void> {
+    try {
+      // Obtener items del carrito local
+      const localItems = this.cartItemsSubject.value;
+      
+      if (localItems.length === 0) {
+        console.log('No hay items locales para sincronizar');
+        return;
+      }
+      
+      console.log('Sincronizando', localItems.length, 'items locales con backend...');
+      
+      // Convertir items locales al formato de API
+      const apiItems = localItems.map(item => {
+        return this.createCartItemPayload(
+          item.tour.id,              // productId
+          item.dayDate,              // scheduleDate
+          item.schedule.id,          // tourScheduleId
+          item.selectedSlot.slotId,  // slotId
+          item.participants.map((p: any) => ({
+            ageType: p.ageType,
+            quantity: p.quantity
+          }))
+        );
+      });
+      
+      // Llamar POST API
+      await this.createOrAddCartItems(apiItems);
+      
+      console.log('Carrito local sincronizado exitosamente con backend');
+      
+    } catch (error) {
+      console.error('Error sincronizando carrito local con backend:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Eliminar item del carrito via API
+   */
+  async removeCartItemFromBackend(itemId: number): Promise<void> {
+    try {
+      const headers = this.getAuthHeaders();
+      
+      // Primero necesitamos obtener el cartId del usuario
+      // Para esto, podemos hacer una llamada a la API o usar el cartId que guardamos
+      const cartResponse = await this.http.get(
+        `${environment.apiUrl}/shopping-cart/user`,
+        { headers }
+      ).toPromise() as any;
+      
+      const cartId = cartResponse.id;
+      
+      await this.http.delete(
+        `${environment.apiUrl}/shopping-cart/${cartId}/items/${itemId}`,
+        { headers }
+      ).toPromise();
+
+      console.log('Item eliminado del backend:', itemId, 'del cart:', cartId);
+      
+      // Recargar carrito después de eliminar
+      await this.loadCartFromBackend();
+      
+    } catch (error) {
+      console.error('Error eliminando item del carrito:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Mapear respuesta de API a CartItems del frontend
+   */
+  private mapApiResponseToCartItems(apiItems: any[]): CartItem[] {
+    return apiItems.map(item => ({
+      id: item.id.toString(), // ✅ API: item.id
+      dayDate: item.scheduleDate, // ✅ API: item.scheduleDate
+      tour: {
+        id: item.productId, // ✅ API: item.productId
+        name: item.tourName || 'Tour sin nombre', // ✅ API: item.tourName
+        description: 'Descubre los lugares más emblemáticos de la ciudad en este increíble recorrido', // TODO: API call to /tours/{productId}
+        duration: '8 horas', // TODO: API call to /tours/{productId}
+        rating: 4.5 // TODO: API call to /tours/{productId} - ratings promedio
+      },
+      schedule: {
+        id: item.tourScheduleId, // ✅ API: item.tourScheduleId
+        scheduleDate: item.scheduleDate, // ✅ API: item.scheduleDate
+        startTime: '09:00', // TODO: API call to /tour-schedules/{tourScheduleId}
+        endTime: '17:00' // TODO: API call to /tour-schedules/{tourScheduleId}
+      },
+      selectedSlot: {
+        slotId: item.slotId || 0, // ✅ API: item.slotId
+        startTime: '09:00', // TODO: API call to /slots/{slotId}
+        endTime: '17:00', // TODO: API call to /slots/{slotId}
+        minCapacity: 2, // TODO: API call to /slots/{slotId}
+        maxCapacity: 15 // TODO: API call to /slots/{slotId}
+      },
+      participants: item.details.map((detail: any) => ({
+        ageType: detail.ageType.name, // ✅ API: detail.ageType.name
+        quantity: detail.quantity, // ✅ API: detail.quantity
+        price: detail.unitPrice // ✅ API: detail.unitPrice
+      })),
+      totalPrice: item.totalPrice, // ✅ API: item.totalPrice
+      totalParticipants: item.details.reduce((sum: number, detail: any) => sum + detail.quantity, 0), // ✅ Calculado
+      address: {
+        city: 'Cartagena', // TODO: API call to /tours/{productId} - meetingPoint.city
+        state: 'Bolívar', // TODO: API call to /tours/{productId} - meetingPoint.state
+        country: 'Colombia', // TODO: API call to /tours/{productId} - meetingPoint.country
+        address: 'Plaza de la Aduana, Centro Histórico' // TODO: API call to /tours/{productId} - meetingPoint.address
+      },
+      gallery: [
+        { 
+          imageUrl: 'assets/img/tours/default-tour.jpg',
+          description: 'Vista principal del tour',
+          order: 1
+        }
+      ] // TODO: API call to /tours/{productId} - gallery images array
+    }));
+  }
+
+  /**
+   * Sincronizar carrito con backend (método helper)
+   */
+  async syncCartWithBackend(): Promise<void> {
+    await this.loadCartFromBackend();
+  }
+
+
 }

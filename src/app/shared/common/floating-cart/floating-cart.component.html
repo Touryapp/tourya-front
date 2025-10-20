@@ -146,9 +146,12 @@
           <i class="isax isax-trash me-1"></i>
           Limpiar
         </button>
-        <button class="btn btn-primary btn-sm flex-grow-1">
-          <i class="isax isax-shopping-cart me-1"></i>
-          Continuar
+        <button class="btn btn-primary btn-sm flex-grow-1" 
+                (click)="onContinue()" 
+                [disabled]="processing">
+          <span *ngIf="processing" class="spinner-border spinner-border-sm me-2" role="status"></span>
+          <i *ngIf="!processing" class="isax isax-shopping-cart me-1"></i>
+          {{ processing ? 'Cargando...' : 'Continuar' }}
         </button>
       </div>
     </div>
