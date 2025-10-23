@@ -7,11 +7,13 @@ import { SharedModule } from "../../../shared/shared-module";
 import { TourModule } from "../tours/tour.module";
 import { TemplatesModule } from "../templates/templates.module";
 import { ProviderTourManagementComponent } from "../provider-tour-management/provider-tour-management.component";
+import { ProviderReviewsComponent } from "../provider-reviews/provider-reviews.component";
 
 @NgModule({
   declarations: [
     ProviderPanelComponent,
-    ProviderTourManagementComponent
+    ProviderTourManagementComponent,
+    ProviderReviewsComponent
   ],
   imports: [
     CommonModule,

@@ -27,6 +27,7 @@ export class ProviderPanelComponent implements OnInit {
   mostrarTours: boolean = false;
   mostrarTemplates: boolean = false;
   mostrarTourManagement: boolean = false;
+  mostrarReviews: boolean = false;
   declinedReason: string = "";
 
   tours: Tour[] = [];
