@@ -6,9 +6,13 @@ import { ProviderPanelComponent } from "./provider-panel.component";
 import { SharedModule } from "../../../shared/shared-module";
 import { TourModule } from "../tours/tour.module";
 import { TemplatesModule } from "../templates/templates.module";
+import { ProviderTourManagementComponent } from "../provider-tour-management/provider-tour-management.component";
 
 @NgModule({
-  declarations: [ProviderPanelComponent],
+  declarations: [
+    ProviderPanelComponent,
+    ProviderTourManagementComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
