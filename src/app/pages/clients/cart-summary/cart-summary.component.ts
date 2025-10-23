@@ -597,10 +597,11 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     // Llamar a la API para eliminar el item del backend
     this.cartService.removeCartItemFromBackend(numericItemId)
       .then(() => {
-        console.log('Item eliminado exitosamente del backend');
+        console.log('✅ Item eliminado exitosamente del backend');
         
-        // Reload cart data from backend to get updated state
-        return this.cartService.loadCartFromBackend();
+        // IMPORTANTE: Forzar recarga desde backend para sincronizar
+        console.log('🔄 Recargando carrito desde backend para sincronizar...');
+        return this.cartService.reloadCartFromBackend();
       })
       .then(() => {
         // Update local cart items from service
@@ -608,11 +609,11 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
           this.cartItems = updatedItems;
           this.updateCartSummary();
           
-          console.log(`Tour "${tourName}" eliminado del carrito`);
+          console.log(`✅ Tour "${tourName}" eliminado del carrito - UI actualizada`);
           
           // Si no quedan items, mostrar estado vacío
           if (this.cartItems.length === 0) {
-            console.log('Carrito vacío después de eliminación');
+            console.log('📭 Carrito vacío después de eliminación');
             this.handleEmptyCart();
           }
         });
@@ -621,7 +622,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
         this.removeTravelerInfo(itemId);
       })
       .catch((error) => {
-        console.error('Error eliminando item del carrito:', error);
+        console.error('❌ Error eliminando item del carrito:', error);
         
         // Mostrar mensaje de error al usuario
         let errorMessage = 'Error eliminando el tour. Por favor, intenta de nuevo.';
@@ -629,8 +630,19 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
           errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
         } else if (error.status === 404) {
           errorMessage = 'El tour ya no está en tu carrito.';
-          // Reload cart to sync with backend
-          this.loadCartData();
+          // IMPORTANTE: Forzar recarga para sincronizar con el backend
+          console.log('⚠️ Tour no encontrado (404) - recargando para sincronizar...');
+          this.cartService.reloadCartFromBackend()
+            .then(() => {
+              this.cartService.cartItems$.pipe(take(1)).subscribe(updatedItems => {
+                this.cartItems = updatedItems;
+                this.updateCartSummary();
+                console.log('✅ Carrito sincronizado después de 404');
+              });
+            })
+            .catch(reloadError => {
+              console.error('❌ Error recargando carrito después de 404:', reloadError);
+            });
         }
         
         alert(errorMessage); // TODO: Replace with proper toast/snackbar
