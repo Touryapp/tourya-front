@@ -30,11 +30,39 @@ export class CartService {
 
   private currentStartDate: string = "";
   private currentEndDate: string = "";
+  
+  // Flag para evitar cargas múltiples del backend
+  private isLoadingFromBackend = false;
+  private hasLoadedFromBackend = false;
 
   constructor(
     private http: HttpClient,
     private authService: AuthService
   ) {}
+
+  /**
+   * Emite nuevos items solo si son diferentes a los actuales (previene loops)
+   */
+  private setCartItemsIfChanged(items: CartItem[]): void {
+    const currentItems = this.cartItemsSubject.value;
+    
+    // Comparar por contenido para evitar emisiones innecesarias
+    try {
+      const currentJson = JSON.stringify(currentItems);
+      const newJson = JSON.stringify(items);
+      
+      if (currentJson === newJson) {
+        console.log('🔄 CartService: Items sin cambios, no emitir');
+        return;
+      }
+    } catch (error) {
+      console.warn('⚠️ CartService: Error comparando items, emitiendo de todos modos', error);
+    }
+    
+    console.log('✅ CartService: Emitiendo items actualizados', items.length, 'items');
+    this.cartItemsSubject.next(items);
+    this.updateCartSummary();
+  }
 
   /**
    * Inicializa el carrito con las fechas de búsqueda
@@ -155,9 +183,8 @@ export class CartService {
       currentItems.push(cartItem);
     }
 
-    this.cartItemsSubject.next([...currentItems]);
+    this.setCartItemsIfChanged([...currentItems]);
     this.updateDaySelection(cartItem.dayDate, cartItem);
-    this.updateCartSummary();
     console.log(
       "CartService: Item agregado. Total items en carrito:",
       currentItems.length
@@ -229,7 +256,7 @@ export class CartService {
       (item) => item.dayDate !== dayDate
     );
 
-    this.cartItemsSubject.next(filteredItems);
+    this.setCartItemsIfChanged(filteredItems);
     this.updateDaySelection(dayDate, undefined);
     this.updateCartSummary();
   }
@@ -292,7 +319,8 @@ export class CartService {
    * Limpia todo el carrito
    */
   clearCart(): void {
-    this.cartItemsSubject.next([]);
+    console.log('🗑️ CartService: Limpiando carrito completo');
+    this.setCartItemsIfChanged([]);
     this.cartSummarySubject.next(null);
 
     // Resetear las selecciones de días
@@ -392,9 +420,24 @@ export class CartService {
   }
 
   /**
-   * Cargar carrito desde el backend
+   * Cargar carrito desde el backend (solo una vez por sesión)
    */
-  async loadCartFromBackend(): Promise<void> {
+  async loadCartFromBackend(force: boolean = false): Promise<void> {
+    // Prevenir cargas múltiples simultáneas
+    if (this.isLoadingFromBackend) {
+      console.log('⏳ CartService: Ya hay una carga en progreso, esperando...');
+      return;
+    }
+
+    // Si ya se cargó y no es forzado, no recargar
+    if (this.hasLoadedFromBackend && !force) {
+      console.log('✅ CartService: Carrito ya cargado previamente');
+      return;
+    }
+
+    this.isLoadingFromBackend = true;
+    console.log('🔄 CartService: Cargando carrito desde backend...');
+
     try {
       const headers = this.getAuthHeaders();
       const response = await this.http.get<any>(
@@ -402,39 +445,49 @@ export class CartService {
         { headers }
       ).toPromise();
 
-      console.log('Shopping cart API response:', response);
+      console.log('📦 Shopping cart API response:', response);
 
       if (response && response.items && response.items.length > 0) {
         const activeItems = response.items.filter((item: any) => item.status === 'ACTIVE');
         if (activeItems.length > 0) {
           const mappedItems = this.mapApiResponseToCartItems(activeItems);
-          this.cartItemsSubject.next(mappedItems);
-          this.updateCartSummary();
-          console.log('Carrito cargado desde backend:', mappedItems.length, 'items activos');
+          this.setCartItemsIfChanged(mappedItems);
+          console.log('✅ Carrito cargado desde backend:', mappedItems.length, 'items activos');
         } else {
-          console.log('No hay items activos en el carrito');
-          this.cartItemsSubject.next([]);
-          this.updateCartSummary();
+          console.log('📭 No hay items activos en el carrito');
+          this.setCartItemsIfChanged([]);
         }
       } else {
-        console.log('Carrito vacío desde backend');
-        this.cartItemsSubject.next([]);
-        this.updateCartSummary();
+        console.log('📭 Carrito vacío desde backend');
+        this.setCartItemsIfChanged([]);
       }
     } catch (error: any) {
-      console.error('Error cargando carrito desde backend:', error);
+      console.error('❌ Error cargando carrito desde backend:', error);
       
       // Si es error 404, significa que el usuario no tiene carrito
       if (error.status === 404) {
-        console.log('Usuario no tiene carrito (404) - estableciendo carrito vacío');
-        this.cartItemsSubject.next([]);
-        this.updateCartSummary();
+        console.log('📭 Usuario no tiene carrito (404) - estableciendo carrito vacío');
+        this.setCartItemsIfChanged([]);
         // No throw error aquí, es un estado válido para usuarios nuevos
       } else {
         // Para otros errores, propagar el error
         throw error;
       }
+    } finally {
+      // Marcar como cargado y liberar el lock
+      this.hasLoadedFromBackend = true;
+      this.isLoadingFromBackend = false;
+      console.log('🏁 CartService: Carga completada');
     }
+  }
+
+  /**
+   * Forzar recarga del carrito desde el backend
+   */
+  async reloadCartFromBackend(): Promise<void> {
+    console.log('🔄 Forzando recarga del carrito...');
+    this.hasLoadedFromBackend = false;
+    return this.loadCartFromBackend(true);
   }
 
   /**
@@ -453,13 +506,23 @@ export class CartService {
         { headers }
       ).toPromise();
 
-      console.log('Items agregados al carrito exitosamente:', response);
+      console.log('✅ Items agregados al carrito exitosamente:', response);
       
-      // Recargar carrito después de agregar items
-      await this.loadCartFromBackend();
+      // IMPORTANTE: Forzar recarga desde backend para sincronizar IDs reales
+      console.log('🔄 Recargando carrito desde backend para sincronizar...');
+      await this.reloadCartFromBackend();
       
     } catch (error: any) {
-      console.error('Error creando/agregando items al carrito:', error);
+      console.error('❌ Error creando/agregando items al carrito:', error);
+      
+      // Si falla, intentar recargar para sincronizar estado
+      try {
+        console.log('⚠️ Intentando sincronizar estado después de error...');
+        await this.reloadCartFromBackend();
+      } catch (reloadError) {
+        console.error('❌ Error sincronizando estado:', reloadError);
+      }
+      
       throw error;
     }
   }
@@ -525,6 +588,19 @@ export class CartService {
   }
 
   /**
+   * Método simple para cargar items directamente al carrito local
+   * sin duplicar ni llamar al backend
+   */
+  loadItemsToLocalCart(items: CartItem[]): void {
+    console.log('📥 Cargando items al carrito local:', items.length);
+    
+    // Limpiar carrito actual antes de cargar los nuevos
+    this.setCartItemsIfChanged(items);
+    
+    console.log('✅ Items cargados al carrito local exitosamente');
+  }
+
+  /**
    * Sincronizar carrito local con backend cuando backend está vacío
    */
   async syncLocalCartWithBackend(): Promise<void> {
@@ -561,6 +637,20 @@ export class CartService {
     } catch (error) {
       console.error('Error sincronizando carrito local con backend:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Cargar items del carrito desde el backend sin duplicar
+   */
+  async loadCartItemsFromBackendOnly(): Promise<void> {
+    try {
+      await this.loadCartFromBackend();
+      
+      console.log('✅ Items cargados desde backend');
+      
+    } catch (error) {
+      console.error('❌ Error cargando items del carrito desde backend:', error);
     }
   }
 

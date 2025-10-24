@@ -20,6 +20,7 @@ import {
 import { TourSlotSelectionModalComponent } from "../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component";
 import { Subject, takeUntil } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
+import { PaymentService } from "../../../shared/services/payment.service";
 
 @Component({
   selector: "app-list-tours",
@@ -162,11 +163,14 @@ export class ListToursComponent implements OnInit, OnDestroy {
     private readonly searchToursService: SearchToursService,
     private readonly cartService: CartService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private paymentService: PaymentService
   ) {}
 
   ngOnInit(): void {
     this.initializeCartSubscriptions();
+    // Ya no llamamos loadCartFromBackend aquí, el CartService lo maneja internamente
+    // cuando se suscribe el componente
 
     this.route.queryParams.subscribe((params) => {
       this.selectedState = params["state"] || "";
@@ -194,11 +198,14 @@ export class ListToursComponent implements OnInit, OnDestroy {
   }
 
   private initializeCartSubscriptions(): void {
+    console.log('🔔 ListTours: Inicializando suscripciones del carrito');
+    
     // Subscribe to cart summary
     this.cartService.cartSummary$
       .pipe(takeUntil(this.destroy$))
       .subscribe((summary) => {
         this.cartSummary = summary;
+        console.log('📊 ListTours: CartSummary actualizado', summary);
       });
 
     // Subscribe to day selections
@@ -208,10 +215,20 @@ export class ListToursComponent implements OnInit, OnDestroy {
         this.daySelections = days;
       });
 
-    // Subscribe to day selections
-    this.cartService.cartItems$.subscribe((items) => {
-      this.isCartVisible = items.length > 0;
-    });
+    // Subscribe to cart items - cargar del backend la primera vez
+    this.cartService.cartItems$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => {
+        console.log('🛒 ListTours: CartItems actualizado', items.length, 'items');
+        this.isCartVisible = items.length > 0;
+        
+        // Cargar del backend solo si está vacío y no se ha cargado aún
+        if (items.length === 0) {
+          this.cartService.loadCartFromBackend().catch(err => {
+            console.error('❌ ListTours: Error cargando carrito inicial', err);
+          });
+        }
+      });
   }
 
   // Show more/less functionality
@@ -708,5 +725,58 @@ export class ListToursComponent implements OnInit, OnDestroy {
     console.log("cartSummary:", this.cartSummary);
     console.log("tours length:", this.tours.length);
     console.log("=========================");
+  }
+
+  /**
+   * DEPRECATED: Ya no se usa - el CartService maneja la carga automáticamente
+   * Carga el carrito desde el backend al iniciar el componente
+   */
+  private async loadCartFromBackend_DEPRECATED(): Promise<void> {
+    try {
+      console.log('🛒 Cargando carrito desde el backend...');
+      
+      const cartResponse = await this.paymentService.getUserShoppingCart();
+      
+      if (cartResponse && cartResponse.items && cartResponse.items.length > 0) {
+        console.log('✅ Carrito cargado desde backend:', cartResponse);
+        
+        // Limpiar el carrito local antes de cargar desde el backend para evitar duplicados
+        this.cartService.clearCart();
+        
+        // Convertir los items del backend y agregarlos al carrito SOLO LOCALMENTE
+        for (const backendItem of cartResponse.items) {
+          // Extraer cantidades de adultos y niños desde details
+          let adults = 0;
+          let children = 0;
+          
+          if (backendItem.details && backendItem.details.length > 0) {
+            backendItem.details.forEach((detail: any) => {
+              const ageType = detail.ageType.name.toUpperCase();
+              if (ageType === 'ADULT') {
+                adults = detail.quantity;
+              } else if (ageType === 'CHILD') {
+                children = detail.quantity;
+              }
+            });
+          }
+          
+          // Cargar el item directamente al carrito usando addTourToCart
+          this.cartService.addTourToCart(
+            backendItem.productId,           // productId
+            backendItem.scheduleDate,        // scheduleDate
+            backendItem.tourScheduleId,      // tourScheduleId
+            backendItem.slotId || 0,         // slotId
+            adults,                          // adults
+            children                         // children
+          );
+        }
+        
+        console.log('✅ Items del backend cargados al FloatingCart (solo local)');
+      } else {
+        console.log('ℹ️ No hay items en el carrito del backend');
+      }
+    } catch (error) {
+      console.error('❌ Error al cargar carrito desde backend:', error);
+    }
   }
 }
