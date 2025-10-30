@@ -24,7 +24,7 @@ export class SearchToursService {
     page: number,
     size: number
   ): Observable<PaginationDto<TourScheduleResponseDto>> {
-    const pageZeroBased = Math.max(0, (page || 1));
+    const pageZeroBased = Math.max(0, (page || 1) -1);
     const pageSize = size || 10;
     const url = `${this.baseUrl}/search?page=${pageZeroBased}&size=${pageSize}`;
     return this.http.post<PaginationDto<TourScheduleResponseDto>>(url, body);
