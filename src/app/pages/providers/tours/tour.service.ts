@@ -67,16 +67,9 @@ export class TourService {
     );
   }
 
-  getSchedulesByTourId(tourId: number): Observable<{
-    content: TourScheduleConfigResponseDto[];
-    totalElements: number;
-    totalPages: number;
-  }> {
-    return this.http.get<{
-      content: TourScheduleConfigResponseDto[];
-      totalElements: number;
-      totalPages: number;
-    }>(`${environment.apiUrl}/tour-schedules/tours/${tourId}`);
+  getSchedulesByTourId(tourId: number): Observable<TourScheduleConfigResponseDto[]
+  > {
+    return this.http.get<TourScheduleConfigResponseDto[]>(`${environment.apiUrl}/tour-schedules/tours/${tourId}`);
   }
 
   getScheduleById(configId: number): Observable<TourSchedule> {

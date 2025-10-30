@@ -642,16 +642,12 @@ export class TourScheduleComponent {
 
   getSchedules() {
     this.tourService.getSchedulesByTourId(this.tourId).subscribe({
-      next: (data: {
-        content: TourScheduleConfigResponseDto[];
-        totalElements: number;
-        totalPages: number;
-      }) => {
-        if (data && data.content) {
-          this.tourSchedules = data.content;
+      next: (data:TourScheduleConfigResponseDto[]) => {
+        if (data) {
+          this.tourSchedules = data;
           
           // Agrupar por configId para crear eventos únicos por configuración
-          const groupedSchedules = this.groupSchedulesByConfig(data.content);
+          const groupedSchedules = this.groupSchedulesByConfig(data);
           
           const events: any[] = Object.values(groupedSchedules).map((group: any) => {
             const firstSchedule = group[0];
