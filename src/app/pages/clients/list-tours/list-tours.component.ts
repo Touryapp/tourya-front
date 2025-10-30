@@ -6,8 +6,6 @@ import {
   SearchTourListDto,
   TourScheduleResponseDto,
 } from "../../../shared/dto/search-tour-response.dto";
-import { State } from "../../../shared/dto/requestProvider-response.dto";
-import { TourCategory } from "../../../shared/dto/tour-response.dto";
 import { environment } from "../../../../environments/environment";
 import { PaginationDto } from "../../../shared/dto/pagination.dto";
 import { SearchToursService } from "./search-tours.service";
@@ -21,6 +19,10 @@ import { TourSlotSelectionModalComponent } from "../../../shared/common/tour-slo
 import { Subject, takeUntil } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { PaymentService } from "../../../shared/services/payment.service";
+import { CityService } from "../../../shared/services/city.service";
+import { LocationsPublicDto } from "../../../shared/dto/locations-public.dto";
+import { TagDto } from "../../../shared/dto/search-tour-response.dto";
+import { CategoryDto } from "../../../shared/dto/category.dto";
 
 @Component({
   selector: "app-list-tours",
@@ -108,17 +110,16 @@ export class ListToursComponent implements OnInit, OnDestroy {
   // Tours data (ahora será llenado por la API)
   tours: TourScheduleResponseDto[] = [];
   loading: boolean = false;
+  // Locations, tags, categories, age types
+  public locationsPublic: LocationsPublicDto[] = [];
+  public selectedLocation: LocationsPublicDto | null = null;
+  public tags: TagDto[] = [];
+  public categories: CategoryDto[] = [];
+  public ageTypes: { name: string }[] = [];
 
-  public states: State[] = [{ id: 1, name: "Bogota" }];
-  public categories: TourCategory[] = [
-    {
-      id: 1,
-      name: "Categoria 1",
-      description: "Descripcion de la categoria",
-    },
-  ];
-
-  public selectedState: string = "";
+  public selectedState: string = ""; // kept for URL param compatibility (stateId)
+  public selectedTag: string = "";
+  public selectedCategoryId?: number;
   public travellersData = {
     adults: 1,
     children: 0,
@@ -129,18 +130,22 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public checkOut: string = "";
 
   // Nuevas propiedades para filtros basados en SearchTourListDto
-  public selectedDuration: string = "";
+  public selectedDurationOption: string = ""; // e.g., 'DAYS:1' or 'WEEKS:3'
   public selectedAgeType: string = "";
-  public minPrice: number = 100;
+  public minPrice: number = 10;
   public maxPrice: number = 5000;
   public searchText: string = "";
 
   // Opciones para los filtros
-  public durationOptions = [
-    { value: "1-3", label: "1-3 días" },
-    { value: "4-7", label: "4-7 días" },
-    { value: "8-14", label: "8-14 días" },
-    { value: "15+", label: "15+ días" },
+  public durationUnifiedOptions = [
+    { value: 'DAYS:1', label: '1 día' },
+    { value: 'DAYS:2', label: '2 días' },
+    { value: 'DAYS:3', label: '3 días' },
+    { value: 'DAYS:4', label: '4 días' },
+    { value: 'WEEKS:1', label: '1 semana' },
+    { value: 'WEEKS:2', label: '2 semanas' },
+    { value: 'WEEKS:3', label: '3 semanas' },
+    { value: 'WEEKS:4', label: '4 semanas' },
   ];
 
   public ageTypeOptions = [
@@ -164,7 +169,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
     private readonly cartService: CartService,
     private router: Router,
     public dialog: MatDialog,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private cityService: CityService
   ) {}
 
   ngOnInit(): void {
@@ -172,8 +178,11 @@ export class ListToursComponent implements OnInit, OnDestroy {
     // Ya no llamamos loadCartFromBackend aquí, el CartService lo maneja internamente
     // cuando se suscribe el componente
 
+    // Cargar catálogos para filtros
+    this.loadFiltersCatalogs();
+
     this.route.queryParams.subscribe((params) => {
-      this.selectedState = params["state"] || "";
+      this.selectedState = params["state"] || ""; // stateId desde Home
       this.travellersData = {
         adults: Number(params["adults"]) || 1,
         children: Number(params["children"]) || 0,
@@ -188,13 +197,54 @@ export class ListToursComponent implements OnInit, OnDestroy {
         this.cartService.initializeCart(this.checkIn, this.checkOut);
       }
 
-      this.searchToursList();
+      // Si recibimos stateId, preseleccionamos una ciudad de ese estado una vez cargadas las locations
+      if (this.selectedState) {
+        const stateIdNum = Number(this.selectedState);
+        const trySelect = () => {
+          if (this.locationsPublic && this.locationsPublic.length) {
+            const loc = this.locationsPublic.find(l => l.stateId === stateIdNum);
+            if (loc) this.selectedLocation = loc;
+            this.searchToursList();
+          } else {
+            // Si aún no cargan, reintentar en el próximo tick mínimo
+            setTimeout(trySelect, 0);
+          }
+        };
+        trySelect();
+      } else {
+        this.searchToursList();
+      }
     });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private loadFiltersCatalogs(): void {
+    // Ciudades/Estados
+    this.cityService.getLocationsPublic().subscribe({
+      next: (data) => {
+        this.locationsPublic = data;
+      },
+      error: (err) => console.error('Error cargando locationsPublic', err)
+    });
+    // Tags
+    this.searchToursService.tagPublic().subscribe({
+      next: (data) => this.tags = data,
+      error: (err) => console.error('Error cargando tags', err)
+    });
+    // Categorías
+    this.searchToursService.categoriesPublic().subscribe({
+      next: (data) => this.categories = data,
+      error: (err) => console.error('Error cargando categorías', err)
+    });
+    // Tipos de edad
+    this.searchToursService.ageTypesPublic().subscribe({
+      next: (data) => this.ageTypes = data,
+      error: (err) => console.error('Error cargando tipos de edad', err)
+    });
   }
 
   private initializeCartSubscriptions(): void {
@@ -278,6 +328,9 @@ export class ListToursComponent implements OnInit, OnDestroy {
   resetFilters(): void {
     console.log("Reseteando filtros...");
     this.selectedState = "";
+    this.selectedLocation = null;
+    this.selectedTag = "";
+    this.selectedCategoryId = undefined;
     this.travellersData = {
       adults: 1,
       children: 0,
@@ -286,7 +339,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     };
     this.checkIn = "";
     this.checkOut = "";
-    this.selectedDuration = "";
+    this.selectedDurationOption = "";
     this.selectedAgeType = "";
     this.minPrice = 100;
     this.maxPrice = 5000;
@@ -422,7 +475,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     console.log("Datos de viajeros:", this.travellersData);
     console.log("Fecha de entrada:", this.checkIn);
     console.log("Fecha de salida:", this.checkOut);
-    console.log("Duración seleccionada:", this.selectedDuration);
+    console.log("Duración seleccionada (opción):", this.selectedDurationOption, "=> horas:", this.computeDurationHours(this.selectedDurationOption));
     console.log("Tipo de edad seleccionado:", this.selectedAgeType);
     console.log("Precio mínimo:", this.minPrice);
     console.log("Precio máximo:", this.maxPrice);
@@ -436,33 +489,6 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
     // Ejecutar búsqueda con todos los filtros
     this.searchToursList();
-  }
-
-  // Método de prueba para verificar datos
-  testSearchData(): void {
-    console.log("=== PRUEBA DE DATOS DE BÚSQUEDA ===");
-    const testData: Partial<SearchTourListDto> = {
-      providerStateId: Number(this.selectedState) || undefined,
-      providerCityId: 1,
-      // categoryId: 1, // Using default category since we replaced with travellers data
-      page: this.page,
-      size: this.size,
-      startDate: this.checkIn || undefined,
-      endDate: this.checkOut || undefined,
-      duration: this.selectedDuration || undefined,
-      ageType: this.selectedAgeType || undefined,
-      minPrice: this.minPrice || undefined,
-      maxPrice: this.maxPrice || undefined,
-      search: this.searchText || undefined,
-      // Note: travellers data is handled separately for now
-    };
-
-    console.log("Datos de prueba que se enviarían a la API:", testData);
-    console.log("Datos de viajeros:", this.travellersData);
-    console.log(
-      "URL del endpoint:",
-      `${environment.apiUrl}/public/tours/schedule/search`
-    );
   }
 
   // Métodos para manejar cambios en los sliders de precio
@@ -530,32 +556,28 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     // Construir objeto de búsqueda con todos los filtros
+    const durationHours = this.computeDurationHours(this.selectedDurationOption);
     const searchData: Partial<SearchTourListDto> = {
-      // providerStateId: Number(this.selectedState) || undefined,
-      // providerCityId: 1,
-      // page: this.page,
-      // size: this.size,
-      // startDate: this.checkIn || undefined,
-      // endDate: this.checkOut || undefined,
-      // duration: this.selectedDuration || undefined,
-      // ageType: this.selectedAgeType || undefined,
-      // minPrice: this.minPrice || undefined,
-      // maxPrice: this.maxPrice || undefined,
-      // search: this.searchText || undefined,
       startDate: this.checkIn || undefined,
       endDate: this.checkOut || undefined,
-      durationType: "HORAS",
-      categoryId: 1, // Default category since we replaced with travellers data
+      providerStateId: this.selectedLocation?.stateId,
+      providerCityId: this.selectedLocation?.cityId,
+      ...(durationHours !== undefined ? { durationType: 'HORAS', duration: String(durationHours) } : {}),
+      categoryId: this.selectedCategoryId,
+      ageType: this.selectedAgeType || undefined,
+      minPrice: this.minPrice || undefined,
+      maxPrice: this.maxPrice || undefined,
+      tag: this.selectedTag || undefined,
+      textSearch: this.searchText || undefined,
       sort_by: "price",
       sort_dir: "DESC",
-      // tourId: 13,
     };
 
     console.log("=== DATOS ENVIADOS A LA API ===");
     console.log("Objeto completo de búsqueda:", searchData);
-    console.log("URL de la petición:", "searchTours endpoint");
+    console.log("URL de la petición:", `${this.searchToursService["baseUrl"]}/search?page=${this.currentPage-1}&size=${this.size}`);
 
-    this.searchToursService.searchTours(searchData).subscribe({
+    this.searchToursService.searchTours(searchData, this.currentPage, this.size).subscribe({
       next: (response: PaginationDto<TourScheduleResponseDto>) => {
         console.log("=== RESPUESTA DE LA API ===");
         console.log("Respuesta completa de searchTours:", response);
@@ -602,6 +624,16 @@ export class ListToursComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
     });
+  }
+
+  private computeDurationHours(option: string): number | undefined {
+    if (!option) return undefined;
+    const [unit, valStr] = option.split(":");
+    const val = Number(valStr);
+    if (!val || val < 0) return undefined;
+    if (unit === 'DAYS') return val * 24;
+    if (unit === 'WEEKS') return val * 7 * 24;
+    return undefined;
   }
 
   // ==================== CART FUNCTIONALITY ====================
