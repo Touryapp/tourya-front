@@ -132,8 +132,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
   // Nuevas propiedades para filtros basados en SearchTourListDto
   public selectedDurationOption: string = ""; // e.g., 'DAYS:1' or 'WEEKS:3'
   public selectedAgeType: string = "";
-  public minPrice: number = 10;
-  public maxPrice: number = 5000;
+  public minPrice: number = 0;
+  public maxPrice: number = 0;
   public searchText: string = "";
 
   // Opciones para los filtros
@@ -341,8 +341,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.checkOut = "";
     this.selectedDurationOption = "";
     this.selectedAgeType = "";
-    this.minPrice = 100;
-    this.maxPrice = 5000;
+    this.minPrice = 0;
+    this.maxPrice = 0;
     this.searchText = "";
     this.currentPage = 1;
     this.page = 1;
@@ -569,8 +569,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
       maxPrice: this.maxPrice || undefined,
       tag: this.selectedTag || undefined,
       textSearch: this.searchText || undefined,
-      sort_by: "price",
-      sort_dir: "DESC",
+      // sort_by: "price",
+      // sort_dir: "DESC",
     };
 
     console.log("=== DATOS ENVIADOS A LA API ===");
