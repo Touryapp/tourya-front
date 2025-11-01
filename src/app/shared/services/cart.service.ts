@@ -316,22 +316,54 @@ export class CartService {
   }
 
   /**
-   * Limpia todo el carrito
+   * Limpia todo el carrito (backend + local)
    */
-  clearCart(): void {
-    console.log('🗑️ CartService: Limpiando carrito completo');
-    this.setCartItemsIfChanged([]);
-    this.cartSummarySubject.next(null);
+  async clearCart(): Promise<void> {
+    try {
+      if (!this.authService.isAuthenticated()) {
+        console.error('❌ No hay usuario autenticado para limpiar el carrito');
+        throw new Error('Usuario no autenticado');
+      }
 
-    // Resetear las selecciones de días
-    const currentDays = this.daySelectionsSubject.getValue();
-    const resetDays = currentDays.map((day) => ({
-      ...day,
-      isSelected: false,
-      tourSelected: undefined,
-    }));
+      console.log('🗑️ Limpiando carrito del usuario actual');
 
-    this.daySelectionsSubject.next(resetDays);
+      const headers = this.getAuthHeaders();
+
+      // Primero obtener el cartId del usuario
+      const cartResponse = await this.http.get(
+        `${environment.apiUrl}/shopping-cart/user`,
+        { headers }
+      ).toPromise() as any;
+
+      const cartId = cartResponse.id;
+      console.log(`🗑️ Limpiando carrito ID: ${cartId}`);
+
+      // Llamar al endpoint DELETE
+      await this.http.delete(
+        `${environment.apiUrl}/shopping-cart/${cartId}/clear`,
+        { headers }
+      ).toPromise();
+
+      console.log('✅ Carrito limpiado exitosamente en el backend');
+
+      // Limpiar el estado local
+      this.setCartItemsIfChanged([]);
+      this.cartSummarySubject.next(null);
+
+      // Resetear las selecciones de días
+      const currentDays = this.daySelectionsSubject.getValue();
+      const resetDays = currentDays.map((day) => ({
+        ...day,
+        isSelected: false,
+        tourSelected: undefined,
+      }));
+
+      this.daySelectionsSubject.next(resetDays);
+
+    } catch (error) {
+      console.error('❌ Error al limpiar el carrito:', error);
+      throw error;
+    }
   }
 
   /**

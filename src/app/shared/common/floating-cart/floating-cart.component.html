@@ -142,9 +142,12 @@
       </div>
 
       <div class="action-buttons">
-        <button class="btn btn-outline-secondary btn-sm me-2" (click)="onClearCart()">
-          <i class="isax isax-trash me-1"></i>
-          Limpiar
+        <button class="btn btn-outline-secondary btn-sm me-2" 
+                (click)="onClearCart()"
+                [disabled]="isClearing">
+          <span *ngIf="isClearing" class="spinner-border spinner-border-sm me-1" role="status"></span>
+          <i *ngIf="!isClearing" class="isax isax-trash me-1"></i>
+          {{ isClearing ? 'Limpiando...' : 'Limpiar' }}
         </button>
         <button class="btn btn-primary btn-sm flex-grow-1" 
                 (click)="onContinue()" 
