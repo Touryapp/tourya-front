@@ -34,12 +34,12 @@ export interface PayerDto {
   documentNumber: string;
 }
 
-// Payment Response DTO
+// Payment Response DTO (Nueva estructura)
 export interface PaymentResponseDto {
   paymentId: number;
   transactionId: string;
   transactionData: string;
-  reservation: ReservationDto;
+  reservations: ReservationDto[]; // ✨ Ahora es un array de reservas
   payer: PayerDto;
   createdDate: string;
   lastModifiedDate: string;
@@ -50,19 +50,23 @@ export interface PaymentResponseDto {
 export interface ReservationDto {
   reservationId: number;
   paymentId: number;
-  qrUrl: string; // QR code como imagen
+  itemId: number; // ✨ ID del item del carrito
+  qrUrl: string; // ✨ QR code único por reserva
   reservationDate: string;
-  deliveryStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED';
+  deliveryStatus: DeliveryStatus; // ✨ Enum tipado
+  serviceResponsible: ServiceResponsibleDto; // ✨ Responsable del servicio
   createdDate: string;
-  items: ReservationItemDto[];
   lastModifiedDate: string;
   createdBy: number;
   lastModifiedBy: number;
 }
 
-export interface ReservationItemDto {
-  shoppingCartItemId: number;
-  serviceResponsible: ServiceResponsibleDto;
+// ✨ Enum para estados de entrega
+export enum DeliveryStatus {
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  DELIVERED = 'DELIVERED',
+  CANCELLED = 'CANCELLED'
 }
 
 // Wompi Response (para referencia)

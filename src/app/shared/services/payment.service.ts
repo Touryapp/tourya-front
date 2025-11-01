@@ -7,7 +7,8 @@ import {
   PaymentResponseDto, 
   WompiResponseDto,
   ShoppingCartResponseDto,
-  ShoppingCartItemDto
+  ShoppingCartItemDto,
+  DeliveryStatus
 } from '../dto/payment.dto';
 
 @Injectable({
@@ -166,5 +167,44 @@ export class PaymentService {
       console.error('❌ formatDate: Error formateando fecha -', dateString, error);
       return 'Error en fecha';
     }
+  }
+
+  /**
+   * Obtener etiqueta del estado de entrega
+   */
+  getDeliveryStatusLabel(status: DeliveryStatus | string): string {
+    const labels: Record<string, string> = {
+      [DeliveryStatus.PENDING]: 'Pendiente',
+      [DeliveryStatus.CONFIRMED]: 'Confirmado',
+      [DeliveryStatus.DELIVERED]: 'Entregado',
+      [DeliveryStatus.CANCELLED]: 'Cancelado'
+    };
+    return labels[status] || status;
+  }
+
+  /**
+   * Obtener clase CSS del estado de entrega
+   */
+  getDeliveryStatusClass(status: DeliveryStatus | string): string {
+    const classes: Record<string, string> = {
+      [DeliveryStatus.PENDING]: 'badge-warning',
+      [DeliveryStatus.CONFIRMED]: 'badge-info',
+      [DeliveryStatus.DELIVERED]: 'badge-success',
+      [DeliveryStatus.CANCELLED]: 'badge-danger'
+    };
+    return classes[status] || 'badge-secondary';
+  }
+
+  /**
+   * Obtener icono del estado de entrega
+   */
+  getDeliveryStatusIcon(status: DeliveryStatus | string): string {
+    const icons: Record<string, string> = {
+      [DeliveryStatus.PENDING]: 'fa-clock',
+      [DeliveryStatus.CONFIRMED]: 'fa-check-circle',
+      [DeliveryStatus.DELIVERED]: 'fa-check-double',
+      [DeliveryStatus.CANCELLED]: 'fa-times-circle'
+    };
+    return icons[status] || 'fa-question-circle';
   }
 }

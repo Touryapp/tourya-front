@@ -49,10 +49,34 @@
     font-size: 1rem;
     color: #333;
   }
+}
+
+// Estilo para el monto total pagado
+.total-amount {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #28a745 !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 1.2 !important;
+}
+
+// Info items styling
+.info-item {
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #333;
+  }
   
   // Estilos especiales para el total pagado
   p.display-6 {
-    font-size: 2.5rem !important;
+    font-size: 3.5rem !important;
     font-weight: 800 !important;
     color: #28a745 !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
@@ -273,5 +297,85 @@
     border: 1px solid #333;
     background: white !important;
     color: #333 !important;
+  }
+}
+
+// Estilos del Carousel de Reservas
+.carousel-dots {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #dee2e6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #adb5bd;
+      transform: scale(1.2);
+    }
+
+    &.active {
+      background-color: #0d6efd;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+// Badge Styles para estados de entrega
+.badge {
+  &.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+  }
+
+  &.bg-success {
+    background-color: #198754 !important;
+    color: #fff !important;
+  }
+
+  &.bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000 !important;
+  }
+
+  &.bg-danger {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+  }
+}
+
+// Animación para transición de reservas
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+// Responsive para móviles
+@media (max-width: 768px) {
+  .carousel-dots .dot {
+    width: 10px;
+    height: 10px;
+
+    &.active {
+      width: 12px;
+      height: 12px;
+    }
   }
 }
