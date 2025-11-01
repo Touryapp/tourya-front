@@ -13,7 +13,7 @@ import { Department } from '../../../shared/dto/department.dto';
 import { City } from '../../../shared/dto/city.dto';
 import { State } from '../../../shared/dto/requestProvider-response.dto';
 import { TourCategory } from '../../../shared/dto/tour-response.dto';
-
+import { LocationsPublicDto } from '../../../shared/dto/locations-public.dto';
 @Component({
   selector: 'app-home-clients',
   standalone: false,
@@ -27,6 +27,7 @@ export class HomeClientsComponent {
   // Variables para selectores de país, departamento y ciudad
   countries: Country[] = [];
   departments: Department[] = [];
+
   public states: State[] =  [{id: 1, name: 'Bogota'}];
 public categories: TourCategory[] = [
   {
@@ -35,6 +36,7 @@ public categories: TourCategory[] = [
     "description": "Descripcion de la categoria"
   }
 ]
+  locationsPublic: LocationsPublicDto[] = [];
   selectedCountry: number | null = null;
   selectedDepartment: number | null = null;
   selectedState: string = '';
@@ -264,7 +266,7 @@ ngOnInit(): void {
   defaultTime.setHours(10, 30, 0, 0); // Set hours, minutes, seconds, milliseconds
   this.time = defaultTime;
   // Cargar países al iniciar el componente
-  this.getCountries();
+  this.getLocationsPublic();
   this.travelDestination = localStorage.getItem('travelDestination') || '';
   this.startDate = localStorage.getItem('startDate') || '';
   this.endDate = localStorage.getItem('endDate') || '';
@@ -274,18 +276,6 @@ toggleClass(index: number){
 }
 selectClass(index:number):void{
  this.isSelected[index]=!this.isSelected[index];
-}
-// Obtener lista de países
-getCountries() {
-  this.countryService.getCountries().subscribe({
-    next: (data: Country[]) => {
-      this.countries = data;
-    },
-    error: (err: any) => {
-      console.error('Error al obtener países', err);
-      this.countries = [];
-    }
-  });
 }
 // Cuando el usuario selecciona un país
 onCountryChange(countryId: number) {
@@ -376,7 +366,19 @@ getTravellersDetails(): string {
   return `${details.join(', ')}, ${this.travellersData.cabinClass}`;
 }
 
+  // Habilitar búsqueda si al menos un dato está seleccionado
+  get isSearchEnabled(): boolean {
+    const hasCity = !!this.selectedState && String(this.selectedState).trim() !== '';
+    const hasCheckIn = !!this.checkIn && String(this.checkIn).trim() !== '';
+    const hasCheckOut = !!this.checkOut && String(this.checkOut).trim() !== '';
+    return hasCity || hasCheckIn || hasCheckOut;
+  }
+
 onSearch(): void {
+  // Evitar envío si no hay datos seleccionados
+  if (!this.isSearchEnabled) {
+    return;
+  }
   const params = [
     `state=${encodeURIComponent(this.selectedState)}`,
     `adults=${encodeURIComponent(this.travellersData.adults)}`,
@@ -387,6 +389,18 @@ onSearch(): void {
     `checkOut=${encodeURIComponent(this.checkOut)}`
   ].join('&');
   this.router.navigateByUrl(`/clients/list-tours?${params}`);
+}
+
+getLocationsPublic(): void {
+  this.cityService.getLocationsPublic().subscribe({
+    next: (data) => {
+      this.locationsPublic = data;
+      console.log('Locations Public Data:', data);
+    },
+    error: (err) => {
+      console.error('Error fetching locations public data', err);
+    }
+  });
 }
 
 }

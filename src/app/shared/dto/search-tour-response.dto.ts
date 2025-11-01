@@ -10,11 +10,12 @@ export interface SearchTourListDto {
   ageType: string;
   minPrice: number;
   maxPrice: number;
-  search: string;
   durationType: string;
   sort_by?: string;
   sort_dir?: string;
   tourId?: number;
+  tag: string;
+  textSearch:string;
 }
 
 export interface ScheduleDto {

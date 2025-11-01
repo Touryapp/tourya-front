@@ -97,7 +97,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     this.searchToursService
       .searchTours({
         tourId: this.selectedTour?.tour?.id,
-      })
+      }, 1, 10)
       .subscribe((data) => {
         if (data && data.content) {
           this.selectedTour = data.content[0];

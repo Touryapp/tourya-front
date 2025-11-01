@@ -1105,14 +1105,15 @@
                                         </form>
                                     </div>
                                     <div class="tab-pane fade active show" id="Tour">
+                                        <!-- Tour Search Form -->
                                         <form class="d-lg-flex" (ngSubmit)="onSearch()">
                                           <div class="d-flex form-info">
                                             <!-- Select Ciudad -->
                                             <div class="form-item">
                                               <label class="form-label fs-14 text-default mb-1">Ciudad</label>
-                                              <select class="form-control" [(ngModel)]="selectedState" name="state" required>
+                                                <select class="form-control" [(ngModel)]="selectedState" name="state">
                                                 <option value="" disabled selected>Selecciona ciudad</option>
-                                                <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+                                                <option *ngFor="let location of locationsPublic" [value]="location.stateId">{{ location.stateName }}</option>
                                               </select>
                                             </div>
                                             <!-- Category field replaced with Travellers dropdown below -->
@@ -1199,15 +1200,15 @@
                                             <!-- Check In -->
                                             <div class="form-item">
                                               <label class="form-label fs-14 text-default mb-1">Check In</label>
-                                              <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn" required>
+                                                <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn">
                                             </div>
                                             <!-- Check Out -->
                                             <div class="form-item">
                                               <label class="form-label fs-14 text-default mb-1">Check Out</label>
-                                              <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut" required>
+                                                <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut">
                                             </div>
                                           </div>
-                                          <button type="submit" class="btn btn-primary search-btn rounded ms-2">Buscar</button>
+                                            <button type="submit" class="btn btn-primary search-btn rounded ms-2" [disabled]="!isSearchEnabled" title="Selecciona al menos un dato para buscar">Buscar</button>
                                         </form>
                                     </div>
                                 </div>
