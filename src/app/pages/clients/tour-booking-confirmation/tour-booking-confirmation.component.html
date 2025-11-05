@@ -66,83 +66,158 @@
           <i class="isax isax-tick-circle fs-1 text-success mb-2"></i>
           <h4 class="mt-2 mb-1">¡Reserva Confirmada!</h4>
           <p class="mb-2">Tu reserva ha sido procesada exitosamente. Recibirás un email de confirmación pronto.</p>
-          <h6 class="mb-0">Reserva #{{ reservationData.reservation.reservationId }}</h6>
+          <h6 class="mb-0">
+            Pago #{{ reservationData.paymentId }} | 
+            <span class="text-muted">{{ totalReservations }} Reserva{{ totalReservations > 1 ? 's' : '' }}</span>
+          </h6>
         </div>
       </div>
     </div>
 
-    <!-- Booking Confirmation -->
-    <div class="row justify-content-center">
+    <!-- Payment Summary Card -->
+    <div class="row justify-content-center mb-4">
       <div class="col-lg-10">
-        <div class="card">
-          <div class="card-header">
+        <div class="card border-primary">
+          <div class="card-header bg-primary text-white">
             <div class="row align-items-center">
               <div class="col-md-6">
-                <h5 class="card-title mb-0">
-                  <i class="isax isax-calendar me-2"></i>
-                  Detalles de la Reserva
+                <h5 class="card-title mb-0 text-white">
+                  <i class="isax isax-wallet-money me-2"></i>
+                  Resumen del Pago
                 </h5>
               </div>
               <div class="col-md-6 text-end">
-                <span class="badge" [ngClass]="getStatusBadgeClass(reservationData.reservation.deliveryStatus)">
-                  {{ getStatusText(reservationData.reservation.deliveryStatus) }}
-                </span>
+                <button class="btn btn-light btn-sm" (click)="downloadAllQRs()">
+                  <i class="isax isax-document-download me-1"></i>
+                  Descargar Todos los QRs
+                </button>
               </div>
             </div>
           </div>
           <div class="card-body">
-            
-            <!-- Reservation Info -->
+            <div class="row">
+              <div class="col-md-4 mb-3 mb-md-0">
+                <label class="form-label text-muted mb-1">ID de Transacción</label>
+                <p class="fw-bold mb-0">{{ reservationData.transactionId }}</p>
+              </div>
+              <div class="col-md-4 mb-3 mb-md-0">
+                <label class="form-label text-muted mb-1">Método de Pago</label>
+                <p class="mb-0">{{ getPaymentMethod() }}</p>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label text-muted mb-1">Total Pagado</label>
+                <p class="fw-bold text-success mb-0 total-amount">{{ formatPrice(getTotalFromWompi()) }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel de Reservas -->
+    <div class="row justify-content-center" *ngIf="currentReservation">
+      <div class="col-lg-10">
+        <div class="card">
+          <div class="card-header bg-light">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <h5 class="card-title mb-0">
+                  <i class="isax isax-ticket me-2"></i>
+                  Reserva {{ currentReservationIndex + 1 }} de {{ totalReservations }}
+                </h5>
+              </div>
+              <div class="col-md-6 text-end">
+                <span class="badge" [ngClass]="getDeliveryStatusClass(currentReservation.deliveryStatus)">
+                  <i class="fa" [ngClass]="getDeliveryStatusIcon(currentReservation.deliveryStatus)" aria-hidden="true"></i>
+                  {{ getDeliveryStatusLabel(currentReservation.deliveryStatus) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <!-- Carousel Controls -->
+            <div class="d-flex justify-content-between align-items-center mb-4" *ngIf="totalReservations > 1">
+              <button 
+                class="btn btn-outline-primary"
+                (click)="previousReservation()"
+                [disabled]="currentReservationIndex === 0">
+                <i class="isax isax-arrow-left me-2"></i>
+                Anterior
+              </button>
+
+              <!-- Dots Navigation -->
+              <div class="carousel-dots">
+                <span 
+                  *ngFor="let reservation of reservationData.reservations; let i = index"
+                  class="dot"
+                  [class.active]="i === currentReservationIndex"
+                  (click)="goToReservation(i)"
+                  [title]="'Ir a reserva ' + (i + 1)">
+                </span>
+              </div>
+
+              <button 
+                class="btn btn-outline-primary"
+                (click)="nextReservation()"
+                [disabled]="currentReservationIndex === totalReservations - 1">
+                Siguiente
+                <i class="isax isax-arrow-right ms-2"></i>
+              </button>
+            </div>
+
+            <!-- Reservation Details -->
             <div class="row mb-4">
               <div class="col-md-6">
                 <div class="info-item mb-3">
                   <label class="form-label text-muted mb-1">ID de Reserva</label>
-                  <p class="fw-bold mb-0">#{{ reservationData.reservation.reservationId }}</p>
+                  <p class="fw-bold mb-0">#{{ currentReservation.reservationId }}</p>
                 </div>
                 <div class="info-item mb-3">
                   <label class="form-label text-muted mb-1">Fecha de Reserva</label>
-                  <p class="mb-0">{{ formatDate(reservationData.reservation.reservationDate) }}</p>
+                  <p class="mb-0">{{ formatDate(currentReservation.reservationDate) }}</p>
                 </div>
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">Estado de Entrega</label>
-                  <p class="mb-0">
-                    <span class="badge" [ngClass]="getStatusBadgeClass(reservationData.reservation.deliveryStatus)">
-                      {{ getStatusText(reservationData.reservation.deliveryStatus) }}
-                    </span>
-                  </p>
+                  <label class="form-label text-muted mb-1">ID del Item</label>
+                  <p class="mb-0">#{{ currentReservation.itemId }}</p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">ID de Transacción</label>
-                  <p class="fw-bold mb-0">{{ reservationData.transactionId }}</p>
+                  <label class="form-label text-muted mb-1">Estado de Entrega</label>
+                  <p class="mb-0">
+                    <span class="badge" [ngClass]="getDeliveryStatusClass(currentReservation.deliveryStatus)">
+                      <i class="fa" [ngClass]="getDeliveryStatusIcon(currentReservation.deliveryStatus)" aria-hidden="true"></i>
+                      {{ getDeliveryStatusLabel(currentReservation.deliveryStatus) }}
+                    </span>
+                  </p>
                 </div>
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">Método de Pago</label>
-                  <p class="mb-0">{{ getPaymentMethod() }}</p>
+                  <label class="form-label text-muted mb-1">Creado</label>
+                  <p class="mb-0 small">{{ formatDate(currentReservation.createdDate) }}</p>
                 </div>
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">Total Pagado</label>
-                  <p class="fw-bold text-success mb-0 fs-2 display-6">{{ formatPrice(getTotalFromWompi()) }}</p>
+                  <label class="form-label text-muted mb-1">Última Modificación</label>
+                  <p class="mb-0 small">{{ formatDate(currentReservation.lastModifiedDate) }}</p>
                 </div>
               </div>
             </div>
 
             <!-- QR Code Section -->
-            <div class="row mb-4" *ngIf="reservationData.reservation.qrUrl">
+            <div class="row mb-4" *ngIf="currentReservation.qrUrl">
               <div class="col-12">
-                <div class="card bg-light">
+                <div class="card bg-light border">
                   <div class="card-body text-center">
                     <h6 class="card-title mb-3">
                       <i class="isax isax-scan-barcode me-2"></i>
-                      Código QR de tu Reserva
+                      Código QR de esta Reserva
                     </h6>
                     <div class="qr-container mb-3">
                       <img 
-                        [src]="reservationData.reservation.qrUrl" 
-                        alt="QR Code Reserva" 
-                        class="img-fluid border rounded"
-                        style="max-width: 200px; max-height: 200px;"
+                        [src]="currentReservation.qrUrl" 
+                        alt="QR Code Reserva #{{ currentReservation.reservationId }}" 
+                        class="img-fluid border rounded shadow-sm"
+                        style="max-width: 250px; max-height: 250px;"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
                       <div class="alert alert-warning mt-3" style="display: none;">
                         <i class="isax isax-warning-2 me-2"></i>
@@ -150,12 +225,12 @@
                       </div>
                     </div>
                     <p class="text-muted small mb-3">
-                      Presenta este código QR al momento de tu tour para confirmar tu reserva.
+                      Presenta este código QR al momento de tu tour para confirmar tu reserva #{{ currentReservation.reservationId }}.
                     </p>
-                    <div class="btn-group">
-                      <button class="btn btn-outline-primary btn-sm" (click)="downloadQR()">
+                    <div class="btn-group gap-2">
+                      <button class="btn btn-primary btn-sm" (click)="downloadQR()">
                         <i class="isax isax-document-download me-1"></i>
-                        Descargar
+                        Descargar QR
                       </button>
                       <button class="btn btn-outline-secondary btn-sm" (click)="shareQR()">
                         <i class="isax isax-share me-1"></i>
@@ -167,126 +242,39 @@
               </div>
             </div>
 
-            <!-- Payer Information -->
-            <div class="row mb-4">
+            <!-- Service Provider Info -->
+            <div class="row mb-4" *ngIf="currentReservation.serviceResponsible">
               <div class="col-12">
                 <h6 class="mb-3">
-                  <i class="isax isax-user me-2"></i>
-                  Información del Pagador
+                  <i class="isax isax-building me-2"></i>
+                  Proveedor del Servicio
                 </h6>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="info-item mb-2">
-                      <label class="form-label text-muted mb-1">Nombre Completo</label>
-                      <p class="mb-0">{{ reservationData.payer.name }}</p>
-                    </div>
-                    <div class="info-item mb-2">
-                      <label class="form-label text-muted mb-1">Email</label>
-                      <p class="mb-0">{{ reservationData.payer.email }}</p>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="info-item mb-2">
-                      <label class="form-label text-muted mb-1">Teléfono</label>
-                      <p class="mb-0">{{ reservationData.payer.phone }}</p>
-                    </div>
-                    <div class="info-item mb-2">
-                      <label class="form-label text-muted mb-1">Documento</label>
-                      <p class="mb-0">{{ reservationData.payer.documentType }} {{ reservationData.payer.documentNumber }}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Service Providers -->
-            <div class="row mb-4" *ngIf="reservationData.reservation.items && reservationData.reservation.items.length > 0">
-              <div class="col-12">
-                <h6 class="mb-3">
-                  <i class="isax isax-call me-2"></i>
-                  Proveedores de Servicios
-                  <span class="badge badge-info ms-2">{{ reservationData.reservation.items.length }} Tour(s)</span>
-                </h6>
-                
-                <!-- Iterar por todos los items -->
-                <div class="row">
-                  <div class="col-lg-6 mb-3" *ngFor="let item of reservationData.reservation.items; let i = index">
-                    <div class="card bg-light border-start border-primary border-4">
-                      <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                          <h6 class="card-title mb-1 text-primary">
-                            <i class="isax isax-location me-1"></i>
-                            Tour #{{ i + 1 }}
-                          </h6>
-                          <small class="text-muted">ID: {{ item.shoppingCartItemId }}</small>
-                        </div>
-                        
-                        <div class="info-item mb-2">
-                          <label class="form-label text-muted mb-1">Proveedor</label>
-                          <p class="mb-1 fw-bold">{{ item.serviceResponsible.name }}</p>
-                        </div>
-                        
-                        <div class="row">
-                          <div class="col-12 col-sm-6">
-                            <div class="info-item mb-2">
-                              <label class="form-label text-muted mb-1">Email</label>
-                              <p class="mb-0 small">
-                                <a [href]="'mailto:' + item.serviceResponsible.email" class="text-decoration-none">
-                                  <i class="isax isax-sms me-1"></i>
-                                  {{ item.serviceResponsible.email }}
-                                </a>
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-12 col-sm-6">
-                            <div class="info-item mb-2">
-                              <label class="form-label text-muted mb-1">Teléfono</label>
-                              <p class="mb-0 small">
-                                <a [href]="'tel:' + item.serviceResponsible.phone" class="text-decoration-none">
-                                  <i class="isax isax-call me-1"></i>
-                                  {{ item.serviceResponsible.phone }}
-                                </a>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                <div class="card bg-light border-start border-primary border-4">
+                  <div class="card-body">
+                    <h6 class="card-title text-primary mb-3">
+                      {{ currentReservation.serviceResponsible.name }}
+                    </h6>
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        <label class="form-label text-muted mb-1">Email de Contacto</label>
+                        <p class="mb-0">
+                          <a [href]="'mailto:' + currentReservation.serviceResponsible.email" 
+                             class="text-decoration-none">
+                            <i class="isax isax-sms me-1"></i>
+                            {{ currentReservation.serviceResponsible.email }}
+                          </a>
+                        </p>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Wompi Transaction Details -->
-            <div class="row mb-4" *ngIf="wompiData">
-              <div class="col-12">
-                <h6 class="mb-3">
-                  <i class="isax isax-card me-2"></i>
-                  Detalles de la Transacción
-                </h6>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="info-item mb-2">
-                      <label class="form-label text-muted mb-1">ID Wompi</label>
-                      <p class="mb-0 font-monospace">{{ wompiData.id }}</p>
-                    </div>
-                    <div class="info-item mb-2">
-                      <label class="form-label text-muted mb-1">Estado</label>
-                      <p class="mb-0">
-                        <span class="badge badge-success" *ngIf="wompiData.status === 'APPROVED'">Aprobado</span>
-                        <span class="badge badge-warning" *ngIf="wompiData.status === 'PENDING'">Pendiente</span>
-                        <span class="badge badge-danger" *ngIf="wompiData.status === 'DECLINED'">Rechazado</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="info-item mb-2">
-                      <label class="form-label text-muted mb-1">Fecha de Creación</label>
-                      <p class="mb-0">{{ formatDate(wompiData['createdAt'] || wompiData['created_at']) }}</p>
-                    </div>
-                    <div class="info-item mb-2" *ngIf="wompiData['finalizedAt'] || wompiData['finalized_at']">
-                      <label class="form-label text-muted mb-1">Fecha de Finalización</label>
-                      <p class="mb-0">{{ formatDate(wompiData['finalizedAt'] || wompiData['finalized_at']) }}</p>
+                      <div class="col-md-6 mb-2">
+                        <label class="form-label text-muted mb-1">Teléfono</label>
+                        <p class="mb-0">
+                          <a [href]="'tel:' + currentReservation.serviceResponsible.phone" 
+                             class="text-decoration-none">
+                            <i class="isax isax-call me-1"></i>
+                            {{ currentReservation.serviceResponsible.phone }}
+                          </a>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -298,22 +286,75 @@
       </div>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- Payer Information -->
     <div class="row justify-content-center mt-4">
       <div class="col-lg-10">
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-          <button class="btn btn-primary" (click)="goToMyReservations()">
-            <i class="isax isax-bookmark me-2"></i>
-            Ver Mis Reservas
-          </button>
+        <div class="card">
+          <div class="card-header">
+            <h6 class="card-title mb-0">
+              <i class="isax isax-user me-2"></i>
+              Información del Pagador
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="info-item mb-2">
+                  <label class="form-label text-muted mb-1">Nombre Completo</label>
+                  <p class="mb-0 fw-bold">{{ reservationData.payer.name }}</p>
+                </div>
+                <div class="info-item mb-2">
+                  <label class="form-label text-muted mb-1">Email</label>
+                  <p class="mb-0">{{ reservationData.payer.email }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-item mb-2">
+                  <label class="form-label text-muted mb-1">Teléfono</label>
+                  <p class="mb-0">{{ reservationData.payer.phone }}</p>
+                </div>
+                <div class="info-item mb-2">
+                  <label class="form-label text-muted mb-1">Documento</label>
+                  <p class="mb-0">{{ reservationData.payer.documentType }} {{ reservationData.payer.documentNumber }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row justify-content-center mt-4 mb-5">
+      <div class="col-lg-10">
+        <div class="d-flex justify-content-between flex-wrap gap-2">
           <button class="btn btn-outline-secondary" (click)="printConfirmation()">
             <i class="isax isax-printer me-2"></i>
-            Imprimir
+            Imprimir Confirmación
           </button>
-          <a [routerLink]="routes.clientsListTours" class="btn btn-outline-primary">
-            <i class="isax isax-search-normal me-2"></i>
-            Buscar Más Tours
-          </a>
+          <button class="btn btn-primary" (click)="goToMyReservations()">
+            <i class="isax isax-ticket me-2"></i>
+            Ver Mis Reservas
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Important Notes -->
+    <div class="row justify-content-center mt-4 mb-5">
+      <div class="col-lg-10">
+        <div class="alert alert-info">
+          <h6 class="alert-heading">
+            <i class="isax isax-info-circle me-2"></i>
+            Información Importante
+          </h6>
+          <ul class="mb-0 ps-3">
+            <li>Guarda los códigos QR de tus reservas, los necesitarás para acceder a los tours.</li>
+            <li>Recibirás un email de confirmación con todos los detalles.</li>
+            <li>Si tienes preguntas, contacta directamente al proveedor del servicio.</li>
+            <li>Puedes descargar cada QR individualmente o todos juntos.</li>
+            <li>Los QRs están también disponibles en tu perfil de usuario.</li>
+          </ul>
         </div>
       </div>
     </div>

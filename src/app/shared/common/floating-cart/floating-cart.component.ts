@@ -10,6 +10,7 @@ import { Subject, takeUntil, take } from "rxjs";
 import { Router } from "@angular/router";
 import { CartService } from "../../services/cart.service";
 import { DaySelection, CartSummary } from "../../dto/cart.dto";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: "app-floating-cart",
@@ -27,6 +28,7 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   cartSummary: CartSummary | null = null;
   isExpanded: boolean = false;
   processing: boolean = false; // Estado para loading del API
+  isClearing: boolean = false; // Estado para loading del clear
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -113,11 +115,58 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Limpia todo el carrito
+   * Limpia todo el carrito con confirmación
    */
-  onClearCart(): void {
-    this.cartService.clearCart();
-    this.clearCart.emit();
+  async onClearCart(): Promise<void> {
+    // Mostrar confirmación
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará todos los tours de tu carrito',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, limpiar carrito',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    try {
+      this.isClearing = true;
+      await this.cartService.clearCart();
+      
+      // Mostrar mensaje de éxito
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
+        icon: 'success',
+        title: '¡Carrito limpiado!',
+        text: 'Todos los tours han sido eliminados'
+      });
+
+      this.clearCart.emit();
+    } catch (error) {
+      console.error('Error al limpiar el carrito:', error);
+      
+      // Mostrar mensaje de error
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al limpiar el carrito',
+        text: 'Por favor, intenta de nuevo',
+        confirmButtonColor: '#0d6efd'
+      });
+    } finally {
+      this.isClearing = false;
+    }
   }
 
   /**
