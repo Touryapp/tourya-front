@@ -1,0 +1,118 @@
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+.card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-radius: 14px;
+  border: none;
+}
+
+.bg-light-200 {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 14px;
+}
+
+.card-bg-light {
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+}
+
+.badge {
+  padding: 0.5em 0.75em;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+.bg-secondary {
+  background-color: #6c757d !important;
+  color: #fff;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+  color: #000;
+}
+
+.bg-info {
+  background-color: #0dcaf0 !important;
+  color: #000;
+}
+
+.bg-success {
+  background-color: #198754 !important;
+  color: #fff;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+  color: #fff;
+}
+
+.btn {
+  min-width: 20px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    font-size: 1.1em;
+  }
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+  
+  &:hover:not(:disabled) {
+    background-color: darken(#198754, 10%);
+    border-color: darken(#198754, 10%);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  
+  &:hover:not(:disabled) {
+    background-color: darken(#dc3545, 10%);
+    border-color: darken(#dc3545, 10%);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.card-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  font-weight: 600;
+}

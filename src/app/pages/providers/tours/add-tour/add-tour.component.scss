@@ -11,3 +11,59 @@
 .mat-slide-toogle {
   margin-left: 8px
 }
+
+// Estilos para el modal
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+// Badges de estado
+.badge {
+  &.bg-secondary {
+    background-color: #6c757d !important;
+  }
+  
+  &.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000;
+  }
+  
+  &.bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000;
+  }
+  
+  &.bg-success {
+    background-color: #198754 !important;
+    color: #fff;
+  }
+  
+  &.bg-danger {
+    background-color: #dc3545 !important;
+    color: #fff;
+  }
+}
+
+// Deshabilitar formulario visualmente
+fieldset:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

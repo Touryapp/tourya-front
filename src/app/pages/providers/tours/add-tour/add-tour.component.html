@@ -48,7 +48,42 @@
 
             <!-- Add Tour -->
             <div class="col-lg-9">
+                <!-- Estado del Tour -->
+                <div class="card shadow-none mb-3" *ngIf="tourId && tour">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="fw-medium">Estado del Tour:</span>
+                                <span class="badge fs-14 px-3 py-2" [ngClass]="getStatusBadgeClass(tour.status)">
+                                    {{ getStatusLabel(tour.status) }}
+                                </span>
+                            </div>
+                            <button 
+                                type="button" 
+                                class="btn btn-primary" 
+                                *ngIf="canSubmitForReview"
+                                (click)="openSubmitConfirmModal()">
+                                <i class="isax isax-send me-2"></i>Enviar a Revisión
+                            </button>
+                        </div>
+                        
+                        <!-- Alerta si no puede editar -->
+                        <div class="alert alert-warning mt-3 mb-0" *ngIf="!canEdit">
+                            <i class="isax isax-info-circle me-2"></i>
+                            <strong>Este tour está en revisión y no puede ser editado.</strong>
+                            Debes esperar a que sea aceptado, devuelto o cancelado para poder editarlo nuevamente.
+                        </div>
+                        
+                        <!-- Alerta si auto-enviará a revisión -->
+                        <div class="alert alert-info mt-3 mb-0" *ngIf="shouldAutoSubmit">
+                            <i class="isax isax-info-circle me-2"></i>
+                            <strong>Nota:</strong> Al guardar los cambios, el tour será enviado automáticamente a revisión.
+                        </div>
+                    </div>
+                </div>
+                
                 <form [formGroup]="tourForm" (ngSubmit)="onSubmit()">
+                    <fieldset [disabled]="!canEdit">
                     <div class="card shadow-none" id="basic_info">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
@@ -672,11 +707,12 @@
                         </div>
                     </div>
 
+                    </fieldset>
 
                     <div class="save" *ngIf="!tourId || tourId && tour">
                         <div class="d-flex align-items-center justify-content-end">
                             <button type="submit" class="btn btn-primary"
-                                [disabled]="loading || (submitted && tourForm.touched && tourForm.invalid)">
+                                [disabled]="loading || (submitted && tourForm.touched && tourForm.invalid) || !canEdit">
                                 <span>{{tourId? "Edit tour" : "Add new tour"}}</span>
                                 <div *ngIf="loading" class="spinner-border spinner-border-sm">
                                 </div>
@@ -858,3 +894,43 @@
     </div>
 </div>
 <!-- /Delete Modal -->
+
+<!-- Modal de Confirmación para Enviar a Revisión -->
+<div class="modal fade" [class.show]="showSubmitConfirmModal" [style.display]="showSubmitConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Envío a Revisión</h5>
+                <button type="button" class="btn-close" (click)="closeSubmitConfirmModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas enviar este tour a revisión?</p>
+                <div class="alert alert-info mb-0">
+                    <i class="isax isax-info-circle me-2"></i>
+                    <small>
+                        <strong>Una vez enviado:</strong><br>
+                        • No podrás editar el tour hasta que sea revisado<br>
+                        • El administrador evaluará tu tour<br>
+                        • Recibirás notificación del resultado
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeSubmitConfirmModal()" [disabled]="isSubmitting">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" (click)="submitTourForReview()" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">Sí, Enviar a Revisión</span>
+                    <div *ngIf="isSubmitting" class="d-flex align-items-center">
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Enviando...
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación -->
+<div class="modal-backdrop fade" [class.show]="showSubmitConfirmModal" [style.display]="showSubmitConfirmModal ? 'block' : 'none'"></div>
+<!-- /Modal de Confirmación -->

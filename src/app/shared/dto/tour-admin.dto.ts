@@ -1,0 +1,118 @@
+export interface TourAdminDto {
+  id: number;
+  name: string;
+  description: string;
+  duration: string;
+  maxPeople: number;
+  highlight: number;
+  price: number | null;
+  minAge: number;
+  rating: number | null;
+  status: TourStatus;
+  tourCategoryId: number;
+  // opcionalmente puede venir el objeto de categoría embebido
+  tourCategory?: TourCategoryDto;
+  provider: ProviderDto;
+  // Arrays adicionales según respuesta de detalle
+  locations?: LocationDto[];
+  mainAttractions?: MainAttractionDto[];
+  includes?: IncludeDto[];
+  excludes?: ExcludeDto[];
+  faq?: FaqDto[];
+  itineraries?: ItineraryDto[];
+  cancellationPolicies?: CancellationPolicyDto[];
+  profilePicture: string | null;
+}
+
+export interface TourCategoryDto {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export interface ProviderDto {
+  id: number;
+  name: string;
+  documentNumber: string;
+  documentType: string;
+  serviceType: string;
+  country: {
+    id: number;
+    name: string;
+  };
+  city: {
+    id: number;
+    name: string;
+  };
+  state: {
+    id: number;
+    name: string;
+  };
+  department: string;
+  address: string;
+  phone: string;
+  status: string;
+}
+
+export interface LocationDto {
+  id?: number;
+  address: string;
+  location: string;
+  addressType: string;
+  countryId: number;
+  stateId: number;
+  cityId: number;
+  latitude?: number;
+  longitude?: number;
+}
+
+export interface MainAttractionDto {
+  id?: number;
+  description: string;
+}
+
+export interface IncludeDto {
+  id?: number;
+  description: string;
+  type?: string;
+}
+
+export interface ExcludeDto {
+  id?: number;
+  description: string;
+  type?: string;
+}
+
+export interface FaqDto {
+  id?: number;
+  question: string;
+  answer: string;
+}
+
+export interface ItineraryDto {
+  id?: number;
+  title: string;
+  day?: number;
+  time?: string;
+  description?: string;
+}
+
+export interface CancellationPolicyDto {
+  id?: number;
+  observations?: string;
+  allowsRainRefund?: boolean;
+  allowsRescheduling?: boolean;
+  cancellationPolicyType?: string;
+}
+
+export type TourStatus = 'created' | 'submitted' | 'returned' | 'accepted' | 'cancelled';
+
+export interface TourAdminListResponse {
+  content: TourAdminDto[];
+  number: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}
