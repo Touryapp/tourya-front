@@ -85,6 +85,12 @@ export class AddTourComponent {
   @ViewChildren("addressInput") addressInputs!: QueryList<ElementRef>;
 
   errorMessage: string = "";
+  
+  // Propiedades para manejo de estado del tour
+  showSubmitConfirmModal: boolean = false;
+  isSubmitting: boolean = false;
+  // Forzar envío en la siguiente guardada (usar el mismo endpoint de guardado con status 'submitted')
+  forceSubmit: boolean = false;
 
   constructor(
     private router: Router,
@@ -751,6 +757,30 @@ export class AddTourComponent {
         }
       : undefined;
 
+    // Determinar el estado a enviar
+    let statusToSend = undefined;
+    if (this.tourId && this.tour?.status) {
+      // Si está en accepted, mantener accepted
+      if (this.tour.status === 'accepted') {
+        statusToSend = 'accepted';
+      }
+      // Si está en returned o cancelled, el backend lo cambiará a created
+      // y luego lo enviamos a submitted automáticamente
+      else if (this.tour.status === 'returned' || this.tour.status === 'cancelled') {
+        // Como no existe un endpoint separado para "submit", guardamos directamente como 'submitted'
+        statusToSend = 'submitted';
+      }
+      // Si está en created, mantener created
+      else if (this.tour.status === 'created') {
+        statusToSend = 'created';
+      }
+    }
+
+    // Si se forzó el envío desde la acción de "Enviar a revisión", sobreescribimos el status
+    if (this.forceSubmit) {
+      statusToSend = 'submitted';
+    }
+
     const body = {
       id: this.tourId || undefined,
       name,
@@ -759,6 +789,7 @@ export class AddTourComponent {
       duration,
       maxPeople: totalNumberOfPeoples,
       minAge: +minAge,
+      ...(statusToSend ? { status: statusToSend } : {}),
       locations: locationMap,
       mainAttractions,
       includes,
@@ -771,9 +802,24 @@ export class AddTourComponent {
 
     this.tourService.saveTourDetails(body).subscribe({
       next: (data) => {
-        this.loading = false;
+  const wasForceSubmit = this.forceSubmit;
+  this.loading = false;
+  this.isSubmitting = false;
+  // resetear flag
+  this.forceSubmit = false;
 
         if (data) {
+          // Si forzamos el submit, navegamos indicando éxito de envío
+          if (wasForceSubmit) {
+            this.openSnackBar('Tour enviado a revisión exitosamente');
+            this.router.navigate(["/providers/provider-panel"], {
+              queryParams: { submittedTour: true },
+            });
+            return;
+          }
+
+          // Si debe auto-enviar a revisión (returned o cancelled) usábamos un endpoint separado antes,
+          // pero como no existe, el backend debe manejar el flujo; aquí solo navegamos según el caso.
           if (this.tourId) {
             this.router.navigate(["/providers/provider-panel"], {
               queryParams: { editedTour: true },
@@ -783,9 +829,9 @@ export class AddTourComponent {
               queryParams: { addedTour: true },
             });
           }
+        } else {
+          this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
         }
-
-        this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
       },
       error: (err) => {
         this.loading = false;
@@ -1032,4 +1078,84 @@ export class AddTourComponent {
       duration: 5000,
     });
   }
+
+  // Métodos para manejo de estado del tour
+  get canEdit(): boolean {
+    if (!this.tour || !this.tour.status) return true;
+    // No se puede editar si está en estado 'submitted'
+    return this.tour.status !== 'submitted';
+  }
+
+  get canSubmitForReview(): boolean {
+    // Solo puede enviar a revisión si está en estado 'created'
+    return this.tour?.status === 'created';
+  }
+
+  get shouldAutoSubmit(): boolean {
+    // Auto-enviar a revisión si está en 'returned' o 'cancelled'
+    return this.tour?.status === 'returned' || this.tour?.status === 'cancelled';
+  }
+
+  getStatusBadgeClass(status?: string): string {
+    if (!status) return 'bg-secondary';
+    switch (status) {
+      case 'created':
+        return 'bg-secondary';
+      case 'submitted':
+        return 'bg-warning';
+      case 'returned':
+        return 'bg-info';
+      case 'accepted':
+        return 'bg-success';
+      case 'cancelled':
+        return 'bg-danger';
+      default:
+        return 'bg-secondary';
+    }
+  }
+
+  getStatusLabel(status?: string): string {
+    if (!status) return 'Sin estado';
+    switch (status) {
+      case 'created':
+        return 'Creado';
+      case 'submitted':
+        return 'Enviado a revisión';
+      case 'returned':
+        return 'Devuelto';
+      case 'accepted':
+        return 'Aceptado';
+      case 'cancelled':
+        return 'Cancelado';
+      default:
+        return status;
+    }
+  }
+
+  openSubmitConfirmModal(): void {
+    this.showSubmitConfirmModal = true;
+  }
+
+  closeSubmitConfirmModal(): void {
+    this.showSubmitConfirmModal = false;
+  }
+
+  submitTourForReview(): void {
+    // No existe un endpoint separado de "submit" en el backend para el provider.
+    // En su lugar forzamos la siguiente guardada a enviar el status 'submitted' usando el mismo endpoint de save.
+    if (!this.tourId) return;
+
+    this.closeSubmitConfirmModal();
+    this.isSubmitting = true;
+    this.forceSubmit = true;
+
+    // Validar y guardar (saveTourDetails respetará `forceSubmit` y enviará status: 'submitted')
+    this.tourForm.markAllAsTouched();
+    if (this.tourForm.valid) {
+      this.saveTourDetails();
+    } else {
+      this.isSubmitting = false;
+    }
+  }
 }
+

@@ -1,0 +1,318 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-12">
+        <h2 class="breadcrumb-title mb-2">Detalle del Tour - Administración</h2>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="isax isax-home5"></i></a></li>
+            <li class="breadcrumb-item"><a routerLink="/admin/tour-admin">Tours</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detalle</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page Wrapper -->
+<div class="content" *ngIf="!loading && tour">
+  <div class="container">
+    
+    <!-- Botones de acción superiores -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <button class="btn btn-secondary" (click)="goBack()">
+            <i class="isax isax-arrow-left me-2"></i>Volver
+          </button>
+          <div class="d-flex gap-2">
+            <span class="badge fs-16 px-3 py-2" [ngClass]="getStatusBadgeClass(tour.status)">
+              {{ getStatusLabel(tour.status) }}
+            </span>
+            <button class="btn btn-success" (click)="openAcceptModal()" [disabled]="!canAccept()">
+              <i class="isax isax-tick-circle me-2"></i>Aceptar Tour
+            </button>
+            <button class="btn btn-danger" (click)="openCancelModal()" [disabled]="!canCancel()">
+              <i class="isax isax-close-circle me-2"></i>Cancelar Tour
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Header del Tour -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="mb-3">{{ tour.name }}</h3>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <p class="mb-2"><strong>ID:</strong> {{ tour.id }}</p>
+                <p class="mb-2"><strong>Categoría:</strong> {{ getCategoryName(tour.tourCategoryId) }}</p>
+                <p class="mb-2"><strong>Duración:</strong> {{ tour.duration }}</p>
+              </div>
+              <div class="col-md-6">
+                <p class="mb-2"><strong>Capacidad Máxima:</strong> {{ tour.maxPeople }} personas</p>
+                <p class="mb-2"><strong>Edad Mínima:</strong> {{ tour.minAge }} años</p>
+                <p class="mb-2"><strong>Precio:</strong> {{ tour.price || 'No definido' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="bg-light-200 card-bg-light mb-4">
+          <h5 class="fs-18 mb-3">Descripción</h5>
+          <div class="mb-2">
+            <div [innerHTML]="tour.description"></div>
+          </div>
+        </div>
+
+        <!-- Locations -->
+        <div class="card mb-4" *ngIf="tour.locations && tour.locations.length">
+          <div class="card-header">
+            <h5 class="mb-0">Ubicaciones</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-0">
+              <li *ngFor="let loc of tour.locations" class="mb-2">
+                <strong>{{ loc.address }}</strong> — {{ loc.location }} ({{ loc.addressType }})
+                <div class="small text-muted">Lat: {{ loc.latitude }}, Lng: {{ loc.longitude }}</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Main Attractions -->
+        <div class="card mb-4" *ngIf="tour.mainAttractions && tour.mainAttractions.length">
+          <div class="card-header">
+            <h5 class="mb-0">Atracciones Principales</h5>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li *ngFor="let a of tour.mainAttractions">{{ a.description }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Includes / Excludes -->
+        <div class="row mb-4">
+          <div class="col-md-6" *ngIf="tour.includes && tour.includes.length">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Incluye</h6>
+              </div>
+              <div class="card-body">
+                <ul>
+                  <li *ngFor="let inc of tour.includes">{{ inc.description }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6" *ngIf="tour.excludes && tour.excludes.length">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">No Incluye</h6>
+              </div>
+              <div class="card-body">
+                <ul>
+                  <li *ngFor="let exc of tour.excludes">{{ exc.description }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Itinerarios -->
+        <div class="card mb-4" *ngIf="tour.itineraries && tour.itineraries.length">
+          <div class="card-header"><h5 class="mb-0">Itinerario</h5></div>
+          <div class="card-body">
+            <div *ngFor="let it of tour.itineraries" class="mb-3">
+              <h6>{{ it.title }} <small class="text-muted">Día {{ it.day }} — {{ it.time }}</small></h6>
+              <p class="mb-0">{{ it.description }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="card mb-4" *ngIf="tour.faq && tour.faq.length">
+          <div class="card-header"><h5 class="mb-0">Preguntas Frecuentes</h5></div>
+          <div class="card-body">
+            <div *ngFor="let q of tour.faq" class="mb-3">
+              <strong>{{ q.question }}</strong>
+              <p class="mb-0">{{ q.answer }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cancellation Policies -->
+        <div class="card mb-4" *ngIf="tour.cancellationPolicies && tour.cancellationPolicies.length">
+          <div class="card-header"><h5 class="mb-0">Políticas de Cancelación</h5></div>
+          <div class="card-body">
+            <div *ngFor="let p of tour.cancellationPolicies" class="mb-3">
+              <p class="mb-1"><strong>Tipo:</strong> {{ p.cancellationPolicyType }}</p>
+              <p class="mb-0">{{ p.observations }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información del Proveedor -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Información del Proveedor</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <p class="mb-2"><strong>Nombre:</strong> {{ providerDetail?.name || tour.provider?.name || '—' }}</p>
+                <p class="mb-2"><strong>Tipo de Documento:</strong> {{ providerDetail?.documentType || tour.provider?.documentType || '—' }}</p>
+                <p class="mb-2"><strong>Número de Documento:</strong> {{ providerDetail?.documentNumber || tour.provider?.documentNumber || '—' }}</p>
+                <p class="mb-2"><strong>Tipo de Servicio:</strong> {{ providerDetail?.serviceType || tour.provider?.serviceType || '—' }}</p>
+              </div>
+              <div class="col-md-6">
+                <p class="mb-2"><strong>País:</strong> {{ providerDetail?.country?.name || tour.provider?.country?.name || '—' }}</p>
+                <p class="mb-2"><strong>Estado:</strong> {{ providerDetail?.state?.name || tour.provider?.state?.name || '—' }}</p>
+                <p class="mb-2"><strong>Ciudad:</strong> {{ providerDetail?.city?.name || tour.provider?.city?.name || '—' }}</p>
+                <p class="mb-2"><strong>Dirección:</strong> {{ providerDetail?.address || tour.provider?.address || '—' }}</p>
+                <p class="mb-2"><strong>Teléfono:</strong> {{ providerDetail?.phone || tour.provider?.phone || '—' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Highlights -->
+        <div class="bg-light-200 card-bg-light mb-4">
+          <h5 class="fs-18 mb-3">Destacados</h5>
+          <div>
+            <ul class="list-unstyled">
+              <li class="d-flex align-items-start mb-2">
+                <i class="isax isax-tick-circle text-success me-2 mt-1"></i>
+                <span>Tour destacado: {{ tour.highlight ? 'Sí' : 'No' }}</span>
+              </li>
+              <li class="d-flex align-items-start mb-2">
+                <i class="isax isax-star text-warning me-2 mt-1"></i>
+                <span>Calificación: {{ tour.rating || 'Sin calificaciones' }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar de Información -->
+      <div class="col-xl-4">
+        <div class="card bg-light-200 mb-4">
+          <div class="card-body">
+            <h5 class="mb-3">Información del Tour</h5>
+            <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+              <span class="text-muted">Estado</span>
+              <span class="badge" [ngClass]="getStatusBadgeClass(tour.status)">
+                {{ getStatusLabel(tour.status) }}
+              </span>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+              <span class="text-muted">ID del Tour</span>
+              <strong>{{ tour.id }}</strong>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+              <span class="text-muted">Categoría</span>
+              <strong>{{ getCategoryName(tour.tourCategoryId) }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="card shadow-none mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">Acciones Administrativas</h6>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-info mb-3">
+              <i class="isax isax-info-circle me-2"></i>
+              <small>
+                <strong>Flujo de Estados:</strong><br>
+                - <strong>Creado:</strong> Tour creado por el proveedor<br>
+                - <strong>Enviado:</strong> Tour enviado para revisión (puede aceptar o cancelar)<br>
+                - <strong>Devuelto:</strong> Tour devuelto al proveedor para correcciones<br>
+                - <strong>Aceptado:</strong> Tour aprobado y publicado<br>
+                - <strong>Cancelado:</strong> Tour rechazado
+              </small>
+            </div>
+            <button class="btn btn-success w-100 mb-2" (click)="openAcceptModal()" [disabled]="!canAccept()">
+              <i class="isax isax-tick-circle me-2"></i>Aceptar Tour
+            </button>
+            <button class="btn btn-danger w-100" (click)="openCancelModal()" [disabled]="!canCancel()">
+              <i class="isax isax-close-circle me-2"></i>Cancelar Tour
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div class="content" *ngIf="loading">
+  <div class="container">
+    <div class="text-center p-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-3">Cargando detalles del tour...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmación para Aceptar -->
+<div class="modal fade" [class.show]="showAcceptModal" [style.display]="showAcceptModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Aceptación</h5>
+        <button type="button" class="btn-close" (click)="closeAcceptModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas aceptar este tour?</p>
+        <div class="alert alert-success mb-0">
+          <i class="isax isax-info-circle me-2"></i>
+          <small>El tour pasará a estado "Aceptado" y estará disponible para los usuarios.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success me-2" (click)="acceptTour()">Sí, Aceptar</button>
+        <button type="button" class="btn btn-secondary" (click)="closeAcceptModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Aceptar -->
+<div class="modal-backdrop fade" [class.show]="showAcceptModal" [style.display]="showAcceptModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Confirmación para Cancelar -->
+<div class="modal fade" [class.show]="showCancelModal" [style.display]="showCancelModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Cancelación</h5>
+        <button type="button" class="btn-close" (click)="closeCancelModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas cancelar este tour?</p>
+        <div class="alert alert-danger mb-0">
+          <i class="isax isax-warning-2 me-2"></i>
+          <small>Esta acción cambiará el estado del tour a "Cancelado".</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger me-2" (click)="cancelTour()">Sí, Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="closeCancelModal()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Cancelar -->
+<div class="modal-backdrop fade" [class.show]="showCancelModal" [style.display]="showCancelModal ? 'block' : 'none'"></div>

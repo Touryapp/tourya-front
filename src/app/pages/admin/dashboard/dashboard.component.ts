@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   requestProviders: any = { content: [] };
   mostrarSolicitudes: boolean = false;
   declinedReason: string = '';
+  mostrarTourList: boolean = false;
 
   // Referencia al enum para usar en el template
   readonly StatusEnum = RequestsProvidersStatus;
@@ -31,6 +32,23 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.cargarSolicitudes();
     this.showGalleryFiles();
+  }
+
+  toggleTourList(): void {
+    // Mostrar la sección de solicitudes (proveedores) y alternar la lista de tours incrustada
+    this.mostrarSolicitudes = false;
+    this.mostrarTourList = !this.mostrarTourList;
+  }
+
+  toggleSolicitudes(): void {
+    // Mostrar la sección de solicitudes (proveedores) y alternar la lista de tours incrustada
+    this.mostrarTourList = false;
+    this.mostrarSolicitudes = !this.mostrarSolicitudes;
+  }
+
+  toggleDashboard(): void {
+    this.mostrarTourList = false;
+    this.mostrarSolicitudes = false;
   }
 
   cargarSolicitudes(): void {

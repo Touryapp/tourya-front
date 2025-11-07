@@ -1,0 +1,128 @@
+.dashboard-container {
+  .card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: none;
+  }
+}
+
+.admin-sidebar {
+  padding-left: 120px;
+}
+
+.table {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  
+  th, td {
+    vertical-align: middle;
+    border: none;
+  }
+  
+  thead {
+    background: #f8f9fa;
+    
+    th {
+      font-weight: 600;
+      color: #222;
+      font-size: 15px;
+      border-bottom: 2px solid #e9ecef;
+    }
+  }
+  
+  tbody tr {
+    transition: background 0.2s;
+    
+    &:hover {
+      background: #f6f8fa;
+    }
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f6f9;
+    color: #888;
+    font-size: 1.2em;
+  }
+  
+  .badge {
+    font-size: 13px;
+    padding: 0.4em 0.9em;
+    font-weight: 500;
+    border-radius: 1em;
+    letter-spacing: 0.02em;
+  }
+  
+  .bg-warning {
+    background: #ffe082 !important;
+    color: #8a6d1b !important;
+  }
+  
+  .bg-success {
+    background: #4caf50 !important;
+    color: #fff !important;
+  }
+  
+  .bg-danger {
+    background: #f44336 !important;
+    color: #fff !important;
+  }
+  
+  .bg-secondary {
+    background: #6c757d !important;
+    color: #fff !important;
+  }
+}
+
+.card-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+}
+
+.card-footer {
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+.btn-outline-primary {
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.pagination {
+  .page-link {
+    border-radius: 0.375rem;
+    margin: 0 2px;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    
+    &:hover {
+      background-color: #e9ecef;
+      border-color: #dee2e6;
+    }
+  }
+  
+  .page-item.active .page-link {
+    background-color: #1b6475;
+    border-color: #1b6475;
+    color: #fff;
+  }
+  
+  .page-item.disabled .page-link {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
