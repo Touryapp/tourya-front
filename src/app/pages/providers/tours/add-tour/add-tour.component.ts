@@ -758,7 +758,7 @@ export class AddTourComponent {
       : undefined;
 
     // Determinar el estado a enviar
-    let statusToSend = undefined;
+    let statusToSend = 'created'; // Valor por defecto
     if (this.tourId && this.tour?.status) {
       // Si está en accepted, mantener accepted
       if (this.tour.status === 'accepted') {
@@ -789,7 +789,6 @@ export class AddTourComponent {
       duration,
       maxPeople: totalNumberOfPeoples,
       minAge: +minAge,
-      ...(statusToSend ? { status: statusToSend } : {}),
       locations: locationMap,
       mainAttractions,
       includes,
@@ -810,11 +809,10 @@ export class AddTourComponent {
 
         if (data) {
           // Si forzamos el submit, navegamos indicando éxito de envío
-          if (wasForceSubmit) {
-            this.openSnackBar('Tour enviado a revisión exitosamente');
-            this.router.navigate(["/providers/provider-panel"], {
-              queryParams: { submittedTour: true },
-            });
+          if (statusToSend === 'submitted') {
+            // Como no existe un endpoint separado para "submit", guardamos directamente como 'submitted'
+            statusToSend = 'submitted';
+            this.submitTourForReview();
             return;
           }
 
@@ -1152,7 +1150,21 @@ export class AddTourComponent {
     // Validar y guardar (saveTourDetails respetará `forceSubmit` y enviará status: 'submitted')
     this.tourForm.markAllAsTouched();
     if (this.tourForm.valid) {
-      this.saveTourDetails();
+      this.tourService.submitTourById(this.tourId).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.openSnackBar('Tour enviado a revisión exitosamente');
+          this.router.navigate(["/providers/provider-panel"], {
+            queryParams: { submittedTour: true },
+          });
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error("Error submitting tour for review.");
+          console.error(err);
+          this.openSnackBar("Ha ocurrido un error, por favor intente de nuevo");
+        },
+      });
     } else {
       this.isSubmitting = false;
     }

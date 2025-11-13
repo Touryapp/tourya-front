@@ -36,6 +36,7 @@ import { SafeHtmlPipe } from "./pipe/safe-html.pipe";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { TranslateModule } from "@ngx-translate/core";
+import { FloatingCartComponent } from "./common/floating-cart/floating-cart.component";
 import { FooterComponent } from "./common/footer/footer.component";
 import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -45,12 +46,16 @@ import {
   DateAdapter,
 } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
+import { MatOptionModule } from "@angular/material/core";
+import { TourSlotSelectionModalComponent } from "./common/tour-slot-selection-modal/tour-slot-selection-modal.component";
 @NgModule({
   declarations: [
     FooterComponent,
+    FloatingCartComponent,
     CommonCounterComponent,
     UserDashboardComponent,
     ConfirmDialogComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -89,9 +94,9 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
+    MatOptionModule,
   ],
   exports: [
-    CommonModule,
     NgScrollbarModule,
     MatTooltipModule,
     LightboxModule,
@@ -110,6 +115,7 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
     NgxEditorModule,
     PopoverModule,
     CommonCounterComponent,
+    FloatingCartComponent,
     DateRangePickerModule,
     UserDashboardComponent,
     FooterComponent,
@@ -127,6 +133,7 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
     ConfirmDialogComponent,
     MatCheckboxModule,
     CalendarAngularCalendarModule,
+  
   ],
   providers: [
     provideNgxMask(),

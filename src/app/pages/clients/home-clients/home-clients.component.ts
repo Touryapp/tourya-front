@@ -40,6 +40,7 @@ public categories: TourCategory[] = [
   selectedCountry: number | null = null;
   selectedDepartment: number | null = null;
   selectedState: string = '';
+  selectedCity: string = '';
   // Variables para capturar los datos del formulario
   travelDestination: string = '';
   startDate: Date | string = '';
@@ -283,7 +284,7 @@ onCountryChange(countryId: number) {
   this.departments = [];
   this.states = [];
   this.selectedDepartment = null;
-  this.selectedState = '';
+  this.selectedCity = '';
   this.getDepartments(countryId);
 }
 // Obtener departamentos por país
@@ -319,7 +320,7 @@ getDepartments(countryId: number) {
 // }
 // Cuando el usuario selecciona una ciudad
 onCityChange(cityName: string) {
-  this.selectedState = cityName;
+  this.selectedCity = cityName;
 }
 onStartDateChange(date: Date) {
   console.log('Fecha de inicio seleccionada:', date);
@@ -368,10 +369,10 @@ getTravellersDetails(): string {
 
   // Habilitar búsqueda si al menos un dato está seleccionado
   get isSearchEnabled(): boolean {
-    const hasCity = !!this.selectedState && String(this.selectedState).trim() !== '';
+    const hasCity = !!this.selectedCity && String(this.selectedCity).trim() !== '';
     const hasCheckIn = !!this.checkIn && String(this.checkIn).trim() !== '';
     const hasCheckOut = !!this.checkOut && String(this.checkOut).trim() !== '';
-    return hasCity || hasCheckIn || hasCheckOut;
+    return hasCity && hasCheckIn && hasCheckOut;
   }
 
 onSearch(): void {
@@ -380,7 +381,7 @@ onSearch(): void {
     return;
   }
   const params = [
-    `state=${encodeURIComponent(this.selectedState)}`,
+    `city=${encodeURIComponent(this.selectedCity)}`,
     `adults=${encodeURIComponent(this.travellersData.adults)}`,
     `children=${encodeURIComponent(this.travellersData.children)}`,
     `infants=${encodeURIComponent(this.travellersData.infants)}`,

@@ -9,6 +9,7 @@ import {
 } from "../../../shared/dto/search-tour-response.dto";
 import { PaginationDto } from "../../../shared/dto/pagination.dto";
 import { CategoryDto } from "../../../shared/dto/category.dto";
+import { TourDetail } from "../../../shared/dto/tour-response.dto";
 
 @Injectable({
   providedIn: "root",
@@ -40,5 +41,8 @@ export class SearchToursService {
 
   ageTypesPublic(): Observable<{name:string}[]> {
     return this.http.get<{name:string}[]>(`${environment.apiUrl}/public/age-price-types`);
+  }
+  detailTourPublic(tourId:number): Observable<TourDetail> {
+    return this.http.get<TourDetail>(`${environment.apiUrl}/public/tour/details/${tourId}`);
   }
 }

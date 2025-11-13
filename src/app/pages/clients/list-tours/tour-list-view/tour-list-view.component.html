@@ -17,7 +17,7 @@
                     <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
                         <ng-template carouselSlide *ngFor="let image of tour?.tour?.gallery; let imgIndex = index">
                             <div class="slide-images">
-                                <a [routerLink]="routes.tourDetails">
+                                <a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">
                                     <img [src]="image.imageUrl || 'assets/img/tours/tours-07.jpg'" class="img-fluid"
                                         [alt]="image.description || 'Tour image'">
                                 </a>
@@ -26,7 +26,7 @@
                         <!-- Fallback image if no gallery -->
                         <ng-template carouselSlide *ngIf="!tour?.tour?.gallery || tour?.tour?.gallery?.length === 0">
                             <div class="slide-images">
-                                <a [routerLink]="routes.tourDetails">
+                                <a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">
                                     <img src="assets/img/tours/tours-07.jpg" class="img-fluid" alt="Tour image">
                                 </a>
                             </div>
@@ -46,7 +46,7 @@
                 <div class="place-content">
                     <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
                         <div>
-                            <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">{{ tour.tour.name ||
+                            <h5 class="mb-1 text-truncate"><a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">{{ tour.tour.name ||
                                     'N/A' }}</a></h5>
                             <p class="fs-14 d-flex align-items-center">
                                 <i class="isax isax-location5 me-2"></i>

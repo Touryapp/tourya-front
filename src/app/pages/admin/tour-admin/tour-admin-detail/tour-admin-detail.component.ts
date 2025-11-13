@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TourAdminService } from '../../../../shared/services/tour-admin.service';
 import { TourAdminDto, TourCategoryDto, ProviderDto } from '../../../../shared/dto/tour-admin.dto';
+import { CityService } from '../../../../shared/services/city.service';
+import { LocationsPublicDto } from '../../../../shared/dto/locations-public.dto';
 import { LightGallery } from 'lightgallery/lightgallery';
 import lgZoom from 'lightgallery/plugins/zoom';
 import lgVideo from 'lightgallery/plugins/video';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tour-admin-detail',
@@ -17,8 +20,39 @@ export class TourAdminDetailComponent implements OnInit {
   loading: boolean = false;
   showAcceptModal: boolean = false;
   showCancelModal: boolean = false;
+  showReturnModal: boolean = false;
   categories: TourCategoryDto[] = [];
   providerDetail: ProviderDto | null = null;
+  locationsPublic: LocationsPublicDto[] = [];
+
+  // Google Maps
+  mapCenter?: google.maps.LatLngLiteral;
+  mapZoom = 14;
+
+  // Slider configurations
+  mainSliderConfig = {
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    fade: true,
+    asNavFor: '.slider-nav'
+  };
+
+  thumbSliderConfig = {
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    asNavFor: '.slider-for',
+    dots: false,
+    centerMode: true,
+    focusOnSelect: true,
+    arrows: false
+  };
+
+  // Gallery settings
+  gallerySettings = {
+    counter: false,
+    plugins: []
+  };
 
   settings = {
     counter: false,
@@ -28,28 +62,37 @@ export class TourAdminDetailComponent implements OnInit {
   private lightGallery!: LightGallery;
 
   // Datos de ejemplo para el slider (deberían venir del tour)
-  mainSlides = [
-    'assets/img/tours/tour-large-01.jpg',
-    'assets/img/tours/tour-large-02.jpg',
-    'assets/img/tours/tour-large-03.jpg',
+  mainSlides: string[] = [
+    'assets/img/tours/tours-07.jpg',
+    'assets/img/tours/tours-08.jpg',
+    'assets/img/tours/tours-09.jpg',
+    'assets/img/tours/tours-10.jpg',
+    'assets/img/tours/tours-11.jpg'
   ];
 
-  thumbSlides = [
-    'assets/img/tours/tour-thumb-01.jpg',
-    'assets/img/tours/tour-thumb-02.jpg',
-    'assets/img/tours/tour-thumb-03.jpg',
+  thumbSlides: string[] = [
+    'assets/img/tours/tours-07.jpg',
+    'assets/img/tours/tours-08.jpg',
+    'assets/img/tours/tours-09.jpg',
+    'assets/img/tours/tours-10.jpg',
+    'assets/img/tours/tours-11.jpg'
   ];
 
-  images = [
+  images: { src: string }[] = [
     { src: 'assets/img/tours/gallery-tour-lg-01.jpg' },
     { src: 'assets/img/tours/gallery-tour-lg-02.jpg' },
     { src: 'assets/img/tours/gallery-tour-lg-03.jpg' },
+    { src: 'assets/img/tours/gallery-tour-lg-04.jpg' },
+    { src: 'assets/img/tours/gallery-tour-lg-05.jpg' },
+    { src: 'assets/img/tours/gallery-tour-lg-06.jpg' }
   ];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private tourAdminService: TourAdminService
+    private tourAdminService: TourAdminService,
+    private cityService: CityService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +101,15 @@ export class TourAdminDetailComponent implements OnInit {
       // cargar catálogo de categorías y detalle en paralelo
       this.loadCategories();
       this.loadTourDetail(+tourId);
+      // cargar catálogo de ubicaciones públicas
+      this.cityService.getLocationsPublic().subscribe({
+        next: (list) => {
+          this.locationsPublic = list || [];
+        },
+        error: (err) => {
+          console.warn('Could not load locationsPublic', err);
+        }
+      });
     }
   }
 
@@ -66,6 +118,27 @@ export class TourAdminDetailComponent implements OnInit {
     this.tourAdminService.getById(tourId).subscribe({
       next: (tour) => {
         this.tour = tour;
+        
+        // Map galleries to sliders if available
+        const galleries: any[] | undefined = (tour as any).galleries && (tour as any).galleries.length 
+          ? (tour as any).galleries 
+          : (tour as any).profilePicture 
+            ? [(tour as any).profilePicture] 
+            : undefined;
+        
+        if (galleries && galleries.length > 0) {
+          this.mainSlides = galleries.map(g => g.imageUrl || 'assets/img/tours/tours-07.jpg');
+          this.thumbSlides = galleries.map(g => g.imageUrl || 'assets/img/tours/tours-07.jpg');
+          this.images = galleries.map(g => ({ src: g.imageUrl || 'assets/img/tours/gallery-tour-lg-01.jpg' }));
+        }
+
+        // Set map center from first location when available
+        const loc = tour?.locations && tour.locations.length ? tour.locations[0] : undefined;
+        if (loc && loc.latitude !== undefined && loc.longitude !== undefined) {
+          this.mapCenter = { lat: loc.latitude, lng: loc.longitude };
+          this.mapZoom = 15;
+        }
+
         // si la respuesta incluye provider con id, intentar cargar detalle del proveedor
         // si no, usar lo que venga embebido en la respuesta (compatibilidad)
         if ((tour as any).provider && (tour as any).provider.id) {
@@ -78,7 +151,7 @@ export class TourAdminDetailComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar el tour:', error);
         this.loading = false;
-        this.router.navigate(['/admin/tour-admin']);
+        this.router.navigate(['/admin/dashboard']);
       }
     });
   }
@@ -136,17 +209,25 @@ export class TourAdminDetailComponent implements OnInit {
     this.showCancelModal = false;
   }
 
+  openReturnModal(): void {
+    this.showReturnModal = true;
+  }
+
+  closeReturnModal(): void {
+    this.showReturnModal = false;
+  }
+
   acceptTour(): void {
     if (this.tour) {
       this.tourAdminService.acceptTour(this.tour.id).subscribe({
         next: () => {
-          alert('Tour aceptado exitosamente');
+          this.openSnackBar('Tour aceptado exitosamente');
           this.closeAcceptModal();
-          this.router.navigate(['/admin/tour-admin']);
+          this.router.navigate(['/admin/dashboard']);
         },
         error: (error) => {
           console.error('Error al aceptar el tour:', error);
-          alert('Error al aceptar el tour');
+          this.openSnackBar('Error al aceptar el tour');
         }
       });
     }
@@ -156,20 +237,36 @@ export class TourAdminDetailComponent implements OnInit {
     if (this.tour) {
       this.tourAdminService.cancelTour(this.tour.id).subscribe({
         next: () => {
-          alert('Tour cancelado exitosamente');
+          this.openSnackBar('Tour cancelado exitosamente');
           this.closeCancelModal();
-          this.router.navigate(['/admin/tour-admin']);
+          this.router.navigate(['/admin/dashboard']);
         },
         error: (error) => {
           console.error('Error al cancelar el tour:', error);
-          alert('Error al cancelar el tour');
+          this.openSnackBar('Error al cancelar el tour');
+        }
+      });
+    }
+  }
+
+  returnedTour(): void {
+    if (this.tour) {
+      this.tourAdminService.returnedTour(this.tour.id).subscribe({
+        next: () => {
+          this.openSnackBar('Tour devuelto exitosamente');
+          this.closeCancelModal();
+          this.router.navigate(['/admin/dashboard']);
+        },
+        error: (error) => {
+          console.error('Error al devolver el tour:', error);
+          this.openSnackBar('Error al devolver el tour');
         }
       });
     }
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/tour-admin']);
+    this.router.navigate(['/admin/dashboard']);
   }
 
   getStatusBadgeClass(status: string): string {
@@ -212,5 +309,47 @@ export class TourAdminDetailComponent implements OnInit {
 
   canCancel(): boolean {
     return this.tour?.status === 'submitted';
+  }
+
+  canReturn(): boolean {
+    return this.tour?.status === 'returned';
+  }
+
+  /**
+   * Build a human readable location string using tour.locations[0] and the public locations catalog.
+   */
+  getLocationDisplay(): string {
+    const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
+    if (!loc) return '';
+
+    // try to find city/state names from locationsPublic
+    const found = this.locationsPublic.find(lp => lp.cityId === loc.cityId && lp.stateId === loc.stateId);
+    const cityName = found ? found.cityName : undefined;
+    const stateName = found ? found.stateName : undefined;
+
+    const parts: string[] = [];
+    if (loc.location) parts.push(loc.location); // friendly name of the location
+    if (loc.address) parts.push(loc.address);
+    if (cityName) parts.push(cityName);
+    else if (loc.cityId) parts.push(String(loc.cityId));
+    if (stateName) parts.push(stateName);
+    else if (loc.stateId) parts.push(String(loc.stateId));
+
+    return parts.filter(p => !!p).join(', ');
+  }
+
+  getImage(i: number): string {
+    if (!this.images) return '';
+    return this.images.length > i ? this.images[i].src : '';
+  }
+
+  onBeforeSlide(): void {
+    // Handle before slide event
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "", {
+      duration: 5000,
+    });
   }
 }

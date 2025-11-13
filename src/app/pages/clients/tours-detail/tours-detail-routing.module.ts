@@ -4,7 +4,7 @@ import { ToursDetailComponent } from './tours-detail.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: ToursDetailComponent
   }
 ];

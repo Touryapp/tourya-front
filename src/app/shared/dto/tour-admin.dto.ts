@@ -1,3 +1,5 @@
+import { Gallery } from "./tour-response.dto";
+
 export interface TourAdminDto {
   id: number;
   name: string;
@@ -21,7 +23,9 @@ export interface TourAdminDto {
   faq?: FaqDto[];
   itineraries?: ItineraryDto[];
   cancellationPolicies?: CancellationPolicyDto[];
-  profilePicture: string | null;
+  profilePicture: Gallery;
+
+  galleries: Gallery[];
 }
 
 export interface TourCategoryDto {
@@ -52,6 +56,8 @@ export interface ProviderDto {
   address: string;
   phone: string;
   status: string;
+  email: string;
+  profilePicture: Gallery;
 }
 
 export interface LocationDto {

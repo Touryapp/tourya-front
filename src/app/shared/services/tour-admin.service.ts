@@ -68,4 +68,12 @@ export class TourAdminService {
   cancelTour(tourId: number): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/admin/cancelTourById/${tourId}`, {});
   }
+
+  /**
+   * Returned un tour
+   * @param tourId ID del tour
+   */
+  returnedTour(tourId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/admin/returnedTourById/${tourId}`, {});
+  }
 }

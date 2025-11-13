@@ -93,4 +93,12 @@ export class TourService {
       body
     );
   }
+
+  // /tour/user/submitTourById/{tourId}
+  submitTourById(tourId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.baseUrl}/user/submitTourById/${tourId}`,
+      {}
+    );
+  }
 }

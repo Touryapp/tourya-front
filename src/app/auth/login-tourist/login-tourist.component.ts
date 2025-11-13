@@ -1,6 +1,6 @@
-import { Component, NgZone, Renderer2 } from "@angular/core";
+import { Component, NgZone, Renderer2, OnInit } from "@angular/core";
 import { routes } from "../../shared/routes/routes";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
 import { SocialLoginDto } from "../../shared/dto/social-login.dto";
@@ -15,7 +15,7 @@ import { RequestsProvidersStatus } from "../../shared/enums/requests-providers-s
   styleUrl: "./login-tourist.component.scss",
   standalone: false,
 })
-export class LoginTouristComponent {
+export class LoginTouristComponent implements OnInit {
   public routes = routes;
   password: boolean[] = [false, false]; // Add more as needed
 
@@ -25,12 +25,14 @@ export class LoginTouristComponent {
   facebookLoading: boolean = false;
 
   loginTouristForm: FormGroup;
+  private returnUrl: string | null = null;
 
   togglePassword(index: number): void {
     this.password[index] = !this.password[index];
   }
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private renderer: Renderer2,
     private ngZone: NgZone,
     private authService: AuthService,
@@ -46,11 +48,14 @@ export class LoginTouristComponent {
     });
   }
 
+  ngOnInit(): void {
+    // read returnUrl if present
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.renderer.addClass(document.body, "bg-light-200");
+  }
+
   navigation() {
     this.router.navigate([routes.index]);
-  }
-  ngOnInit(): void {
-    this.renderer.addClass(document.body, "bg-light-200");
   }
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, "bg-light-200");
@@ -78,7 +83,12 @@ export class LoginTouristComponent {
               roles: response.roleList,
             });
             this.getConsultData();
-            this.redirectByRole(response.roleList);
+              // if returnUrl provided, navigate back there, otherwise use role-based redirect
+              if (this.returnUrl) {
+                this.router.navigateByUrl(this.returnUrl);
+              } else {
+                this.redirectByRole(response.roleList);
+              }
           } else {
             this.errorMessage =
               "Ha ocurrido un error, por favor intente de nuevo";
@@ -129,7 +139,11 @@ export class LoginTouristComponent {
           });
           this.googleLoading = false;
           this.getConsultData();
-          this.redirectByRole(response.roleList);
+          if (this.returnUrl) {
+            this.router.navigateByUrl(this.returnUrl);
+          } else {
+            this.redirectByRole(response.roleList);
+          }
         },
         error: (err) => {
           console.error('Error en autenticación con Google:', err);
@@ -174,7 +188,11 @@ export class LoginTouristComponent {
           });
           this.facebookLoading = false;
           this.getConsultData();
-          this.redirectByRole(response.roleList);
+          if (this.returnUrl) {
+            this.router.navigateByUrl(this.returnUrl);
+          } else {
+            this.redirectByRole(response.roleList);
+          }
         },
         error: (err) => {
           console.error('Error en autenticación con Facebook:', err);

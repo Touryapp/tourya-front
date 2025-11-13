@@ -12,7 +12,7 @@ import {
   ParticipantSelection,
 } from "../../dto/cart.dto";
 import { CartService } from "../../services/cart.service";
-import { OwlOptions } from "ngx-owl-carousel-o";
+import { CarouselModule, OwlOptions } from "ngx-owl-carousel-o";
 import dayjs from "dayjs";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import {
@@ -20,12 +20,26 @@ import {
   TourScheduleResponseDto,
 } from "../../dto/search-tour-response.dto";
 import { SearchToursService } from "../../../pages/clients/list-tours/search-tours.service";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { SlickCarouselModule } from "ngx-slick-carousel";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { ModalModule } from "ngx-bootstrap/modal";
 
 @Component({
   selector: "app-tour-slot-selection-modal",
-  standalone: false,
+  standalone: true,
   templateUrl: "./tour-slot-selection-modal.component.html",
   styleUrls: ["./tour-slot-selection-modal.component.scss"],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    SlickCarouselModule,
+    MatSlideToggleModule,
+    ModalModule,
+    CarouselModule
+  ],
 })
 export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   // Modal state

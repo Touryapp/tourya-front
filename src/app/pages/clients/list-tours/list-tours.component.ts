@@ -118,6 +118,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public ageTypes: { name: string }[] = [];
 
   public selectedState: string = ""; // kept for URL param compatibility (stateId)
+  selectedCity: string = "";
   public selectedTag: string = "";
   public selectedCategoryId?: number;
   public travellersData = {
@@ -182,7 +183,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.loadFiltersCatalogs();
 
     this.route.queryParams.subscribe((params) => {
-      this.selectedState = params["state"] || ""; // stateId desde Home
+      this.selectedCity = params["city"] || ""; // stateId desde Home
       this.travellersData = {
         adults: Number(params["adults"]) || 1,
         children: Number(params["children"]) || 0,
@@ -198,11 +199,11 @@ export class ListToursComponent implements OnInit, OnDestroy {
       }
 
       // Si recibimos stateId, preseleccionamos una ciudad de ese estado una vez cargadas las locations
-      if (this.selectedState) {
-        const stateIdNum = Number(this.selectedState);
+      if (this.selectedCity) {
+        const cityIdNum = Number(this.selectedCity);
         const trySelect = () => {
           if (this.locationsPublic && this.locationsPublic.length) {
-            const loc = this.locationsPublic.find(l => l.stateId === stateIdNum);
+            const loc = this.locationsPublic.find(l => l.cityId === cityIdNum);
             if (loc) this.selectedLocation = loc;
             this.searchToursList();
           } else {
@@ -327,7 +328,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   // Reset filters
   resetFilters(): void {
     console.log("Reseteando filtros...");
-    this.selectedState = "";
+    this.selectedCity = "";
     this.selectedLocation = null;
     this.selectedTag = "";
     this.selectedCategoryId = undefined;
@@ -449,7 +450,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
   onSearch(): void {
     console.log("=== BÚSQUEDA PRINCIPAL ===");
-    console.log("Estado seleccionado:", this.selectedState);
+    console.log("Estado seleccionado:", this.selectedCity);
     console.log("Datos de viajeros:", this.travellersData);
     console.log("Fecha de entrada:", this.checkIn);
     console.log("Fecha de salida:", this.checkOut);
@@ -471,7 +472,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   // Método para búsqueda desde filtros del sidebar
   onSearchFromFilters(): void {
     console.log("=== BÚSQUEDA DESDE FILTROS ===");
-    console.log("Estado seleccionado:", this.selectedState);
+    console.log("Estado seleccionado:", this.selectedCity);
     console.log("Datos de viajeros:", this.travellersData);
     console.log("Fecha de entrada:", this.checkIn);
     console.log("Fecha de salida:", this.checkOut);

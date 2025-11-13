@@ -17,7 +17,7 @@
                 <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
                     <ng-template carouselSlide *ngFor="let image of  tour?.tour?.gallery; let imgIndex = index">
                         <div class="slide-images">
-                            <a [routerLink]="routes.tourDetails">
+                            <a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">
                                 <img [src]="image.imageUrl || 'assets/img/tours/tours-07.jpg'" class="tour-card-img"
                                     [alt]="image.description || 'Tour image'">
                             </a>
@@ -25,7 +25,7 @@
                     </ng-template>
                     <ng-template carouselSlide *ngIf="!tour?.tour?.gallery || tour?.tour?.gallery?.length === 0">
                         <div class="slide-images">
-                            <a [routerLink]="routes.tourDetails">
+                            <a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">
                                 <img src="assets/img/tours/tours-07.jpg" class="tour-card-img" alt="Tour image">
                             </a>
                         </div>
@@ -48,7 +48,7 @@
                         </span>
                     </div>
                 </div>
-                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.tourDetails">{{ tour.tour.name || 'N/A' }}</a>
+                <h5 class="mb-1 text-truncate"><a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">{{ tour.tour.name || 'N/A' }}</a>
                 </h5>
                 <p class="d-flex align-items-center mb-3 tour-card-location">
                     <i class="fa fa-map-marker-alt me-2"></i>

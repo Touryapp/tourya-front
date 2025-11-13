@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ToursDetailRoutingModule } from './tours-detail-routing.module';
 import { ToursDetailComponent } from './tours-detail.component';
 import { SharedModule } from '../../../shared/shared-module';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { SharedModule } from '../../../shared/shared-module';
     CommonModule,
     ReactiveFormsModule,
     SharedModule,
+    GoogleMapsModule,
     ToursDetailRoutingModule
   ]
 })

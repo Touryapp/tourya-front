@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit {
   // Métodos para verificar el estado y mostrar botones apropiados
   canPreApprove(): boolean {
     const canPreApprove = this.selectedProvider?.status === 'Submitted';
-    console.log('canPreApprove:', canPreApprove, 'Status:', this.selectedProvider?.status, 'Expected: Submitted');
+    // console.log('canPreApprove:', canPreApprove, 'Status:', this.selectedProvider?.status, 'Expected: Submitted');
     return canPreApprove;
   }
 

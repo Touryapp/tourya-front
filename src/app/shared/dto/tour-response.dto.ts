@@ -6,7 +6,7 @@ export interface Tour {
   duration?: string;
   maxPeople?: number;
   highlight?: number;
-  price?: 0;
+  price?: number;
   minAge?: number;
   rating?: 0;
   status?: string;
@@ -20,6 +20,32 @@ export interface Tour {
   tourCategory?: TourCategory;
   provider?: Provider;
   profilePicture?: Gallery;
+  galleries?: Gallery[];
+}
+
+export interface TourDetail {
+  id: number;
+  name: string;
+  description: string;
+  tourCategoryId: number;
+  duration: string;
+  maxPeople: number;
+  highlight: number;
+  price: number;
+  minAge: number;
+  rating: 0;
+  status: string;
+  locations: Location[];
+  mainAttractions: MainAttraction[];
+  includes: Include[];
+  excludes: Exclude[];
+  faq: FAQ[];
+  itineraries: Itinerary[];
+  cancellationPolicies: CancellationPolicy[];
+  tourCategory: TourCategory;
+  provider: Provider;
+  profilePicture: Gallery;
+  galleries: Gallery[];
 }
 
 export interface TourCategory {
@@ -30,16 +56,28 @@ export interface TourCategory {
 
 interface Provider {
   id?: number;
-  nombre?: string;
-  numeroDocumento?: string;
-  tipoDocumento?: string;
-  tipoServicio?: string;
-  pais?: string;
-  departamento?: string;
-  ciudad?: string;
-  direccion?: string;
-  telefono?: string;
-  status?: string;
+  name: string;
+  documentNumber: string;
+  documentType: string;
+  serviceType: string;
+  country: {
+      id: number,
+      name: string
+    },
+  city: {
+    id: number,
+    name: string
+  },
+  state: {
+    id: number,
+    name: string
+  },
+  department: string;
+  address: string;
+  status: string;
+  email: string;
+  profilePicture: Gallery;
+  phone: string;
 }
 
 interface Location {
@@ -95,7 +133,7 @@ interface CancellationPolicy {
 
 export interface Gallery {
   id?: number;
-  imageUrl?: string;
-  description?: string;
-  orderIndex?: number;
+  imageUrl: string;
+  description: string;
+  orderIndex: number;
 }
