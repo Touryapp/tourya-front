@@ -8,6 +8,7 @@ import { Roles } from "../../shared/enums/roles.enum";
 import { RoleDto } from "../../shared/dto/role.dto";
 import { RequestProvidersService } from "../../pages/providers/requestproviders/request-providers.service";
 import { RequestsProvidersStatus } from "../../shared/enums/requests-providers-status.enum";
+import { PendingActionService } from "../../shared/services/pending-action.service";
 
 @Component({
   selector: "app-login-tourist",
@@ -36,7 +37,8 @@ export class LoginTouristComponent implements OnInit {
     private renderer: Renderer2,
     private ngZone: NgZone,
     private authService: AuthService,
-    private requestProviderService: RequestProvidersService
+    private requestProviderService: RequestProvidersService,
+    private pendingActionService: PendingActionService
   ) {
     this.loginTouristForm = new FormGroup({
       email: new FormControl("", [Validators.required, Validators.email]),
@@ -83,12 +85,30 @@ export class LoginTouristComponent implements OnInit {
               roles: response.roleList,
             });
             this.getConsultData();
-              // if returnUrl provided, navigate back there, otherwise use role-based redirect
-              if (this.returnUrl) {
-                this.router.navigateByUrl(this.returnUrl);
-              } else {
-                this.redirectByRole(response.roleList);
-              }
+            
+            // Verificar si hay acción pendiente
+            const hasPendingAction = this.pendingActionService.hasPendingAction();
+            console.log(`✅ Login exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
+            
+            if (hasPendingAction) {
+              const pendingAction = this.pendingActionService.getPendingCartAction();
+              console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
+              console.log('📍 URL de retorno:', pendingAction?.returnUrl);
+              
+              // Redirigir a la URL de retorno (donde estaba el modal)
+              // El modal detectará automáticamente la acción pendiente y la ejecutará
+              const returnUrl = pendingAction?.returnUrl || this.returnUrl || '/';
+              console.log('🚀 Navegando a:', returnUrl);
+              this.router.navigateByUrl(returnUrl);
+            } else if (this.returnUrl) {
+              // returnUrl provided sin acción pendiente
+              console.log('📍 Usando returnUrl del queryParam:', this.returnUrl);
+              this.router.navigateByUrl(this.returnUrl);
+            } else {
+              // Redirect basado en rol
+              console.log('👤 Redirigiendo basado en rol');
+              this.redirectByRole(response.roleList);
+            }
           } else {
             this.errorMessage =
               "Ha ocurrido un error, por favor intente de nuevo";
@@ -139,7 +159,19 @@ export class LoginTouristComponent implements OnInit {
           });
           this.googleLoading = false;
           this.getConsultData();
-          if (this.returnUrl) {
+          
+          // Verificar si hay acción pendiente
+          const hasPendingAction = this.pendingActionService.hasPendingAction();
+          console.log(`✅ Login Google exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
+          
+          if (hasPendingAction) {
+            const pendingAction = this.pendingActionService.getPendingCartAction();
+            console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
+            console.log('📍 URL de retorno:', pendingAction?.returnUrl);
+            const returnUrl = pendingAction?.returnUrl || this.returnUrl || '/';
+            console.log('🚀 Navegando a:', returnUrl);
+            this.router.navigateByUrl(returnUrl);
+          } else if (this.returnUrl) {
             this.router.navigateByUrl(this.returnUrl);
           } else {
             this.redirectByRole(response.roleList);
@@ -188,7 +220,19 @@ export class LoginTouristComponent implements OnInit {
           });
           this.facebookLoading = false;
           this.getConsultData();
-          if (this.returnUrl) {
+          
+          // Verificar si hay acción pendiente
+          const hasPendingAction = this.pendingActionService.hasPendingAction();
+          console.log(`✅ Login Facebook exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
+          
+          if (hasPendingAction) {
+            const pendingAction = this.pendingActionService.getPendingCartAction();
+            console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
+            console.log('📍 URL de retorno:', pendingAction?.returnUrl);
+            const returnUrl = pendingAction?.returnUrl || this.returnUrl || '/';
+            console.log('🚀 Navegando a:', returnUrl);
+            this.router.navigateByUrl(returnUrl);
+          } else if (this.returnUrl) {
             this.router.navigateByUrl(this.returnUrl);
           } else {
             this.redirectByRole(response.roleList);
