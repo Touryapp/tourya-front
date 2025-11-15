@@ -5,7 +5,8 @@
     <div class="card booking-header mb-4">
         <div class="card-body header-content d-flex align-items-center justify-content-between flex-wrap">
             <div>
-                <h6>Gestión de Reservas de Tours</h6>
+                <h6>{{ config.title }}</h6>
+                <p class="fs-14 text-gray-6 fw-normal" *ngIf="config.subtitle">{{ config.subtitle }}</p>
                 <p class="fs-14 text-gray-6 fw-normal">Total de Reservas: {{ totalBookings }}</p>
             </div>
 
@@ -13,7 +14,8 @@
                 <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
                     <i class="isax isax-refresh me-1"></i>Limpiar Filtros
                 </button>
-                <div class="dropdown">
+                                <!-- Export -->
+                <div class="dropdown" *ngIf="config.canExport">
                     <a href="javascript:void(0);" 
                        class="dropdown-toggle btn btn-sm border text-gray-6 rounded fw-normal fs-14 d-inline-flex align-items-center" 
                        data-bs-toggle="dropdown">
@@ -60,83 +62,35 @@
                             placeholder="Buscar..." />
                     </div>
 
-                    <!-- Filter by Tour Type -->
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" 
-                           class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
-                           data-bs-toggle="dropdown" 
-                           aria-expanded="false">
-                            Tipo de Tour
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end p-3">
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('')">Todos</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Adventure Tourism')">Adventure Tourism</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Escorted Tour')">Escorted Tour</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Ground Tour')">Ground Tour</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Sightseeing Tours')">Sightseeing Tours</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Filter by Status -->
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" 
-                           class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
-                           data-bs-toggle="dropdown" 
-                           aria-expanded="false">
-                            Estado
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end p-3">
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('')">Todos</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Upcoming')">Upcoming</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Pending')">Pending</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Confirmed')">Confirmed</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Cancelled')">Cancelled</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Completed')">Completed</a>
-                            </li>
-                        </ul>
+                    <!-- Filtros dinámicos según configuración -->
+                                    <div class="d-flex align-items-center flex-wrap row-gap-3 column-gap-4">
+                    <div class="dropdown" *ngFor="let filter of config.filters">
+                        <!-- Filtro de tipo SELECT -->
+                        <div *ngIf="filter.type === 'select'">
+                            <a href="javascript:void(0);" 
+                               class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
+                               data-bs-toggle="dropdown" 
+                               aria-expanded="false">
+                                {{ filter.label }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end p-3">
+                                <li *ngFor="let option of filter.options">
+                                    <a href="javascript:void(0);" 
+                                       class="dropdown-item rounded-1"
+                                       (click)="filter.field === 'status' ? filterByStatus(option.value) : filterByTourType(option.value)">
+                                        {{ option.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Filtro de tipo TEXT -->
+                        <input 
+                            *ngIf="filter.type === 'text'"
+                            type="text" 
+                            class="form-control form-control-sm"
+                            [placeholder]="filter.label"
+                            (input)="searchData($any($event.target).value)" />
                     </div>
 
                     <!-- Sort By -->
@@ -174,93 +128,60 @@
                 <table matSort (matSortChange)="sortData($event)" class="table datatable">
                     <thead class="thead-light">
                         <tr>
-                            <th mat-sort-header="id">ID</th>
-                            <th mat-sort-header="tourName">Tour & Tipo</th>
-                            <th mat-sort-header="customerName">Cliente</th>
-                            <th mat-sort-header="travellers">Viajeros</th>
-                            <th mat-sort-header="duration">Duración</th>
-                            <th mat-sort-header="price">Precio</th>
-                            <th mat-sort-header="checkInDate">Fecha Inicio</th>
-                            <th mat-sort-header="status">Estado</th>
+                            <!-- Columnas dinámicas según configuración -->
+                            <th *ngFor="let column of config.columns" 
+                                [attr.mat-sort-header]="column.sortable ? column.field : undefined">
+                                {{ column.header }}
+                            </th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (booking of tableData; track booking.id) {
                             <tr>
-                                <td>
-                                    <a href="javascript:void(0);" 
-                                       class="link-primary fw-medium" 
-                                       data-bs-toggle="modal" 
-                                       data-bs-target="#bookingDetailModal"
-                                       (click)="viewBookingDetails(booking)">
-                                        {{ booking.id }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
+                                <!-- Celdas dinámicas -->
+                                <td *ngFor="let column of config.columns">
+                                    <!-- Columna de imagen -->
+                                    <div *ngIf="column.type === 'image'" class="d-flex align-items-center">
                                         <a href="javascript:void(0);" class="avatar avatar-lg">
-                                            <img src="assets/img/tours/{{ booking.img }}" 
+                                            <img [src]="'assets/img/tours/' + getCellValue(booking, column)" 
                                                  class="img-fluid rounded-circle" 
                                                  alt="tour">
                                         </a>
-                                        <div class="ms-2">
-                                            <p class="text-dark mb-0 fw-medium fs-14">
-                                                {{ booking.tourName }}
-                                            </p>
-                                            <span class="fs-14 fw-normal text-gray-6">{{ booking.tourType }}</span>
-                                        </div>
                                     </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <p class="mb-0 fw-medium">{{ booking.customerName }}</p>
-                                        <span class="text-gray-6 fs-12">{{ booking.customerEmail }}</span>
-                                    </div>
-                                </td>
-                                <td>{{ booking.travellers }}</td>
-                                <td>{{ booking.duration }}</td>
-                                <td class="fw-semibold">{{ booking.price }}</td>
-                                <td>{{ booking.checkInDate }}</td>
-                                <td>
-                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
-                                          [ngClass]="getStatusClass(booking.status)">
-                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ booking.status }}
+
+                                    <!-- Columna de estado -->
+                                    <span *ngIf="column.type === 'status'"
+                                          class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                          [ngClass]="getStatusClass(getCellValue(booking, column))">
+                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ getStatusLabel(getCellValue(booking, column)) }}
+                                    </span>
+
+                                    <!-- Columnas normales -->
+                                    <span *ngIf="column.type !== 'image' && column.type !== 'status'">
+                                        {{ getCellValue(booking, column) }}
                                     </span>
                                 </td>
+
+                                <!-- Columna de acciones dinámicas -->
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <a href="javascript:void(0);" 
-                                           data-bs-toggle="modal" 
-                                           data-bs-target="#bookingDetailModal"
-                                           (click)="viewBookingDetails(booking)"
-                                           class="btn btn-sm btn-light"
-                                           title="Ver detalles">
-                                            <i class="isax isax-eye"></i>
-                                        </a>
-                                        @if (booking.status === 'Pending') {
-                                            <button 
-                                                class="btn btn-sm btn-success" 
-                                                (click)="confirmBooking(booking.id)"
-                                                title="Confirmar">
-                                                <i class="isax isax-tick-circle"></i>
-                                            </button>
-                                        }
-                                        @if (booking.status !== 'Cancelled' && booking.status !== 'Completed') {
-                                            <button 
-                                                class="btn btn-sm btn-danger" 
-                                                (click)="cancelBooking(booking.id)"
-                                                title="Cancelar">
-                                                <i class="isax isax-close-circle"></i>
-                                            </button>
-                                        }
+                                        <button 
+                                            *ngFor="let action of config.actions"
+                                            [hidden]="!isActionVisible(action, booking)"
+                                            class="btn btn-sm"
+                                            [ngClass]="'btn-' + action.color"
+                                            (click)="onAction(action.id, booking)"
+                                            [title]="action.label">
+                                            <i [class]="action.icon"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         }
                         @if (tableData.length === 0) {
                             <tr>
-                                <td colspan="9" class="text-center py-5">
+                                <td [attr.colspan]="(config.columns.length || 0) + 1" class="text-center py-5">
                                     <div class="text-muted">
                                         <i class="isax isax-box fs-1 mb-3 d-block"></i>
                                         <h5>No se encontraron reservas</h5>

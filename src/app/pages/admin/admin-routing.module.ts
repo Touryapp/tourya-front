@@ -19,6 +19,10 @@ const routes: Routes = [
       {
         path: 'tour-admin',
         loadChildren: () => import('./tour-admin/tour-admin.module').then(m => m.TourAdminModule)
+      },
+      {
+        path: 'bookings-management',
+        loadChildren: () => import('../providers/provider-tour-management/provider-tour-management.module').then(m => m.ProviderTourManagementModule)
       }
     ]
   }

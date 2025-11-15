@@ -1,6 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
+import {
+  BookingManagementConfig,
+  BookingManagementConfigService,
+  UserRole,
+  ActionConfig,
+  ColumnConfig
+} from '../../../shared/services/booking-management-config.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
@@ -34,6 +42,10 @@ export interface ProviderTourBooking {
 export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   public routes = routes;
   
+  // Configuración dinámica según rol
+  config!: BookingManagementConfig;
+  currentRole!: UserRole;
+  
   // Variables de paginación y filtrado
   public pageSize = 10;
   public currentPage = 1;
@@ -42,26 +54,48 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   public selectedStatus = '';
   public selectedTourType = '';
   
-  // Datos de la tabla
-  public tableData: ProviderTourBooking[] = [];
-  public tableDataCopy: ProviderTourBooking[] = [];
+  // Datos de la tabla (any[] para permitir acceso dinámico)
+  public tableData: any[] = [];
+  public tableDataCopy: any[] = [];
   
   // Modales
-  public selectedBooking: ProviderTourBooking | null = null;
+  public selectedBooking: any | null = null;
 
   // Dropdown states
   dropdownOpen = false;
   dropdownOpen1 = false;
   dropdownOpen2 = false;
 
-  constructor() {}
+  constructor(
+    private configService: BookingManagementConfigService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    // Detectar rol y cargar configuración
+    this.currentRole = this.getUserRole();
+    this.config = this.configService.getConfigByRole(this.currentRole);
+    
+    // Cargar datos
     this.loadMockData();
   }
 
   ngOnDestroy(): void {
     // Cleanup si es necesario
+  }
+
+  /**
+   * Obtiene el rol del usuario actual
+   */
+  private getUserRole(): UserRole {
+    if (this.authService.isAdmin()) {
+      return 'ADMIN';
+    } else if (this.authService.isProvider()) {
+      return 'PROVIDER';
+    } else if (this.authService.isUser()) {
+      return 'CLIENT';
+    }
+    throw new Error('Usuario sin rol válido asignado');
   }
 
   /**
@@ -320,6 +354,157 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
    */
   public exportData(format: 'pdf' | 'excel'): void {
     alert(`Exportando datos como ${format.toUpperCase()}...`);
+  }
+
+  /**
+   * Maneja las acciones según el rol y la acción específica
+   */
+  public onAction(actionId: string, row: any): void {
+    switch (this.currentRole) {
+      case 'CLIENT':
+        this.handleClientAction(actionId, row);
+        break;
+      case 'PROVIDER':
+        this.handleProviderAction(actionId, row);
+        break;
+      case 'ADMIN':
+        this.handleAdminAction(actionId, row);
+        break;
+    }
+  }
+
+  /**
+   * Maneja acciones del rol CLIENT
+   */
+  private handleClientAction(actionId: string, booking: any): void {
+    switch (actionId) {
+      case 'view':
+        this.viewBookingDetails(booking);
+        break;
+      case 'cancel':
+        if (confirm('¿Estás seguro de cancelar esta reserva?')) {
+          this.cancelBooking(booking.id);
+        }
+        break;
+      default:
+        console.warn('Acción no reconocida:', actionId);
+    }
+  }
+
+  /**
+   * Maneja acciones del rol PROVIDER
+   */
+  private handleProviderAction(actionId: string, booking: any): void {
+    switch (actionId) {
+      case 'view':
+        this.viewBookingDetails(booking);
+        break;
+      case 'confirm':
+        if (confirm('¿Confirmar esta reserva?')) {
+          this.confirmBooking(booking.id);
+        }
+        break;
+      case 'complete':
+        if (confirm('¿Marcar esta reserva como completada?')) {
+          this.completeBooking(booking.id);
+        }
+        break;
+      case 'cancel':
+        if (confirm('¿Estás seguro de cancelar esta reserva?')) {
+          this.cancelBooking(booking.id);
+        }
+        break;
+      default:
+        console.warn('Acción no reconocida:', actionId);
+    }
+  }
+
+  /**
+   * Maneja acciones del rol ADMIN
+   */
+  private handleAdminAction(actionId: string, booking: any): void {
+    switch (actionId) {
+      case 'view':
+        this.viewBookingDetails(booking);
+        break;
+      case 'approve':
+        if (confirm('¿Aprobar esta reserva?')) {
+          this.confirmBooking(booking.id);
+          alert('Reserva aprobada');
+        }
+        break;
+      case 'suspend':
+        if (confirm('¿Suspender esta reserva?')) {
+          booking.status = 'Cancelled';
+          alert('Reserva suspendida');
+        }
+        break;
+      case 'cancel':
+        if (confirm('¿Cancelar esta reserva?')) {
+          this.cancelBooking(booking.id);
+        }
+        break;
+      case 'delete':
+        if (confirm('¿Eliminar permanentemente esta reserva?')) {
+          const index = this.tableData.findIndex(b => b.id === booking.id);
+          if (index > -1) {
+            this.tableData.splice(index, 1);
+            this.tableDataCopy = [...this.tableData];
+            alert('Reserva eliminada');
+          }
+        }
+        break;
+      default:
+        console.warn('Acción no reconocida:', actionId);
+    }
+  }
+
+  /**
+   * Verifica si una acción es visible para una fila específica
+   */
+  public isActionVisible(action: ActionConfig, row: any): boolean {
+    if (!action.visible) {
+      return true;
+    }
+    return action.visible(row);
+  }
+
+  /**
+   * Obtiene el valor formateado de una celda según su tipo
+   */
+  public getCellValue(row: any, column: ColumnConfig): any {
+    const value = row[column.field];
+    
+    switch (column.type) {
+      case 'currency':
+        // Si ya viene formateado con $, retornarlo tal cual
+        if (typeof value === 'string' && value.includes('$')) {
+          return value;
+        }
+        return value ? `$${value}` : '-';
+      case 'date':
+        return value || '-';
+      case 'status':
+        return value;
+      case 'list':
+        return Array.isArray(value) ? value.join(', ') : value || '-';
+      default:
+        return value || '-';
+    }
+  }
+
+  /**
+   * Obtiene la etiqueta traducida de un estado
+   */
+  public getStatusLabel(status: string): string {
+    const labels: Record<string, string> = {
+      'Upcoming': 'Próxima',
+      'Pending': 'Pendiente',
+      'Confirmed': 'Confirmada',
+      'Cancelled': 'Cancelada',
+      'Completed': 'Completada'
+    };
+    return labels[status] || status;
   }
 
   /**
