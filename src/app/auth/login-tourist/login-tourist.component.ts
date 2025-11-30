@@ -8,6 +8,9 @@ import { Roles } from "../../shared/enums/roles.enum";
 import { RoleDto } from "../../shared/dto/role.dto";
 import { RequestProvidersService } from "../../pages/providers/requestproviders/request-providers.service";
 import { RequestsProvidersStatus } from "../../shared/enums/requests-providers-status.enum";
+import { PendingsService } from "../../core/services/pendings.service";
+import { BsModalService } from "ngx-bootstrap/modal";
+import { PendingReviewsModalComponent } from "../../shared/components/pending-reviews-modal/pending-reviews-modal.component";
 
 @Component({
   selector: "app-login-tourist",
@@ -36,7 +39,9 @@ export class LoginTouristComponent implements OnInit {
     private renderer: Renderer2,
     private ngZone: NgZone,
     private authService: AuthService,
-    private requestProviderService: RequestProvidersService
+    private requestProviderService: RequestProvidersService,
+    private pendingsService: PendingsService,
+    private modalService: BsModalService
   ) {
     this.loginTouristForm = new FormGroup({
       email: new FormControl("", [Validators.required, Validators.email]),
@@ -83,6 +88,13 @@ export class LoginTouristComponent implements OnInit {
               roles: response.roleList,
             });
             this.getConsultData();
+            const isUser = response.roleList.some(r => r.id === Roles.USER);
+            const isProvider = response.roleList.some(r => r.id === Roles.PROVIDER);
+            const isAdmin = response.roleList.some(r => r.id === Roles.ADMIN);
+
+            if (isUser && !isProvider && !isAdmin) {
+              this.getPendingReviews();
+            }
               // if returnUrl provided, navigate back there, otherwise use role-based redirect
               if (this.returnUrl) {
                 this.router.navigateByUrl(this.returnUrl);
@@ -139,6 +151,13 @@ export class LoginTouristComponent implements OnInit {
           });
           this.googleLoading = false;
           this.getConsultData();
+          const isUser = response.roleList.some(r => r.id === Roles.USER);
+          const isProvider = response.roleList.some(r => r.id === Roles.PROVIDER);
+          const isAdmin = response.roleList.some(r => r.id === Roles.ADMIN);
+
+          if (isUser && !isProvider && !isAdmin) {
+              this.getPendingReviews();
+            }
           if (this.returnUrl) {
             this.router.navigateByUrl(this.returnUrl);
           } else {
@@ -188,6 +207,13 @@ export class LoginTouristComponent implements OnInit {
           });
           this.facebookLoading = false;
           this.getConsultData();
+          const isUser = response.roleList.some(r => r.id === Roles.USER);
+          const isProvider = response.roleList.some(r => r.id === Roles.PROVIDER);
+          const isAdmin = response.roleList.some(r => r.id === Roles.ADMIN);
+          
+          if (isUser && !isProvider && !isAdmin) {
+            this.getPendingReviews();
+          }
           if (this.returnUrl) {
             this.router.navigateByUrl(this.returnUrl);
           } else {
@@ -215,6 +241,8 @@ export class LoginTouristComponent implements OnInit {
   }
 
   getConsultData(){
+    console.log("Consultando datos");
+    
     this.requestProviderService.consultData().subscribe({
       next: (response) => {
         console.log(response);
@@ -228,6 +256,24 @@ export class LoginTouristComponent implements OnInit {
       error: (error) => {
         this.authService.setRequestProviderStatus(RequestsProvidersStatus.CREATED);
         console.error('Error al obtener los datos del usuario:', error);
+      }
+    })
+  }
+  getPendingReviews(){
+    this.pendingsService.getPendingReviews().subscribe({
+      next: (response) => {
+        console.log(response);
+        if(response && response.data && response.data.reviewPendingBookings && response.data.reviewPendingBookings.length > 0){
+          console.log("Mostrando modal");
+          
+          const initialState = {
+            pendingReviews: response.data.reviewPendingBookings
+          };
+          this.modalService.show(PendingReviewsModalComponent, { initialState, class: 'modal-lg', backdrop: 'static', keyboard: false });
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener las revisiones pendientes:', error);
       }
     })
   }
