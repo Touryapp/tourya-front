@@ -10,11 +10,11 @@
     <div *ngFor="let review of pendingReviews" class="list-group-item d-flex justify-content-between align-items-center">
       <div>
         <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{ review.hotel }}</h5>
-          <small class="ms-2">{{ review.bookedOn | date }}</small>
+          <h5 class="mb-1">{{ review.tourName }}</h5>
+          <small class="ms-2">{{ review.date | date }}</small>
         </div>
-        <p class="mb-1">Habitación: {{ review.room }}</p>
-        <small>Ubicación: {{ review.location }}</small>
+        <p class="mb-1">Cliente: {{ review.customerName }}</p>
+        <small>Booking ID: {{ review.bookingId }}</small>
       </div>
       <button class="btn btn-sm btn-primary ms-3" (click)="goToReview(review)">
         Reseñar

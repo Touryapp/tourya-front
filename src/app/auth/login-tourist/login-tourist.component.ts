@@ -1,4 +1,4 @@
-import { Component, NgZone, Renderer2, OnInit } from "@angular/core";
+import { Component, NgZone, Renderer2, OnInit, OnDestroy } from "@angular/core";
 import { routes } from "../../shared/routes/routes";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -8,7 +8,7 @@ import { Roles } from "../../shared/enums/roles.enum";
 import { RoleDto } from "../../shared/dto/role.dto";
 import { RequestProvidersService } from "../../pages/providers/requestproviders/request-providers.service";
 import { RequestsProvidersStatus } from "../../shared/enums/requests-providers-status.enum";
-import { PendingsService } from "../../core/services/pendings.service";
+import { ReviewsService } from "../../core/services/reviews.service";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { PendingReviewsModalComponent } from "../../shared/components/pending-reviews-modal/pending-reviews-modal.component";
 
@@ -18,7 +18,7 @@ import { PendingReviewsModalComponent } from "../../shared/components/pending-re
   styleUrl: "./login-tourist.component.scss",
   standalone: false,
 })
-export class LoginTouristComponent implements OnInit {
+export class LoginTouristComponent implements OnInit, OnDestroy {
   public routes = routes;
   password: boolean[] = [false, false]; // Add more as needed
 
@@ -40,7 +40,7 @@ export class LoginTouristComponent implements OnInit {
     private ngZone: NgZone,
     private authService: AuthService,
     private requestProviderService: RequestProvidersService,
-    private pendingsService: PendingsService,
+    private reviewsService: ReviewsService,
     private modalService: BsModalService
   ) {
     this.loginTouristForm = new FormGroup({
@@ -260,14 +260,14 @@ export class LoginTouristComponent implements OnInit {
     })
   }
   getPendingReviews(){
-    this.pendingsService.getPendingReviews().subscribe({
+    this.reviewsService.getPendingReviews().subscribe({
       next: (response) => {
         console.log(response);
-        if(response && response.data && response.data.reviewPendingBookings && response.data.reviewPendingBookings.length > 0){
+        if(response && response.content && response.content.length > 0){
           console.log("Mostrando modal");
           
           const initialState = {
-            pendingReviews: response.data.reviewPendingBookings
+            pendingReviews: response.content
           };
           this.modalService.show(PendingReviewsModalComponent, { initialState, class: 'modal-lg', backdrop: 'static', keyboard: false });
         }

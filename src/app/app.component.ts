@@ -4,6 +4,7 @@ import { CommonService } from "./shared/common/common.service";
 import { url } from "./shared/models/models";
 import { setTheme } from "ngx-bootstrap/utils";
 import { TranslateService } from "@ngx-translate/core";
+import { GeolocationService } from "./core/services/geolocation.service";
 
 @Component({
   selector: "app-root",
@@ -19,7 +20,8 @@ export class AppComponent {
   constructor(
     private common: CommonService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private geoService: GeolocationService
   ) {
     setTheme("bs5");
     this.common.base.subscribe((res: string) => {
@@ -37,13 +39,39 @@ export class AppComponent {
       }
     });
 
+    // Configurar idiomas disponibles
     this.translate.addLangs(["en", "es", "pt"]);
     this.translate.setDefaultLang("en");
 
-    this.translate.use(
-      localStorage.getItem("lang") || this.translate.getBrowserLang() || "en"
-    );
+    // Detectar y establecer idioma
+    this.detectAndSetLanguage();
   }
+
+  /**
+   * Detecta el idioma basado en el país del navegador
+   * Prioridad: 1. localStorage, 2. País del navegador, 3. Idioma del navegador, 4. Fallback 'en'
+   */
+  private detectAndSetLanguage(): void {
+    // 1. Verificar si ya hay un idioma guardado por el usuario
+    const savedLang = localStorage.getItem("lang");
+    
+    if (savedLang) {
+      this.translate.use(savedLang);
+      return;
+    }
+
+    // 2. Detectar país desde el navegador
+    const countryCode = this.geoService.getCountryFromBrowser();
+    const detectedLang = this.geoService.mapCountryToLanguage(countryCode);
+    
+    // 3. Usar el idioma detectado o el del navegador como fallback
+    const languageToUse = detectedLang || this.translate.getBrowserLang() || "en";
+    
+    this.translate.use(languageToUse);
+    
+    console.log(`País detectado: ${countryCode}, Idioma: ${languageToUse}`);
+  }
+
   public getRoutes(events: url) {
     const splitVal = events.url.split("/");
     this.common.base.next(splitVal[1]);

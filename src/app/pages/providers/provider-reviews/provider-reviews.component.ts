@@ -1,24 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
-
-// Interfaz para las reviews de los tours del proveedor
-export interface ProviderReview {
-  id: string;
-  tourName: string;
-  tourId: string;
-  tourImage: string;
-  customerName: string;
-  customerImage: string;
-  rating: number;
-  title: string;
-  comment: string;
-  date: string;
-  daysAgo: string;
-  likes: number;
-  dislikes: number;
-  hearts: number;
-  bookingId: string;
-}
+import { Subscription } from 'rxjs';
+import { ReviewsService } from '../../../core/services/reviews.service';
+import { ProviderReview } from '../../../shared/models/reviews.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-provider-reviews',
@@ -36,164 +21,46 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   public averageRating = 0;
   public searchTerm = '';
   public selectedRatingFilter = 0; // 0 = todas, 1-5 = filtrar por rating
+  public isLoading = false;
+  private reviewsSubscription: Subscription | undefined;
+  
+  // Estado del formulario de respuesta
+  public replyingToReviewId: string | null = null;
+  public replyText: string = '';
 
-  constructor() {}
+  constructor(
+    private reviewsService: ReviewsService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.loadMockReviews();
-    this.calculateStatistics();
+    this.loadReviews();
   }
 
   ngOnDestroy(): void {
-    // Cleanup si es necesario
+    if (this.reviewsSubscription) {
+      this.reviewsSubscription.unsubscribe();
+    }
   }
 
   /**
-   * Carga datos mock de reviews
+   * Carga reviews del servicio
    */
-  private loadMockReviews(): void {
-    const mockReviews: ProviderReview[] = [
-      {
-        id: 'REV-001',
-        tourName: 'LaughFest Carnival',
-        tourId: 'TOUR-101',
-        tourImage: 'tours-21.jpg',
-        customerName: 'Sarah Johnson',
-        customerImage: 'user-02.jpg',
-        rating: 5.0,
-        title: 'Amazing Experience!',
-        comment: 'This tour exceeded all my expectations! The guides were knowledgeable and friendly, the locations were breathtaking, and everything was perfectly organized. Would definitely recommend!',
-        date: '2024-10-20',
-        daysAgo: '2 days ago',
-        likes: 25,
-        dislikes: 2,
-        hearts: 18,
-        bookingId: 'TB-1001'
+  private loadReviews(): void {
+    this.isLoading = true;
+    this.reviewsSubscription = this.reviewsService.getReviews().subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.filteredReviews = [...response.content];
+        this.totalReviews = response.totalElements;
+        this.calculateStatistics();
+        this.isLoading = false;
       },
-      {
-        id: 'REV-002',
-        tourName: 'Beach Paradise Adventure',
-        tourId: 'TOUR-102',
-        tourImage: 'tours-22.jpg',
-        customerName: 'Michael Chen',
-        customerImage: 'user-03.jpg',
-        rating: 4.5,
-        title: 'Great Tour with Minor Issues',
-        comment: 'Overall a fantastic tour! The beach locations were stunning and the activities were fun. Only minor complaint was that lunch could have been better. But the guides made up for it with their enthusiasm!',
-        date: '2024-10-18',
-        daysAgo: '4 days ago',
-        likes: 20,
-        dislikes: 5,
-        hearts: 15,
-        bookingId: 'TB-1002'
-      },
-      {
-        id: 'REV-003',
-        tourName: 'Mountain Expedition',
-        tourId: 'TOUR-103',
-        tourImage: 'tours-23.jpg',
-        customerName: 'Emma Wilson',
-        customerImage: 'user-04.jpg',
-        rating: 4.8,
-        title: 'Breathtaking Views!',
-        comment: 'The mountain views were absolutely incredible! Our guide was experienced and made sure everyone felt safe. The hiking trails were well-maintained. This is a must-do tour for nature lovers!',
-        date: '2024-10-15',
-        daysAgo: '7 days ago',
-        likes: 32,
-        dislikes: 1,
-        hearts: 28,
-        bookingId: 'TB-1003'
-      },
-      {
-        id: 'REV-004',
-        tourName: 'City Lights Tour',
-        tourId: 'TOUR-104',
-        tourImage: 'tours-24.jpg',
-        customerName: 'David Martinez',
-        customerImage: 'user-05.jpg',
-        rating: 3.5,
-        title: 'Good but Could Be Better',
-        comment: 'The tour was decent but felt a bit rushed. We didn\'t get enough time at each location. The guide was nice but could have provided more historical context. Price was reasonable though.',
-        date: '2024-10-12',
-        daysAgo: '10 days ago',
-        likes: 12,
-        dislikes: 8,
-        hearts: 10,
-        bookingId: 'TB-1004'
-      },
-      {
-        id: 'REV-005',
-        tourName: 'Tropical Getaway',
-        tourId: 'TOUR-105',
-        tourImage: 'tours-25.jpg',
-        customerName: 'Lisa Anderson',
-        customerImage: 'user-06.jpg',
-        rating: 4.9,
-        title: 'Paradise Found!',
-        comment: 'This was the vacation of a lifetime! The tropical locations were like something out of a magazine. Snorkeling, beach activities, amazing food - everything was perfect! The tour company thought of every detail.',
-        date: '2024-10-10',
-        daysAgo: '12 days ago',
-        likes: 45,
-        dislikes: 0,
-        hearts: 38,
-        bookingId: 'TB-1005'
-      },
-      {
-        id: 'REV-006',
-        tourName: 'Historic Route 66',
-        tourId: 'TOUR-106',
-        tourImage: 'tours-26.jpg',
-        customerName: 'James Brown',
-        customerImage: 'user-07.jpg',
-        rating: 4.2,
-        title: 'Nostalgic Journey',
-        comment: 'A wonderful trip down memory lane! Visiting all the classic Route 66 stops was amazing. The guide had great stories and the pace was comfortable. A few stops could have been longer but overall great experience.',
-        date: '2024-10-08',
-        daysAgo: '14 days ago',
-        likes: 18,
-        dislikes: 3,
-        hearts: 16,
-        bookingId: 'TB-1006'
-      },
-      {
-        id: 'REV-007',
-        tourName: 'LaughFest Carnival',
-        tourId: 'TOUR-101',
-        tourImage: 'tours-21.jpg',
-        customerName: 'Maria Garcia',
-        customerImage: 'user-08.jpg',
-        rating: 4.7,
-        title: 'Fun for the Whole Family',
-        comment: 'My kids absolutely loved this tour! There were activities for all ages and the staff was incredibly patient with children. Safety was clearly a priority. We\'ll definitely be booking again!',
-        date: '2024-10-05',
-        daysAgo: '17 days ago',
-        likes: 28,
-        dislikes: 2,
-        hearts: 22,
-        bookingId: 'TB-1007'
-      },
-      {
-        id: 'REV-008',
-        tourName: 'Beach Paradise Adventure',
-        tourId: 'TOUR-102',
-        tourImage: 'tours-22.jpg',
-        customerName: 'Robert Taylor',
-        customerImage: 'user-09.jpg',
-        rating: 3.8,
-        title: 'Nice Beach Tour',
-        comment: 'The beaches were beautiful and the water activities were fun. However, the group was quite large which made it feel a bit crowded at times. Transportation could have been more comfortable.',
-        date: '2024-10-03',
-        daysAgo: '19 days ago',
-        likes: 15,
-        dislikes: 6,
-        hearts: 12,
-        bookingId: 'TB-1008'
+      error: (error) => {
+        console.error('Error loading reviews:', error);
+        this.isLoading = false;
       }
-    ];
-
-    this.reviews = mockReviews;
-    this.filteredReviews = [...mockReviews];
-    this.totalReviews = mockReviews.length;
+    });
   }
 
   /**
@@ -236,8 +103,7 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
       filtered = filtered.filter(review =>
         review.tourName.toLowerCase().includes(searchLower) ||
         review.customerName.toLowerCase().includes(searchLower) ||
-        review.comment.toLowerCase().includes(searchLower) ||
-        review.title.toLowerCase().includes(searchLower)
+        review.comment.toLowerCase().includes(searchLower)
       );
     }
 
@@ -289,9 +155,89 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Responde a una review (mock)
+   * Verifica si se puede responder a una review
+   * Solo si el usuario es PROVIDER y la review no tiene respuesta
+   */
+  public canRespondToReview(review: ProviderReview): boolean {
+    return this.authService.isProvider() && !review.answer;
+  }
+
+  /**
+   * Abre/cierra el formulario de respuesta para una review
    */
   public respondToReview(reviewId: string): void {
-    alert(`Función de respuesta para review ${reviewId} - Próximamente`);
+    if (this.replyingToReviewId === reviewId) {
+      // Si ya está abierto, cerrarlo
+      this.cancelReply();
+    } else {
+      // Abrir formulario para esta review
+      this.replyingToReviewId = reviewId;
+      this.replyText = '';
+    }
+  }
+
+  /**
+   * Verifica si el formulario de respuesta está abierto para una review específica
+   */
+  public isReplyFormOpen(reviewId: string): boolean {
+    return this.replyingToReviewId === reviewId;
+  }
+
+  /**
+   * Cancela la respuesta y cierra el formulario
+   */
+  public cancelReply(): void {
+    this.replyingToReviewId = null;
+    this.replyText = '';
+  }
+
+  /**
+   * Envía la respuesta a la review
+   */
+  public submitReply(reviewId: string): void {
+    if (!this.replyText.trim()) {
+      alert('Por favor escribe una respuesta antes de enviar');
+      return;
+    }
+
+    // Obtener información del proveedor desde el usuario autenticado
+    const user = this.authService.getUser();
+    const providerName = user?.name || user?.firstName + ' ' + user?.lastName || 'Provider';
+    const providerImage = user?.profileImage || 'user-default.jpg';
+
+    // Calcular fecha y días transcurridos
+    const currentDate = new Date();
+    const dateString = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
+    const daysAgo = 'Justo ahora';
+
+    // Preparar datos de la respuesta
+    const answerData = {
+      comment: this.replyText.trim(),
+      providerName: providerName,
+      providerImage: providerImage,
+      date: dateString,
+      daysAgo: daysAgo,
+      likes: 0,
+      dislikes: 0,
+      hearts: 0
+    };
+
+    // Llamar al servicio para guardar la respuesta
+    this.reviewsService.saveReviewReply(reviewId, answerData).subscribe({
+      next: (response) => {
+        console.log('Respuesta guardada exitosamente:', response);
+        alert('¡Respuesta enviada exitosamente!');
+        
+        // Cerrar el formulario
+        this.cancelReply();
+        
+        // Recargar las reviews para mostrar la nueva respuesta
+        this.loadReviews();
+      },
+      error: (error) => {
+        console.error('Error al guardar la respuesta:', error);
+        alert('Error al enviar la respuesta. Por favor intenta nuevamente.');
+      }
+    });
   }
 }

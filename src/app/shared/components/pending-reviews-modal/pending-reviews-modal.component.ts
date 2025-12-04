@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
-import { ReviewPendingBooking } from '../../models/pending-review.model';
+import { ProviderReview } from '../../models/reviews.model';
 import { routes } from '../../routes/routes';
 
 @Component({
@@ -11,7 +11,7 @@ import { routes } from '../../routes/routes';
   styleUrls: ['./pending-reviews-modal.component.scss']
 })
 export class PendingReviewsModalComponent implements OnInit, OnDestroy {
-  pendingReviews: ReviewPendingBooking[] = [];
+  pendingReviews: ProviderReview[] = [];
  
   constructor(
     public bsModalRef: BsModalRef,
@@ -26,7 +26,7 @@ export class PendingReviewsModalComponent implements OnInit, OnDestroy {
     this.bsModalRef.hide();
   }
 
-  goToReview(review: ReviewPendingBooking) {
+  goToReview(review: ProviderReview) {
     this.bsModalRef.hide();
     // Assuming the review page takes an ID, or we navigate to the general review page
     // You might need to adjust this route parameter based on your routing configuration

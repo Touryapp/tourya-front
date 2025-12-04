@@ -82,8 +82,10 @@ export class DefaultHeaderComponent {
       this.themeColor = res;
     });
 
-    const lang = localStorage.getItem("lang");
-    this.useLanguage(lang || "en");
+    // Obtener el idioma actual (ya fue detectado en app.component.ts)
+    // No forzar "en" como default para respetar la detección automática
+    const currentLang = this.translate.currentLang || this.translate.getDefaultLang();
+    this.selectedLanguage = currentLang;
     this.languages = this.translate.getLangs();
   }
 
