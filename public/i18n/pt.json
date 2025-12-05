@@ -59,5 +59,55 @@
         "answer": "Nosso escritório principal fica no centro de San Andrés (Centro comercial Newpoint Local 227), a poucos metros do píer turístico, e está aberto todos os dias. Também atendemos por WhatsApp e ligações 24 horas por dia, 7 dias por semana."
       }
     }
+  },
+  "provider-reviews": {
+    "title": "Avaliações de Clientes",
+    "filters": {
+      "rating": "Filtrar por classificação",
+      "tour": "Filtrar por passeio",
+      "provider": "Filtrar por fornecedor",
+      "user": "Filtrar por usuário",
+      "all": "Todas",
+      "allTours": "Todos",
+      "allProviders": "Todos",
+      "allUsers": "Todos",
+      "stars": "estrelas",
+      "clearFilters": "Limpar Filtros"
+    },
+    "stats": {
+      "totalReviews": "Total de Avaliações",
+      "averageRating": "Classificação Média"
+    },
+    "actions": {
+      "respond": "Responder",
+      "reject": "Rejeitar",
+      "viewDetails": "Ver detalhes do passeio",
+      "export": "Exportar"
+    },
+    "replyForm": {
+      "title": "Escreva sua resposta",
+      "placeholder": "Escreva sua resposta ao cliente aqui...",
+      "charactersCount": "caracteres",
+      "cancel": "Cancelar",
+      "submit": "Enviar Resposta"
+    },
+    "rejectForm": {
+      "title": "Selecione o motivo da rejeição",
+      "label": "Motivo da rejeição:",
+      "placeholder": "Selecione um motivo",
+      "reasons": {
+        "inappropriate": "Conteúdo inadequado",
+        "false": "Informação falsa ou enganosa",
+        "spam": "Spam ou conteúdo irrelevante"
+      },
+      "cancel": "Cancelar",
+      "submit": "Rejeitar Avaliação"
+    },
+    "empty": {
+      "noResults": "Nenhuma avaliação encontrada",
+      "adjustFilters": "Tente ajustar seus filtros de pesquisa",
+      "noReviews": "Você ainda não tem avaliações",
+      "noReviewsMessage": "As avaliações de seus clientes aparecerão aqui"
+    }
   }
 }

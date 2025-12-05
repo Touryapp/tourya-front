@@ -59,5 +59,55 @@
         "answer": "Nuestra oficina principal está en el centro de San Andrés (Centro comercial Newpoint Local 227), a pocos metros del muelle turístico, y está abierta todos los días. También atendemos por WhatsApp y llamadas 24/7."
       }
     }
+  },
+  "provider-reviews": {
+    "title": "Calificaciones de Clientes",
+    "filters": {
+      "rating": "Filtrar por calificación",
+      "tour": "Filtrar por tour",
+      "provider": "Filtrar por proveedor",
+      "user": "Filtrar por usuario",
+      "all": "Todas",
+      "allTours": "Todos",
+      "allProviders": "Todos",
+      "allUsers": "Todos",
+      "stars": "estrellas",
+      "clearFilters": "Limpiar Filtros"
+    },
+    "stats": {
+      "totalReviews": "Total de Reseñas",
+      "averageRating": "Rating Promedio"
+    },
+    "actions": {
+      "respond": "Responder",
+      "reject": "Rechazar",
+      "viewDetails": "Ver detalles del tour",
+      "export": "Exportar"
+    },
+    "replyForm": {
+      "title": "Escribe tu respuesta",
+      "placeholder": "Escribe tu respuesta al cliente aquí...",
+      "charactersCount": "caracteres",
+      "cancel": "Cancelar",
+      "submit": "Enviar Respuesta"
+    },
+    "rejectForm": {
+      "title": "Selecciona el motivo de rechazo",
+      "label": "Motivo de rechazo:",
+      "placeholder": "Selecciona un motivo",
+      "reasons": {
+        "inappropriate": "Contenido inapropiado",
+        "false": "Información falsa o engañosa",
+        "spam": "Spam o contenido irrelevante"
+      },
+      "cancel": "Cancelar",
+      "submit": "Rechazar Review"
+    },
+    "empty": {
+      "noResults": "No se encontraron calificaciones",
+      "adjustFilters": "Intenta ajustar tus filtros de búsqueda",
+      "noReviews": "Aún no tienes calificaciones",
+      "noReviewsMessage": "Las calificaciones de tus clientes aparecerán aquí"
+    }
   }
 }

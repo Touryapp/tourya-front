@@ -59,5 +59,55 @@
         "answer": "Our main office is in downtown San Andres (Newpoint Shopping Center Local 227), a few meters from the tourist pier, and is open every day. We also attend by WhatsApp and calls 24/7."
       }
     }
+  },
+  "provider-reviews": {
+    "title": "Customer Reviews",
+    "filters": {
+      "rating": "Filter by rating",
+      "tour": "Filter by tour",
+      "provider": "Filter by provider",
+      "user": "Filter by user",
+      "all": "All",
+      "allTours": "All",
+      "allProviders": "All",
+      "allUsers": "All",
+      "stars": "stars",
+      "clearFilters": "Clear Filters"
+    },
+    "stats": {
+      "totalReviews": "Total Reviews",
+      "averageRating": "Average Rating"
+    },
+    "actions": {
+      "respond": "Respond",
+      "reject": "Reject",
+      "viewDetails": "View tour details",
+      "export": "Export"
+    },
+    "replyForm": {
+      "title": "Write your response",
+      "placeholder": "Write your response to the customer here...",
+      "charactersCount": "characters",
+      "cancel": "Cancel",
+      "submit": "Send Response"
+    },
+    "rejectForm": {
+      "title": "Select rejection reason",
+      "label": "Rejection reason:",
+      "placeholder": "Select a reason",
+      "reasons": {
+        "inappropriate": "Inappropriate content",
+        "false": "False or misleading information",
+        "spam": "Spam or irrelevant content"
+      },
+      "cancel": "Cancel",
+      "submit": "Reject Review"
+    },
+    "empty": {
+      "noResults": "No reviews found",
+      "adjustFilters": "Try adjusting your search filters",
+      "noReviews": "You don't have any reviews yet",
+      "noReviewsMessage": "Your customer reviews will appear here"
+    }
   }
 }

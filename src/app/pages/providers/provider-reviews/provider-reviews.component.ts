@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, HostListener } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { Subscription } from 'rxjs';
 import { ReviewsService } from '../../../core/services/reviews.service';
@@ -14,19 +14,65 @@ import { AuthService } from '../../../core/services/auth.service';
 export class ProviderReviewsComponent implements OnInit, OnDestroy {
   public routes = routes;
   
+  // Input para controlar la visibilidad de los filtros
+  @Input() showFilters: boolean = true;
+  
   // Variables de paginación y filtrado
   public reviews: ProviderReview[] = [];
   public filteredReviews: ProviderReview[] = [];
   public totalReviews = 0;
   public averageRating = 0;
-  public searchTerm = '';
-  public selectedRatingFilter = 0; // 0 = todas, 1-5 = filtrar por rating
   public isLoading = false;
   private reviewsSubscription: Subscription | undefined;
+  
+  // Detección de roles
+  public isCliente: boolean = false;
+  public isProveedor: boolean = false;
+  public isBackoffice: boolean = false;
+  
+  // Filtros por rol
+  public selectedRatingFilter = 0; // 0 = todas, 1-5 = filtrar por rating
+  public selectedTourFilter: string = 'all'; // 'all' o ID del tour
+  public selectedProviderFilter: string = 'all'; // 'all' o ID del proveedor
+  public selectedUserFilter: string = 'all'; // 'all' o ID del usuario
+  
+  // Términos de búsqueda para autocomplete
+  public tourSearchTerm: string = 'Todos';
+  public providerSearchTerm: string = 'Todos';
+  public userSearchTerm: string = 'Todos';
+  
+  // Listas filtradas para autocomplete
+  public filteredTours: any[] = [];
+  public filteredProviders: any[] = [];
+  public filteredUsers: any[] = [];
+  
+  // Datos disponibles para filtros
+  public availableTours: any[] = [];
+  public availableProviders: any[] = [];
+  public availableUsers: any[] = [];
+  
+  // Control de dropdowns abiertos
+  public tourDropdownOpen: boolean = false;
+  public providerDropdownOpen: boolean = false;
+  public userDropdownOpen: boolean = false;
   
   // Estado del formulario de respuesta
   public replyingToReviewId: string | null = null;
   public replyText: string = '';
+  
+  // Paginación
+  public currentPage: number = 1;
+  public pageSize: number = 10;
+  public totalPages: number = 0;
+  
+  // Estado de rechazo (para Backoffice)
+  public rejectingReviewId: string | null = null;
+  public selectedRejectionReason: string = '';
+  public rejectionReasons: string[] = [
+    'Contenido inapropiado',
+    'Información falsa o engañosa',
+    'Spam o contenido irrelevante'
+  ];
 
   constructor(
     private reviewsService: ReviewsService,
@@ -34,12 +80,47 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Detectar roles del usuario con lógica de exclusividad
+    // Prioridad: Admin > Provider > User
+    const isUser = this.authService.isUser();
+    const isProvider = this.authService.isProvider();
+    const isAdmin = this.authService.isAdmin();
+    
+    // Asignar rol exclusivo según prioridad
+    if (isAdmin) {
+      this.isBackoffice = true;
+      this.isProveedor = false;
+      this.isCliente = false;
+    } else if (isProvider) {
+      this.isBackoffice = false;
+      this.isProveedor = true;
+      this.isCliente = false;
+    } else if (isUser) {
+      this.isBackoffice = false;
+      this.isProveedor = false;
+      this.isCliente = true;
+    }
+    
     this.loadReviews();
   }
 
   ngOnDestroy(): void {
     if (this.reviewsSubscription) {
       this.reviewsSubscription.unsubscribe();
+    }
+  }
+
+  /**
+   * Cierra todos los dropdowns cuando se hace click fuera
+   */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    // Verificar si el click fue fuera de los inputs de autocomplete
+    if (!target.closest('.position-relative')) {
+      this.tourDropdownOpen = false;
+      this.providerDropdownOpen = false;
+      this.userDropdownOpen = false;
     }
   }
 
@@ -53,7 +134,9 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
         this.reviews = response.content;
         this.filteredReviews = [...response.content];
         this.totalReviews = response.totalElements;
+        this.totalPages = response.totalPages;
         this.calculateStatistics();
+        this.initializeFilterData();
         this.isLoading = false;
       },
       error: (error) => {
@@ -61,6 +144,57 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     });
+  }
+
+  /**
+   * Inicializa los datos para los filtros basándose en las reviews cargadas
+   */
+  private initializeFilterData(): void {
+    // Extraer tours únicos
+    this.availableTours = this.extractUniqueItems(
+      this.reviews,
+      'tourId',
+      'tourName'
+    );
+    this.filteredTours = [...this.availableTours];
+    
+    // Extraer usuarios únicos (clientes que han hecho reviews)
+    this.availableUsers = this.extractUniqueItems(
+      this.reviews,
+      'customerName',
+      'customerName'
+    );
+    this.filteredUsers = [...this.availableUsers];
+    
+    // Para backoffice, extraer proveedores únicos (si está disponible en el modelo)
+    // Por ahora usaremos datos mock o se puede extender el modelo
+    if (this.isBackoffice) {
+      this.availableProviders = [
+        { id: 'provider1', name: 'Proveedor 1' },
+        { id: 'provider2', name: 'Proveedor 2' },
+        { id: 'provider3', name: 'Proveedor 3' }
+      ];
+      this.filteredProviders = [...this.availableProviders];
+    }
+  }
+
+  /**
+   * Extrae items únicos de las reviews
+   */
+  private extractUniqueItems(
+    reviews: ProviderReview[],
+    idField: string,
+    nameField: string
+  ): any[] {
+    const uniqueMap = new Map();
+    reviews.forEach(review => {
+      const id = (review as any)[idField];
+      const name = (review as any)[nameField];
+      if (id && !uniqueMap.has(id)) {
+        uniqueMap.set(id, { id, name });
+      }
+    });
+    return Array.from(uniqueMap.values());
   }
 
   /**
@@ -77,53 +211,249 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Filtra reviews por búsqueda
-   */
-  public searchReviews(): void {
-    this.applyFilters();
-  }
-
-  /**
    * Filtra por rating
    */
   public filterByRating(rating: number): void {
     this.selectedRatingFilter = rating;
+    this.currentPage = 1; // Reset a la primera página al cambiar filtro
     this.applyFilters();
   }
 
   /**
-   * Aplica todos los filtros
+   * Filtra tours basándose en el término de búsqueda
    */
-  private applyFilters(): void {
-    let filtered = [...this.reviews];
-
-    // Filtrar por búsqueda
-    if (this.searchTerm && this.searchTerm.trim() !== '') {
-      const searchLower = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(review =>
-        review.tourName.toLowerCase().includes(searchLower) ||
-        review.customerName.toLowerCase().includes(searchLower) ||
-        review.comment.toLowerCase().includes(searchLower)
+  public filterTours(): void {
+    const searchLower = this.tourSearchTerm.toLowerCase();
+    if (searchLower === 'todos' || searchLower === '') {
+      this.filteredTours = [...this.availableTours];
+    } else {
+      this.filteredTours = this.availableTours.filter(tour =>
+        tour.name.toLowerCase().includes(searchLower)
       );
     }
-
-    // Filtrar por rating
-    if (this.selectedRatingFilter > 0) {
-      filtered = filtered.filter(review => 
-        Math.floor(review.rating) === this.selectedRatingFilter
-      );
-    }
-
-    this.filteredReviews = filtered;
   }
 
   /**
-   * Limpia todos los filtros
+   * Filtra proveedores basándose en el término de búsqueda
+   */
+  public filterProviders(): void {
+    const searchLower = this.providerSearchTerm.toLowerCase();
+    if (searchLower === 'todos' || searchLower === '') {
+      this.filteredProviders = [...this.availableProviders];
+    } else {
+      this.filteredProviders = this.availableProviders.filter(provider =>
+        provider.name.toLowerCase().includes(searchLower)
+      );
+    }
+  }
+
+  /**
+   * Filtra usuarios basándose en el término de búsqueda
+   */
+  public filterUsers(): void {
+    const searchLower = this.userSearchTerm.toLowerCase();
+    if (searchLower === 'todos' || searchLower === '') {
+      this.filteredUsers = [...this.availableUsers];
+    } else {
+      this.filteredUsers = this.availableUsers.filter(user =>
+        user.name.toLowerCase().includes(searchLower)
+      );
+    }
+  }
+
+  /**
+   * Selecciona un tour del autocomplete
+   */
+  public selectTour(tour: any): void {
+    this.selectedTourFilter = tour.id;
+    this.tourSearchTerm = tour.name;
+    this.tourDropdownOpen = false;
+    this.currentPage = 1; // Reset a la primera página
+    this.applyFilters();
+  }
+
+  /**
+   * Selecciona un proveedor del autocomplete
+   */
+  public selectProvider(provider: any): void {
+    this.selectedProviderFilter = provider.id;
+    this.providerSearchTerm = provider.name;
+    this.providerDropdownOpen = false;
+    this.currentPage = 1; // Reset a la primera página
+    this.applyFilters();
+  }
+
+  /**
+   * Selecciona un usuario del autocomplete
+   */
+  public selectUser(user: any): void {
+    this.selectedUserFilter = user.id;
+    this.userSearchTerm = user.name;
+    this.userDropdownOpen = false;
+    this.currentPage = 1; // Reset a la primera página
+    this.applyFilters();
+  }
+
+  /**
+   * Resetea el filtro de tour
+   */
+  public resetTourFilter(): void {
+    this.selectedTourFilter = 'all';
+    this.tourSearchTerm = 'Todos';
+    this.filteredTours = [...this.availableTours];
+    this.tourDropdownOpen = false;
+    this.applyFilters();
+  }
+
+  /**
+   * Resetea el filtro de proveedor
+   */
+  public resetProviderFilter(): void {
+    this.selectedProviderFilter = 'all';
+    this.providerSearchTerm = 'Todos';
+    this.filteredProviders = [...this.availableProviders];
+    this.providerDropdownOpen = false;
+    this.applyFilters();
+  }
+
+  /**
+   * Resetea el filtro de usuario
+   */
+  public resetUserFilter(): void {
+    this.selectedUserFilter = 'all';
+    this.userSearchTerm = 'Todos';
+    this.filteredUsers = [...this.availableUsers];
+    this.userDropdownOpen = false;
+    this.applyFilters();
+  }
+
+  /**
+   * Aplica todos los filtros llamando al servicio
+   */
+  public applyFilters(): void {
+    this.isLoading = true;
+    
+    // Preparar objeto de filtros
+    const filters: any = {
+      pageSize: this.pageSize,
+      pageNumber: this.currentPage
+    };
+    
+    // Agregar filtros activos
+    if (this.selectedRatingFilter > 0) {
+      filters.rating = this.selectedRatingFilter;
+    }
+    
+    if (this.selectedTourFilter !== 'all') {
+      filters.tourId = this.selectedTourFilter;
+    }
+    
+    if (this.selectedUserFilter !== 'all') {
+      filters.userId = this.selectedUserFilter;
+    }
+    
+    if (this.selectedProviderFilter !== 'all') {
+      filters.providerId = this.selectedProviderFilter;
+    }
+    
+    // Llamar al servicio con los filtros
+    this.reviewsService.getReviews(filters).subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.filteredReviews = [...response.content];
+        this.totalReviews = response.totalElements;
+        this.totalPages = response.totalPages;
+        this.calculateStatistics();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error applying filters:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Limpia todos los filtros y recarga las reviews
    */
   public clearFilters(): void {
-    this.searchTerm = '';
     this.selectedRatingFilter = 0;
-    this.filteredReviews = [...this.reviews];
+    this.selectedTourFilter = 'all';
+    this.selectedProviderFilter = 'all';
+    this.selectedUserFilter = 'all';
+    this.tourSearchTerm = 'Todos';
+    this.providerSearchTerm = 'Todos';
+    this.userSearchTerm = 'Todos';
+    this.filteredTours = [...this.availableTours];
+    this.filteredProviders = [...this.availableProviders];
+    this.filteredUsers = [...this.availableUsers];
+    this.currentPage = 1; // Reset a la primera página
+    
+    // Recargar reviews sin filtros
+    this.loadReviews();
+  }
+
+  /**
+   * Navega a una página específica
+   */
+  public goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) {
+      return;
+    }
+    this.currentPage = page;
+    this.applyFilters();
+  }
+
+  /**
+   * Navega a la página siguiente
+   */
+  public nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.applyFilters();
+    }
+  }
+
+  /**
+   * Navega a la página anterior
+   */
+  public previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.applyFilters();
+    }
+  }
+
+  /**
+   * Obtiene el array de números de página para mostrar
+   */
+  public getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+    
+    if (this.totalPages <= maxPagesToShow) {
+      // Mostrar todas las páginas si son pocas
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Mostrar páginas alrededor de la actual
+      let startPage = Math.max(1, this.currentPage - 2);
+      let endPage = Math.min(this.totalPages, this.currentPage + 2);
+      
+      // Ajustar si estamos cerca del inicio o fin
+      if (this.currentPage <= 3) {
+        endPage = maxPagesToShow;
+      } else if (this.currentPage >= this.totalPages - 2) {
+        startPage = this.totalPages - maxPagesToShow + 1;
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
   }
 
   /**
@@ -237,6 +567,62 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error al guardar la respuesta:', error);
         alert('Error al enviar la respuesta. Por favor intenta nuevamente.');
+      }
+    });
+  }
+
+  /**
+   * Abre/cierra el formulario de rechazo para una review (solo Backoffice)
+   */
+  public toggleRejectForm(reviewId: string): void {
+    if (this.rejectingReviewId === reviewId) {
+      // Si ya está abierto, cerrarlo
+      this.cancelReject();
+    } else {
+      // Abrir formulario para esta review
+      this.rejectingReviewId = reviewId;
+      this.selectedRejectionReason = '';
+    }
+  }
+
+  /**
+   * Verifica si el formulario de rechazo está abierto para una review específica
+   */
+  public isRejectFormOpen(reviewId: string): boolean {
+    return this.rejectingReviewId === reviewId;
+  }
+
+  /**
+   * Cancela el rechazo y cierra el formulario
+   */
+  public cancelReject(): void {
+    this.rejectingReviewId = null;
+    this.selectedRejectionReason = '';
+  }
+
+  /**
+   * Envía el rechazo de la review
+   */
+  public submitReject(reviewId: string): void {
+    if (!this.selectedRejectionReason) {
+      alert('Por favor selecciona un motivo de rechazo');
+      return;
+    }
+
+    this.reviewsService.rejectReview(reviewId, this.selectedRejectionReason).subscribe({
+      next: (response) => {
+        console.log('Review rechazada exitosamente:', response);
+        alert('Review rechazada exitosamente');
+        
+        // Cerrar el formulario
+        this.cancelReject();
+        
+        // Recargar las reviews
+        this.applyFilters();
+      },
+      error: (error) => {
+        console.error('Error al rechazar la review:', error);
+        alert('Error al rechazar la review. Por favor intenta nuevamente.');
       }
     });
   }

@@ -279,6 +279,63 @@
       }
     }
   }
+
+  // Autocomplete dropdown styles
+  .autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 4px;
+
+    .autocomplete-item {
+      padding: 0.625rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      font-size: 0.875rem;
+      color: #495057;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      &:first-child {
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+      }
+    }
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+
+      &:hover {
+        background: #555;
+      }
+    }
+  }
 }
 
 // Review info reply styles (matching tour-details)
@@ -360,6 +417,36 @@
   }
 }
 
+// Reject form container (for Backoffice)
+.reject-form-container {
+  background: #FFF5F5;
+  border: 1px solid #FED7D7 !important;
+  border-radius: 10px;
+  animation: slideDown 0.3s ease-out;
+
+  h6 {
+    color: #C53030;
+    margin-bottom: 1rem;
+  }
+
+  .form-select {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    padding: 0.75rem;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.1);
+    }
+  }
+
+  .btn {
+    min-width: 100px;
+  }
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -425,6 +512,7 @@
   }
 }
 
+
 // Animation for cards
 @keyframes slideInUp {
   from {
@@ -439,4 +527,97 @@
 
 .review-card {
   animation: slideInUp 0.3s ease-out;
+}
+
+// Autocomplete dropdown styles
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 4px;
+
+  .autocomplete-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f8f9fa;
+    }
+
+    &:first-child {
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+  }
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+// Reject form container styles
+.reject-form-container {
+  background-color: #fff5f5;
+  border-color: #f5c2c7 !important;
+
+  h6 {
+    color: #842029;
+  }
+
+  .form-label {
+    color: #842029;
+  }
+
+  .form-select {
+    border-color: #f5c2c7;
+
+    &:focus {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+
+    &:hover {
+      background-color: #bb2d3b;
+      border-color: #b02a37;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
 }
