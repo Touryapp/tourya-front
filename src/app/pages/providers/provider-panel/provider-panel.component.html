@@ -160,7 +160,18 @@
       </div>
 
       <div *ngIf="mostrarReviews">
-        <app-provider-reviews></app-provider-reviews>
+        <app-provider-reviews
+          [reviews]="reviews"
+          [totalReviews]="totalReviews"
+          [averageRating]="averageRating"
+          [isLoading]="reviewsLoading"
+          [totalPages]="reviewsTotalPages"
+          [currentPage]="reviewsCurrentPage"
+          (loadReviews)="onLoadReviews()"
+          (applyFiltersEvent)="onApplyFilters($event)"
+          (submitReplyEvent)="onSubmitReply($event)"
+          (submitRejectEvent)="onSubmitReject($event)">
+        </app-provider-reviews>
       </div>
 
       <div *ngIf="mostrarPagos">

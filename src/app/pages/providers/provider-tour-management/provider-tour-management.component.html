@@ -412,9 +412,9 @@
                             @if (selectedBooking.status === 'Pending') {
                                 <button 
                                     class="btn btn-success" 
-                                    (click)="confirmBooking(selectedBooking.id)"
+                                    (click)="navigateToQrScanner(selectedBooking.id)"
                                     data-bs-dismiss="modal">
-                                    <i class="isax isax-tick-circle me-2"></i>Confirmar Reserva
+                                    <i class="isax isax-scan me-2"></i>Confirmar reserva
                                 </button>
                             }
                             @if (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming') {

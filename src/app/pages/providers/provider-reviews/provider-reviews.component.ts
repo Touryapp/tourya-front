@@ -1,7 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, HostListener } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
-import { Subscription } from 'rxjs';
-import { ReviewsService } from '../../../core/services/reviews.service';
 import { ProviderReview } from '../../../shared/models/reviews.model';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -11,19 +9,28 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './provider-reviews.component.html',
   styleUrl: './provider-reviews.component.scss'
 })
-export class ProviderReviewsComponent implements OnInit, OnDestroy {
+export class ProviderReviewsComponent implements OnInit, OnChanges {
   public routes = routes;
   
   // Input para controlar la visibilidad de los filtros
   @Input() showFilters: boolean = true;
   
-  // Variables de paginación y filtrado
-  public reviews: ProviderReview[] = [];
+  // Inputs para recibir datos del padre
+  @Input() reviews: ProviderReview[] = [];
+  @Input() totalReviews = 0;
+  @Input() averageRating = 0;
+  @Input() isLoading = false;
+  @Input() totalPages: number = 0;
+  @Input() currentPage: number = 1;
+  
+  // Outputs para emitir eventos al padre
+  @Output() loadReviews = new EventEmitter<any>();
+  @Output() applyFiltersEvent = new EventEmitter<any>();
+  @Output() submitReplyEvent = new EventEmitter<{reviewId: string, answerData: any}>();
+  @Output() submitRejectEvent = new EventEmitter<{reviewId: string, reason: string}>();
+  
+  // Variables de filtrado local
   public filteredReviews: ProviderReview[] = [];
-  public totalReviews = 0;
-  public averageRating = 0;
-  public isLoading = false;
-  private reviewsSubscription: Subscription | undefined;
   
   // Detección de roles
   public isCliente: boolean = false;
@@ -61,9 +68,7 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   public replyText: string = '';
   
   // Paginación
-  public currentPage: number = 1;
   public pageSize: number = 10;
-  public totalPages: number = 0;
   
   // Estado de rechazo (para Backoffice)
   public rejectingReviewId: string | null = null;
@@ -75,7 +80,6 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private reviewsService: ReviewsService,
     private authService: AuthService
   ) {}
 
@@ -101,13 +105,14 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
       this.isCliente = true;
     }
     
-    this.loadReviews();
+    // Emitir evento para que el padre cargue las reviews
+    this.loadReviewsData();
   }
-
-  ngOnDestroy(): void {
-    if (this.reviewsSubscription) {
-      this.reviewsSubscription.unsubscribe();
-    }
+  
+  ngOnChanges(): void {
+    // Actualizar filteredReviews cuando cambien las reviews del Input
+    this.filteredReviews = [...this.reviews];
+    this.initializeFilterData();
   }
 
   /**
@@ -125,25 +130,10 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Carga reviews del servicio
+   * Emite evento para que el padre cargue reviews
    */
-  private loadReviews(): void {
-    this.isLoading = true;
-    this.reviewsSubscription = this.reviewsService.getReviews().subscribe({
-      next: (response) => {
-        this.reviews = response.content;
-        this.filteredReviews = [...response.content];
-        this.totalReviews = response.totalElements;
-        this.totalPages = response.totalPages;
-        this.calculateStatistics();
-        this.initializeFilterData();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading reviews:', error);
-        this.isLoading = false;
-      }
-    });
+  private loadReviewsData(): void {
+    this.loadReviews.emit();
   }
 
   /**
@@ -197,18 +187,7 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
     return Array.from(uniqueMap.values());
   }
 
-  /**
-   * Calcula estadísticas generales
-   */
-  private calculateStatistics(): void {
-    if (this.reviews.length === 0) {
-      this.averageRating = 0;
-      return;
-    }
 
-    const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
-    this.averageRating = parseFloat((sum / this.reviews.length).toFixed(1));
-  }
 
   /**
    * Filtra por rating
@@ -328,11 +307,9 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Aplica todos los filtros llamando al servicio
+   * Aplica todos los filtros emitiendo evento al padre
    */
   public applyFilters(): void {
-    this.isLoading = true;
-    
     // Preparar objeto de filtros
     const filters: any = {
       pageSize: this.pageSize,
@@ -356,21 +333,8 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
       filters.providerId = this.selectedProviderFilter;
     }
     
-    // Llamar al servicio con los filtros
-    this.reviewsService.getReviews(filters).subscribe({
-      next: (response) => {
-        this.reviews = response.content;
-        this.filteredReviews = [...response.content];
-        this.totalReviews = response.totalElements;
-        this.totalPages = response.totalPages;
-        this.calculateStatistics();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error applying filters:', error);
-        this.isLoading = false;
-      }
-    });
+    // Emitir evento al padre para que aplique los filtros
+    this.applyFiltersEvent.emit(filters);
   }
 
   /**
@@ -389,8 +353,8 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
     this.filteredUsers = [...this.availableUsers];
     this.currentPage = 1; // Reset a la primera página
     
-    // Recargar reviews sin filtros
-    this.loadReviews();
+    // Emitir evento para recargar reviews sin filtros
+    this.loadReviewsData();
   }
 
   /**
@@ -552,23 +516,11 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
       hearts: 0
     };
 
-    // Llamar al servicio para guardar la respuesta
-    this.reviewsService.saveReviewReply(reviewId, answerData).subscribe({
-      next: (response) => {
-        console.log('Respuesta guardada exitosamente:', response);
-        alert('¡Respuesta enviada exitosamente!');
-        
-        // Cerrar el formulario
-        this.cancelReply();
-        
-        // Recargar las reviews para mostrar la nueva respuesta
-        this.loadReviews();
-      },
-      error: (error) => {
-        console.error('Error al guardar la respuesta:', error);
-        alert('Error al enviar la respuesta. Por favor intenta nuevamente.');
-      }
-    });
+    // Emitir evento al padre para que guarde la respuesta
+    this.submitReplyEvent.emit({ reviewId, answerData });
+    
+    // Cerrar el formulario
+    this.cancelReply();
   }
 
   /**
@@ -609,21 +561,10 @@ export class ProviderReviewsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.reviewsService.rejectReview(reviewId, this.selectedRejectionReason).subscribe({
-      next: (response) => {
-        console.log('Review rechazada exitosamente:', response);
-        alert('Review rechazada exitosamente');
-        
-        // Cerrar el formulario
-        this.cancelReject();
-        
-        // Recargar las reviews
-        this.applyFilters();
-      },
-      error: (error) => {
-        console.error('Error al rechazar la review:', error);
-        alert('Error al rechazar la review. Por favor intenta nuevamente.');
-      }
-    });
+    // Emitir evento al padre para que rechace la review
+    this.submitRejectEvent.emit({ reviewId, reason: this.selectedRejectionReason });
+    
+    // Cerrar el formulario
+    this.cancelReject();
   }
 }

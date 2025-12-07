@@ -6,6 +6,8 @@ import { Tour } from "../../../shared/dto/tour-response.dto";
 import { TourService } from "../tours/tour.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ReviewsService } from "../../../core/services/reviews.service";
+import { ProviderReview } from "../../../shared/models/reviews.model";
 
 @Component({
   selector: "app-provider-panel",
@@ -38,10 +40,19 @@ export class ProviderPanelComponent implements OnInit {
   public totalItems: number = 0;
   public totalPages: number = 0;
   public currentPage: number = 1;
+  
+  // Variables para reviews
+  reviews: ProviderReview[] = [];
+  totalReviews: number = 0;
+  averageRating: number = 0;
+  reviewsLoading: boolean = false;
+  reviewsTotalPages: number = 0;
+  reviewsCurrentPage: number = 1;
 
   constructor(
     private requestProvidersService: RequestProvidersService,
     private toursService: TourService,
+    private reviewsService: ReviewsService,
     private router: Router,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar
@@ -176,5 +187,97 @@ export class ProviderPanelComponent implements OnInit {
     this._snackBar.open(message, "", {
       duration: 5000,
     });
+  }
+  
+  // Métodos para manejar reviews
+  
+  /**
+   * Carga las reviews desde el servicio
+   */
+  onLoadReviews(): void {
+    this.reviewsLoading = true;
+    this.reviewsService.getReviews().subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.totalReviews = response.totalElements;
+        this.reviewsTotalPages = response.totalPages;
+        this.reviewsCurrentPage = response.number + 1;
+        this.calculateReviewStatistics();
+        this.reviewsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading reviews:', error);
+        this.reviewsLoading = false;
+      }
+    });
+  }
+  
+  /**
+   * Aplica filtros a las reviews
+   */
+  onApplyFilters(filters: any): void {
+    this.reviewsLoading = true;
+    this.reviewsService.getReviews(filters).subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.totalReviews = response.totalElements;
+        this.reviewsTotalPages = response.totalPages;
+        this.reviewsCurrentPage = response.number + 1;
+        this.calculateReviewStatistics();
+        this.reviewsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error applying filters:', error);
+        this.reviewsLoading = false;
+      }
+    });
+  }
+  
+  /**
+   * Envía una respuesta a una review
+   */
+  onSubmitReply(event: {reviewId: string, answerData: any}): void {
+    this.reviewsService.saveReviewReply(event.reviewId, event.answerData).subscribe({
+      next: (response) => {
+        console.log('Respuesta guardada exitosamente:', response);
+        this.openSnackBar('¡Respuesta enviada exitosamente!');
+        // Recargar las reviews para mostrar la nueva respuesta
+        this.onLoadReviews();
+      },
+      error: (error) => {
+        console.error('Error al guardar la respuesta:', error);
+        this.openSnackBar('Error al enviar la respuesta. Por favor intenta nuevamente.');
+      }
+    });
+  }
+  
+  /**
+   * Rechaza una review
+   */
+  onSubmitReject(event: {reviewId: string, reason: string}): void {
+    this.reviewsService.rejectReview(event.reviewId, event.reason).subscribe({
+      next: (response) => {
+        console.log('Review rechazada exitosamente:', response);
+        this.openSnackBar('Review rechazada exitosamente');
+        // Recargar las reviews
+        this.onLoadReviews();
+      },
+      error: (error) => {
+        console.error('Error al rechazar la review:', error);
+        this.openSnackBar('Error al rechazar la review. Por favor intenta nuevamente.');
+      }
+    });
+  }
+  
+  /**
+   * Calcula las estadísticas de las reviews
+   */
+  private calculateReviewStatistics(): void {
+    if (this.reviews.length === 0) {
+      this.averageRating = 0;
+      return;
+    }
+    const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+    this.averageRating = parseFloat((sum / this.reviews.length).toFixed(1));
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
+import { Router } from '@angular/router';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
@@ -54,7 +55,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   dropdownOpen1 = false;
   dropdownOpen2 = false;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadMockData();
@@ -280,6 +281,14 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
    */
   public viewBookingDetails(booking: ProviderTourBooking): void {
     this.selectedBooking = booking;
+    this.selectedBooking.status = 'Pending';
+  }
+
+  /**
+   * Navega al escáner QR para confirmar la reserva
+   */
+  public navigateToQrScanner(bookingId: string): void {
+    this.router.navigate(['/providers/scan-qr', bookingId]);
   }
 
   /**
