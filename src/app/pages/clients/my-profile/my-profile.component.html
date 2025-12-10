@@ -1,0 +1,169 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-01 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Mi Perfil</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Mi Perfil</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Sidebar -->
+            <div class="col-xl-3 col-lg-4">
+               <app-client-dashboard/>
+            </div>
+            <!-- /Sidebar -->
+
+            <!-- My Profile -->
+            <div class="col-xl-9 col-lg-8">
+                
+                <!-- Sección: Mi Perfil -->
+                @if (activeSection === 'profile') {
+                    <div class="card shadow-none mb-0">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h6>Mi Perfil</h6>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <a href="javascript:void(0);" class="p-1 rounded-circle btn btn-light d-flex align-items-center justify-content-center">
+                                    <i class="isax isax-edit-2 fs-14"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="fs-16 mb-3">Información Básica</h6>
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="avatar avatar-xl flex-shrink-0 me-3 ">
+                                    <img src="assets/img/users/user-01.jpg" alt="Img" class="img-fluid rounded">
+                                </span>
+                                <div class="profile-upload">
+                                    <div class="mb-2">
+                                        <p class="fs-12">Tamaño de imagen recomendado: 40px x 40px</p>
+                                    </div>
+                                    <div class="profile-uploader d-flex align-items-center">
+                                        <div class="drag-upload-btn btn btn-sm btn-primary me-2">
+                                            Subir Imagen
+                                            <input type="file" class="form-control image-sign" multiple="">
+                                        </div>
+                                        <a href="javascript:void(0);" class="btn btn-light btn-sm">Cancelar</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row border-bottom pb-2 mb-3">
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <h6 class="fs-14">Nombre</h6>
+                                        <p>Jeffrey</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <h6 class="fs-14">Apellido</h6>
+                                        <p>Wilson</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <h6 class="fs-14">Correo Electrónico</h6>
+                                        <p>chrfo2356&#64;example.com</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <h6 class="fs-14">Teléfono</h6>
+                                        <p>+1 12656 26654</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <h6 class="fs-16 mb-3">Información de Dirección</h6>
+                            <div class="row g-2">
+                                <div class="col-md-12">
+                                    <div>
+                                        <h6 class="fs-14">Dirección</h6>
+                                        <p>4530 Clousson Road, Houston</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <h6 class="fs-14">País</h6>
+                                        <p>Estados Unidos</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <h6 class="fs-14">Estado/Provincia</h6>
+                                        <p>California</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <h6 class="fs-14">Ciudad</h6>
+                                        <p>San Francisco</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <h6 class="fs-14">Código Postal</h6>
+                                        <p>94105</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Sección: Mis Reservas -->
+                @if (activeSection === 'bookings') {
+                    <div class="card shadow-none mb-0">
+                        <div class="card-header">
+                            <h6>Mis Reservas</h6>
+                        </div>
+                        <div class="card-body">
+                            <app-provider-tour-management></app-provider-tour-management>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Sección: Mis Reseñas -->
+                @if (activeSection === 'reviews') {
+                    <div class="card shadow-none mb-0">
+                        <div class="card-header">
+                            <h6>Mis Reseñas</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Sección de reseñas en desarrollo...</p>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Sección: Lista de Deseos -->
+                @if (activeSection === 'wishlist') {
+                    <div class="card shadow-none mb-0">
+                        <div class="card-header">
+                            <h6>Lista de Deseos</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Sección de lista de deseos en desarrollo...</p>
+                        </div>
+                    </div>
+                }
+                
+            </div>
+            <!-- /My Profile -->
+
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
