@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ReservationService } from '../../../shared/services/reservation.service';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
@@ -55,10 +56,140 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   dropdownOpen1 = false;
   dropdownOpen2 = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private reservationService: ReservationService
+  ) {}
 
   ngOnInit(): void {
     this.loadMockData();
+    
+    // Verificar si hay parámetros de query (desde el QR scan)
+    this.route.queryParams.subscribe((params: any) => {
+      console.log('📋 Query params recibidos:', params);
+      
+      if (params['openModal'] === 'true' && params['reservationId']) {
+        console.log('🔓 Cargando reserva desde API con reservationId:', params['reservationId']);
+        
+        // Llamar al servicio para obtener los datos reales de la reserva
+        this.reservationService.getReservationById(params['reservationId']).subscribe({
+          next: (reservation) => {
+            console.log('✅ Reserva obtenida del backend:', reservation);
+            
+            // Convertir la reserva del backend al formato ProviderTourBooking
+            this.selectedBooking = this.mapReservationToBooking(reservation);
+            
+            // Abrir el modal automáticamente después de que la vista esté lista
+            requestAnimationFrame(() => {
+              const modalElement = document.getElementById('bookingDetailModal');
+              if (modalElement) {
+                const modal = new (window as any).bootstrap.Modal(modalElement);
+                modal.show();
+                console.log('✅ Modal abierto automáticamente con datos reales');
+              } else {
+                console.error('❌ No se encontró el elemento del modal');
+              }
+            });
+          },
+          error: (error) => {
+            console.error('❌ Error al obtener la reserva:', error);
+            
+            // Fallback: crear objeto con los datos del QR si falla la llamada al backend
+            console.log('⚠️ Usando datos del QR como fallback');
+            this.selectedBooking = this.createBookingFromParams(params);
+            
+            // Abrir el modal de todos modos
+            requestAnimationFrame(() => {
+              const modalElement = document.getElementById('bookingDetailModal');
+              if (modalElement) {
+                const modal = new (window as any).bootstrap.Modal(modalElement);
+                modal.show();
+                console.log('✅ Modal abierto con datos del QR (fallback)');
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
+  /**
+   * Mapea una Reservation del backend a ProviderTourBooking
+   */
+  private mapReservationToBooking(reservation: any): ProviderTourBooking {
+    return {
+      id: `RES-${reservation.id || reservation.reservationId}`,
+      tourName: reservation.tourName || 'Reserva desde QR',
+      tourType: reservation.tourType || 'Tour',
+      img: 'tours-21.jpg',
+      customerName: reservation.payer || 'Cliente',
+      customerEmail: reservation.email || '',
+      customerPhone: reservation.customerPhone || '+1 00000 00000',
+      travellers: reservation.travellers || 'N/A',
+      duration: reservation.duration || 'N/A',
+      price: reservation.price ? `$${reservation.price}` : '$0',
+      bookingDate: reservation.reservationDate ? new Date(reservation.reservationDate).toLocaleDateString() : 'N/A',
+      checkInDate: reservation.checkInDate ? this.formatDateTime(reservation.checkInDate) : 'N/A',
+      returnDate: reservation.returnDate ? this.formatDateTime(reservation.returnDate) : 'N/A',
+      status: reservation.status || 'PENDING',
+      destination: reservation.destination || 'N/A',
+      extraServices: reservation.extraServices || [],
+      activities: reservation.activities || [],
+      isSelected: false
+    };
+  }
+  
+  /**
+   * Formatea una fecha ISO a formato legible: "15 Oct 2025, 09:00 AM"
+   */
+  private formatDateTime(dateString: string): string {
+    const date = new Date(dateString);
+    
+    // Opciones para el formato de fecha
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    };
+    
+    // Opciones para el formato de hora
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    };
+    
+    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    
+    return `${formattedDate}, ${formattedTime}`;
+  }
+  
+  /**
+   * Crea un objeto de reserva desde los parámetros del QR
+   */
+  private createBookingFromParams(params: any): ProviderTourBooking {
+    return {
+      id: `RES-${params['reservationId']}`,
+      tourName: 'Reserva desde QR',
+      tourType: 'Tour',
+      img: 'tours-21.jpg',
+      customerName: decodeURIComponent(params['payer'] || 'Cliente'),
+      customerEmail: params['email'] || '',
+      customerPhone: '+1 00000 00000',
+      travellers: 'N/A',
+      duration: 'N/A',
+      price: '$0',
+      bookingDate: params['reservationDate'] ? new Date(params['reservationDate']).toLocaleDateString() : 'N/A',
+      checkInDate: params['reservationDate'] ? new Date(params['reservationDate']).toLocaleString() : 'N/A',
+      returnDate: 'N/A',
+      status: (params['status'] || 'PENDING') as any,
+      destination: 'N/A',
+      extraServices: [],
+      activities: [],
+      isSelected: false
+    };
   }
 
   ngOnDestroy(): void {
@@ -287,8 +418,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   /**
    * Navega al escáner QR para confirmar la reserva
    */
-  public navigateToQrScanner(bookingId: string): void {
-    this.router.navigate(['/providers/scan-qr', bookingId]);
+  public navigateToQrScanner(bookingId?: string): void {
+    this.router.navigate(['/providers/scan-qr']);
   }
 
   /**

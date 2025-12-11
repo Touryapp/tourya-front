@@ -61,14 +61,26 @@ export class ProviderPanelComponent implements OnInit {
   ngOnInit(): void {
     const added = !!this.route.snapshot.queryParamMap.get("addedTour");
     const edited = !!this.route.snapshot.queryParamMap.get("editedTour");
+    const openModal = this.route.snapshot.queryParamMap.get("openModal");
 
     if (added) {
       this.openSnackBar("Tour added successfully");
     } else if (edited) {
       this.openSnackBar("Tour successfully edited");
     }
+    
+    // Si viene desde el QR scanner, mostrar la vista de "Mis reservas"
+    if (openModal === 'true') {
+      console.log('🔓 Activando vista de Mis reservas desde QR scan');
+      this.mostrarTourManagement = true;
+      this.mostrarTours = false;
+      this.mostrarTemplates = false;
+      this.mostrarReviews = false;
+      this.mostrarPagos = false;
+    }
 
-    this.router.navigate([], { queryParams: null });
+    // No limpiar los query params aquí para que provider-tour-management pueda leerlos
+    // this.router.navigate([], { queryParams: null });
 
     this.getToursProvider();
   }

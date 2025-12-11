@@ -37,6 +37,10 @@ const routes: Routes = [
         path: "scan-qr/:bookingId",
         component: QrScannerComponent,
       },
+      {
+        path: "scan-qr",
+        component: QrScannerComponent,
+      },
       { path: "", redirectTo: "provider-panel", pathMatch: "full" },
     ],
   },

@@ -10,6 +10,9 @@
             </div>
 
             <div class="d-flex align-items-center flex-wrap gap-2">
+                <button class="btn btn-sm btn-success" (click)="navigateToQrScanner('')">
+                    <i class="isax isax-scan me-1"></i>Confirmar Reserva
+                </button>
                 <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
                     <i class="isax isax-refresh me-1"></i>Limpiar Filtros
                 </button>
@@ -409,14 +412,6 @@
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-                            @if (selectedBooking.status === 'Pending') {
-                                <button 
-                                    class="btn btn-success" 
-                                    (click)="navigateToQrScanner(selectedBooking.id)"
-                                    data-bs-dismiss="modal">
-                                    <i class="isax isax-scan me-2"></i>Confirmar reserva
-                                </button>
-                            }
                             @if (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming') {
                                 <button 
                                     class="btn btn-primary" 

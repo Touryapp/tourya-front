@@ -39,17 +39,13 @@ export class QrScannerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Obtener el bookingId de la ruta
+    // Obtener el bookingId de la ruta (opcional ahora)
     this.bookingId = this.route.snapshot.paramMap.get('bookingId') || '';
     
-    if (!this.bookingId) {
-      this.snackBar.open('ID de reserva inválido', 'Cerrar', { duration: 3000 });
-      this.goBack();
-      return;
+    // Si hay bookingId, cargar datos del booking
+    if (this.bookingId) {
+      this.loadBookingData();
     }
-    
-    // Cargar datos del booking
-    this.loadBookingData();
     
     // Inicializar cámara con getUserMedia personalizado
     setTimeout(() => {
@@ -166,7 +162,16 @@ export class QrScannerComponent implements OnInit, OnDestroy {
     this.isProcessing = true;
     this.errorMessage = '';
     
-    console.log('QR Code escaneado:', resultString);
+    // ========== LOGS DE DEBUGGING ==========
+    console.log('========================================');
+    console.log('🔍 QR CODE ESCANEADO:');
+    console.log('========================================');
+    console.log('📄 Contenido completo:', resultString);
+    console.log('📏 Longitud:', resultString.length);
+    console.log('🔤 Tipo:', typeof resultString);
+    console.log('🌐 ¿Es una URL?:', resultString.startsWith('http://') || resultString.startsWith('https://'));
+    console.log('========================================');
+    // ========================================
     
     // Validar el código QR
     this.validateAndConfirmBooking(resultString);
@@ -176,22 +181,73 @@ export class QrScannerComponent implements OnInit, OnDestroy {
    * Valida el QR y confirma la reserva
    */
   private validateAndConfirmBooking(qrCode: string): void {
-    // Simulación de validación (reemplazar con llamada real al backend)
-    setTimeout(() => {
-      const isValid = this.validateQRCode(qrCode);
+    console.log('🔄 validateAndConfirmBooking - Iniciando...');
+    
+    try {
+      const validationResult = this.validateQRCode(qrCode);
+      console.log('📊 Resultado de validación:', validationResult);
       
-      if (isValid) {
-        // Éxito: confirmar y regresar
-        this.snackBar.open('✓ Reserva confirmada exitosamente', 'Cerrar', { 
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
+      if (validationResult.isValid) {
+        console.log('✅ QR válido, procesando...');
         
-        // Navegar de vuelta con parámetro de éxito
-        this.router.navigate(['/providers/provider-panel'], {
-          queryParams: { confirmed: this.bookingId }
-        });
+        // Si el QR contiene una URL completa, extraer parámetros y navegar al panel
+        if (validationResult.redirectUrl) {
+          console.log('🌐 URL del QR detectada:', validationResult.redirectUrl);
+          
+          try {
+            // Extraer todos los parámetros de la URL
+            const url = new URL(validationResult.redirectUrl);
+            const queryParams: any = {};
+            
+            // Copiar todos los parámetros
+            url.searchParams.forEach((value, key) => {
+              queryParams[key] = value;
+            });
+            
+            console.log('📋 Query params extraídos:', queryParams);
+            
+            // Agregar flag para abrir el modal automáticamente
+            queryParams['openModal'] = 'true';
+            
+            console.log('🚀 Navegando a /providers/provider-panel con params:', queryParams);
+            
+            // Navegar al provider panel con los parámetros
+            this.router.navigate(['/providers/provider-panel'], {
+              queryParams: queryParams
+            }).then(success => {
+              console.log('✅ Navegación completada:', success);
+            }).catch(error => {
+              console.error('❌ Error en la navegación:', error);
+            });
+            
+          } catch (error) {
+            console.error('❌ Error al procesar la URL:', error);
+            this.errorMessage = 'Error al procesar el código QR';
+            this.isProcessing = false;
+          }
+          
+        } else if (validationResult.bookingId) {
+          console.log('📝 Usando bookingId (formato antiguo):', validationResult.bookingId);
+          
+          // Fallback: Si solo hay bookingId (formato antiguo)
+          this.bookingId = validationResult.bookingId;
+          
+          this.snackBar.open(`✓ Reserva ${this.bookingId} confirmada exitosamente`, 'Cerrar', { 
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          
+          this.router.navigate(['/providers/provider-panel'], {
+            queryParams: { confirmed: this.bookingId }
+          });
+        } else {
+          console.error('❌ Validación exitosa pero sin redirectUrl ni bookingId');
+          this.errorMessage = 'Error: Datos incompletos en el QR';
+          this.isProcessing = false;
+        }
       } else {
+        console.log('❌ QR inválido');
+        
         // Error: mostrar mensaje y permitir reintentar
         this.scanAttempts++;
         
@@ -203,16 +259,89 @@ export class QrScannerComponent implements OnInit, OnDestroy {
           this.isProcessing = false; // Permitir nuevo escaneo
         }
       }
-    }, 1000);
+    } catch (error) {
+      console.error('❌ Error crítico en validateAndConfirmBooking:', error);
+      this.errorMessage = 'Error al procesar el código QR';
+      this.isProcessing = false;
+    }
   }
 
   /**
-   * Valida el formato del código QR
+   * Valida el formato del código QR y extrae el booking ID o URL de redirección
    */
-  private validateQRCode(qrCode: string): boolean {
-    // Implementa tu lógica de validación
-    // Por ejemplo: "TOURYA-BOOKING-TB-1001-HASH123"
-    return qrCode.includes(this.bookingId);
+  private validateQRCode(qrCode: string): { isValid: boolean; bookingId?: string; redirectUrl?: string } {
+    console.log('🔎 Iniciando validación del QR...');
+    
+    // Verificar si es una URL
+    if (qrCode.startsWith('http://') || qrCode.startsWith('https://')) {
+      console.log('🌐 El QR es una URL, extrayendo parámetros...');
+      
+      try {
+        const url = new URL(qrCode);
+        const reservationId = url.searchParams.get('reservationId');
+        const paymentId = url.searchParams.get('paymentId');
+        const status = url.searchParams.get('status');
+        
+        console.log('📋 Parámetros extraídos:');
+        console.log('  - reservationId:', reservationId);
+        console.log('  - paymentId:', paymentId);
+        console.log('  - status:', status);
+        
+        if (reservationId) {
+          console.log('✅ reservationId encontrado:', reservationId);
+          console.log('🌐 URL completa para redirección:', qrCode);
+          
+          // Verificar que el estado sea válido (opcional)
+          if (status && status !== 'PENDING') {
+            console.log('⚠️ Advertencia: El estado de la reserva es:', status);
+          }
+          
+          return {
+            isValid: true,
+            bookingId: `RES-${reservationId}`, // Formato: RES-10
+            redirectUrl: qrCode // URL completa para redirección
+          };
+        } else {
+          console.log('❌ No se encontró reservationId en la URL');
+        }
+      } catch (error) {
+        console.error('❌ Error al parsear la URL:', error);
+      }
+    }
+    
+    // Fallback: Intentar patrones anteriores por si acaso
+    console.log('🔍 Intentando patrones de texto plano...');
+    
+    // Patrón esperado: TOURYA-BOOKING-{ID}-{HASH}
+    const qrPattern = /TOURYA-BOOKING-(TB-\d+)-[A-Z0-9]+/i;
+    const match = qrCode.match(qrPattern);
+    
+    console.log('🎯 Patrón completo (TOURYA-BOOKING-TB-XXXX-HASH):', match);
+    
+    if (match && match[1]) {
+      console.log('✅ Match encontrado! Booking ID:', match[1]);
+      return {
+        isValid: true,
+        bookingId: match[1]
+      };
+    }
+    
+    // Si no coincide con el patrón esperado, intentar encontrar cualquier ID de booking
+    const simplePattern = /(TB-\d+)/i;
+    const simpleMatch = qrCode.match(simplePattern);
+    
+    console.log('🎯 Patrón simple (TB-XXXX):', simpleMatch);
+    
+    if (simpleMatch && simpleMatch[1]) {
+      console.log('✅ Match simple encontrado! Booking ID:', simpleMatch[1]);
+      return {
+        isValid: true,
+        bookingId: simpleMatch[1]
+      };
+    }
+    
+    console.log('❌ No se encontró ningún patrón válido');
+    return { isValid: false };
   }
 
   /**
@@ -237,24 +366,52 @@ export class QrScannerComponent implements OnInit, OnDestroy {
    * Maneja la selección de archivo de imagen
    */
   async onFileSelected(event: any): Promise<void> {
+    console.log('📁 onFileSelected - Evento recibido:', event);
+    
     const file = event.target.files[0];
-    if (!file) return;
+    console.log('📁 Archivo seleccionado:', file);
+    
+    if (!file) {
+      console.log('❌ No se seleccionó ningún archivo');
+      return;
+    }
+
+    console.log('📁 Nombre del archivo:', file.name);
+    console.log('📁 Tipo de archivo:', file.type);
+    console.log('📁 Tamaño del archivo:', file.size, 'bytes');
 
     this.isProcessing = true;
     this.errorMessage = '';
 
     try {
+      console.log('🔄 Creando BrowserQRCodeReader...');
       const codeReader = new BrowserQRCodeReader();
-      const result = await codeReader.decodeFromImageUrl(URL.createObjectURL(file));
+      
+      const imageUrl = URL.createObjectURL(file);
+      console.log('🖼️ URL de la imagen creada:', imageUrl);
+      
+      console.log('🔍 Intentando decodificar QR de la imagen...');
+      const result = await codeReader.decodeFromImageUrl(imageUrl);
+      
+      console.log('📊 Resultado de decodificación:', result);
       
       if (result && result.getText()) {
+        console.log('✅ QR decodificado exitosamente desde imagen!');
+        console.log('📄 Texto del QR:', result.getText());
+        
+        // Resetear isProcessing antes de llamar a onCodeResult
+        // porque onCodeResult lo volverá a poner en true
+        this.isProcessing = false;
+        
         this.onCodeResult(result.getText());
       } else {
+        console.log('❌ No se pudo obtener texto del resultado');
         this.errorMessage = 'No se pudo leer el código QR de la imagen. Intenta con otra imagen.';
         this.isProcessing = false;
       }
     } catch (error) {
-      console.error('Error al leer QR de imagen:', error);
+      console.error('❌ Error al leer QR de imagen:', error);
+      console.error('❌ Detalles del error:', JSON.stringify(error, null, 2));
       this.errorMessage = 'No se encontró un código QR válido en la imagen.';
       this.isProcessing = false;
     }
