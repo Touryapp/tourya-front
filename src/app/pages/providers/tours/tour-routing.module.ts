@@ -26,7 +26,7 @@ const routes: Routes = [
         path: "details",
         loadChildren: () =>
           import("./tour-details/tour-details.module").then(
-            (m) => m.TourDetailsModule
+            (m) => m.TourDetailsProviderModule
           ),
       },
       {

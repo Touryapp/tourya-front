@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 // usando @angular/google-maps para mapa nativo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { LocationsPublicDto } from '../../../shared/dto/locations-public.dto';
 import { Tour, Gallery, TourDetail } from '../../../shared/dto/tour-response.dto';
 import { routes } from "../../../shared/routes/routes";
+import { LightGallery } from 'lightgallery/lightgallery';
 
 @Component({
   selector: 'app-tours-detail',
@@ -21,7 +22,7 @@ import { routes } from "../../../shared/routes/routes";
   templateUrl: './tours-detail.component.html',
   styleUrl: './tours-detail.component.scss'
 })
-export class ToursDetailComponent implements OnInit {
+export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
   public routes = routes;
   
   // Date picker
@@ -32,30 +33,66 @@ export class ToursDetailComponent implements OnInit {
   // Show more/less functionality
   isMore: boolean[] = [false, false, false, false, false, false, false, false];
   
-  // Main slider configuration
+ // Configuration for the main slider
   mainSliderConfig = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
     fade: true,
     asNavFor: '.slider-nav'
+   
   };
-
-  // Thumbnail slider configuration
+  
+  // Configuration for the thumbnail slider
   thumbSliderConfig = {
     slidesToShow: 4,
     slidesToScroll: 1,
+    vertical: true,
     asNavFor: '.slider-for',
     dots: false,
-    centerMode: true,
+    arrows: true,
     focusOnSelect: true,
-    arrows: false
+    verticalSwiping: true,
+    prevArrow: "<span class='slick-next'><i class='fa-solid fa-chevron-down'></i></span>",
+    nextArrow: "<span class='slick-prev'><i class='fa-solid fa-chevron-up'></i></span>",
+    responsive: [
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+            slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 580,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 0,
+        settings: {
+          vertical: false,
+          slidesToShow: 2,
+        },
+      },
+    ],
+
+
   };
 
   // Gallery settings
   gallerySettings = {
     counter: false,
-    plugins: []
+    plugins: [],
+    onInit: (detail: { instance: LightGallery }): void => {
+      this.lightGallery = detail.instance;
+    }
   };
 
   // Lightbox settings
@@ -66,30 +103,15 @@ export class ToursDetailComponent implements OnInit {
 
   // Main slides data
   mainSlides: string[] = [
-    'assets/img/tours/tours-07.jpg',
-    'assets/img/tours/tours-08.jpg',
-    'assets/img/tours/tours-09.jpg',
-    'assets/img/tours/tours-10.jpg',
-    'assets/img/tours/tours-11.jpg'
   ];
 
   // Thumbnail slides data
   thumbSlides: string[] = [
-    'assets/img/tours/tours-07.jpg',
-    'assets/img/tours/tours-08.jpg',
-    'assets/img/tours/tours-09.jpg',
-    'assets/img/tours/tours-10.jpg',
-    'assets/img/tours/tours-11.jpg'
   ];
 
   // Gallery images
   images: { src: string }[] = [
-    { src: 'assets/img/tours/gallery-tour-lg-01.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-02.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-03.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-04.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-05.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-06.jpg' }
+    
   ];
 
   // Loaded tour
@@ -105,6 +127,8 @@ export class ToursDetailComponent implements OnInit {
   isCartVisible: boolean = false;
 
   private destroy$ = new Subject<void>();
+  private needRefresh = false;
+  private lightGallery!: LightGallery;
 
   constructor(
     private fb: FormBuilder
@@ -133,6 +157,8 @@ export class ToursDetailComponent implements OnInit {
             this.mainSlides = galleries.map(g => g.imageUrl || 'assets/img/tours/tours-07.jpg');
             this.thumbSlides = galleries.map(g => g.imageUrl || 'assets/img/tours/tours-07.jpg');
             this.images = galleries.map(g => ({ src: g.imageUrl || 'assets/img/tours/gallery-tour-lg-01.jpg' }));
+            // Marcar que necesitamos refrescar lightgallery después del render
+            this.needRefresh = true;
           }
           // set map center from first location when available
           const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
@@ -197,7 +223,15 @@ export class ToursDetailComponent implements OnInit {
     this.isMore[index] = !this.isMore[index];
   }
 
-
+  /**
+   * Refresh lightgallery after view updates (when data loads dynamically)
+   */
+  ngAfterViewChecked(): void {
+    if (this.needRefresh && this.lightGallery) {
+      this.lightGallery.refresh();
+      this.needRefresh = false;
+    }
+  }
 
   onBeforeSlide(): void {
     // Handle before slide event

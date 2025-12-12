@@ -182,6 +182,10 @@ export class routes {
     return this.tour + "/edit";
   }
 
+  public static get tourPanelProvider(): string {
+    return this.providers + "/provider-panel";
+  }
+
   public static get tourBookingConfirmation(): string {
     return this.tour + "/tour-booking-confirmation";
   }

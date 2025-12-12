@@ -29,58 +29,6 @@
             <div class="col-xl-9 col-lg-9">
                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                     <h6 class="mb-3">{{totalElements}} Tours Found on Your Search</h6>
-                    <!-- <div class="d-flex align-items-center flex-wrap">
-                        <div class="list-item d-flex align-items-center mb-3">
-
-                            <a [routerLink]="routes.tourList" class="list-icon active me-2"><i
-                                    class="isax isax-firstline"></i></a>
-                        </div>
-                        <div class="dropdown mb-3">
-                            <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <span class="fw-medium text-gray-9">Sort By : </span>Recommended
-                            </a>
-                            <div class="dropdown-menu dropdown-sm">
-                                <form>
-                                    <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
-                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                        <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
-                                            id="recommend1" checked>
-                                        <label class="form-check-label ms-2" for="recommend1">Recommended</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                        <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
-                                            id="recommend2">
-                                        <label class="form-check-label ms-2" for="recommend2">Price: low to high</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                        <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
-                                            id="recommend3">
-                                        <label class="form-check-label ms-2" for="recommend3">Price: high to low</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                        <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
-                                            id="recommend4">
-                                        <label class="form-check-label ms-2" for="recommend4">Newest</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                        <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
-                                            id="recommend5">
-                                        <label class="form-check-label ms-2" for="recommend5">Ratings</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                        <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
-                                            id="recommend6">
-                                        <label class="form-check-label ms-2" for="recommend6">Reviews</label>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
-                                        <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
-                                        <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
 
                 <div class="hotel-list">
@@ -97,30 +45,7 @@
                                                 </a>
                                             </div>
                                         </ng-template>
-                                        <!-- <ng-template carouselSlide>
-                                            <div class="slide-images">
-                                                <a [routerLink]="[routes.tourDetails, tour.id]">
-                                                    <img src="assets/img/tours/tours-08.jpg" class="img-fluid "
-                                                        alt="img">
-                                                </a>
-                                            </div>
-                                        </ng-template>
-                                        <ng-template carouselSlide>
-                                            <div class="slide-images">
-                                                <a [routerLink]="[routes.tourDetails, tour.id]">
-                                                    <img src="assets/img/tours/tours-09.jpg" class="img-fluid "
-                                                        alt="img">
-                                                </a>
-                                            </div>
-                                        </ng-template>
-                                        <ng-template carouselSlide>
-                                            <div class="slide-images">
-                                                <a [routerLink]="[routes.tourDetails, tour.id]">
-                                                    <img src="assets/img/tours/tours-10.jpg" class="img-fluid"
-                                                        alt="img">
-                                                </a>
-                                            </div>
-                                        </ng-template> -->
+                                        
                                     </owl-carousel-o>
 
                                     <div class="fav-item">
@@ -176,10 +101,6 @@
                                                     {{tour?.price}}</span>
 
                                             </h6>
-                                            <!-- <a href="javascript:void(0);" class="avatar avatar-sm flex-shrink-0">
-                                                <img src="assets/img/users/user-08.jpg" class="rounded-circle"
-                                                    alt="img">
-                                            </a> -->
 
                                             <a class="me-2" [routerLink]="[routes.editTour, tour.id]">Edit tour</a>
 
