@@ -40,6 +40,24 @@ export class DefaultHeaderComponent {
   public routes = routes;
   side_bar_data: MainMenu[] = [];
   password: boolean[] = [false, false]; // Add more as needed
+  isLegalOpen = false;
+  isProfileOpen = false;
+  isProfileToursOpen = false;
+
+  toggleLegal() {
+    this.isLegalOpen = !this.isLegalOpen;
+  }
+
+  toggleProfile() {
+    this.isProfileOpen = !this.isProfileOpen;
+  }
+
+  toggleProfileTours() {
+    this.isProfileToursOpen = !this.isProfileToursOpen;
+    // Keep parent open
+    this.isProfileOpen = true;
+  }
+
 
   togglePassword(index: number): void {
     this.password[index] = !this.password[index];
