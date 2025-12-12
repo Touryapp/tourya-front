@@ -266,7 +266,7 @@ export class routes {
   }
   //user and admin
   public static get user(): string {
-    return this.baseUrl + "/feature-module/user";
+    return this.baseUrl + "/clients";
   }
   public static get userDashboard(): string {
     return this.user + "/dashboard";

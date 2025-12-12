@@ -25,6 +25,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SlickCarouselModule } from "ngx-slick-carousel";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { ModalModule } from "ngx-bootstrap/modal";
+import { Router } from "@angular/router";
+import { AuthService } from "../../../core/services/auth.service";
+import { PendingActionService, PendingCartAction } from "../../services/pending-action.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-tour-slot-selection-modal",
@@ -89,6 +93,9 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   constructor(
     private cartService: CartService,
     private readonly searchToursService: SearchToursService,
+    private router: Router,
+    private authService: AuthService,
+    private pendingActionService: PendingActionService,
     public dialogRef: MatDialogRef<TourSlotSelectionModalComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -144,6 +151,9 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
             this.updateAvailableSlots();
           }
         }
+        
+        // Verificar si hay acción pendiente después de cargar los datos
+        this.checkAndExecutePendingAction();
       });
   }
 
@@ -290,7 +300,226 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Confirma la selección y agrega al carrito
    */
   async confirmSelection(): Promise<void> {
+    console.log('🚀 ============ INICIO DE confirmSelection() ============');
+    console.log('📋 Estado inicial:', {
+      isValid: this.isValid,
+      hasTour: !!this.selectedTour,
+      hasSlot: !!this.selectedSlot,
+      isProcessing: this.isProcessing
+    });
+    
     if (!this.isValid || !this.selectedTour || !this.selectedSlot) {
+      console.log('❌ Validación fallida:', { 
+        isValid: this.isValid, 
+        hasTour: !!this.selectedTour, 
+        hasSlot: !!this.selectedSlot 
+      });
+      return;
+    }
+
+    console.log('🎯 Validación pasada - verificando autenticación...');
+    console.log('🔍 Token en localStorage:', localStorage.getItem('token') ? 'SÍ existe' : 'NO existe');
+    console.log('🔍 Usuario en localStorage:', localStorage.getItem('user') ? 'SÍ existe' : 'NO existe');
+
+    // Verificar autenticación ANTES de continuar
+    const isAuthenticated = this.authService.isAuthenticated();
+    const token = this.authService.getToken();
+    console.log(`🔐 Estado de autenticación: ${isAuthenticated}`);
+    console.log(`🔐 Token obtenido: ${token ? 'Token presente (length: ' + token.length + ')' : 'NO HAY TOKEN'}`);
+
+    if (!isAuthenticated || !token) {
+      console.log('⚠️ Usuario NO autenticado - llamando handleUnauthenticatedUser()...');
+      this.handleUnauthenticatedUser();
+      console.log('✅ handleUnauthenticatedUser() ejecutado - SALIENDO de confirmSelection()');
+      return;
+    }
+
+    // Usuario autenticado - proceder con la lógica original
+    console.log('✅ Usuario autenticado - llamando addToCartInternal()...');
+    await this.addToCartInternal();
+    console.log('🏁 ============ FIN DE confirmSelection() ============');
+  }
+
+  /**
+   * Manejar usuario no autenticado
+   */
+  private handleUnauthenticatedUser(): void {
+    console.log('🚨 ============ INICIO DE handleUnauthenticatedUser() ============');
+    console.log('📋 Datos disponibles:', {
+      hasTour: !!this.selectedTour,
+      hasSlot: !!this.selectedSlot,
+      hasDate: !!this.selectedDate
+    });
+    
+    if (!this.selectedTour || !this.selectedSlot || !this.selectedDate) {
+      console.log('❌ Faltan datos necesarios - SALIENDO sin hacer nada');
+      return;
+    }
+
+    // Buscar el schedule que coincide con la fecha seleccionada
+    const selectedDateStr = new Date(this.selectedDate).toISOString().split('T')[0];
+    const matchingSchedule = this.selectedTour.schedules.find(schedule => {
+      const scheduleDate = new Date(schedule.scheduleDate).toISOString().split('T')[0];
+      return scheduleDate === selectedDateStr;
+    });
+    
+    const tourScheduleId = matchingSchedule?.id || 0;
+    console.log('📅 Fecha seleccionada:', selectedDateStr);
+    console.log('🔍 Schedule encontrado:', matchingSchedule);
+    console.log('🆔 tourScheduleId:', tourScheduleId);
+
+    // Guardar estado actual del modal
+    const pendingAction: PendingCartAction = {
+      tourId: this.selectedTour.tour.id || 0,
+      dayId: tourScheduleId, // Usar el ID real del schedule
+      slotId: this.selectedSlot.slotId,
+      selectedDate: this.selectedDate,
+      participants: this.participants.map(p => ({ ...p })),
+      totalPrice: this.totalPrice,
+      returnUrl: this.router.url // Guardar URL actual para volver después
+    };
+
+    console.log('💾 Guardando acción pendiente:', pendingAction);
+    this.pendingActionService.setPendingCartAction(pendingAction);
+    console.log('✅ Acción guardada - Total de participantes:', this.totalParticipants);
+
+    // Cerrar el modal
+    console.log('� Cerrando modal...');
+    this.closeModal();
+
+    // Mostrar mensaje y redirigir a login
+    console.log('💬 Mostrando SweetAlert...');
+    Swal.fire({
+      icon: 'info',
+      title: 'Inicia sesión para continuar',
+      text: 'Necesitas iniciar sesión para agregar tours a tu carrito',
+      confirmButtonText: 'Ir a Iniciar Sesión',
+      confirmButtonColor: '#3085d6',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      console.log('📱 Usuario respondió al alert:', result);
+      if (result.isConfirmed) {
+        // Redirigir a login con returnUrl
+        console.log('🔄 Redirigiendo a /login...');
+        this.router.navigate(['/login'], { 
+          queryParams: { 
+            returnUrl: pendingAction.returnUrl 
+          } 
+        });
+      } else {
+        // Usuario canceló - limpiar acción pendiente
+        console.log('❌ Usuario canceló - limpiando acción pendiente');
+        this.pendingActionService.clearPendingAction();
+      }
+    });
+  }
+
+  /**
+   * Verificar y ejecutar acción pendiente después de login
+   */
+  private checkAndExecutePendingAction(): void {
+    // Solo ejecutar si el usuario está autenticado y hay acción pendiente
+    if (this.authService.isAuthenticated() && this.pendingActionService.hasPendingAction()) {
+      const pendingAction = this.pendingActionService.getPendingCartAction();
+      
+      if (pendingAction) {
+        console.log('🔄 Detectada acción pendiente - restaurando estado:', pendingAction);
+        
+        // Restaurar el estado del modal
+        setTimeout(() => {
+          this.restoreModalState(pendingAction);
+        }, 500);
+      }
+    }
+  }
+
+  /**
+   * Restaurar el estado del modal desde la acción pendiente
+   */
+  private restoreModalState(action: PendingCartAction): void {
+    console.log('🔄 Restaurando estado del modal...');
+    
+    // Restaurar fecha seleccionada
+    this.selectedDate = new Date(action.selectedDate);
+    console.log('📅 Fecha restaurada:', this.selectedDate);
+    
+    // Actualizar slots disponibles para esa fecha
+    this.updateAvailableSlots();
+    
+    // Restaurar slot y participantes después de que se carguen los slots
+    setTimeout(() => {
+      // Buscar y seleccionar el slot
+      this.selectedSlot = this.availableSlots.find(s => s.slotId === action.slotId) || null;
+      console.log('⏰ Slot restaurado:', this.selectedSlot);
+      
+      if (this.selectedSlot) {
+        // Restaurar participantes
+        this.participants = action.participants.map(p => ({ ...p }));
+        this.updateTotals();
+        console.log('👥 Participantes restaurados:', this.participants);
+        
+        // Ejecutar automáticamente la acción de agregar al carrito
+        setTimeout(() => {
+          console.log('✅ Ejecutando acción pendiente automáticamente...');
+          this.executePendingAddToCart();
+        }, 500);
+      } else {
+        console.error('❌ No se pudo encontrar el slot con ID:', action.slotId);
+        this.pendingActionService.clearPendingAction();
+        
+        Swal.fire({
+          icon: 'warning',
+          title: 'Horario no disponible',
+          text: 'El horario seleccionado ya no está disponible. Por favor, selecciona otro.',
+        });
+      }
+    }, 500);
+  }
+
+  /**
+   * Ejecutar la acción de agregar al carrito pendiente
+   */
+  private async executePendingAddToCart(): Promise<void> {
+    try {
+      this.isProcessing = true;
+      
+      console.log('✅ Ejecutando acción pendiente - agregando al carrito...');
+      
+      // Agregar al carrito
+      await this.addToCartInternal();
+      
+      // Limpiar acción pendiente
+      this.pendingActionService.clearPendingAction();
+      
+      // Mostrar mensaje de éxito especial
+      Swal.fire({
+        icon: 'success',
+        title: '¡Bienvenido de nuevo!',
+        text: 'El tour ha sido agregado a tu carrito exitosamente',
+        timer: 3000,
+        showConfirmButton: false
+      });
+      
+    } catch (error) {
+      console.error('❌ Error ejecutando acción pendiente:', error);
+      this.pendingActionService.clearPendingAction();
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al agregar el tour. Por favor, intenta nuevamente.'
+      });
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
+  /**
+   * Lógica interna para agregar al carrito (extraída del método original)
+   */
+  private async addToCartInternal(): Promise<void> {
+    if (!this.selectedTour || !this.selectedSlot) {
       return;
     }
 
@@ -345,13 +574,75 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       
     } catch (error: any) {
       console.error("❌ Error agregando tour al carrito:", error);
+      console.error("❌ Error status:", error?.status);
+      console.error("❌ Error completo:", error);
       
-      // Mostrar mensaje de error al usuario
+      // Si es error 401 (no autenticado), limpiar sesión y guardar acción pendiente
+      if (error.status === 401 || error.status === 403) {
+        console.log('🔐 Error de autenticación detectado - limpiando sesión y guardando acción pendiente');
+        
+        // Limpiar token inválido
+        this.authService.removeToken();
+        localStorage.removeItem('user');
+        
+        // Guardar acción pendiente ANTES de redirigir
+        if (!this.selectedTour || !this.selectedSlot || !this.selectedDate) {
+          return;
+        }
+
+        // Buscar el schedule que coincide con la fecha seleccionada
+        const selectedDateStr = new Date(this.selectedDate).toISOString().split('T')[0];
+        const matchingSchedule = this.selectedTour.schedules.find(schedule => {
+          const scheduleDate = new Date(schedule.scheduleDate).toISOString().split('T')[0];
+          return scheduleDate === selectedDateStr;
+        });
+        
+        const tourScheduleId = matchingSchedule?.id || 0;
+        console.log('📅 (Error 401) Fecha seleccionada:', selectedDateStr);
+        console.log('🔍 (Error 401) Schedule encontrado:', matchingSchedule);
+        console.log('🆔 (Error 401) tourScheduleId:', tourScheduleId);
+
+        const pendingAction: PendingCartAction = {
+          tourId: this.selectedTour.tour.id || 0,
+          dayId: tourScheduleId, // Usar el ID real del schedule
+          slotId: this.selectedSlot.slotId,
+          selectedDate: this.selectedDate,
+          participants: this.participants.map(p => ({ ...p })),
+          totalPrice: this.totalPrice,
+          returnUrl: this.router.url
+        };
+
+        this.pendingActionService.setPendingCartAction(pendingAction);
+        console.log('💾 Acción pendiente guardada después de error 401:', pendingAction);
+
+        // Cerrar modal
+        this.closeModal();
+
+        // Mostrar mensaje y redirigir a login
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sesión expirada',
+          text: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente para continuar.',
+          confirmButtonText: 'Ir a Iniciar Sesión',
+          confirmButtonColor: '#3085d6',
+          allowOutsideClick: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/login'], { 
+              queryParams: { 
+                returnUrl: pendingAction.returnUrl 
+              } 
+            });
+          }
+        });
+        
+        return; // Salir del catch
+      }
+      
+      // Otros errores
       let errorMessage = "Error agregando el tour al carrito. Por favor, intenta de nuevo.";
       
-      if (error.status === 401) {
-        errorMessage = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.";
-      } else if (error.status === 400) {
+      if (error.status === 400) {
         errorMessage = "Datos inválidos. Por favor, verifica tu selección.";
       } else if (error.status === 409) {
         errorMessage = "Este tour ya existe en tu carrito para esta fecha.";
@@ -368,7 +659,14 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Formatea el precio
+   * Formatea el tiempo
+   */
+  formatTime(time: string): string {
+    return time.substring(0, 5); // HH:MM
+  }
+
+  /**
+   * Formatea el precio en formato de moneda colombiana
    */
   formatPrice(price: number): string {
     return new Intl.NumberFormat("es-CO", {
@@ -376,13 +674,6 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       currency: "COP",
       minimumFractionDigits: 0,
     }).format(price);
-  }
-
-  /**
-   * Formatea el tiempo
-   */
-  formatTime(time: string): string {
-    return time.substring(0, 5); // HH:MM
   }
 
   /**

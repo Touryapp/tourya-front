@@ -11,6 +11,7 @@ import { RequestsProvidersStatus } from "../../shared/enums/requests-providers-s
 import { ReviewsService } from "../../core/services/reviews.service";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { PendingReviewsModalComponent } from "../../shared/components/pending-reviews-modal/pending-reviews-modal.component";
+import { PendingActionService } from "../../shared/services/pending-action.service";
 
 @Component({
   selector: "app-login-tourist",
@@ -41,7 +42,8 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private requestProviderService: RequestProvidersService,
     private reviewsService: ReviewsService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private pendingActionService: PendingActionService
   ) {
     this.loginTouristForm = new FormGroup({
       email: new FormControl("", [Validators.required, Validators.email]),
@@ -95,12 +97,29 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
             if (isUser && !isProvider && !isAdmin) {
               this.getPendingReviews();
             }
-              // if returnUrl provided, navigate back there, otherwise use role-based redirect
-              if (this.returnUrl) {
-                this.router.navigateByUrl(this.returnUrl);
-              } else {
-                this.redirectByRole(response.roleList);
-              }
+            // Verificar si hay acción pendiente
+            const hasPendingAction = this.pendingActionService.hasPendingAction();
+            console.log(`✅ Login exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
+
+            if (hasPendingAction) {
+              const pendingAction = this.pendingActionService.getPendingCartAction();
+              console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
+              console.log('📍 URL de retorno:', pendingAction?.returnUrl);
+
+              // Redirigir a la URL de retorno (donde estaba el modal)
+              // El modal detectará automáticamente la acción pendiente y la ejecutará
+              const returnUrl = pendingAction?.returnUrl || this.returnUrl || '/';
+              console.log('🚀 Navegando a:', returnUrl);
+              this.router.navigateByUrl(returnUrl);
+            } else if (this.returnUrl) {
+              // returnUrl provided sin acción pendiente
+              console.log('📍 Usando returnUrl del queryParam:', this.returnUrl);
+              this.router.navigateByUrl(this.returnUrl);
+            } else {
+              // Redirect basado en rol
+              console.log('👤 Redirigiendo basado en rol');
+              this.redirectByRole(response.roleList);
+            }
           } else {
             this.errorMessage =
               "Ha ocurrido un error, por favor intente de nuevo";
@@ -124,22 +143,22 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     try {
       this.googleLoading = true;
       const result = await this.authService.loginWithGoogle();
-      
+
       // Obtener datos del usuario
       const user = result.user;
       console.log('Usuario de Google:', user);
-      
-       // Obtener token de autenticación
-       const token = await user.getIdToken();
-       console.log('Token:', token);
+
+      // Obtener token de autenticación
+      const token = await user.getIdToken();
+      console.log('Token:', token);
       // Datos básicos del usuario que podemos usar
-      const userData:SocialLoginDto = {
+      const userData: SocialLoginDto = {
         firstname: user.displayName || '',
         lastname: '',
         email: user.email || '',
         uuidSocial: user.uid || '',
       };
-      
+
       await this.authService.authenticateSocial(userData).subscribe({
         next: (response) => {
           console.log('Respuesta de Google:', response)
@@ -156,9 +175,21 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
           const isAdmin = response.roleList.some(r => r.id === Roles.ADMIN);
 
           if (isUser && !isProvider && !isAdmin) {
-              this.getPendingReviews();
-            }
-          if (this.returnUrl) {
+            this.getPendingReviews();
+          }
+
+          // Verificar si hay acción pendiente
+          const hasPendingAction = this.pendingActionService.hasPendingAction();
+          console.log(`✅ Login Google exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
+
+          if (hasPendingAction) {
+            const pendingAction = this.pendingActionService.getPendingCartAction();
+            console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
+            console.log('📍 URL de retorno:', pendingAction?.returnUrl);
+            const returnUrl = pendingAction?.returnUrl || this.returnUrl || '/';
+            console.log('🚀 Navegando a:', returnUrl);
+            this.router.navigateByUrl(returnUrl);
+          } else if (this.returnUrl) {
             this.router.navigateByUrl(this.returnUrl);
           } else {
             this.redirectByRole(response.roleList);
@@ -180,7 +211,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     try {
       this.facebookLoading = true;
       const result = await this.authService.loginWithFacebook();
-      
+
       // Obtener datos del usuario
       const user = result.user;
       console.log('Usuario de Facebook:', user);
@@ -188,13 +219,13 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
       const token = await user.getIdToken();
       console.log('Token de Facebook:', token);
       // Datos básicos del usuario
-      const userData:SocialLoginDto = {
+      const userData: SocialLoginDto = {
         firstname: user.displayName || '',
         lastname: '',
         email: user.email || '',
         uuidSocial: user.uid || '',
       };
-      
+
       await this.authService.authenticateSocial(userData).subscribe({
         next: (response) => {
           // Navegar a la página principal
@@ -210,11 +241,23 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
           const isUser = response.roleList.some(r => r.id === Roles.USER);
           const isProvider = response.roleList.some(r => r.id === Roles.PROVIDER);
           const isAdmin = response.roleList.some(r => r.id === Roles.ADMIN);
-          
+
           if (isUser && !isProvider && !isAdmin) {
             this.getPendingReviews();
           }
-          if (this.returnUrl) {
+
+          // Verificar si hay acción pendiente
+          const hasPendingAction = this.pendingActionService.hasPendingAction();
+          console.log(`✅ Login Facebook exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
+
+          if (hasPendingAction) {
+            const pendingAction = this.pendingActionService.getPendingCartAction();
+            console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
+            console.log('📍 URL de retorno:', pendingAction?.returnUrl);
+            const returnUrl = pendingAction?.returnUrl || this.returnUrl || '/';
+            console.log('🚀 Navegando a:', returnUrl);
+            this.router.navigateByUrl(returnUrl);
+          } else if (this.returnUrl) {
             this.router.navigateByUrl(this.returnUrl);
           } else {
             this.redirectByRole(response.roleList);
@@ -225,7 +268,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
           this.facebookLoading = false;
         }
       });
-      
+
     } catch (error) {
       console.error('Error en autenticación con Facebook:', error);
       this.facebookLoading = false;
@@ -235,21 +278,21 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
   redirectByRole(role: RoleDto[]) {
     if (role.some(r => r.id === Roles.ADMIN)) {
       this.router.navigate(["admin"]);
-    }else if (role.some(r => r.id === Roles.USER)) {
+    } else if (role.some(r => r.id === Roles.USER)) {
       this.router.navigate(["home"]);
     }
   }
 
-  getConsultData(){
+  getConsultData() {
     console.log("Consultando datos");
-    
+
     this.requestProviderService.consultData().subscribe({
       next: (response) => {
         console.log(response);
-        if(response){
+        if (response) {
           this.authService.setRequestProviderStatus(response.status as RequestsProvidersStatus);
           this.authService.setIdProvider(response.provider.id);
-        }else{
+        } else {
           this.authService.setRequestProviderStatus(RequestsProvidersStatus.CREATED);
         }
       },
@@ -259,13 +302,13 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
       }
     })
   }
-  getPendingReviews(){
+  getPendingReviews() {
     this.reviewsService.getPendingReviews().subscribe({
       next: (response) => {
         console.log(response);
-        if(response && response.content && response.content.length > 0){
+        if (response && response.content && response.content.length > 0) {
           console.log("Mostrando modal");
-          
+
           const initialState = {
             pendingReviews: response.content
           };
