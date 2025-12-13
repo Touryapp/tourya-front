@@ -5,6 +5,7 @@ import { MyProfileRoutingModule } from './my-profile-routing.module';
 import { SharedModule } from '../../../shared/shared-module';
 import { ClientsModule } from '../clients.module';
 import { ProviderTourManagementModule } from '../../providers/provider-tour-management/provider-tour-management.module';
+import { ProviderPanelModule } from '../../providers/provider-panel/provider-panel.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ProviderTourManagementModule } from '../../providers/provider-tour-mana
     SharedModule,
     MyProfileRoutingModule,
     ClientsModule,
-    ProviderTourManagementModule
+    ProviderTourManagementModule,
+    ProviderPanelModule
   ]
 })
 export class MyProfileModule { }

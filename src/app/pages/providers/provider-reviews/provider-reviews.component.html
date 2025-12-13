@@ -177,7 +177,7 @@
 
     <!-- Reviews List -->
     @if (filteredReviews.length > 0) {
-        @for (review of filteredReviews; track review.id) {
+        @for (review of filteredReviews; track $index) {
             <div class="card shadow-sm mb-3 review-card">
                 <div class="card-body">
                     <!-- Review Header -->

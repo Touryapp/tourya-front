@@ -143,7 +143,18 @@
                             <h6>Mis Reseñas</h6>
                         </div>
                         <div class="card-body">
-                            <p class="text-muted">Sección de reseñas en desarrollo...</p>
+                            <app-provider-reviews
+                                [reviews]="reviews"
+                                [totalReviews]="totalReviews"
+                                [averageRating]="averageRating"
+                                [isLoading]="reviewsLoading"
+                                [totalPages]="reviewsTotalPages"
+                                [currentPage]="reviewsCurrentPage"
+                                (loadReviews)="onLoadReviews()"
+                                (applyFiltersEvent)="onApplyFilters($event)"
+                                (submitReplyEvent)="onSubmitReply($event)"
+                                (submitRejectEvent)="onSubmitReject($event)">
+                            </app-provider-reviews>
                         </div>
                     </div>
                 }

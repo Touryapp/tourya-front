@@ -106,7 +106,10 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     }
     
     // Emitir evento para que el padre cargue las reviews
-    this.loadReviewsData();
+    // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      this.loadReviewsData();
+    });
   }
   
   ngOnChanges(): void {

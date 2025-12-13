@@ -26,5 +26,8 @@ import { ProviderPaymentsComponent } from "../provider-payments/provider-payment
     TemplatesModule,
     ProviderTourManagementModule
   ],
+  exports: [
+    ProviderReviewsComponent
+  ]
 })
 export class ProviderPanelModule {}
