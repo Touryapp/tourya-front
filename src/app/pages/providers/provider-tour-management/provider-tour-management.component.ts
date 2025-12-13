@@ -11,6 +11,7 @@ import {
   ColumnConfig
 } from '../../../shared/services/booking-management-config.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
@@ -73,7 +74,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private reservationService: ReservationService,
     private configService: BookingManagementConfigService,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -670,14 +672,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
    * Obtiene la etiqueta traducida de un estado
    */
   public getStatusLabel(status: string): string {
-    const labels: Record<string, string> = {
-      'Upcoming': 'Próxima',
-      'Pending': 'Pendiente',
-      'Confirmed': 'Confirmada',
-      'Cancelled': 'Cancelada',
-      'Completed': 'Completada'
+    const statusKeys: Record<string, string> = {
+      'Upcoming': 'provider-tour-management.status.upcoming',
+      'Pending': 'provider-tour-management.status.pending',
+      'Confirmed': 'provider-tour-management.status.confirmed',
+      'Cancelled': 'provider-tour-management.status.cancelled',
+      'Completed': 'provider-tour-management.status.completed',
+      'PENDING': 'provider-tour-management.status.pending',
+      'CONFIRMED': 'provider-tour-management.status.confirmed'
     };
-    return labels[status] || status;
+    
+    const translationKey = statusKeys[status];
+    return translationKey ? this.translate.instant(translationKey) : status;
   }
 
   /**

@@ -183,5 +183,78 @@
         }
       }
     }
+  },
+  "provider-tour-management": {
+    "header": {
+      "totalBookings": "Total de Reservas",
+      "confirmBooking": "Confirmar Reserva",
+      "clearFilters": "Limpar Filtros",
+      "export": "Exportar",
+      "exportPdf": "Exportar como PDF",
+      "exportExcel": "Exportar como Excel"
+    },
+    "list": {
+      "title": "Lista de Reservas",
+      "search": "Buscar...",
+      "sortBy": "Ordenar:",
+      "recent": "Recentes",
+      "mostRecent": "Mais Recentes",
+      "oldest": "Mais Antigos",
+      "priceAsc": "Preço Crescente",
+      "priceDesc": "Preço Decrescente"
+    },
+    "columns": {
+      "image": "Imagem",
+      "id": "ID",
+      "tourName": "Nome do Passeio",
+      "tourType": "Tipo de Passeio",
+      "customer": "Cliente",
+      "travellers": "Viajantes",
+      "duration": "Duração",
+      "price": "Preço",
+      "bookingDate": "Data da Reserva",
+      "checkIn": "Data de Início",
+      "returnDate": "Data de Retorno",
+      "status": "Status",
+      "destination": "Destino",
+      "actions": "Ações"
+    },
+    "status": {
+      "upcoming": "Próxima",
+      "pending": "Pendente",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada",
+      "completed": "Concluída"
+    },
+    "empty": {
+      "noBookings": "Nenhuma reserva encontrada",
+      "adjustFilters": "Tente ajustar seus filtros de pesquisa"
+    },
+    "modal": {
+      "title": "Detalhes da Reserva",
+      "close": "Fechar",
+      "tourInfo": "Informações do Passeio",
+      "bookingInfo": "Informações da Reserva",
+      "customerInfo": "Informações do Cliente",
+      "extraServices": "Serviços Adicionais",
+      "activities": "Atividades Incluídas",
+      "fields": {
+        "destination": "Destino",
+        "duration": "Duração",
+        "bookingDate": "Data da Reserva",
+        "totalPrice": "Preço Total",
+        "checkInDate": "Data de Início",
+        "returnDate": "Data de Retorno",
+        "travellers": "Viajantes",
+        "name": "Nome",
+        "email": "Email",
+        "phone": "Telefone"
+      },
+      "actions": {
+        "complete": "Marcar como Concluída",
+        "confirm": "Confirmar Reserva",
+        "cancel": "Cancelar Reserva"
+      }
+    }
   }
 }

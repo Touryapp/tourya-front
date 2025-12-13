@@ -183,5 +183,78 @@
         }
       }
     }
+  },
+  "provider-tour-management": {
+    "header": {
+      "totalBookings": "Total Bookings",
+      "confirmBooking": "Confirm Booking",
+      "clearFilters": "Clear Filters",
+      "export": "Export",
+      "exportPdf": "Export as PDF",
+      "exportExcel": "Export as Excel"
+    },
+    "list": {
+      "title": "Booking List",
+      "search": "Search...",
+      "sortBy": "Sort By:",
+      "recent": "Recent",
+      "mostRecent": "Most Recent",
+      "oldest": "Oldest",
+      "priceAsc": "Price Ascending",
+      "priceDesc": "Price Descending"
+    },
+    "columns": {
+      "image": "Image",
+      "id": "ID",
+      "tourName": "Tour Name",
+      "tourType": "Tour Type",
+      "customer": "Customer",
+      "travellers": "Travellers",
+      "duration": "Duration",
+      "price": "Price",
+      "bookingDate": "Booking Date",
+      "checkIn": "Check-in Date",
+      "returnDate": "Return Date",
+      "status": "Status",
+      "destination": "Destination",
+      "actions": "Actions"
+    },
+    "status": {
+      "upcoming": "Upcoming",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed"
+    },
+    "empty": {
+      "noBookings": "No bookings found",
+      "adjustFilters": "Try adjusting your search filters"
+    },
+    "modal": {
+      "title": "Booking Details",
+      "close": "Close",
+      "tourInfo": "Tour Information",
+      "bookingInfo": "Booking Information",
+      "customerInfo": "Customer Information",
+      "extraServices": "Additional Services",
+      "activities": "Included Activities",
+      "fields": {
+        "destination": "Destination",
+        "duration": "Duration",
+        "bookingDate": "Booking Date",
+        "totalPrice": "Total Price",
+        "checkInDate": "Check-in Date",
+        "returnDate": "Return Date",
+        "travellers": "Travellers",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "actions": {
+        "complete": "Mark as Completed",
+        "confirm": "Confirm Booking",
+        "cancel": "Cancel Booking"
+      }
+    }
   }
 }
