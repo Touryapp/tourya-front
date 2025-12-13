@@ -27,7 +27,7 @@
                     <!-- Slider -->
                     <div>
                         <div class="service-wrap mb-4">
-                            <div class="slider-wrap vertical-slider tour-vertical-slide d-flex custom-slick align-items-center">
+                            <div class="slider-wrap vertical-slider tour-vertical-slide d-flex custom-slick align-items-center" *ngIf="mainSlides.length > 0">
                                 <ngx-slick-carousel #mainSlider="slick-carousel" [config]="mainSliderConfig" class="slider-for nav-center" id="large-img">
                                     <div ngxSlickItem class="service-img" *ngFor="let slide of mainSlides">
                                         <img [src]="slide" class="img-fluid" alt="Slider">

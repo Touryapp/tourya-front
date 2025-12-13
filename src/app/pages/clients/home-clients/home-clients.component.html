@@ -1173,8 +1173,8 @@
                                              <div class="form-item dropdown">
                                                 <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
                                                     <label class="form-label fs-14 text-default mb-1">Travellers</label>
-                                                    <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
-                                                    <p class="fs-12 mb-0">2 Adult</p>
+                                                    <h5>{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? 'Person' : 'Persons' }}</span></h5>
+                                                    <p class="fs-12 mb-0">{{ getTravellersDetails() }}</p>
                                                 </div>
                                                 <div class="dropdown-menu dropdown-menu-end dropdown-xl">
                                                     <h5 class="mb-3">Select Travelers</h5>
@@ -1183,22 +1183,36 @@
                                                             <div class="col-md-12">
                                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
                                                                     <label class="form-label text-gray-9 mb-2">Adult</label>
-                                                                    <app-common-counter/>
+                                                                    <app-common-counter 
+                                                                        [quantity]="travellersData.adults" 
+                                                                        [min]="1" 
+                                                                        [max]="20"
+                                                                        (quantityChange)="updateTravellersCount('adults', $event)">
+                                                                    </app-common-counter>
                                                                 </div>
                                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                                    <label class="form-label text-gray-9 mb-2">Childrens <span class="text-default fw-normal">( 12+ Yrs )</span></label>
-                                                                    <app-common-counter/>
+                                                                    <label class="form-label text-gray-9 mb-2">Children <span class="text-default fw-normal">( 2-11 Yrs )</span></label>
+                                                                    <app-common-counter 
+                                                                        [quantity]="travellersData.children" 
+                                                                        [min]="0" 
+                                                                        [max]="20"
+                                                                        (quantityChange)="updateTravellersCount('children', $event)">
+                                                                    </app-common-counter>
                                                                 </div>
                                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                                    <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 12+ Yrs )</span></label>
-                                                                    <app-common-counter/>
+                                                                    <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 0-2 Yrs )</span></label>
+                                                                    <app-common-counter 
+                                                                        [quantity]="travellersData.infants" 
+                                                                        [min]="0" 
+                                                                        [max]="10"
+                                                                        (quantityChange)="updateTravellersCount('infants', $event)">
+                                                                    </app-common-counter>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-end">
-                                                        <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Cancel</a>
-                                                        <button type="submit" class="btn btn-primary btn-sm" >Apply</button>
+                                                        <a href="javascript:void(0);" class="btn btn-light btn-sm me-2" data-bs-toggle="dropdown">Close</a>
                                                     </div>
                                                 </div>
                                             </div>

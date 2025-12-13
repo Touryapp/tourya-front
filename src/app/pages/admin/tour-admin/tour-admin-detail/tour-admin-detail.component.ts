@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TourAdminService } from '../../../../shared/services/tour-admin.service';
 import { TourAdminDto, TourCategoryDto, ProviderDto } from '../../../../shared/dto/tour-admin.dto';
@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./tour-admin-detail.component.scss'],
   standalone: false
 })
-export class TourAdminDetailComponent implements OnInit {
+export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
   tour: TourAdminDto | null = null;
   loading: boolean = false;
   showAcceptModal: boolean = false;
@@ -29,29 +29,66 @@ export class TourAdminDetailComponent implements OnInit {
   mapCenter?: google.maps.LatLngLiteral;
   mapZoom = 14;
 
-  // Slider configurations
+ // Configuration for the main slider
   mainSliderConfig = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
     fade: true,
     asNavFor: '.slider-nav'
+   
   };
-
+  
+  // Configuration for the thumbnail slider
   thumbSliderConfig = {
     slidesToShow: 4,
     slidesToScroll: 1,
+    vertical: true,
     asNavFor: '.slider-for',
     dots: false,
-    centerMode: true,
+    arrows: true,
     focusOnSelect: true,
-    arrows: false
+    verticalSwiping: true,
+    prevArrow: "<span class='slick-next'><i class='fa-solid fa-chevron-down'></i></span>",
+    nextArrow: "<span class='slick-prev'><i class='fa-solid fa-chevron-up'></i></span>",
+    responsive: [
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+            slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 580,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 0,
+        settings: {
+          vertical: false,
+          slidesToShow: 2,
+        },
+      },
+    ],
+
+
   };
 
   // Gallery settings
   gallerySettings = {
     counter: false,
-    plugins: []
+    plugins: [],
+    onInit: (detail: { instance: LightGallery }): void => {
+      this.lightGallery = detail.instance;
+    }
   };
 
   settings = {
@@ -60,32 +97,14 @@ export class TourAdminDetailComponent implements OnInit {
   };
 
   private lightGallery!: LightGallery;
+  private needRefresh = false;
 
   // Datos de ejemplo para el slider (deberían venir del tour)
-  mainSlides: string[] = [
-    'assets/img/tours/tours-07.jpg',
-    'assets/img/tours/tours-08.jpg',
-    'assets/img/tours/tours-09.jpg',
-    'assets/img/tours/tours-10.jpg',
-    'assets/img/tours/tours-11.jpg'
-  ];
+  mainSlides: string[] = [];
 
-  thumbSlides: string[] = [
-    'assets/img/tours/tours-07.jpg',
-    'assets/img/tours/tours-08.jpg',
-    'assets/img/tours/tours-09.jpg',
-    'assets/img/tours/tours-10.jpg',
-    'assets/img/tours/tours-11.jpg'
-  ];
+  thumbSlides: string[] = [];
 
-  images: { src: string }[] = [
-    { src: 'assets/img/tours/gallery-tour-lg-01.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-02.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-03.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-04.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-05.jpg' },
-    { src: 'assets/img/tours/gallery-tour-lg-06.jpg' }
-  ];
+  images: { src: string }[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -130,6 +149,8 @@ export class TourAdminDetailComponent implements OnInit {
           this.mainSlides = galleries.map(g => g.imageUrl || 'assets/img/tours/tours-07.jpg');
           this.thumbSlides = galleries.map(g => g.imageUrl || 'assets/img/tours/tours-07.jpg');
           this.images = galleries.map(g => ({ src: g.imageUrl || 'assets/img/tours/gallery-tour-lg-01.jpg' }));
+          // Marcar que necesitamos refrescar lightgallery después del render
+          this.needRefresh = true;
         }
 
         // Set map center from first location when available
@@ -345,6 +366,16 @@ export class TourAdminDetailComponent implements OnInit {
 
   onBeforeSlide(): void {
     // Handle before slide event
+  }
+
+  /**
+   * Refresh lightgallery after view updates (when data loads dynamically)
+   */
+  ngAfterViewChecked(): void {
+    if (this.needRefresh && this.lightGallery) {
+      this.lightGallery.refresh();
+      this.needRefresh = false;
+    }
   }
 
   openSnackBar(message: string) {
