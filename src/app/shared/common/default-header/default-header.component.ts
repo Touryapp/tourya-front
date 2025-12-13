@@ -13,6 +13,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { Roles } from "../../enums/roles.enum";
 import { RequestsProvidersStatus } from "../../enums/requests-providers-status.enum";
 import { DataService } from "../../../shared/data/data.service";
+import { ProviderPanelStateService, ProviderPanelView } from "../../../shared/services/provider-panel-state.service";
 
 @Component({
   selector: "app-default-header",
@@ -84,7 +85,8 @@ export class DefaultHeaderComponent {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     public settings: SettingService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private panelStateService: ProviderPanelStateService
   ) {
     this.common.base.subscribe((res: string) => {
       this.base = res;
@@ -239,5 +241,21 @@ export class DefaultHeaderComponent {
     } else if (this.isProvider && requestProviderStatus === RequestsProvidersStatus.APPROVED) {
       this.router.navigate(["providers"]);
     }
+  }
+
+  /**
+   * Navega al panel de proveedor y cambia la vista usando el servicio compartido
+   */
+  navigateToProviderPanel(view: ProviderPanelView): void {
+    console.log('🔄 Navegando a provider panel con vista:', view);
+    
+    // Primero navegar a la ruta del provider panel
+    this.router.navigate(['/providers/provider-panel']).then(() => {
+      // Luego cambiar la vista usando el servicio
+      this.panelStateService.setView(view);
+      
+      // Cerrar el menú hamburguesa
+      this.closeMenu();
+    });
   }
 }

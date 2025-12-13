@@ -467,6 +467,40 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Confirma una reserva desde el modal usando el servicio PUT
+   */
+  public confirmBookingFromModal(bookingId: string): void {
+    // Extraer el ID numérico del formato "RES-10" o "TB-1001"
+    const numericId = bookingId.includes('-') ? bookingId.split('-')[1] : bookingId;
+    
+    console.log('🔄 Confirmando reserva:', numericId);
+    
+    this.reservationService.confirmReservation(numericId).subscribe({
+      next: (response) => {
+        console.log('✅ Reserva confirmada exitosamente:', response);
+        
+        // Actualizar el estado en la tabla local
+        const booking = this.tableData.find(b => b.id === bookingId);
+        if (booking) {
+          booking.status = 'Confirmed';
+        }
+        
+        // Actualizar también en tableDataCopy
+        const bookingCopy = this.tableDataCopy.find(b => b.id === bookingId);
+        if (bookingCopy) {
+          bookingCopy.status = 'Confirmed';
+        }
+        
+        alert(`✅ Reserva ${bookingId} confirmada exitosamente`);
+      },
+      error: (error) => {
+        console.error('❌ Error al confirmar la reserva:', error);
+        alert(`❌ Error al confirmar la reserva. Por favor intenta nuevamente.`);
+      }
+    });
+  }
+
+  /**
    * Cancela una reserva (solo UI - mock)
    */
   public cancelBooking(bookingId: string): void {

@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ReviewsService } from "../../../core/services/reviews.service";
 import { ProviderReview } from "../../../shared/models/reviews.model";
+import { ProviderPanelStateService } from "../../../shared/services/provider-panel-state.service";
 
 @Component({
   selector: "app-provider-panel",
@@ -55,7 +56,8 @@ export class ProviderPanelComponent implements OnInit {
     private reviewsService: ReviewsService,
     private router: Router,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private panelStateService: ProviderPanelStateService
   ) {}
 
   ngOnInit(): void {
@@ -72,17 +74,30 @@ export class ProviderPanelComponent implements OnInit {
     // Si viene desde el QR scanner, mostrar la vista de "Mis reservas"
     if (openModal === 'true') {
       console.log('🔓 Activando vista de Mis reservas desde QR scan');
-      this.mostrarTourManagement = true;
-      this.mostrarTours = false;
-      this.mostrarTemplates = false;
-      this.mostrarReviews = false;
-      this.mostrarPagos = false;
+      this.setView('reservas');
     }
+
+    // Suscribirse a cambios de vista desde el menú hamburguesa
+    this.panelStateService.currentView$.subscribe(view => {
+      console.log('📱 Cambio de vista desde menú hamburguesa:', view);
+      this.setView(view);
+    });
 
     // No limpiar los query params aquí para que provider-tour-management pueda leerlos
     // this.router.navigate([], { queryParams: null });
 
     this.getToursProvider();
+  }
+  
+  /**
+   * Cambia la vista activa del panel
+   */
+  setView(view: 'dashboard' | 'tours' | 'templates' | 'reservas' | 'reviews' | 'pagos'): void {
+    this.mostrarTours = view === 'tours';
+    this.mostrarTemplates = view === 'templates';
+    this.mostrarTourManagement = view === 'reservas';
+    this.mostrarReviews = view === 'reviews';
+    this.mostrarPagos = view === 'pagos';
   }
 
   getToursProvider() {

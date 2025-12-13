@@ -341,6 +341,14 @@
                                     <i class="isax isax-tick-square me-2"></i>Marcar como Completada
                                 </button>
                             }
+                            @if (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING') {
+                                <button 
+                                    class="btn btn-success" 
+                                    (click)="confirmBookingFromModal(selectedBooking.id)"
+                                    data-bs-dismiss="modal">
+                                    <i class="isax isax-tick-circle me-2"></i>Confirmar reserva
+                                </button>
+                            }
                             @if (selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
                                 <button 
                                     class="btn btn-danger" 

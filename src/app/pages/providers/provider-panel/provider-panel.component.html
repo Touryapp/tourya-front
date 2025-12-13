@@ -27,7 +27,7 @@
       <div class="card-body user-sidebar-body">
         <ul>
           <li>
-            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="mostrarTours = false; mostrarTemplates = false; mostrarTourManagement = false; mostrarReviews = false; mostrarPagos = false">
+            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('dashboard')">
               <i class="isax isax-grid-55"></i> Dashboard
             </a>
           </li>
@@ -50,12 +50,12 @@
             <!-- Submenú colapsable -->
             <ul class="collapse ps-3" id="misToursSub">
               <li>
-                <a href="javascript:void(0);" class="d-flex align-items-center" (click)="mostrarTours = true; mostrarTemplates = false; mostrarTourManagement = false; mostrarReviews = false; mostrarPagos = false">
+                <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('tours')">
                   <i class="isax isax-user"></i> Lista de Tour
                 </a>
               </li>
               <li>
-                <a href="javascript:void(0);" class="d-flex align-items-center" (click)="mostrarTours = false; mostrarTemplates = true; mostrarTourManagement = false; mostrarReviews = false; mostrarPagos = false">
+                <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('templates')">
                   <i class="isax isax-document-text"></i> Templates de Horarios
                 </a>
               </li>
@@ -65,18 +65,18 @@
             
           </li>
               <li>
-                <a href="javascript:void(0);" class="d-flex align-items-center" (click)="mostrarTours = false; mostrarTemplates = false; mostrarTourManagement = true; mostrarReviews = false; mostrarPagos = false">
+                <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('reservas')">
                   <i class="isax isax-route-square"></i> Mis reservas
                 </a>
               </li>
           <li>
-            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="mostrarTours = false; mostrarTemplates = false; mostrarTourManagement = false; mostrarReviews = true; mostrarPagos = false">
+            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('reviews')">
               <i class="isax isax-star"></i> Mis reseñas
             </a>
           </li>
 
           <li>
-            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="mostrarTours = false; mostrarTemplates = false; mostrarTourManagement = false; mostrarReviews = false; mostrarPagos = true">
+            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('pagos')">
               <i class="isax isax-wallet-2"></i> Mis Pagos
             </a>
           </li>

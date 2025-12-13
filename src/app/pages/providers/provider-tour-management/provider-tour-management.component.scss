@@ -14,6 +14,7 @@
   .hotel-list {
     border-radius: 0.75rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden; // Prevenir desbordamiento del card
 
     .list-header {
       border-bottom: 1px solid #e3e6ef;
@@ -275,3 +276,50 @@
   z-index: 1000;
   border-radius: 0.75rem;
 }
+
+// Responsive table styles - NUEVO
+.custom-datatable-filter {
+  &.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    display: block;
+    
+    // Asegurar que la tabla no se desborde
+    table {
+      min-width: 900px; // Ancho mínimo para que las columnas sean legibles
+      width: 100%;
+      
+      // En móviles, hacer las celdas más compactas
+      @media (max-width: 991.98px) {
+        min-width: 800px;
+        font-size: 0.875rem;
+        
+        th, td {
+          padding: 0.75rem 0.5rem;
+          white-space: nowrap;
+        }
+        
+        .avatar {
+          width: 36px !important;
+          height: 36px !important;
+        }
+        
+        .btn-sm {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+        }
+      }
+      
+      @media (max-width: 767.98px) {
+        min-width: 700px;
+        font-size: 0.8rem;
+        
+        th, td {
+          padding: 0.5rem 0.375rem;
+        }
+      }
+    }
+  }
+}
+
