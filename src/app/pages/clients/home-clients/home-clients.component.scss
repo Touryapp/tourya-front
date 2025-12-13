@@ -1,6 +1,77 @@
 .hero-sec-six {
-  background: url('../../../../../public/assets/img/tourya.svg') no-repeat center center;
-  background-size: cover;
+  position: relative;
+  padding: 100px 0;
+  min-height: 600px;
+  overflow: hidden;
+  
+  &::after {
+    content: "";
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  
+  .banner-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    
+    .slider-img {
+      height: 100%;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    
+    // Vertical dots on the right - exact template style
+    ::ng-deep .owl-dots {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(-50%);
+      
+      .owl-dot {
+        span {
+          display: none;
+        }
+        color: #fff;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(228, 235, 241, 0.2);
+        margin: 3px 0;
+        
+        &.active {
+          background: #fff;
+          outline: 1px solid #fff;
+          outline-offset: 3px;
+          margin: 5px 0;
+        }
+        
+        &:hover {
+          color: #E04F16;
+        }
+      }
+    }
+  }
+  
+  .container {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .work-section-six-client {

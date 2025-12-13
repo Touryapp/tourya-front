@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { OwlOptions } from 'ngx-owl-carousel-o';
+import { OwlOptions, CarouselComponent } from 'ngx-owl-carousel-o';
 import { routes } from '../../../shared/routes/routes';
 // IMPORTS DE SERVICIOS Y DTOS PARA PAÍS, DEPARTAMENTO Y CIUDAD
 
@@ -208,6 +208,46 @@ public clientSlider : OwlOptions ={
       },
     },
 }
+public bannerSlider: OwlOptions = {
+  loop: true,
+  margin: 0,
+  nav: false,
+  dots: true,
+  autoplay: true,
+  autoplayTimeout: 10000,
+  autoplayHoverPause: true,
+  autoplaySpeed: 1000,
+  smartSpeed: 2000,
+  autoWidth: true,
+  mouseDrag: true,
+  touchDrag: true,
+  pullDrag: true,
+  animateOut: "custom-slide-out-up",
+  animateIn: "custom-slide-in-up",
+  responsive: {
+    0: {
+      items: 1,
+    },
+    550: {
+      items: 1,
+    },
+    1200: {
+      items: 1,
+    },
+    1400: {
+      items: 1,
+    },
+  },
+};
+
+@ViewChild('bannerCarousel') bannerCarousel!: CarouselComponent;
+
+onCarouselChanged(event: any): void {
+  // When user manually changes slide (via dots), the library should
+  // automatically reset the autoplay timer with our configuration
+  // (autoplayHoverPause: true, mouseDrag: true, touchDrag: true)
+}
+
 onSubmit() :void { 
   this.router.navigateByUrl('/hotel/hotel-grid'); 
 }
