@@ -527,7 +527,7 @@ export class DataService {
     {
       tittle: 'Proveedores',
       base: 'proveedores',
-      route: routes.contactanos,
+      route: routes.proveedoresPage,
       showAsTab: false,
       separateRoute: false,
       twoTitle: false,

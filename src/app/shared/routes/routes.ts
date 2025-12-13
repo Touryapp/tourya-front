@@ -416,6 +416,6 @@ export class routes {
     return this.baseUrl + "/legal";
   }
   public static get proveedoresPage(): string {
-    return this.baseUrl + "/proveedores";
+    return this.baseUrl + "/providers/home";
   }
 }
