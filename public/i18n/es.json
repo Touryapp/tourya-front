@@ -109,5 +109,79 @@
       "noReviews": "Aún no tienes calificaciones",
       "noReviewsMessage": "Las calificaciones de tus clientes aparecerán aquí"
     }
+  },
+  "provider-home": {
+    "hero": {
+      "title": "Vende más tours en San Andrés con el 1er marketplace de la isla",
+      "subtitle": "Nosotros hacemos el marketing, atendemos a los turistas 24/7 y garantizamos pagos seguros. Tú solo te enfocas en ofrecer experiencias inolvidables.",
+      "cta-heading": "Comienza a vender tus tours hoy mismo",
+      "cta-button": "Registrarse"
+    },
+    "benefits": {
+      "title": "¿Por qué unirte a nuestro Marketplace?",
+      "subtitle": "Tourya es un Marketplace que conecta tus servicios de tour con turistas que buscan vivir las mejores experiencias en la isla de san Andrés.",
+      "cards": {
+        "marketing": {
+          "title": "Marketing incluido",
+          "description": "Nosotros nos encargamos de la publicidad en Google, redes sociales y buscadores."
+        },
+        "payments": {
+          "title": "Pagos seguros y puntuales",
+          "description": "Recibe tu dinero de forma confiable en los tiempos establecidos."
+        },
+        "support": {
+          "title": "Atención al turista 24/7",
+          "description": "Atendemos consultas y reservas por diferentes canales (teléfono, correo y WhatsApp) y en 3 idiomas (español, inglés y portugués)."
+        },
+        "office": {
+          "title": "Oficina física en la isla",
+          "description": "Atención directa de quejas y reclamos, lo que genera confianza al turista."
+        }
+      }
+    },
+    "how-it-works": {
+      "badge": "¿Cómo Funciona?",
+      "title": "Vende tus tours en 3 pasos simples",
+      "steps": {
+        "step1": {
+          "title": "Crea tu cuenta",
+          "description": "Regístrate gratis en nuestro marketplace como operador turístico."
+        },
+        "step2": {
+          "title": "Configura tus tours",
+          "description": "Sube fotos, detalles de tus actividades, precios, horarios y la disponibilidad."
+        },
+        "step3": {
+          "title": "Publica y comienza a vender",
+          "description": "Activa tus tours y empieza a recibir reservas de turistas de todo el mundo."
+        }
+      }
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes de Operadores",
+      "subtitle": "Preguntas frecuentes sobre nuestro marketplace",
+      "items": {
+        "q1": {
+          "question": "¿Cuánto cuesta publicar mis tours?",
+          "answer": "Publicar es totalmente gratis. Solo pagas una comisión cuando se concrete una venta."
+        },
+        "q2": {
+          "question": "¿Cuándo recibo mis pagos?",
+          "answer": "Los pagos se realizan en los tiempos establecidos, de manera segura y transparente."
+        },
+        "q3": {
+          "question": "¿Quién atiende a los turistas?",
+          "answer": "Nuestro equipo se encarga de toda la atención al cliente 24/7 en español, inglés y portugués."
+        },
+        "q4": {
+          "question": "¿Necesito tener una oficina física?",
+          "answer": "No es necesario. Nosotros contamos con oficina propia en la isla para dar soporte a los turistas."
+        },
+        "q5": {
+          "question": "¿Puedo subir más de un tour?",
+          "answer": "Sí, puedes publicar todos los tours que ofrezcas y aumentar tus ingresos."
+        }
+      }
+    }
   }
 }
