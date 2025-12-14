@@ -278,6 +278,8 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
   redirectByRole(role: RoleDto[]) {
     if (role.some(r => r.id === Roles.ADMIN)) {
       this.router.navigate(["admin"]);
+    } else if (role.some(r => r.id === Roles.PROVIDER)) {
+      this.router.navigate(["providers/home"]);
     } else if (role.some(r => r.id === Roles.USER)) {
       this.router.navigate(["home"]);
     }

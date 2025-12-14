@@ -216,14 +216,13 @@ public bannerSlider: OwlOptions = {
   autoplay: true,
   autoplayTimeout: 10000,
   autoplayHoverPause: true,
-  autoplaySpeed: 1000,
-  smartSpeed: 2000,
-  autoWidth: true,
+  autoplaySpeed: 800,
+  smartSpeed: 800,
   mouseDrag: true,
   touchDrag: true,
   pullDrag: true,
-  animateOut: "custom-slide-out-up",
-  animateIn: "custom-slide-in-up",
+  animateOut: "fadeOut",
+  animateIn: "fadeIn",
   responsive: {
     0: {
       items: 1,
@@ -243,9 +242,21 @@ public bannerSlider: OwlOptions = {
 @ViewChild('bannerCarousel') bannerCarousel!: CarouselComponent;
 
 onCarouselChanged(event: any): void {
-  // When user manually changes slide (via dots), the library should
-  // automatically reset the autoplay timer with our configuration
-  // (autoplayHoverPause: true, mouseDrag: true, touchDrag: true)
+  // When user manually changes slide (via dots/drag), we need to
+  // explicitly stop and restart autoplay to reset the timer
+  if (event.property && event.property.name === 'position') {
+    // Check if this was a manual change (not autoplay)
+    if (this.bannerCarousel && event.trigger !== 'autoplay') {
+      // Stop current autoplay
+      this.bannerCarousel.stopAutoplay();
+      // Restart autoplay after a brief delay to reset the timer
+      setTimeout(() => {
+        if (this.bannerCarousel) {
+          this.bannerCarousel.startAutoplay();
+        }
+      }, 100);
+    }
+  }
 }
 
 onSubmit() :void { 

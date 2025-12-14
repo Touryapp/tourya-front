@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { routes } from '../../../shared/routes/routes';
 import { ClientMenuService } from '../../../shared/data/client-menu.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
@@ -24,12 +25,23 @@ export class MyProfileComponent implements OnInit {
   reviewsCurrentPage: number = 1;
 
   constructor(
+    private route: ActivatedRoute,
     private clientMenuService: ClientMenuService,
     private reviewsService: ReviewsService,
     private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    // Escuchar cambios en los query params para navegar a la sección correcta
+    this.route.queryParams.subscribe(params => {
+      if (params['section']) {
+        setTimeout(() => {
+          this.activeSection = params['section'];
+          this.clientMenuService.setActiveSection(params['section']);
+        });
+      }
+    });
+    
     // Suscribirse a cambios de sección desde el menú
     this.clientMenuService.activeSection$.subscribe(section => {
       // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError

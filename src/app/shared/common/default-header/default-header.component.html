@@ -126,14 +126,14 @@
                                                 <li class="has-submenu" [class.active]="isProfileToursOpen">
                                                     <a href="javascript:void(0);" (click)="toggleProfileTours()">Tours <i class="fa-solid fa-angle-down"></i></a>
                                                     <ul class="submenu" [style.display]="isProfileToursOpen ? 'block' : 'none'">
-                                                        <li><a href="javascript:void(0);" (click)="navigateToProviderPanel('tours')">Lista de tours</a></li>
-                                                        <li><a href="javascript:void(0);" (click)="navigateToProviderPanel('templates')">Templates de horarios</a></li>
+                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('tours')">Lista de tours</a></li>
+                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('templates')">Templates de horarios</a></li>
                                                     </ul>
                                                     <a class="mean-expand" href="javascript:void(0);" (click)="toggleProfileTours()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
                                                 </li>
-                                                <li><a href="javascript:void(0);" (click)="navigateToProviderPanel('reservas')">Mis reservas</a></li>
-                                                <li><a href="javascript:void(0);" (click)="navigateToProviderPanel('reviews')">Mis reseñas</a></li>
-                                                <li><a href="javascript:void(0);" (click)="navigateToProviderPanel('pagos')">Mis Pagos</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">Mis reservas</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('reviews')">Mis reseñas</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('payments')">Mis Pagos</a></li>
                                             </ul>
                                             <a class="mean-expand" href="javascript:void(0);" (click)="toggleProfile()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
                                         </li>

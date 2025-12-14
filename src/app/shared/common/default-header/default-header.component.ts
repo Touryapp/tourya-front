@@ -258,4 +258,47 @@ export class DefaultHeaderComponent {
       this.closeMenu();
     });
   }
+
+  /**
+   * Navega a la sección de perfil correcta basándose en el rol del usuario
+   * - Si es Cliente: navega a /clients/my-profile con query param de sección
+   * - Si es Proveedor: navega a /providers/provider-panel con la vista correspondiente
+   */
+  navigateToProfileSection(section: 'profile' | 'bookings' | 'reviews' | 'payments' | 'tours' | 'templates'): void {
+    console.log('🔄 Navegando a sección de perfil:', section, 'Rol:', this.isProvider ? 'Provider' : 'Client');
+    
+    // Si el usuario es proveedor (y no solo cliente), usar la navegación de proveedor
+    if (this.isProvider && !this.isAdmin) {
+      // Mapear las secciones a las vistas del provider panel
+      const viewMap: { [key: string]: ProviderPanelView } = {
+        'tours': 'tours',
+        'templates': 'templates',
+        'bookings': 'reservas',
+        'reviews': 'reviews',
+        'payments': 'pagos'
+      };
+      
+      const view = viewMap[section];
+      if (view) {
+        this.navigateToProviderPanel(view);
+      }
+    } else {
+      // Si es cliente, navegar a la ruta de cliente con query param de sección
+      const sectionMap: { [key: string]: string } = {
+        'profile': 'profile',
+        'bookings': 'bookings',
+        'reviews': 'reviews',
+        'payments': 'payments'
+      };
+      
+      const clientSection = sectionMap[section] || 'profile';
+      
+      this.router.navigate(['/clients/my-profile'], {
+        queryParams: { section: clientSection }
+      }).then(() => {
+        // Cerrar el menú hamburguesa
+        this.closeMenu();
+      });
+    }
+  }
 }
