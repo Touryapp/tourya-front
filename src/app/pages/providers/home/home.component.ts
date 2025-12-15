@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
-import { OwlOptions } from "ngx-owl-carousel-o";
+import { OwlOptions, CarouselComponent } from "ngx-owl-carousel-o";
 import { routes } from "../../../shared/routes/routes";
 
 @Component({
@@ -162,6 +162,57 @@ export class HomeComponent {
       },
     },
   };
+  public bannerSlider: OwlOptions = {
+    loop: true,
+    margin: 0,
+    nav: false,
+    dots: true,
+    autoplay: true,
+    autoplayTimeout: 10000,
+    autoplayHoverPause: true,
+    autoplaySpeed: 800,
+    smartSpeed: 800,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: true,
+    animateOut: "fadeOut",
+    animateIn: "fadeIn",
+    responsive: {
+      0: {
+        items: 1,
+      },
+      550: {
+        items: 1,
+      },
+      1200: {
+        items: 1,
+      },
+      1400: {
+        items: 1,
+      },
+    },
+  };
+
+  @ViewChild('bannerCarousel') bannerCarousel!: CarouselComponent;
+
+  onCarouselChanged(event: any): void {
+    // When user manually changes slide (via dots/drag), we need to
+    // explicitly stop and restart autoplay to reset the timer
+    if (event.property && event.property.name === 'position') {
+      // Check if this was a manual change (not autoplay)
+      if (this.bannerCarousel && event.trigger !== 'autoplay') {
+        // Stop current autoplay
+        this.bannerCarousel.stopAutoplay();
+        // Restart autoplay after a brief delay to reset the timer
+        setTimeout(() => {
+          if (this.bannerCarousel) {
+            this.bannerCarousel.startAutoplay();
+          }
+        }, 100);
+      }
+    }
+  }
+
   onSubmit(): void {
     this.router.navigateByUrl("/hotel/hotel-grid");
   }

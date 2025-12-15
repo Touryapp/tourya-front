@@ -68,7 +68,6 @@
                     <div>
                         <a [routerLink]="routes.login" class="text-white btn btn-secondary w-100 mb-2"
                             *ngIf="!isAuthenticated">Iniciar Sesion</a>
-                        <a href="javascript:void(0);" *ngIf="isAuthenticated && isProvider && !isAdmin" (click)="redirectByRole()" class="text-white btn btn-secondary w-100 mb-2">Perfil Proveedor</a>
                     </div>
                 </div>
             </div>
@@ -334,9 +333,13 @@
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             [routerLink]="routes.customerHotelBooking">My Booking</a>
                                     </li>
-                                    <li *ngIf="isUser">
+                                    <li *ngIf="isUser && !isProvider">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.myProfile">My Profile</a>
+                                            href="javascript:void(0);" (click)="navigateToProfileSection('profile')">My Profile</a>
+                                    </li>
+                                    <li *ngIf="isProvider && !isAdmin">
+                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
+                                            href="javascript:void(0);" (click)="navigateToProviderPanel('dashboard')">My Profile</a>
                                     </li>
                                     <li *ngIf="isAdmin || isUser || isProvider">
                                         <hr class="dropdown-divider my-2">

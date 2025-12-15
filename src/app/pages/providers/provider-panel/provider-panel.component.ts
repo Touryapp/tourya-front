@@ -75,6 +75,18 @@ export class ProviderPanelComponent implements OnInit {
     if (openModal === 'true') {
       console.log('🔓 Activando vista de Mis reservas desde QR scan');
       this.setView('reservas');
+    } else {
+      // Establecer vista por defecto si no hay una vista específica solicitada
+      // Primero verificar si hay una vista pendiente desde el servicio
+      const currentView = this.panelStateService.getCurrentView();
+      if (currentView) {
+        console.log('📱 Vista inicial desde servicio:', currentView);
+        this.setView(currentView);
+      } else {
+        // Si no hay vista desde el servicio, establecer 'tours' como vista por defecto
+        console.log('🏠 Estableciendo vista por defecto: tours');
+        this.setView('dashboard');
+      }
     }
 
     // Suscribirse a cambios de vista desde el menú hamburguesa

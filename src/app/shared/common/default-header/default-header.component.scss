@@ -35,6 +35,23 @@
     padding: 20px;
     margin: -20px -20px 20px -20px; // Negative margins to extend to edges
     
+    // Ensure the inner flex container centers items vertically
+    .d-flex {
+        align-items: center !important;
+        margin-bottom: 0 !important; // Override .mb-3 to prevent vertical misalignment
+        
+        a {
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            
+            img {
+                background: transparent !important;
+                border: none !important;
+            }
+        }
+    }
+    
     .offcanvas-close {
         color: white !important;
         
