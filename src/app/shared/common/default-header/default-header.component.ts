@@ -192,6 +192,12 @@ export class DefaultHeaderComponent {
   }
 
   useLanguage(language: string): void {
+    // Proveedores no pueden cambiar el idioma
+    if (!this.canChangeLanguage) {
+      console.warn('Los proveedores no pueden cambiar el idioma');
+      return;
+    }
+
     const langs = this.translate.getLangs();
     if (langs.includes(language)) {
       this.selectedLanguage = language;
@@ -232,6 +238,19 @@ export class DefaultHeaderComponent {
   }
   get isUser(): boolean {
     return this.authService.isUser();
+  }
+
+  /**
+   * Determina si el usuario puede cambiar el idioma
+   * Solo los proveedores (que no sean admin) NO pueden cambiar el idioma
+   */
+  get canChangeLanguage(): boolean {
+    // Si es proveedor y NO es admin, no puede cambiar idioma
+    if (this.isProvider && !this.isAdmin) {
+      return false;
+    }
+    // Todos los demás (no autenticados, clientes, admins) pueden cambiar idioma
+    return true;
   }
 
   redirectByRole() {

@@ -141,7 +141,7 @@
                     </thead>
                     <tbody>
                         @for (booking of tableData; track booking.id) {
-                            <tr>
+                            <tr (click)="viewBookingDetails(booking)" style="cursor: pointer;">
                                 <!-- Celdas dinámicas -->
                                 <td *ngFor="let column of config.columns">
                                     <!-- Columna de imagen -->
@@ -174,7 +174,7 @@
                                             [hidden]="!isActionVisible(action, booking)"
                                             class="btn btn-sm"
                                             [ngClass]="'btn-' + action.color"
-                                            (click)="onAction(action.id, booking)"
+                                            (click)="onAction(action.id, booking); $event.stopPropagation()"
                                             [title]="action.label">
                                             <i [class]="action.icon"></i>
                                         </button>
@@ -201,6 +201,30 @@
         </div>
     </div>
     <!-- /Booking List -->
+
+    <!-- Pagination -->
+    @if (tableData.length > 0 && totalPages > 1) {
+        <nav class="pagination-nav mt-4">
+            <ul class="pagination justify-content-center justify-content-sm-end">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="previousPage()" aria-label="Previous">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                    </a>
+                </li>
+                @for (page of getPageNumbers(); track page) {
+                    <li class="page-item" [class.active]="page === currentPage">
+                        <a class="page-link" href="javascript:void(0);" (click)="goToPage(page)">{{ page }}</a>
+                    </li>
+                }
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" href="javascript:void(0);" (click)="nextPage()" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    <!-- /Pagination -->
 
 </div>
 <!-- /Provider Tour Management -->

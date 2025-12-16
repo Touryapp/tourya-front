@@ -3,6 +3,7 @@ import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReservationService } from '../../../shared/services/reservation.service';
+import { ClientReservation } from '../../../shared/models/reservation.model';
 import {
   BookingManagementConfig,
   BookingManagementConfigService,
@@ -53,6 +54,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   public pageSize = 10;
   public currentPage = 1;
   public totalBookings = 0;
+  public totalPages = 0; // Agregado para paginación
   public searchDataValue = '';
   public selectedStatus = '';
   public selectedTourType = '';
@@ -63,6 +65,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   
   // Modales
   public selectedBooking: any | null = null;
+
+  // Flag para evitar que el modal se abra múltiples veces desde el QR
+  private modalOpenedFromQR: boolean = false;
 
   // Dropdown states
   dropdownOpen = false;
@@ -79,19 +84,31 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    console.log('🚀 ProviderTourManagementComponent - ngOnInit iniciado');
+    
     // Detectar rol y cargar configuración
     this.currentRole = this.getUserRole();
     this.config = this.configService.getConfigByRole(this.currentRole);
     
-    // Cargar datos
-    this.loadMockData();
+    // Cargar datos según el rol
+    if (this.currentRole === 'CLIENT') {
+      this.loadClientReservations();
+    } else {
+      this.loadMockData();
+    }
     
     // Verificar si hay parámetros de query (desde el QR scan)
     this.route.queryParams.subscribe((params: any) => {
-      console.log('📋 Query params recibidos:', params);
+      console.log('📋 Query params recibidos en provider-tour-management:', params);
       
-      if (params['openModal'] === 'true' && params['reservationId']) {
+      // Solo procesar si openModal=true, hay reservationId y NO se ha abierto el modal antes
+      if (params['openModal'] === 'true' && params['reservationId'] && !this.modalOpenedFromQR) {
         console.log('🔓 Cargando reserva desde API con reservationId:', params['reservationId']);
+        
+        // Marcar que el modal ya fue abierto desde QR
+        this.modalOpenedFromQR = true;
+        
+        // NO limpiar los query params aquí, lo hace el componente padre (provider-panel)
         
         // Llamar al servicio para obtener los datos reales de la reserva
         this.reservationService.getReservationById(params['reservationId']).subscribe({
@@ -101,17 +118,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
             // Convertir la reserva del backend al formato ProviderTourBooking
             this.selectedBooking = this.mapReservationToBooking(reservation);
             
-            // Abrir el modal automáticamente después de que la vista esté lista
-            requestAnimationFrame(() => {
-              const modalElement = document.getElementById('bookingDetailModal');
-              if (modalElement) {
-                const modal = new (window as any).bootstrap.Modal(modalElement);
-                modal.show();
-                console.log('✅ Modal abierto automáticamente con datos reales');
-              } else {
-                console.error('❌ No se encontró el elemento del modal');
-              }
-            });
+            // Abrir el modal con retry para asegurar que el DOM esté listo
+            this.openModalWithRetry();
           },
           error: (error) => {
             console.error('❌ Error al obtener la reserva:', error);
@@ -120,15 +128,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
             console.log('⚠️ Usando datos del QR como fallback');
             this.selectedBooking = this.createBookingFromParams(params);
             
-            // Abrir el modal de todos modos
-            requestAnimationFrame(() => {
-              const modalElement = document.getElementById('bookingDetailModal');
-              if (modalElement) {
-                const modal = new (window as any).bootstrap.Modal(modalElement);
-                modal.show();
-                console.log('✅ Modal abierto con datos del QR (fallback)');
-              }
-            });
+            // Abrir el modal con retry
+            this.openModalWithRetry();
           }
         });
       }
@@ -138,25 +139,37 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   /**
    * Mapea una Reservation del backend a ProviderTourBooking
    */
-  private mapReservationToBooking(reservation: any): ProviderTourBooking {
+  private mapReservationToBooking(reservation: ClientReservation): ProviderTourBooking {
     return {
-      id: `RES-${reservation.id || reservation.reservationId}`,
-      tourName: reservation.tourName || 'Reserva desde QR',
-      tourType: reservation.tourType || 'Tour',
+      id: `RES-${reservation.reservationId}`,
+      tourName: reservation.tourName,
+      tourType: 'Tour',
       img: 'tours-21.jpg',
-      customerName: reservation.payer || 'Cliente',
-      customerEmail: reservation.email || '',
-      customerPhone: reservation.customerPhone || '+1 00000 00000',
-      travellers: reservation.travellers || 'N/A',
-      duration: reservation.duration || 'N/A',
-      price: reservation.price ? `$${reservation.price}` : '$0',
-      bookingDate: reservation.reservationDate ? new Date(reservation.reservationDate).toLocaleDateString() : 'N/A',
-      checkInDate: reservation.checkInDate ? this.formatDateTime(reservation.checkInDate) : 'N/A',
-      returnDate: reservation.returnDate ? this.formatDateTime(reservation.returnDate) : 'N/A',
-      status: reservation.status || 'PENDING',
-      destination: reservation.destination || 'N/A',
-      extraServices: reservation.extraServices || [],
-      activities: reservation.activities || [],
+      customerName: reservation.payerName,
+      customerEmail: reservation.payerEmail,
+      customerPhone: reservation.payerPhone,
+      travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
+      duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
+      price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
+      bookingDate: new Date(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }),
+      checkInDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })}, ${reservation.slotTimeStart}`,
+      returnDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })}, ${reservation.slotTimeEnd}`,
+      status: this.mapReservationStatus(reservation.reservationDeliveryStatus),
+      destination: 'N/A',
+      extraServices: [],
+      activities: [],
       isSelected: false
     };
   }
@@ -232,7 +245,87 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Carga datos mock para simular las reservas de tours
+   * Carga las reservas reales del cliente desde el API
+   */
+  private loadClientReservations(): void {
+    this.reservationService.getClientReservations({
+      page: this.currentPage - 1,
+      size: this.pageSize
+    }).subscribe({
+      next: (response) => {
+        console.log('✅ Reservas del cliente cargadas:', response);
+        
+        // Mapear las reservas del API al formato de la tabla
+        const mappedReservations = response.content.map((reservation, index) => 
+          this.mapClientReservationToBooking(reservation, index)
+        );
+        
+        this.tableData = mappedReservations;
+        this.tableDataCopy = [...mappedReservations];
+        this.totalBookings = response.totalElements;
+        this.totalPages = response.totalPages; // Guardar total de páginas
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar reservas del cliente:', error);
+        // Fallback a datos mock en caso de error
+        this.loadMockData();
+      }
+    });
+  }
+
+  /**
+   * Mapea una ClientReservation del API a ProviderTourBooking para la tabla
+   */
+  private mapClientReservationToBooking(reservation: ClientReservation, index: number): ProviderTourBooking {
+    return {
+      sNo: index + 1,
+      id: `RES-${reservation.reservationId}`,
+      tourName: reservation.tourName,
+      tourType: 'Tour', // El API no devuelve tipo de tour
+      img: 'tours-21.jpg', // Imagen por defecto
+      customerName: reservation.payerName,
+      customerEmail: reservation.payerEmail,
+      customerPhone: reservation.payerPhone,
+      travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
+      duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
+      price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
+      bookingDate: new Date(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }),
+      checkInDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })}, ${reservation.slotTimeStart}`,
+      returnDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })}, ${reservation.slotTimeEnd}`,
+      status: this.mapReservationStatus(reservation.reservationDeliveryStatus),
+      destination: 'N/A', // El API no devuelve destino
+      extraServices: [],
+      activities: [],
+      isSelected: false
+    };
+  }
+
+  /**
+   * Mapea el estado de la reserva del API al formato de la tabla
+   */
+  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED'): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' {
+    const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed'> = {
+      'PENDING': 'Pending',
+      'DELIVERED': 'Completed',
+      'CANCELLED': 'Cancelled'
+    };
+    return statusMap[apiStatus] || 'Pending';
+  }
+
+  /**
+   * Carga datos mock para simular las reservas de tours (usado para proveedores)
    */
   private loadMockData(): void {
     const mockData: ProviderTourBooking[] = [
@@ -447,7 +540,40 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
    */
   public viewBookingDetails(booking: ProviderTourBooking): void {
     this.selectedBooking = booking;
-    this.selectedBooking.status = 'Pending';
+    
+    // Abrir el modal programáticamente
+    setTimeout(() => {
+      const modalElement = document.getElementById('bookingDetailModal');
+      if (modalElement) {
+        const modal = new (window as any).bootstrap.Modal(modalElement);
+        modal.show();
+      }
+    }, 0);
+  }
+
+  /**
+   * Abre el modal con reintentos para asegurar que el DOM esté listo
+   * Útil cuando se viene desde el QR scanner y el componente se está cargando
+   */
+  private openModalWithRetry(attempt: number = 0, maxAttempts: number = 20): void {
+    const modalElement = document.getElementById('bookingDetailModal');
+    
+    if (modalElement) {
+      // Modal encontrado, abrirlo
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+      console.log(`✅ Modal abierto exitosamente (intento ${attempt + 1})`);
+    } else if (attempt < maxAttempts) {
+      // Modal no encontrado, reintentar después de un delay
+      console.log(`⏳ Modal no encontrado, reintentando... (intento ${attempt + 1}/${maxAttempts})`);
+      setTimeout(() => {
+        this.openModalWithRetry(attempt + 1, maxAttempts);
+      }, 300); // Esperar 300ms entre intentos (total 6 segundos)
+    } else {
+      // Se agotaron los intentos
+      console.error('❌ No se pudo abrir el modal después de múltiples intentos');
+      console.error('El componente puede no haberse renderizado correctamente');
+    }
   }
 
   /**
@@ -469,31 +595,52 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Confirma una reserva desde el modal usando el servicio PUT
+   * Confirma/Consume una reserva desde el modal
    */
   public confirmBookingFromModal(bookingId: string): void {
     // Extraer el ID numérico del formato "RES-10" o "TB-1001"
     const numericId = bookingId.includes('-') ? bookingId.split('-')[1] : bookingId;
     
-    console.log('🔄 Confirmando reserva:', numericId);
+    console.log('🔄 Consumiendo reserva:', numericId);
     
     this.reservationService.confirmReservation(numericId).subscribe({
       next: (response) => {
-        console.log('✅ Reserva confirmada exitosamente:', response);
+        console.log('✅ Reserva consumida exitosamente:', response);
         
-        // Actualizar el estado en la tabla local
+        // Actualizar el estado en la tabla local según la respuesta del API
         const booking = this.tableData.find(b => b.id === bookingId);
         if (booking) {
-          booking.status = 'Confirmed';
+          // Mapear el deliveryStatus de la respuesta al status de la UI
+          booking.status = response.deliveryStatus === 'DELIVERED' ? 'Completed' : 
+                          response.deliveryStatus === 'PENDING' ? 'Pending' : 
+                          'Cancelled';
         }
         
         // Actualizar también en tableDataCopy
         const bookingCopy = this.tableDataCopy.find(b => b.id === bookingId);
         if (bookingCopy) {
-          bookingCopy.status = 'Confirmed';
+          bookingCopy.status = response.deliveryStatus === 'DELIVERED' ? 'Completed' : 
+                              response.deliveryStatus === 'PENDING' ? 'Pending' : 
+                              'Cancelled';
         }
         
-        alert(`✅ Reserva ${bookingId} confirmada exitosamente`);
+        // Actualizar el selectedBooking si es el que está en el modal
+        if (this.selectedBooking && this.selectedBooking.id === bookingId) {
+          this.selectedBooking.status = response.deliveryStatus === 'DELIVERED' ? 'Completed' : 
+                                       response.deliveryStatus === 'PENDING' ? 'Pending' : 
+                                       'Cancelled';
+        }
+        
+        // Cerrar el modal automáticamente
+        const modalElement = document.getElementById('bookingDetailModal');
+        if (modalElement) {
+          const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
+          if (modal) {
+            modal.hide();
+          }
+        }
+        
+        alert(`✅ Reserva ${bookingId} confirmada y entregada exitosamente`);
       },
       error: (error) => {
         console.error('❌ Error al confirmar la reserva:', error);
@@ -698,5 +845,81 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
       'Completed': 'badge-success'
     };
     return statusClasses[status] || 'badge-secondary';
+  }
+
+  /**
+   * Métodos de paginación
+   */
+  
+  /**
+   * Navega a una página específica
+   */
+  public goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) {
+      return;
+    }
+    this.currentPage = page;
+    // Recargar datos si es cliente
+    if (this.currentRole === 'CLIENT') {
+      this.loadClientReservations();
+    }
+  }
+
+  /**
+   * Navega a la página anterior
+   */
+  public previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      // Recargar datos si es cliente
+      if (this.currentRole === 'CLIENT') {
+        this.loadClientReservations();
+      }
+    }
+  }
+
+  /**
+   * Navega a la página siguiente
+   */
+  public nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      // Recargar datos si es cliente
+      if (this.currentRole === 'CLIENT') {
+        this.loadClientReservations();
+      }
+    }
+  }
+
+  /**
+   * Obtiene el array de números de página para mostrar
+   */
+  public getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+    
+    if (this.totalPages <= maxPagesToShow) {
+      // Mostrar todas las páginas si son pocas
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Mostrar páginas alrededor de la actual
+      let startPage = Math.max(1, this.currentPage - 2);
+      let endPage = Math.min(this.totalPages, this.currentPage + 2);
+      
+      // Ajustar si estamos cerca del inicio o fin
+      if (this.currentPage <= 3) {
+        endPage = maxPagesToShow;
+      } else if (this.currentPage >= this.totalPages - 2) {
+        startPage = this.totalPages - maxPagesToShow + 1;
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
   }
 }

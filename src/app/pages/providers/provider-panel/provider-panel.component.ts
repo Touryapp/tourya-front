@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { routes } from "../../../shared/routes/routes";
 import { RequestProvider } from "../../../shared/dto/requestProvider-response.dto";
 import { RequestProvidersService } from "../requestproviders/request-providers.service";
@@ -57,13 +57,15 @@ export class ProviderPanelComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private panelStateService: ProviderPanelStateService
+    private panelStateService: ProviderPanelStateService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     const added = !!this.route.snapshot.queryParamMap.get("addedTour");
     const edited = !!this.route.snapshot.queryParamMap.get("editedTour");
     const openModal = this.route.snapshot.queryParamMap.get("openModal");
+    const reservationId = this.route.snapshot.queryParamMap.get("reservationId");
 
     if (added) {
       this.openSnackBar("Tour added successfully");
@@ -71,10 +73,29 @@ export class ProviderPanelComponent implements OnInit {
       this.openSnackBar("Tour successfully edited");
     }
     
-    // Si viene desde el QR scanner, mostrar la vista de "Mis reservas"
-    if (openModal === 'true') {
-      console.log('🔓 Activando vista de Mis reservas desde QR scan');
-      this.setView('reservas');
+    // Si viene desde el QR scanner, mostrar la vista de "Mis reservas" INMEDIATAMENTE
+    if (openModal === 'true' && reservationId) {
+      console.log('🔓 QR DETECTADO - Activando vista de Mis reservas');
+      console.log('📋 Reservation ID:', reservationId);
+      console.log('🎯 Estableciendo mostrarTourManagement = true');
+      
+      // Usar setTimeout para asegurar que Angular detecte el cambio
+      setTimeout(() => {
+        this.setView('reservas');
+        this.cdr.detectChanges(); // Forzar detección de cambios
+        console.log('✅ Vista activada - mostrarTourManagement:', this.mostrarTourManagement);
+        
+        // Limpiar los query params DESPUÉS de activar la vista
+        // Esto evita que el modal se vuelva a abrir al cambiar de vista
+        setTimeout(() => {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {},
+            replaceUrl: true // Reemplazar la URL en el historial
+          });
+          console.log('🧹 Query params limpiados desde provider-panel');
+        }, 500); // Esperar 500ms para que el componente hijo lea los params
+      }, 0);
     } else {
       // Establecer vista por defecto si no hay una vista específica solicitada
       // Primero verificar si hay una vista pendiente desde el servicio
@@ -83,8 +104,8 @@ export class ProviderPanelComponent implements OnInit {
         console.log('📱 Vista inicial desde servicio:', currentView);
         this.setView(currentView);
       } else {
-        // Si no hay vista desde el servicio, establecer 'tours' como vista por defecto
-        console.log('🏠 Estableciendo vista por defecto: tours');
+        // Si no hay vista desde el servicio, establecer 'dashboard' como vista por defecto
+        console.log('🏠 Estableciendo vista por defecto: dashboard');
         this.setView('dashboard');
       }
     }

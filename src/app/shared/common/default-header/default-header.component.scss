@@ -25,7 +25,7 @@
         order: -1 !important; /* Force visual first position */
         margin-right: auto !important; /* Push everything else right, stick to left */
         margin-left: 0 !important; /* Ensure no left margin pushing it right */
-        display: block !important;
+        // Removed display: block !important to respect Bootstrap's d-xl-none class
     }
 }
 
