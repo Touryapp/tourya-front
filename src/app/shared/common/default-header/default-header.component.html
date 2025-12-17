@@ -179,28 +179,14 @@
                                             <a href="javascript:void(0);"
                                                 class="dropdown-toggle bg-white border d-flex align-items-center"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img src="assets/img/flags/us-flag.svg" class="me-2" alt="flag">ENG
+                                                <img [src]="getLanguageImg(selectedLanguage)" class="me-2" alt="flag">{{selectedLanguage | uppercase}}
                                             </a>
                                             <ul class="dropdown-menu p-2">
-                                                <li>
+                                                <li *ngFor="let language of languages">
                                                     <a class="dropdown-item rounded d-flex align-items-center"
-                                                        href="javascript:void(0);">
-                                                        <img src="assets/img/flags/us-flag.svg" class="me-2"
-                                                            alt="flag">ENG
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item rounded d-flex align-items-center"
-                                                        href="javascript:void(0);">
-                                                        <img src="assets/img/flags/arab-flag.svg" class="me-2"
-                                                            alt="flag">ARA
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item rounded d-flex align-items-center"
-                                                        href="javascript:void(0);">
-                                                        <img src="assets/img/flags/france-flag.svg" class="me-2"
-                                                            alt="flag">FRE
+                                                        href="javascript:void(0);" (click)="useLanguage(language)">
+                                                        <img [src]="getLanguageImg(language)" class="me-2" alt="flag">
+                                                        {{language | uppercase}}
                                                     </a>
                                                 </li>
                                             </ul>
