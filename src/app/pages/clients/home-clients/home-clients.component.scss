@@ -88,7 +88,7 @@
     // Vertical dots on the right - centered in hero section
     ::ng-deep .owl-dots {
       position: absolute;
-      right: 50px;
+      right: 15px;
       top: 50%;
       z-index: 10;
       display: flex;
@@ -130,7 +130,7 @@
   @media (max-width: 992px) {
     .banner-slider {
       ::ng-deep .owl-dots {
-        right: 20px;
+        right: 15px;
       }
     }
   }

@@ -65,6 +65,10 @@ export class DefaultHeaderComponent {
   }
   @HostListener("window:scroll", [])
   onWindowScroll() {
+    // Don't change header state when hamburger menu is open to prevent menu reset
+    if (this.show) {
+      return;
+    }
     // Add a fixed class when the scroll position is greater than 50px
     this.isFixed = window.pageYOffset > 50;
   }
@@ -169,10 +173,14 @@ export class DefaultHeaderComponent {
   closeMenu(): void {
     this.isMobileMenu = false; // Removes the `mean-container` class
     this.show = false;
+    // Re-enable body scroll
+    document.body.style.overflow = '';
   }
   addmenu(): void {
     this.isMobileMenu = true;
     this.show = true;
+    // Disable body scroll to prevent menu reset on scroll
+    document.body.style.overflow = 'hidden';
   }
   openSubMenu(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
