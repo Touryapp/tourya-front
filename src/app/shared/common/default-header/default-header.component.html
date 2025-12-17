@@ -2,6 +2,7 @@
 
     <!-- Header Topbar-->
     <div class="header-topbar header-top-six text-center bg-transparent">
+
         <div class="container">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
                 <div class="d-flex align-items-center flex-wrap">
@@ -19,7 +20,7 @@
                     </a>
                 </div>
                 <div class="d-flex align-items-center">
-                    <div class="dropdown flag-dropdown mb-2 me-3">
+                    <div class="dropdown flag-dropdown mb-2 me-3" *ngIf="canChangeLanguage">
                         <a href="javascript:void(0);" class="dropdown-toggle d-inline-flex align-items-center"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <img [src]="getLanguageImg(selectedLanguage)" class="me-2" alt="flag">{{selectedLanguage |
@@ -67,7 +68,6 @@
                     <div>
                         <a [routerLink]="routes.login" class="text-white btn btn-secondary w-100 mb-2"
                             *ngIf="!isAuthenticated">Iniciar Sesion</a>
-                        <a href="javascript:void(0);" *ngIf="isAuthenticated && !isAdmin" (click)="redirectByRole()" class="text-white btn btn-secondary w-100 mb-2">Perfil Proveedor</a>
                     </div>
                 </div>
             </div>
@@ -82,25 +82,11 @@
                     <div class="offcanvas-detail">
                         <div class="offcanvas-head">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <a [routerLink]="routes.index" class="black-logo-responsive">
-                                    <img src="assets/img/logo-dark.svg" alt="logo-img">
-                                </a>
-                                <a [routerLink]="routes.index" class="white-logo-responsive">
-                                    <img src="assets/img/logo.svg" alt="logo-img">
+                                <a [routerLink]="routes.index">
+                                    <img src="assets/img/logo-blue.svg" alt="logo-img" style="max-width: 120px;">
                                 </a>
                                 <div class="offcanvas-close" (click)="closeMenu()">
                                     <i class="ti ti-x"></i>
-                                </div>
-                            </div>
-                            <div class="wishlist-info d-flex justify-content-between align-items-center">
-                                <h6 class="fs-16 fw-medium">Wishlist</h6>
-                                <div class="d-flex align-items-center">
-                                    <div class="fav-dropdown">
-                                        <a [routerLink]="routes.wishlist" class="position-relative">
-                                            <i class="isax isax-heart"></i><span
-                                                class="count-icon bg-secondary text-gray-9">0</span>
-                                        </a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -112,128 +98,84 @@
                                         </span></span>
                                 </a>
                                 <nav class="mean-nav">
-                                    <ul class="main-nav" style="display: none;" [ngClass]="{'active' : isDropdownOpen}">
-                                        <ng-container *ngFor="let mainMenus of header, let i = index">
-                                            <ng-container *ngIf="mainMenus.separateRoute === true">
-                                                <li class="has-submenu megamenu active"
-                                                    [ngClass]="{'dropdown-opened' : isDropdownOpen}">
-                                                    <a href="javascript:void(0);">
-                                                        {{mainMenus.tittle}}
-                                                        <i class="fa-solid fa-plus"></i>
-                                                    </a>
-                                                    <ul class="submenu mega-submenu"
-                                                        [ngStyle]="{ display: isDropdownOpen ? 'block' : 'none' }">
+                                    <ul class="main-nav" style="display: block;">
+                                        <!-- User Profile Section (shown only when authenticated) -->
+                                        <li *ngIf="isAuthenticated" class="user-profile-section border-bottom pb-3 mb-3">
+                                            <div class="d-flex align-items-center mb-3 px-2">
+                                                <span class="avatar avatar-md me-2">
+                                                    <img src="assets/img/users/user-05.jpg" alt="User"
+                                                        class="img-fluid rounded-circle border border-white border-2">
+                                                </span>
+                                                <h6 class="mb-0 fs-16">Jeffrey Wilson</h6>
+                                            </div>
+                                            <!-- Direct user options -->
+                                            <ul class="list-unstyled mb-0">
+                                                <li *ngIf="isUser">
+                                                    <a class="d-block py-2 px-2" [routerLink]="routes.customerHotelBooking" (click)="closeMenu()">My Booking</a>
+                                                </li>
+                                                <li *ngIf="isAdmin || isUser || isProvider">
+                                                    <a class="d-block py-2 px-2" [routerLink]="routes.profileSettings" (click)="closeMenu()">Settings</a>
+                                                </li>
+                                                <li>
+                                                    <a class="d-block py-2 px-2" href="javascript:void(0);" (click)="logout()">Logout</a>
+                                                </li>
+                                            </ul>
+                                        </li>
 
-                                                        <li>
-                                                            <div class="megamenu-wrapper">
-                                                                <div
-                                                                    class="d-none d-lg-flex align-items-center justify-content-between flex-wrap">
-                                                                    <h6 class="mb-3">Home Pages</h6>
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-secondary btn-md mb-3 text-white d-inline-block w-auto">Purchase
-                                                                        Template</a>
-                                                                </div>
-                                                                <div class="row g-lg-4">
-                                                                    <ng-container *ngFor="let menu of mainMenus.menu">
-                                                                        <div class="col-lg-2">
-                                                                            <div class="single-demo"
-                                                                                [class.active]="base === menu.base">
-                                                                                <div class="demo-img">
-                                                                                    <a [routerLink]="menu.route"><img
-                                                                                            [src]="menu.img"
-                                                                                            class="img-fluid"
-                                                                                            alt="img" /></a>
-                                                                                </div>
-                                                                                <div class="demo-info">
-                                                                                    <a
-                                                                                        [routerLink]="menu.route">{{menu.homeName}}</a>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </ng-container>
-                                                                </div>
-                                                            </div>
-                                                        </li>
+                                        <!-- My Profile Submenu (shown only when authenticated) -->
+                                        <li *ngIf="isAuthenticated" class="has-submenu border-bottom pb-3 mb-3" [class.active]="isProfileOpen">
+                                            <a href="javascript:void(0);" (click)="toggleProfile()">My Profile <i class="fa-solid fa-angle-down"></i></a>
+                                            <ul class="submenu" [style.display]="isProfileOpen ? 'block' : 'none'">
+                                                <!-- Provider-specific options -->
+                                                <li *ngIf="isProvider && !isAdmin" class="has-submenu" [class.active]="isProfileToursOpen">
+                                                    <a href="javascript:void(0);" (click)="toggleProfileTours()">Tours <i class="fa-solid fa-angle-down"></i></a>
+                                                    <ul class="submenu" [style.display]="isProfileToursOpen ? 'block' : 'none'">
+                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('tours')">Lista de tours</a></li>
+                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('templates')">Templates de horarios</a></li>
                                                     </ul>
-                                                    <a class="mean-expand" href="javascript:void(0);"
-                                                        style="font-size: 18px"
-                                                        [ngClass]="{'mean-clicked' : isDropdownOpen}"
-                                                        (click)="openSubMenu()"><i class="ti ti-plus"></i></a>
+                                                    <a class="mean-expand" href="javascript:void(0);" (click)="toggleProfileTours()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
                                                 </li>
-                                            </ng-container>
-                                            <ng-container *ngIf="mainMenus.separateRoute === false">
-                                                <li class="has-submenu mega-innermenu"
-                                                    [class.active]="base === mainMenus.base || page===mainMenus.base"
-                                                    [ngClass]="{'dropdown-opened' : openDropdownIndex === i}">
-                                                    <a href="javascript:void(0);">{{mainMenus.tittle}}<i
-                                                            class="fa-solid fa-plus"></i></a>
-                                                    <ul class="submenu mega-submenu"
-                                                        [ngStyle]="{ display: openDropdownIndex === i ? 'block' : 'none' }">
-                                                        <li>
-                                                            <div class="megamenu-wrapper">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <h6>{{mainMenus.tittle}}</h6>
-                                                                        <ul style="display: none;">
-                                                                            <ng-container
-                                                                                *ngFor="let menu of mainMenus.menu">
-                                                                                <ng-container
-                                                                                    *ngIf="mainMenus.twoTitle === false">
-                                                                                    <li><a
-                                                                                            href="javascript:void(0)">{{menu.menuValue}}</a>
-                                                                                    </li>
-                                                                                </ng-container>
-                                                                                <ng-container
-                                                                                    *ngIf="mainMenus.twoTitle === true">
-                                                                                    <ng-container
-                                                                                        *ngIf="menu.menuValue">
-                                                                                        <li><a
-                                                                                                href="javascript:void(0)">{{menu.menuValue}}</a>
-                                                                                        </li>
-                                                                                    </ng-container>
-                                                                                </ng-container>
-                                                                                <ng-container
-                                                                                    *ngIf="mainMenus.twoTitle === true">
-                                                                                    <ng-container
-                                                                                        *ngIf="menu.menuValue2">
-                                                                                        <li><a
-                                                                                                href="javascript:void(0)">{{menu.menuValue2}}</a>
-                                                                                        </li>
-                                                                                    </ng-container>
-                                                                                </ng-container>
-                                                                            </ng-container>
-                                                                        </ul>
-                                                                        <a class="mean-expand"
-                                                                            href="javascript:void(0);"
-                                                                            style="font-size: 18px"><i
-                                                                                class="ti ti-plus"></i></a>
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="menu-img">
-                                                                            <img src="assets/img/menu/flight.jpg"
-                                                                                alt="img" class="img-fluid">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                    <a class="mean-expand" href="javascript:void(0);"
-                                                        style="font-size: 18px"
-                                                        [ngClass]="{'mean-clicked' : openDropdownIndex === i}"
-                                                        (click)="toggleSubMenu(i)"><i class="ti ti-plus"></i></a>
-                                                </li>
-                                            </ng-container>
-                                        </ng-container>
+                                                <!-- Common options for all authenticated users -->
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">Mis reservas</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('reviews')">Mis reseñas</a></li>
+                                                <li *ngIf="isUser && !isProvider"><a [routerLink]="routes.wishlist" (click)="closeMenu()">Lista de Deseos</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('profile')">Mi Perfil</a></li>
+                                                <li *ngIf="isProvider && !isAdmin"><a href="javascript:void(0);" (click)="navigateToProfileSection('payments')">Mis Pagos</a></li>
+                                            </ul>
+                                            <a class="mean-expand" href="javascript:void(0);" (click)="toggleProfile()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
+                                        </li>
+
+                                        <!-- Navigation Options -->
+                                        <li>
+                                            <a [routerLink]="routes.listTours" (click)="closeMenu()">Tour</a>
+                                        </li>
+                                        <li>
+                                            <a [routerLink]="routes.blogGrid" (click)="closeMenu()">Blog</a>
+                                        </li>
+                                        <li>
+                                            <a [routerLink]="routes.contactanos" (click)="closeMenu()">Contactenos</a>
+                                        </li>
+                                        <li class="has-submenu" [class.active]="isLegalOpen">
+                                            <a href="javascript:void(0);" (click)="toggleLegal()">Legal <i class="fa-solid fa-angle-down"></i></a>
+                                            <ul class="submenu" [style.display]="isLegalOpen ? 'block' : 'none'">
+                                                <li><a [routerLink]="routes.termsConditions" (click)="closeMenu()">Terminos y condiciones</a></li>
+                                                <li><a [routerLink]="routes.privacyPolicy" (click)="closeMenu()">Politicas de privacidad y tratamientos de datos personales</a></li>
+                                            </ul>
+                                            <a class="mean-expand" href="javascript:void(0);" (click)="toggleLegal()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
+                                        </li>
+                                        <li *ngIf="isProvider || isAdmin">
+                                            <a [routerLink]="routes.proveedoresPage" (click)="closeMenu()">Proveedores</a>
+                                        </li>
                                     </ul>
                                 </nav>
+
                             </div>
                         </div>
                         <div class="offcanvas__contact">
                             <div class="mt-4">
                                 <div class="header-dropdown d-flex flex-fill">
                                     <div class="w-100">
-                                        <div class="dropdown flag-dropdown mb-2">
+                                        <div class="dropdown flag-dropdown mb-2" *ngIf="canChangeLanguage">
                                             <a href="javascript:void(0);"
                                                 class="dropdown-toggle bg-white border d-flex align-items-center"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -278,11 +220,24 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        <div class="mb-2 d-flex align-items-center justify-content-center border rounded p-2 bg-white">
+                                            <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle me-3"
+                                                [ngClass]="{'activate' : isdark}" (click)="darkMode()"
+                                                (click)="settings.changeThemeColor('1')">
+                                                <i class="isax isax-moon"></i>
+                                            </a>
+                                            <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
+                                                [ngClass]="{'activate' : islight}" (click)="darkMode()"
+                                                (click)="settings.changeThemeColor('2')">
+                                                <i class="isax isax-sun-1"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div><a href="javascript:void(0);" class="text-white btn btn-secondary w-100 mb-3"
-                                        data-bs-toggle="modal" data-bs-target="#login-modal">Iniciar Sesion</a></div>
-                                <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary w-100">Become Expert</a>
+                                <div *ngIf="!isAuthenticated">
+                                    <a href="javascript:void(0);" class="text-white btn btn-secondary w-100 mb-3"
+                                        data-bs-toggle="modal" data-bs-target="#login-modal">Iniciar Sesion</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -291,6 +246,13 @@
             <div class="offcanvas-overlay" [ngClass]="{ 'overlay-open': show }" (click)="closeMenu()"></div>
             <div class="header-nav">
                 <div class="main-menu-wrapper">
+                    <!-- Hamburger button outside of ng-template conditions to ensure visibility -->
+                    <div class="header__hamburger d-xl-none my-auto me-3">
+                        <div class="sidebar-menu" (click)="addmenu()" style="cursor: pointer;">
+                            <i class="fa-solid fa-bars fs-24 text-dark"></i>
+                        </div>
+                    </div>
+
                     <div class="navbar-logo">
                         <a class="logo-white header-logo" [routerLink]="routes.index">
                             <img [src]="'assets/img/logo-blue.svg'" class="logo" alt="Logo">
@@ -300,7 +262,8 @@
                             <img src="assets/img/logo-white.svg" class="logo" alt="Logo">
                         </a> -->
                     </div>
-                    <nav id="mobile-menu">
+
+                    <nav id="mobile-menu" class="d-none d-xl-block">
                         <ul class="main-nav" [ngClass]="{ 'active': isHovered }">
                             <ng-container *ngFor="let mainMenus of header">
                                 <!-- Menú simple sin submenús -->
@@ -355,6 +318,8 @@
                                     <i class="isax isax-menu5"></i>
                                 </div>
                             </div>
+
+
                         </div>
 
 
@@ -364,6 +329,8 @@
                                 <i class="isax isax-menu5"></i>
                             </div>
                         </div>
+
+
                     </span>
                     <ng-template #defaultheader>
                         <div class="header-btn d-flex align-items-center">
@@ -382,10 +349,11 @@
                             <div class="dropdown profile-dropdown">
                                 <a href="javascript:void(0);" class="d-flex align-items-center"
                                     data-bs-toggle="dropdown">
-                                    <span class="avatar avatar-md">
+                                    <span class="avatar avatar-md me-2">
                                         <img src="assets/img/users/user-05.jpg" alt="Img"
                                             class="img-fluid rounded-circle border border-white border-4">
                                     </span>
+                                    <h6 class="mb-0 fs-16 d-none d-lg-block text-white">Jeffrey Wilson</h6>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end p-3">
                                     <li *ngIf="isAdmin">
@@ -396,9 +364,13 @@
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             [routerLink]="routes.customerHotelBooking">My Booking</a>
                                     </li>
-                                    <li *ngIf="isUser">
+                                    <li *ngIf="isUser && !isProvider">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.myProfile">My Profile</a>
+                                            href="javascript:void(0);" (click)="navigateToProfileSection('profile')">My Profile</a>
+                                    </li>
+                                    <li *ngIf="isProvider && !isAdmin">
+                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
+                                            href="javascript:void(0);" (click)="navigateToProviderPanel('dashboard')">My Profile</a>
                                     </li>
                                     <li *ngIf="isAdmin || isUser || isProvider">
                                         <hr class="dropdown-divider my-2">
@@ -413,17 +385,15 @@
                                     </li>
                                 </ul>
                             </div>
-                            <a [routerLink]="base==='hotel' || page==='hotel-booking'?routes.addHotel:base==='car' 
-                            || page==='car-booking'? routes.addCar:base==='flight' || page === 'flight-booking'? routes.addFlight:base==='cruise' 
-                            || page === 'cruise-booking'? routes.addCruise:base==='tour' || page === 'tour-booking'? routes.addTour:routes.addHotel"
-                                class="btn btn-primary me-0">
-                                Add Listing
-                            </a>
+
                             <div class="header__hamburger d-xl-none my-auto">
-                                <div class="sidebar-menu">
+                                <div class="sidebar-menu" (click)="addmenu()">
                                     <i class="isax isax-menu5"></i>
                                 </div>
                             </div>
+
+
+
                         </div>
                     </ng-template>
                 </div>

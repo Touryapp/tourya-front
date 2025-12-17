@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { ProvidersComponent } from "./providers.component";
+import { QrScannerComponent } from "./qr-scanner/qr-scanner.component";
 
 const routes: Routes = [
   {
@@ -31,6 +32,14 @@ const routes: Routes = [
         path: "templates",
         loadChildren: () =>
           import("./templates/templates.module").then((m) => m.TemplatesModule),
+      },
+      {
+        path: "scan-qr/:bookingId",
+        component: QrScannerComponent,
+      },
+      {
+        path: "scan-qr",
+        component: QrScannerComponent,
       },
       { path: "", redirectTo: "provider-panel", pathMatch: "full" },
     ],

@@ -270,7 +270,7 @@ export class routes {
   }
   //user and admin
   public static get user(): string {
-    return this.baseUrl + "/feature-module/user";
+    return this.baseUrl + "/clients";
   }
   public static get userDashboard(): string {
     return this.user + "/dashboard";
@@ -416,6 +416,6 @@ export class routes {
     return this.baseUrl + "/legal";
   }
   public static get proveedoresPage(): string {
-    return this.baseUrl + "/proveedores";
+    return this.baseUrl + "/providers/home";
   }
 }

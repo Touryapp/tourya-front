@@ -1,0 +1,114 @@
+<div class="qr-scanner-page">
+  <!-- Header -->
+  <div class="scanner-header">
+    <button class="btn btn-link text-dark" (click)="goBack()">
+      <i class="isax isax-arrow-left me-2"></i> Volver
+    </button>
+    <h5 class="mb-0">Escanear Código QR</h5>
+    <div style="width: 80px;"></div> <!-- Spacer -->
+  </div>
+
+  <!-- Booking Info Card -->
+  <div class="booking-info-card" *ngIf="bookingData">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="mb-2">Confirmando Reserva</h6>
+        <p class="mb-1"><strong>ID:</strong> {{ bookingData.id }}</p>
+        <p class="mb-1" *ngIf="bookingData.tourName"><strong>Tour:</strong> {{ bookingData.tourName }}</p>
+        <p class="mb-0" *ngIf="bookingData.customerName"><strong>Cliente:</strong> {{ bookingData.customerName }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scanner Container -->
+  <div class="scanner-container">
+    <!-- Estado: Escaneando -->
+    <div class="scanner-viewport" *ngIf="isScanning && !isProcessing && !cameraError">
+      <zxing-scanner
+        [formats]="allowedFormats"
+        [torch]="false"
+        [enable]="false">
+      </zxing-scanner>
+      
+      <!-- Overlay con guías visuales -->
+      <div class="scanner-overlay">
+        <div class="scan-frame"></div>
+        <p class="scan-instruction">Coloca el código QR dentro del marco</p>
+      </div>
+    </div>
+
+    <!-- Estado: Procesando -->
+    <div class="processing-state" *ngIf="isProcessing">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Procesando...</span>
+      </div>
+      <p class="mt-3">Validando código QR...</p>
+    </div>
+
+    <!-- Estado: Error de Cámara -->
+    <div class="error-state" *ngIf="cameraError && !errorMessage">
+      <i class="isax isax-camera-slash text-warning" style="font-size: 4rem;"></i>
+      <h6 class="mt-3 fw-medium">No se puede acceder a la cámara</h6>
+      <p class="text-muted mb-0">La cámara está siendo usada por otra aplicación</p>
+      <p class="text-muted">o no se pudo inicializar correctamente.</p>
+      
+      <div class="alert alert-info mt-3 text-start" style="max-width: 400px;">
+        <small>
+          <strong>Soluciones:</strong><br>
+          • Cierra otras apps que usen la cámara<br>
+          • Usa las opciones alternativas abajo
+        </small>
+      </div>
+    </div>
+
+    <!-- Estado: Error de Validación -->
+    <div class="error-state" *ngIf="errorMessage && !isScanning">
+      <i class="isax isax-close-circle text-danger" style="font-size: 4rem;"></i>
+      <p class="text-danger mt-3 fw-medium">{{ errorMessage }}</p>
+      
+      <div class="mt-4" *ngIf="scanAttempts < maxAttempts">
+        <button class="btn btn-primary" (click)="retryScanning()">
+          <i class="isax isax-refresh me-2"></i>Reintentar con Cámara
+        </button>
+      </div>
+      
+      <div class="mt-4" *ngIf="scanAttempts >= maxAttempts">
+        <button class="btn btn-secondary" (click)="goBack()">
+          Volver a Reservas
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="scanner-actions">
+    <!-- Subir imagen de QR -->
+    <button 
+      class="btn btn-primary"
+      (click)="fileInput.click()">
+      <i class="isax isax-gallery-import me-2"></i> Subir Imagen de QR
+    </button>
+    
+    <!-- Input oculto para subir archivo -->
+    <input 
+      #fileInput
+      type="file" 
+      accept="image/*" 
+      (change)="onFileSelected($event)"
+      style="display: none;">
+
+    <!-- Entrada manual -->
+    <button 
+      class="btn btn-outline-secondary"
+      (click)="enterManually()">
+      <i class="isax isax-keyboard me-2"></i> Ingresar Código
+    </button>
+  </div>
+
+  <!-- Attempts Counter -->
+  <div class="attempts-counter" *ngIf="scanAttempts > 0">
+    <small class="text-muted">
+      Intentos: {{ scanAttempts }} / {{ maxAttempts }}
+    </small>
+  </div>
+</div>

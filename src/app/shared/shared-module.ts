@@ -48,6 +48,7 @@ import {
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { MatOptionModule } from "@angular/material/core";
 import { TourSlotSelectionModalComponent } from "./common/tour-slot-selection-modal/tour-slot-selection-modal.component";
+import { PendingReviewsModalComponent } from "./components/pending-reviews-modal/pending-reviews-modal.component";
 @NgModule({
   declarations: [
     FooterComponent,
@@ -55,7 +56,7 @@ import { TourSlotSelectionModalComponent } from "./common/tour-slot-selection-mo
     CommonCounterComponent,
     UserDashboardComponent,
     ConfirmDialogComponent,
-    
+    PendingReviewsModalComponent
   ],
   imports: [
     CommonModule,
@@ -133,7 +134,7 @@ import { TourSlotSelectionModalComponent } from "./common/tour-slot-selection-mo
     ConfirmDialogComponent,
     MatCheckboxModule,
     CalendarAngularCalendarModule,
-  
+    PendingReviewsModalComponent
   ],
   providers: [
     provideNgxMask(),

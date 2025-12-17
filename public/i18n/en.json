@@ -59,5 +59,202 @@
         "answer": "Our main office is in downtown San Andres (Newpoint Shopping Center Local 227), a few meters from the tourist pier, and is open every day. We also attend by WhatsApp and calls 24/7."
       }
     }
+  },
+  "provider-reviews": {
+    "title": "Customer Reviews",
+    "filters": {
+      "rating": "Filter by rating",
+      "tour": "Filter by tour",
+      "provider": "Filter by provider",
+      "user": "Filter by user",
+      "all": "All",
+      "allTours": "All",
+      "allProviders": "All",
+      "allUsers": "All",
+      "stars": "stars",
+      "clearFilters": "Clear Filters"
+    },
+    "stats": {
+      "totalReviews": "Total Reviews",
+      "averageRating": "Average Rating"
+    },
+    "actions": {
+      "respond": "Respond",
+      "reject": "Reject",
+      "viewDetails": "View tour details",
+      "export": "Export"
+    },
+    "replyForm": {
+      "title": "Write your response",
+      "placeholder": "Write your response to the customer here...",
+      "charactersCount": "characters",
+      "cancel": "Cancel",
+      "submit": "Send Response"
+    },
+    "rejectForm": {
+      "title": "Select rejection reason",
+      "label": "Rejection reason:",
+      "placeholder": "Select a reason",
+      "reasons": {
+        "inappropriate": "Inappropriate content",
+        "false": "False or misleading information",
+        "spam": "Spam or irrelevant content"
+      },
+      "cancel": "Cancel",
+      "submit": "Reject Review"
+    },
+    "empty": {
+      "noResults": "No reviews found",
+      "adjustFilters": "Try adjusting your search filters",
+      "noReviews": "You don't have any reviews yet",
+      "noReviewsMessage": "Your customer reviews will appear here"
+    }
+  },
+  "provider-home": {
+    "hero": {
+      "title": "Sell more tours in San Andrés with the island's 1st marketplace",
+      "subtitle": "We handle the marketing, attend to tourists 24/7 and guarantee secure payments. You just focus on offering unforgettable experiences.",
+      "cta-heading": "Start selling your tours today",
+      "cta-button": "Sign Up"
+    },
+    "benefits": {
+      "title": "Why join our Marketplace?",
+      "subtitle": "Tourya is a Marketplace that connects your tour services with tourists looking to live the best experiences on the island of San Andrés.",
+      "cards": {
+        "marketing": {
+          "title": "Marketing included",
+          "description": "We take care of advertising on Google, social media and search engines."
+        },
+        "payments": {
+          "title": "Secure and timely payments",
+          "description": "Receive your money reliably at the established times."
+        },
+        "support": {
+          "title": "24/7 tourist support",
+          "description": "We handle inquiries and reservations through different channels (phone, email and WhatsApp) and in 3 languages (Spanish, English and Portuguese)."
+        },
+        "office": {
+          "title": "Physical office on the island",
+          "description": "Direct attention to complaints and claims, which generates trust in tourists."
+        }
+      }
+    },
+    "how-it-works": {
+      "badge": "How Does It Work?",
+      "title": "Sell your tours in 3 simple steps",
+      "steps": {
+        "step1": {
+          "title": "Create your account",
+          "description": "Register for free on our marketplace as a tour operator."
+        },
+        "step2": {
+          "title": "Set up your tours",
+          "description": "Upload photos, details of your activities, prices, schedules and availability."
+        },
+        "step3": {
+          "title": "Publish and start selling",
+          "description": "Activate your tours and start receiving bookings from tourists around the world."
+        }
+      }
+    },
+    "faq": {
+      "title": "Operator Frequently Asked Questions",
+      "subtitle": "Frequently asked questions about our marketplace",
+      "items": {
+        "q1": {
+          "question": "How much does it cost to publish my tours?",
+          "answer": "Publishing is completely free. You only pay a commission when a sale is made."
+        },
+        "q2": {
+          "question": "When do I receive my payments?",
+          "answer": "Payments are made at the established times, in a secure and transparent manner."
+        },
+        "q3": {
+          "question": "Who attends to tourists?",
+          "answer": "Our team handles all customer service 24/7 in Spanish, English and Portuguese."
+        },
+        "q4": {
+          "question": "Do I need to have a physical office?",
+          "answer": "It is not necessary. We have our own office on the island to support tourists."
+        },
+        "q5": {
+          "question": "Can I upload more than one tour?",
+          "answer": "Yes, you can publish all the tours you offer and increase your income."
+        }
+      }
+    }
+  },
+  "provider-tour-management": {
+    "header": {
+      "totalBookings": "Total Bookings",
+      "confirmBooking": "Confirm Booking",
+      "clearFilters": "Clear Filters",
+      "export": "Export",
+      "exportPdf": "Export as PDF",
+      "exportExcel": "Export as Excel"
+    },
+    "list": {
+      "title": "Booking List",
+      "search": "Search...",
+      "sortBy": "Sort By:",
+      "recent": "Recent",
+      "mostRecent": "Most Recent",
+      "oldest": "Oldest",
+      "priceAsc": "Price Ascending",
+      "priceDesc": "Price Descending"
+    },
+    "columns": {
+      "image": "Image",
+      "id": "ID",
+      "tourName": "Tour Name",
+      "tourType": "Tour Type",
+      "customer": "Customer",
+      "travellers": "Travellers",
+      "duration": "Duration",
+      "price": "Price",
+      "bookingDate": "Booking Date",
+      "checkIn": "Check-in Date",
+      "returnDate": "Return Date",
+      "status": "Status",
+      "destination": "Destination",
+      "actions": "Actions"
+    },
+    "status": {
+      "upcoming": "Upcoming",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed"
+    },
+    "empty": {
+      "noBookings": "No bookings found",
+      "adjustFilters": "Try adjusting your search filters"
+    },
+    "modal": {
+      "title": "Booking Details",
+      "close": "Close",
+      "tourInfo": "Tour Information",
+      "bookingInfo": "Booking Information",
+      "customerInfo": "Customer Information",
+      "extraServices": "Additional Services",
+      "activities": "Included Activities",
+      "fields": {
+        "destination": "Destination",
+        "duration": "Duration",
+        "bookingDate": "Booking Date",
+        "totalPrice": "Total Price",
+        "checkInDate": "Check-in Date",
+        "returnDate": "Return Date",
+        "travellers": "Travellers",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "actions": {
+        "complete": "Mark as Completed",
+        "confirm": "Confirm Booking",
+        "cancel": "Cancel Booking"
+      }
+    }
   }
 }

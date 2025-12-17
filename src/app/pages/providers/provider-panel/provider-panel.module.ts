@@ -6,14 +6,13 @@ import { ProviderPanelComponent } from "./provider-panel.component";
 import { SharedModule } from "../../../shared/shared-module";
 import { TourModule } from "../tours/tour.module";
 import { TemplatesModule } from "../templates/templates.module";
-import { ProviderTourManagementComponent } from "../provider-tour-management/provider-tour-management.component";
+import { ProviderTourManagementModule } from "../provider-tour-management/provider-tour-management.module";
 import { ProviderReviewsComponent } from "../provider-reviews/provider-reviews.component";
 import { ProviderPaymentsComponent } from "../provider-payments/provider-payments.component";
 
 @NgModule({
   declarations: [
     ProviderPanelComponent,
-    ProviderTourManagementComponent,
     ProviderReviewsComponent,
     ProviderPaymentsComponent
   ],
@@ -24,7 +23,11 @@ import { ProviderPaymentsComponent } from "../provider-payments/provider-payment
     SharedModule,
     ProviderPanelRoutingModule,
     TourModule,
-    TemplatesModule
+    TemplatesModule,
+    ProviderTourManagementModule
   ],
+  exports: [
+    ProviderReviewsComponent
+  ]
 })
 export class ProviderPanelModule {}

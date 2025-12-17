@@ -1207,3 +1207,42 @@ mat-slider {
       left: -10px !important;
   }
 }
+
+// Global fix for owl-carousel stage children height
+.owl-stage > div {
+  height: 100% !important;
+  min-height: 100% !important;
+}
+
+
+// Force owl-stage children to fill height - more specific selector
+.owl-stage-outer .owl-stage > div,
+.owl-stage > div[class*='ng-tns'] {
+  height: 100% !important;
+  min-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+
+// Ultra-specific selector for owl-stage children - force height
+.hero-sec-six .banner-slider .owl-carousel .owl-stage-outer .owl-stage > div,
+.banner-slider .owl-stage > div,
+div.owl-stage > div {
+  height: 100% !important;
+  min-height: 100% !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+// CRITICAL FIX: Force owl-stage children to 100% height using universal selector
+.owl-stage > * {
+  height: 100% !important;
+  min-height: 100% !important;
+}
+
+.owl-stage > div[class] {
+  height: 100% !important;
+  min-height: 100% !important;
+  flex: 1 !important;
+}

@@ -6,23 +6,23 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3">
                 <div>
-                    <h5 class="mb-1">Mis Calificaciones</h5>
+                    <h5 class="mb-1">{{'provider-reviews.title' | translate}}</h5>
                     <p class="fs-14 text-gray-6 mb-0">
-                        Total de Reviews: <span class="fw-semibold text-dark">{{ totalReviews }}</span> | 
-                        Rating Promedio: <span class="badge badge-warning badge-xs text-dark ms-1">{{ averageRating }}</span>
+                        {{'provider-reviews.stats.totalReviews' | translate}}: <span class="fw-semibold text-dark">{{ totalReviews }}</span> | 
+                        {{'provider-reviews.stats.averageRating' | translate}}: <span class="badge badge-warning badge-xs text-dark ms-1">{{ averageRating }}</span>
                     </p>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                     <div class="me-3">
                         <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
-                            <i class="isax isax-refresh me-1"></i>Limpiar Filtros
+                            <i class="isax isax-refresh me-1"></i>{{'provider-reviews.filters.clearFilters' | translate}}
                         </button>
                     </div>
                     <div class="dropdown">
                         <a href="javascript:void(0);" 
                            class="dropdown-toggle btn btn-sm btn-white rounded border d-inline-flex align-items-center" 
                            data-bs-toggle="dropdown">
-                            <i class="ti ti-file-export me-1"></i>Exportar
+                            <i class="ti ti-file-export me-1"></i>{{'provider-reviews.actions.export' | translate}}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end p-3">
                             <li>
@@ -48,94 +48,136 @@
     <!-- /Review Title -->
 
     <!-- Filters Section -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="row g-3">
-                <!-- Search -->
-                <div class="col-lg-6">
-                    <div class="input-icon-start position-relative">
-                        <span class="icon-addon">
-                            <i class="isax isax-search-normal-1 fs-14"></i>
-                        </span>
-                        <input 
-                            [(ngModel)]="searchTerm" 
-                            (ngModelChange)="searchReviews()" 
-                            type="search" 
-                            class="form-control"
-                            placeholder="Buscar por tour, cliente o comentario..." />
+    @if (showFilters) {
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <!-- Filtro de Calificación (común para todos los roles) -->
+                    <div [class]="isCliente ? 'col-md-6' : (isProveedor ? 'col-md-4' : 'col-md-3')">
+                        <label class="form-label fw-medium">{{'provider-reviews.filters.rating' | translate}}:</label>
+                        <select 
+                            class="form-select"
+                            [(ngModel)]="selectedRatingFilter"
+                            (ngModelChange)="filterByRating(selectedRatingFilter)">
+                            <option value="0">{{'provider-reviews.filters.all' | translate}}</option>
+                            <option value="5">5 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="4">4 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="3">3 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="2">2 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="1">1 {{'provider-reviews.filters.stars' | translate}}</option>
+                        </select>
                     </div>
-                </div>
 
-                <!-- Filter by Rating -->
-                <div class="col-lg-6">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="text-nowrap fw-medium">Filtrar por:</span>
-                        <div class="dropdown flex-grow-1">
-                            <a href="javascript:void(0);" 
-                               class="dropdown-toggle btn btn-white rounded border d-inline-flex align-items-center w-100 justify-content-between" 
-                               data-bs-toggle="dropdown">
-                                @if (selectedRatingFilter === 0) {
-                                    <span>Todas las calificaciones</span>
-                                } @else {
-                                    <span>{{ selectedRatingFilter }} estrellas</span>
+                    <!-- Filtro de Tour (común para Cliente y Proveedor, autocomplete para Backoffice) -->
+                    <div [class]="isCliente ? 'col-md-6' : (isProveedor ? 'col-md-4' : 'col-md-3')">
+                        <label class="form-label fw-medium">{{'provider-reviews.filters.tour' | translate}}:</label>
+                        
+                        <!-- Select simple para Cliente y Proveedor -->
+                        @if (isCliente || isProveedor) {
+                            <select 
+                                class="form-select"
+                                [(ngModel)]="selectedTourFilter"
+                                (ngModelChange)="applyFilters()">
+                                <option value="all">{{'provider-reviews.filters.allTours' | translate}}</option>
+                                @for (tour of availableTours; track tour.id) {
+                                    <option [value]="tour.id">{{ tour.name }}</option>
                                 }
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end p-3 w-100">
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item rounded-1"
-                                       (click)="filterByRating(0)">
-                                        Todas las calificaciones
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item rounded-1"
-                                       (click)="filterByRating(5)">
-                                        ⭐⭐⭐⭐⭐ 5 Estrellas
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item rounded-1"
-                                       (click)="filterByRating(4)">
-                                        ⭐⭐⭐⭐ 4 Estrellas
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item rounded-1"
-                                       (click)="filterByRating(3)">
-                                        ⭐⭐⭐ 3 Estrellas
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item rounded-1"
-                                       (click)="filterByRating(2)">
-                                        ⭐⭐ 2 Estrellas
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item rounded-1"
-                                       (click)="filterByRating(1)">
-                                        ⭐ 1 Estrella
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                            </select>
+                        }
+                        
+                        <!-- Autocomplete para Backoffice -->
+                        @if (isBackoffice) {
+                            <div class="position-relative">
+                                <input 
+                                    type="text"
+                                    class="form-control"
+                                    [(ngModel)]="tourSearchTerm"
+                                    (ngModelChange)="filterTours()"
+                                    (focus)="tourDropdownOpen = true"
+                                    [placeholder]="'provider-reviews.filters.allTours' | translate"
+                                    autocomplete="off" />
+                                @if (tourDropdownOpen && filteredTours.length > 0) {
+                                    <div class="autocomplete-dropdown">
+                                        <div class="autocomplete-item" (click)="resetTourFilter()">
+                                            {{'provider-reviews.filters.allTours' | translate}}
+                                        </div>
+                                        @for (tour of filteredTours; track tour.id) {
+                                            <div class="autocomplete-item" (click)="selectTour(tour)">
+                                                {{ tour.name }}
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
                     </div>
+
+                    <!-- Filtro de Proveedor (solo Backoffice) -->
+                    @if (isBackoffice) {
+                        <div class="col-md-3">
+                            <label class="form-label fw-medium">{{'provider-reviews.filters.provider' | translate}}:</label>
+                            <div class="position-relative">
+                                <input 
+                                    type="text"
+                                    class="form-control"
+                                    [(ngModel)]="providerSearchTerm"
+                                    (ngModelChange)="filterProviders()"
+                                    (focus)="providerDropdownOpen = true"
+                                    [placeholder]="'provider-reviews.filters.allProviders' | translate"
+                                    autocomplete="off" />
+                                @if (providerDropdownOpen && filteredProviders.length > 0) {
+                                    <div class="autocomplete-dropdown">
+                                        <div class="autocomplete-item" (click)="resetProviderFilter()">
+                                            {{'provider-reviews.filters.allProviders' | translate}}
+                                        </div>
+                                        @for (provider of filteredProviders; track provider.id) {
+                                            <div class="autocomplete-item" (click)="selectProvider(provider)">
+                                                {{ provider.name }}
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Filtro de Usuario (Proveedor y Backoffice) -->
+                    @if (isProveedor || isBackoffice) {
+                        <div [class]="isProveedor ? 'col-md-4' : 'col-md-3'">
+                            <label class="form-label fw-medium">{{'provider-reviews.filters.user' | translate}}:</label>
+                            <div class="position-relative">
+                                <input 
+                                    type="text"
+                                    class="form-control"
+                                    [(ngModel)]="userSearchTerm"
+                                    (ngModelChange)="filterUsers()"
+                                    (focus)="userDropdownOpen = true"
+                                    [placeholder]="'provider-reviews.filters.allUsers' | translate"
+                                    autocomplete="off" />
+                                @if (userDropdownOpen && filteredUsers.length > 0) {
+                                    <div class="autocomplete-dropdown">
+                                        <div class="autocomplete-item" (click)="resetUserFilter()">
+                                            {{'provider-reviews.filters.allUsers' | translate}}
+                                        </div>
+                                        @for (user of filteredUsers; track user.id) {
+                                            <div class="autocomplete-item" (click)="selectUser(user)">
+                                                {{ user.name }}
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-    </div>
+    }
     <!-- /Filters Section -->
 
     <!-- Reviews List -->
     @if (filteredReviews.length > 0) {
-        @for (review of filteredReviews; track review.id) {
+        @for (review of filteredReviews; track $index) {
             <div class="card shadow-sm mb-3 review-card">
                 <div class="card-body">
                     <!-- Review Header -->
@@ -195,7 +237,6 @@
 
                     <!-- Review Content -->
                     <div class="mb-3">
-                        <h6 class="fs-16 fw-semibold mb-2">{{ review.title }}</h6>
                         <p class="fs-15 text-gray-7 mb-0">{{ review.comment }}</p>
                     </div>
 
@@ -216,18 +257,128 @@
 
                         <!-- Actions -->
                         <div class="d-flex align-items-center gap-2">
-                            <button 
-                                class="btn btn-sm btn-outline-primary"
-                                (click)="respondToReview(review.id)">
-                                <i class="isax isax-message-text me-1"></i>Responder
-                            </button>
+                            <!-- Botón Responder solo para Proveedor -->
+                            @if (isProveedor && canRespondToReview(review)) {
+                                <button 
+                                    class="btn btn-sm btn-outline-primary"
+                                    (click)="respondToReview(review.id)">
+                                    <i class="isax isax-message-text me-1"></i>{{'provider-reviews.actions.respond' | translate}}
+                                </button>
+                            }
+                            
+                            <!-- Botón Rechazar solo para Backoffice -->
+                            @if (isBackoffice && !review.answer) {
+                                <button 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="toggleRejectForm(review.id)">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.actions.reject' | translate}}
+                                </button>
+                            }
+                            
+                            <!-- Botón Ver detalles (todos los roles) -->
                             <a href="javascript:void(0);" 
                                class="btn btn-sm btn-outline-secondary"
-                               title="Ver detalles del tour">
+                               [title]="'provider-reviews.actions.viewDetails' | translate">
                                 <i class="isax isax-eye"></i>
                             </a>
                         </div>
                     </div>
+                    
+                    <!-- Reply Form (shown when user clicks Responder) -->
+                    @if (isReplyFormOpen(review.id)) {
+                        <div class="reply-form-container mt-4 p-3 border rounded">
+                            <h6 class="fs-16 fw-medium mb-3">
+                                <i class="isax isax-message-text me-2 text-primary"></i>{{'provider-reviews.replyForm.title' | translate}}
+                            </h6>
+                            <div class="mb-3">
+                                <textarea 
+                                    [(ngModel)]="replyText"
+                                    class="form-control"
+                                    rows="4"
+                                    [placeholder]="'provider-reviews.replyForm.placeholder' | translate"
+                                    maxlength="500"></textarea>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-muted">{{ replyText.length }}/500 {{'provider-reviews.replyForm.charactersCount' | translate}}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button 
+                                    class="btn btn-sm btn-outline-secondary"
+                                    (click)="cancelReply()">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.replyForm.cancel' | translate}}
+                                </button>
+                                <button 
+                                    class="btn btn-sm btn-primary"
+                                    (click)="submitReply(review.id)"
+                                    [disabled]="!replyText.trim()">
+                                    <i class="isax isax-send-2 me-1"></i>{{'provider-reviews.replyForm.submit' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    
+                    <!-- Rejection Form (shown when Backoffice clicks Rechazar) -->
+                    @if (isRejectFormOpen(review.id)) {
+                        <div class="reject-form-container mt-4 p-3 border rounded">
+                            <h6 class="fs-16 fw-medium mb-3">
+                                <i class="isax isax-close-circle me-2 text-danger"></i>{{'provider-reviews.rejectForm.title' | translate}}
+                            </h6>
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">{{'provider-reviews.rejectForm.label' | translate}}</label>
+                                <select 
+                                    class="form-select"
+                                    [(ngModel)]="selectedRejectionReason">
+                                    <option value="">{{'provider-reviews.rejectForm.placeholder' | translate}}</option>
+                                    @for (reason of rejectionReasons; track reason) {
+                                        <option [value]="reason">{{ reason | translate }}</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button 
+                                    class="btn btn-sm btn-outline-secondary"
+                                    (click)="cancelReject()">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.rejectForm.cancel' | translate}}
+                                </button>
+                                <button 
+                                    class="btn btn-sm btn-danger"
+                                    (click)="submitReject(review.id)"
+                                    [disabled]="!selectedRejectionReason">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.rejectForm.submit' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (review.answer) {
+                        <div class="review-info reply mt-4 p-3">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="avatar avatar-lg me-2 flex-shrink-0">
+                                        <img src="assets/img/users/{{ review.answer.providerImage }}" class="rounded-circle" alt="provider">
+                                    </span>
+                                    <div>
+                                        <h6 class="fs-16 fw-medium mb-1">{{ review.answer.providerName }}</h6>
+                                        <div class="d-flex align-items-center flex-wrap date-info">
+                                            <p class="fs-14 mb-0">{{ review.answer.daysAgo }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-2">{{ review.answer.comment }}</p>
+                            <div class="d-inline-flex align-items-center">
+                                <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3">
+                                    <i class="isax isax-like-1 me-2"></i>{{ review.answer.likes }}
+                                </a>
+                                <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3">
+                                    <i class="isax isax-dislike me-2"></i>{{ review.answer.dislikes }}
+                                </a>
+                                <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3">
+                                    <i class="isax isax-heart5 text-danger me-2"></i>{{ review.answer.hearts }}
+                                </a>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         }
@@ -237,15 +388,15 @@
             <div class="card-body text-center py-5">
                 <div class="text-muted">
                     <i class="isax isax-star fs-1 mb-3 d-block"></i>
-                    @if (searchTerm || selectedRatingFilter > 0) {
-                        <h5>No se encontraron calificaciones</h5>
-                        <p>Intenta ajustar tus filtros de búsqueda</p>
+                    @if (selectedRatingFilter > 0 || selectedTourFilter !== 'all' || selectedProviderFilter !== 'all' || selectedUserFilter !== 'all') {
+                        <h5>{{'provider-reviews.empty.noResults' | translate}}</h5>
+                        <p>{{'provider-reviews.empty.adjustFilters' | translate}}</p>
                         <button class="btn btn-primary mt-3" (click)="clearFilters()">
-                            Limpiar Filtros
+                            {{'provider-reviews.filters.clearFilters' | translate}}
                         </button>
                     } @else {
-                        <h5>Aún no tienes calificaciones</h5>
-                        <p>Las calificaciones de tus clientes aparecerán aquí</p>
+                        <h5>{{'provider-reviews.empty.noReviews' | translate}}</h5>
+                        <p>{{'provider-reviews.empty.noReviewsMessage' | translate}}</p>
                     }
                 </div>
             </div>
@@ -253,20 +404,22 @@
     }
     <!-- /Reviews List -->
 
-    <!-- Pagination (si se necesita en el futuro) -->
-    @if (filteredReviews.length > 0) {
+    <!-- Pagination -->
+    @if (filteredReviews.length > 0 && totalPages > 1) {
         <nav class="pagination-nav mt-4">
             <ul class="pagination justify-content-center justify-content-sm-end">
-                <li class="page-item disabled">
-                    <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="previousPage()" aria-label="Previous">
                         <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
                     </a>
                 </li>
-                <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
-                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
-                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                @for (page of getPageNumbers(); track page) {
+                    <li class="page-item" [class.active]="page === currentPage">
+                        <a class="page-link" href="javascript:void(0);" (click)="goToPage(page)">{{ page }}</a>
+                    </li>
+                }
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" href="javascript:void(0);" (click)="nextPage()" aria-label="Next">
                         <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
                     </a>
                 </li>

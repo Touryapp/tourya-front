@@ -59,6 +59,20 @@ const routes: Routes = [
             (m) => m.TourBookingConfirmationModule
           ),
       },
+      {
+        path: "clients/my-bookings",
+        loadChildren: () =>
+          import("../providers/provider-tour-management/provider-tour-management.module").then(
+            (m) => m.ProviderTourManagementModule
+          ),
+      },
+      {
+        path: "clients/my-profile",
+        loadChildren: () =>
+          import("./my-profile/my-profile.module").then(
+            (m) => m.MyProfileModule
+          ),
+      },
       { path: "", redirectTo: "home", pathMatch: "full" },
     ],
   },

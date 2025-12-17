@@ -59,5 +59,202 @@
         "answer": "Nuestra oficina principal está en el centro de San Andrés (Centro comercial Newpoint Local 227), a pocos metros del muelle turístico, y está abierta todos los días. También atendemos por WhatsApp y llamadas 24/7."
       }
     }
+  },
+  "provider-reviews": {
+    "title": "Calificaciones de Clientes",
+    "filters": {
+      "rating": "Filtrar por calificación",
+      "tour": "Filtrar por tour",
+      "provider": "Filtrar por proveedor",
+      "user": "Filtrar por usuario",
+      "all": "Todas",
+      "allTours": "Todos",
+      "allProviders": "Todos",
+      "allUsers": "Todos",
+      "stars": "estrellas",
+      "clearFilters": "Limpiar Filtros"
+    },
+    "stats": {
+      "totalReviews": "Total de Reseñas",
+      "averageRating": "Rating Promedio"
+    },
+    "actions": {
+      "respond": "Responder",
+      "reject": "Rechazar",
+      "viewDetails": "Ver detalles del tour",
+      "export": "Exportar"
+    },
+    "replyForm": {
+      "title": "Escribe tu respuesta",
+      "placeholder": "Escribe tu respuesta al cliente aquí...",
+      "charactersCount": "caracteres",
+      "cancel": "Cancelar",
+      "submit": "Enviar Respuesta"
+    },
+    "rejectForm": {
+      "title": "Selecciona el motivo de rechazo",
+      "label": "Motivo de rechazo:",
+      "placeholder": "Selecciona un motivo",
+      "reasons": {
+        "inappropriate": "Contenido inapropiado",
+        "false": "Información falsa o engañosa",
+        "spam": "Spam o contenido irrelevante"
+      },
+      "cancel": "Cancelar",
+      "submit": "Rechazar Review"
+    },
+    "empty": {
+      "noResults": "No se encontraron calificaciones",
+      "adjustFilters": "Intenta ajustar tus filtros de búsqueda",
+      "noReviews": "Aún no tienes calificaciones",
+      "noReviewsMessage": "Las calificaciones de tus clientes aparecerán aquí"
+    }
+  },
+  "provider-home": {
+    "hero": {
+      "title": "Vende más tours en San Andrés con el 1er marketplace de la isla",
+      "subtitle": "Nosotros hacemos el marketing, atendemos a los turistas 24/7 y garantizamos pagos seguros. Tú solo te enfocas en ofrecer experiencias inolvidables.",
+      "cta-heading": "Comienza a vender tus tours hoy mismo",
+      "cta-button": "Registrarse"
+    },
+    "benefits": {
+      "title": "¿Por qué unirte a nuestro Marketplace?",
+      "subtitle": "Tourya es un Marketplace que conecta tus servicios de tour con turistas que buscan vivir las mejores experiencias en la isla de san Andrés.",
+      "cards": {
+        "marketing": {
+          "title": "Marketing incluido",
+          "description": "Nosotros nos encargamos de la publicidad en Google, redes sociales y buscadores."
+        },
+        "payments": {
+          "title": "Pagos seguros y puntuales",
+          "description": "Recibe tu dinero de forma confiable en los tiempos establecidos."
+        },
+        "support": {
+          "title": "Atención al turista 24/7",
+          "description": "Atendemos consultas y reservas por diferentes canales (teléfono, correo y WhatsApp) y en 3 idiomas (español, inglés y portugués)."
+        },
+        "office": {
+          "title": "Oficina física en la isla",
+          "description": "Atención directa de quejas y reclamos, lo que genera confianza al turista."
+        }
+      }
+    },
+    "how-it-works": {
+      "badge": "¿Cómo Funciona?",
+      "title": "Vende tus tours en 3 pasos simples",
+      "steps": {
+        "step1": {
+          "title": "Crea tu cuenta",
+          "description": "Regístrate gratis en nuestro marketplace como operador turístico."
+        },
+        "step2": {
+          "title": "Configura tus tours",
+          "description": "Sube fotos, detalles de tus actividades, precios, horarios y la disponibilidad."
+        },
+        "step3": {
+          "title": "Publica y comienza a vender",
+          "description": "Activa tus tours y empieza a recibir reservas de turistas de todo el mundo."
+        }
+      }
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes de Operadores",
+      "subtitle": "Preguntas frecuentes sobre nuestro marketplace",
+      "items": {
+        "q1": {
+          "question": "¿Cuánto cuesta publicar mis tours?",
+          "answer": "Publicar es totalmente gratis. Solo pagas una comisión cuando se concrete una venta."
+        },
+        "q2": {
+          "question": "¿Cuándo recibo mis pagos?",
+          "answer": "Los pagos se realizan en los tiempos establecidos, de manera segura y transparente."
+        },
+        "q3": {
+          "question": "¿Quién atiende a los turistas?",
+          "answer": "Nuestro equipo se encarga de toda la atención al cliente 24/7 en español, inglés y portugués."
+        },
+        "q4": {
+          "question": "¿Necesito tener una oficina física?",
+          "answer": "No es necesario. Nosotros contamos con oficina propia en la isla para dar soporte a los turistas."
+        },
+        "q5": {
+          "question": "¿Puedo subir más de un tour?",
+          "answer": "Sí, puedes publicar todos los tours que ofrezcas y aumentar tus ingresos."
+        }
+      }
+    }
+  },
+  "provider-tour-management": {
+    "header": {
+      "totalBookings": "Total de Reservas",
+      "confirmBooking": "Confirmar Reserva",
+      "clearFilters": "Limpiar Filtros",
+      "export": "Exportar",
+      "exportPdf": "Exportar como PDF",
+      "exportExcel": "Exportar como Excel"
+    },
+    "list": {
+      "title": "Lista de Reservas",
+      "search": "Buscar...",
+      "sortBy": "Ordenar:",
+      "recent": "Recientes",
+      "mostRecent": "Más Recientes",
+      "oldest": "Más Antiguos",
+      "priceAsc": "Precio Ascendente",
+      "priceDesc": "Precio Descendente"
+    },
+    "columns": {
+      "image": "Imagen",
+      "id": "ID",
+      "tourName": "Nombre del Tour",
+      "tourType": "Tipo de Tour",
+      "customer": "Cliente",
+      "travellers": "Viajeros",
+      "duration": "Duración",
+      "price": "Precio",
+      "bookingDate": "Fecha de Reserva",
+      "checkIn": "Fecha de Inicio",
+      "returnDate": "Fecha de Retorno",
+      "status": "Estado",
+      "destination": "Destino",
+      "actions": "Acciones"
+    },
+    "status": {
+      "upcoming": "Próxima",
+      "pending": "Pendiente",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada",
+      "completed": "Completada"
+    },
+    "empty": {
+      "noBookings": "No se encontraron reservas",
+      "adjustFilters": "Intenta ajustar tus filtros de búsqueda"
+    },
+    "modal": {
+      "title": "Detalles de Reserva",
+      "close": "Cerrar",
+      "tourInfo": "Información del Tour",
+      "bookingInfo": "Información de la Reserva",
+      "customerInfo": "Información del Cliente",
+      "extraServices": "Servicios Adicionales",
+      "activities": "Actividades Incluidas",
+      "fields": {
+        "destination": "Destino",
+        "duration": "Duración",
+        "bookingDate": "Fecha de Reserva",
+        "totalPrice": "Precio Total",
+        "checkInDate": "Fecha de Inicio",
+        "returnDate": "Fecha de Retorno",
+        "travellers": "Viajeros",
+        "name": "Nombre",
+        "email": "Email",
+        "phone": "Teléfono"
+      },
+      "actions": {
+        "complete": "Marcar como Completada",
+        "confirm": "Confirmar reserva",
+        "cancel": "Cancelar Reserva"
+      }
+    }
   }
 }

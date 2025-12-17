@@ -5,33 +5,38 @@
     <div class="card booking-header mb-4">
         <div class="card-body header-content d-flex align-items-center justify-content-between flex-wrap">
             <div>
-                <h6>Gestión de Reservas de Tours</h6>
-                <p class="fs-14 text-gray-6 fw-normal">Total de Reservas: {{ totalBookings }}</p>
+                <h6>{{ config.title }}</h6>
+                <p class="fs-14 text-gray-6 fw-normal" *ngIf="config.subtitle">{{ config.subtitle }}</p>
+                <p class="fs-14 text-gray-6 fw-normal">{{ 'provider-tour-management.header.totalBookings' | translate }}: {{ totalBookings }}</p>
             </div>
 
             <div class="d-flex align-items-center flex-wrap gap-2">
-                <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
-                    <i class="isax isax-refresh me-1"></i>Limpiar Filtros
+                <button *ngIf="currentRole === 'PROVIDER'" class="btn btn-sm btn-success" (click)="navigateToQrScanner('')">
+                    <i class="isax isax-scan me-1"></i>{{ 'provider-tour-management.header.confirmBooking' | translate }}
                 </button>
-                <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+                    <i class="isax isax-refresh me-1"></i>{{ 'provider-tour-management.header.clearFilters' | translate }}
+                </button>
+                                <!-- Export -->
+                <div class="dropdown" *ngIf="config.canExport">
                     <a href="javascript:void(0);" 
                        class="dropdown-toggle btn btn-sm border text-gray-6 rounded fw-normal fs-14 d-inline-flex align-items-center" 
                        data-bs-toggle="dropdown">
-                        <i class="ti ti-file-export me-2 fs-14 text-gray-6"></i>Exportar
+                        <i class="ti ti-file-export me-2 fs-14 text-gray-6"></i>{{ 'provider-tour-management.header.export' | translate }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-3">
                         <li>
                             <a href="javascript:void(0);" 
                                class="dropdown-item rounded-1"
                                (click)="exportData('pdf')">
-                                <i class="ti ti-file-type-pdf me-1"></i>Exportar como PDF
+                                <i class="ti ti-file-type-pdf me-1"></i>{{ 'provider-tour-management.header.exportPdf' | translate }}
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0);" 
                                class="dropdown-item rounded-1"
                                (click)="exportData('excel')">
-                                <i class="ti ti-file-type-xls me-1"></i>Exportar como Excel
+                                <i class="ti ti-file-type-xls me-1"></i>{{ 'provider-tour-management.header.exportExcel' | translate }}
                             </a>
                         </li>
                     </ul>
@@ -45,7 +50,7 @@
     <div class="card hotel-list">
         <div class="card-body p-0">
             <div class="list-header d-flex align-items-center justify-content-between flex-wrap p-3">
-                <h6 class="mb-0">Lista de Reservas</h6>
+                <h6 class="mb-0">{{ 'provider-tour-management.list.title' | translate }}</h6>
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <!-- Search -->
                     <div class="input-icon-start position-relative">
@@ -57,110 +62,62 @@
                             (ngModelChange)="searchData(searchDataValue)" 
                             type="search" 
                             class="form-control form-control-sm"
-                            placeholder="Buscar..." />
+                            placeholder="{{ 'provider-tour-management.list.search' | translate }}" />
                     </div>
 
-                    <!-- Filter by Tour Type -->
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" 
-                           class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
-                           data-bs-toggle="dropdown" 
-                           aria-expanded="false">
-                            Tipo de Tour
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end p-3">
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('')">Todos</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Adventure Tourism')">Adventure Tourism</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Escorted Tour')">Escorted Tour</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Ground Tour')">Ground Tour</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByTourType('Sightseeing Tours')">Sightseeing Tours</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Filter by Status -->
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" 
-                           class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
-                           data-bs-toggle="dropdown" 
-                           aria-expanded="false">
-                            Estado
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end p-3">
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('')">Todos</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Upcoming')">Upcoming</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Pending')">Pending</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Confirmed')">Confirmed</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Cancelled')">Cancelled</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Completed')">Completed</a>
-                            </li>
-                        </ul>
+                    <!-- Filtros dinámicos según configuración -->
+                                    <div class="d-flex align-items-center flex-wrap row-gap-3 column-gap-4">
+                    <div class="dropdown" *ngFor="let filter of config.filters">
+                        <!-- Filtro de tipo SELECT -->
+                        <div *ngIf="filter.type === 'select'">
+                            <a href="javascript:void(0);" 
+                               class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
+                               data-bs-toggle="dropdown" 
+                               aria-expanded="false">
+                                {{ filter.label }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end p-3">
+                                <li *ngFor="let option of filter.options">
+                                    <a href="javascript:void(0);" 
+                                       class="dropdown-item rounded-1"
+                                       (click)="filter.field === 'status' ? filterByStatus(option.value) : filterByTourType(option.value)">
+                                        {{ option.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Filtro de tipo TEXT -->
+                        <input 
+                            *ngIf="filter.type === 'text'"
+                            type="text" 
+                            class="form-control form-control-sm"
+                            [placeholder]="filter.label"
+                            (input)="searchData($any($event.target).value)" />
                     </div>
 
                     <!-- Sort By -->
                     <div class="d-flex align-items-center sort-by">
-                        <span class="fs-14 text-gray-9 fw-medium me-2">Ordenar:</span>
+                        <span class="fs-14 text-gray-9 fw-medium me-2">{{ 'provider-tour-management.list.sortBy' | translate }}</span>
                         <div class="dropdown">
                             <a href="javascript:void(0);" 
                                class="dropdown-toggle text-gray-6 btn btn-sm rounded d-inline-flex align-items-center" 
                                data-bs-toggle="dropdown" 
                                aria-expanded="false">
-                                Recientes
+                                {{ 'provider-tour-management.list.recent' | translate }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end p-3">
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Más Recientes</a>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">{{ 'provider-tour-management.list.mostRecent' | translate }}</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Más Antiguos</a>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">{{ 'provider-tour-management.list.oldest' | translate }}</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Precio Ascendente</a>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">{{ 'provider-tour-management.list.priceAsc' | translate }}</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Precio Descendente</a>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">{{ 'provider-tour-management.list.priceDesc' | translate }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -174,97 +131,64 @@
                 <table matSort (matSortChange)="sortData($event)" class="table datatable">
                     <thead class="thead-light">
                         <tr>
-                            <th mat-sort-header="id">ID</th>
-                            <th mat-sort-header="tourName">Tour & Tipo</th>
-                            <th mat-sort-header="customerName">Cliente</th>
-                            <th mat-sort-header="travellers">Viajeros</th>
-                            <th mat-sort-header="duration">Duración</th>
-                            <th mat-sort-header="price">Precio</th>
-                            <th mat-sort-header="checkInDate">Fecha Inicio</th>
-                            <th mat-sort-header="status">Estado</th>
-                            <th>Acciones</th>
+                            <!-- Columnas dinámicas según configuración -->
+                            <th *ngFor="let column of config.columns" 
+                                [attr.mat-sort-header]="column.sortable ? column.field : undefined">
+                                {{ column.header }}
+                            </th>
+                            <th>{{ 'provider-tour-management.columns.actions' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (booking of tableData; track booking.id) {
-                            <tr>
-                                <td>
-                                    <a href="javascript:void(0);" 
-                                       class="link-primary fw-medium" 
-                                       data-bs-toggle="modal" 
-                                       data-bs-target="#bookingDetailModal"
-                                       (click)="viewBookingDetails(booking)">
-                                        {{ booking.id }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
+                            <tr (click)="viewBookingDetails(booking)" style="cursor: pointer;">
+                                <!-- Celdas dinámicas -->
+                                <td *ngFor="let column of config.columns">
+                                    <!-- Columna de imagen -->
+                                    <div *ngIf="column.type === 'image'" class="d-flex align-items-center">
                                         <a href="javascript:void(0);" class="avatar avatar-lg">
-                                            <img src="assets/img/tours/{{ booking.img }}" 
+                                            <img [src]="'assets/img/tours/' + getCellValue(booking, column)" 
                                                  class="img-fluid rounded-circle" 
                                                  alt="tour">
                                         </a>
-                                        <div class="ms-2">
-                                            <p class="text-dark mb-0 fw-medium fs-14">
-                                                {{ booking.tourName }}
-                                            </p>
-                                            <span class="fs-14 fw-normal text-gray-6">{{ booking.tourType }}</span>
-                                        </div>
                                     </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <p class="mb-0 fw-medium">{{ booking.customerName }}</p>
-                                        <span class="text-gray-6 fs-12">{{ booking.customerEmail }}</span>
-                                    </div>
-                                </td>
-                                <td>{{ booking.travellers }}</td>
-                                <td>{{ booking.duration }}</td>
-                                <td class="fw-semibold">{{ booking.price }}</td>
-                                <td>{{ booking.checkInDate }}</td>
-                                <td>
-                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
-                                          [ngClass]="getStatusClass(booking.status)">
-                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ booking.status }}
+
+                                    <!-- Columna de estado -->
+                                    <span *ngIf="column.type === 'status'"
+                                          class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                          [ngClass]="getStatusClass(getCellValue(booking, column))">
+                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ getStatusLabel(getCellValue(booking, column)) }}
+                                    </span>
+
+                                    <!-- Columnas normales -->
+                                    <span *ngIf="column.type !== 'image' && column.type !== 'status'">
+                                        {{ getCellValue(booking, column) }}
                                     </span>
                                 </td>
+
+                                <!-- Columna de acciones dinámicas -->
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <a href="javascript:void(0);" 
-                                           data-bs-toggle="modal" 
-                                           data-bs-target="#bookingDetailModal"
-                                           (click)="viewBookingDetails(booking)"
-                                           class="btn btn-sm btn-light"
-                                           title="Ver detalles">
-                                            <i class="isax isax-eye"></i>
-                                        </a>
-                                        @if (booking.status === 'Pending') {
-                                            <button 
-                                                class="btn btn-sm btn-success" 
-                                                (click)="confirmBooking(booking.id)"
-                                                title="Confirmar">
-                                                <i class="isax isax-tick-circle"></i>
-                                            </button>
-                                        }
-                                        @if (booking.status !== 'Cancelled' && booking.status !== 'Completed') {
-                                            <button 
-                                                class="btn btn-sm btn-danger" 
-                                                (click)="cancelBooking(booking.id)"
-                                                title="Cancelar">
-                                                <i class="isax isax-close-circle"></i>
-                                            </button>
-                                        }
+                                        <button 
+                                            *ngFor="let action of config.actions"
+                                            [hidden]="!isActionVisible(action, booking)"
+                                            class="btn btn-sm"
+                                            [ngClass]="'btn-' + action.color"
+                                            (click)="onAction(action.id, booking); $event.stopPropagation()"
+                                            [title]="action.label">
+                                            <i [class]="action.icon"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         }
                         @if (tableData.length === 0) {
                             <tr>
-                                <td colspan="9" class="text-center py-5">
+                                <td [attr.colspan]="(config.columns.length || 0) + 1" class="text-center py-5">
                                     <div class="text-muted">
                                         <i class="isax isax-box fs-1 mb-3 d-block"></i>
-                                        <h5>No se encontraron reservas</h5>
-                                        <p>Intenta ajustar tus filtros de búsqueda</p>
+                                        <h5>{{ 'provider-tour-management.empty.noBookings' | translate }}</h5>
+                                        <p>{{ 'provider-tour-management.empty.adjustFilters' | translate }}</p>
                                     </div>
                                 </td>
                             </tr>
@@ -278,6 +202,30 @@
     </div>
     <!-- /Booking List -->
 
+    <!-- Pagination -->
+    @if (tableData.length > 0 && totalPages > 1) {
+        <nav class="pagination-nav mt-4">
+            <ul class="pagination justify-content-center justify-content-sm-end">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="previousPage()" aria-label="Previous">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                    </a>
+                </li>
+                @for (page of getPageNumbers(); track page) {
+                    <li class="page-item" [class.active]="page === currentPage">
+                        <a class="page-link" href="javascript:void(0);" (click)="goToPage(page)">{{ page }}</a>
+                    </li>
+                }
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" href="javascript:void(0);" (click)="nextPage()" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    <!-- /Pagination -->
+
 </div>
 <!-- /Provider Tour Management -->
 
@@ -287,7 +235,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="bookingDetailModalLabel">
-                    Detalles de Reserva 
+                    {{ 'provider-tour-management.modal.title' | translate }} 
                     @if (selectedBooking) {
                         <span class="fs-14 fw-medium text-primary">{{ selectedBooking.id }}</span>
                     }
@@ -327,34 +275,34 @@
 
                         <!-- Booking Info -->
                         <div class="upcoming-details mb-4">
-                            <h6 class="mb-3">Información de la Reserva</h6>
+                            <h6 class="mb-3">{{ 'provider-tour-management.modal.bookingInfo' | translate }}</h6>
                             <div class="row gy-3">
                                 <div class="col-lg-3">
-                                    <h6 class="fs-14 text-gray-6">Destino</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.destination' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.destination }}</p>
                                 </div>
                                 <div class="col-lg-3">
-                                    <h6 class="fs-14 text-gray-6">Duración</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.duration' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.duration }}</p>
                                 </div>
                                 <div class="col-lg-3">
-                                    <h6 class="fs-14 text-gray-6">Fecha de Reserva</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.bookingDate' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.bookingDate }}</p>
                                 </div>
                                 <div class="col-lg-3">
-                                    <h6 class="fs-14 text-gray-6">Precio Total</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.totalPrice' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium text-success">{{ selectedBooking.price }}</p>
                                 </div>
                                 <div class="col-lg-6">
-                                    <h6 class="fs-14 text-gray-6">Fecha de Inicio</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.checkInDate' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.checkInDate }}</p>
                                 </div>
                                 <div class="col-lg-6">
-                                    <h6 class="fs-14 text-gray-6">Fecha de Retorno</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.returnDate' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.returnDate }}</p>
                                 </div>
                                 <div class="col-lg-12">
-                                    <h6 class="fs-14 text-gray-6">Viajeros</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.travellers' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.travellers }}</p>
                                 </div>
                             </div>
@@ -362,18 +310,18 @@
 
                         <!-- Customer Info -->
                         <div class="upcoming-details mb-4">
-                            <h6 class="mb-3">Información del Cliente</h6>
+                            <h6 class="mb-3">{{ 'provider-tour-management.modal.customerInfo' | translate }}</h6>
                             <div class="row gy-3">
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Nombre</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.name' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerName }}</p>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Email</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.email' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerEmail }}</p>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Teléfono</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.phone' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerPhone }}</p>
                                 </div>
                             </div>
@@ -382,7 +330,7 @@
                         <!-- Extra Services -->
                         @if (selectedBooking.extraServices && selectedBooking.extraServices.length > 0) {
                             <div class="upcoming-details mb-4">
-                                <h6 class="mb-3">Servicios Adicionales</h6>
+                                <h6 class="mb-3">{{ 'provider-tour-management.modal.extraServices' | translate }}</h6>
                                 <div class="d-flex flex-wrap gap-2">
                                     @for (service of selectedBooking.extraServices; track service) {
                                         <span class="badge bg-primary-subtle text-primary px-3 py-2 fs-14">
@@ -396,7 +344,7 @@
                         <!-- Activities -->
                         @if (selectedBooking.activities && selectedBooking.activities.length > 0) {
                             <div class="upcoming-details mb-4">
-                                <h6 class="mb-3">Actividades Incluidas</h6>
+                                <h6 class="mb-3">{{ 'provider-tour-management.modal.activities' | translate }}</h6>
                                 <div class="d-flex flex-wrap gap-2">
                                     @for (activity of selectedBooking.activities; track activity) {
                                         <span class="badge bg-success-subtle text-success px-3 py-2 fs-14">
@@ -409,20 +357,20 @@
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-                            @if (selectedBooking.status === 'Pending') {
-                                <button 
-                                    class="btn btn-success" 
-                                    (click)="confirmBooking(selectedBooking.id)"
-                                    data-bs-dismiss="modal">
-                                    <i class="isax isax-tick-circle me-2"></i>Confirmar Reserva
-                                </button>
-                            }
                             @if (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming') {
                                 <button 
                                     class="btn btn-primary" 
                                     (click)="completeBooking(selectedBooking.id)"
                                     data-bs-dismiss="modal">
-                                    <i class="isax isax-tick-square me-2"></i>Marcar como Completada
+                                    <i class="isax isax-tick-square me-2"></i>{{ 'provider-tour-management.modal.actions.complete' | translate }}
+                                </button>
+                            }
+                            @if (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING') {
+                                <button 
+                                    class="btn btn-success" 
+                                    (click)="confirmBookingFromModal(selectedBooking.id)"
+                                    data-bs-dismiss="modal">
+                                    <i class="isax isax-tick-circle me-2"></i>{{ 'provider-tour-management.modal.actions.confirm' | translate }}
                                 </button>
                             }
                             @if (selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
@@ -430,11 +378,11 @@
                                     class="btn btn-danger" 
                                     (click)="cancelBooking(selectedBooking.id)"
                                     data-bs-dismiss="modal">
-                                    <i class="isax isax-close-circle me-2"></i>Cancelar Reserva
+                                    <i class="isax isax-close-circle me-2"></i>{{ 'provider-tour-management.modal.actions.cancel' | translate }}
                                 </button>
                             }
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                Cerrar
+                                {{ 'provider-tour-management.modal.close' | translate }}
                             </button>
                         </div>
                     </div>

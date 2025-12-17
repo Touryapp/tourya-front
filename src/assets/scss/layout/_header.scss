@@ -689,11 +689,11 @@ header {
 .offcanvas-info {
 	background: $white none repeat scroll 0 0;
 	position: fixed;
-	right: 0;
+	left: 0;
 	top: 0;
 	width: 350px;
 	height: 100%;
-    @include transform(translateX(calc(100% + 80px)));
+    @include transform(translateX(calc(-100% - 80px)));
 	-webkit-transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
 	-moz-transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
 	transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;

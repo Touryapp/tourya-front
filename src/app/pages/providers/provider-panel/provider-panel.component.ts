@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { routes } from "../../../shared/routes/routes";
 import { RequestProvider } from "../../../shared/dto/requestProvider-response.dto";
 import { RequestProvidersService } from "../requestproviders/request-providers.service";
@@ -6,6 +6,9 @@ import { Tour } from "../../../shared/dto/tour-response.dto";
 import { TourService } from "../tours/tour.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ReviewsService } from "../../../core/services/reviews.service";
+import { ProviderReview } from "../../../shared/models/reviews.model";
+import { ProviderPanelStateService } from "../../../shared/services/provider-panel-state.service";
 
 @Component({
   selector: "app-provider-panel",
@@ -38,28 +41,96 @@ export class ProviderPanelComponent implements OnInit {
   public totalItems: number = 0;
   public totalPages: number = 0;
   public currentPage: number = 1;
+  
+  // Variables para reviews
+  reviews: ProviderReview[] = [];
+  totalReviews: number = 0;
+  averageRating: number = 0;
+  reviewsLoading: boolean = false;
+  reviewsTotalPages: number = 0;
+  reviewsCurrentPage: number = 1;
 
   constructor(
     private requestProvidersService: RequestProvidersService,
     private toursService: TourService,
+    private reviewsService: ReviewsService,
     private router: Router,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private panelStateService: ProviderPanelStateService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     const added = !!this.route.snapshot.queryParamMap.get("addedTour");
     const edited = !!this.route.snapshot.queryParamMap.get("editedTour");
+    const openModal = this.route.snapshot.queryParamMap.get("openModal");
+    const reservationId = this.route.snapshot.queryParamMap.get("reservationId");
 
     if (added) {
       this.openSnackBar("Tour added successfully");
     } else if (edited) {
       this.openSnackBar("Tour successfully edited");
     }
+    
+    // Si viene desde el QR scanner, mostrar la vista de "Mis reservas" INMEDIATAMENTE
+    if (openModal === 'true' && reservationId) {
+      console.log('🔓 QR DETECTADO - Activando vista de Mis reservas');
+      console.log('📋 Reservation ID:', reservationId);
+      console.log('🎯 Estableciendo mostrarTourManagement = true');
+      
+      // Usar setTimeout para asegurar que Angular detecte el cambio
+      setTimeout(() => {
+        this.setView('reservas');
+        this.cdr.detectChanges(); // Forzar detección de cambios
+        console.log('✅ Vista activada - mostrarTourManagement:', this.mostrarTourManagement);
+        
+        // Limpiar los query params DESPUÉS de activar la vista
+        // Esto evita que el modal se vuelva a abrir al cambiar de vista
+        setTimeout(() => {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {},
+            replaceUrl: true // Reemplazar la URL en el historial
+          });
+          console.log('🧹 Query params limpiados desde provider-panel');
+        }, 500); // Esperar 500ms para que el componente hijo lea los params
+      }, 0);
+    } else {
+      // Establecer vista por defecto si no hay una vista específica solicitada
+      // Primero verificar si hay una vista pendiente desde el servicio
+      const currentView = this.panelStateService.getCurrentView();
+      if (currentView) {
+        console.log('📱 Vista inicial desde servicio:', currentView);
+        this.setView(currentView);
+      } else {
+        // Si no hay vista desde el servicio, establecer 'dashboard' como vista por defecto
+        console.log('🏠 Estableciendo vista por defecto: dashboard');
+        this.setView('dashboard');
+      }
+    }
 
-    this.router.navigate([], { queryParams: null });
+    // Suscribirse a cambios de vista desde el menú hamburguesa
+    this.panelStateService.currentView$.subscribe(view => {
+      console.log('📱 Cambio de vista desde menú hamburguesa:', view);
+      this.setView(view);
+    });
+
+    // No limpiar los query params aquí para que provider-tour-management pueda leerlos
+    // this.router.navigate([], { queryParams: null });
 
     this.getToursProvider();
+  }
+  
+  /**
+   * Cambia la vista activa del panel
+   */
+  setView(view: 'dashboard' | 'tours' | 'templates' | 'reservas' | 'reviews' | 'pagos'): void {
+    this.mostrarTours = view === 'tours';
+    this.mostrarTemplates = view === 'templates';
+    this.mostrarTourManagement = view === 'reservas';
+    this.mostrarReviews = view === 'reviews';
+    this.mostrarPagos = view === 'pagos';
   }
 
   getToursProvider() {
@@ -176,5 +247,97 @@ export class ProviderPanelComponent implements OnInit {
     this._snackBar.open(message, "", {
       duration: 5000,
     });
+  }
+  
+  // Métodos para manejar reviews
+  
+  /**
+   * Carga las reviews desde el servicio
+   */
+  onLoadReviews(): void {
+    this.reviewsLoading = true;
+    this.reviewsService.getReviews().subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.totalReviews = response.totalElements;
+        this.reviewsTotalPages = response.totalPages;
+        this.reviewsCurrentPage = response.number + 1;
+        this.calculateReviewStatistics();
+        this.reviewsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading reviews:', error);
+        this.reviewsLoading = false;
+      }
+    });
+  }
+  
+  /**
+   * Aplica filtros a las reviews
+   */
+  onApplyFilters(filters: any): void {
+    this.reviewsLoading = true;
+    this.reviewsService.getReviews(filters).subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.totalReviews = response.totalElements;
+        this.reviewsTotalPages = response.totalPages;
+        this.reviewsCurrentPage = response.number + 1;
+        this.calculateReviewStatistics();
+        this.reviewsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error applying filters:', error);
+        this.reviewsLoading = false;
+      }
+    });
+  }
+  
+  /**
+   * Envía una respuesta a una review
+   */
+  onSubmitReply(event: {reviewId: string, answerData: any}): void {
+    this.reviewsService.saveReviewReply(event.reviewId, event.answerData).subscribe({
+      next: (response) => {
+        console.log('Respuesta guardada exitosamente:', response);
+        this.openSnackBar('¡Respuesta enviada exitosamente!');
+        // Recargar las reviews para mostrar la nueva respuesta
+        this.onLoadReviews();
+      },
+      error: (error) => {
+        console.error('Error al guardar la respuesta:', error);
+        this.openSnackBar('Error al enviar la respuesta. Por favor intenta nuevamente.');
+      }
+    });
+  }
+  
+  /**
+   * Rechaza una review
+   */
+  onSubmitReject(event: {reviewId: string, reason: string}): void {
+    this.reviewsService.rejectReview(event.reviewId, event.reason).subscribe({
+      next: (response) => {
+        console.log('Review rechazada exitosamente:', response);
+        this.openSnackBar('Review rechazada exitosamente');
+        // Recargar las reviews
+        this.onLoadReviews();
+      },
+      error: (error) => {
+        console.error('Error al rechazar la review:', error);
+        this.openSnackBar('Error al rechazar la review. Por favor intenta nuevamente.');
+      }
+    });
+  }
+  
+  /**
+   * Calcula las estadísticas de las reviews
+   */
+  private calculateReviewStatistics(): void {
+    if (this.reviews.length === 0) {
+      this.averageRating = 0;
+      return;
+    }
+    const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+    this.averageRating = parseFloat((sum / this.reviews.length).toFixed(1));
   }
 }

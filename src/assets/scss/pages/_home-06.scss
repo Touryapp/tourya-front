@@ -104,7 +104,8 @@
     margin-bottom: 40px;
 }
 .hero-sec-six {
-    background: url(../../../../public/assets/img/tours/home-banner-6.jpg);
+    // background: url(../../../../public/assets/img/tours/home-banner-6.jpg);
+    // Commented out to allow carousel background images to work
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

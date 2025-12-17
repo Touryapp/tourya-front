@@ -10909,7 +10909,7 @@ footer.footer-three .footer-bottom .policy-links li a:hover {
 }
 .hero-section .banner-sec .owl-dots {
   position: absolute;
-  right: 50px;
+  right: 15px;
   top: 50%;
   z-index: 1;
   display: flex;

@@ -1,5 +1,49 @@
 <!-- Hero Section -->
 <section class="hero-sec-six">
+    <div class="banner-slider banner-sec">
+        <owl-carousel-o #bannerCarousel [options]="bannerSlider" (changed)="onCarouselChanged($event)">
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya1.png" alt="TourYa 1">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya2.png" alt="TourYa 2">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya3.png" alt="TourYa 3">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya4.png" alt="TourYa 4">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya5.png" alt="TourYa 5">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya6.png" alt="TourYa 6">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya7.png" alt="TourYa 7">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="assets/img/carrousel/tourya8.png" alt="TourYa 8">
+                </div>
+            </ng-template>
+        </owl-carousel-o>
+    </div>
     <div class="container">
         <div class="hero-content">
             <div class="row align-items-center">

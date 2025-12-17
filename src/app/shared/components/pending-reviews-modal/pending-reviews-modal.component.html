@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Reseñas Pendientes</h4>
+  <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true" class="visually-hidden">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>Tienes las siguientes reseñas pendientes por completar:</p>
+  <div class="list-group">
+    <div *ngFor="let review of pendingReviews" class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ review.tourName }}</h5>
+          <small class="ms-2">{{ review.date | date }}</small>
+        </div>
+        <p class="mb-1">Cliente: {{ review.customerName }}</p>
+        <small>Booking ID: {{ review.bookingId }}</small>
+      </div>
+      <button class="btn btn-sm btn-primary ms-3" (click)="goToReview(review)">
+        Reseñar
+      </button>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+</div>

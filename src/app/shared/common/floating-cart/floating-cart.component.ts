@@ -190,14 +190,7 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
    * Verifica si hay días disponibles
    */
   hasDaysAvailable(): boolean {
-    const hasData = this.daySelections.length > 0;
-    console.log(
-      "FloatingCart: hasDaysAvailable ->",
-      hasData,
-      "Días:",
-      this.daySelections.length
-    );
-    return hasData;
+    return this.daySelections.length > 0;
   }
 
   /**

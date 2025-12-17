@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { routes } from "../../../shared/routes/routes";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import {
   SearchTourListDto,
   TourScheduleResponseDto,
@@ -16,13 +16,15 @@ import {
   CartSummary,
 } from "../../../shared/dto/cart.dto";
 import { TourSlotSelectionModalComponent } from "../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil, filter } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { PaymentService } from "../../../shared/services/payment.service";
 import { CityService } from "../../../shared/services/city.service";
 import { LocationsPublicDto } from "../../../shared/dto/locations-public.dto";
 import { TagDto } from "../../../shared/dto/search-tour-response.dto";
 import { CategoryDto } from "../../../shared/dto/category.dto";
+import { PendingActionService } from "../../../shared/services/pending-action.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-list-tours",
@@ -171,10 +173,14 @@ export class ListToursComponent implements OnInit, OnDestroy {
     private router: Router,
     public dialog: MatDialog,
     private paymentService: PaymentService,
-    private cityService: CityService
+    private cityService: CityService,
+    private pendingActionService: PendingActionService
   ) {}
 
   ngOnInit(): void {
+    console.log('🎬 ngOnInit - Iniciando componente list-tours');
+    console.log('📦 ¿Hay acción pendiente al iniciar?', this.pendingActionService.hasPendingAction());
+    
     this.initializeCartSubscriptions();
     // Ya no llamamos loadCartFromBackend aquí, el CartService lo maneja internamente
     // cuando se suscribe el componente
@@ -183,6 +189,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.loadFiltersCatalogs();
 
     this.route.queryParams.subscribe((params) => {
+      console.log('� queryParams recibidos:', params);
+      
       this.selectedCity = params["city"] || ""; // stateId desde Home
       this.travellersData = {
         adults: Number(params["adults"]) || 1,
@@ -198,6 +206,15 @@ export class ListToursComponent implements OnInit, OnDestroy {
         this.cartService.initializeCart(this.checkIn, this.checkOut);
       }
 
+      // IMPORTANTE: Verificar si hay acción pendiente ANTES de buscar
+      const hasPendingAction = this.pendingActionService.hasPendingAction();
+      console.log('🔍 queryParams subscribe - ¿Hay acción pendiente?', hasPendingAction);
+      
+      if (hasPendingAction) {
+        const pendingAction = this.pendingActionService.getPendingCartAction();
+        console.log('� Datos de la acción pendiente:', pendingAction);
+      }
+      
       // Si recibimos stateId, preseleccionamos una ciudad de ese estado una vez cargadas las locations
       if (this.selectedCity) {
         const cityIdNum = Number(this.selectedCity);
@@ -205,6 +222,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
           if (this.locationsPublic && this.locationsPublic.length) {
             const loc = this.locationsPublic.find(l => l.cityId === cityIdNum);
             if (loc) this.selectedLocation = loc;
+            console.log('🔍 Ejecutando búsqueda con ciudad seleccionada...');
             this.searchToursList();
           } else {
             // Si aún no cargan, reintentar en el próximo tick mínimo
@@ -213,7 +231,23 @@ export class ListToursComponent implements OnInit, OnDestroy {
         };
         trySelect();
       } else {
+        // Siempre ejecutar la búsqueda, especialmente si hay acción pendiente
+        console.log('🔍 Ejecutando búsqueda inicial de tours...');
         this.searchToursList();
+        
+        // FALLBACK: Si después de 3 segundos la búsqueda no ha terminado
+        // pero hay acción pendiente, intentar procesarla de todas formas
+        if (hasPendingAction) {
+          setTimeout(() => {
+            console.log('⏰ TIMEOUT: 3 segundos después de iniciar búsqueda...');
+            console.log('⏰ ¿Ya se procesó la acción pendiente?', !this.pendingActionService.hasPendingAction());
+            
+            if (this.pendingActionService.hasPendingAction()) {
+              console.warn('⚠️ La búsqueda de tours no terminó, pero forzando procesamiento de acción pendiente...');
+              this.checkForPendingAction();
+            }
+          }, 3000);
+        }
       }
     });
   }
@@ -613,16 +647,29 @@ export class ListToursComponent implements OnInit, OnDestroy {
           this.cartService.initializeCart(this.checkIn, this.checkOut);
           this.cartService.updateAvailableToursForDays(this.tours);
         }
+
+        // Verificar acción pendiente DESPUÉS de cargar los tours
+        console.log('🎯 searchToursList completado, llamando a checkForPendingAction()...');
+        this.checkForPendingAction();
       },
       error: (error: any) => {
         console.error("=== ERROR EN LA BÚSQUEDA ===");
         console.error("Error al buscar tours:", error);
+        console.error("Status:", error.status);
         console.error("Detalles del error:", error.message);
+        console.error("Error completo:", error);
         this.tours = [];
         this.totalItems = 0;
         this.totalPages = 0;
         this.currentPage = 1;
         this.loading = false;
+        
+        // IMPORTANTE: Si hay acción pendiente, intentar ejecutarla de todas formas
+        // por si los tours ya están cargados de antes
+        if (this.pendingActionService.hasPendingAction() && this.tours.length > 0) {
+          console.warn('⚠️ Error en búsqueda pero hay tours previos, intentando procesar acción pendiente...');
+          this.checkForPendingAction();
+        }
       },
     });
   }
@@ -811,5 +858,128 @@ export class ListToursComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('❌ Error al cargar carrito desde backend:', error);
     }
+  }
+
+  /**
+   * Verifica si hay una acción pendiente y agrega el tour al carrito automáticamente
+   */
+  private checkForPendingAction(): void {
+    console.log('🔎 checkForPendingAction() llamado');
+    console.log('🔎 Tours disponibles:', this.tours.length);
+    console.log('🔎 hasPendingAction:', this.pendingActionService.hasPendingAction());
+    
+    if (!this.pendingActionService.hasPendingAction()) {
+      console.log('ℹ️ No hay acción pendiente en list-tours');
+      return;
+    }
+
+    const pendingAction = this.pendingActionService.getPendingCartAction();
+    console.log('🎯 Acción pendiente detectada en list-tours:', pendingAction);
+    console.log('🎯 Contenido de sessionStorage:', sessionStorage.getItem('pendingCartAction'));
+
+    if (!pendingAction) {
+      console.warn('⚠️ hasPendingAction() devolvió true pero getPendingCartAction() devolvió null');
+      return;
+    }
+
+    // Pequeño delay para asegurar que la UI esté lista
+    setTimeout(async () => {
+      console.log('🔍 Procesando acción pendiente...');
+      console.log('📦 Datos:', {
+        tourId: pendingAction.tourId,
+        dayId: pendingAction.dayId,
+        slotId: pendingAction.slotId,
+        selectedDate: pendingAction.selectedDate,
+        participants: pendingAction.participants
+      });
+      console.log('📋 Tours cargados:', this.tours.length);
+      
+      try {
+        // Buscar el tour en la lista actual SOLO para mostrar el nombre en el mensaje
+        // Pero intentaremos agregar al carrito de todas formas
+        const tour = this.tours.find((t: TourScheduleResponseDto) => t.tour.id === pendingAction.tourId);
+      
+        if (!tour && this.tours.length > 0) {
+          console.warn('⚠️ No se encontró el tour con ID:', pendingAction.tourId);
+          console.warn('📋 IDs de tours disponibles:', this.tours.map(t => t.tour.id));
+          console.warn('⚠️ Intentando agregar al carrito de todas formas...');
+        } else if (tour) {
+          console.log('✅ Tour encontrado:', tour.tour.name);
+        } else {
+          console.warn('⚠️ No hay tours cargados todavía, pero intentando agregar al carrito...');
+        }
+        
+        // Calcular adultos y niños de los participantes
+        console.log('📦 Estructura de participantes:', pendingAction.participants);
+        
+        // Los participantes tienen ageType (string) y quantity (number)
+        let adults = 0;
+        let children = 0;
+        
+        pendingAction.participants.forEach((p: any) => {
+          if (p.ageType === 'ADULT') {
+            adults += p.quantity || 0;
+          } else if (p.ageType === 'CHILD') {
+            children += p.quantity || 0;
+          }
+        });
+
+        console.log('👥 Participantes calculados - Adultos:', adults, 'Niños:', children);
+
+        // Agregar al carrito usando el servicio
+        const dayDate = new Date(pendingAction.selectedDate);
+        const dayDateFormatted = dayDate.toISOString().split('T')[0];
+        
+        console.log('🚀 Llamando a addTourToCart con:', {
+          productId: pendingAction.tourId,
+          scheduleDate: dayDateFormatted,
+          tourScheduleId: pendingAction.dayId,
+          slotId: pendingAction.slotId,
+          adults,
+          children
+        });
+        
+        await this.cartService.addTourToCart(
+          pendingAction.tourId,       // productId
+          dayDateFormatted,           // scheduleDate (YYYY-MM-DD)
+          pendingAction.dayId,        // tourScheduleId
+          pendingAction.slotId,       // slotId
+          adults,                     // adults
+          children                    // children
+        );
+
+        console.log('✅ Tour agregado al carrito exitosamente desde acción pendiente');
+
+        // Limpiar acción pendiente
+        this.pendingActionService.clearPendingAction();
+        console.log('🧹 Acción pendiente limpiada del sessionStorage');
+
+        // Mostrar mensaje de bienvenida
+        Swal.fire({
+          icon: 'success',
+          title: '¡Bienvenido de nuevo!',
+          text: tour ? `Hemos agregado el tour "${tour.tour.name}" a tu carrito.` : 'Tu tour ha sido agregado al carrito exitosamente.',
+          confirmButtonText: 'Ver carrito',
+          showCancelButton: true,
+          cancelButtonText: 'Continuar buscando'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Aquí podrías navegar a la página del carrito si existe
+            console.log('Usuario quiere ver el carrito');
+          }
+        });
+
+      } catch (error) {
+        console.error('❌ Error al procesar acción pendiente:', error);
+        this.pendingActionService.clearPendingAction();
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al agregar el tour. Por favor, intenta nuevamente.',
+          confirmButtonText: 'Entendido'
+        });
+      }
+    }, 500); // Pequeño delay para asegurar que la UI esté lista
   }
 }
