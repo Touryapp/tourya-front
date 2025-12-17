@@ -261,6 +261,13 @@ export class DefaultHeaderComponent {
     return true;
   }
 
+  /**
+   * Get the user's display name (first name + first surname)
+   */
+  get userDisplayName(): string {
+    return this.authService.getUserDisplayName();
+  }
+
   redirectByRole() {
     const requestProviderStatus = this.authService.getRequestProviderStatus();
     if (this.isUser && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
