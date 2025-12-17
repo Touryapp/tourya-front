@@ -215,4 +215,43 @@ export class AuthService {
     const id = localStorage.getItem("idProvider");
     return id ? parseInt(id) : null;
   }
+  
+  /**
+   * Get user's display name (first name + first surname)
+   * Examples:
+   * - "Luis Daniel Mendoza Owkin" -> "Luis Mendoza"
+   * - "Juan Pérez" -> "Juan Pérez"
+   * - "María" -> "María"
+   */
+  getUserDisplayName(): string {
+    const user = this.getUser();
+    if (!user || !user.fullName) {
+      return 'Usuario';
+    }
+
+    const nameParts = user.fullName.trim().split(/\s+/);
+    
+    if (nameParts.length === 0) {
+      return 'Usuario';
+    }
+    
+    if (nameParts.length === 1) {
+      // Solo un nombre
+      return nameParts[0];
+    }
+    
+    if (nameParts.length === 2) {
+      // Un nombre y un apellido
+      return `${nameParts[0]} ${nameParts[1]}`;
+    }
+    
+    // Dos o más nombres y apellidos
+    // Tomar el primer nombre (índice 0) y el primer apellido
+    // Asumiendo que los apellidos empiezan después de la mitad
+    const firstName = nameParts[0];
+    const middleIndex = Math.floor(nameParts.length / 2);
+    const firstSurname = nameParts[middleIndex];
+    
+    return `${firstName} ${firstSurname}`;
+  }
 } 
