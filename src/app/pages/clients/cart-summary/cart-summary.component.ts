@@ -8,6 +8,7 @@ import { WompiService, WompiCheckoutConfig, WompiTransactionResult } from '../..
 import { PaymentService } from '../../../shared/services/payment.service';
 import { PaymentResponseDto, WompiResponseDto, ShoppingCartResponseDto } from '../../../shared/dto/payment.dto';
 import { environment } from '../../../../environments/environment';
+import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 
 // Interface for traveler information per tour
 interface TravelerInfo {
@@ -76,7 +77,8 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private router: Router,
     private wompiService: WompiService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {

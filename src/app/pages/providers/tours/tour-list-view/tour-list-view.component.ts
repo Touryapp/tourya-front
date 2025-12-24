@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { OwlOptions } from "ngx-owl-carousel-o";
 import { Tour } from "../../../../shared/dto/tour-response.dto";
+import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 
 @Component({
   selector: "app-tour-list-view-provider",
@@ -24,6 +25,8 @@ export class TourListViewComponent {
   @Output() goToPage = new EventEmitter<number>();
   @Output() goToPreviousPage = new EventEmitter<void>();
   @Output() goToNextPage = new EventEmitter<void>();
+
+  constructor(public i18nService: I18nFieldService) {}
 
   // Favorites functionality
   isClassAdded: boolean[] = [];
@@ -131,7 +134,11 @@ export class TourListViewComponent {
   }
 
   displayTourDescription(tour: Tour): string {
-    return tour?.description || "";
+    return this.i18nService.getValue(tour?.description);
+  }
+
+  displayTourName(tour: Tour): string {
+    return this.i18nService.getValue(tour?.name);
   }
 
   profilePicture(tour: Tour) {

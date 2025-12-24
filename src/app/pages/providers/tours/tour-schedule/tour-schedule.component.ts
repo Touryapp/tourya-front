@@ -27,6 +27,7 @@ import { Subject } from "rxjs";
 import { TemplateService } from "../../templates/template.service";
 import { AuthService } from "../../../../core/services/auth.service";
 import { TourScheduleConfigResponseDto } from "../../../../shared/dto/tour-schedule.response.dto";
+import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 @Component({
   selector: "app-tour-schedule",
   standalone: false,
@@ -91,7 +92,8 @@ export class TourScheduleComponent {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private templateService: TemplateService,
-    private authService: AuthService
+    private authService: AuthService,
+    public i18nService: I18nFieldService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 

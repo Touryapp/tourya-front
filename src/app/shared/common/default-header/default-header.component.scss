@@ -9,16 +9,6 @@
         padding-left: 15px; /* Add some padding so it's not glued to edge */
     }
 
-    .navbar-logo {
-        position: absolute !important;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%); /* Perfectly center X and Y */
-        margin: 0 !important;
-        z-index: 10; 
-        width: auto !important; /* Prevent it from taking full width */
-    }
-
     .header__hamburger {
         position: relative;
         z-index: 20;

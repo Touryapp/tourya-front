@@ -9,6 +9,7 @@ import { AuthService } from "../../../../core/services/auth.service";
 import { CartService } from "../../../../shared/services/cart.service";
 import { CityService } from "../../../../shared/services/city.service";
 import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
+import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 
 @Component({
   selector: "app-tour-details-provider",
@@ -130,7 +131,8 @@ export class TourDetailsProviderComponent implements OnInit, OnDestroy, AfterVie
     private cityService: CityService,
     public authService: AuthService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {
@@ -195,7 +197,7 @@ export class TourDetailsProviderComponent implements OnInit, OnDestroy, AfterVie
     const stateName = found ? found.stateName : undefined;
 
     const parts: string[] = [];
-    if (loc.location) parts.push(loc.location); // friendly name of the location
+    if (loc.location) parts.push(this.i18nService.getValue(loc.location)); // friendly name of the location
     if (loc.address) parts.push(loc.address);
     if (cityName) parts.push(cityName);
     else if (loc.cityId) parts.push(String(loc.cityId));

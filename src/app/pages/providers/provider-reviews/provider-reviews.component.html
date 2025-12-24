@@ -80,7 +80,7 @@
                                 (ngModelChange)="applyFilters()">
                                 <option value="all">{{'provider-reviews.filters.allTours' | translate}}</option>
                                 @for (tour of availableTours; track tour.id) {
-                                    <option [value]="tour.id">{{ tour.name }}</option>
+                                    <option [value]="tour.id">{{ i18nService.getValue(tour.name) }}</option>
                                 }
                             </select>
                         }
@@ -103,7 +103,7 @@
                                         </div>
                                         @for (tour of filteredTours; track tour.id) {
                                             <div class="autocomplete-item" (click)="selectTour(tour)">
-                                                {{ tour.name }}
+                                                {{ i18nService.getValue(tour.name) }}
                                             </div>
                                         }
                                     </div>

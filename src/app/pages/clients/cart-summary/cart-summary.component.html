@@ -318,7 +318,7 @@
                                 <button 
                                     type="button" 
                                     class="btn btn-sm btn-outline-danger position-absolute delete-tour-btn"
-                                    (click)="confirmRemoveItem(item.id, item.tour.name)"
+                                    (click)="confirmRemoveItem(item.id, i18nService.getValue(item.tour.name))"
                                     [disabled]="processing"
                                     title="Eliminar tour del carrito">
                                     <i class="fas fa-times" *ngIf="!processing"></i>
@@ -327,9 +327,9 @@
 
                                 <div class="d-flex align-items-start mb-3">
                                     <img [src]="(item.gallery.length > 0 ? item.gallery[0].imageUrl : '') || 'assets/img/tours/default-tour.jpg'" 
-                                         [alt]="item.tour.name" class="tour-thumb me-3">
+                                         [alt]="i18nService.getValue(item.tour.name)" class="tour-thumb me-3">
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1">{{ item.tour.name }}</h6>
+                                        <h6 class="mb-1">{{ i18nService.getValue(item.tour.name) }}</h6>
                                         <div class="tour-details mb-2">
                                             <p class="text-muted small mb-1">
                                                 <i class="fas fa-calendar me-1"></i>

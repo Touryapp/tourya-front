@@ -9,6 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ReviewsService } from "../../../core/services/reviews.service";
 import { ProviderReview } from "../../../shared/models/reviews.model";
 import { ProviderPanelStateService } from "../../../shared/services/provider-panel-state.service";
+import { I18nFieldService } from "../../../shared/services/i18n-field.service";
 
 @Component({
   selector: "app-provider-panel",
@@ -58,7 +59,8 @@ export class ProviderPanelComponent implements OnInit {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private panelStateService: ProviderPanelStateService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {

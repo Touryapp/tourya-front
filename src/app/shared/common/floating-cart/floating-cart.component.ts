@@ -11,6 +11,7 @@ import { Router } from "@angular/router";
 import { CartService } from "../../services/cart.service";
 import { DaySelection, CartSummary } from "../../dto/cart.dto";
 import Swal from 'sweetalert2';
+import { I18nFieldService } from "../../services/i18n-field.service";
 
 @Component({
   selector: "app-floating-cart",
@@ -33,7 +34,8 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
 
   constructor(
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    public i18nService: I18nFieldService
   ) {}
 
   /**

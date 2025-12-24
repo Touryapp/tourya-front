@@ -8,6 +8,7 @@ import { LightGallery } from 'lightgallery/lightgallery';
 import lgZoom from 'lightgallery/plugins/zoom';
 import lgVideo from 'lightgallery/plugins/video';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { I18nFieldService } from '../../../../shared/services/i18n-field.service';
 
 @Component({
   selector: 'app-tour-admin-detail',
@@ -111,7 +112,8 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
     private router: Router,
     private tourAdminService: TourAdminService,
     private cityService: CityService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {

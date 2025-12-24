@@ -2,6 +2,7 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter, HostListener
 import { routes } from '../../../shared/routes/routes';
 import { ProviderReview } from '../../../shared/models/reviews.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 
 @Component({
   selector: 'app-provider-reviews',
@@ -80,7 +81,8 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
   ];
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {

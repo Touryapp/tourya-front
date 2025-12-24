@@ -5,6 +5,7 @@ import { TourService } from "../tour.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Gallery, Tour } from "../../../../shared/dto/tour-response.dto";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 
 @Component({
   selector: "app-tour-gallery",
@@ -29,7 +30,8 @@ export class TourGalleryComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private tourService: TourService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private i18nService: I18nFieldService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -115,6 +117,7 @@ export class TourGalleryComponent implements OnInit {
           ...gallery,
           id: gallery.id ? gallery.id : undefined,
           imageUrl: gallery.id ? gallery.imageUrl : undefined,
+          description: this.i18nService.createI18nField(gallery.description),
           file: undefined,
         };
       });
@@ -162,7 +165,7 @@ export class TourGalleryComponent implements OnInit {
         this.galleries.at(index).patchValue({
           id: gallery?.id,
           imageUrl: gallery?.imageUrl,
-          description: gallery?.description,
+          description: this.i18nService.getValue(gallery?.description),
           orderIndex: gallery?.orderIndex,
         });
       });

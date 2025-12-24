@@ -92,9 +92,9 @@
             <!-- Tour Selected -->
             <div class="selected-tour" *ngIf="day.isSelected && day.tourSelected">
               <div class="tour-info">
-                <div class="tour-name">{{ day.tourSelected.tour.name }}</div>
+                <div class="tour-name">{{ i18nService.getValue(day.tourSelected.tour.name) }}</div>
                 <div class="tour-image">
-                  <img [src]="day.tourSelected.gallery.at(0)?.imageUrl" alt="{{ day.tourSelected.tour.name }}">
+                  <img [src]="day.tourSelected.gallery.at(0)?.imageUrl" alt="{{ i18nService.getValue(day.tourSelected.tour.name) }}">
                 </div>
                 <div class="tour-details">
                   <span class="tour-time">

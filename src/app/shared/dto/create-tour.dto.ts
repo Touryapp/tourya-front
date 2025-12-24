@@ -1,49 +1,78 @@
-import { TypeOfAddress } from "../enums/type-of-address.enum";
+import { I18nField } from '../interfaces/i18n-field.interface';
 
 export interface CreateTourDto {
   id?: number;
-  name: string;
-  description: string;
+  name: I18nField;
+  description: I18nField;
   tourCategoryId: number;
   duration: string;
   maxPeople: number;
-  locations: Location[];
-  mainAttractions: MainAttraction[];
-  includes: Include[];
-  excludes: Exclude[];
-  faq: Faq[];
+  minAge: number;
+  locations: CreateLocationDto[];
+  mainAttractions: CreateMainAttractionDto[];
+  includes: CreateIncludeDto[];
+  excludes: CreateExcludeDto[];
+  faq: CreateFaqDto[];
+  itineraries: CreateItineraryDto[];
+  cancellationPolicies: CreateCancellationPolicyDto[];
+  modifiedArrayList?: {
+    updatedLocations: boolean;
+    updatedMainAttractions: boolean;
+    updatedIncludes: boolean;
+    updatedExcludes: boolean;
+    updatedItineraries: boolean;
+    updatedFaq: boolean;
+    updatedCancellationPolicies: boolean;
+  };
 }
 
-export interface Location {
+export interface CreateLocationDto {
   id?: number;
   countryId: number;
   stateId: number;
   cityId: number;
-  latitude: 0.1;
-  longitude: 0.1;
+  latitude: number;
+  longitude: number;
   address: string;
-  addressType: TypeOfAddress;
+  location: I18nField;
+  addressType: string;
 }
 
-export interface MainAttraction {
+export interface CreateMainAttractionDto {
   id?: number;
-  description: string;
+  description: I18nField;
 }
 
-export interface Include {
+export interface CreateIncludeDto {
   id?: number;
-  description: string;
-  type: "Include";
+  description: I18nField;
+  type: string;
 }
 
-export interface Exclude {
+export interface CreateExcludeDto {
   id?: number;
-  description: string;
-  type: "Exclude";
+  description: I18nField;
+  type: string;
 }
 
-export interface Faq {
+export interface CreateFaqDto {
   id?: number;
-  question: string;
-  answer: string;
+  question: I18nField;
+  answer: I18nField;
+}
+
+export interface CreateItineraryDto {
+  id?: number;
+  title: I18nField;
+  day: number;
+  time: string;
+  description: I18nField;
+}
+
+export interface CreateCancellationPolicyDto {
+  id?: number;
+  observations: I18nField;
+  allowsRainRefund: boolean;
+  allowsRescheduling: boolean;
+  cancellationPolicyType: string;
 }

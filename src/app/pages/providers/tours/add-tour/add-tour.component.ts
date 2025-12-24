@@ -24,6 +24,7 @@ import { Department } from "../../../../shared/dto/department.dto";
 import { City } from "../../../../shared/dto/city.dto";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CancellationPolicyType } from "../../../../shared/enums/cancellation-policy-type";
+import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 
 @Component({
   selector: "app-add-tour",
@@ -101,7 +102,8 @@ export class AddTourComponent {
     private departmentService: DepartmentService,
     private cityService: CityService,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private i18nService: I18nFieldService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -740,7 +742,7 @@ export class AddTourComponent {
         latitude: +latitude,
         longitude: +longitude,
         address,
-        location: location.location,
+        location: this.i18nService.createI18nField(location.location),
         addressType: typeOfAddress,
       };
     });
@@ -783,19 +785,46 @@ export class AddTourComponent {
 
     const body = {
       id: this.tourId || undefined,
-      name,
-      description,
+      name: this.i18nService.createI18nField(name),
+      description: this.i18nService.createI18nField(description),
       tourCategoryId: +category,
       duration,
       maxPeople: totalNumberOfPeoples,
       minAge: +minAge,
       locations: locationMap,
-      mainAttractions,
-      includes,
-      excludes,
-      faq,
-      itineraries,
-      cancellationPolicies,
+      mainAttractions: mainAttractions.map((attr: any) => ({
+        id: attr.id,
+        description: this.i18nService.createI18nField(attr.description)
+      })),
+      includes: includes.map((inc: any) => ({
+        id: inc.id,
+        description: this.i18nService.createI18nField(inc.description),
+        type: inc.type
+      })),
+      excludes: excludes.map((exc: any) => ({
+        id: exc.id,
+        description: this.i18nService.createI18nField(exc.description),
+        type: exc.type
+      })),
+      faq: faq.map((f: any) => ({
+        id: f.id,
+        question: this.i18nService.createI18nField(f.question),
+        answer: this.i18nService.createI18nField(f.answer)
+      })),
+      itineraries: itineraries.map((itin: any) => ({
+        id: itin.id,
+        title: this.i18nService.createI18nField(itin.title),
+        day: itin.day,
+        time: itin.time,
+        description: this.i18nService.createI18nField(itin.description)
+      })),
+      cancellationPolicies: cancellationPolicies.map((policy: any) => ({
+        id: policy.id,
+        observations: this.i18nService.createI18nField(policy.observations),
+        allowsRainRefund: policy.allowsRainRefund,
+        allowsRescheduling: policy.allowsRescheduling,
+        cancellationPolicyType: policy.cancellationPolicyType
+      })),
       modifiedArrayList,
     };
 
@@ -900,12 +929,12 @@ export class AddTourComponent {
 
           this.tourForm.patchValue({
             id: this.tour?.id,
-            name: this.tour?.name,
+            name: this.i18nService.getValue(this.tour?.name),
             category: this.tour?.tourCategoryId,
             duration: this.tour?.duration,
             totalNumberOfPeoples: this.tour?.maxPeople,
             minAge: this.tour?.minAge,
-            description: this.tour?.description,
+            description: this.i18nService.getValue(this.tour?.description),
           });
 
           this.tour?.locations?.map((location, index) => {
@@ -922,7 +951,7 @@ export class AddTourComponent {
               country: location.countryId,
               department: location.stateId,
               city: location.cityId,
-              location: location.location,
+              location: this.i18nService.getValue(location.location),
               latitude: location.latitude,
               longitude: location.longitude,
               address: location.address,
@@ -934,7 +963,7 @@ export class AddTourComponent {
 
             this.mainAttractions.at(index).patchValue({
               id: mainAttraction?.id,
-              description: mainAttraction?.description,
+              description: this.i18nService.getValue(mainAttraction?.description),
             });
           });
 
@@ -943,7 +972,7 @@ export class AddTourComponent {
 
             this.includes.at(index).patchValue({
               id: include?.id,
-              description: include?.description,
+              description: this.i18nService.getValue(include?.description),
               type: include?.type,
             });
           });
@@ -953,7 +982,7 @@ export class AddTourComponent {
 
             this.excludes.at(index).patchValue({
               id: exclude?.id,
-              description: exclude?.description,
+              description: this.i18nService.getValue(exclude?.description),
               type: exclude?.type,
             });
           });
@@ -963,10 +992,10 @@ export class AddTourComponent {
 
             this.itineraries.at(index).patchValue({
               id: itinerary?.id,
-              title: itinerary?.title,
+              title: this.i18nService.getValue(itinerary?.title),
               day: itinerary?.day,
               time: itinerary?.time,
-              description: itinerary?.description,
+              description: this.i18nService.getValue(itinerary?.description),
             });
           });
 
@@ -975,8 +1004,8 @@ export class AddTourComponent {
 
             this.faq.at(index).patchValue({
               id: faq?.id,
-              question: faq?.question,
-              answer: faq?.answer,
+              question: this.i18nService.getValue(faq?.question),
+              answer: this.i18nService.getValue(faq?.answer),
             });
           });
 
@@ -985,7 +1014,7 @@ export class AddTourComponent {
 
             this.cancellationPolicies.at(index).patchValue({
               id: cancellationPolicy?.id,
-              observations: cancellationPolicy?.observations,
+              observations: this.i18nService.getValue(cancellationPolicy?.observations),
               allowsRainRefund: cancellationPolicy?.allowsRainRefund,
               allowsRescheduling: cancellationPolicy?.allowsRescheduling,
               cancellationPolicyType:
