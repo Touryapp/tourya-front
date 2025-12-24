@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TourAdminService } from '../../../../shared/services/tour-admin.service';
 import { TourAdminDto, TourStatus, TourCategoryDto } from '../../../../shared/dto/tour-admin.dto';
+import { I18nFieldService } from '../../../../shared/services/i18n-field.service';
 
 @Component({
   selector: 'app-tour-admin-list',
@@ -33,7 +34,8 @@ export class TourAdminListComponent implements OnInit {
 
   constructor(
     private tourAdminService: TourAdminService,
-    private router: Router
+    private router: Router,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {

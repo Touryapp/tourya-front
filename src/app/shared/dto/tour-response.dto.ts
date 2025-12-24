@@ -1,7 +1,9 @@
+import { I18nField } from '../interfaces/i18n-field.interface';
+
 export interface Tour {
   id?: number;
-  name?: string;
-  description?: string;
+  name?: I18nField | string;
+  description?: I18nField | string;
   tourCategoryId?: number;
   duration?: string;
   maxPeople?: number;
@@ -83,7 +85,7 @@ interface Provider {
 interface Location {
   id?: number;
   address: string;
-  location: string;
+  location: I18nField | string;
   addressType: string;
   countryId: number;
   stateId: number;
@@ -94,38 +96,38 @@ interface Location {
 
 interface MainAttraction {
   id?: number;
-  description: string;
+  description: I18nField | string;
 }
 
 interface Include {
   id?: number;
-  description: string;
+  description: I18nField | string;
   type: string;
 }
 
 interface Exclude {
   id?: number;
-  description: string;
+  description: I18nField | string;
   type: string;
 }
 
 interface FAQ {
   id?: number;
-  question: string;
-  answer: string;
+  question: I18nField | string;
+  answer: I18nField | string;
 }
 
 interface Itinerary {
   id?: number;
-  title: string;
+  title: I18nField | string;
   day: number;
   time: string;
-  description: string;
+  description: I18nField | string;
 }
 
 interface CancellationPolicy {
   id?: number;
-  observations: string;
+  observations: I18nField | string;
   allowsRainRefund: boolean;
   allowsRescheduling: boolean;
   cancellationPolicyType: string;
@@ -134,6 +136,6 @@ interface CancellationPolicy {
 export interface Gallery {
   id?: number;
   imageUrl: string;
-  description: string;
+  description: I18nField | string;
   orderIndex: number;
 }

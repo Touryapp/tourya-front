@@ -7,6 +7,7 @@ import { CreateTourDto } from "../../../shared/dto/create-tour.dto";
 import { TourSchedule } from "../../../shared/dto/tour-schedule.response.dto";
 import { CreateTourSchedule } from "../../../shared/dto/create-tour-schedule.dto";
 import { TourScheduleConfigResponseDto } from "../../../shared/dto/tour-schedule.response.dto";
+import { I18nFieldService } from "../../../shared/services/i18n-field.service";
 
 @Injectable({
   providedIn: "root",
@@ -14,7 +15,10 @@ import { TourScheduleConfigResponseDto } from "../../../shared/dto/tour-schedule
 export class TourService {
   private baseUrl = environment.apiUrl + "/tour";
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private i18nService: I18nFieldService
+  ) {}
 
   getToursProvider(
     data: { page: number; size: number } = { page: 0, size: 10 }

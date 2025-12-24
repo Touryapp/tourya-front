@@ -15,6 +15,7 @@ import { LocationsPublicDto } from '../../../shared/dto/locations-public.dto';
 import { Tour, Gallery, TourDetail } from '../../../shared/dto/tour-response.dto';
 import { routes } from "../../../shared/routes/routes";
 import { LightGallery } from 'lightgallery/lightgallery';
+import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 
 @Component({
   selector: 'app-tours-detail',
@@ -139,7 +140,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     public authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
-    private cartService: CartService
+    private cartService: CartService,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {
@@ -204,7 +206,7 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     const stateName = found ? found.stateName : undefined;
 
     const parts: string[] = [];
-    if (loc.location) parts.push(loc.location); // friendly name of the location
+    if (loc.location) parts.push(this.i18nService.getValue(loc.location)); // friendly name of the location
     if (loc.address) parts.push(loc.address);
     if (cityName) parts.push(cityName);
     else if (loc.cityId) parts.push(String(loc.cityId));

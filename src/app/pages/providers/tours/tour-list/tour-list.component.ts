@@ -5,6 +5,7 @@ import { OwlOptions } from "ngx-owl-carousel-o";
 import { TourService } from "../tour.service";
 import { Tour } from "../../../../shared/dto/tour-response.dto";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 
 @Component({
   selector: "app-tour-list",
@@ -27,7 +28,8 @@ export class TourListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private tourService: TourService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {
@@ -132,7 +134,11 @@ export class TourListComponent implements OnInit {
   }
 
   displayTourDescription(tour: Tour): string {
-    return tour?.description || "";
+    return this.i18nService.getValue(tour?.description);
+  }
+
+  displayTourName(tour: Tour): string {
+    return this.i18nService.getValue(tour?.name);
   }
 
   profilePicture(tour: Tour) {

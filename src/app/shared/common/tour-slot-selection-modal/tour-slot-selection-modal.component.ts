@@ -29,6 +29,7 @@ import { Router } from "@angular/router";
 import { AuthService } from "../../../core/services/auth.service";
 import { PendingActionService, PendingCartAction } from "../../services/pending-action.service";
 import Swal from "sweetalert2";
+import { I18nFieldService } from "../../services/i18n-field.service";
 
 @Component({
   selector: "app-tour-slot-selection-modal",
@@ -96,6 +97,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     private router: Router,
     private authService: AuthService,
     private pendingActionService: PendingActionService,
+    public i18nService: I18nFieldService,
     public dialogRef: MatDialogRef<TourSlotSelectionModalComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -730,7 +732,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Obtiene el nombre del tour de manera segura
    */
   getTourName(): string {
-    return this.selectedTour?.tour?.name || "";
+    return this.i18nService.getValue(this.selectedTour?.tour?.name) || "";
   }
 
   /**
@@ -790,7 +792,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Obtiene la descripción del tour de manera segura
    */
   getTourDescription(): string {
-    return this.selectedTour?.tour?.description || "";
+    return this.i18nService.getValue(this.selectedTour?.tour?.description) || "";
   }
 
   generateDateRange(startDate: Date, endDate: Date) {

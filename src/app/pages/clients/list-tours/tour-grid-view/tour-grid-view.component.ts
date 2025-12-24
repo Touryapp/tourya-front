@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { OwlOptions } from "ngx-owl-carousel-o";
 import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
+import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 
 @Component({
   selector: "app-tour-grid-view",
@@ -25,6 +26,8 @@ export class TourGridViewComponent {
   @Output() goToPreviousPage = new EventEmitter<void>();
   @Output() goToNextPage = new EventEmitter<void>();
   @Output() selectTour = new EventEmitter<TourScheduleResponseDto>();
+
+  constructor(public i18nService: I18nFieldService) {}
 
   // Favorites functionality
   isClassAdded: boolean[] = [];
