@@ -3,17 +3,27 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { map, tap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
-import { ReviewsApiResponse } from '../../shared/models/reviews.model';
+import { 
+  ReviewsApiResponse, 
+  CreateReviewRequest, 
+  CreateReviewSimpleRequest,
+  ProviderAnswerRequest,
+  UpdateReviewWithAnswerRequest
+} from '../../shared/models/reviews.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReviewsService {
-  private baseUrl = environment.apiUrl + '/pendings';
+  private baseUrl = environment.apiUrl;
   private pendingReviewsCache: ReviewsApiResponse | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private translate: TranslateService
+  ) { }
 
   getPendingReviews(): Observable<ReviewsApiResponse> {
     // TODO: change url for deployed back service
@@ -33,7 +43,6 @@ export class ReviewsService {
     rating?: number;
     tourId?: string;
     userId?: string;
-    providerId?: string;
     pageNumber?: number;
     pageSize?: number;
   }): Observable<ReviewsApiResponse> {
@@ -41,8 +50,9 @@ export class ReviewsService {
     const params: string[] = [];
     
     // Paginación (valores por defecto)
+    // El backend usa paginación 0-indexed
     const pageSize = filters?.pageSize || 10;
-    const pageNumber = filters?.pageNumber || 1;
+    const pageNumber = filters?.pageNumber !== undefined ? filters.pageNumber : 0;
     params.push(`pageSize=${pageSize}`);
     params.push(`pageNumber=${pageNumber}`);
     
@@ -56,45 +66,39 @@ export class ReviewsService {
     if (filters?.userId && filters.userId !== 'all') {
       params.push(`userId=${filters.userId}`);
     }
-    if (filters?.providerId && filters.providerId !== 'all') {
-      params.push(`providerId=${filters.providerId}`);
-    }
     
     const queryString = params.join('&');
-    const url = `https://6aa5ded6-1a98-4c3d-a307-5717b77f587c.mock.pstmn.io/api/v1/public/search/reviews?${queryString}`;
+    const url = `${this.baseUrl}/public/search/reviews?${queryString}`;
     
     return this.http.get<ReviewsApiResponse>(url);
   }
 
   /**
    * Guarda la respuesta del proveedor a una review
-   * @param reviewId ID de la review a la que se responde
-   * @param answerData Datos de la respuesta del proveedor
+   * @param reviewId ID de la review a la que se responde (formato: REV-XXX)
+   * @param answerComment Comentario de respuesta del proveedor
    */
-  saveReviewReply(reviewId: string, answerData: {
-    comment: string;
-    providerName: string;
-    providerImage: string;
-    date: string;
-    daysAgo: string;
-    likes?: number;
-    dislikes?: number;
-    hearts?: number;
-  }): Observable<any> {
-    const url = `https://6aa5ded6-1a98-4c3d-a307-5717b77f587c.mock.pstmn.io/api/v1/public/save/review/${reviewId}`;
+  saveReviewReply(reviewId: string, answerComment: string): Observable<any> {
+    const url = `${this.baseUrl}/public/save/review/${reviewId}`;
     
-    // Estructura completa que espera el backend
-    const payload = {
+    // Obtener el idioma actual del usuario
+    const currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'es';
+    
+    // Construir el payload completo según la estructura del API
+    // Solo llenamos el comentario en el idioma actual
+    const payload: UpdateReviewWithAnswerRequest = {
       answer: {
-        answerId: `ANS-${Date.now()}`, // Generar ID único
-        comment: answerData.comment,
-        providerName: answerData.providerName,
-        providerImage: answerData.providerImage,
-        date: answerData.date,
-        daysAgo: answerData.daysAgo,
-        likes: answerData.likes || 0,
-        dislikes: answerData.dislikes || 0,
-        hearts: answerData.hearts || 0
+        comment: {
+          es: currentLang === 'es' ? answerComment : '',
+          en: currentLang === 'en' ? answerComment : '',
+          pt: currentLang === 'pt' ? answerComment : ''
+        },
+        providerName: '', // Se puede obtener del AuthService si es necesario
+        providerImage: '', // Se puede obtener del perfil del usuario
+        date: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+        likes: 0,
+        dislikes: 0,
+        hearts: 0
       }
     };
     
@@ -107,14 +111,23 @@ export class ReviewsService {
    * @param rejectionReason Motivo del rechazo
    */
   rejectReview(reviewId: string, rejectionReason: string): Observable<any> {
-    const url = `https://6aa5ded6-1a98-4c3d-a307-5717b77f587c.mock.pstmn.io/api/v1/public/save/review/${reviewId}`;
+    const url = `${this.baseUrl}/public/save/review/${reviewId}`;
     
     const payload = {
-      status: 'REJECTED',
+      status: 'CANCELED',
       rejectionReason: rejectionReason
     };
     
     return this.http.patch(url, payload);
+  }
+
+  /**
+   * Guarda una nueva review de un cliente con comentarios multilingües
+   * @param reviewData Datos de la review a guardar
+   */
+  saveReview(reviewData: CreateReviewRequest): Observable<any> {
+    const url = `${this.baseUrl}/public/save/review`;
+    return this.http.post(url, reviewData);
   }
 
   getFromCachePendingReviews(): Observable<ReviewsApiResponse> {
@@ -130,5 +143,31 @@ export class ReviewsService {
       first: true,
       last: true
     })
+  }
+
+  /**
+   * Crea una nueva reseña para una reserva
+   * @param reviewData Datos de la reseña a crear
+   */
+  createReview(reviewData: CreateReviewSimpleRequest): Observable<any> {
+    const url = `${this.baseUrl}/public/save/review`;
+    
+    // Obtener el idioma actual del usuario
+    const currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'es';
+    
+    // Construir el payload con el comentario solo en el idioma actual
+    // Los otros idiomas se envían vacíos
+    const payload: CreateReviewRequest = {
+      reservationId: reviewData.reservationId,
+      rating: reviewData.rating,
+      comment: {
+        es: currentLang === 'es' ? reviewData.comment : '',
+        en: currentLang === 'en' ? reviewData.comment : '',
+        pt: currentLang === 'pt' ? reviewData.comment : ''
+      },
+      date: new Date().toISOString().split('T')[0] // Formato YYYY-MM-DD
+    };
+    
+    return this.http.post(url, payload);
   }
 }

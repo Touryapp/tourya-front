@@ -16,6 +16,10 @@ export class MyProfileComponent implements OnInit {
   public routes = routes;
   activeSection: string = 'profile'; // 'profile' | 'bookings' | 'reviews' | 'wishlist'
 
+  // Variables para bookings
+  highlightedReservationId: number | null = null;
+  shouldCreateReview: boolean = false;
+
   // Variables para reviews
   reviews: ProviderReview[] = [];
   totalReviews: number = 0;
@@ -38,6 +42,20 @@ export class MyProfileComponent implements OnInit {
         setTimeout(() => {
           this.activeSection = params['section'];
           this.clientMenuService.setActiveSection(params['section']);
+          
+          // Capturar o resetear reservationId
+          if (params['reservationId']) {
+            this.highlightedReservationId = Number(params['reservationId']);
+          } else {
+            this.highlightedReservationId = null;
+          }
+
+          // Capturar o resetear createReview flag
+          if (params['createReview'] === 'true') {
+            this.shouldCreateReview = true;
+          } else {
+            this.shouldCreateReview = false;
+          }
         });
       }
     });
@@ -102,7 +120,10 @@ export class MyProfileComponent implements OnInit {
    * Envía una respuesta a una review (si los clientes pueden responder)
    */
   onSubmitReply(event: {reviewId: string, answerData: any}): void {
-    this.reviewsService.saveReviewReply(event.reviewId, event.answerData).subscribe({
+    // Extraer solo el comentario del answerData
+    const comment = event.answerData.comment || event.answerData;
+    
+    this.reviewsService.saveReviewReply(event.reviewId, comment).subscribe({
       next: (response) => {
         console.log('Respuesta guardada exitosamente:', response);
         this.openSnackBar('¡Respuesta enviada exitosamente!');

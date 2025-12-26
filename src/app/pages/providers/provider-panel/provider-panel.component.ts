@@ -299,7 +299,10 @@ export class ProviderPanelComponent implements OnInit {
    * Envía una respuesta a una review
    */
   onSubmitReply(event: {reviewId: string, answerData: any}): void {
-    this.reviewsService.saveReviewReply(event.reviewId, event.answerData).subscribe({
+    // Extraer solo el comentario del answerData
+    const comment = event.answerData.comment || event.answerData;
+    
+    this.reviewsService.saveReviewReply(event.reviewId, comment).subscribe({
       next: (response) => {
         console.log('Respuesta guardada exitosamente:', response);
         this.openSnackBar('¡Respuesta enviada exitosamente!');

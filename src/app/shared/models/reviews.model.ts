@@ -37,11 +37,10 @@ export interface ProviderReview {
   likes: number;
   dislikes: number;
   hearts: number;
-  bookingId: string;
+  reservationId: number;
   status?: string;
   answer?: ProviderReviewAsk;
 }
-
 
 export interface ReviewsApiResponse {
   content: ProviderReview[];
@@ -51,4 +50,60 @@ export interface ReviewsApiResponse {
   totalPages: number;
   first: boolean;
   last: boolean;
+}
+
+/**
+ * Estructura para comentarios multilingües
+ */
+export interface MultilingualComment {
+  es: string;
+  en: string;
+  pt: string;
+}
+
+/**
+ * Request para crear una nueva review con comentarios multilingües
+ */
+export interface CreateReviewRequest {
+  reservationId: number;
+  rating: number;
+  comment: MultilingualComment;
+  date: string;
+}
+
+/**
+ * Request simplificado para crear una review (el servicio maneja la internacionalización)
+ */
+export interface CreateReviewSimpleRequest {
+  reservationId: number;
+  rating: number;
+  comment: string;
+}
+
+/**
+ * Estructura para la respuesta del proveedor a una review
+ */
+export interface ProviderAnswerRequest {
+  comment: MultilingualComment;
+  providerName: string;
+  providerImage: string;
+  date: string;
+  daysAgo?: string;
+  likes?: number;
+  dislikes?: number;
+  hearts?: number;
+}
+
+/**
+ * Request completo para actualizar una review con la respuesta del proveedor
+ */
+export interface UpdateReviewWithAnswerRequest {
+  rating?: number;
+  comment?: MultilingualComment;
+  likes?: number;
+  dislikes?: number;
+  hearts?: number;
+  status?: string;
+  rejectionReason?: string;
+  answer: ProviderAnswerRequest;
 }

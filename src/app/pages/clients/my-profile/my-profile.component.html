@@ -131,7 +131,10 @@
                             <h6>Mis Reservas</h6>
                         </div>
                         <div class="card-body">
-                            <app-provider-tour-management></app-provider-tour-management>
+                            <app-provider-tour-management
+                                [highlightedReservationId]="highlightedReservationId"
+                                [shouldCreateReview]="shouldCreateReview">
+                            </app-provider-tour-management>
                         </div>
                     </div>
                 }

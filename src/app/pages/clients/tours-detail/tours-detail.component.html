@@ -208,25 +208,24 @@
 
                     <!-- Reviews -->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
-                        <h6 class="mb-3">Reviews (0)</h6>
+                        <h6 class="mb-3">Reviews ({{ totalReviews }})</h6>
                         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>Write a Review</a>
                     </div>
+                    
+                    <!-- Review Stats (Placeholder for now as API doesn't return aggregated stats yet) -->
                     <div class="row">
                         <div class="col-md-6 d-flex">
                             <div class="rating-item bg-light-200 text-center flex-fill mb-3">
                                 <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
-                                <h5 class="display-6">0 / 5.0</h5>
+                                <h5 class="display-6">{{ tour.rating || 0 }} / 5.0</h5>
                                 <div class="d-inline-flex align-items-center justify-content-center mb-3">
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary"></i>
+                                    <i class="ti ti-star-filled text-warning me-1" *ngFor="let s of [1,2,3,4,5]; let i=index" [ngClass]="{'ti-star-filled text-warning': i < (tour.rating || 0), 'ti-star-off text-muted': i >= (tour.rating || 0)}"></i>
                                 </div>
-                                <p>Based On 0 Reviews</p>
+                                <p>Based On {{ totalReviews }} Reviews</p>
                             </div>
                         </div>
                         <div class="col-md-6 d-flex">
+                             <!-- Progress bars placeholder - keeping static for layout -->
                             <div class="card rating-progress shadow-none flex-fill mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center mb-2">
@@ -236,78 +235,92 @@
                                         </div>
                                         <p class="progress-count ms-2">0</p>
                                     </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">4 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">3 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">2 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <p class="me-2 text-nowrap mb-0">1 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
+                                    <!-- ... other bars ... -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="card review-item shadow-none mb-3">
+
+                    <!-- Reviews List -->
+                    <div *ngIf="reviewsLoading" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <ng-container *ngFor="let review of reviews">
+                    <div class="card review-item shadow-none mb-3" *ngIf="review.status !== 'CANCELED' || isBackoffice">
                         <div class="card-body p-3">
                             <div class="review-info">
                                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="avatar avatar-lg me-2 flex-shrink-0">
-											<img src="assets/img/users/user-05.jpg" class="rounded-circle" alt="img">
+											<img [src]="review.customerImage || 'assets/img/users/user-01.jpg'" class="rounded-circle" alt="img">
 										</span>
                                         <div>
-                                            <h6 class="fs-16 fw-medium mb-1">Joseph Massey</h6>
+                                            <h6 class="fs-16 fw-medium mb-1">{{ review.customerName }}</h6>
                                             <div class="d-flex align-items-center flex-wrap date-info">
-                                                <p class="fs-14 mb-0">2 days ago</p>
-                                                <p class="fs-14 d-inline-flex align-items-center mb-0"><span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>Unforgettable Stay!</p>
+                                                <p class="fs-14 mb-0">{{ review.date | date:'mediumDate' }}</p>
+                                                <p class="fs-14 d-inline-flex align-items-center mb-0 ms-2">
+                                                    <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ review.rating }}</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="javascript:void(0);" class="btn btn-outline-light btn-md d-inline-flex align-items-center mb-2"><i class="isax isax-repeat me-1"></i>Reply</a>
+                                    <!-- Reply button could go here -->
                                 </div>
-                                <p class="mb-2">It was a good location however the cocoon concept was weird. No tables, chairs etc was difficult as everything went on the floor.</p>
-                                <lightgallery class="d-flex align-items-center">
-                                    <div class="avatar avatar-md me-2 mb-2" data-fancybox="gallery" href="assets/img/tours/tour-large-01.jpg">
-                                        <img src="assets/img/tours/tour-thumb-01.jpg" class="br-10" alt="img">
-                                    </div>
-                                    <div class="avatar avatar-md me-2 mb-2" data-fancybox="gallery" href="assets/img/tours/tour-large-02.jpg">
-                                        <img src="assets/img/tours/tour-thumb-02.jpg" class="br-10" alt="img">
-                                    </div>
-                                    <div class="avatar avatar-md me-0 mb-2" data-fancybox="gallery" href="assets/img/tours/tour-large-03.jpg">
-                                        <img src="assets/img/tours/tour-thumb-03.jpg" class="br-10" alt="img">
-                                    </div>
-                                </lightgallery>
+                                <p class="mb-2">{{ review.comment }}</p>
+                                
+                                <!-- Reactions -->
                                 <div class="d-inline-flex align-items-center">
-                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>21</a>
-                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>50</a>
-                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>45</a>
+                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>{{ review.likes || 0 }}</a>
+                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>{{ review.dislikes || 0 }}</a>
+                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>{{ review.hearts || 0 }}</a>
+                                </div>
+                                <div class="mt-2" *ngIf="isBackoffice">
+                                    <button class="btn btn-sm btn-outline-danger" *ngIf="review.status !== 'CANCELED'" (click)="toggleRejectForm(review.id)">
+                                        Reject Review
+                                    </button>
+                                    <span *ngIf="review.status === 'CANCELED'" class="text-danger fw-bold">Cancelada</span>
+                                </div>
+
+                                <!-- Review Rejection Form -->
+                                <div class="mt-3 p-3 border rounded bg-light" *ngIf="rejectingReviewId === review.id">
+                                    <h6>Select Rejection Reason</h6>
+                                    <div class="mb-3">
+                                        <div class="form-check" *ngFor="let reason of rejectionReasons">
+                                            <input class="form-check-input" type="radio" name="rejectionReason" [id]="'reason-' + reason" [value]="reason" [(ngModel)]="selectedRejectionReason">
+                                            <label class="form-check-label" [for]="'reason-' + reason">
+                                                {{ reason }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-danger" (click)="submitReject(review.id)">Confimar Rechazo</button>
+                                        <button class="btn btn-sm btn-secondary" (click)="cancelReject()">Cancelar</button>
+                                    </div>
+                                </div>
+
+                                <!-- Provider Answer -->
+                                <div *ngIf="review.answer" class="bg-light-500 rounded p-3 mt-3 ms-4 border-start border-primary border-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="avatar avatar-sm me-2">
+                                            <img [src]="review.answer.providerImage || 'assets/img/profiles/avatar-02.jpg'" class="rounded-circle" alt="provider">
+                                        </span>
+                                        <div>
+                                            <h6 class="fs-14 fw-medium mb-0">{{ review.answer.providerName || 'Provider Response' }}</h6>
+                                            <small class="text-muted">{{ review.answer.date | date:'mediumDate' }}</small>
+                                        </div>
+                                    </div>
+                                    <p class="fs-14 mb-0">{{ i18nService.getValue(review.answer.comment) }}</p>
                                 </div>
                             </div>
                         </div>
-                    </div> -->
-                    <div class="text-center mb-4 mb-xl-0">
-                        <a href="javascript:void(0);" class="btn btn-primary btn-md d-inline-flex align-items-center justify-content-center mt-2">See all 0 reviews<i class="isax isax-arrow-right-3 ms-1"></i></a>
+                    </div>
+                    </ng-container>
+                
+                    <div class="text-center mb-4 mb-xl-0" *ngIf="totalReviews > reviews.length">
+                        <a href="javascript:void(0);" class="btn btn-primary btn-md d-inline-flex align-items-center justify-content-center mt-2">See all reviews<i class="isax isax-arrow-right-3 ms-1"></i></a>
                     </div>
                 </div>
                 <!-- /Reviews -->

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, OnChanges } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,6 +13,8 @@ import {
 } from '../../../shared/services/booking-management-config.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { I18nFieldService } from '../../../shared/services/i18n-field.service';
+import { ReviewsService } from '../../../core/services/reviews.service';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
@@ -43,7 +45,7 @@ export interface ProviderTourBooking {
   templateUrl: './provider-tour-management.component.html',
   styleUrl: './provider-tour-management.component.scss'
 })
-export class ProviderTourManagementComponent implements OnInit, OnDestroy {
+export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnChanges {
   public routes = routes;
   
   // Configuración dinámica según rol
@@ -74,13 +76,26 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   dropdownOpen1 = false;
   dropdownOpen2 = false;
 
+  // Inputs from parent component
+  @Input() highlightedReservationId: number | null = null;
+  @Input() shouldCreateReview: boolean = false;
+
+  // Review modal state
+  public showReviewModal: boolean = false;
+  public reviewModalBooking: any | null = null;
+  public reviewRating: number = 0;
+  public reviewComment: string = '';
+  public reviewImages: File[] = [];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private reservationService: ReservationService,
     private configService: BookingManagementConfigService,
     private authService: AuthService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public i18nService: I18nFieldService,
+    private reviewsService: ReviewsService
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +149,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
         });
       }
     });
+    
+    // Agregar listener para cuando se cierra el modal de detalles de la reserva
+    // Esto limpiará los query params para evitar que se vuelvan a abrir los modales
+    setTimeout(() => {
+      const modalElement = document.getElementById('bookingDetailModal');
+      if (modalElement) {
+        modalElement.addEventListener('hidden.bs.modal', () => {
+          console.log('🔒 Modal de detalles cerrado - limpiando query params');
+          this.clearQueryParams();
+        });
+      }
+    }, 1000);
   }
   
   /**
@@ -142,7 +169,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
   private mapReservationToBooking(reservation: ClientReservation): ProviderTourBooking {
     return {
       id: `RES-${reservation.reservationId}`,
-      tourName: reservation.tourName,
+      tourName: this.i18nService.getValue(reservation.tourName),
       tourType: 'Tour',
       img: 'tours-21.jpg',
       customerName: reservation.payerName,
@@ -280,7 +307,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
     return {
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
-      tourName: reservation.tourName,
+      tourName: this.i18nService.getValue(reservation.tourName),
       tourType: 'Tour', // El API no devuelve tipo de tour
       img: 'tours-21.jpg', // Imagen por defecto
       customerName: reservation.payerName,
@@ -922,4 +949,161 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy {
     
     return pages;
   }
+
+  /**
+   * Lifecycle hook para detectar cambios en los inputs
+   */
+  ngOnChanges(): void {
+    // Si viene el flag shouldCreateReview y hay un reservationId, abrir modales en secuencia
+    if (this.shouldCreateReview && this.highlightedReservationId) {
+      setTimeout(() => {
+        // Buscar la reserva por ID (convertir a string si es necesario para comparación)
+        const booking = this.tableData.find(b => {
+          // Extraer el número del ID si tiene formato TB-XXX
+          const bookingNumericId = b.id.includes('-') ? parseInt(b.id.split('-')[1]) : parseInt(b.id);
+          return bookingNumericId === this.highlightedReservationId;
+        });
+        
+        if (booking) {
+          // Abrir directamente el modal de reseña
+          // No abrimos el modal de detalles primero para evitar solapamiento de modales (problema de textarea)
+          // Al cerrar el modal de reseña, closeReviewModal se encargará de abrir el modal de detalles
+          this.openReviewModalForBooking(booking.id);
+          
+          // Limpiar los query params inmediatamente
+          this.clearQueryParams();
+        }
+        
+        // Reset el flag para evitar que se abra múltiples veces
+        this.shouldCreateReview = false;
+        this.highlightedReservationId = null;
+      }, 500);
+    }
+  }
+
+  /**
+   * Abre el modal de reseña para una reserva específica
+   */
+  public openReviewModalForBooking(bookingId: string): void {
+    const booking = this.tableData.find(b => b.id === bookingId);
+    if (booking) {
+      // Cerrar el modal de detalles de Bootstrap primero
+      const modalElement = document.getElementById('bookingDetailModal');
+      if (modalElement) {
+        const bootstrapModal = (window as any).bootstrap.Modal.getInstance(modalElement);
+        if (bootstrapModal) {
+          bootstrapModal.hide();
+        }
+      }
+      
+      // Esperar a que el modal se cierre antes de abrir el de reseña
+      setTimeout(() => {
+        this.reviewModalBooking = booking;
+        this.showReviewModal = true;
+        this.reviewRating = 0;
+        this.reviewComment = '';
+        this.reviewImages = [];
+      }, 300);
+    }
+  }
+
+  /**
+   * Cierra el modal de reseña
+   */
+  public closeReviewModal(): void {
+    // Guardar referencia a la reserva antes de limpiar el estado
+    const booking = this.reviewModalBooking;
+
+    this.showReviewModal = false;
+    this.reviewModalBooking = null;
+    this.reviewRating = 0;
+    this.reviewComment = '';
+    this.reviewImages = [];
+    
+    // Limpiar los query params al cerrar el modal
+    this.clearQueryParams();
+    
+    // Reabrir el modal de detalles automáticamente si había una reserva seleccionada
+    if (booking) {
+      setTimeout(() => {
+        this.viewBookingDetails(booking);
+      }, 300);
+    }
+  }
+
+  /**
+   * Establece el rating de la reseña
+   */
+  public setReviewRating(rating: number): void {
+    this.reviewRating = rating;
+  }
+
+  /**
+   * Maneja la selección de imágenes
+   */
+  public onReviewImagesSelected(event: any): void {
+    const files = event.target.files;
+    if (files) {
+      this.reviewImages = Array.from(files);
+    }
+  }
+
+  /**
+   * Envía la reseña al backend
+   */
+  public submitReview(): void {
+    if (!this.reviewRating || !this.reviewComment.trim()) {
+      alert('Por favor completa todos los campos requeridos (rating y comentario)');
+      return;
+    }
+
+    if (!this.reviewModalBooking) {
+      alert('Error: No se encontró la reserva');
+      return;
+    }
+
+    // Extraer el ID numérico de la reserva (formato "RES-29" -> 29)
+    const reservationId = this.reviewModalBooking.id.includes('-') 
+      ? parseInt(this.reviewModalBooking.id.split('-')[1]) 
+      : parseInt(this.reviewModalBooking.id);
+
+    // Preparar el payload - createReview maneja la internacionalización internamente
+    const reviewPayload = {
+      reservationId: reservationId,
+      rating: this.reviewRating,
+      comment: this.reviewComment
+    };
+
+    console.log('🔄 Enviando reseña:', reviewPayload);
+
+    // Llamar al servicio de reviews
+    this.reviewsService.createReview(reviewPayload).subscribe({
+      next: (response: any) => {
+        console.log('✅ Reseña guardada exitosamente:', response);
+        alert(`¡Reseña enviada exitosamente para ${this.reviewModalBooking!.tourName}!`);
+        this.closeReviewModal();
+      },
+      error: (error: any) => {
+        console.error('❌ Error al guardar la reseña:', error);
+        alert('❌ Error al enviar la reseña. Por favor intenta nuevamente.');
+      }
+    });
+  }
+
+  /**
+   * Limpia los query parameters de la URL
+   */
+  private clearQueryParams(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        reservationId: null,
+        createReview: null
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
+    console.log('🧹 Query params limpiados correctamente');
+  }
 }
+

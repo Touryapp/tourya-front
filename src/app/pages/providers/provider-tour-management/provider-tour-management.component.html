@@ -356,39 +356,147 @@
                         }
 
                         <!-- Actions -->
-                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-                            @if (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming') {
-                                <button 
-                                    class="btn btn-primary" 
-                                    (click)="completeBooking(selectedBooking.id)"
-                                    data-bs-dismiss="modal">
-                                    <i class="isax isax-tick-square me-2"></i>{{ 'provider-tour-management.modal.actions.complete' | translate }}
+                        <div class="d-flex justify-content-between gap-2 mt-4 pt-3 border-top">
+                            <div class="d-flex gap-2">
+                                <!-- Botón Reseñar para clientes con reservas completadas -->
+                                @if (currentRole === 'CLIENT' && selectedBooking.status === 'Completed') {
+                                    <button 
+                                        class="btn btn-primary" 
+                                        (click)="openReviewModalForBooking(selectedBooking.id)">
+                                        <i class="isax isax-star me-2"></i>Reseñar
+                                    </button>
+                                }
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                @if (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming') {
+                                    <button 
+                                        class="btn btn-primary" 
+                                        (click)="completeBooking(selectedBooking.id)"
+                                        data-bs-dismiss="modal">
+                                        <i class="isax isax-tick-square me-2"></i>{{ 'provider-tour-management.modal.actions.complete' | translate }}
+                                    </button>
+                                }
+                                @if (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING') {
+                                    <button 
+                                        class="btn btn-success" 
+                                        (click)="confirmBookingFromModal(selectedBooking.id)"
+                                        data-bs-dismiss="modal">
+                                        <i class="isax isax-tick-circle me-2"></i>{{ 'provider-tour-management.modal.actions.confirm' | translate }}
+                                    </button>
+                                }
+                                @if (selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
+                                    <button 
+                                        class="btn btn-danger" 
+                                        (click)="cancelBooking(selectedBooking.id)"
+                                        data-bs-dismiss="modal">
+                                        <i class="isax isax-close-circle me-2"></i>{{ 'provider-tour-management.modal.actions.cancel' | translate }}
+                                    </button>
+                                }
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    {{ 'provider-tour-management.modal.close' | translate }}
                                 </button>
-                            }
-                            @if (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING') {
-                                <button 
-                                    class="btn btn-success" 
-                                    (click)="confirmBookingFromModal(selectedBooking.id)"
-                                    data-bs-dismiss="modal">
-                                    <i class="isax isax-tick-circle me-2"></i>{{ 'provider-tour-management.modal.actions.confirm' | translate }}
-                                </button>
-                            }
-                            @if (selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
-                                <button 
-                                    class="btn btn-danger" 
-                                    (click)="cancelBooking(selectedBooking.id)"
-                                    data-bs-dismiss="modal">
-                                    <i class="isax isax-close-circle me-2"></i>{{ 'provider-tour-management.modal.actions.cancel' | translate }}
-                                </button>
-                            }
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                {{ 'provider-tour-management.modal.close' | translate }}
-                            </button>
+                            </div>
                         </div>
                     </div>
                 }
             </div>
         </div>
-    </div>
+</div>
 </div>
 <!-- /Modal de Detalles de Reserva -->
+
+<!-- Review Modal -->
+@if (showReviewModal && reviewModalBooking) {
+    <!-- Backdrop -->
+    <div class="modal-backdrop fade show" style="z-index: 1050;"></div>
+    
+    <!-- Modal -->
+    <div class="modal fade show d-block" tabindex="-1" style="z-index: 1055;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center justify-content-between">
+                    <h5>Escribir Reseña</h5>
+                    <a href="javascript:void(0);" (click)="closeReviewModal()" aria-label="Close">
+                        <i class="ti ti-x fs-16"></i>
+                    </a>
+                </div>
+                <div class="modal-body pb-0">
+                    <!-- Tour Info -->
+                    <div class="mb-3 p-3 bg-light rounded">
+                        <h6 class="mb-1">{{ reviewModalBooking.tourName }}</h6>
+                        <p class="fs-14 text-muted mb-0">
+                            <i class="isax isax-receipt-text me-1"></i>Booking: {{ reviewModalBooking.id }}
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Tu Calificación <span class="text-danger">*</span></label>
+                                <div class="selection-wrap">
+                                    <div class="d-inline-block">
+                                        <div class="rating-selction">
+                                            <input type="radio" name="rating" value="5" id="rating5" 
+                                                   [checked]="reviewRating === 5"
+                                                   (change)="setReviewRating(5)">
+                                            <label for="rating5"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio" name="rating" value="4" id="rating4"
+                                                   [checked]="reviewRating === 4"
+                                                   (change)="setReviewRating(4)">
+                                            <label for="rating4"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio" name="rating" value="3" id="rating3"
+                                                   [checked]="reviewRating === 3"
+                                                   (change)="setReviewRating(3)">
+                                            <label for="rating3"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio" name="rating" value="2" id="rating2"
+                                                   [checked]="reviewRating === 2"
+                                                   (change)="setReviewRating(2)">
+                                            <label for="rating2"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio" name="rating" value="1" id="rating1"
+                                                   [checked]="reviewRating === 1"
+                                                   (change)="setReviewRating(1)">
+                                            <label for="rating1"><i class="fa-solid fa-star"></i></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Imágenes</label>
+                                <input type="file" class="form-control" accept=".jpg, .png" multiple
+                                       (change)="onReviewImagesSelected($event)">
+                                @if (reviewImages.length > 0) {
+                                    <small class="text-muted">{{ reviewImages.length }} imagen(es) seleccionada(s)</small>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Escribe tu Reseña <span class="text-danger">*</span></label>
+                                <textarea 
+                                    class="form-control" 
+                                    rows="3"
+                                    [value]="reviewComment"
+                                    (input)="reviewComment = $any($event.target).value"
+                                    placeholder="Comparte tu experiencia con este tour..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center justify-content-end m-0 gap-2">
+                        <button type="button" class="btn btn-secondary btn-md" (click)="closeReviewModal()">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn btn-primary btn-md" (click)="submitReview()">
+                            <i class="isax isax-edit-2 me-1"></i>Enviar Reseña
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- /Review Modal -->
