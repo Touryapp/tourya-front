@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TourSlotSelectionModalComponent } from '../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component';
 import { CartItem } from '../../../shared/dto/cart.dto';
 import { ActivatedRoute } from '@angular/router';
@@ -16,6 +17,8 @@ import { Tour, Gallery, TourDetail } from '../../../shared/dto/tour-response.dto
 import { routes } from "../../../shared/routes/routes";
 import { LightGallery } from 'lightgallery/lightgallery';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
+import { ReviewsService } from '../../../core/services/reviews.service';
+import { ProviderReview } from '../../../shared/models/reviews.model';
 
 @Component({
   selector: 'app-tours-detail',
@@ -34,7 +37,7 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   // Show more/less functionality
   isMore: boolean[] = [false, false, false, false, false, false, false, false];
   
- // Configuration for the main slider
+  // Configuration for the main slider
   mainSliderConfig = {
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -141,10 +144,31 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private router: Router,
     private dialog: MatDialog,
     private cartService: CartService,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private reviewsService: ReviewsService,
+    private snackBar: MatSnackBar
   ) {}
 
+  // Reviews data
+  reviews: ProviderReview[] = [];
+  totalReviews: number = 0;
+  reviewsLoading: boolean = false;
+  
+  // Admin rejection state
+  isBackoffice: boolean = false;
+  rejectingReviewId: string | null = null;
+  selectedRejectionReason: string = '';
+  rejectionReasons: string[] = [
+    'Contenido inapropiado',
+    'Información falsa o engañosa',
+    'Spam o contenido irrelevante'
+  ];
+
+    // Check if user is admin
   ngOnInit(): void {
+    // Check if user is admin
+    this.isBackoffice = this.authService.isAdmin();
+
     // Initialize component
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? +idParam : 0;
@@ -166,7 +190,6 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
           const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
   
           if (loc && loc.latitude !== undefined && loc.longitude !== undefined) {
-
           // subscribe to cart items to control floating cart visibility
           this.cartService.cartItems$
             .pipe(takeUntil(this.destroy$))
@@ -190,7 +213,79 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
           console.error('Error loading tour detail', err);
         }
       });
+
+      // Load reviews
+      this.loadReviews(id);
     }
+  }
+
+  /**
+   * Load reviews for the current tour
+   */
+  loadReviews(tourId: number): void {
+    this.reviewsLoading = true;
+    this.reviewsService.getReviews({
+      tourId: tourId.toString(),
+      pageNumber: 0,
+      pageSize: 10
+    }).subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.totalReviews = response.totalElements;
+        this.reviewsLoading = false;
+        console.log('✅ Reviews loaded:', this.reviews);
+      },
+      error: (error) => {
+        console.error('❌ Error loading reviews:', error);
+        this.reviewsLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Opens/closes the rejection form for a specific review
+   */
+  toggleRejectForm(reviewId: string): void {
+    if (this.rejectingReviewId === reviewId) {
+      this.cancelReject();
+    } else {
+      this.rejectingReviewId = reviewId;
+      this.selectedRejectionReason = '';
+    }
+  }
+
+  /**
+   * Cancels the rejection action
+   */
+  cancelReject(): void {
+    this.rejectingReviewId = null;
+    this.selectedRejectionReason = '';
+  }
+
+  /**
+   * Submits the review rejection
+   */
+  submitReject(reviewId: string): void {
+    if (!this.selectedRejectionReason) {
+      this.snackBar.open('Please select a reason for rejection', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.reviewsService.rejectReview(reviewId, this.selectedRejectionReason).subscribe({
+      next: () => {
+        this.snackBar.open('Review rejected successfully', 'Close', { duration: 3000 });
+        this.cancelReject();
+        // Reload reviews
+        const idParam = this.route.snapshot.paramMap.get('id');
+        if (idParam) {
+          this.loadReviews(+idParam);
+        }
+      },
+      error: (error) => {
+        console.error('Error rejecting review:', error);
+        this.snackBar.open('Error rejecting review', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   /**

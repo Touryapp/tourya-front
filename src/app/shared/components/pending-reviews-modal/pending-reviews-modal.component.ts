@@ -28,9 +28,14 @@ export class PendingReviewsModalComponent implements OnInit, OnDestroy {
 
   goToReview(review: ProviderReview) {
     this.bsModalRef.hide();
-    // Assuming the review page takes an ID, or we navigate to the general review page
-    // You might need to adjust this route parameter based on your routing configuration
-    this.router.navigate([routes.review], { queryParams: { id: review.id } });
+    // Navegar a la sección de reservas para crear la reseña
+    this.router.navigate([routes.myProfile], { 
+      queryParams: { 
+        section: 'bookings',
+        reservationId: review.reservationId,
+        createReview: 'true' // Flag para abrir el modal de crear reseña
+      } 
+    });
   }
 
   ngOnDestroy(): void {

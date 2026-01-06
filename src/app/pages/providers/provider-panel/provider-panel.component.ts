@@ -298,8 +298,16 @@ export class ProviderPanelComponent implements OnInit {
   /**
    * Envía una respuesta a una review
    */
+  /**
+   * Envía una respuesta a una review
+   */
   onSubmitReply(event: {reviewId: string, answerData: any}): void {
-    this.reviewsService.saveReviewReply(event.reviewId, event.answerData).subscribe({
+    // Extraer solo el comentario del answerData
+    const comment = event.answerData.comment || event.answerData;
+    // Extraer archivos si existen (agregados en ProviderReviewsComponent)
+    const files = event.answerData.files || [];
+    
+    this.reviewsService.saveReviewReply(event.reviewId, comment, files).subscribe({
       next: (response) => {
         console.log('Respuesta guardada exitosamente:', response);
         this.openSnackBar('¡Respuesta enviada exitosamente!');
@@ -339,7 +347,7 @@ export class ProviderPanelComponent implements OnInit {
       this.averageRating = 0;
       return;
     }
-    const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+    const sum = this.reviews.reduce((acc, review) => acc + (review.rating ?? 0), 0);
     this.averageRating = parseFloat((sum / this.reviews.length).toFixed(1));
   }
 }

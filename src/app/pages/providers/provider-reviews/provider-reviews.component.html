@@ -187,7 +187,7 @@
                             <div class="col-lg-6 mb-3 mb-lg-0">
                                 <div class="d-flex align-items-center">
                                     <span class="avatar avatar-lg rounded-circle flex-shrink-0 me-3">
-                                        <img src="assets/img/users/{{ review.customerImage }}" 
+                                        <img [src]="review.customerImage || 'assets/img/users/user-default.jpg'" 
                                              alt="customer" 
                                              class="img-fluid rounded-circle">
                                     </span>
@@ -200,11 +200,11 @@
                                             </span>
                                             <div class="d-flex align-items-center">
                                                 <span class="badge badge-xs text-dark me-2" 
-                                                      [ngClass]="getRatingBadgeClass(review.rating)">
+                                                      [ngClass]="getRatingBadgeClass(review.rating!)">
                                                     {{ review.rating }}
                                                 </span>
                                                 <div class="rating-stars">
-                                                    @for (star of getStarsArray(review.rating); track $index) {
+                                                    @for (star of getStarsArray(review.rating!); track $index) {
                                                         <i class="fa-solid fa-star" 
                                                            [class.text-warning]="star.full"
                                                            [class.text-gray-3]="!star.full"></i>
@@ -220,14 +220,14 @@
                             <div class="col-lg-6">
                                 <div class="d-flex align-items-center justify-content-lg-end">
                                     <span class="avatar avatar-md rounded flex-shrink-0 me-2">
-                                        <img src="assets/img/tours/{{ review.tourImage }}" 
+                                        <img [src]="review.tourImage || 'assets/img/tours/default-tour.jpg'" 
                                              alt="tour" 
                                              class="img-fluid rounded">
                                     </span>
                                     <div>
                                         <p class="fs-14 fw-medium text-dark mb-0">{{ review.tourName }}</p>
                                         <p class="fs-12 text-gray-6 mb-0">
-                                            <i class="isax isax-receipt-text me-1"></i>Booking: {{ review.bookingId }}
+                                            <i class="isax isax-receipt-text me-1"></i>Reservation: {{ review.reservationId }}
                                         </p>
                                     </div>
                                 </div>
@@ -237,8 +237,24 @@
 
                     <!-- Review Content -->
                     <div class="mb-3">
-                        <p class="fs-15 text-gray-7 mb-0">{{ review.comment }}</p>
+                        <p class="fs-15 text-gray-7 mb-0">{{ i18nService.getValue(review.comment) }}</p>
                     </div>
+
+                    <!-- Review Images -->
+                    @if (review.attachmentUrls && review.attachmentUrls.length > 0) {
+                        <div class="mb-3">
+                            <div class="d-flex flex-wrap gap-2">
+                                @for (imageUrl of review.attachmentUrls; track imageUrl) {
+                                    <a [href]="imageUrl" target="_blank" class="review-image-thumbnail">
+                                        <img [src]="imageUrl" 
+                                             alt="Review attachment" 
+                                             class="rounded"
+                                             style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
 
                     <!-- Review Footer -->
                     <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-2">
@@ -261,7 +277,7 @@
                             @if (isProveedor && canRespondToReview(review)) {
                                 <button 
                                     class="btn btn-sm btn-outline-primary"
-                                    (click)="respondToReview(review.id)">
+                                    (click)="respondToReview(review.id!)">
                                     <i class="isax isax-message-text me-1"></i>{{'provider-reviews.actions.respond' | translate}}
                                 </button>
                             }
@@ -270,7 +286,7 @@
                             @if (isBackoffice && !review.answer) {
                                 <button 
                                     class="btn btn-sm btn-outline-danger"
-                                    (click)="toggleRejectForm(review.id)">
+                                    (click)="toggleRejectForm(review.id!)">
                                     <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.actions.reject' | translate}}
                                 </button>
                             }
@@ -285,7 +301,7 @@
                     </div>
                     
                     <!-- Reply Form (shown when user clicks Responder) -->
-                    @if (isReplyFormOpen(review.id)) {
+                    @if (isReplyFormOpen(review.id!)) {
                         <div class="reply-form-container mt-4 p-3 border rounded">
                             <h6 class="fs-16 fw-medium mb-3">
                                 <i class="isax isax-message-text me-2 text-primary"></i>{{'provider-reviews.replyForm.title' | translate}}
@@ -300,6 +316,16 @@
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <small class="text-muted">{{ replyText.length }}/500 {{'provider-reviews.replyForm.charactersCount' | translate}}</small>
                                 </div>
+                                <div class="mt-3">
+                                    <label class="form-label fs-14 fw-medium text-gray-7">
+                                        <i class="isax isax-gallery me-1"></i>Adjuntar imágenes (Máx 5)
+                                    </label>
+                                    <input type="file" class="form-control form-control-sm" accept=".jpg, .jpeg, .png" multiple
+                                           (change)="onReplyImagesSelected($event)">
+                                    @if (replyImages.length > 0) {
+                                        <small class="text-muted d-block mt-1">{{ replyImages.length }} imagen(es) seleccionada(s)</small>
+                                    }
+                                </div>
                             </div>
                             <div class="d-flex justify-content-end gap-2">
                                 <button 
@@ -309,7 +335,7 @@
                                 </button>
                                 <button 
                                     class="btn btn-sm btn-primary"
-                                    (click)="submitReply(review.id)"
+                                    (click)="submitReply(review.id!)"
                                     [disabled]="!replyText.trim()">
                                     <i class="isax isax-send-2 me-1"></i>{{'provider-reviews.replyForm.submit' | translate}}
                                 </button>
@@ -318,7 +344,7 @@
                     }
                     
                     <!-- Rejection Form (shown when Backoffice clicks Rechazar) -->
-                    @if (isRejectFormOpen(review.id)) {
+                    @if (isRejectFormOpen(review.id!)) {
                         <div class="reject-form-container mt-4 p-3 border rounded">
                             <h6 class="fs-16 fw-medium mb-3">
                                 <i class="isax isax-close-circle me-2 text-danger"></i>{{'provider-reviews.rejectForm.title' | translate}}
@@ -342,7 +368,7 @@
                                 </button>
                                 <button 
                                     class="btn btn-sm btn-danger"
-                                    (click)="submitReject(review.id)"
+                                    (click)="submitReject(review.id!)"
                                     [disabled]="!selectedRejectionReason">
                                     <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.rejectForm.submit' | translate}}
                                 </button>
@@ -355,7 +381,9 @@
                             <div class="d-flex align-items-center justify-content-between flex-wrap">
                                 <div class="d-flex align-items-center mb-2">
                                     <span class="avatar avatar-lg me-2 flex-shrink-0">
-                                        <img src="assets/img/users/{{ review.answer.providerImage }}" class="rounded-circle" alt="provider">
+                                        <img [src]="review.answer.providerImage || 'assets/img/users/user-default.jpg'" 
+                                             class="rounded-circle" 
+                                             alt="provider">
                                     </span>
                                     <div>
                                         <h6 class="fs-16 fw-medium mb-1">{{ review.answer.providerName }}</h6>
@@ -365,7 +393,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="mb-2">{{ review.answer.comment }}</p>
+                            <p class="mb-2">{{ i18nService.getValue(review.answer.comment) }}</p>
+                            
+                            <!-- Answer Images -->
+                            @if (review.answer.attachmentUrls && review.answer.attachmentUrls.length > 0) {
+                                <div class="mb-2">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @for (imageUrl of review.answer.attachmentUrls; track imageUrl) {
+                                            <a [href]="imageUrl" target="_blank" class="review-image-thumbnail">
+                                                <img [src]="imageUrl" 
+                                                     alt="Answer attachment" 
+                                                     class="rounded"
+                                                     style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            
                             <div class="d-inline-flex align-items-center">
                                 <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3">
                                     <i class="isax isax-like-1 me-2"></i>{{ review.answer.likes }}
