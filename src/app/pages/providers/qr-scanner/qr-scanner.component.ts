@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BarcodeFormat } from '@zxing/library';
+import { BarcodeFormat, DecodeHintType } from '@zxing/library';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BrowserQRCodeReader } from '@zxing/browser';
 
@@ -298,7 +298,7 @@ export class QrScannerComponent implements OnInit, OnDestroy {
           
           return {
             isValid: true,
-            bookingId: `RES-${reservationId}`, // Formato: RES-10
+            bookingId: `RES-${reservationId}`, // Formato esperado por el modal: RES-10
             redirectUrl: qrCode // URL completa para redirección
           };
         } else {
@@ -311,15 +311,24 @@ export class QrScannerComponent implements OnInit, OnDestroy {
     
     // Fallback: Intentar patrones anteriores por si acaso
     console.log('🔍 Intentando patrones de texto plano...');
+
+    // 1. Patrón nuevo directo (RES-38)
+    const resPattern = /(?:RES-)(\d+)/i;
+    const resMatch = qrCode.match(resPattern);
+    if (resMatch && resMatch[1]) {
+       console.log('✅ Match directo RES-ID encontrado:', resMatch[1]);
+       return {
+         isValid: true,
+         bookingId: `RES-${resMatch[1]}`
+       };
+    }
     
-    // Patrón esperado: TOURYA-BOOKING-{ID}-{HASH}
+    // 2. Patrón esperado antiguo: TOURYA-BOOKING-{ID}-{HASH}
     const qrPattern = /TOURYA-BOOKING-(TB-\d+)-[A-Z0-9]+/i;
     const match = qrCode.match(qrPattern);
     
-    console.log('🎯 Patrón completo (TOURYA-BOOKING-TB-XXXX-HASH):', match);
-    
     if (match && match[1]) {
-      console.log('✅ Match encontrado! Booking ID:', match[1]);
+      console.log('✅ Match TOURYA-BOOKING encontrado! Booking ID:', match[1]);
       return {
         isValid: true,
         bookingId: match[1]
@@ -382,12 +391,19 @@ export class QrScannerComponent implements OnInit, OnDestroy {
 
     this.isProcessing = true;
     this.errorMessage = '';
+    
+    let imageUrl: string | undefined;
+    
+    // Configurar hints para mejorar la detección (TRY_HARDER ayuda con imágenes rotadas o con ruido)
+    const hints = new Map();
+    hints.set(DecodeHintType.TRY_HARDER, true);
+    
+    const codeReader = new BrowserQRCodeReader(hints);
 
     try {
-      console.log('🔄 Creando BrowserQRCodeReader...');
-      const codeReader = new BrowserQRCodeReader();
+      console.log('🔄 Creando BrowserQRCodeReader con hints avanzados...');
       
-      const imageUrl = URL.createObjectURL(file);
+      imageUrl = URL.createObjectURL(file);
       console.log('🖼️ URL de la imagen creada:', imageUrl);
       
       console.log('🔍 Intentando decodificar QR de la imagen...');
@@ -399,25 +415,254 @@ export class QrScannerComponent implements OnInit, OnDestroy {
         console.log('✅ QR decodificado exitosamente desde imagen!');
         console.log('📄 Texto del QR:', result.getText());
         
-        // Resetear isProcessing antes de llamar a onCodeResult
-        // porque onCodeResult lo volverá a poner en true
         this.isProcessing = false;
-        
         this.onCodeResult(result.getText());
       } else {
         console.log('❌ No se pudo obtener texto del resultado');
         this.errorMessage = 'No se pudo leer el código QR de la imagen. Intenta con otra imagen.';
         this.isProcessing = false;
       }
-    } catch (error) {
-      console.error('❌ Error al leer QR de imagen:', error);
-      console.error('❌ Detalles del error:', JSON.stringify(error, null, 2));
-      this.errorMessage = 'No se encontró un código QR válido en la imagen.';
-      this.isProcessing = false;
+    } catch (error: any) {
+      // Lista de errores "normales" de decodificación que pueden justificar un reintento
+      const isDecodeError = 
+        error.name === 'NotFoundException' || 
+        error.name === 'NotFoundException2' || 
+        error.name === 'FormatException' || 
+        error.name === 'FormatException2' || 
+        error.name === 'ChecksumException' || 
+        (error.toString && (error.toString().includes('NotFound') || error.toString().includes('Format') || error.toString().includes('Checksum')));
+
+      if (isDecodeError) {
+        // SI ES EL PRIMER ERROR, INTENTAR CON ESTRATEGIAS DE PROCESAMIENTO
+        if (imageUrl && !imageUrl.startsWith('data:')) {
+          console.warn('⚠️ Primer intento fallido. Iniciando estrategias de recuperación...');
+          
+          // Orden de estrategias optimizado
+          const strategies = [
+            'binary-balanced',       // 1. Equilibrada (Min+Max)/2 -> Mejor para separar ruido
+            'binary-adaptive',       // 2. Adaptativa (Promedio)
+            'grayscale-smooth',      // 3. Grayscale con suavizado (Evita bordes "dientes de sierra")
+            'grayscale',             // 4. Grayscale crudo (Nearest neighbor)
+            'binary-adaptive-low',   // 5. Adaptativa Baja (Mejor para QR oscuros)
+            'normalize',             // 6. Normalización (Full dynamic range)
+            'contrast'               // 7. Contraste Fijo
+          ];
+          let decoded = false;
+
+          for (const strategy of strategies) {
+            if (decoded) break;
+            
+            this.errorMessage = `Intentando estrategia: ${strategy}...`;
+            console.log(`🔄 Probando estrategia: ${strategy}`);
+            
+            try {
+              const processedCanvas = await this.preprocessImage(imageUrl, strategy);
+              const retryResult = await codeReader.decodeFromCanvas(processedCanvas);
+              
+              if (retryResult && retryResult.getText()) {
+                console.log(`✅ ESTRATEGIA EXITOSA: ${strategy}`);
+                console.log('📄 Texto recuperado:', retryResult.getText());
+                this.isProcessing = false;
+                this.onCodeResult(retryResult.getText());
+                decoded = true;
+                return; // Éxito
+              }
+            } catch (retryError) {
+              console.warn(`⚠️ Falló estrategia ${strategy}`);
+            }
+          }
+
+          if (!decoded) {
+             console.error('❌ Todas las estrategias de recuperación fallaron.');
+             this.errorMessage = 'No se pudo leer el QR. Intente mejorar la iluminación o recortar la imagen.';
+             this.isProcessing = false;
+          }
+        } else {
+           // No es URL válida o es data URL sin tratar
+           this.errorMessage = 'Error de formato o lectura de QR.';
+           this.isProcessing = false;
+        }
+      } else {
+        // Otro tipo de error
+        console.error('❌ Error no recuperable:', error);
+        this.errorMessage = 'Ocurrió un error al procesar la imagen.';
+        this.isProcessing = false;
+      }
+    } finally {
+      // Liberar memoria de la URL creada
+      if (typeof imageUrl !== 'undefined') {
+        URL.revokeObjectURL(imageUrl);
+      }
     }
     
     // Limpiar el input para permitir seleccionar el mismo archivo de nuevo
     event.target.value = '';
+  }
+
+  /**
+   * Aplica procesamiento de imagen avanzado con soporte para binarización adaptativa
+   * Retorna un HTMLCanvasElement listo para ser leído
+   */
+  private async preprocessImage(imageUrl: string, strategy: string = 'contrast'): Promise<HTMLCanvasElement> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        // --- 1. Intelligent Resizing ---
+        if (width < 500 && height < 500) {
+             // Upscale x2 para imágenes pequeñas (crucial para ZXing)
+             const scale = 2;
+             width = width * scale;
+             height = height * scale;
+        } else if (width > 800 || height > 800) {
+           // Downscale si es gigante
+            const maxDimension = 800; 
+            const ratio = Math.min(maxDimension / width, maxDimension / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+        }
+
+        console.log(`🖼️ Procesando imagen: ${img.width}x${img.height} -> ${width}x${height} (Estrategia: ${strategy})`);
+
+        const padding = 40; // Quiet Zone
+        const canvas = document.createElement('canvas');
+        canvas.width = width + (padding * 2);
+        canvas.height = height + (padding * 2);
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        
+        if (!ctx) {
+          reject(new Error('No se pudo obtener el contexto del canvas'));
+          return;
+        }
+
+        // Fondo blanco
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Configurable smoothing based on strategy name
+        ctx.imageSmoothingEnabled = strategy.includes('smooth');
+        ctx.imageSmoothingQuality = 'high';
+        
+        ctx.drawImage(img, padding, padding, width, height);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        // --- 2. Pass 1: Convert to Grayscale & Calculate Stats ---
+        let min = 255;
+        let max = 0;
+        let sum = 0;
+        
+        // Convertimos todo a escala de grises primero para facilitar cálculos
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          // Luminancia perceptual
+          const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+          
+          data[i] = gray;
+          data[i + 1] = gray;
+          data[i + 2] = gray;
+
+          // Stats (ignorando el padding blanco puro para no sesgar el promedio hacia arriba demasiado)
+          // El padding es blanco (255), si contamos demasiados 255 el promedio sube artificialmente.
+          // Pero aquí estamos leyendo lo que acabamos de dibujar.
+          // Una optimización simple es solo contar píxeles dentro de la imagen original, 
+          // pero asumiremos que el QR ocupa buena parte.
+          if (gray < min) min = gray;
+          if (gray > max) max = gray;
+          sum += gray;
+        }
+
+        const avg = sum / (data.length / 4);
+        console.log(`📊 Stats: Min=${min}, Max=${max}, Avg=${avg.toFixed(1)}`);
+
+        // --- 3. Pass 2: Apply Strategy ---
+        // Si es 'grayscale', ya terminamos (la conversión se hizo arriba)
+        
+        if (strategy === 'normalize') {
+           // Stretch contrast: (val - min) * (255 / (max - min))
+           const range = max - min;
+           if (range > 0) {
+             const factor = 255 / range;
+             for (let i = 0; i < data.length; i += 4) {
+               const val = data[i]; // Ya es gris
+               const norm = Math.floor((val - min) * factor);
+               data[i] = norm;
+               data[i + 1] = norm;
+               data[i + 2] = norm;
+             }
+           }
+        }
+        else if (strategy.startsWith('binary-balanced')) {
+             // Umbral Medio = (Min + Max) / 2
+             // Más robusto que el promedio cuando hay mucho blanco (quiet zone)
+             let threshold = (min + max) / 2;
+             
+             // Clamp threshold
+             threshold = Math.max(10, Math.min(245, threshold));
+             console.log(`⚖️ Binarizando con Umbral Balanceado: ${threshold.toFixed(1)}`);
+ 
+             for (let i = 0; i < data.length; i += 4) {
+                 const val = data[i];
+                 const binary = (val > threshold) ? 255 : 0;
+                 data[i] = binary;
+                 data[i + 1] = binary;
+                 data[i + 2] = binary;
+             }
+         }
+        else if (strategy.startsWith('binary-adaptive')) {
+            let threshold = avg; // Default: Average
+
+            if (strategy === 'binary-adaptive-high') {
+                threshold = avg + 25; // Favorece oscuros (bueno para imágenes lavadas/brillantes)
+            } else if (strategy === 'binary-adaptive-low') {
+                threshold = avg - 25; // Favorece claros (bueno para imágenes oscuras)
+            }
+
+            // Clamp threshold
+            threshold = Math.max(10, Math.min(245, threshold));
+            console.log(`⚖️ Binarizando con Umbral Adaptativo: ${threshold.toFixed(1)}`);
+
+            for (let i = 0; i < data.length; i += 4) {
+                const val = data[i];
+                const binary = (val > threshold) ? 255 : 0;
+                data[i] = binary;
+                data[i + 1] = binary;
+                data[i + 2] = binary;
+            }
+        }
+        else if (strategy === 'contrast') {
+             // Fixed threshold 128
+             const threshold = 128;
+             for (let i = 0; i < data.length; i += 4) {
+                const val = data[i];
+                const binary = (val > threshold) ? 255 : 0;
+                data[i] = binary;
+                data[i + 1] = binary;
+                data[i + 2] = binary;
+            }
+        }
+        else if (strategy === 'invert') {
+             for (let i = 0; i < data.length; i += 4) {
+                const val = data[i];
+                const inv = 255 - val;
+                data[i] = inv;
+                data[i + 1] = inv;
+                data[i + 2] = inv;
+            }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        resolve(canvas);
+      };
+      img.onerror = (err) => reject(err);
+      img.src = imageUrl;
+    });
   }
 
   /**

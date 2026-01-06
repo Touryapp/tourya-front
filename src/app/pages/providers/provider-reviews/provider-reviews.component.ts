@@ -493,6 +493,55 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
   /**
    * Envía la respuesta a la review
    */
+  public replyImages: File[] = [];
+
+  /**
+   * Maneja la selección de imágenes para la respuesta
+   */
+  public onReplyImagesSelected(event: any): void {
+    const files = event.target.files;
+    if (files) {
+      const fileList = Array.from(files) as File[];
+      
+      // 1. Validar cantidad máxima (5 archivos)
+      if (fileList.length > 5) {
+        alert('Solo puedes adjuntar un máximo de 5 imágenes.');
+        // Limpiar el input
+        event.target.value = '';
+        this.replyImages = [];
+        return;
+      }
+
+      const validFiles: File[] = [];
+      const invalidFiles: string[] = [];
+
+      // 2. Validar tipo y tamaño por archivo
+      fileList.forEach(file => {
+        const isValidType = file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg';
+        const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
+
+        if (!isValidType) {
+          invalidFiles.push(`${file.name} (Tipo no permitido)`);
+        } else if (!isValidSize) {
+          invalidFiles.push(`${file.name} (Excede 5MB)`);
+        } else {
+          validFiles.push(file);
+        }
+      });
+
+      if (invalidFiles.length > 0) {
+        alert(`Algunos archivos no son válidos:\n${invalidFiles.join('\n')}\n\nSolo se permiten imágenes PNG/JPG de máximo 5MB.`);
+        event.target.value = '';
+        this.replyImages = [];
+      } else {
+        this.replyImages = validFiles;
+      }
+    }
+  }
+
+  /**
+   * Envía la respuesta a la review
+   */
   public submitReply(reviewId: string): void {
     if (!this.replyText.trim()) {
       alert('Por favor escribe una respuesta antes de enviar');
@@ -518,10 +567,14 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
       daysAgo: daysAgo,
       likes: 0,
       dislikes: 0,
-      hearts: 0
+      hearts: 0,
+      // Usamos una propiedad temporal para pasar los archivos
+      // El componente padre deberá extraerla antes de llamar al servicio o cambiar la firma del evento
+      files: this.replyImages
     };
 
     // Emitir evento al padre para que guarde la respuesta
+    // Nota: El padre provider-panel.component.ts debe ser actualizado para manejar la propiedad 'files'
     this.submitReplyEvent.emit({ reviewId, answerData });
     
     // Cerrar el formulario

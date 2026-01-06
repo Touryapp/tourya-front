@@ -7,18 +7,40 @@
 <div class="modal-body">
   <p>Tienes las siguientes reseñas pendientes por completar:</p>
   <div class="list-group">
-    <div *ngFor="let review of pendingReviews" class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{ review.tourName }}</h5>
-          <small class="ms-2">{{ review.date | date }}</small>
+    <div *ngFor="let review of pendingReviews" class="list-group-item">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="flex-grow-1">
+          <!-- Tour Name and Status Badge -->
+          <div class="d-flex w-100 justify-content-between align-items-center mb-2">
+            <h5 class="mb-0">{{ review.tourName || 'Tour sin nombre' }}</h5>
+            <span class="badge" *ngIf="review.deliveryStatus" [ngClass]="{
+              'bg-success': review.deliveryStatus === 'DELIVERED',
+              'bg-warning': review.deliveryStatus === 'PENDING',
+              'bg-danger': review.deliveryStatus === 'CANCELLED'
+            }">{{ review.deliveryStatus }}</span>
+          </div>
+          
+          <!-- Service Responsible Info -->
+          <div class="mb-2" *ngIf="review.serviceResponsible">
+            <p class="mb-1"><strong>Responsable del servicio:</strong> {{ review.serviceResponsible.name }}</p>
+            <p class="mb-1"><small>Email: {{ review.serviceResponsible.email }}</small></p>
+            <p class="mb-1"><small>Teléfono: {{ review.serviceResponsible.phone }}</small></p>
+          </div>
+          
+          <!-- Reservation Details -->
+          <div class="mb-2">
+            <small class="d-block" *ngIf="review.reservationDate"><strong>Fecha de reserva:</strong> {{ review.reservationDate | date:'medium' }}</small>
+            <small class="d-block"><strong>Reservation ID:</strong> {{ review.reservationId }}</small>
+            <small class="d-block" *ngIf="review.tourType"><strong>Tipo de tour:</strong> {{ review.tourType }}</small>
+            <small class="d-block" *ngIf="review.destination"><strong>Destino:</strong> {{ review.destination }}</small>
+          </div>
         </div>
-        <p class="mb-1">Cliente: {{ review.customerName }}</p>
-        <small>Reservation ID: {{ review.reservationId }}</small>
+        
+        <!-- Action Button -->
+        <button class="btn btn-sm btn-primary ms-3" (click)="goToReview(review)">
+          Reseñar
+        </button>
       </div>
-      <button class="btn btn-sm btn-primary ms-3" (click)="goToReview(review)">
-        Reseñar
-      </button>
     </div>
   </div>
 </div>

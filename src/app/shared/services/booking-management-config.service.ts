@@ -210,7 +210,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'tourName',
-          header: 'Tour',
+          header: 'Nombre del Tour',
           type: 'text',
           sortable: true,
           filterable: true,

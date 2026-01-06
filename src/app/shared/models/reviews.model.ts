@@ -21,25 +21,54 @@ export interface ProviderReviewAsk {
   likes: number;
   dislikes: number;
   hearts: number;
+  attachmentUrls?: string[]; // URLs of answer images
+}
+
+export interface ServiceResponsible {
+  name: string;
+  email: string;
+  phone: number;
 }
 
 export interface ProviderReview {
-  id: string;
-  tourName: string;
-  tourId: string;
-  tourImage: string;
-  customerName: string;
-  customerImage: string;
-  rating: number;
-  comment: string;
-  date: string;
-  daysAgo: string;
-  likes: number;
-  dislikes: number;
-  hearts: number;
   reservationId: number;
+  paymentId: number;
+  itemId: number;
+  qrUrl: string;
+  reservationDate: string;
+  deliveryStatus?: string;
+  serviceResponsible?: ServiceResponsible;
+  createdDate: string;
+  lastModifiedDate: string;
+  createdBy: number;
+  lastModifiedBy: number;
+  tourId: number | null;
+  tourName: string | null;
+  tourType: string | null;
+  duration: string | null;
+  checkInDate: string | null;
+  returnDate: string | null;
+  destination: string | null;
+  price: number | null;
+  travellers: number | null;
+  activities: string | null;
+  extraServices: string | null;
+  payer: string | null;
+  // Legacy fields for reviews (when they exist)
+  id?: string;
+  tourImage?: string;
+  customerName?: string;
+  customerImage?: string;
+  rating?: number;
+  comment?: string;
+  date?: string;
+  daysAgo?: string;
+  likes?: number;
+  dislikes?: number;
+  hearts?: number;
   status?: string;
   answer?: ProviderReviewAsk;
+  attachmentUrls?: string[]; // URLs of review images
 }
 
 export interface ReviewsApiResponse {

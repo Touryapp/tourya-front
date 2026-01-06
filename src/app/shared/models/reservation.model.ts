@@ -96,3 +96,40 @@ export interface ConsumeReservationResponse {
   createdBy: number;
   lastModifiedBy: number;
 }
+
+/**
+ * Interfaz para los detalles de una reserva (GET /api/v1/reservations/{id})
+ */
+export interface ReservationDetails {
+  reservationId: number;
+  paymentId: number;
+  itemId: number;
+  qrUrl: string;
+  reservationDate: string;
+  deliveryStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED';
+  serviceResponsible: {
+    name: string;
+    email: string;
+    phone: number;
+  };
+  createdDate: string;
+  lastModifiedDate: string;
+  createdBy: number;
+  lastModifiedBy: number;
+  tourId: number;
+  tourName: string;
+  tourType: string;
+  duration: string;
+  checkInDate: string;
+  returnDate: string;
+  destination: string;
+  price: number;
+  travellers: string;
+  activities: string[];
+  extraServices: string[];
+  payer: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+}

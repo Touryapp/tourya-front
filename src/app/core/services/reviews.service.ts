@@ -27,7 +27,8 @@ export class ReviewsService {
 
   getPendingReviews(): Observable<ReviewsApiResponse> {
     // TODO: change url for deployed back service
-    const url = 'https://6aa5ded6-1a98-4c3d-a307-5717b77f587c.mock.pstmn.io/api/v1/public/search/pending-reviews';
+    
+    const url = `${this.baseUrl}/public/search/pending-reviews?pageSize=20&pageNumber=0`;
     return this.http.get<ReviewsApiResponse>(url).pipe(
       tap(response => {
         this.pendingReviewsCache = response;
@@ -78,7 +79,7 @@ export class ReviewsService {
    * @param reviewId ID de la review a la que se responde (formato: REV-XXX)
    * @param answerComment Comentario de respuesta del proveedor
    */
-  saveReviewReply(reviewId: string, answerComment: string): Observable<any> {
+  saveReviewReply(reviewId: string, answerComment: string, files: File[] = []): Observable<any> {
     const url = `${this.baseUrl}/public/save/review/${reviewId}`;
     
     // Obtener el idioma actual del usuario
@@ -102,7 +103,18 @@ export class ReviewsService {
       }
     };
     
-    return this.http.patch(url, payload);
+    // Crear FormData para enviar JSON + Archivos
+    const formData = new FormData();
+    formData.append('reviewData', JSON.stringify(payload));
+    
+    // Adjuntar archivos si existen
+    if (files && files.length > 0) {
+      files.forEach(file => {
+        formData.append('answerFiles', file);
+      });
+    }
+    
+    return this.http.patch(url, formData);
   }
 
   /**
@@ -149,7 +161,7 @@ export class ReviewsService {
    * Crea una nueva reseña para una reserva
    * @param reviewData Datos de la reseña a crear
    */
-  createReview(reviewData: CreateReviewSimpleRequest): Observable<any> {
+  createReview(reviewData: CreateReviewSimpleRequest, files: File[] = []): Observable<any> {
     const url = `${this.baseUrl}/public/save/review`;
     
     // Obtener el idioma actual del usuario
@@ -168,6 +180,17 @@ export class ReviewsService {
       date: new Date().toISOString().split('T')[0] // Formato YYYY-MM-DD
     };
     
-    return this.http.post(url, payload);
+    // Crear FormData para enviar JSON + Archivos
+    const formData = new FormData();
+    formData.append('reviewData', JSON.stringify(payload));
+    
+    // Adjuntar archivos si existen
+    if (files && files.length > 0) {
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+    }
+    
+    return this.http.post(url, formData);
   }
 }

@@ -190,7 +190,6 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
           const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
   
           if (loc && loc.latitude !== undefined && loc.longitude !== undefined) {
-
           // subscribe to cart items to control floating cart visibility
           this.cartService.cartItems$
             .pipe(takeUntil(this.destroy$))

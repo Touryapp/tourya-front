@@ -369,7 +369,8 @@
                             </div>
                             
                             <div class="d-flex gap-2">
-                                @if (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming') {
+                                <!-- Botones de gestión solo para PROVIDER y ADMIN -->
+                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming')) {
                                     <button 
                                         class="btn btn-primary" 
                                         (click)="completeBooking(selectedBooking.id)"
@@ -377,7 +378,7 @@
                                         <i class="isax isax-tick-square me-2"></i>{{ 'provider-tour-management.modal.actions.complete' | translate }}
                                     </button>
                                 }
-                                @if (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING') {
+                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING')) {
                                     <button 
                                         class="btn btn-success" 
                                         (click)="confirmBookingFromModal(selectedBooking.id)"
@@ -385,7 +386,7 @@
                                         <i class="isax isax-tick-circle me-2"></i>{{ 'provider-tour-management.modal.actions.confirm' | translate }}
                                     </button>
                                 }
-                                @if (selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
+                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
                                     <button 
                                         class="btn btn-danger" 
                                         (click)="cancelBooking(selectedBooking.id)"
@@ -465,7 +466,7 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Imágenes</label>
-                                <input type="file" class="form-control" accept=".jpg, .png" multiple
+                                <input type="file" class="form-control" accept=".jpg, .jpeg, .png" multiple
                                        (change)="onReviewImagesSelected($event)">
                                 @if (reviewImages.length > 0) {
                                     <small class="text-muted">{{ reviewImages.length }} imagen(es) seleccionada(s)</small>

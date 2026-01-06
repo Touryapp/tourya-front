@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Reservation, ClientReservation, PaginatedResponse, ConsumeReservationResponse } from '../models/reservation.model';
+import { Reservation, ClientReservation, PaginatedResponse, ConsumeReservationResponse, ReservationDetails } from '../models/reservation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,8 @@ export class ReservationService {
    * @param reservationId ID de la reserva
    * @returns Observable con los datos de la reserva
    */
-  getReservationById(reservationId: number | string): Observable<ClientReservation> {
-    return this.http.get<ClientReservation>(`${this.apiUrl}/reservations/${reservationId}`);
+  getReservationById(reservationId: number | string): Observable<ReservationDetails> {
+    return this.http.get<ReservationDetails>(`${this.apiUrl}/reservations/${reservationId}`);
   }
 
   /**
@@ -52,12 +52,7 @@ export class ReservationService {
     size?: number;
     status?: string;
     tourType?: string;
-  } = {}): Observable<{
-    content: Reservation[];
-    totalElements: number;
-    totalPages: number;
-    number: number;
-  }> {
+  } = {}): Observable<PaginatedResponse<ClientReservation>> {
     const queryParams: any = {
       page: (params.page || 0).toString(),
       size: (params.size || 10).toString()
@@ -71,12 +66,10 @@ export class ReservationService {
       queryParams.tourType = params.tourType;
     }
 
-    return this.http.get<{
-      content: Reservation[];
-      totalElements: number;
-      totalPages: number;
-      number: number;
-    }>(`${this.baseUrl}/provider`, { params: queryParams });
+    return this.http.get<PaginatedResponse<ClientReservation>>(
+      `${this.apiUrl}/reservations`,
+      { params: queryParams }
+    );
   }
 
   /**

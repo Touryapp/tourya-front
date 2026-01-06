@@ -163,7 +163,7 @@ export class MyProfileComponent implements OnInit {
       this.averageRating = 0;
       return;
     }
-    const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+    const sum = this.reviews.reduce((acc, review) => acc + (review.rating ?? 0), 0);
     this.averageRating = parseFloat((sum / this.reviews.length).toFixed(1));
   }
 
