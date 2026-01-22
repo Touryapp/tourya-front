@@ -522,6 +522,15 @@ export class TourScheduleComponent {
       slots,
     } = this.tourScheduleForm.value;
 
+    // Convert ANY to ADULT before sending to backend
+    const processedSlots = slots.map((slot: any) => ({
+      ...slot,
+      prices: slot.prices.map((price: any) => ({
+        ...price,
+        ageType: price.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : price.ageType
+      }))
+    }));
+
     const body = {
       tourId: this.tourId,
       label,
@@ -529,7 +538,7 @@ export class TourScheduleComponent {
       endDate: dayjs(endDate).format("YYYY-MM-DD"),
       daysOfWeek,
       isUnlimitedCapacity,
-      slots,
+      slots: processedSlots,
       createdBy: 1,
     };
 
