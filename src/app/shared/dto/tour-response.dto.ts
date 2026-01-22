@@ -5,6 +5,7 @@ export interface Tour {
   name?: I18nField | string;
   description?: I18nField | string;
   tourCategoryId?: number;
+  priceType?: string;
   duration?: string;
   maxPeople?: number;
   highlight?: number;
@@ -30,6 +31,7 @@ export interface TourDetail {
   name: string;
   description: string;
   tourCategoryId: number;
+  priceType: string;
   duration: string;
   maxPeople: number;
   highlight: number;

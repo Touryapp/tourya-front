@@ -5,6 +5,7 @@ export enum TypeOfPerson {
 }
 
 export enum TypeOfPersonLabel {
+  ANY = "ANY",
   ADULT = "ADULT",
   CHILD = "CHILD",
   INFANT = "INFANT",

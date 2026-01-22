@@ -285,12 +285,33 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
         console.log(`  ${key}: "${value}" [length: ${value.length}]`);
       });
 
+      // ⚠️ IMPORTANTE: No incluir redirectUrl con localhost o IPs (causa error 403 en Wompi)
+      // Wompi bloquea URLs con localhost/IPs por regla de seguridad EC2MetaDataSSRF_QUERYARGUMENTS
+      
+      // Verificar si el origin es un dominio real (no localhost ni IP)
+      const isRealDomain = () => {
+        const origin = window.location.origin;
+        // Bloquear localhost
+        if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+          return false;
+        }
+        // Bloquear IPs (formato: http://123.123.123.123)
+        const ipPattern = /^https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
+        if (ipPattern.test(origin)) {
+          return false;
+        }
+        return true;
+      };
+
       const wompiConfig: WompiCheckoutConfig = {
         currency: 'COP',
         amountInCents: amountInCents,
         reference: reference,  // ← Desde backend
         publicKey: environment.wompi.publicKey,
-        redirectUrl: `${window.location.origin}/clients/payment-confirmation`,
+        // ✅ Solo incluir redirectUrl si es un dominio real (no localhost ni IP)
+        ...(isRealDomain() && { 
+          redirectUrl: `${window.location.origin}/clients/payment-confirmation` 
+        }),
         signature: signature,  // ← Desde backend
         customerData: {
           email: this.userForm.email,

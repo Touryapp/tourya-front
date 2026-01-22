@@ -256,5 +256,258 @@
         "cancel": "Cancelar Reserva"
       }
     }
+  },
+  "tour-form": {
+    "breadcrumb": {
+      "home": "Inicio",
+      "providersPanel": "Panel de Proveedores",
+      "addTours": "Agregar Tours",
+      "editTours": "Editar Tours"
+    },
+    "title": {
+      "add": "Agregar Tours",
+      "edit": "Editar Tours"
+    },
+    "status": {
+      "label": "Estado del Tour:",
+      "created": "Creado",
+      "submitted": "Enviado",
+      "accepted": "Aceptado",
+      "returned": "Devuelto",
+      "cancelled": "Cancelado",
+      "submitButton": "Enviar a Revisión",
+      "cannotEditWarning": "Este tour está en revisión y no puede ser editado.",
+      "cannotEditMessage": "Debes esperar a que sea aceptado, devuelto o cancelado para poder editarlo nuevamente.",
+      "autoSubmitNote": "Nota:",
+      "autoSubmitMessage": "Al guardar los cambios, el tour será enviado automáticamente a revisión."
+    },
+    "sections": {
+      "tourDetails": "Detalles del Tour",
+      "description": "Descripción",
+      "locations": "Ubicaciones",
+      "mainAttractions": "Atracciones Principales",
+      "includes": "Incluye",
+      "excludes": "Excluye",
+      "itinerary": "Itinerario",
+      "faq": "Preguntas Frecuentes",
+      "cancellationPolicies": "Políticas de Cancelación"
+    },
+    "fields": {
+      "name": {
+        "label": "Nombre",
+        "errors": {
+          "required": "El nombre es requerido",
+          "minlength": "El nombre debe tener al menos 3 caracteres",
+          "maxlength": "El nombre no puede tener más de 50 caracteres"
+        }
+      },
+      "category": {
+        "label": "Categoría",
+        "placeholder": "Seleccionar",
+        "options": {
+          "aquatic": "Acuático",
+          "land": "Terrestre",
+          "adventure": "Aventura",
+          "night": "Nocturno",
+          "experiences": "Experiencias",
+          "cultural": "Cultural",
+          "transportRental": "Alquiler de Transporte"
+        },
+        "errors": {
+          "required": "La categoría es requerida"
+        }
+      },
+      "priceType": {
+        "label": "Tipo de precio",
+        "placeholder": "Seleccionar",
+        "options": {
+          "group": "Grupo",
+          "individual": "Individual"
+        },
+        "errors": {
+          "required": "El tipo de precio es requerido"
+        }
+      },
+      "duration": {
+        "label": "Duración",
+        "errors": {
+          "required": "La duración es requerida",
+          "minlength": "La duración debe tener al menos 1 carácter",
+          "maxlength": "La duración no puede tener más de 50 caracteres"
+        }
+      },
+      "totalNumberOfPeoples": {
+        "label": "Número Total de Personas",
+        "errors": {
+          "required": "El número total de personas es requerido"
+        }
+      },
+      "minAge": {
+        "label": "Edad Mínima",
+        "errors": {
+          "required": "La edad mínima es requerida"
+        }
+      },
+      "typeOfAddress": {
+        "label": "Tipo de Dirección",
+        "placeholder": "Seleccionar",
+        "options": {
+          "meetingPoint": "Punto de Encuentro",
+          "endPoint": "Punto Final",
+          "pickUpPoint": "Punto de Recogida"
+        },
+        "errors": {
+          "required": "El tipo de dirección es requerido"
+        }
+      },
+      "country": {
+        "label": "País",
+        "placeholder": "Seleccionar",
+        "errors": {
+          "required": "El país es requerido"
+        }
+      },
+      "department": {
+        "label": "Departamento",
+        "placeholder": "Seleccionar",
+        "errors": {
+          "required": "El departamento es requerido"
+        }
+      },
+      "city": {
+        "label": "Ciudad",
+        "placeholder": "Seleccionar",
+        "errors": {
+          "required": "La ciudad es requerida"
+        }
+      },
+      "location": {
+        "label": "Ubicación",
+        "placeholder": "Ingrese la dirección completa",
+        "errors": {
+          "required": "La ubicación es requerida"
+        }
+      },
+      "address": {
+        "label": "Dirección",
+        "errors": {
+          "required": "La dirección es requerida",
+          "minlength": "La dirección debe tener al menos 3 caracteres",
+          "maxlength": "La dirección no puede tener más de 50 caracteres"
+        }
+      },
+      "attraction": {
+        "label": "Atracción",
+        "errors": {
+          "required": "La atracción es requerida"
+        }
+      },
+      "include": {
+        "label": "Incluye",
+        "errors": {
+          "required": "Este campo es requerido"
+        }
+      },
+      "exclude": {
+        "label": "Excluye",
+        "errors": {
+          "required": "Este campo es requerido"
+        }
+      },
+      "itineraryTitle": {
+        "label": "Título",
+        "errors": {
+          "required": "El título es requerido",
+          "minlength": "El título debe tener al menos 3 caracteres",
+          "maxlength": "El título no puede tener más de 50 caracteres"
+        }
+      },
+      "day": {
+        "label": "Día",
+        "errors": {
+          "required": "El día es requerido",
+          "min": "El día mínimo es 1"
+        }
+      },
+      "time": {
+        "label": "Hora",
+        "errors": {
+          "required": "La hora es requerida"
+        }
+      },
+      "itineraryDescription": {
+        "label": "Descripción",
+        "errors": {
+          "required": "La descripción es requerida",
+          "minlength": "La descripción debe tener al menos 3 caracteres",
+          "maxlength": "La descripción no puede tener más de 255 caracteres"
+        }
+      },
+      "question": {
+        "label": "Pregunta",
+        "errors": {
+          "required": "La pregunta es requerida",
+          "minlength": "La pregunta debe tener al menos 3 caracteres",
+          "maxlength": "La pregunta no puede tener más de 50 caracteres"
+        }
+      },
+      "answer": {
+        "label": "Respuesta",
+        "errors": {
+          "required": "La respuesta es requerida",
+          "minlength": "La respuesta debe tener al menos 3 caracteres",
+          "maxlength": "La respuesta no puede tener más de 255 caracteres"
+        }
+      },
+      "cancellationPolicyType": {
+        "label": "Tipo de política de cancelación",
+        "placeholder": "Seleccionar",
+        "options": {
+          "flexible": "Flexible",
+          "moderate": "Moderada",
+          "nonRefundable": "No reembolsable"
+        },
+        "errors": {
+          "required": "El tipo de política de cancelación es requerido"
+        }
+      },
+      "observations": {
+        "label": "Observaciones",
+        "errors": {
+          "required": "Las observaciones son requeridas",
+          "maxlength": "Las observaciones no pueden tener más de 255 caracteres"
+        }
+      },
+      "allowsRainRefund": {
+        "label": "Permite reembolso por lluvia",
+        "errors": {
+          "required": "Este campo es requerido"
+        }
+      },
+      "allowsRescheduling": {
+        "label": "Permite reprogramación",
+        "errors": {
+          "required": "Este campo es requerido"
+        }
+      }
+    },
+    "buttons": {
+      "addNew": "Agregar Nuevo",
+      "addTour": "Agregar nuevo tour",
+      "editTour": "Editar tour",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "close": "Cerrar"
+    },
+    "modals": {
+      "itinerary": {
+        "titleAdd": "Agregar nuevo itinerario",
+        "titleEdit": "Editar itinerario"
+      },
+      "faq": {
+        "titleAdd": "Agregar nueva pregunta",
+        "titleEdit": "Editar pregunta"
+      }
+    }
   }
 }

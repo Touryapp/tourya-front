@@ -25,6 +25,8 @@ import { City } from "../../../../shared/dto/city.dto";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CancellationPolicyType } from "../../../../shared/enums/cancellation-policy-type";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
+import { PriceType } from "../../../../shared/enums/price-type.enum";
+
 
 @Component({
   selector: "app-add-tour",
@@ -73,6 +75,8 @@ export class AddTourComponent {
   readonly TypeOfAddress = TypeOfAddress;
   readonly TypeOfPerson = TypeOfPerson;
   readonly CancellationPolicyType = CancellationPolicyType;
+  readonly PriceType = PriceType;
+
 
   tourId: number = 0;
   tour: Tour | null = null;
@@ -117,22 +121,17 @@ export class AddTourComponent {
         ],
       ],
       category: ["", [Validators.required]],
+      priceType: ["", [Validators.required]],
       duration: [
         "",
         [
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(1),
           Validators.maxLength(50),
         ],
       ],
-      totalNumberOfPeoples: [
-        "",
-        [
-          Validators.required,
-          Validators.min(1),
-          Validators.pattern("^[0-9]*$"),
-        ],
-      ],
+
+      totalNumberOfPeoples: [""], // Initially no validators
       minAge: [
         "",
         [
@@ -158,6 +157,26 @@ export class AddTourComponent {
     this.addCancellationPolicy();
 
     this.getCountries();
+
+    // Listen to priceType changes to update totalNumberOfPeoples validation
+    this.tourForm.get('priceType')?.valueChanges.subscribe((priceType) => {
+      const totalNumberOfPeoplesControl = this.tourForm.get('totalNumberOfPeoples');
+      
+      if (priceType === PriceType.GROUP) {
+        // If GROUP, make totalNumberOfPeoples required
+        totalNumberOfPeoplesControl?.setValidators([
+          Validators.required,
+          Validators.min(1),
+          Validators.pattern("^[0-9]*$"),
+        ]);
+      } else {
+        // If INDIVIDUAL, remove validators and clear value
+        totalNumberOfPeoplesControl?.clearValidators();
+        totalNumberOfPeoplesControl?.setValue('');
+      }
+      
+      totalNumberOfPeoplesControl?.updateValueAndValidity();
+    });
 
     if (this.tourId > 0) {
       this.getTour();
@@ -712,6 +731,7 @@ export class AddTourComponent {
       name,
       description,
       category,
+      priceType,
       duration,
       minAge,
       totalNumberOfPeoples,
@@ -723,6 +743,7 @@ export class AddTourComponent {
       faq,
       cancellationPolicies,
     } = this.tourForm.value;
+
 
     const locationMap = locations.map((location: any) => {
       const {
@@ -788,9 +809,11 @@ export class AddTourComponent {
       name: this.i18nService.createI18nField(name),
       description: this.i18nService.createI18nField(description),
       tourCategoryId: +category,
+      priceType: priceType,
       duration,
       maxPeople: totalNumberOfPeoples,
       minAge: +minAge,
+
       locations: locationMap,
       mainAttractions: mainAttractions.map((attr: any) => ({
         id: attr.id,
@@ -931,11 +954,13 @@ export class AddTourComponent {
             id: this.tour?.id,
             name: this.i18nService.getValue(this.tour?.name),
             category: this.tour?.tourCategoryId,
+            priceType: this.tour?.priceType,
             duration: this.tour?.duration,
             totalNumberOfPeoples: this.tour?.maxPeople,
             minAge: this.tour?.minAge,
             description: this.i18nService.getValue(this.tour?.description),
           });
+
 
           this.tour?.locations?.map((location, index) => {
             if (index >= 1) {
