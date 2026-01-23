@@ -85,6 +85,10 @@ export class TourScheduleComponent {
   selectedTemplate: TourSchedule | null = null;
   templatesLoading = false;
 
+  // Modal para conversión ANY a ADULT
+  showAnyModal = false;
+  pendingSlotIndex: number | null = null;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -188,86 +192,19 @@ export class TourScheduleComponent {
     this.tourScheduleForm
       .get("isUnlimitedCapacity")
       ?.valueChanges.subscribe((value) => {
-        if (value) {
-          this.slots.controls.forEach((control, index) => {
-            const maxCapacityControl = control.get("maxCapacity");
-
-            maxCapacityControl?.setValue("");
-            maxCapacityControl?.setValidators([]);
-            maxCapacityControl?.updateValueAndValidity();
-          });
-        } else {
-          this.slots.controls.forEach((control, index) => {
-            const maxCapacityControl = control.get("maxCapacity");
-
-            maxCapacityControl?.setValidators([
-              Validators.required,
-              onlyNumberValidator(),
-            ]);
-
-            maxCapacityControl?.updateValueAndValidity();
-          });
-        }
+        // isUnlimitedCapacity logic removed as capacity fields are removed
       });
 
     this.slots.valueChanges.subscribe((value) => {
-      this.slots.controls.forEach((control, index) => {
-        // Check min capacity
-        if (!this.tourScheduleForm.get("isUnlimitedCapacity")?.value) {
-          const minCapacityControl = control.get("minCapacity");
-          const maxCapacityControl = control.get("maxCapacity");
-
-          const minCapacityValue = +(minCapacityControl?.value || 0);
-          const maxCapacityValue = +(maxCapacityControl?.value || 0);
-
-          if (minCapacityValue > maxCapacityValue) {
-            maxCapacityControl?.setErrors({ min: true });
-          }
-        }
-
-        // Check min age
-        this.prices(index).controls.forEach((priceControl, indexPrice) => {
-          const minAgeControl = priceControl.get("minAge");
-          const maxAgeControl = priceControl.get("maxAge");
-
-          const minAgeValue = +minAgeControl?.value || 0;
-          const maxAgeValue = +maxAgeControl?.value || 0;
-
-          if (minAgeValue > maxAgeValue) {
-            maxAgeControl?.setErrors({
-              min: true,
-            });
-          }
-        });
-      });
+      // Age and capacity validation removed
     });
   }
 
   ngOnDestroy(): void {}
 
-  onKeypressMinCapacity(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
-  onKeypressMaxCapacity(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
-  onKeypressMinAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
-  onKeypressMaxAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
   onPriceBlur(indexSlot: number, indexPrice: number) {
     const priceControl = this.prices(indexSlot).at(indexPrice).get("price");
@@ -340,39 +277,17 @@ export class TourScheduleComponent {
     }
   }
 
-  checkMinMaxAge(indexSlot: number, indexPrice: number) {
-    const minAgeControl = this.prices(indexSlot).at(indexPrice).get("minAge");
-    const maxAgeControl = this.prices(indexSlot).at(indexPrice).get("maxAge");
 
-    const minAgeValue = +minAgeControl?.value || 0;
-    const maxAgeValue = +maxAgeControl?.value || 0;
-
-    if (minAgeValue >= 0 && maxAgeValue >= 0 && minAgeValue > maxAgeValue) {
-      maxAgeControl?.setErrors({
-        min: true,
-      });
-    }
-  }
 
   get slots(): FormArray {
     return this.tourScheduleForm.get("slots") as FormArray;
   }
 
   newSlot(): FormGroup {
-    const isUnlimitedCapacityValue = this.tourScheduleForm.get(
-      "isUnlimitedCapacity"
-    )?.value;
-
-    const maxCapacityValidators = isUnlimitedCapacityValue
-      ? []
-      : [Validators.required, onlyNumberValidator()];
-
     return this.fb.group({
       id: ["", []],
       startTime: ["", [Validators.required]],
       endTime: ["", [Validators.required]],
-      minCapacity: ["", [Validators.required, onlyNumberValidator()]],
-      maxCapacity: ["", maxCapacityValidators],
       prices: this.fb.array([]),
     });
   }
@@ -399,24 +314,43 @@ export class TourScheduleComponent {
     return this.fb.group({
       id: ["", []],
       ageType: ["", [Validators.required]],
-      minAge: [
-        "",
-        [Validators.required, Validators.min(0), onlyNumberValidator()],
-      ],
-      maxAge: [
-        "",
-        [Validators.required, Validators.min(0), onlyNumberValidator()],
-      ],
       price: ["", [Validators.required, Validators.min(0)]],
     });
   }
 
   addPrice(index: number) {
+    // Check if first price has ANY selected
+    const firstPrice = this.prices(index).at(0);
+    if (firstPrice && firstPrice.get('ageType')?.value === TypeOfPersonLabel.ANY) {
+      // Show modal to confirm conversion from ANY to ADULT
+      this.pendingSlotIndex = index;
+      this.showAnyModal = true;
+      return;
+    }
+
     if (this.prices(index).valid) {
       this.prices(index).push(this.newPrice());
     } else {
       this.prices(index).markAllAsTouched();
     }
+  }
+
+  confirmAnyToAdultConversion() {
+    if (this.pendingSlotIndex !== null) {
+      const firstPrice = this.prices(this.pendingSlotIndex).at(0);
+      if (firstPrice) {
+        // Convert ANY to ADULT
+        firstPrice.get('ageType')?.setValue(TypeOfPersonLabel.ADULT);
+        // Add new price
+        this.prices(this.pendingSlotIndex).push(this.newPrice());
+      }
+    }
+    this.closeAnyModal();
+  }
+
+  closeAnyModal() {
+    this.showAnyModal = false;
+    this.pendingSlotIndex = null;
   }
 
   removePrice(indexSlot: number, indexPrice: number) {
@@ -468,6 +402,13 @@ export class TourScheduleComponent {
       .filter((v) => v);
 
     return typesOfPeople.includes(typeOfPerson);
+  }
+
+  // Check if ANY option should be available for a specific price
+  isAnyOptionAvailable(indexSlot: number, indexPrice: number): boolean {
+    // ANY is only available for the first price (index 0) AND only if there's only one price
+    const pricesCount = this.prices(indexSlot).length;
+    return indexPrice === 0 && pricesCount === 1;
   }
 
   checkTourScheduleByStartDateAndEndDate() {
@@ -533,8 +474,6 @@ export class TourScheduleComponent {
           id: [slot.id || ""],
           startTime: [slot.startTime || ""],
           endTime: [slot.endTime || ""],
-          minCapacity: [slot.minCapacity || ""],
-          maxCapacity: [slot.maxCapacity || ""],
           prices: this.fb.array([]),
         });
 
@@ -552,8 +491,6 @@ export class TourScheduleComponent {
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
-            minAge: [price.minAge || ""],
-            maxAge: [price.maxAge || ""],
             price: [price.price || ""],
           });
 
@@ -585,6 +522,15 @@ export class TourScheduleComponent {
       slots,
     } = this.tourScheduleForm.value;
 
+    // Convert ANY to ADULT before sending to backend
+    const processedSlots = slots.map((slot: any) => ({
+      ...slot,
+      prices: slot.prices.map((price: any) => ({
+        ...price,
+        ageType: price.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : price.ageType
+      }))
+    }));
+
     const body = {
       tourId: this.tourId,
       label,
@@ -592,7 +538,7 @@ export class TourScheduleComponent {
       endDate: dayjs(endDate).format("YYYY-MM-DD"),
       daysOfWeek,
       isUnlimitedCapacity,
-      slots,
+      slots: processedSlots,
       createdBy: 1,
     };
 
@@ -780,6 +726,12 @@ export class TourScheduleComponent {
         }
       }
     }
+
+    // Console log para verificar si hay algo seleccionado
+    const hasSelection = !!this.tourScheduleForm.get("startDate")?.value;
+    console.log("¿Hay fechas seleccionadas en el calendario?", hasSelection);
+    console.log("Start Date:", this.tourScheduleForm.get("startDate")?.value);
+    console.log("End Date:", this.tourScheduleForm.get("endDate")?.value);
 
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -976,8 +928,6 @@ export class TourScheduleComponent {
           id: [slot.id || ""],
           startTime: [slot.startTime || ""],
           endTime: [slot.endTime || ""],
-          minCapacity: [slot.minCapacity || ""],
-          maxCapacity: [slot.maxCapacity || ""],
           prices: this.fb.array([]),
         });
 
@@ -1062,14 +1012,10 @@ export class TourScheduleComponent {
               slots: slots.map((s: any) => ({
                 startTime: s.startTime,
                 endTime: s.endTime,
-                minCapacity: s.minCapacity,
-                maxCapacity: s.maxCapacity,
                 prices: s.prices.map((p: any) => ({
-                  ageType: p.ageType,
-                  minAge: p.minAge,
-                  maxAge: p.maxAge,
-                  price: p.price
-                }))
+                  ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,
+                  price: p.price,
+                })),
               }))
             }
           };
@@ -1140,13 +1086,9 @@ export class TourScheduleComponent {
               id: s.id || 0, // Incluir ID del slot si existe
               startTime: s.startTime,
               endTime: s.endTime,
-              minCapacity: s.minCapacity,
-              maxCapacity: s.maxCapacity,
               prices: s.prices.map((p: any) => ({
                 id: p.id || 0, // Incluir ID del precio si existe
-                ageType: p.ageType,
-                minAge: p.minAge,
-                maxAge: p.maxAge,
+                ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,
                 price: p.price
               }))
             }))

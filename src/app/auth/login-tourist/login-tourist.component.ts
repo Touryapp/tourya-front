@@ -279,7 +279,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     if (role.some(r => r.id === Roles.ADMIN)) {
       this.router.navigate(["admin"]);
     } else if (role.some(r => r.id === Roles.PROVIDER)) {
-      this.router.navigate(["providers/home"]);
+      this.router.navigate(["providers/provider-panel"]);
     } else if (role.some(r => r.id === Roles.USER)) {
       this.router.navigate(["home"]);
     }

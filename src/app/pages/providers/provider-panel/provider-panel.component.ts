@@ -10,6 +10,7 @@ import { ReviewsService } from "../../../core/services/reviews.service";
 import { ProviderReview } from "../../../shared/models/reviews.model";
 import { ProviderPanelStateService } from "../../../shared/services/provider-panel-state.service";
 import { I18nFieldService } from "../../../shared/services/i18n-field.service";
+import { AuthService } from "../../../core/services/auth.service";
 
 @Component({
   selector: "app-provider-panel",
@@ -60,7 +61,8 @@ export class ProviderPanelComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private panelStateService: ProviderPanelStateService,
     private cdr: ChangeDetectorRef,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

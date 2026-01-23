@@ -3,15 +3,15 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">{{tourId ? 'Edit Tours' : 'Add Tours' }}</h2>
+                <h2 class="breadcrumb-title mb-2">{{tourId ? ('tour-form.title.edit' | translate) : ('tour-form.title.add' | translate) }}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'">Providers Panel</a>
+                        <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'">{{ 'tour-form.breadcrumb.providersPanel' | translate }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            {{tourId ? 'Edit Tours' : 'Add Tours' }}
+                            {{tourId ? ('tour-form.breadcrumb.editTours' | translate) : ('tour-form.breadcrumb.addTours' | translate) }}
                         </li>
                     </ol>
                 </nav>
@@ -31,7 +31,7 @@
                 <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
                     <div class="card-body">
                         <div>
-                            <h5 class="mb-3">{{tourId ? 'Edit Tour' : 'Add Tour' }}</h5>
+                            <h5 class="mb-3">{{tourId ? ('tour-form.title.edit' | translate) : ('tour-form.title.add' | translate) }}</h5>
                             <ul class="add-tab-list">
                                 <li *ngFor="let tab of tabs">
                                     <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
@@ -87,43 +87,43 @@
                     <div class="card shadow-none" id="basic_info">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h5 class="fs-18">Tour Details</h5>
+                                <h5 class="fs-18">{{ 'tour-form.sections.tourDetails' | translate }}</h5>
                             </div>
                         </div>
                         <div class="card-body pb-1">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label class="form-label">Name</label>
+                                        <label class="form-label">{{ 'tour-form.fields.name.label' | translate }}</label>
                                         <input type="text" class="form-control" formControlName="name"
                                             (blur)="onNameBlur($event)">
                                         <div *ngIf="tourForm.controls['name'].invalid && (tourForm.controls['name'].dirty || tourForm.controls['name'].touched)"
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['name'].errors?.['required']">
-                                                Name is required
+                                                {{ 'tour-form.fields.name.errors.required' | translate }}
                                             </div>
                                             <div *ngIf="tourForm.controls['name'].errors?.['minlength']">
-                                                Name must be at least 3 characters long
+                                                {{ 'tour-form.fields.name.errors.minlength' | translate }}
                                             </div>
                                             <div *ngIf="tourForm.controls['name'].errors?.['maxlength']">
-                                                Name cannot be more than 50 characters long
+                                                {{ 'tour-form.fields.name.errors.maxlength' | translate }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Category</label>
-                                        <mat-select class="custom-mat-select select" placeholder="Select"
+                                        <label class="form-label">{{ 'tour-form.fields.category.label' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.category.placeholder' | translate }}"
                                             formControlName="category" (blur)="onCategoryBlur($event)">
-                                            <mat-option [value]="Category.AQUATIC">Aquatic</mat-option>
-                                            <mat-option [value]="Category.LAND">Land</mat-option>
-                                            <mat-option [value]="Category.ADVENTURE">Adventure</mat-option>
-                                            <mat-option [value]="Category.NIGHT">Night</mat-option>
-                                            <mat-option [value]="Category.EXPERIENCES">Experiences</mat-option>
-                                            <mat-option [value]="Category.CULTURAL">Cultural</mat-option>
+                                            <mat-option [value]="Category.AQUATIC">{{ 'tour-form.fields.category.options.aquatic' | translate }}</mat-option>
+                                            <mat-option [value]="Category.LAND">{{ 'tour-form.fields.category.options.land' | translate }}</mat-option>
+                                            <mat-option [value]="Category.ADVENTURE">{{ 'tour-form.fields.category.options.adventure' | translate }}</mat-option>
+                                            <mat-option [value]="Category.NIGHT">{{ 'tour-form.fields.category.options.night' | translate }}</mat-option>
+                                            <mat-option [value]="Category.EXPERIENCES">{{ 'tour-form.fields.category.options.experiences' | translate }}</mat-option>
+                                            <mat-option [value]="Category.CULTURAL">{{ 'tour-form.fields.category.options.cultural' | translate }}</mat-option>
                                             <mat-option [value]="Category.TRANSPORT_RENTAL">
-                                                Transport Rental
+                                                {{ 'tour-form.fields.category.options.transportRental' | translate }}
                                             </mat-option>
                                         </mat-select>
 
@@ -131,41 +131,62 @@
                                             class="text-danger">
 
                                             <div *ngIf="tourForm.controls['category'].errors?.['required']">
-                                                Category is required
+                                                {{ 'tour-form.fields.category.errors.required' | translate }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Duration</label>
+                                        <label class="form-label">{{ 'tour-form.fields.priceType.label' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.priceType.placeholder' | translate }}"
+                                            formControlName="priceType">
+                                            <mat-option [value]="PriceType.GROUP">{{ 'tour-form.fields.priceType.options.group' | translate }}</mat-option>
+                                            <mat-option [value]="PriceType.INDIVIDUAL">{{ 'tour-form.fields.priceType.options.individual' | translate }}</mat-option>
+                                        </mat-select>
+
+
+                                        <div *ngIf="tourForm.controls['priceType'].invalid && (tourForm.controls['priceType'].dirty || tourForm.controls['priceType'].touched)"
+                                            class="text-danger">
+
+                                            <div *ngIf="tourForm.controls['priceType'].errors?.['required']">
+                                                {{ 'tour-form.fields.priceType.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.duration.label' | translate }}</label>
                                         <input type="text" class="form-control" formControlName="duration"
                                             (blur)="onDurationBlur($event)">
                                         <div *ngIf="tourForm.controls['duration'].invalid && (tourForm.controls['duration'].dirty || tourForm.controls['duration'].touched)"
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['duration'].errors?.['required']">
-                                                Duration is required
+                                                {{ 'tour-form.fields.duration.errors.required' | translate }}
                                             </div>
                                             <div *ngIf="tourForm.controls['duration'].errors?.['minlength']">
-                                                Duration must be at least 3 characters
+                                                {{ 'tour-form.fields.duration.errors.minlength' | translate }}
                                             </div>
+
                                             <div *ngIf="tourForm.controls['duration'].errors?.['maxlength']">
-                                                Duration cannot be more than 50 characters
+                                                {{ 'tour-form.fields.duration.errors.maxlength' | translate }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-6">
+                                <div class="col-lg-4 col-md-6" *ngIf="tourForm.get('priceType')?.value === PriceType.GROUP">
                                     <div class="mb-3">
-                                        <label class="form-label">Total Number Of Peoples</label>
+                                        <label class="form-label">{{ 'tour-form.fields.totalNumberOfPeoples.label' | translate }}</label>
                                         <input type="number" class="form-control" formControlName="totalNumberOfPeoples"
                                             min="1" (keypress)="onKeyPressTotalNumberOfPeople($event)"
                                             (blur)="onTotalNumberOfPeopleBlur($event)">
                                         <div *ngIf="tourForm.controls['totalNumberOfPeoples'].invalid && (tourForm.controls['totalNumberOfPeoples'].dirty || tourForm.controls['totalNumberOfPeoples'].touched)"
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['totalNumberOfPeoples'].errors?.['required']">
-                                                Total Number Of Peoples is required
+                                                {{ 'tour-form.fields.totalNumberOfPeoples.errors.required' | translate }}
                                             </div>
                                         </div>
                                     </div>
@@ -174,13 +195,13 @@
 
                                 <div class="col-lg-4 col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Min Age </label>
+                                        <label class="form-label">{{ 'tour-form.fields.minAge.label' | translate }} </label>
                                         <input type="number" class="form-control" formControlName="minAge" min="0"
                                             (keypress)="onKeyPressMinAge($event)" (blur)="onMinAgeBlur($event)">
                                         <div *ngIf="tourForm.controls['minAge'].invalid && (tourForm.controls['minAge'].dirty || tourForm.controls['minAge'].touched)"
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['minAge'].errors?.['required']">
-                                                Min age is required
+                                                {{ 'tour-form.fields.minAge.errors.required' | translate }}
                                             </div>
                                         </div>
                                     </div>
@@ -191,7 +212,7 @@
 
                     <div class="card shadow-none" id="description">
                         <div class="card-header">
-                            <h5 class="fs-18">Description</h5>
+                            <h5 class="fs-18">{{ 'tour-form.sections.description' | translate }}</h5>
                         </div>
                         <div class="card-body text-editor">
                             <ngx-editor [editor]="editor" formControlName="description"
@@ -217,7 +238,7 @@
                     <div class="card shadow-none" id="locations">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h5 class="fs-18">Locations</h5>
+                                <h5 class="fs-18">{{ 'tour-form.sections.locations' | translate }}</h5>
                             </div>
                         </div>
 
@@ -229,22 +250,22 @@
                                         <div class="col-xl-3 col-md-6">
                                             <div class="mb-3">
 
-                                                <label class="form-label">Type of Address</label>
+                                                <label class="form-label">{{ 'tour-form.fields.typeOfAddress.label' | translate }}</label>
 
-                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.typeOfAddress.placeholder' | translate }}"
                                                     formControlName="typeOfAddress">
                                                     <mat-option
                                                         [disabled]="typeOfAddressIsSelected(TypeOfAddress.MEETING_POINT, i)"
                                                         [value]="TypeOfAddress.MEETING_POINT">
-                                                        Meeting Point
+                                                        {{ 'tour-form.fields.typeOfAddress.options.meetingPoint' | translate }}
                                                     </mat-option>
                                                     <mat-option
                                                         [disabled]="typeOfAddressIsSelected(TypeOfAddress.END_POINT, i)"
-                                                        [value]="TypeOfAddress.END_POINT">End Point</mat-option>
+                                                        [value]="TypeOfAddress.END_POINT">{{ 'tour-form.fields.typeOfAddress.options.endPoint' | translate }}</mat-option>
                                                     <mat-option
                                                         [disabled]="typeOfAddressIsSelected(TypeOfAddress.PICK_UP_POINT, i)"
                                                         [value]="TypeOfAddress.PICK_UP_POINT">
-                                                        Pick Up Point
+                                                        {{ 'tour-form.fields.typeOfAddress.options.pickUpPoint' | translate }}
                                                     </mat-option>
                                                 </mat-select>
 
@@ -252,7 +273,7 @@
                                                     class="text-danger">
 
                                                     <div *ngIf="location.get('typeOfAddress')?.errors?.['required']">
-                                                        Type of address is required
+                                                        {{ 'tour-form.fields.typeOfAddress.errors.required' | translate }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -261,8 +282,8 @@
 
                                         <div class="col-xl-3 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Country</label>
-                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                <label class="form-label">{{ 'tour-form.fields.country.label' | translate }}</label>
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.country.placeholder' | translate }}"
                                                     formControlName="country"
                                                     (valueChange)="onCountryChange($event, i)">
                                                     <mat-option *ngFor="let country of countries"
@@ -272,7 +293,7 @@
                                                 <div *ngIf="location.get('country')?.invalid && (location.get('country')?.dirty || location.get('country')?.touched)"
                                                     class="text-danger">
                                                     <div *ngIf="location.get('country')?.errors?.['required']">
-                                                        Country is required
+                                                        {{ 'tour-form.fields.country.errors.required' | translate }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -280,8 +301,8 @@
 
                                         <div class="col-xl-3 col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Department</label>
-                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                <label class="form-label">{{ 'tour-form.fields.department.label' | translate }}</label>
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.department.placeholder' | translate }}"
                                                     formControlName="department"
                                                     (valueChange)=" onDepartmentChange($event, i)">
                                                     <mat-option *ngFor="let department of departments[i]"
@@ -291,7 +312,7 @@
                                                 <div *ngIf="location.get('department')?.invalid && (location.get('department')?.dirty || location.get('department')?.touched)"
                                                     class="text-danger">
                                                     <div *ngIf="location.get('department')?.errors?.['required']">
-                                                        Department is required
+                                                        {{ 'tour-form.fields.department.errors.required' | translate }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -299,8 +320,8 @@
                                         <div class="col-xl-3 col-md-6">
                                             <div class="mb-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label">City</label>
-                                                    <mat-select class="custom-mat-select select" placeholder="Select"
+                                                    <label class="form-label">{{ 'tour-form.fields.city.label' | translate }}</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.city.placeholder' | translate }}"
                                                         formControlName="city">
                                                         <mat-option *ngFor="let city of cities[i]"
                                                             [value]="city.id">{{city.name}}</mat-option>
@@ -308,7 +329,7 @@
                                                     <div *ngIf="location.get('city')?.invalid && (location.get('city')?.dirty || location.get('city')?.touched)"
                                                         class="text-danger">
                                                         <div *ngIf="location.get('city')?.errors?.['required']">
-                                                            City is required
+                                                            {{ 'tour-form.fields.city.errors.required' | translate }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -317,9 +338,9 @@
 
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Location</label>
+                                                <label class="form-label">{{ 'tour-form.fields.location.label' | translate }}</label>
                                                 <input #addressInput type="text" formControlName="location"
-                                                    class="form-control" placeholder="Enter full address"
+                                                    class="form-control" placeholder="{{ 'tour-form.fields.location.placeholder' | translate }}"
                                                     (blur)="initAutocomplete(i)"
                                                     (change)="onLocationChange($event,i)" />
 
@@ -336,7 +357,7 @@
 
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Address</label>
+                                                <label class="form-label">{{ 'tour-form.fields.address.label' | translate }}</label>
                                                 <textarea class="form-control" minlength="2" maxlength="50"
                                                     formControlName="address" (blur)="onAddressBlur($event, i)">
                                                 </textarea>
@@ -344,14 +365,14 @@
                                                 <div *ngIf="location.get('address')?.invalid && (location.get('address')?.dirty || location.get('address')?.touched)"
                                                     class="text-danger">
                                                     <div *ngIf="location.get('address')?.errors?.['required']">
-                                                        Address is required
+                                                        {{ 'tour-form.fields.address.errors.required' | translate }}
                                                     </div>
 
                                                     <div *ngIf="location.get('address')?.errors?.['minlength']">
-                                                        Address must be at least 3 characters long
+                                                        {{ 'tour-form.fields.address.errors.minlength' | translate }}
                                                     </div>
                                                     <div *ngIf="location.get('address')?.errors?.['maxlength']">
-                                                        Address cannot be more than 50 characters long
+                                                        {{ 'tour-form.fields.address.errors.maxlength' | translate }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -370,7 +391,7 @@
                                     <a *ngIf="locations.length < 3" href="javascript:void(0);"
                                         class="btn btn-primary btn-sm add-highlight" (click)="addLocation()">
                                         <i class="isax isax-add-circle me-1"></i>
-                                        Add New
+                                        {{ 'tour-form.buttons.addNew' | translate }}
                                     </a>
                                 </div>
                             </div>
@@ -381,7 +402,7 @@
                     <div class="card shadow-none" id="activities">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h5 class="fs-18">Main Attractions</h5>
+                                <h5 class="fs-18">{{ 'tour-form.sections.mainAttractions' | translate }}</h5>
                             </div>
                         </div>
                         <div class="card-body">
@@ -391,7 +412,7 @@
                                     <div class="row add-highlight-info">
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Attraction</label>
+                                                <label class="form-label">{{ 'tour-form.fields.attraction.label' | translate }}</label>
                                                 <div class="d-flex align-items-center">
                                                     <input type="text" class="form-control"
                                                         formControlName="description"
@@ -406,7 +427,7 @@
                                                 <div *ngIf="attraction.get('description')?.invalid && (attraction.get('description')?.touched || attraction.get('description')?.dirty)"
                                                     class="text-danger">
                                                     <div *ngIf="attraction.get('description')?.errors?.['required']">
-                                                        Attraction is required.
+                                                        {{ 'tour-form.fields.attraction.errors.required' | translate }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -417,7 +438,7 @@
                                     <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
                                         (click)="addAttraction()">
                                         <i class="isax isax-add-circle me-1"></i>
-                                        Add New
+                                        {{ 'tour-form.buttons.addNew' | translate }}
                                     </a>
                                 </div>
 
@@ -430,7 +451,7 @@
                             <div class="card shadow-none" id="includes">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <h5 class="fs-18">Includes</h5>
+                                        <h5 class="fs-18">{{ 'tour-form.sections.includes' | translate }}</h5>
                                     </div>
                                 </div>
                                 <div class="card-body pb-1">
@@ -441,7 +462,7 @@
                                                 <div class="row add-highlight-info">
                                                     <div class="col-md-12">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Include</label>
+                                                            <label class="form-label">{{ 'tour-form.fields.include.label' | translate }}</label>
                                                             <div class="d-flex align-items-center">
                                                                 <input type="text" class="form-control"
                                                                     formControlName="description"
@@ -456,7 +477,7 @@
                                                                 class="text-danger">
                                                                 <div
                                                                     *ngIf="include.get('description')?.errors?.['required']">
-                                                                    Include is required.
+                                                                    {{ 'tour-form.fields.include.errors.required' | translate }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -467,7 +488,7 @@
                                                 <a href="javascript:void(0);"
                                                     class="btn btn-primary btn-sm add-highlight"
                                                     (click)="addInclude()"><i class="isax isax-add-circle me-1"></i>
-                                                    Add New
+                                                    {{ 'tour-form.buttons.addNew' | translate }}
                                                 </a>
                                             </div>
                                         </div>
@@ -479,7 +500,7 @@
                             <div class="card shadow-none" id="excludes">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <h5 class="fs-18">Excludes</h5>
+                                        <h5 class="fs-18">{{ 'tour-form.sections.excludes' | translate }}</h5>
                                     </div>
                                 </div>
                                 <div class="card-body pb-1">
@@ -490,7 +511,7 @@
                                                 <div class="row add-highlight-info">
                                                     <div class="col-md-12">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Exclude</label>
+                                                            <label class="form-label">{{ 'tour-form.fields.exclude.label' | translate }}</label>
                                                             <div class="d-flex align-items-center">
                                                                 <input type="text" class="form-control"
                                                                     formControlName="description"
@@ -505,7 +526,7 @@
                                                                 class="text-danger">
                                                                 <div
                                                                     *ngIf="exclude.get('description')?.errors?.['required']">
-                                                                    Exclude is required.
+                                                                    {{ 'tour-form.fields.exclude.errors.required' | translate }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -516,7 +537,7 @@
                                                 <a href="javascript:void(0);"
                                                     class="btn btn-primary btn-sm add-highlight" (click)="addExclude()">
                                                     <i class="isax isax-add-circle me-1"></i>
-                                                    Add New
+                                                    {{ 'tour-form.buttons.addNew' | translate }}
                                                 </a>
                                             </div>
                                         </div>
@@ -528,7 +549,7 @@
 
                     <div class="card shadow-none" id="itineraries">
                         <div class="card-header">
-                            <h5 class="fs-18">Itinerary</h5>
+                            <h5 class="fs-18">{{ 'tour-form.sections.itinerary' | translate }}</h5>
                         </div>
                         <div class="card-body">
                             <div formArrayName="itineraries">
@@ -560,7 +581,7 @@
                                 <a href="javascript:void(0);" class="btn btn-primary btn-sm"
                                     (click)="openModal(itineraryModal)">
                                     <i class="isax isax-add-circle me-1"></i>
-                                    Add New
+                                    {{ 'tour-form.buttons.addNew' | translate }}
                                 </a>
                             </div>
                         </div>
@@ -568,7 +589,7 @@
 
                     <div class="card shadow-none" id="faq">
                         <div class="card-header">
-                            <h5 class="fs-18">FAQ</h5>
+                            <h5 class="fs-18">{{ 'tour-form.sections.faq' | translate }}</h5>
                         </div>
                         <div class="card-body">
                             <div formArrayName="faq">
@@ -599,7 +620,7 @@
                             <div>
                                 <a href="javascript:void(0);" class="btn btn-primary btn-sm"
                                     (click)="openModal(faqModal)">
-                                    <i class="isax isax-add-circle me-1"></i>Add New
+                                    <i class="isax isax-add-circle me-1"></i>{{ 'tour-form.buttons.addNew' | translate }}
                                 </a>
                             </div>
                         </div>
@@ -609,7 +630,7 @@
                     <div class="card shadow-none" id="cancellationPolicies">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h5 class="fs-18">Cancellation Policies</h5>
+                                <h5 class="fs-18">{{ 'tour-form.sections.cancellationPolicies' | translate }}</h5>
                             </div>
                         </div>
                         <div class="card-body pb-1">
@@ -621,9 +642,9 @@
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-3">
 
-                                                <label class="form-label">Cancellation policy type</label>
+                                                <label class="form-label">{{ 'tour-form.fields.cancellationPolicyType.label' | translate }}</label>
 
-                                                <mat-select class="custom-mat-select select" placeholder="Select"
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.cancellationPolicyType.placeholder' | translate }}"
                                                     formControlName="cancellationPolicyType"
                                                     (blur)="onCancellationPolicyTypeBlur($event, i)">
                                                     <mat-option [value]="CancellationPolicyType.FLEXIBLE">
@@ -713,7 +734,7 @@
                         <div class="d-flex align-items-center justify-content-end">
                             <button type="submit" class="btn btn-primary"
                                 [disabled]="loading || (submitted && tourForm.touched && tourForm.invalid) || !canEdit">
-                                <span>{{tourId? "Edit tour" : "Add new tour"}}</span>
+                                <span>{{tourId? ('tour-form.buttons.editTour' | translate) : ('tour-form.buttons.addTour' | translate) }}</span>
                                 <div *ngIf="loading" class="spinner-border spinner-border-sm">
                                 </div>
                             </button>

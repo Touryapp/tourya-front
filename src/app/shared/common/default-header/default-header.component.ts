@@ -335,4 +335,14 @@ export class DefaultHeaderComponent {
       });
     }
   }
+
+  /**
+   * Navega a la página de login pasando la URL actual como returnUrl
+   */
+  navigateToLogin(): void {
+    const currentUrl = this.router.url;
+    this.router.navigate(['/login'], {
+      queryParams: { returnUrl: currentUrl }
+    });
+  }
 }
