@@ -1,6 +1,8 @@
 export interface CartItem {
   id: string; // UUID único para el item
-  dayDate: string; // Fecha del día seleccionado (YYYY-MM-DD)
+  dayDate: string; // Fecha del día seleccionado (YYYY-MM-DD) - fecha inicio
+  startDate?: string; // Fecha de inicio del tour (YYYY-MM-DD)
+  endDate?: string; // Fecha de fin del tour (YYYY-MM-DD) - para tours multi-día
   tour: {
     id: number;
     name: string;
