@@ -55,77 +55,73 @@
       </div>
     </div>
 
-    <!-- Days List -->
-    <div class="days-container">
-      <h6 class="section-title">Días de Viaje</h6>
+    <!-- Tours List - Mostrar tours seleccionados como tarjetas -->
+    <div class="tours-container">
+      <h6 class="section-title">
+        <i class="isax isax-routing-2 me-2"></i>
+        Tours Seleccionados
+      </h6>
 
-      <div class="days-scroll">
-        <div class="day-item-wrapper" *ngFor="let day of daySelections; let i = index" [ngClass]="getDayClass(day)"
-          (click)="onDayClick(day)">
-
-          <div class="day-card">
-            <!-- Day Header -->
-            <div class="day-header">
-              <div class="day-info">
-                <div class="day-number">Día {{ day.dayNumber }}</div>
-                <div class="day-details">
-                  <span class="day-name">{{ day.date | date: 'EEEE' }}</span>
-                  <span class="day-date">{{ day.date | date: 'dd MMM' }}</span>
-                </div>
-              </div>
-
-              <div class="day-status">
-                <span class="status-badge" [ngClass]="{ 
-                        'selected': day.isSelected, 
-                        'available': !day.isSelected && day.availableTours > 0,
-                        'no-tours': day.availableTours === 0 
-                      }">
-                  <i class="isax" [ngClass]="{
-                       'isax-tick-circle': day.isSelected,
-                       'isax-add-circle': !day.isSelected && day.availableTours > 0,
-                       'isax-close-circle': day.availableTours === 0
-                     }"></i>
-                </span>
-              </div>
+      <div class="tours-scroll">
+        <!-- Iterar directamente sobre los cartItems del servicio -->
+        <div class="tour-card" *ngFor="let item of getCartItems() | async; let i = index">
+          
+          <!-- Tour Image con badge del día -->
+          <div class="tour-card-image">
+            <img 
+              [src]="getTourImage(item)" 
+              [alt]="i18nService.getValue(item.tour?.name)"
+              (error)="$any($event.target).src='assets/img/tours/default-tour.jpg'"
+              loading="lazy">
+            <div class="day-badge">
+              <i class="isax isax-calendar-1"></i>
+              {{ item.dayDate | date: 'EEE dd MMM' }}
             </div>
+          </div>
 
-            <!-- Tour Selected -->
-            <div class="selected-tour" *ngIf="day.isSelected && day.tourSelected">
-              <div class="tour-info">
-                <div class="tour-name">{{ i18nService.getValue(day.tourSelected.tour.name) }}</div>
-                <div class="tour-image">
-                  <img [src]="day.tourSelected.gallery.at(0)?.imageUrl" alt="{{ i18nService.getValue(day.tourSelected.tour.name) }}">
-                </div>
-                <div class="tour-details">
-                  <span class="tour-time">
-                    {{ day.tourSelected.selectedSlot.startTime }} - {{ day.tourSelected.selectedSlot.endTime }}
-                  </span>
-                  <span class="tour-participants ms-2">
-                    <i class="isax isax-profile-2user me-1"></i>
-                    {{ day.tourSelected.totalParticipants }} personas
-                  </span>
-                </div>
-                <div class="tour-price">
-                  {{ formatPrice(day.tourSelected.totalPrice) }}
-                </div>
-              </div>
-
-              <button class="btn btn-sm btn-outline-danger remove-btn" (click)="removeTourFromDay(day, $event)"
-                title="Remover tour">
+          <!-- Tour Content -->
+          <div class="tour-card-content">
+            <div class="tour-card-header">
+              <h6 class="tour-card-name" [title]="i18nService.getValue(item.tour?.name)">
+                {{ i18nService.getValue(item.tour?.name) }}
+              </h6>
+              <button 
+                class="btn-remove-tour" 
+                (click)="removeCartItem(item, $event)"
+                title="Eliminar tour">
                 <i class="isax isax-trash"></i>
               </button>
             </div>
 
-            <!-- Available Tours Info -->
-            <!-- <div class="available-info" *ngIf="!day.isSelected">
-              <span class="text-muted" *ngIf="day.availableTours > 0">
-                {{ day.availableTours }} tours disponibles
-              </span>
-              <span class="text-muted" *ngIf="day.availableTours === 0">
-                No hay tours disponibles
-              </span>
-            </div> -->
+            <!-- Fecha del itinerario (rango si es multi-día) -->
+            <p class="tour-card-date">
+              <i class="isax isax-calendar-1"></i>
+              <strong>{{ getDateRange(item) }}</strong>
+            </p>
+
+            <!-- Horario -->
+            <p class="tour-card-schedule" *ngIf="item.selectedSlot">
+              <i class="isax isax-clock"></i>
+              {{ item.selectedSlot.startTime }} - {{ item.selectedSlot.endTime }}
+            </p>
+
+            <!-- Participantes -->
+            <p class="tour-card-participants">
+              <i class="isax isax-profile-2user"></i>
+              {{ item.totalParticipants }} persona(s)
+            </p>
+
+            <!-- Precio -->
+            <div class="tour-card-price">
+              {{ formatPrice(item.totalPrice) }}
+            </div>
           </div>
+        </div>
+
+        <!-- Estado vacío si no hay tours -->
+        <div class="no-tours-message" *ngIf="!hasToursSelected()">
+          <i class="isax isax-calendar-search"></i>
+          <p>No hay tours seleccionados aún</p>
         </div>
       </div>
     </div>
@@ -157,17 +153,6 @@
           {{ processing ? 'Cargando...' : 'Continuar' }}
         </button>
       </div>
-    </div>
-
-    <!-- Empty State -->
-    <div class="empty-state" *ngIf="!hasToursSelected()">
-      <div class="empty-icon">
-        <i class="isax isax-calendar-search"></i>
-      </div>
-      <h6>Planifica tu viaje</h6>
-      <p class="text-muted mb-0">
-        Selecciona tours para cada día de tu itinerario haciendo clic en los días disponibles.
-      </p>
     </div>
   </div>
 </div>

@@ -145,7 +145,222 @@
   }
 }
 
-/* Days Container */
+/* Tours Container - Nueva sección para mostrar tours como tarjetas */
+.tours-container {
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: var(--bs-primary);
+    }
+  }
+}
+
+.tours-scroll {
+  max-height: 320px;
+  overflow-y: auto;
+  margin: -4px;
+  padding: 4px;
+
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+}
+
+/* Tour Card - Tarjeta individual de tour */
+.tour-card {
+  display: flex;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+  align-items: flex-start;
+
+  &:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+    transform: translateY(-1px);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Tour Card Image */
+.tour-card-image {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f0f0f0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .day-badge {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+    color: #fff;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 16px 4px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-align: center;
+    line-height: 1.2;
+
+    i {
+      font-size: 9px;
+    }
+  }
+}
+
+/* Tour Card Content */
+.tour-card-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tour-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.tour-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.btn-remove-tour {
+  background: none;
+  border: none;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 2px;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+  line-height: 1;
+
+  &:hover {
+    color: var(--bs-danger);
+  }
+}
+
+.tour-card-schedule,
+.tour-card-participants {
+  font-size: 11px;
+  color: #6c757d;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.3;
+
+  i {
+    font-size: 12px;
+    color: #adb5bd;
+    flex-shrink: 0;
+  }
+}
+
+.tour-card-date {
+  font-size: 12px !important;
+  color: #f89201 !important;
+  margin: 0 0 6px 0 !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.3;
+  background-color: rgba(248, 146, 1, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: fit-content;
+
+  i {
+    font-size: 14px;
+    color: #f89201;
+    flex-shrink: 0;
+  }
+
+  strong {
+    color: #2c3e50;
+    text-transform: capitalize;
+    font-weight: 600;
+  }
+}
+
+.tour-card-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bs-primary);
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* No tours message */
+.no-tours-message {
+  text-align: center;
+  padding: 24px 16px;
+  color: #6c757d;
+
+  i {
+    font-size: 32px;
+    color: #dee2e6;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  p {
+    font-size: 13px;
+    margin: 0;
+  }
+}
+
+/* Days Container - Original (mantenido para referencia si se necesita) */
 .days-container {
   .section-title {
     font-size: 14px;
@@ -177,117 +392,7 @@
   }
 }
 
-/* Day Item */
-.day-item-wrapper {
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: translateX(2px);
-  }
-
-  // &.no-tours {
-  //   cursor: not-allowed;
-  //   opacity: 0.6;
-
-  //   &:hover {
-  //     transform: none;
-  //   }
-  // }
-
-  .day-card {
-    background: #f8f9fa;
-    border: 2px solid transparent;
-    border-radius: 12px;
-    padding: 12px;
-    transition: all 0.2s;
-
-    &:hover {
-      background: #e9ecef;
-    }
-  }
-
-  &.selected .day-card {
-    border-color: #f89201 !important;
-  }
-    
-
-  &.available .day-card {
-    border-color: rgba(var(--bs-success-rgb), 0.3);
-  }
-
-  // &.no-tours .day-card {
-  //   background: #f1f3f4;
-  //   border-color: rgba(var(--bs-secondary-rgb), 0.3);
-  // }
-}
-
-/* Day Header */
-.day-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-
-  .day-info {
-    .day-number {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--bs-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .day-details {
-      display: flex;
-      flex-direction: column;
-      
-      .day-name {
-        font-size: 14px;
-        font-weight: 500;
-        color: #2c3e50;
-      }
-
-      .day-date {
-        font-size: 12px;
-        color: #6c757d;
-      }
-    }
-  }
-
-  .day-status {
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      
-      &.selected {
-        background: var(--bs-primary);
-        color: white;
-      }
-
-      &.available {
-        background: var(--bs-success);
-        color: white;
-      }
-
-      &.no-tours {
-        background: var(--bs-secondary);
-        color: white;
-      }
-
-      i {
-        font-size: 14px;
-      }
-    }
-  }
-}
-
-/* Selected Tour */
+/* Selected Tour - Estilo legacy (ya no se usa, reemplazado por tour-card) */
 .selected-tour {
   display: flex;
   align-items: flex-start;

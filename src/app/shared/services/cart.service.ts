@@ -61,7 +61,37 @@ export class CartService {
     
     console.log('✅ CartService: Emitiendo items actualizados', items.length, 'items');
     this.cartItemsSubject.next(items);
+    this.syncDaySelectionsWithCartItems(items);
     this.updateCartSummary();
+  }
+
+  /**
+   * Sincroniza los daySelections con los items del carrito
+   * Esto asegura que tourSelected esté correctamente vinculado en cada día
+   */
+  private syncDaySelectionsWithCartItems(cartItems: CartItem[]): void {
+    const currentDays = this.daySelectionsSubject.getValue();
+    
+    if (currentDays.length === 0) {
+      console.log('⚠️ CartService: No hay días inicializados, no se puede sincronizar');
+      return;
+    }
+
+    const updatedDays = currentDays.map(day => {
+      // Buscar si hay un item del carrito para este día
+      const cartItem = cartItems.find(item => item.dayDate === day.date);
+      
+      return {
+        ...day,
+        isSelected: !!cartItem,
+        tourSelected: cartItem || undefined
+      };
+    });
+
+    console.log('🔄 CartService: Días sincronizados con carrito:', 
+      updatedDays.filter(d => d.isSelected).length, 'días con tours');
+    
+    this.daySelectionsSubject.next(updatedDays);
   }
 
   /**
@@ -693,8 +723,17 @@ export class CartService {
     try {
       const headers = this.getAuthHeaders();
       
-      // Primero necesitamos obtener el cartId del usuario
-      // Para esto, podemos hacer una llamada a la API o usar el cartId que guardamos
+      // Eliminar el item localmente primero (actualización optimista)
+      const currentItems = this.cartItemsSubject.getValue();
+      const filteredItems = currentItems.filter(item => {
+        const id = typeof item.id === 'string' ? parseInt(item.id, 10) : item.id;
+        return id !== itemId;
+      });
+      
+      // Actualizar UI inmediatamente
+      this.setCartItemsIfChanged(filteredItems);
+      
+      // Luego eliminar del backend
       const cartResponse = await this.http.get(
         `${environment.apiUrl}/shopping-cart/user`,
         { headers }
@@ -707,13 +746,26 @@ export class CartService {
         { headers }
       ).toPromise();
 
-      console.log('Item eliminado del backend:', itemId, 'del cart:', cartId);
+      console.log('✅ Item eliminado del backend:', itemId, 'del cart:', cartId);
       
-      // Recargar carrito después de eliminar
-      await this.loadCartFromBackend();
+      // Recargar para asegurar sincronización
+      this.hasLoadedFromBackend = false; // Forzar recarga
+      await this.loadCartFromBackend(true);
       
-    } catch (error) {
-      console.error('Error eliminando item del carrito:', error);
+    } catch (error: any) {
+      console.error('❌ Error eliminando item del carrito:', error);
+      
+      // Si es 404, el item ya no existe - recargar de todos modos
+      if (error.status === 404) {
+        this.hasLoadedFromBackend = false;
+        await this.loadCartFromBackend(true);
+        return;
+      }
+      
+      // Revertir cambio local en caso de error
+      this.hasLoadedFromBackend = false;
+      await this.loadCartFromBackend(true);
+      
       throw error;
     }
   }
@@ -725,25 +777,27 @@ export class CartService {
     return apiItems.map(item => ({
       id: item.id.toString(), // ✅ API: item.id
       dayDate: item.scheduleDate, // ✅ API: item.scheduleDate
+      startDate: item.startDate || item.scheduleDate, // Fecha inicio del tour
+      endDate: item.endDate || null, // Fecha fin del tour (si es multi-día)
       tour: {
         id: item.productId, // ✅ API: item.productId
         name: item.tourName || 'Tour sin nombre', // ✅ API: item.tourName
-        description: 'Descubre los lugares más emblemáticos de la ciudad en este increíble recorrido', // TODO: API call to /tours/{productId}
-        duration: '8 horas', // TODO: API call to /tours/{productId}
-        rating: 4.5 // TODO: API call to /tours/{productId} - ratings promedio
+        description: item.tourDescription || 'Descubre los lugares más emblemáticos de la ciudad en este increíble recorrido',
+        duration: item.duration || '8 horas',
+        rating: item.rating || 4.5
       },
       schedule: {
         id: item.tourScheduleId, // ✅ API: item.tourScheduleId
         scheduleDate: item.scheduleDate, // ✅ API: item.scheduleDate
-        startTime: '09:00', // TODO: API call to /tour-schedules/{tourScheduleId}
-        endTime: '17:00' // TODO: API call to /tour-schedules/{tourScheduleId}
+        startTime: item.startTime || '09:00',
+        endTime: item.endTime || '17:00'
       },
       selectedSlot: {
         slotId: item.slotId || 0, // ✅ API: item.slotId
-        startTime: '09:00', // TODO: API call to /slots/{slotId}
-        endTime: '17:00', // TODO: API call to /slots/{slotId}
-        minCapacity: 2, // TODO: API call to /slots/{slotId}
-        maxCapacity: 15 // TODO: API call to /slots/{slotId}
+        startTime: item.startTime || '09:00',
+        endTime: item.endTime || '17:00',
+        minCapacity: item.minCapacity || 2,
+        maxCapacity: item.maxCapacity || 15
       },
       participants: item.details.map((detail: any) => ({
         ageType: detail.ageType.name, // ✅ API: detail.ageType.name
@@ -753,19 +807,28 @@ export class CartService {
       totalPrice: item.totalPrice, // ✅ API: item.totalPrice
       totalParticipants: item.details.reduce((sum: number, detail: any) => sum + detail.quantity, 0), // ✅ Calculado
       address: {
-        city: 'Cartagena', // TODO: API call to /tours/{productId} - meetingPoint.city
-        state: 'Bolívar', // TODO: API call to /tours/{productId} - meetingPoint.state
-        country: 'Colombia', // TODO: API call to /tours/{productId} - meetingPoint.country
-        address: 'Plaza de la Aduana, Centro Histórico' // TODO: API call to /tours/{productId} - meetingPoint.address
+        city: item.city || 'Cartagena',
+        state: item.state || 'Bolívar',
+        country: item.country || 'Colombia',
+        address: item.meetingPoint || 'Plaza de la Aduana, Centro Histórico'
       },
-      gallery: [
+      // Usar imagen del tour si viene en la respuesta
+      gallery: item.tourImageUrl ? [
+        { 
+          imageUrl: item.tourImageUrl,
+          description: 'Vista principal del tour',
+          order: 1
+        }
+      ] : item.gallery || [
         { 
           imageUrl: 'assets/img/tours/default-tour.jpg',
           description: 'Vista principal del tour',
           order: 1
         }
-      ] // TODO: API call to /tours/{productId} - gallery images array
-    }));
+      ],
+      // Campo adicional para acceso directo a la imagen
+      tourImageUrl: item.tourImageUrl || item.imageUrl || null
+    } as CartItem & { tourImageUrl?: string }));
   }
 
   /**
