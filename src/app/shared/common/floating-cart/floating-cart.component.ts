@@ -6,10 +6,11 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
-import { Subject, takeUntil, take } from "rxjs";
+import { Subject, takeUntil, take, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { CartService } from "../../services/cart.service";
-import { DaySelection, CartSummary } from "../../dto/cart.dto";
+import { DaySelection, CartSummary, CartItem } from "../../dto/cart.dto";
 import Swal from 'sweetalert2';
 import { I18nFieldService } from "../../services/i18n-field.service";
 
@@ -39,10 +40,19 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * Obtiene los items actuales del carrito
+   * Obtiene los items actuales del carrito ordenados por fecha
    */
-  getCartItems() {
-    return this.cartService.cartItems$;
+  getCartItems(): Observable<CartItem[]> {
+    return this.cartService.cartItems$.pipe(
+      map(items => {
+        // Ordenar por fecha (startDate o dayDate)
+        return [...items].sort((a, b) => {
+          const dateA = new Date(a.startDate || a.dayDate).getTime();
+          const dateB = new Date(b.startDate || b.dayDate).getTime();
+          return dateA - dateB; // Orden ascendente (más antigua primero)
+        });
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -91,6 +101,153 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   removeTourFromDay(day: DaySelection, event: Event): void {
     event.stopPropagation();
     this.cartService.removeItemFromCart(day.date);
+  }
+
+  /**
+   * Remueve un item del carrito directamente
+   */
+  async removeCartItem(item: any, event: Event): Promise<void> {
+    event.stopPropagation();
+    
+    // Guardar el ID antes de eliminar para evitar problemas
+    const itemId = item.id;
+    const itemDate = item.dayDate;
+    
+    if (!itemId && !itemDate) {
+      console.warn('Item sin ID ni fecha, no se puede eliminar');
+      return;
+    }
+    
+    try {
+      // Si tiene ID numérico, eliminar del backend
+      if (itemId) {
+        const numericId = typeof itemId === 'string' ? parseInt(itemId, 10) : itemId;
+        if (!isNaN(numericId)) {
+          console.log('🗑️ Eliminando item del backend:', numericId);
+          await this.cartService.removeCartItemFromBackend(numericId);
+        } else {
+          // ID no numérico, eliminar localmente por fecha
+          console.log('🗑️ Eliminando item local por fecha:', itemDate);
+          this.cartService.removeItemFromCart(itemDate);
+        }
+      } else {
+        // Sin ID, eliminar por fecha
+        console.log('🗑️ Eliminando item por fecha:', itemDate);
+        this.cartService.removeItemFromCart(itemDate);
+      }
+      
+      console.log('✅ Tour eliminado del carrito');
+      
+      // Toast de éxito
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+      Toast.fire({
+        icon: 'success',
+        title: 'Tour eliminado'
+      });
+      
+    } catch (error: any) {
+      console.error('❌ Error eliminando tour:', error);
+      
+      // Si es 404, el item ya no existe - actualizar UI igualmente
+      if (error.status === 404) {
+        console.log('Item ya no existe en backend, actualizando UI...');
+        await this.cartService.reloadCartFromBackend();
+        return;
+      }
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo eliminar el tour. Intenta de nuevo.',
+        confirmButtonColor: '#0d6efd'
+      });
+    }
+  }
+
+  /**
+   * Obtiene la imagen del tour
+   */
+  getTourImage(item: any): string {
+    // Prioridad: gallery > tour.images > tourImageUrl > default
+    
+    // 1. Gallery del item (array de objetos con imageUrl)
+    if (item.gallery && item.gallery.length > 0) {
+      const firstImage = item.gallery[0];
+      const url = firstImage.imageUrl || firstImage.url;
+      if (url && !url.includes('default-tour')) {
+        return url;
+      }
+    }
+    
+    // 2. tourImageUrl directo del item (viene del mapeo de API)
+    if (item.tourImageUrl) {
+      return item.tourImageUrl;
+    }
+    
+    // 3. Verificar si el tour tiene imágenes directamente
+    if (item.tour?.images && item.tour.images.length > 0) {
+      return item.tour.images[0];
+    }
+    
+    // 4. Gallery dentro del tour
+    if (item.tour?.gallery && item.tour.gallery.length > 0) {
+      const url = item.tour.gallery[0].imageUrl || item.tour.gallery[0].url;
+      if (url) return url;
+    }
+    
+    // 5. ImageUrl directo del tour
+    if (item.tour?.imageUrl) {
+      return item.tour.imageUrl;
+    }
+    
+    // 6. Default
+    return 'assets/img/tours/default-tour.jpg';
+  }
+
+  /**
+   * Obtiene el rango de fechas del tour
+   * Si tiene startDate y endDate diferentes, muestra rango
+   * Si no, muestra solo la fecha única
+   */
+  getDateRange(item: any): string {
+    const startDate = item.startDate || item.dayDate;
+    const endDate = item.endDate;
+    
+    const formatDate = (dateStr: string): string => {
+      const date = new Date(dateStr + 'T12:00:00');
+      const options: Intl.DateTimeFormatOptions = { 
+        weekday: 'long', 
+        day: '2-digit', 
+        month: 'long',
+        year: 'numeric'
+      };
+      return date.toLocaleDateString('es-CO', options);
+    };
+
+    const formatShortDate = (dateStr: string): string => {
+      const date = new Date(dateStr + 'T12:00:00');
+      const options: Intl.DateTimeFormatOptions = { 
+        day: '2-digit', 
+        month: 'short'
+      };
+      return date.toLocaleDateString('es-CO', options);
+    };
+
+    // Si tiene fecha de fin y es diferente a la de inicio
+    if (endDate && endDate !== startDate) {
+      const start = formatShortDate(startDate);
+      const end = formatShortDate(endDate);
+      return `${start} al ${end}`;
+    }
+    
+    // Solo una fecha
+    return formatDate(startDate);
   }
 
   /**
