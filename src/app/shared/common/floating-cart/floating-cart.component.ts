@@ -47,8 +47,10 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
       map(items => {
         // Ordenar por fecha (startDate o dayDate)
         return [...items].sort((a, b) => {
-          const dateA = new Date(a.startDate || a.dayDate).getTime();
-          const dateB = new Date(b.startDate || b.dayDate).getTime();
+          const itemA = a as any;
+          const itemB = b as any;
+          const dateA = new Date(itemA.startDate || a.dayDate).getTime();
+          const dateB = new Date(itemB.startDate || b.dayDate).getTime();
           return dateA - dateB; // Orden ascendente (más antigua primero)
         });
       })
