@@ -407,43 +407,45 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         console.log('✅ Reagendamiento exitoso:', response);
         this.isProcessing = false;
         
-        Swal.fire({
-          icon: 'success',
-          title: '¡Reagendamiento Exitoso!',
-          html: `
-            <div style="text-align: center;">
-              <p style="font-size: 16px; margin-bottom: 10px;">
-                Tu reserva <strong>${this.data.reservationId}</strong> ha sido reagendada exitosamente.
-              </p>
-              <div style="background-color: #f0f9ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                <p style="margin: 5px 0; color: #0369a1;">
-                  <strong>📅 Nueva fecha:</strong> ${dayjs(newDate).format('DD/MM/YYYY')}
-                </p>
-                <p style="margin: 5px 0; color: #0369a1;">
-                  <strong>⏰ Horario:</strong> ${this.selectedSlot?.startTime} - ${this.selectedSlot?.endTime}
-                </p>
-              </div>
-              <p style="font-size: 14px; color: #666;">
-                Puedes ver los detalles en "Mis Reservas"
-              </p>
-            </div>
-          `,
-          confirmButtonText: 'Ver Mis Reservas',
-          confirmButtonColor: '#3085d6',
-          showClass: {
-            popup: 'animate__animated animate__fadeInDown'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-          }
+        // Cerrar el modal inmediatamente
+        this.dialogRef.close();
+        
+        // Navegar a la sección de reservas (bookings)
+        this.router.navigate(['/clients/my-profile'], { 
+          queryParams: { section: 'bookings' }
         }).then(() => {
-          // Cerrar el modal
-          this.dialogRef.close();
+          // Mostrar mensaje de éxito después de navegar
+          console.log('� Intentando mostrar modal de éxito...');
           
-          // Navegar a la sección de reservas (bookings)
-          this.router.navigate(['/clients/my-profile'], { 
-            queryParams: { section: 'bookings' }
-          });
+          try {
+            Swal.fire({
+              icon: 'success',
+              title: '¡Reagendamiento Exitoso!',
+              html: `
+                <div style="text-align: center;">
+                  <p style="font-size: 16px; margin-bottom: 10px;">
+                    Tu reserva <strong>${this.data.reservationId}</strong> ha sido reagendada exitosamente.
+                  </p>
+                  <div style="background-color: #f0f9ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <p style="margin: 5px 0; color: #0369a1;">
+                      <strong>📅 Nueva fecha:</strong> ${dayjs(newDate).format('DD/MM/YYYY')}
+                    </p>
+                    <p style="margin: 5px 0; color: #0369a1;">
+                      <strong>⏰ Horario:</strong> ${this.selectedSlot?.startTime} - ${this.selectedSlot?.endTime}
+                    </p>
+                  </div>
+                  <p style="font-size: 14px; color: #666;">
+                    Los detalles se han actualizado en "Mis Reservas"
+                  </p>
+                </div>
+              `,
+              confirmButtonText: 'Entendido',
+              confirmButtonColor: '#3085d6'
+            });
+            console.log('✅ Swal.fire() llamado exitosamente');
+          } catch (error) {
+            console.error('❌ Error al mostrar Swal:', error);
+          }
         });
       },
       error: (error) => {
