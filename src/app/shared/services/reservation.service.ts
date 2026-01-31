@@ -34,12 +34,38 @@ export class ReservationService {
   }
 
   /**
-   * Cancela una reserva
+   * Cancela una reserva con un motivo específico
    * @param reservationId ID de la reserva a cancelar
+   * @param cancellationReason Motivo de la cancelación (RAIN o CANNOT_ATTEND)
    * @returns Observable con la reserva cancelada
    */
-  cancelReservation(reservationId: number | string): Observable<Reservation> {
-    return this.http.put<Reservation>(`${this.baseUrl}/${reservationId}/cancel`, {});
+  cancelReservation(
+    reservationId: number | string, 
+    cancellationReason: string
+  ): Observable<Reservation> {
+    const body = {
+      cancellationReason: cancellationReason
+    };
+    return this.http.put<Reservation>(`${this.apiUrl}/reservations/${reservationId}/cancel`, body);
+  }
+
+  /**
+   * Reagenda una reserva
+   * @param reservationId ID de la reserva a reagendar (formato "RES-98" o número)
+   * @param newDate Nueva fecha en formato YYYY-MM-DD
+   * @returns Observable con la reserva reagendada
+   */
+  rescheduleReservation(
+    reservationId: string | number, 
+    newDate: string
+  ): Observable<any> {
+    // Extraer el número de reserva del formato "RES-98" si es necesario
+    const numericId = typeof reservationId === 'string' 
+      ? reservationId.replace('RES-', '') 
+      : reservationId;
+    
+    const body = { newDate };
+    return this.http.put(`${this.apiUrl}/reservations/${numericId}/reschedule`, body);
   }
 
   /**

@@ -195,15 +195,16 @@
 
           <button type="button" class="btn btn-primary" [disabled]="!isValid || isProcessing" (click)="confirmSelection()">
             <span *ngIf="!isProcessing">
-              <i class="isax isax-add-circle me-1"></i>
-              Agregar al Itinerario
+              <i class="isax isax-add-circle me-1" *ngIf="!isRescheduling"></i>
+              <i class="isax isax-calendar me-1" *ngIf="isRescheduling"></i>
+              {{ isRescheduling ? 'Reagendar' : 'Agregar al Itinerario' }}
               <span *ngIf="totalPrice > 0" class="ms-2">
                 ({{ formatPrice(totalPrice) }})
               </span>
             </span>
             <span *ngIf="isProcessing">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              Agregando...
+              {{ isRescheduling ? 'Reagendando...' : 'Agregando...' }}
             </span>
           </button>
         </div>
