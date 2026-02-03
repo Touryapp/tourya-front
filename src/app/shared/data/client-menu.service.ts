@@ -95,6 +95,17 @@ export class ClientMenuService {
           icon: 'isax-profile-tick5'
         },
         {
+          menuValue: 'Créditos',
+          section: 'credits',
+          hasSubRoute: false,
+          showSubRoute: false,
+          base: 'credits',
+          page: '',
+          last: '',
+          subMenus: [],
+          icon: 'isax-wallet-25'
+        },
+        {
           menuValue: 'Cerrar Sesión',
           route: routes.index,
           hasSubRoute: false,

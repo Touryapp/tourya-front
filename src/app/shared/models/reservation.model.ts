@@ -31,7 +31,7 @@ export interface Reservation {
 export interface ClientReservation {
   reservationId: number;
   reservationDate: string;
-  reservationDeliveryStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED';
+  reservationDeliveryStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED';
   reservationCreatedDate: string;
   paymentId: number;
   paymentTransactionId: string;
@@ -61,6 +61,8 @@ export interface ClientReservation {
   serviceResponsibleName: string;
   serviceResponsibleEmail: string;
   serviceResponsiblePhone: string;
+  maxCancellationDate?: string; // ISO date string - maximum date for cancellation
+  maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
 }
 
 /**

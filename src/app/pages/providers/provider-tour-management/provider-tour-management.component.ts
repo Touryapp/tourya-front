@@ -15,11 +15,17 @@ import { AuthService } from '../../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TourSlotSelectionModalComponent } from '../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component';
+import { SearchToursService } from '../../clients/list-tours/search-tours.service';
+import { TourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
+import { CartItem } from '../../../shared/dto/cart.dto';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
   sNo?: number;
   id: string;
+  tourId?: number; // ID del tour para reagendamiento
   tourName: string;
   tourType: string;
   img: string;
@@ -37,6 +43,8 @@ export interface ProviderTourBooking {
   extraServices?: string[];
   activities?: string[];
   isSelected?: boolean;
+  maxCancellationDate?: string; // ISO date string - maximum date for cancellation
+  maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
 }
 
 @Component({
@@ -87,6 +95,20 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   public reviewComment: string = '';
   public reviewImages: File[] = [];
 
+  // Cancellation modal state
+  public showCancelModal: boolean = false;
+  public cancelModalBooking: any | null = null;
+  public cancellationReason: string = '';
+
+  // Reschedule date selection modal state
+  public showRescheduleDateModal: boolean = false;
+  public rescheduleDateModalBooking: any | null = null;
+  public rescheduleCheckIn: string = '';
+  public rescheduleCheckOut: string = '';
+  public get minDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -95,7 +117,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     private authService: AuthService,
     private translate: TranslateService,
     public i18nService: I18nFieldService,
-    private reviewsService: ReviewsService
+    private reviewsService: ReviewsService,
+    private dialog: MatDialog,
+    private searchToursService: SearchToursService
   ) {}
 
   ngOnInit(): void {
@@ -205,6 +229,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
 
     return {
       id: `RES-${reservation.reservationId}`,
+      tourId: reservation.tourId, // Mapear el ID del tour
       tourName: reservation.tourName || 'N/A',
       tourType: reservation.tourType || 'N/A',
       img: 'tours-21.jpg',
@@ -390,7 +415,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       destination: 'N/A',
       extraServices: [],
       activities: [],
-      isSelected: false
+      isSelected: false,
+      maxCancellationDate: reservation.maxCancellationDate,
+      maxReschedulingDate: reservation.maxReschedulingDate
     };
   }
 
@@ -401,6 +428,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     return {
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
+      tourId: reservation.tourId, // Agregar tourId para reagendamiento
       tourName: this.i18nService.getValue(reservation.tourName),
       tourType: 'Tour', // El API no devuelve tipo de tour
       img: 'tours-21.jpg', // Imagen por defecto
@@ -429,18 +457,21 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       destination: 'N/A', // El API no devuelve destino
       extraServices: [],
       activities: [],
-      isSelected: false
+      isSelected: false,
+      maxCancellationDate: reservation.maxCancellationDate,
+      maxReschedulingDate: reservation.maxReschedulingDate
     };
   }
 
   /**
    * Mapea el estado de la reserva del API al formato de la tabla
    */
-  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED'): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' {
+  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED'): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' {
     const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed'> = {
       'PENDING': 'Pending',
       'DELIVERED': 'Completed',
-      'CANCELLED': 'Cancelled'
+      'CANCELLED': 'Cancelled',
+      'CANCELED': 'Cancelled'  // API usa ortografía americana
     };
     return statusMap[apiStatus] || 'Pending';
   }
@@ -824,10 +855,13 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       case 'view':
         this.viewBookingDetails(booking);
         break;
+      case 'reschedule':
+        // Handle reschedule action directly
+        this.handleReschedule(booking);
+        break;
       case 'cancel':
-        if (confirm('¿Estás seguro de cancelar esta reserva?')) {
-          this.cancelBooking(booking.id);
-        }
+        // Open cancellation modal instead of direct confirmation
+        this.openCancelModal(booking);
         break;
       default:
         console.warn('Acción no reconocida:', actionId);
@@ -1283,6 +1317,222 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       replaceUrl: true
     });
     console.log('🧹 Query params limpiados correctamente');
+  }
+
+  /**
+   * Abre el modal de confirmación de cancelación
+   */
+  public openCancelModal(booking: any): void {
+    this.cancelModalBooking = booking;
+    this.cancellationReason = ''; // Reset reason
+    this.showCancelModal = true;
+  }
+
+  /**
+   * Cierra el modal de confirmación de cancelación
+   */
+  public closeCancelModal(): void {
+    this.showCancelModal = false;
+    this.cancelModalBooking = null;
+    this.cancellationReason = '';
+  }
+
+  /**
+   * Confirma la cancelación de la reserva con el motivo seleccionado
+   */
+  public confirmCancellation(): void {
+    if (!this.cancellationReason) {
+      alert('Por favor selecciona un motivo de cancelación');
+      return;
+    }
+
+    if (!this.cancelModalBooking) {
+      alert('Error: No se encontró la reserva');
+      return;
+    }
+
+    // Mapear el motivo del usuario al valor esperado por el API
+    const reasonMap: { [key: string]: string } = {
+      'Lluvia': 'RAIN',
+      'No puedo disfrutarlo': 'CANNOT_ATTEND'
+    };
+
+    const apiReason = reasonMap[this.cancellationReason];
+    
+    if (!apiReason) {
+      alert('Error: Motivo de cancelación no válido');
+      return;
+    }
+
+    // Extraer el ID numérico del formato "RES-10" o "TB-1001"
+    const numericId = this.cancelModalBooking.id.includes('-') 
+      ? this.cancelModalBooking.id.split('-')[1] 
+      : this.cancelModalBooking.id;
+
+    console.log('🔄 Cancelando reserva:', this.cancelModalBooking.id);
+    console.log('📝 Motivo de cancelación (usuario):', this.cancellationReason);
+    console.log('📝 Motivo de cancelación (API):', apiReason);
+
+    // Llamar al servicio de cancelación con el motivo
+    this.reservationService.cancelReservation(numericId, apiReason).subscribe({
+      next: (response) => {
+        console.log('✅ Reserva cancelada exitosamente:', response);
+        
+        // Actualizar el estado en la tabla local
+        const booking = this.tableData.find(b => b.id === this.cancelModalBooking!.id);
+        if (booking) {
+          booking.status = 'Cancelled';
+        }
+        
+        // Actualizar también en tableDataCopy
+        const bookingCopy = this.tableDataCopy.find(b => b.id === this.cancelModalBooking!.id);
+        if (bookingCopy) {
+          bookingCopy.status = 'Cancelled';
+        }
+        
+        alert(`✅ Reserva ${this.cancelModalBooking!.id} cancelada exitosamente`);
+        
+        // Cerrar el modal
+        this.closeCancelModal();
+      },
+      error: (error) => {
+        console.error('❌ Error al cancelar la reserva:', error);
+        alert('❌ Error al cancelar la reserva. Por favor intenta nuevamente.');
+      }
+    });
+  }
+
+  /**
+   * Maneja la acción de reagendar una reserva
+   */
+  public handleReschedule(booking: any): void {
+    console.log('🔄 Abriendo modal de selección de fechas para:', booking.id);
+    this.openRescheduleDateModal(booking);
+  }
+
+  /**
+   * Abre el modal de selección de fechas para reagendar
+   */
+  public openRescheduleDateModal(booking: any): void {
+    this.rescheduleDateModalBooking = booking;
+    this.rescheduleCheckIn = new Date().toISOString().split('T')[0]; // Fecha de hoy
+    this.rescheduleCheckOut = ''; // Vacío para que el usuario seleccione
+    this.showRescheduleDateModal = true;
+  }
+
+  /**
+   * Cierra el modal de selección de fechas
+   */
+  public closeRescheduleDateModal(): void {
+    this.showRescheduleDateModal = false;
+    this.rescheduleDateModalBooking = null;
+  }
+
+  /**
+   * Confirma las fechas y abre el modal de selección de slots
+   */
+  public confirmRescheduleDates(): void {
+    if (!this.rescheduleDateModalBooking) {
+      alert('Error: No se encontró la reserva');
+      return;
+    }
+
+    if (!this.rescheduleCheckIn || !this.rescheduleCheckOut) {
+      alert('Por favor selecciona las fechas de Check In y Check Out');
+      return;
+    }
+
+    // Comparar fechas como strings (formato YYYY-MM-DD)
+    if (this.rescheduleCheckIn >= this.rescheduleCheckOut) {
+      alert('La fecha de Check Out debe ser posterior a la fecha de Check In');
+      return;
+    }
+
+    // Guardar los datos antes de cerrar el modal
+    const bookingData = this.rescheduleDateModalBooking;
+    const tourId = bookingData.tourId;
+    const checkInStr = this.rescheduleCheckIn;
+    const checkOutStr = this.rescheduleCheckOut;
+
+    console.log('✅ Fechas seleccionadas:', {
+      checkIn: checkInStr,
+      checkOut: checkOutStr,
+      tourId: tourId,
+      bookingData: bookingData // Debug: ver todos los datos
+    });
+
+    // Validar que tengamos el tourId
+    if (!tourId) {
+      console.error('❌ tourId es undefined. Datos de la reserva:', bookingData);
+      alert('Error: No se pudo obtener el ID del tour. Por favor, intenta nuevamente.');
+      return;
+    }
+
+    // Cerrar el modal de fechas
+    this.closeRescheduleDateModal();
+
+    console.log('🔍 Cargando datos del tour desde API...', { tourId, checkInStr, checkOutStr });
+
+    // Cargar el tour específico por ID
+    this.searchToursService.detailTourPublic(tourId).subscribe({
+      next: (tourDetail) => {
+        console.log('✅ Datos del tour cargados:', tourDetail);
+        
+        if (tourDetail) {
+          // Buscar schedules disponibles para las fechas seleccionadas
+          this.searchToursService.searchTours({
+            tourId: tourId,
+            startDate: checkInStr,
+            endDate: checkOutStr
+          }, 1, 10).subscribe({
+            next: (response) => {
+              console.log('✅ Schedules cargados:', response);
+              
+              if (response && response.content && response.content.length > 0) {
+                const tourData: TourScheduleResponseDto = response.content[0];
+                
+                console.log('🎯 Abriendo modal de slots con datos completos:', tourData);
+                
+                // Abrir el modal de selección de slots con los datos completos
+                const dialogRef = this.dialog.open(TourSlotSelectionModalComponent, {
+                  width: '600px',
+                  data: {
+                    tour: tourData,
+                    checkIn: checkInStr,
+                    checkOut: checkOutStr,
+                    isRescheduling: true, // Indicar que es flujo de reagendamiento
+                    reservationId: bookingData.id, // ID de la reserva para el API
+                    originalPrice: parseFloat(bookingData.price.replace('$', '').replace(',', '')), // Precio original
+                    tourAdded: (cartItem: CartItem) => {
+                      console.log('✅ Nueva fecha/slot seleccionado:', cartItem);
+                      // El callback ya no se usa aquí, la lógica está en el modal
+                    }
+                  }
+                });
+                
+                dialogRef.afterClosed().subscribe(() => {
+                  console.log('Modal de slots cerrado');
+                });
+              } else {
+                console.error('❌ No se encontraron horarios disponibles para las fechas seleccionadas');
+                alert('No hay horarios disponibles para las fechas seleccionadas. Por favor, intenta con otras fechas.');
+              }
+            },
+            error: (error) => {
+              console.error('❌ Error cargando schedules:', error);
+              alert('Error al cargar los horarios disponibles. Por favor, intenta nuevamente.');
+            }
+          });
+        } else {
+          console.error('❌ No se encontraron datos del tour');
+          alert('No se pudo cargar la información del tour. Por favor, intenta nuevamente.');
+        }
+      },
+      error: (error) => {
+        console.error('❌ Error cargando datos del tour:', error);
+        alert('Error al cargar la información del tour. Por favor, intenta nuevamente.');
+      }
+    });
   }
 }
 

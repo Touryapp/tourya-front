@@ -501,3 +501,132 @@
     </div>
 }
 <!-- /Review Modal -->
+
+<!-- Cancellation Confirmation Modal -->
+@if (showCancelModal && cancelModalBooking) {
+    <!-- Backdrop -->
+    <div class="modal-backdrop fade show" style="z-index: 1050;"></div>
+    
+    <!-- Modal -->
+    <div class="modal fade show d-block" tabindex="-1" style="z-index: 1055;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cancelar Reserva</h5>
+                    <button type="button" class="btn-close" (click)="closeCancelModal()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Booking Info -->
+                    <div class="mb-3 p-3 bg-light rounded">
+                        <h6 class="mb-1">{{ cancelModalBooking.tourName }}</h6>
+                        <p class="fs-14 text-muted mb-0">
+                            <i class="isax isax-receipt-text me-1"></i>Reserva: {{ cancelModalBooking.id }}
+                        </p>
+                    </div>
+
+                    <!-- Confirmation Message -->
+                    <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                        <i class="isax isax-warning-2 fs-4 me-2"></i>
+                        <div>
+                            <strong>¿Estás seguro de cancelar esta reserva?</strong>
+                            <p class="mb-0 fs-14">Esta acción no se puede deshacer.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cancellation Reason -->
+                    <div class="mb-3">
+                        <label class="form-label">Motivo de cancelación <span class="text-danger">*</span></label>
+                        <select 
+                            class="form-select" 
+                            [(ngModel)]="cancellationReason"
+                            required>
+                            <option value="" disabled selected>Selecciona un motivo</option>
+                            <option value="Lluvia">Lluvia</option>
+                            <option value="No puedo disfrutarlo">No puedo disfrutarlo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeCancelModal()">
+                        Volver
+                    </button>
+                    <button type="button" class="btn btn-danger" (click)="confirmCancellation()">
+                        <i class="isax isax-close-circle me-1"></i>Confirmar Cancelación
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- /Cancellation Confirmation Modal -->
+
+<!-- Reschedule Date Selection Modal -->
+@if (showRescheduleDateModal && rescheduleDateModalBooking) {
+    <!-- Backdrop -->
+    <div class="modal-backdrop fade show" style="z-index: 1050;"></div>
+    
+    <!-- Modal -->
+    <div class="modal fade show d-block" tabindex="-1" style="z-index: 1055;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reagendar Reserva</h5>
+                    <button type="button" class="btn-close" (click)="closeRescheduleDateModal()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Booking Info -->
+                    <div class="mb-3 p-3 bg-light rounded">
+                        <h6 class="mb-1">{{ rescheduleDateModalBooking.tourName }}</h6>
+                        <p class="fs-14 text-muted mb-0">
+                            <i class="isax isax-receipt-text me-1"></i>Reserva: {{ rescheduleDateModalBooking.id }}
+                        </p>
+                    </div>
+
+                    <!-- Information Message -->
+                    <div class="alert alert-info d-flex align-items-center mb-3" role="alert">
+                        <i class="isax isax-calendar fs-4 me-2"></i>
+                        <div>
+                            <strong>Selecciona las nuevas fechas</strong>
+                            <p class="mb-0 fs-14">Elige las fechas de Check In y Check Out para tu tour.</p>
+                        </div>
+                    </div>
+
+                    <!-- Date Inputs -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Check In <span class="text-danger">*</span></label>
+                                <input 
+                                    type="date" 
+                                    class="form-control" 
+                                    [(ngModel)]="rescheduleCheckIn"
+                                    [min]="minDate"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Check Out <span class="text-danger">*</span></label>
+                                <input 
+                                    type="date" 
+                                    class="form-control" 
+                                    [(ngModel)]="rescheduleCheckOut"
+                                    [min]="rescheduleCheckIn"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeRescheduleDateModal()">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-warning" (click)="confirmRescheduleDates()">
+                        <i class="isax isax-calendar me-1"></i>Continuar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- /Reschedule Date Selection Modal -->

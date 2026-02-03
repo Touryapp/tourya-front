@@ -154,11 +154,38 @@ export class BookingManagementConfigService {
           visible: (row) => true // Siempre visible
         },
         {
+          id: 'reschedule',
+          label: 'Reagendar',
+          icon: 'fa fa-calendar',
+          color: 'warning',
+          visible: (row) => {
+            // Check if status is Pending
+            const isPending = row.status === 'Pending' || row.status === 'PENDING';
+            
+            // Check if current date is before maxReschedulingDate
+            const isBeforeReschedulingDate = row.maxReschedulingDate 
+              ? new Date() < new Date(row.maxReschedulingDate)
+              : false;
+            
+            return isPending && isBeforeReschedulingDate;
+          }
+        },
+        {
           id: 'cancel',
           label: 'Cancelar',
           icon: 'fa fa-times-circle',
           color: 'danger',
-          visible: (row) => row.status === 'Upcoming' || row.status === 'Pending' || row.status === 'Confirmed'
+          visible: (row) => {
+            // Check if status is Pending
+            const isPending = row.status === 'Pending' || row.status === 'PENDING';
+            
+            // Check if current date is before maxCancellationDate
+            const isBeforeCancellationDate = row.maxCancellationDate 
+              ? new Date() < new Date(row.maxCancellationDate)
+              : false;
+            
+            return isPending && isBeforeCancellationDate;
+          }
         }
       ],
       filters: [
@@ -294,13 +321,6 @@ export class BookingManagementConfigService {
           icon: 'fa fa-flag-checkered',
           color: 'primary',
           visible: (row) => row.status === 'Confirmed' || row.status === 'Upcoming'
-        },
-        {
-          id: 'cancel',
-          label: 'Cancelar',
-          icon: 'fa fa-times-circle',
-          color: 'danger',
-          visible: (row) => row.status === 'Pending' || row.status === 'Confirmed' || row.status === 'Upcoming'
         }
       ],
       filters: [

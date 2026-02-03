@@ -30,6 +30,7 @@ import { AuthService } from "../../../core/services/auth.service";
 import { PendingActionService, PendingCartAction } from "../../services/pending-action.service";
 import Swal from "sweetalert2";
 import { I18nFieldService } from "../../services/i18n-field.service";
+import { ReservationService } from "../../services/reservation.service";
 
 @Component({
   selector: "app-tour-slot-selection-modal",
@@ -66,6 +67,9 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   totalParticipants: number = 0;
   totalPrice: number = 0;
 
+  // Rescheduling mode
+  isRescheduling: boolean = false;
+
   customOptions: OwlOptions = {
     loop: false,
     mouseDrag: true,
@@ -98,6 +102,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private pendingActionService: PendingActionService,
     public i18nService: I18nFieldService,
+    private reservationService: ReservationService, // Para reagendamiento
     public dialogRef: MatDialogRef<TourSlotSelectionModalComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -105,11 +110,15 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       dayDate: string;
       checkIn: string;
       checkOut: string;
+      isRescheduling?: boolean; // Flag para indicar modo de reagendamiento
+      reservationId?: string; // ID de la reserva para reagendar
+      originalPrice?: number; // Precio original de la reserva
       tourAdded: (cartItem: CartItem) => void;
     }
   ) {
     this.selectedTour = data.tour;
     this.selectedDay = data.dayDate;
+    this.isRescheduling = data.isRescheduling || false; // Inicializar flag
     // this.availableSlots = this.cartService.convertToSlotsWithPrices(data.tour);
 
     this.resetSelection();
@@ -299,7 +308,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Confirma la selección y agrega al carrito
+   * Confirma la selección y agrega al carrito o reagenda
    */
   async confirmSelection(): Promise<void> {
     console.log('🚀 ============ INICIO DE confirmSelection() ============');
@@ -307,7 +316,8 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       isValid: this.isValid,
       hasTour: !!this.selectedTour,
       hasSlot: !!this.selectedSlot,
-      isProcessing: this.isProcessing
+      isProcessing: this.isProcessing,
+      isRescheduling: this.isRescheduling
     });
     
     if (!this.isValid || !this.selectedTour || !this.selectedSlot) {
@@ -316,6 +326,13 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         hasTour: !!this.selectedTour, 
         hasSlot: !!this.selectedSlot 
       });
+      return;
+    }
+
+    // Si es modo reagendamiento, manejar diferente
+    if (this.isRescheduling) {
+      console.log('🔄 Modo reagendamiento activado');
+      await this.handleReschedule();
       return;
     }
 
@@ -340,6 +357,109 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     console.log('✅ Usuario autenticado - llamando addToCartInternal()...');
     await this.addToCartInternal();
     console.log('🏁 ============ FIN DE confirmSelection() ============');
+  }
+
+  /**
+   * Maneja el flujo de reagendamiento
+   */
+  private async handleReschedule(): Promise<void> {
+    console.log('🔄 Iniciando proceso de reagendamiento...');
+    
+    // Validar que tengamos los datos necesarios
+    if (!this.data.reservationId || !this.selectedDate) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Faltan datos para reagendar la reserva'
+      });
+      return;
+    }
+
+    // Validar precio: el nuevo precio debe ser menor o igual al original
+    const originalPrice = this.data.originalPrice || 0;
+    const newPrice = this.totalPrice;
+
+    console.log('💰 Validación de precios:', {
+      originalPrice,
+      newPrice,
+      isValid: newPrice <= originalPrice
+    });
+
+    if (newPrice > originalPrice) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Precio mayor',
+        text: `El nuevo precio ($${newPrice.toFixed(2)}) es mayor al precio original ($${originalPrice.toFixed(2)}). No se puede reagendar.`,
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
+    // Formatear la fecha seleccionada
+    const newDate = dayjs(this.selectedDate).format('YYYY-MM-DD');
+    
+    console.log('📅 Reagendando a:', newDate);
+
+    this.isProcessing = true;
+
+    this.reservationService.rescheduleReservation(this.data.reservationId, newDate).subscribe({
+      next: (response) => {
+        console.log('✅ Reagendamiento exitoso:', response);
+        this.isProcessing = false;
+        
+        // Cerrar el modal inmediatamente
+        this.dialogRef.close();
+        
+        // Navegar a la sección de reservas (bookings)
+        this.router.navigate(['/clients/my-profile'], { 
+          queryParams: { section: 'bookings' }
+        }).then(() => {
+          // Mostrar mensaje de éxito después de navegar
+          console.log('� Intentando mostrar modal de éxito...');
+          
+          try {
+            Swal.fire({
+              icon: 'success',
+              title: '¡Reagendamiento Exitoso!',
+              html: `
+                <div style="text-align: center;">
+                  <p style="font-size: 16px; margin-bottom: 10px;">
+                    Tu reserva <strong>${this.data.reservationId}</strong> ha sido reagendada exitosamente.
+                  </p>
+                  <div style="background-color: #f0f9ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <p style="margin: 5px 0; color: #0369a1;">
+                      <strong>📅 Nueva fecha:</strong> ${dayjs(newDate).format('DD/MM/YYYY')}
+                    </p>
+                    <p style="margin: 5px 0; color: #0369a1;">
+                      <strong>⏰ Horario:</strong> ${this.selectedSlot?.startTime} - ${this.selectedSlot?.endTime}
+                    </p>
+                  </div>
+                  <p style="font-size: 14px; color: #666;">
+                    Los detalles se han actualizado en "Mis Reservas"
+                  </p>
+                </div>
+              `,
+              confirmButtonText: 'Entendido',
+              confirmButtonColor: '#3085d6'
+            });
+            console.log('✅ Swal.fire() llamado exitosamente');
+          } catch (error) {
+            console.error('❌ Error al mostrar Swal:', error);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('❌ Error al reagendar:', error);
+        this.isProcessing = false;
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.error?.message || 'No se pudo reagendar la reserva. Por favor, intenta nuevamente.',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    });
   }
 
   /**
