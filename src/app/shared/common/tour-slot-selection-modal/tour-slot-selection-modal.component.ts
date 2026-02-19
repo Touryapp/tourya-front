@@ -143,7 +143,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
               endDateDayjs.toDate()
             );
 
-            const scheduleDates = this.selectedTour.schedules.map(
+            const scheduleDates = (this.selectedTour.schedules || []).map(
               (schedule) => {
                 return dayjs(schedule.scheduleDate).format("YYYY-MM-DD");
               }
@@ -200,11 +200,9 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    */
   selectSlot(slot: SlotDto): void {
     this.selectedSlot = slot;
-    if (slot.prices) {
-      this.participants = this.cartService.createParticipantSelections(
-        slot.prices
-      );
-    }
+    this.participants = this.cartService.createParticipantSelections(
+      slot.prices ?? []
+    );
     this.updateValidation();
   }
 
@@ -253,6 +251,8 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    */
   private canAddParticipant(): boolean {
     if (!this.selectedSlot) return false;
+    // Si no hay límite definido (null/undefined/0), permitir agregar
+    if (!this.selectedSlot.maxCapacity) return true;
     return this.totalParticipants < this.selectedSlot.maxCapacity;
   }
 
