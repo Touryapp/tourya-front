@@ -161,7 +161,7 @@ export class CartService {
 
     const updatedDays = currentDays.map((day) => {
       const toursForDay = tours.filter((tour) => {
-        const tourDates = tour.schedules.map((schedule) => {
+        const tourDates = (tour.schedules || []).map((schedule) => {
           return new Date(schedule.scheduleDate || "")
             .toISOString()
             .split("T")[0];
@@ -403,7 +403,7 @@ export class CartService {
     tour: TourScheduleResponseDto,
     date: string
   ): SlotDto[] {
-    const schedule = tour.schedules.find((schedule) => {
+    const schedule = (tour.schedules || []).find((schedule) => {
       return (
         dayjs(schedule.scheduleDate).format("YYYY-MM-DD") ===
         dayjs(date).format("YYYY-MM-DD")
@@ -426,7 +426,7 @@ export class CartService {
       SENIOR: "Senior",
     };
 
-    return slotPrices.map((price) => ({
+    return (slotPrices || []).map((price) => ({
       ageType: price.ageType,
       label: ageTypeLabels[price.ageType] || price.ageType,
       minAge: price.minAge,
