@@ -886,11 +886,6 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           this.completeBooking(booking.id);
         }
         break;
-      case 'cancel':
-        if (confirm('¿Estás seguro de cancelar esta reserva?')) {
-          this.cancelBooking(booking.id);
-        }
-        break;
       default:
         console.warn('Acción no reconocida:', actionId);
     }
@@ -914,11 +909,6 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         if (confirm('¿Suspender esta reserva?')) {
           booking.status = 'Cancelled';
           alert('Reserva suspendida');
-        }
-        break;
-      case 'cancel':
-        if (confirm('¿Cancelar esta reserva?')) {
-          this.cancelBooking(booking.id);
         }
         break;
       case 'delete':
@@ -1354,7 +1344,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Mapear el motivo del usuario al valor esperado por el API
     const reasonMap: { [key: string]: string } = {
       'Lluvia': 'RAIN',
-      'No puedo disfrutarlo': 'CANNOT_ATTEND'
+      'No puedo disfrutarlo': 'CANNOT_ATTEND',
+      'no puede disfrutarlo': 'CANNOT_ATTEND',
+      'No puede disfrutarlo': 'CANNOT_ATTEND'
     };
 
     const apiReason = reasonMap[this.cancellationReason];
@@ -1400,6 +1392,30 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         alert('❌ Error al cancelar la reserva. Por favor intenta nuevamente.');
       }
     });
+  }
+
+  /**
+   * Verifica si la reserva se puede cancelar basado en su estado y fecha máxima.
+   */
+  public canCancel(booking: any): boolean {
+    if (!booking) return false;
+    const isPending = booking.status === 'Pending' || booking.status === 'PENDING';
+    const isBeforeCancellationDate = booking.maxCancellationDate 
+      ? new Date() < new Date(booking.maxCancellationDate)
+      : false;
+    return isPending && isBeforeCancellationDate;
+  }
+
+  /**
+   * Verifica si la reserva se puede reagendar basado en su estado y fecha máxima.
+   */
+  public canReschedule(booking: any): boolean {
+    if (!booking) return false;
+    const isPending = booking.status === 'Pending' || booking.status === 'PENDING';
+    const isBeforeReschedulingDate = booking.maxReschedulingDate 
+      ? new Date() < new Date(booking.maxReschedulingDate)
+      : false;
+    return isPending && isBeforeReschedulingDate;
   }
 
   /**

@@ -419,22 +419,35 @@ export class CartService {
    * Crea configuración inicial de participantes basada en los precios del slot
    */
   createParticipantSelections(slotPrices: any[]): ParticipantSelection[] {
-    const ageTypeLabels: { [key: string]: string } = {
-      ADULT: "Adulto",
-      CHILD: "Niño",
-      INFANT: "Infante",
-      SENIOR: "Senior",
-    };
+    const priceCount = slotPrices.length;
 
-    return (slotPrices || []).map((price) => ({
-      ageType: price.ageType,
-      label: ageTypeLabels[price.ageType] || price.ageType,
-      minAge: price.minAge,
-      maxAge: price.maxAge,
-      price: price.price,
-      quantity: 0,
-      maxQuantity: 10, // Límite por defecto, se puede ajustar según la capacidad del slot
-    }));
+    return (slotPrices || []).map((price) => {
+      let label = "";
+
+      if (price.ageType === 'ADULT') {
+        // Si es el único tipo de precio, usamos "Cualquiera"
+        // Si hay más de un tipo de precio, usamos "Adultos"
+        label = (priceCount > 1) ? "Adultos" : "Cualquiera";
+      } else if (price.ageType === 'CHILD') {
+        label = "Niños";
+      } else if (price.ageType === 'INFANT') {
+        label = "Infantes";
+      } else if (price.ageType === 'SENIOR') {
+        label = "Adultos Mayores";
+      } else {
+        label = price.ageType;
+      }
+
+      return {
+        ageType: price.ageType,
+        label: label,
+        minAge: price.minAge,
+        maxAge: price.maxAge,
+        price: price.price,
+        quantity: 0,
+        maxQuantity: 10, // Límite por defecto, se puede ajustar según la capacidad del slot
+      };
+    });
   }
 
   /**

@@ -479,13 +479,6 @@ export class BookingManagementConfigService {
           visible: (row) => row.status === 'Confirmed' || row.status === 'Upcoming'
         },
         {
-          id: 'cancel',
-          label: 'Cancelar',
-          icon: 'fa fa-times-circle',
-          color: 'danger',
-          visible: (row) => row.status !== 'Cancelled' && row.status !== 'Completed'
-        },
-        {
           id: 'delete',
           label: 'Eliminar',
           icon: 'fa fa-trash',
