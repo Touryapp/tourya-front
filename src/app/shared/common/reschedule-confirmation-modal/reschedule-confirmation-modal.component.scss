@@ -173,6 +173,19 @@
     padding: 6px;
     border-radius: 8px;
   }
+
+  .price-note-higher {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    
+    .warning-title {
+      font-size: 1.1rem;
+    }
+    
+    .warning-text {
+      font-size: 0.95rem;
+    }
+  }
 }
 
 .modal-footer {

@@ -159,15 +159,24 @@ export class BookingManagementConfigService {
           icon: 'fa fa-calendar',
           color: 'warning',
           visible: (row) => {
-            // Check if status is Pending
-            const isPending = row.status === 'Pending' || row.status === 'PENDING';
+            // Use the new canReschedule field from API if available
+            if (row.canReschedule !== undefined) {
+              return row.canReschedule;
+            }
             
-            // Check if current date is before maxReschedulingDate
-            const isBeforeReschedulingDate = row.maxReschedulingDate 
-              ? new Date() < new Date(row.maxReschedulingDate)
-              : false;
+            // Fallback to legacy logic if canReschedule is not present
+            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
             
-            return isPending && isBeforeReschedulingDate;
+            if (!row.maxReschedulingDate) return false;
+            
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            
+            // Robust parsing: appending T00:00:00 ensures local time parsing
+            const limitDate = new Date(row.maxReschedulingDate + 'T00:00:00');
+            limitDate.setHours(0, 0, 0, 0);
+            
+            return isActionable && now <= limitDate;
           }
         },
         {
@@ -176,15 +185,21 @@ export class BookingManagementConfigService {
           icon: 'fa fa-times-circle',
           color: 'danger',
           visible: (row) => {
-            // Check if status is Pending
-            const isPending = row.status === 'Pending' || row.status === 'PENDING';
+            // Check if status is Pending or Rescheduled
+            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
             
-            // Check if current date is before maxCancellationDate
-            const isBeforeCancellationDate = row.maxCancellationDate 
-              ? new Date() < new Date(row.maxCancellationDate)
-              : false;
+            // Check if current date is before or equal to maxCancellationDate
+            // We use startOf('day') for both to ensure same-day comparison works correctly
+            if (!row.maxCancellationDate) return false;
             
-            return isPending && isBeforeCancellationDate;
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            
+            // Robust parsing: appending T00:00:00 ensures local time parsing
+            const limitDate = new Date(row.maxCancellationDate + 'T00:00:00');
+            limitDate.setHours(0, 0, 0, 0);
+            
+            return isActionable && now <= limitDate;
           }
         }
       ],
@@ -313,7 +328,38 @@ export class BookingManagementConfigService {
           label: 'Confirmar',
           icon: 'fa fa-check-circle',
           color: 'success',
-          visible: (row) => row.status === 'Pending'
+          visible: (row) => row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED'
+        },
+        {
+          id: 'reschedule',
+          label: 'Reagendar',
+          icon: 'fa fa-calendar',
+          color: 'warning',
+          visible: (row) => {
+            if (row.canReschedule !== undefined) return row.canReschedule;
+            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
+            if (!row.maxReschedulingDate) return false;
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            const limitDate = new Date(row.maxReschedulingDate + 'T00:00:00');
+            limitDate.setHours(0, 0, 0, 0);
+            return isActionable && now <= limitDate;
+          }
+        },
+        {
+          id: 'cancel',
+          label: 'Cancelar',
+          icon: 'fa fa-times-circle',
+          color: 'danger',
+          visible: (row) => {
+            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
+            if (!row.maxCancellationDate) return false;
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            const limitDate = new Date(row.maxCancellationDate + 'T00:00:00');
+            limitDate.setHours(0, 0, 0, 0);
+            return isActionable && now <= limitDate;
+          }
         },
         {
           id: 'complete',

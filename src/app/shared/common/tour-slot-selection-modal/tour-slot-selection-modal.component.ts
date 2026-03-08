@@ -401,9 +401,15 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         tourName: this.getTourName(),
         newDate: newDateStr,
         newTime: newTime,
+        slotId: this.selectedSlot?.slotId,
+        startTime: this.selectedSlot?.startTime,
+        endTime: this.selectedSlot?.endTime,
         participants: this.participants
           .filter(p => p.quantity > 0)
           .map(p => ({ label: p.label, quantity: p.quantity })),
+        configQuantity: this.participants
+          .filter(p => p.quantity > 0)
+          .map(p => ({ ageType: p.ageType, quantity: p.quantity })),
         newTotalPrice: this.totalPrice,
         originalPrice: originalPrice
       }

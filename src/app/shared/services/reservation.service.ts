@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Reservation, ClientReservation, PaginatedResponse, ConsumeReservationResponse, ReservationDetails } from '../models/reservation.model';
+import { Reservation, ClientReservation, PaginatedResponse, ConsumeReservationResponse, ReservationDetails, RescheduleReservationRequest } from '../models/reservation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -52,19 +52,19 @@ export class ReservationService {
   /**
    * Reagenda una reserva
    * @param reservationId ID de la reserva a reagendar (formato "RES-98" o número)
-   * @param newDate Nueva fecha en formato YYYY-MM-DD
+   * @param body Objeto con los datos de reagendamiento (newDate, slotId, startTime, endTime, configQuantity)
    * @returns Observable con la reserva reagendada
    */
   rescheduleReservation(
     reservationId: string | number, 
-    newDate: string
+    body: RescheduleReservationRequest
   ): Observable<any> {
     // Extraer el número de reserva del formato "RES-98" si es necesario
     const numericId = typeof reservationId === 'string' 
       ? reservationId.replace('RES-', '') 
       : reservationId;
-    
-    const body = { newDate };
+
+    // Se consume el servicio real para el reagendamiento
     return this.http.put(`${this.apiUrl}/reservations/${numericId}/reschedule`, body);
   }
 
