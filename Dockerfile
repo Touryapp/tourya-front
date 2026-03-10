@@ -28,7 +28,7 @@ COPY --from=builder /app/dist/template/browser /usr/share/nginx/html
 #COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 # Exponemos el puerto 80
-EXPOSE 80
+EXPOSE 8080
 
 # Iniciamos nginx
 CMD ["nginx", "-g", "daemon off;"]

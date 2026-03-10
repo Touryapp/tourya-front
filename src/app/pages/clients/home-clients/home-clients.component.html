@@ -52,17 +52,16 @@
                         <h1 class="text-white display-5 mb-2">{{'home.title' | translate}}</h1>
                         <P class="text-white">{{'home.subtitle' | translate}}</P>
                     </div>
-                    <div class="banner-form-tab-six">
-                        <ul class="nav">
-                            <li>
-                                <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab"
-                                    data-bs-target="#Tour">
-                                    <i class="fa-solid fa-camera me-2"></i>Tour
-                                </a>
-                            </li>
-                        </ul>
+                    <!-- Coming Soon badge replacing search form -->
+                    <div class="text-center mt-4">
+                        <div class="d-inline-block bg-white bg-opacity-10 rounded-4 px-5 py-4" style="backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);">
+                            <span class="text-warning fw-semibold text-uppercase d-block mb-2" style="letter-spacing: 3px; font-size: 14px;">Coming Soon</span>
+                            <h2 class="text-white display-4 fw-bold mb-2">Próximamente</h2>
+                            <p class="text-white-50 mb-0 fs-16">Estamos preparando algo increíble para ti</p>
+                        </div>
                     </div>
-                    <div class="banner-form card mb-0">
+                    <!-- Search form hidden for landing page -->
+                    <div class="banner-form card mb-0" style="display: none;">
                         <div class="card-body">
                             <div>
                                 <div class="tab-content">

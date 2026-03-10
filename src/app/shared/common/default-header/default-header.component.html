@@ -249,139 +249,20 @@
                         </a> -->
                     </div>
 
+                    <!-- Navigation links hidden for landing page -->
                     <nav id="mobile-menu" class="d-none d-xl-block">
-                        <ul class="main-nav" [ngClass]="{ 'active': isHovered }">
-                            <ng-container *ngFor="let mainMenus of header">
-                                <!-- Menú simple sin submenús -->
-                                <ng-container *ngIf="!mainMenus.isSubMenu || mainMenus.menu.length === 0">
-                                    <li [class.active]="base === mainMenus.base">
-                                        <a [routerLink]="mainMenus.route">{{mainMenus.tittle}}</a>
-                                    </li>
-                                </ng-container>
-                                
-                                <!-- Menú con submenús -->
-                                <ng-container *ngIf="mainMenus.isSubMenu && mainMenus.menu.length > 0">
-                                    <li class="has-submenu" 
-                                        [class.active]="base === mainMenus.base"
-                                        (mouseenter)="isHovered = true" 
-                                        (mouseleave)="isHovered = false">
-                                        <a href="javascript:void(0);">{{mainMenus.tittle}} 
-                                            <i class="fa-solid fa-angle-down"></i>
-                                        </a>
-                                        <ul class="submenu">
-                                            <ng-container *ngFor="let menu of mainMenus.menu">
-                                                <li [class.active]="base === menu.base || page === menu.base">
-                                                    <a [routerLink]="menu.route">{{menu.menuValue}}</a>
-                                                </li>
-                                            </ng-container>
-                                        </ul>
-                                    </li>
-                                </ng-container>
-                            </ng-container>
+                        <ul class="main-nav">
                         </ul>
                     </nav>
 
-                    <span
-                        *ngIf="['index', 'index-2', 'index-3', 'index-4', 'index-5', 'index-6','pages'].includes(base) ; else defaultheader">
-                        <div *ngIf="base === 'index'" class="header-btn d-flex align-items-center">
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
-                            <div><a href="javascript:void(0);" class="btn btn-white me-3" data-bs-toggle="modal"
-                                    data-bs-target="#login-modal">Iniciar Sesion</a></div>
-                            <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary me-0">Become Expert</a>
-                            <div class="header__hamburger d-xl-none my-auto">
-                                <div class="sidebar-menu" (click)="addmenu()">
-                                    <i class="isax isax-menu5"></i>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-
-
+                    <!-- Header buttons hidden for landing page -->
+                    <div class="header-btn d-flex align-items-center">
                         <div class="header__hamburger d-xl-none my-auto">
                             <div class="sidebar-menu" (click)="addmenu()">
                                 <i class="isax isax-menu5"></i>
                             </div>
                         </div>
-
-
-                    </span>
-                    <ng-template #defaultheader>
-                        <div class="header-btn d-flex align-items-center">
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
-                            <div class="dropdown profile-dropdown">
-                                <a href="javascript:void(0);" class="d-flex align-items-center"
-                                    data-bs-toggle="dropdown">
-                                    <span class="avatar avatar-md me-2">
-                                        <img src="assets/img/users/user-05.jpg" alt="Img"
-                                            class="img-fluid rounded-circle border border-white border-4">
-                                    </span>
-                                    <h6 class="mb-0 fs-16 d-none d-lg-block text-white">{{userDisplayName}}</h6>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                    <li *ngIf="isAdmin">
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.userDashboard">Dashboard</a>
-                                    </li>
-                                    <li *ngIf="isUser">
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.customerHotelBooking">My Booking</a>
-                                    </li>
-                                    <li *ngIf="isUser && !isProvider">
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            href="javascript:void(0);" (click)="navigateToProfileSection('profile')">My Profile</a>
-                                    </li>
-                                    <li *ngIf="isProvider && !isAdmin">
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            href="javascript:void(0);" (click)="navigateToProviderPanel('dashboard')">My Profile</a>
-                                    </li>
-                                    <li *ngIf="isAdmin || isUser || isProvider">
-                                        <hr class="dropdown-divider my-2">
-                                    </li>
-                                    <li *ngIf="isAdmin || isUser || isProvider">
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.profileSettings">Settings</a>
-                                    </li>
-                                    <li *ngIf="isAuthenticated">
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            (click)="logout()">Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="header__hamburger d-xl-none my-auto">
-                                <div class="sidebar-menu" (click)="addmenu()">
-                                    <i class="isax isax-menu5"></i>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                    </ng-template>
+                    </div>
                 </div>
             </div>
         </div>
