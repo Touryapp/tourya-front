@@ -24,11 +24,11 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copiamos la build al directorio por defecto de nginx
 COPY --from=builder /app/dist/template/browser /usr/share/nginx/html
 
-# Copiamos una configuración de nginx custom para SPA (manejo de rutas)
-#COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/nginx.conf
-# Exponemos el puerto 80
-EXPOSE 8080
+# Copiamos el template de nginx
+COPY nginx.conf /etc/nginx/nginx.conf.template
 
-# Iniciamos nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Puerto por defecto (80 para AWS, Cloud Run inyecta 8080 automaticamente)
+ENV PORT=80
+
+# Al arrancar: reemplaza ${PORT} en el template y lanza nginx
+CMD sh -c "envsubst '\$PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
