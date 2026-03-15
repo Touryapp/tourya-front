@@ -1,0 +1,132 @@
+<!-- Credits Management -->
+<div class="provider-tour-management" [ngClass]="{'p-0': mode === 'payment'}">
+    
+    <!-- Header (Hidden in payment mode) -->
+    <div class="card booking-header mb-4" *ngIf="mode === 'profile'">
+        <div class="card-body header-content d-flex align-items-center justify-content-between flex-wrap">
+            <div>
+                <h6>Mis Créditos</h6>
+                <p class="fs-14 text-gray-6 fw-normal">Total de créditos: {{ totalCredits }}</p>
+            </div>
+        </div>
+    </div>
+    <!-- /Header -->
+
+    <!-- Credits List -->
+    <div class="card hotel-list" [ngClass]="{'shadow-none border-0': mode === 'payment'}">
+        <div class="card-body p-0">
+            <div class="list-header d-flex align-items-center justify-content-between flex-wrap p-3" *ngIf="mode === 'profile'">
+                <h6 class="mb-0">Listado de Créditos</h6>
+                
+                <!-- Status Filter -->
+                <div class="d-flex align-items-center">
+                    <span class="fs-14 text-gray-9 fw-medium me-2">Estado:</span>
+                    <select 
+                        class="form-select form-select-sm w-auto" 
+                        (change)="onStatusChange($event)"
+                        [value]="selectedStatus">
+                        <option value="">Todos</option>
+                        <option value="CREATED">{{ 'CREATED' | translate }}</option>
+                        <option value="CANCELED">{{ 'CANCELED' | translate }}</option>
+                        <option value="DELETED">{{ 'DELETED' | translate }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="custom-datatable-filter table-responsive">
+                <table class="table datatable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th *ngIf="mode === 'payment'">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [checked]="allSelected" (change)="toggleSelectAll($event)">
+                                    <label class="form-check-label">Usar</label>
+                                </div>
+                            </th>
+                            <th>id</th>
+                            <th>Id de la Reserva</th>
+                            <th>Valor</th>
+                            <th>Fecha de creación</th>
+                            <th *ngIf="mode === 'profile'">Fecha de expiración</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (credit of tableData; track credit.id) {
+                            <tr [ngClass]="{'selected-row': isSelected(credit.id)}">
+                                <td *ngIf="mode === 'payment'">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" [checked]="isSelected(credit.id)" (change)="toggleCreditSelection(credit.id)">
+                                    </div>
+                                </td>
+                                <td>{{ credit.id }}</td>
+                                <td>{{ credit.reservationId }}</td>
+                                <td>{{ credit.amount | currency:'COP':'symbol':'1.0-0' }}</td>
+                                <td>{{ credit.creationDate | date:'dd/MM/yyyy' }}</td>
+                                <td *ngIf="mode === 'profile'">{{ credit.expirationDate | date:'dd/MM/yyyy' }}</td>
+                                <td>
+                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                          [ngClass]="getStatusClass(credit.status)">
+                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ credit.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                        @if (tableData.length === 0 && !isLoading) {
+                            <tr>
+                                <td [attr.colspan]="mode === 'payment' ? 6 : 6" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="isax isax-box fs-1 mb-3 d-block"></i>
+                                        <h5>No se encontraron créditos</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @if (isLoading) {
+                            <tr>
+                                <td [attr.colspan]="mode === 'payment' ? 6 : 6" class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Cargando...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /Table -->
+
+            <!-- Footer for payment mode -->
+            <div class="p-3 bg-light" *ngIf="mode === 'payment' && tableData.length > 0">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <span class="fw-medium">Seleccionados: {{ selectedCreditsIds.size }}</span>
+                        <span class="ms-3 text-primary fw-bold" *ngIf="totalSelectedAmount > 0">
+                            Total: {{ totalSelectedAmount | currency:'COP':'symbol':'1.0-0' }}
+                        </span>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-secondary btn-sm me-2" [disabled]="isProcessing" (click)="cancelSelection()">
+                            Cancelar
+                        </button>
+                        <button class="btn btn-primary btn-sm" [disabled]="selectedCreditsIds.size === 0 || isExceedingMax || isProcessing" (click)="emitSelectedCredits()">
+                            <span *ngIf="isProcessing" class="spinner-border spinner-border-sm me-1"></span>
+                            Usar Créditos
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Error Message -->
+                <div *ngIf="isExceedingMax" class="text-danger fs-12 mt-2">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    El valor total de los creditos seleccionados es mayor al valor de la reserva, debe ser menor o igual a {{ maxValue | currency:'COP':'symbol':'1.0-0' }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /Credits List -->
+
+</div>
+<!-- /Credits Management -->

@@ -213,6 +213,13 @@ export class ListToursComponent implements OnInit, OnDestroy {
         console.log("💰 Reagendamiento requiere pago - Abriendo carrito automáticamente");
         this.isCartVisible = true;
         
+        // Forzar recarga desde el backend porque la reserva fue modificada
+        this.cartService.reloadCartFromBackend().then(() => {
+          console.log("✅ Carrito recargado para el pago del reagendamiento");
+        }).catch(err => {
+          console.error("❌ Error recargando carrito para el reagendamiento", err);
+        });
+
         // Esperamos un tick para que Angular renderice el componente hijo (ngIf=isVisible)
         // y luego llamamos a su método interno para expandirlo visualmente
         setTimeout(() => {

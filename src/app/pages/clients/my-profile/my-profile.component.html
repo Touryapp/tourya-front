@@ -162,6 +162,15 @@
                     </div>
                 }
                 
+                <!-- Sección: Créditos -->
+                @if (activeSection === 'credits') {
+                    <div class="card shadow-none mb-0 border-0 bg-transparent">
+                        <div class="card-body p-0">
+                            <app-client-credits></app-client-credits>
+                        </div>
+                    </div>
+                }
+                
                 <!-- Sección: Lista de Deseos -->
                 @if (activeSection === 'wishlist') {
                     <div class="card shadow-none mb-0">

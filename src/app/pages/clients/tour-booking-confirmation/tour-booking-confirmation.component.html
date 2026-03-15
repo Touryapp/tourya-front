@@ -104,9 +104,26 @@
                 <label class="form-label text-muted mb-1">Método de Pago</label>
                 <p class="mb-0">{{ getPaymentMethod() }}</p>
               </div>
-              <div class="col-md-4">
-                <label class="form-label text-muted mb-1">Total Pagado</label>
-                <p class="fw-bold text-success mb-0 total-amount">{{ formatPrice(getTotalFromWompi()) }}</p>
+              <div class="col-md-4 text-start text-md-end">
+                <div *ngIf="reservationData.appliedCredits && reservationData.appliedCredits > 0; else noCreditsBreakdown" class="d-flex flex-column align-items-start align-items-md-end">
+                  <div class="mb-1 w-100 d-flex justify-content-between">
+                    <span class="text-muted small">Valor total:</span>
+                    <span class="fw-medium">{{ formatPrice(reservationData.totalAmount || 0) }}</span>
+                  </div>
+                  <div class="mb-2 w-100 d-flex justify-content-between text-success">
+                    <span class="small">Créditos aplicados:</span>
+                    <span class="fw-medium">-{{ formatPrice(reservationData.appliedCredits) }}</span>
+                  </div>
+                  <div class="w-100 d-flex justify-content-between border-top pt-1">
+                    <span class="text-muted fw-bold">Total Pagado:</span>
+                    <span class="fw-bold text-primary">{{ formatPrice(getTotalFromWompi()) }}</span>
+                  </div>
+                </div>
+                <!-- Plantilla por defecto cuando no hay créditos aplicados -->
+                <ng-template #noCreditsBreakdown>
+                  <label class="form-label text-muted mb-1">Total Pagado</label>
+                  <p class="fw-bold text-primary mb-0 total-amount">{{ formatPrice(getTotalFromWompi()) }}</p>
+                </ng-template>
               </div>
             </div>
           </div>

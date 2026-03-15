@@ -6,6 +6,7 @@ import { SharedModule } from '../../../shared/shared-module';
 import { ClientsModule } from '../clients.module';
 import { ProviderTourManagementModule } from '../../providers/provider-tour-management/provider-tour-management.module';
 import { ProviderPanelModule } from '../../providers/provider-panel/provider-panel.module';
+import { ClientCreditsModule } from '../client-credits/client-credits.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ProviderPanelModule } from '../../providers/provider-panel/provider-pan
     MyProfileRoutingModule,
     ClientsModule,
     ProviderTourManagementModule,
-    ProviderPanelModule
+    ProviderPanelModule,
+    ClientCreditsModule
   ]
 })
 export class MyProfileModule { }
