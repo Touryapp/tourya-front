@@ -9,6 +9,8 @@ import { PaymentService } from '../../../shared/services/payment.service';
 import { PaymentResponseDto, WompiResponseDto, ShoppingCartResponseDto } from '../../../shared/dto/payment.dto';
 import { environment } from '../../../../environments/environment';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
+import { CreditService } from '../../../shared/services/credit.service';
+import { ClientCredit } from '../../../shared/models/credit.model';
 
 // Interface for traveler information per tour
 interface TravelerInfo {
@@ -32,6 +34,11 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   // Cart data properties
   cartSummary: CartSummary | null = null;
   cartItems: CartItem[] = [];
+  userCredits: ClientCredit[] = [];
+  selectedCredits: ClientCredit[] = [];
+  appliedCreditsValue = 0;
+  isModalOpen: boolean = false;
+  totalCreditsValue = 0;
   loading = false;
   processing = false;
 
@@ -78,12 +85,14 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     private router: Router,
     private wompiService: WompiService,
     private paymentService: PaymentService,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private creditService: CreditService
   ) {}
 
   ngOnInit(): void {
     console.log('CartSummary: Iniciando componente...');
     this.loadCartData();
+    this.loadUserCredits();
   }
 
   ngOnDestroy(): void {
@@ -151,6 +160,111 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
           console.error('CartSummary: Error cargando items, usando mock data:', error);
         }
       });
+  }
+
+  /**
+   * Carga los créditos disponibles del usuario
+   */
+  private loadUserCredits(): void {
+    this.creditService.getCredits('CREATED')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (credits: ClientCredit[]) => {
+          this.userCredits = credits;
+          this.totalCreditsValue = credits.reduce((acc, credit) => acc + credit.amount, 0);
+          console.log('CartSummary: Créditos cargados:', this.userCredits.length, 'créditos');
+        },
+        error: (error: any) => {
+          console.error('CartSummary: Error cargando créditos:', error);
+        }
+      });
+  }
+
+  /**
+   * Maneja la selección de créditos desde el componente modal
+   */
+  onCreditsSelected(selected: ClientCredit[]): void {
+    if (!selected || selected.length === 0) {
+      this.removeAppliedCredits();
+      this.closeCreditsModal();
+      return;
+    }
+
+    if (!this.cartItems || this.cartItems.length === 0) {
+      alert('No hay items en el carrito para aplicar créditos.');
+      return;
+    }
+
+    this.processing = true;
+    const amountToReserve = selected.reduce((acc, credit) => acc + credit.amount, 0);
+    const creditIds = selected.map(c => c.id);
+    const shoppingCartItemId = parseInt(this.cartItems[0].id, 10);
+
+    const payload = {
+      shoppingCartItemId,
+      amountToReserve,
+      creditIds
+    };
+
+    console.log('Reservando créditos:', payload);
+
+    this.creditService.reserveCredits(payload).subscribe({
+      next: (response) => {
+        console.log('✅ Créditos reservados exitosamente en el backend:', response);
+        this.selectedCredits = selected;
+        this.appliedCreditsValue = amountToReserve;
+        this.isModalOpen = false;
+        this.closeCreditsModal();
+        this.processing = false;
+      },
+      error: (error) => {
+        console.error('❌ Error reservando créditos:', error);
+        
+        // Manejar mensaje de error del backend si existe
+        let errorMessage = 'Error al aplicar los créditos. Por favor intente nuevamente.';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.error && error.error.error) {
+          errorMessage = error.error.error;
+        } else if (typeof error.error === 'string') {
+          errorMessage = error.error;
+        }
+
+        alert(errorMessage);
+        this.processing = false;
+      }
+    });
+  }
+
+  onCreditsCanceled(): void {
+    this.isModalOpen = false;
+    this.closeCreditsModal();
+  }
+
+  private closeCreditsModal(): void {
+    const modalElement = document.getElementById('creditsModal');
+    if (modalElement) {
+      const modalInstance = (window as any).bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+  }
+
+  /**
+   * Resetea los créditos seleccionados
+   */
+  removeAppliedCredits(): void {
+    this.selectedCredits = [];
+    this.appliedCreditsValue = 0;
+  }
+
+  /**
+   * Calcula el total final a pagar restando créditos aplicados
+   */
+  get finalTotalToPay(): number {
+    const total = this.cartSummary?.totalPrice || 0;
+    return Math.max(0, total - this.appliedCreditsValue);
   }
 
   /**
@@ -259,7 +373,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
    */
   private async prepareWompiData(): Promise<WompiCheckoutConfig> {
     try {
-      const totalAmount = this.cartSummary?.totalPrice || 0;
+      const totalAmount = this.finalTotalToPay;
       const amountInCents = this.wompiService.copToCents(totalAmount);
       
       console.log('🔐 Preparando datos de Wompi con backend...');
@@ -381,8 +495,38 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
       alert('No hay items en el carrito para procesar');
       return;
     }
-    
+
     this.processing = true;
+
+    // ✨ Bypass scenario: User has applied credits that cover the ENTIRE cost
+    if (this.finalTotalToPay === 0 && this.appliedCreditsValue > 0) {
+      console.log('CartSummary: El pago está cubierto 100% por créditos. Omitiendo Wompi.');
+      try {
+        // Enviar pago "CREDIT" al backend
+        const reservationData = await this.processPaymentWithBackend({
+          id: '', // Empty Wompi ID since Wompi wasn't called
+          amount_in_cents: 0,
+          currency: 'COP',
+          payment_method_type: 'CREDIT',
+          status: 'APPROVED',
+          created_at: new Date().toISOString()
+        });
+
+        // Navegar a confirmación
+        this.router.navigate(['/clients/tour-booking-confirmation'], {
+          state: { reservationData }
+        }).then(success => {
+          console.log('✅ Navegación exitosa (100% Crédito):', success);
+        });
+
+      } catch (error) {
+        console.error('❌ Error procesando pago 100% crédito:', error);
+        alert('Ocurrió un error al procesar el pago con tus créditos. Por favor contacta a soporte.');
+      } finally {
+        this.processing = false;
+      }
+      return; // Exit method
+    }
     
     try {
       // 3. Preparar datos para Wompi usando endpoint del backend
@@ -528,9 +672,24 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
       const reservationData = await this.paymentService.processPayment(
         wompiResponse,
         activeItems,
-        payerInfo
+        payerInfo,
+        {
+          appliedCreditsValue: this.appliedCreditsValue,
+          finalTotalToPay: this.finalTotalToPay,
+          selectedCredits: this.selectedCredits.map(c => c.id)
+        }
       );
       
+      // Inject fallback values for frontend if backend doesn't return them yet
+      if (reservationData) {
+        if (reservationData.totalAmount === undefined) {
+          reservationData.totalAmount = this.cartSummary?.totalPrice || 0;
+        }
+        if (reservationData.appliedCredits === undefined) {
+          reservationData.appliedCredits = this.appliedCreditsValue;
+        }
+      }
+
       console.log('✅ Reserva creada exitosamente:', reservationData);
       return reservationData;
       

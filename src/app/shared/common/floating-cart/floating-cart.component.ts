@@ -208,8 +208,8 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
       return item.tour.imageUrl;
     }
     
-    // 6. Default
-    return 'assets/img/tours/default-tour.jpg';
+    // 6. Default (Use tours-01.jpg as default-tour.jpg is missing)
+    return 'assets/img/tours/tours-01.jpg';
   }
 
   /**

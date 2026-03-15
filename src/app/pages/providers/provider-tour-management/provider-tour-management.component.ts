@@ -45,6 +45,7 @@ export interface ProviderTourBooking {
   isSelected?: boolean;
   maxCancellationDate?: string; // ISO date string - maximum date for cancellation
   maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
+  canReschedule?: boolean; // New field from API
 }
 
 @Component({
@@ -417,7 +418,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       activities: [],
       isSelected: false,
       maxCancellationDate: reservation.maxCancellationDate,
-      maxReschedulingDate: reservation.maxReschedulingDate
+      maxReschedulingDate: reservation.maxReschedulingDate,
+      canReschedule: reservation.canReschedule
     };
   }
 
@@ -459,16 +461,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       activities: [],
       isSelected: false,
       maxCancellationDate: reservation.maxCancellationDate,
-      maxReschedulingDate: reservation.maxReschedulingDate
+      maxReschedulingDate: reservation.maxReschedulingDate,
+      canReschedule: reservation.canReschedule
     };
   }
 
   /**
    * Mapea el estado de la reserva del API al formato de la tabla
    */
-  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED'): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' {
+  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED' | 'RESCHEDULED'): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' {
     const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed'> = {
       'PENDING': 'Pending',
+      'RESCHEDULED': 'Pending', // Tratamos reagendado como pendiente para acciones
       'DELIVERED': 'Completed',
       'CANCELLED': 'Cancelled',
       'CANCELED': 'Cancelled'  // API usa ortografía americana
@@ -886,10 +890,11 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           this.completeBooking(booking.id);
         }
         break;
+      case 'reschedule':
+        this.handleReschedule(booking);
+        break;
       case 'cancel':
-        if (confirm('¿Estás seguro de cancelar esta reserva?')) {
-          this.cancelBooking(booking.id);
-        }
+        this.openCancelModal(booking);
         break;
       default:
         console.warn('Acción no reconocida:', actionId);
@@ -914,11 +919,6 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         if (confirm('¿Suspender esta reserva?')) {
           booking.status = 'Cancelled';
           alert('Reserva suspendida');
-        }
-        break;
-      case 'cancel':
-        if (confirm('¿Cancelar esta reserva?')) {
-          this.cancelBooking(booking.id);
         }
         break;
       case 'delete':
@@ -1354,7 +1354,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Mapear el motivo del usuario al valor esperado por el API
     const reasonMap: { [key: string]: string } = {
       'Lluvia': 'RAIN',
-      'No puedo disfrutarlo': 'CANNOT_ATTEND'
+      'No puedo disfrutarlo': 'CANNOT_ATTEND',
+      'no puede disfrutarlo': 'CANNOT_ATTEND',
+      'No puede disfrutarlo': 'CANNOT_ATTEND'
     };
 
     const apiReason = reasonMap[this.cancellationReason];
@@ -1400,6 +1402,51 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         alert('❌ Error al cancelar la reserva. Por favor intenta nuevamente.');
       }
     });
+  }
+
+  /**
+   * Verifica si la reserva se puede cancelar basado en su estado y fecha máxima.
+   */
+  public canCancel(booking: any): boolean {
+    if (!booking) return false;
+    const isActionable = booking.status === 'Pending' || booking.status === 'PENDING' || booking.status === 'RESCHEDULED';
+    
+    if (!booking.maxCancellationDate) return false;
+    
+    // Updated robust comparison logic
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    // Appending T00:00:00 ensures the date is parsed in local time
+    const limitDate = new Date(booking.maxCancellationDate + 'T00:00:00');
+    limitDate.setHours(0, 0, 0, 0);
+    
+    return isActionable && now <= limitDate;
+  }
+
+  /**
+   * Verifica si la reserva se puede reagendar basado en su estado y fecha máxima.
+   */
+  public canReschedule(booking: any): boolean {
+    if (!booking) return false;
+    
+    // Use the new canReschedule field from API if available
+    if (booking.canReschedule !== undefined) {
+      return booking.canReschedule;
+    }
+
+    // Fallback to legacy logic
+    const isActionable = booking.status === 'Pending' || booking.status === 'PENDING' || booking.status === 'RESCHEDULED';
+    
+    if (!booking.maxReschedulingDate) return false;
+    
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    
+    // Robust parsing: appending T00:00:00 ensures local time parsing
+    const limitDate = new Date(booking.maxReschedulingDate + 'T00:00:00');
+    limitDate.setHours(0, 0, 0, 0);
+    
+    return isActionable && now <= limitDate;
   }
 
   /**

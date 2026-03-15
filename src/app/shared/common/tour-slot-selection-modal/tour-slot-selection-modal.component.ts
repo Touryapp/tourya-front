@@ -14,7 +14,7 @@ import {
 import { CartService } from "../../services/cart.service";
 import { CarouselModule, OwlOptions } from "ngx-owl-carousel-o";
 import dayjs from "dayjs";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from "@angular/material/dialog";
 import {
   SlotDto,
   TourScheduleResponseDto,
@@ -31,6 +31,7 @@ import { PendingActionService, PendingCartAction } from "../../services/pending-
 import Swal from "sweetalert2";
 import { I18nFieldService } from "../../services/i18n-field.service";
 import { ReservationService } from "../../services/reservation.service";
+import { RescheduleConfirmationModalComponent } from "../reschedule-confirmation-modal/reschedule-confirmation-modal.component";
 
 @Component({
   selector: "app-tour-slot-selection-modal",
@@ -44,7 +45,8 @@ import { ReservationService } from "../../services/reservation.service";
     SlickCarouselModule,
     MatSlideToggleModule,
     ModalModule,
-    CarouselModule
+    CarouselModule,
+    RescheduleConfirmationModalComponent
   ],
 })
 export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
@@ -60,7 +62,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   participants: ParticipantSelection[] = [];
   dates: Date[] = [];
   selectedDate: Date | null = null;
-
+  
   // Validation
   isValid: boolean = false;
   validationErrors: string[] = [];
@@ -103,6 +105,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     private pendingActionService: PendingActionService,
     public i18nService: I18nFieldService,
     private reservationService: ReservationService, // Para reagendamiento
+    private dialog: MatDialog, // Para abrir el modal de confirmación
     public dialogRef: MatDialogRef<TourSlotSelectionModalComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -379,85 +382,45 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     const originalPrice = this.data.originalPrice || 0;
     const newPrice = this.totalPrice;
 
-    console.log('💰 Validación de precios:', {
+    console.log('💰 Resumen de precios:', {
       originalPrice,
-      newPrice,
-      isValid: newPrice <= originalPrice
+      newPrice
     });
 
-    if (newPrice > originalPrice) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Precio mayor',
-        text: `El nuevo precio ($${newPrice.toFixed(2)}) es mayor al precio original ($${originalPrice.toFixed(2)}). No se puede reagendar.`,
-        confirmButtonText: 'Entendido'
-      });
-      return;
-    }
-
     // Formatear la fecha seleccionada
-    const newDate = dayjs(this.selectedDate).format('YYYY-MM-DD');
+    const newDateStr = dayjs(this.selectedDate).format('YYYY-MM-DD');
+    const newTime = `${this.selectedSlot?.startTime || ''} - ${this.selectedSlot?.endTime || ''}`;
     
-    console.log('📅 Reagendando a:', newDate);
+    console.log('📅 Preparando confirmación de reagendamiento para:', newDateStr);
 
-    this.isProcessing = true;
+    // Abrir el modal de confirmación
+    const confirmRef = this.dialog.open(RescheduleConfirmationModalComponent, {
+      width: '500px',
+      data: {
+        reservationId: this.data.reservationId,
+        tourName: this.getTourName(),
+        newDate: newDateStr,
+        newTime: newTime,
+        slotId: this.selectedSlot?.slotId,
+        startTime: this.selectedSlot?.startTime,
+        endTime: this.selectedSlot?.endTime,
+        participants: this.participants
+          .filter(p => p.quantity > 0)
+          .map(p => ({ label: p.label, quantity: p.quantity })),
+        configQuantity: this.participants
+          .filter(p => p.quantity > 0)
+          .map(p => ({ ageType: p.ageType, quantity: p.quantity })),
+        newTotalPrice: this.totalPrice,
+        originalPrice: originalPrice
+      }
+    });
 
-    this.reservationService.rescheduleReservation(this.data.reservationId, newDate).subscribe({
-      next: (response) => {
-        console.log('✅ Reagendamiento exitoso:', response);
-        this.isProcessing = false;
-        
-        // Cerrar el modal inmediatamente
-        this.dialogRef.close();
-        
-        // Navegar a la sección de reservas (bookings)
-        this.router.navigate(['/clients/my-profile'], { 
-          queryParams: { section: 'bookings' }
-        }).then(() => {
-          // Mostrar mensaje de éxito después de navegar
-          console.log('� Intentando mostrar modal de éxito...');
-          
-          try {
-            Swal.fire({
-              icon: 'success',
-              title: '¡Reagendamiento Exitoso!',
-              html: `
-                <div style="text-align: center;">
-                  <p style="font-size: 16px; margin-bottom: 10px;">
-                    Tu reserva <strong>${this.data.reservationId}</strong> ha sido reagendada exitosamente.
-                  </p>
-                  <div style="background-color: #f0f9ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                    <p style="margin: 5px 0; color: #0369a1;">
-                      <strong>📅 Nueva fecha:</strong> ${dayjs(newDate).format('DD/MM/YYYY')}
-                    </p>
-                    <p style="margin: 5px 0; color: #0369a1;">
-                      <strong>⏰ Horario:</strong> ${this.selectedSlot?.startTime} - ${this.selectedSlot?.endTime}
-                    </p>
-                  </div>
-                  <p style="font-size: 14px; color: #666;">
-                    Los detalles se han actualizado en "Mis Reservas"
-                  </p>
-                </div>
-              `,
-              confirmButtonText: 'Entendido',
-              confirmButtonColor: '#3085d6'
-            });
-            console.log('✅ Swal.fire() llamado exitosamente');
-          } catch (error) {
-            console.error('❌ Error al mostrar Swal:', error);
-          }
-        });
-      },
-      error: (error) => {
-        console.error('❌ Error al reagendar:', error);
-        this.isProcessing = false;
-        
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.error?.message || 'No se pudo reagendar la reserva. Por favor, intenta nuevamente.',
-          confirmButtonText: 'Aceptar'
-        });
+    // Cerrar este modal DESPUÉS de abrir el nuevo para evitar que se pierda el contexto
+    this.dialogRef.close();
+
+    confirmRef.afterClosed().subscribe(confirmed => {
+      if (!confirmed) {
+        console.log('❌ Reagendamiento cancelado por el usuario');
       }
     });
   }

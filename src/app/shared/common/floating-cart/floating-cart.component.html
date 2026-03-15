@@ -1,5 +1,5 @@
 <!-- Floating Cart Container -->
-<div class="floating-cart" *ngIf="isVisible && hasDaysAvailable()" [ngClass]="{ 'expanded': isExpanded }">
+<div class="floating-cart" *ngIf="isVisible" [ngClass]="{ 'expanded': isExpanded }">
 
   <!-- Cart Header - Siempre visible -->
   <div class="cart-header" (click)="toggleExpansion()">
@@ -71,7 +71,7 @@
             <img 
               [src]="getTourImage(item)" 
               [alt]="i18nService.getValue(item.tour?.name)"
-              (error)="$any($event.target).src='assets/img/tours/default-tour.jpg'"
+              (error)="$any($event.target).src !== 'assets/img/tours/tours-01.jpg' ? $any($event.target).src='assets/img/tours/tours-01.jpg' : null"
               loading="lazy">
             <div class="day-badge">
               <i class="isax isax-calendar-1"></i>

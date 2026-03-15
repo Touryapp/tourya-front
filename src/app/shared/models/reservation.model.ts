@@ -63,6 +63,7 @@ export interface ClientReservation {
   serviceResponsiblePhone: string;
   maxCancellationDate?: string; // ISO date string - maximum date for cancellation
   maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
+  canReschedule?: boolean; // New field from API
 }
 
 /**
@@ -134,4 +135,18 @@ export interface ReservationDetails {
     email: string;
     phone: string;
   };
+}
+
+/**
+ * Interfaz para la solicitud de reagendamiento de una reserva
+ */
+export interface RescheduleReservationRequest {
+  newDate: string;
+  slotId: number;
+  startTime: string;
+  endTime: string;
+  configQuantity: {
+    ageType: string;
+    quantity: number;
+  }[];
 }

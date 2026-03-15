@@ -389,7 +389,7 @@
                                 @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
                                     <button 
                                         class="btn btn-danger" 
-                                        (click)="cancelBooking(selectedBooking.id)"
+                                        (click)="openCancelModal(selectedBooking)"
                                         data-bs-dismiss="modal">
                                         <i class="isax isax-close-circle me-2"></i>{{ 'provider-tour-management.modal.actions.cancel' | translate }}
                                     </button>

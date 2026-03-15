@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CartSummaryRoutingModule } from './cart-summary-routing.module';
 import { CartSummaryComponent } from './cart-summary.component';
 import { SharedModule } from '../../../shared/shared-module';
+import { ClientCreditsModule } from '../client-credits/client-credits.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { SharedModule } from '../../../shared/shared-module';
     CommonModule,
     FormsModule,
     SharedModule,
-    CartSummaryRoutingModule
+    CartSummaryRoutingModule,
+    ClientCreditsModule
   ]
 })
 export class CartSummaryModule { }

@@ -9,7 +9,13 @@ export interface ReferenceGenerationResponseDto {
 // Payment Request DTO
 export interface PaymentRequestDto {
   transactionId: string;
-  transactionData: string; // Todo el objeto de Wompi como JSON string
+  transactionData?: string | null; // Todo el objeto de Wompi como JSON string, o null si es 100% crédito
+  paymentType: 'PLATFORM' | 'CREDIT' | 'CREDIT_AND_PLATFORM'; // ✨ Nuevo campo
+  amountCredit?: number; // ✨ Nuevo campo
+  amountPlatform?: number; // ✨ Nuevo campo
+  creditData?: {
+    creditIds: number[];
+  }; // ✨ Nuevo campo
   items: PaymentItemDto[];
   payer: PayerDto;
 }
@@ -45,6 +51,8 @@ export interface PaymentResponseDto {
   lastModifiedDate: string;
   createdBy: number;
   lastModifiedBy: number;
+  totalAmount?: number; // ✨ Total original antes de créditos
+  appliedCredits?: number; // ✨ Valor de créditos aplicados
 }
 
 export interface ReservationDto {

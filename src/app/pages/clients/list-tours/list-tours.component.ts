@@ -16,6 +16,7 @@ import {
   CartSummary,
 } from "../../../shared/dto/cart.dto";
 import { TourSlotSelectionModalComponent } from "../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component";
+import { FloatingCartComponent } from "../../../shared/common/floating-cart/floating-cart.component";
 import { Subject, takeUntil, filter } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { PaymentService } from "../../../shared/services/payment.service";
@@ -33,6 +34,7 @@ import Swal from "sweetalert2";
   styleUrl: "./list-tours.component.scss",
 })
 export class ListToursComponent implements OnInit, OnDestroy {
+  @ViewChild(FloatingCartComponent) floatingCart!: FloatingCartComponent;
   public routes = routes;
   public Math = Math; // Para usar Math en el template
 
@@ -206,13 +208,34 @@ export class ListToursComponent implements OnInit, OnDestroy {
         this.cartService.initializeCart(this.checkIn, this.checkOut);
       }
 
+      // IMPORTANTE: Si venimos de un reagendamiento con cobro, abrir carrito automáticamente
+      if (params["action"] === "pay-reschedule") {
+        console.log("💰 Reagendamiento requiere pago - Abriendo carrito automáticamente");
+        this.isCartVisible = true;
+        
+        // Forzar recarga desde el backend porque la reserva fue modificada
+        this.cartService.reloadCartFromBackend().then(() => {
+          console.log("✅ Carrito recargado para el pago del reagendamiento");
+        }).catch(err => {
+          console.error("❌ Error recargando carrito para el reagendamiento", err);
+        });
+
+        // Esperamos un tick para que Angular renderice el componente hijo (ngIf=isVisible)
+        // y luego llamamos a su método interno para expandirlo visualmente
+        setTimeout(() => {
+          if (this.floatingCart) {
+            this.floatingCart.openCart();
+          }
+        }, 100);
+      }
+
       // IMPORTANTE: Verificar si hay acción pendiente ANTES de buscar
       const hasPendingAction = this.pendingActionService.hasPendingAction();
       console.log('🔍 queryParams subscribe - ¿Hay acción pendiente?', hasPendingAction);
       
       if (hasPendingAction) {
         const pendingAction = this.pendingActionService.getPendingCartAction();
-        console.log('� Datos de la acción pendiente:', pendingAction);
+        console.log(' Datos de la acción pendiente:', pendingAction);
       }
       
       // Si recibimos stateId, preseleccionamos una ciudad de ese estado una vez cargadas las locations

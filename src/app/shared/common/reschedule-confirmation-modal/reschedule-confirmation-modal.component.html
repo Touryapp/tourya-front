@@ -1,0 +1,113 @@
+<div class="modal-header border-0 pb-0">
+  <div class="modal-title-section">
+    <h4 class="modal-title">
+      <i class="isax isax-calendar-tick me-2 text-primary"></i>
+      Confirmar Reagendamiento
+    </h4>
+    <p class="modal-subtitle text-muted mb-0">Revisa los detalles antes de continuar</p>
+  </div>
+  <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()" [disabled]="isProcessing"></button>
+</div>
+
+<div class="modal-body p-4">
+  <!-- Tour Summary -->
+  <div class="confirmation-section mb-4">
+    <div class="tour-name-badge mb-3">
+      <h5 class="mb-0 text-primary">{{ data.tourName }}</h5>
+    </div>
+
+    <div class="reschedule-details-grid">
+      <div class="detail-card">
+        <div class="detail-icon">
+          <i class="isax isax-calendar-1"></i>
+        </div>
+        <div class="detail-info">
+          <span class="detail-label">Nueva Fecha</span>
+          <span class="detail-value">{{ formatDate(data.newDate) }}</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-icon">
+          <i class="isax isax-clock"></i>
+        </div>
+        <div class="detail-info">
+          <span class="detail-label">Nuevo Horario</span>
+          <span class="detail-value">{{ data.newTime }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Participants Section -->
+  <div class="confirmation-section mb-4">
+    <h6 class="section-title mb-3">
+      <i class="isax isax-people me-2"></i>
+      Participantes
+    </h6>
+    <div class="participants-summary">
+      <div class="participant-confirm-item" *ngFor="let p of data.participants">
+        <span class="p-label">{{ p.label }}</span>
+        <span class="p-quantity">x{{ p.quantity }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Price Section -->
+  <div class="confirmation-section">
+    <h6 class="section-title mb-3">
+      <i class="isax isax-money-2 me-2"></i>
+      Resumen de Precio
+    </h6>
+    <div class="price-comparison-card">
+      <div class="price-row original">
+        <span class="price-label">Precio Original:</span>
+        <span class="price-value text-muted text-decoration-line-through">{{ formatPrice(data.originalPrice) }}</span>
+      </div>
+      <div class="price-row final">
+        <span class="price-label">Nuevo Precio Final:</span>
+        <span class="price-value highlight">{{ formatPrice(data.newTotalPrice) }}</span>
+      </div>
+      <div class="price-note mt-2" *ngIf="data.newTotalPrice < data.originalPrice">
+        <small class="text-success">
+          <i class="isax isax-info-circle me-1"></i>
+          Diferencia a favor del cliente
+        </small>
+      </div>
+
+      <!-- Nuevo bloque para cuando el precio es MAYOR -->
+      <div class="price-note-higher mt-3 p-2 rounded" *ngIf="data.newTotalPrice > data.originalPrice">
+        <div class="d-flex align-items-center mb-1">
+          <i class="isax isax-warning-2 text-danger fs-5 me-2"></i>
+          <strong class="text-danger warning-title">¡Atención! Nuevo costo adicional</strong>
+        </div>
+        <p class="text-danger mb-2 warning-text">
+          Ya que el nuevo precio es mayor, lo llevaremos al carrito para que realice el pago del excedente.
+        </p>
+        <div class="d-flex justify-content-between align-items-center bg-white px-3 py-2 rounded shadow-sm border border-danger border-opacity-25 mt-2">
+          <span class="text-danger fw-bold" style="font-size: 0.95rem;">Excedente a pagar:</span>
+          <span class="text-danger fw-bolder" style="font-size: 1.15rem;">{{ formatPrice(data.newTotalPrice - data.originalPrice) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer border-0 p-4 pt-0">
+  <div class="footer-actions w-100 d-flex gap-3">
+    <button type="button" class="btn btn-outline-secondary flex-grow-1" (click)="closeModal()" [disabled]="isProcessing">
+      <i class="isax isax-close-square me-1"></i>
+      Cancelar
+    </button>
+    <button type="button" class="btn btn-primary flex-grow-1" (click)="confirmReschedule()" [disabled]="isProcessing">
+      <span *ngIf="!isProcessing">
+        <i class="isax isax-tick-circle me-1"></i>
+        Confirmar Reagendamiento
+      </span>
+      <span *ngIf="isProcessing">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Procesando...
+      </span>
+    </button>
+  </div>
+</div>

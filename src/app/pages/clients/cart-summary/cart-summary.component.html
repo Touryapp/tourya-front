@@ -375,17 +375,62 @@
                         <!-- Price Breakdown -->
                         <div class="price-breakdown" *ngIf="cartSummary">
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Total Items:</span>
-                                <span>{{ cartSummary.totalItems }}</span>
+                                <span>Subtotal:</span>
+                                <span>{{ formatPrice(cartSummary.totalPrice) }}</span>
                             </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Total Participantes:</span>
-                                <span>{{ cartSummary.totalParticipants }}</span>
+                            
+                            <!-- Créditos Disponibles (Aviso) -->
+                            <div class="d-flex justify-content-between align-items-center mb-2" *ngIf="totalCreditsValue > 0 && selectedCredits.length === 0">
+                                <span class="text-success"><i class="fas fa-wallet me-1"></i> Créditos Disponibles:</span>
+                                <span class="text-success">{{ formatPrice(totalCreditsValue) }}</span>
                             </div>
+                            
+                            <!-- Créditos Aplicados -->
+                            <div class="d-flex justify-content-between align-items-center mb-2" *ngIf="selectedCredits.length > 0">
+                                <span class="text-primary"><i class="fas fa-check-circle me-1"></i> Créditos Aplicados:</span>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-primary me-2">-{{ formatPrice(appliedCreditsValue) }}</span>
+                                    <button class="btn btn-sm btn-outline-danger p-0 px-1" (click)="removeAppliedCredits()" title="Remover créditos">
+                                        <i class="fas fa-times fs-10"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info py-2 px-3 mt-2 d-flex justify-content-between align-items-center" *ngIf="totalCreditsValue > 0 && selectedCredits.length === 0">
+                                <div>
+                                    <small><i class="fas fa-info-circle me-1"></i> Tienes créditos que puedes usar en tus reservas.</small>
+                                </div>
+                                <button class="btn btn-sm btn-primary ms-2 btn-credits-square" data-bs-toggle="modal" data-bs-target="#creditsModal" (click)="isModalOpen = true">
+                                    Usar credito
+                                </button>
+                            </div>
+                            
                             <hr>
                             <div class="d-flex justify-content-between mb-3">
                                 <strong>Total a Pagar:</strong>
-                                <strong class="text-primary">{{ formatPrice(cartSummary.totalPrice) }}</strong>
+                                <strong class="text-primary">{{ formatPrice(finalTotalToPay) }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Modal de Créditos -->
+                        <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="creditsModalLabel">Seleccionar Créditos para Usar</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="isModalOpen = false"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <app-client-credits *ngIf="isModalOpen"
+                                            [mode]="'payment'" 
+                                            [creditsAvailable]="userCredits"
+                                            [maxValue]="totalAmount"
+                                            [isProcessing]="processing"
+                                            (useCredits)="onCreditsSelected($any($event))"
+                                            (cancel)="onCreditsCanceled()">
+                                        </app-client-credits>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

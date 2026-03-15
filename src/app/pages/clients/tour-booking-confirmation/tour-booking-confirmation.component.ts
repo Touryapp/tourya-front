@@ -594,6 +594,10 @@ export class TourBookingConfirmationComponent implements OnInit {
     this.wompiData = this.parseWompiData();
     this.initializeReservations(); // ✨ Inicializar reservas
     
+    // Inject mock credits to see UI changes
+    this.reservationData.totalAmount = 52500000 / 100;
+    this.reservationData.appliedCredits = 7000000 / 100;
+
     console.log('✅ Mock data loaded successfully for maquetación:', this.reservationData);
     console.log('✅ Wompi mock data parsed:', this.wompiData);
     console.log(`✅ ${this.totalReservations} reservas mock cargadas`);

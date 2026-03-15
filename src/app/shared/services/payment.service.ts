@@ -49,17 +49,53 @@ export class PaymentService {
    * @param payerInfo - Información del pagador
    */
   async processPayment(
-    wompiResponse: WompiResponseDto,
+    wompiResponse: Partial<WompiResponseDto>,
     cartItems: ShoppingCartItemDto[],
-    payerInfo: any
+    payerInfo: any,
+    creditDetails?: { appliedCreditsValue: number; finalTotalToPay: number; selectedCredits: number[] }
   ): Promise<PaymentResponseDto> {
     try {
       const headers = this.getAuthHeaders();
       
+      // Determinar qué tipo de pago es y los montos relativos
+      let paymentType: 'PLATFORM' | 'CREDIT' | 'CREDIT_AND_PLATFORM' = 'PLATFORM';
+      
+      // Intentar obtener el monto de Wompi (puede venir en snake_case o camelCase)
+      const wompiAmount = wompiResponse.amount_in_cents || wompiResponse['amountInCents'] || 0;
+      let amountPlatform = wompiAmount / 100;
+      let amountCredit = 0;
+      let creditData: { creditIds: number[] } | undefined = undefined;
+
+      // Si tenemos detalles de crédito, usamos los valores calculados en el frontend como prioridad
+      if (creditDetails) {
+        amountCredit = creditDetails.appliedCreditsValue || 0;
+        // El monto de plataforma es lo que sobra por pagar (puede ser 0 si es 100% crédito)
+        amountPlatform = creditDetails.finalTotalToPay;
+        
+        if (creditDetails.selectedCredits && creditDetails.selectedCredits.length > 0) {
+          creditData = { creditIds: creditDetails.selectedCredits };
+          
+          if (amountPlatform === 0) {
+            paymentType = 'CREDIT';
+          } else {
+            paymentType = 'CREDIT_AND_PLATFORM';
+          }
+        } else {
+          paymentType = 'PLATFORM';
+        }
+      } else {
+        // Fallback si no hay creditDetails (pago estándar sin tocar créditos)
+        paymentType = 'PLATFORM';
+      }
+
       // Preparar payload para la API
       const paymentRequest: PaymentRequestDto = {
-        transactionId: wompiResponse.id,
-        transactionData: JSON.stringify(wompiResponse), // Todo el objeto de Wompi como string
+        transactionId: wompiResponse.id || `CREDIT-PAYMENT-${new Date().getTime()}`,
+        transactionData: paymentType === 'CREDIT' ? null : JSON.stringify(wompiResponse),
+        paymentType,
+        amountCredit,
+        amountPlatform,
+        creditData,
         items: cartItems.map(item => ({
           shoppingCartItemId: item.id,
           serviceResponsible: {
