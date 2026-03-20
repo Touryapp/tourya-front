@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentResponseDto, WompiResponseDto, ReservationDto, DeliveryStatus } from '../../../shared/dto/payment.dto';
 import { PaymentService } from '../../../shared/services/payment.service';
+import { ReservationService } from '../../../shared/services/reservation.service';
+import { ClientReservation } from '../../../shared/models/reservation.model';
 import { routes } from '../../../shared/routes/routes';
 
 @Component({
@@ -26,7 +28,8 @@ export class TourBookingConfirmationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public router: Router,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private reservationService: ReservationService
   ) {
     // Obtener datos de la navegación EN EL CONSTRUCTOR
     const navigation = this.router.getCurrentNavigation();
@@ -41,20 +44,112 @@ export class TourBookingConfirmationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Procesar datos que ya se obtuvieron en el constructor
+    // 1. Verificar si vienen datos del estado de navegación (pago con tarjeta/widget directo)
     if (this.reservationData) {
       this.wompiData = this.parseWompiData();
-      this.initializeReservations(); // ✨ Inicializar reservas
+      this.initializeReservations();
       this.loading = false;
-      console.log('✅ Wompi data parsed:', this.wompiData);
-      
-      // Debug completo de la estructura de datos
+      console.log('✅ Datos cargados desde el estado de navegación');
       this.debugReservationData();
     } else {
-      console.log('⚠️ Loading mock data for testing');
-      this.loadMockData();
-      this.loading = false;
+      // 2. Verificar si viene un ID por URL (retorno de redirección PSE/Transferencia)
+      this.route.queryParams.subscribe(params => {
+        const transactionId = params['id'];
+        if (transactionId) {
+          console.log('🔄 Detectado retorno de Wompi con ID:', transactionId);
+          this.recoverTransaction(transactionId);
+        } else {
+          // 3. Fallback a mock data solo si no hay nada más
+          console.log('⚠️ No se detectó transacción, cargando mock data para pruebas');
+          this.loadMockData();
+          this.loading = false;
+        }
+      });
     }
+  }
+
+  /**
+   * Recupera la transacción desde el backend usando el ID de Wompi
+   */
+  private recoverTransaction(transactionId: string): void {
+    this.loading = true;
+    console.log('📡 Buscando reservas asociadas a la transacción:', transactionId);
+
+    // Intentar obtener las reservas del cliente y filtrar por transactionId
+    this.reservationService.getClientReservations({ page: 0, size: 50 }).subscribe({
+      next: (response) => {
+        const matchedReservations = response.content.filter(res => res.paymentTransactionId === transactionId);
+        
+        if (matchedReservations.length > 0) {
+          console.log('✅ Reservas encontradas:', matchedReservations);
+          this.mapToReservationData(matchedReservations, transactionId);
+          this.loading = false;
+        } else {
+          console.warn('⚠️ No se encontraron reservas aún. El webhook podría estar procesándose.');
+          // Podríamos implementar un reintento aquí, pero por ahora mostramos error amigable
+          this.error = 'Tu pago está siendo procesado. Podrás ver tus reservas en "Mis Reservas" en unos momentos.';
+          this.loading = false;
+        }
+      },
+      error: (err) => {
+        console.error('❌ Error recuperando reservas:', err);
+        this.error = 'Hubo un error al recuperar los detalles de tu reserva. Por favor contacta a soporte.';
+        this.loading = false;
+      }
+    });
+  }
+
+  /**
+   * Mapea ClientReservation (modelo backend) a PaymentResponseDto (modelo frontend esperado aquí)
+   */
+  private mapToReservationData(clientReservations: ClientReservation[], transactionId: string): void {
+    const first = clientReservations[0];
+    
+    // Construir estructura compatible con lo que el componente ya sabe mostrar
+    this.reservationData = {
+      paymentId: first.paymentId,
+      transactionId: transactionId,
+      transactionData: JSON.stringify({
+        id: transactionId,
+        status: 'APPROVED',
+        amount_in_cents: first.shoppingTotalPrice * 100,
+        payment_method_type: 'PSE/Transferencia',
+        created_at: first.reservationCreatedDate
+      }),
+      reservations: clientReservations.map(res => ({
+        reservationId: res.reservationId,
+        paymentId: res.paymentId,
+        itemId: res.shoppingItemId,
+        qrUrl: '', // El backend de lista de reservas usualmente no trae el QR directamente si no es el detalle
+        reservationDate: res.reservationDate,
+        deliveryStatus: res.reservationDeliveryStatus as any,
+        serviceResponsible: {
+          name: res.serviceResponsibleName,
+          email: res.serviceResponsibleEmail,
+          phone: res.serviceResponsiblePhone as any
+        },
+        createdDate: res.reservationCreatedDate,
+        lastModifiedDate: res.reservationCreatedDate,
+        createdBy: 0,
+        lastModifiedBy: 0
+      })),
+      payer: {
+        id: 0,
+        name: first.payerName,
+        email: first.payerEmail,
+        phone: first.payerPhone,
+        documentType: first.payerDocumentType,
+        documentNumber: first.payerDocumentNumber
+      },
+      createdDate: first.reservationCreatedDate,
+      lastModifiedDate: first.reservationCreatedDate,
+      createdBy: 0,
+      lastModifiedBy: 0,
+      totalAmount: first.shoppingTotalPrice
+    };
+
+    this.wompiData = this.parseWompiData();
+    this.initializeReservations();
   }
 
   /**

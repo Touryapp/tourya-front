@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { routes } from '../../../shared/routes/routes';
 import { ClientMenuService } from '../../../shared/data/client-menu.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
@@ -30,6 +30,7 @@ export class MyProfileComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private clientMenuService: ClientMenuService,
     private reviewsService: ReviewsService,
     private _snackBar: MatSnackBar
@@ -38,10 +39,11 @@ export class MyProfileComponent implements OnInit {
   ngOnInit(): void {
     // Escuchar cambios en los query params para navegar a la sección correcta
     this.route.queryParams.subscribe(params => {
-      if (params['section']) {
+      const section = params['section'];
+      if (section && section !== this.activeSection) {
         setTimeout(() => {
-          this.activeSection = params['section'];
-          this.clientMenuService.setActiveSection(params['section']);
+          this.activeSection = section;
+          this.clientMenuService.setActiveSection(section);
           
           // Capturar o resetear reservationId
           if (params['reservationId']) {
@@ -62,10 +64,18 @@ export class MyProfileComponent implements OnInit {
     
     // Suscribirse a cambios de sección desde el menú
     this.clientMenuService.activeSection$.subscribe(section => {
-      // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
-      setTimeout(() => {
-        this.activeSection = section;
-      });
+      // Si la sección es diferente a la actual, actualizar y sincronizar URL
+      if (section !== this.activeSection) {
+        setTimeout(() => {
+          this.activeSection = section;
+          // Actualizar URL sin recargar la página
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { section: section },
+            queryParamsHandling: 'merge'
+          });
+        });
+      }
     });
   }
 

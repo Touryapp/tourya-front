@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, OnChanges, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -73,6 +74,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   // Datos de la tabla (any[] para permitir acceso dinámico)
   public tableData: any[] = [];
   public tableDataCopy: any[] = [];
+
+  // Suscripciones
+  private subscriptions: Subscription = new Subscription();
   
   // Modales
   public selectedBooking: any | null = null;
@@ -120,7 +124,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     public i18nService: I18nFieldService,
     private reviewsService: ReviewsService,
     private dialog: MatDialog,
-    private searchToursService: SearchToursService
+    private searchToursService: SearchToursService,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -138,6 +144,20 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     } else {
       this.loadMockData();
     }
+
+    this.subscriptions.add(
+      this.reservationService.reservationUpdated$.subscribe(() => {
+        console.log('🔄 Notificación de actualización recibida - Refrescando lista');
+        this.ngZone.run(() => {
+          if (this.currentRole === 'CLIENT') {
+            this.loadClientReservations();
+          } else if (this.currentRole === 'PROVIDER') {
+            this.loadProviderReservations();
+          }
+          this.cdr.detectChanges();
+        });
+      })
+    );
     
     // Verificar si hay parámetros de query (desde el QR scan)
     this.route.queryParams.subscribe((params: any) => {
@@ -189,6 +209,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       }
     }, 1000);
   }
+
+  /**
+   * Parsea una cadena de fecha tratando de evitar el desfase de zona horaria (UTC vs Local)
+   */
+  private parseLocalDate(dateString: string): Date {
+    if (!dateString) return new Date();
+    // Si es solo YYYY-MM-DD, añadir T00:00:00 para forzar el parseo como hora local
+    if (dateString.length === 10 && dateString.includes('-') && !dateString.includes('T')) {
+      return new Date(dateString + 'T00:00:00');
+    }
+    return new Date(dateString);
+  }
   
   /**
    * Mapea una ReservationDetails del backend a ProviderTourBooking
@@ -198,7 +230,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const formatDate = (dateString: string) => {
       if (!dateString) return 'N/A';
       try {
-        const date = new Date(dateString);
+        const date = this.parseLocalDate(dateString);
         return date.toLocaleDateString('es-ES', {
           day: '2-digit',
           month: 'short',
@@ -212,7 +244,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const formatDateTime = (dateString: string) => {
       if (!dateString) return 'N/A';
       try {
-        const date = new Date(dateString);
+        const date = this.parseLocalDate(dateString);
         const dateStr = date.toLocaleDateString('es-ES', {
           day: '2-digit',
           month: 'short',
@@ -304,7 +336,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   ngOnDestroy(): void {
-    // Cleanup si es necesario
+    this.subscriptions.unsubscribe();
   }
 
   /**
@@ -397,17 +429,17 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
       price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
-      bookingDate: new Date(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
+      bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'
       }),
-      checkInDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+      checkInDate: `${this.parseLocalDate(reservation.scheduleDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'
       })}, ${reservation.slotTimeStart}`,
-      returnDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+      returnDate: `${this.parseLocalDate(reservation.scheduleDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'
@@ -440,17 +472,17 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
       price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
-      bookingDate: new Date(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
+      bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'
       }),
-      checkInDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+      checkInDate: `${this.parseLocalDate(reservation.scheduleDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'
       })}, ${reservation.slotTimeStart}`,
-      returnDate: `${new Date(reservation.scheduleDate).toLocaleDateString('es-ES', {
+      returnDate: `${this.parseLocalDate(reservation.scheduleDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'

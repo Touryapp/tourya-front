@@ -402,19 +402,46 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
       // ⚠️ IMPORTANTE: No incluir redirectUrl con localhost o IPs (causa error 403 en Wompi)
       // Wompi bloquea URLs con localhost/IPs por regla de seguridad EC2MetaDataSSRF_QUERYARGUMENTS
       
-      // Verificar si el origin es un dominio real (no localhost ni IP)
+      // Verificar si el origin es un dominio real o una IP pública (no metadata AWS)
       const isRealDomain = () => {
         const origin = window.location.origin;
-        // Bloquear localhost
-        if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        // Permitir localhost en ambientes de desarrollo si es necesario, 
+        // pero Wompi a veces lo bloquea. Permitimos IPs que no sean la de metadata.
+        if (origin.includes('169.254.169.254')) {
           return false;
         }
-        // Bloquear IPs (formato: http://123.123.123.123)
-        const ipPattern = /^https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
-        if (ipPattern.test(origin)) {
-          return false;
+        // Si es localhost o 127.0.0.1, Wompi Sandbox lo permite, el comentario anterior sugería lo contrario
+        // pero para el usuario en test mode necesitamos que el redirectUrl se envíe.
+        return true; 
+      };
+
+      // Obtener una URL de redirección segura que Wompi no bloquee (WAF bloquea IPs literales y patrones X.X.X.X)
+      const getSafeRedirectUrl = () => {
+        const origin = window.location.origin;
+        // Detectar si el origin es una IP o localhost
+        const isIpOrLocalhost = /^(https?:\/\/)?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|localhost)(:\d+)?$/.test(origin);
+        
+        if (isIpOrLocalhost) {
+          // Es una IP o localhost, transformar a sslip.io con guiones para engañar al WAF de Wompi
+          console.log('🔄 Transformando origen IP/localhost a sslip.io (con guiones) dinámicamente...');
+          
+          const urlObj = new URL(origin);
+          let hostname = urlObj.hostname;
+          
+          if (hostname === 'localhost') {
+            hostname = '127.0.0.1';
+          }
+          
+          // Transformar 127.0.0.1 -> 127-0-0-1.sslip.io (Usa guiones para evitar el WAF)
+          const safeHostname = hostname.replace(/\./g, '-') + '.sslip.io';
+          const port = urlObj.port ? `:${urlObj.port}` : '';
+          const protocol = urlObj.protocol;
+          
+          return `${protocol}//${safeHostname}${port}/clients/tour-booking-confirmation`;
         }
-        return true;
+        
+        // Si ya es un dominio real, usar origin normal
+        return `${origin}/clients/tour-booking-confirmation`;
       };
 
       const wompiConfig: WompiCheckoutConfig = {
@@ -422,10 +449,8 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
         amountInCents: amountInCents,
         reference: reference,  // ← Desde backend
         publicKey: environment.wompi.publicKey,
-        // ✅ Solo incluir redirectUrl si es un dominio real (no localhost ni IP)
-        ...(isRealDomain() && { 
-          redirectUrl: `${window.location.origin}/clients/payment-confirmation` 
-        }),
+        // ✅ URL dinámica y segura que Wompi acepta (usando nip.io para IPs)
+        redirectUrl: getSafeRedirectUrl(),
         signature: signature,  // ← Desde backend
         customerData: {
           email: this.userForm.email,

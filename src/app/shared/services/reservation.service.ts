@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Reservation, ClientReservation, PaginatedResponse, ConsumeReservationResponse, ReservationDetails, RescheduleReservationRequest } from '../models/reservation.model';
 
@@ -12,6 +12,10 @@ export class ReservationService {
   // private baseUrl = environment.apiUrl + '/public/bookings';
   private baseUrl = 'https://6aa5ded6-1a98-4c3d-a307-5717b77f587c.mock.pstmn.io/api/v1/public/bookings';
   private apiUrl = environment.apiUrl;
+  
+  // Subject para notificar cambios en las reservas
+  private reservationUpdatedSource = new Subject<void>();
+  reservationUpdated$ = this.reservationUpdatedSource.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -81,7 +85,8 @@ export class ReservationService {
   } = {}): Observable<PaginatedResponse<ClientReservation>> {
     const queryParams: any = {
       page: (params.page || 0).toString(),
-      size: (params.size || 10).toString()
+      size: (params.size || 10).toString(),
+      _t: new Date().getTime().toString()
     };
 
     if (params.status) {
@@ -109,12 +114,20 @@ export class ReservationService {
   } = {}): Observable<PaginatedResponse<ClientReservation>> {
     const queryParams: any = {
       page: (params.page || 0).toString(),
-      size: (params.size || 10).toString()
+      size: (params.size || 10).toString(),
+      _t: new Date().getTime().toString()
     };
 
     return this.http.get<PaginatedResponse<ClientReservation>>(
       `${this.apiUrl}/reservations`,
       { params: queryParams }
     );
+  }
+
+  /**
+   * Notifica a los suscriptores que una reserva ha sido actualizada
+   */
+  notifyReservationUpdated(): void {
+    this.reservationUpdatedSource.next();
   }
 }

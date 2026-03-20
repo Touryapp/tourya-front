@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   mostrarSolicitudes: boolean = false;
   declinedReason: string = '';
   mostrarTourList: boolean = false;
+  mostrarMaritimeReports: boolean = false;
 
   // Referencia al enum para usar en el template
   readonly StatusEnum = RequestsProvidersStatus;
@@ -37,18 +38,27 @@ export class DashboardComponent implements OnInit {
   toggleTourList(): void {
     // Mostrar la sección de solicitudes (proveedores) y alternar la lista de tours incrustada
     this.mostrarSolicitudes = false;
+    this.mostrarMaritimeReports = false;
     this.mostrarTourList = !this.mostrarTourList;
   }
 
   toggleSolicitudes(): void {
     // Mostrar la sección de solicitudes (proveedores) y alternar la lista de tours incrustada
     this.mostrarTourList = false;
+    this.mostrarMaritimeReports = false;
     this.mostrarSolicitudes = !this.mostrarSolicitudes;
+  }
+
+  toggleMaritimeReports(): void {
+    this.mostrarTourList = false;
+    this.mostrarSolicitudes = false;
+    this.mostrarMaritimeReports = !this.mostrarMaritimeReports;
   }
 
   toggleDashboard(): void {
     this.mostrarTourList = false;
     this.mostrarSolicitudes = false;
+    this.mostrarMaritimeReports = false;
   }
 
   cargarSolicitudes(): void {
