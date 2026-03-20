@@ -1,3 +1,10 @@
+:host {
+  display: block;
+  max-height: 95vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .modal-header {
   padding: 24px 24px 16px;
 
@@ -19,6 +26,7 @@
     }
   }
 }
+
 
 .confirmation-section {
   .section-title {
@@ -210,7 +218,37 @@
 }
 
 @media (max-width: 576px) {
+  .modal-header {
+    padding: 16px 16px 8px;
+  }
+  
+  .modal-body {
+    padding: 16px !important;
+  }
+
+  .modal-footer {
+    padding: 0 16px 20px !important;
+  }
+
   .reschedule-details-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .footer-actions {
+    flex-direction: column;
+    gap: 10px !important;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .price-comparison-card {
+    padding: 15px;
+    
+    .price-value.highlight {
+      font-size: 1.15rem;
+    }
   }
 }

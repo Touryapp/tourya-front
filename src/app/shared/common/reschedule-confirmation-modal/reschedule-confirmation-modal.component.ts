@@ -63,6 +63,9 @@ export class RescheduleConfirmationModalComponent {
         this.isProcessing = false;
         this.dialogRef.close(true);
         
+        // Notificar que la reserva ha sido actualizada para que la lista se refresque
+        // this.reservationService.notifyReservationUpdated(); // Se movió al final del Swal
+        
         const formattedDate = dayjs(this.data.newDate).format('DD/MM/YYYY');
         
         let successMessageHtml = `
@@ -106,6 +109,9 @@ export class RescheduleConfirmationModalComponent {
           confirmButtonText: 'Entendido',
           confirmButtonColor: '#3085d6'
         }).then(() => {
+          // Notificar que la reserva ha sido actualizada para que la lista se refresque
+          this.reservationService.notifyReservationUpdated();
+
           // Navegar dependiendo de la respuesta, o dejar que el componente padre actualice
           if (response && response.priceComparison === 'HIGHER') {
             // El usuario indicó que debemos ir a /clients/list-tours?city=453

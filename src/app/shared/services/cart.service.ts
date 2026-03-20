@@ -35,6 +35,9 @@ export class CartService {
   private isLoadingFromBackend = false;
   private hasLoadedFromBackend = false;
 
+  // Caché local para preservar horarios de slots (fix para discrepancia de horarios)
+  private slotTimeCache: Map<number, { startTime: string; endTime: string }> = new Map();
+
   constructor(
     private http: HttpClient,
     private authService: AuthService
@@ -215,6 +218,17 @@ export class CartService {
 
     this.setCartItemsIfChanged([...currentItems]);
     this.updateDaySelection(cartItem.dayDate, cartItem);
+    
+    // Guardar en caché los horarios del slot para este ID (por si el backend no los devuelve en el reload)
+    if (cartItem.selectedSlot && cartItem.selectedSlot.slotId) {
+      this.slotTimeCache.set(cartItem.selectedSlot.slotId, {
+        startTime: cartItem.selectedSlot.startTime,
+        endTime: cartItem.selectedSlot.endTime
+      });
+      console.log(`💾 Slot ${cartItem.selectedSlot.slotId} guardado en caché de horarios:`, 
+        cartItem.selectedSlot.startTime, '-', cartItem.selectedSlot.endTime);
+    }
+
     console.log(
       "CartService: Item agregado. Total items en carrito:",
       currentItems.length
@@ -787,61 +801,66 @@ export class CartService {
    * Mapear respuesta de API a CartItems del frontend
    */
   private mapApiResponseToCartItems(apiItems: any[]): CartItem[] {
-    return apiItems.map(item => ({
-      id: item.id.toString(), // ✅ API: item.id
-      dayDate: item.scheduleDate, // ✅ API: item.scheduleDate
-      startDate: item.startDate || item.scheduleDate, // Fecha inicio del tour
-      endDate: item.endDate || null, // Fecha fin del tour (si es multi-día)
-      tour: {
-        id: item.productId, // ✅ API: item.productId
-        name: item.tourName || 'Tour sin nombre', // ✅ API: item.tourName
-        description: item.tourDescription || 'Descubre los lugares más emblemáticos de la ciudad en este increíble recorrido',
-        duration: item.duration || '8 horas',
-        rating: item.rating || 4.5
-      },
-      schedule: {
-        id: item.tourScheduleId, // ✅ API: item.tourScheduleId
-        scheduleDate: item.scheduleDate, // ✅ API: item.scheduleDate
-        startTime: item.startTime || '09:00',
-        endTime: item.endTime || '17:00'
-      },
-      selectedSlot: {
-        slotId: item.slotId || 0, // ✅ API: item.slotId
-        startTime: item.startTime || '09:00',
-        endTime: item.endTime || '17:00',
-        minCapacity: item.minCapacity || 2,
-        maxCapacity: item.maxCapacity || 15
-      },
-      participants: item.details.map((detail: any) => ({
-        ageType: detail.ageType.name, // ✅ API: detail.ageType.name
-        quantity: detail.quantity, // ✅ API: detail.quantity
-        price: detail.unitPrice // ✅ API: detail.unitPrice
-      })),
-      totalPrice: item.totalPrice, // ✅ API: item.totalPrice
-      totalParticipants: item.details.reduce((sum: number, detail: any) => sum + detail.quantity, 0), // ✅ Calculado
-      address: {
-        city: item.city || 'Cartagena',
-        state: item.state || 'Bolívar',
-        country: item.country || 'Colombia',
-        address: item.meetingPoint || 'Plaza de la Aduana, Centro Histórico'
-      },
-      // Usar imagen del tour si viene en la respuesta
-      gallery: item.tourImageUrl ? [
-        { 
-          imageUrl: item.tourImageUrl,
-          description: 'Vista principal del tour',
-          order: 1
-        }
-      ] : item.gallery || [
-        { 
-          imageUrl: 'assets/img/tours/default-tour.jpg',
-          description: 'Vista principal del tour',
-          order: 1
-        }
-      ],
-      // Campo adicional para acceso directo a la imagen
-      tourImageUrl: item.tourImageUrl || item.imageUrl || null
-    } as CartItem & { tourImageUrl?: string }));
+    return apiItems.map(item => {
+      const slotId = item.slotId || (item.slot ? item.slot.id : 0);
+      const cachedTimes = this.slotTimeCache.get(slotId);
+      
+      return {
+        id: item.id.toString(), // ✅ API: item.id
+        dayDate: item.scheduleDate, // ✅ API: item.scheduleDate
+        startDate: item.startDate || item.scheduleDate, // Fecha inicio del tour
+        endDate: item.endDate || null, // Fecha fin del tour (si es multi-día)
+        tour: {
+          id: item.productId, // ✅ API: item.productId
+          name: item.tourName || 'Tour sin nombre', // ✅ API: item.tourName
+          description: item.tourDescription || 'Descubre los lugares más emblemáticos de la ciudad en este increíble recorrido',
+          duration: item.duration || '8 horas',
+          rating: item.rating || 4.5
+        },
+        schedule: {
+          id: item.tourScheduleId, // ✅ API: item.tourScheduleId
+          scheduleDate: item.scheduleDate, // ✅ API: item.scheduleDate
+          startTime: item.startTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
+          endTime: item.endTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00'
+        },
+        selectedSlot: {
+          slotId: slotId, // ✅ API: item.slotId o item.slot.id
+          startTime: item.startTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
+          endTime: item.endTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00',
+          minCapacity: item.minCapacity || (item.slot ? item.slot.minCapacity : 2),
+          maxCapacity: item.maxCapacity || (item.slot ? item.slot.maxCapacity : 15)
+        },
+        participants: item.details.map((detail: any) => ({
+          ageType: detail.ageType.name, // ✅ API: detail.ageType.name
+          quantity: detail.quantity, // ✅ API: detail.quantity
+          price: detail.unitPrice // ✅ API: detail.unitPrice
+        })),
+        totalPrice: item.totalPrice, // ✅ API: item.totalPrice
+        totalParticipants: item.details.reduce((sum: number, detail: any) => sum + detail.quantity, 0), // ✅ Calculado
+        address: {
+          city: item.city || 'Cartagena',
+          state: item.state || 'Bolívar',
+          country: item.country || 'Colombia',
+          address: item.meetingPoint || 'Plaza de la Aduana, Centro Histórico'
+        },
+        // Usar imagen del tour si viene en la respuesta
+        gallery: item.tourImageUrl ? [
+          { 
+            imageUrl: item.tourImageUrl,
+            description: 'Vista principal del tour',
+            order: 1
+          }
+        ] : item.gallery || [
+          { 
+            imageUrl: 'assets/img/tours/default-tour.jpg',
+            description: 'Vista principal del tour',
+            order: 1
+          }
+        ],
+        // Campo adicional para acceso directo a la imagen
+        tourImageUrl: item.tourImageUrl || item.imageUrl || null
+      } as CartItem & { tourImageUrl?: string };
+    });
   }
 
   /**

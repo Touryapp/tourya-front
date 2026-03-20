@@ -396,6 +396,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     // Abrir el modal de confirmación
     const confirmRef = this.dialog.open(RescheduleConfirmationModalComponent, {
       width: '500px',
+      maxWidth: '95vw',
       data: {
         reservationId: this.data.reservationId,
         tourName: this.getTourName(),
