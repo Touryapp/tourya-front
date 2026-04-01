@@ -36,7 +36,8 @@ export class SearchToursService {
   }
 
   categoriesPublic(): Observable<CategoryDto[]> {
-    return this.http.get<CategoryDto[]>(`${environment.apiUrl}/public/search/categories`);
+    // return this.http.get<CategoryDto[]>(`${environment.apiUrl}/public/search/categories`);
+    return this.http.get<CategoryDto[]>(`https://c5683a55-ac29-4dab-b77c-cf29f0f19101.mock.pstmn.io/api/v1/public/search/categories`);
   }
 
   ageTypesPublic(): Observable<{name:string}[]> {

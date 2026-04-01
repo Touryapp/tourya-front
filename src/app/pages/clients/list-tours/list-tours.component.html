@@ -199,26 +199,70 @@
                                 </div>
                             </div>
                             <div class="accordion accordion-list">
+
+                                <!-- Categorías -->
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
-                                        <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#s"
-                                            aria-expanded="true" aria-controls="accordion-populars" role="button">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-hotel" aria-expanded="false" aria-controls="accordion-hotel" role="button">
+                                            <i class="isax isax-buildings me-2 text-primary"></i>Categorías
+                                        </div>
+                                    </div>
+                                    <div id="accordion-hotel" class="accordion-collapse collapse">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let c of categories; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'cat_'+i" 
+                                                        [checked]="selectedCategoryIds.includes(c.id)"
+                                                        (change)="toggleSelection(selectedCategoryIds, c.id)">
+                                                    <label class="form-check-label ms-2" [for]="'cat_'+i">
+                                                        {{ c.name }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SubCategorías -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-subcats" aria-expanded="false" aria-controls="accordion-subcats" role="button">
+                                            <i class="isax isax-category-2 me-2 text-primary"></i>SubCategorías
+                                        </div>
+                                    </div>
+                                    <div id="accordion-subcats" class="accordion-collapse collapse">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let s of filteredSubCategories; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'subcat_'+i" 
+                                                        [checked]="selectedSubCategoryIds.includes(s.id)"
+                                                        (change)="toggleSelection(selectedSubCategoryIds, s.id)">
+                                                    <label class="form-check-label ms-2" [for]="'subcat_'+i">
+                                                        {{ s.name }}
+                                                    </label>
+                                                </div>
+                                                <div *ngIf="filteredSubCategories.length === 0" class="text-muted fs-14">
+                                                    No hay subcategorías disponibles
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tags -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-tags" aria-expanded="false" aria-controls="accordion-tags" role="button">
                                             <i class="isax isax-ranking me-2 text-primary"></i>Tags
                                         </div>
                                     </div>
-                                    <div id="accordion-populars" class="accordion-collapse collapse show">
+                                    <div id="accordion-tags" class="accordion-collapse collapse">
                                         <div class="accordion-body pt-2">
                                             <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" type="radio" name="tagFilter" id="tag_all" [value]="''"
-                                                        [(ngModel)]="selectedTag" [ngModelOptions]="{standalone: true}">
-                                                    <label class="form-check-label ms-2" for="tag_all">
-                                                        Todos
-                                                    </label>
-                                                </div>
                                                 <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let t of tags; let i = index">
-                                                    <input class="form-check-input ms-0 mt-0" type="radio" name="tagFilter" [id]="'tag_'+i" [value]="t.name"
-                                                        [(ngModel)]="selectedTag" [ngModelOptions]="{standalone: true}">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'tag_'+i" 
+                                                        [checked]="selectedTags.includes(t.name)"
+                                                        (change)="toggleSelection(selectedTags, t.name)">
                                                     <label class="form-check-label ms-2" [for]="'tag_'+i">
                                                         {{ t.name }}
                                                     </label>
@@ -227,230 +271,99 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Horarios -->
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
-                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
-                                            data-bs-target="#accordion-popular" aria-expanded="true"
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-horarios" aria-expanded="false" aria-controls="accordion-horarios" role="button">
+                                            <i class="isax isax-clock me-2 text-primary"></i>Horarios
+                                        </div>
+                                    </div>
+                                    <div id="accordion-horarios" class="accordion-collapse collapse">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let h of scheduleOptions; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'horario_'+i" 
+                                                        [checked]="selectedSchedules.includes(h.value)"
+                                                        (change)="toggleSelection(selectedSchedules, h.value)">
+                                                    <label class="form-check-label ms-2" [for]="'horario_'+i">
+                                                        {{ h.label }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Duraciones -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-duraciones" aria-expanded="false" aria-controls="accordion-duraciones" role="button">
+                                            <i class="isax isax-timer-1 me-2 text-primary"></i>Duraciones
+                                        </div>
+                                    </div>
+                                    <div id="accordion-duraciones" class="accordion-collapse collapse">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let d of durationOptions; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'duracion_'+i" 
+                                                        [checked]="selectedDurations.includes(d.value)"
+                                                        (change)="toggleSelection(selectedDurations, d.value)">
+                                                    <label class="form-check-label ms-2" [for]="'duracion_'+i">
+                                                        {{ d.label }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Rango de Precio -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-popular" aria-expanded="false"
                                             aria-controls="accordion-popular" role="button">
                                             <i class="isax isax-coin me-2 text-primary"></i>Rango de Precio
                                         </div>
                                     </div>
-                                    <div id="accordion-popular" class="accordion-collapse collapse show">
+                                    <div id="accordion-popular" class="accordion-collapse collapse">
                                         <div class="accordion-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span class="badge badge-xs badge-light text-gray-4">${{ minPrice
-                                                    }}</span>
-                                                <span class="badge badge-xs badge-light text-gray-4">${{ maxPrice
-                                                    }}</span>
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <div class="input-group input-group-sm me-2">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" [(ngModel)]="minPriceFormatted" 
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </div>
+                                                <div class="input-group input-group-sm ms-2">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" [(ngModel)]="maxPriceFormatted" 
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </div>
                                             </div>
-                                            <div class="filter-range">
+                                            <div class="filter-range mt-3">
                                                 <div class="d-flex align-items-center">
-                                                    <input type="range" class="form-range" min="0" max="10000"
-                                                        step="10" [(ngModel)]="minPrice"
+                                                    <input type="range" class="form-range" min="0" max="100000000"
+                                                        step="10000" [(ngModel)]="minPrice"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (input)="onMinPriceChange($event)"
                                                         (change)="onMinPriceChange($event)">
-                                                    <span class="ms-2">${{ minPrice }}</span>
                                                 </div>
                                                 <div class="d-flex align-items-center mt-2">
-                                                    <input type="range" class="form-range" min="0" max="10000"
-                                                        step="10" [(ngModel)]="maxPrice"
+                                                    <input type="range" class="form-range" min="0" max="100000000"
+                                                        step="10000" [(ngModel)]="maxPrice"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (input)="onMaxPriceChange($event)"
                                                         (change)="onMaxPriceChange($event)">
-                                                    <span class="ms-2">${{ maxPrice }}</span>
                                                 </div>
                                             </div>
                                             <div class="filter-range-amount">
-                                                <p class="fs-14">Rango: <span class="text-gray-9 fw-medium">${{ minPrice
-                                                        }} - ${{ maxPrice }}</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="accordion-item border-bottom p-3">
-                                    <div class="accordion-header">
-                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
-                                            data-bs-target="#accordion-duration" aria-expanded="true"
-                                            aria-controls="accordion-duration" role="button">
-                                            <i class="isax isax-clock me-2 text-primary"></i>Duración del Tour
-                                        </div>
-                                    </div>
-                                    <div id="accordion-duration" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="form-item">
-                                                <label class="form-label fs-14 text-default mb-1">Duración</label>
-                                                <select class="form-control" [(ngModel)]="selectedDurationOption" [ngModelOptions]="{standalone: true}">
-                                                    <option value="">Cualquiera</option>
-                                                    <option *ngFor="let opt of durationUnifiedOptions" [value]="opt.value">{{ opt.label }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <div class="accordion-item border-bottom p-3">
-                                    <div class="accordion-header">
-                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
-                                            data-bs-target="#accordion-age" aria-expanded="true"
-                                            aria-controls="accordion-age" role="button">
-                                            <i class="isax isax-profile-2user me-2 text-primary"></i>Tipo de Edad
-                                        </div>
-                                    </div>
-                                    <div id="accordion-age" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let at of ageTypes; let i = index">
-                                                    <input class="form-check-input ms-0 mt-0" name="ageType"
-                                                        type="radio" [id]="'age'+i" [value]="at.name"
-                                                        [(ngModel)]="selectedAgeType"
-                                                        [ngModelOptions]="{standalone: true}">
-                                                    <label class="form-check-label ms-2" [for]="'age'+i">
-                                                        {{ at.name | titlecase }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item border-bottom p-3">
-                                    <div class="accordion-header">
-                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
-                                            data-bs-target="#accordion-hotel" aria-expanded="true"
-                                            aria-controls="accordion-hotel" role="button">
-                                            <i class="isax isax-buildings me-2 text-primary"></i>Categorías
-                                        </div>
-                                    </div>
-                                    <div id="accordion-hotel" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="form-item">
-                                                <label class="form-label fs-14 text-default mb-1">Categoría</label>
-                                                <select class="form-control" [(ngModel)]="selectedCategoryId" [ngModelOptions]="{standalone: true}">
-                                                    <option [ngValue]="undefined">Todas</option>
-                                                    <option *ngFor="let c of categories" [ngValue]="c.id">{{ c.name }}</option>
-                                                </select>
+                                                <p class="fs-14">Rango: <span class="text-gray-9 fw-medium">${{ minPrice | number:'1.0-0' }} - ${{ maxPrice | number:'1.0-0' }}</span></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- <div class="accordion-item border-bottom p-3">
-                                    <div class="accordion-header">
-                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
-                                            data-bs-target="#accordion-cusine" aria-expanded="true"
-                                            aria-controls="accordion-cusine" role="button">
-                                            <i class="isax isax-activity me-2 text-primary"></i>Activities
-                                        </div>
-                                    </div>
-                                    <div id="accordion-cusine" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="cusine1"
-                                                        type="checkbox" id="cusine1">
-                                                    <label class="form-check-label ms-2" for="cusine1">
-                                                        Hiking
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="cusine2"
-                                                        type="checkbox" id="cusine2">
-                                                    <label class="form-check-label ms-2" for="cusine2">
-                                                        Sightseeing
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                    <input class="form-check-input ms-0 mt-0" name="cusine3"
-                                                        type="checkbox" id="cusine3">
-                                                    <label class="form-check-label ms-2" for="cusine3">
-                                                        Wildlife Safari
-                                                    </label>
-                                                </div>
-                                                <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                                    <input class="form-check-input ms-0 mt-0" name="cusine4"
-                                                        type="checkbox" id="cusine4" checked>
-                                                    <label class="form-check-label ms-2" for="cusine4">
-                                                        Boat Tours
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="accordion-item border-bottom p-3">
-                                    <div class="accordion-header">
-                                        <div class="accordion-button p-0" data-bs-toggle="collapse"
-                                            data-bs-target="#accordion-brand" aria-expanded="true"
-                                            aria-controls="accordion-brand" role="button">
-                                            <i class="isax isax-discount-shape me-2 text-primary"></i>Reviews
-                                        </div>
-                                    </div>
-                                    <div id="accordion-brand" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="review1" type="checkbox"
-                                                    id="review1">
-                                                <label class="form-check-label ms-2" for="review1">
-                                                    <span class="rating d-flex align-items-center">
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">5 Star</span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="review2" type="checkbox"
-                                                    id="review2">
-                                                <label class="form-check-label ms-2" for="review2">
-                                                    <span class="rating d-flex align-items-center">
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">4 Star</span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="review3" type="checkbox"
-                                                    id="review3">
-                                                <label class="form-check-label ms-2" for="review3">
-                                                    <span class="rating d-flex align-items-center">
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">3 Star</span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                                <input class="form-check-input ms-0 mt-0" name="review4" type="checkbox"
-                                                    id="review4">
-                                                <label class="form-check-label ms-2" for="review4">
-                                                    <span class="rating d-flex align-items-center">
-                                                        <i class="fas fa-star filled text-primary me-1"></i>
-                                                        <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">2 Star</span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div class="form-check d-flex align-items-center ps-0 mb-0">
-                                                <input class="form-check-input ms-0 mt-0" name="review5" type="checkbox"
-                                                    id="review5">
-                                                <label class="form-check-label ms-2" for="review5">
-                                                    <span class="rating d-flex align-items-center">
-                                                        <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">1 Star</span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </div>
 
                             <!-- Botón de búsqueda -->

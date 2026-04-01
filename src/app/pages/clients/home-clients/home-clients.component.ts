@@ -47,7 +47,7 @@ public categories: TourCategory[] = [
   endDate: Date | string = '';
   // Travellers data
   public travellersData = {
-    adults: 1,
+    adults: 2,
     children: 0,
     infants: 0,
     cabinClass: 'Economy'
@@ -431,6 +431,18 @@ onSearch(): void {
   if (!this.isSearchEnabled) {
     return;
   }
+
+  const userActionsTrace = {
+    city: this.selectedCity,
+    adults: this.travellersData.adults,
+    children: this.travellersData.children,
+    infants: this.travellersData.infants,
+    cabinClass: this.travellersData.cabinClass,
+    checkIn: this.checkIn,
+    checkOut: this.checkOut
+  };
+  localStorage.setItem('userActionsTrace', JSON.stringify(userActionsTrace));
+
   const params = [
     `city=${encodeURIComponent(this.selectedCity)}`,
     `adults=${encodeURIComponent(this.travellersData.adults)}`,

@@ -26,6 +26,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { CancellationPolicyType } from "../../../../shared/enums/cancellation-policy-type";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 import { PriceType } from "../../../../shared/enums/price-type.enum";
+import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
 
 
 @Component({
@@ -81,11 +82,41 @@ export class AddTourComponent {
   tourId: number = 0;
   tour: Tour | null = null;
 
+  subcategories = [
+    { value: 'paseo_al_cayo', label: 'Paseo al Cayo' },
+    { value: 'tour_bahia_diurno', label: 'Tour Bahía Diurno' },
+    { value: 'ponton', label: 'Pontón' },
+    { value: 'yate_de_lujo', label: 'Yate de Lujo' },
+    { value: 'bar_en_el_agua', label: 'Bar en el Agua' },
+    { value: 'semi_submarino', label: 'Semi Submarino' },
+    { value: 'snorkeling', label: 'Snorkeling' },
+    { value: 'buceo', label: 'Buceo' },
+    { value: 'snuba', label: 'Snuba' },
+    { value: 'windsurf', label: 'Windsurf' },
+    { value: 'esqui_acuatico', label: 'Esquí Acuático' },
+    { value: 'wakeboard', label: 'Wakeboard' },
+    { value: 'fly_board', label: 'Fly Board' },
+    { value: 'kayak', label: 'Kayak' },
+    { value: 'vuelta_a_la_isla_city_tour', label: 'Vuelta a la isla (City Tour)' },
+    { value: 'parasail', label: 'Parasail' },
+    { value: 'jet_ski', label: 'Jet Ski' },
+    { value: 'fiesta_noche_blanca', label: 'Fiesta Noche Blanca' },
+    { value: 'paddle_board', label: 'Paddle Board' },
+    { value: 'aquanautas', label: 'Aquanautas' },
+    { value: 'picnic', label: 'Picnic' },
+    { value: 'cocina_local', label: 'Cocina Local' },
+    { value: 'moto', label: 'Moto' },
+    { value: 'bicicleta', label: 'Bicicleta' },
+    { value: 'carro_playero', label: 'Carro Playero' },
+  ];
+
   submitted: boolean = false;
 
   countries: Country[] = [];
   departments: Department[][] = [];
   cities: City[][] = [];
+
+  backendCategories: any[] = [];
 
   @ViewChildren("addressInput") addressInputs!: QueryList<ElementRef>;
 
@@ -107,7 +138,8 @@ export class AddTourComponent {
     private cityService: CityService,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private i18nService: I18nFieldService
+    private i18nService: I18nFieldService,
+    private searchToursService: SearchToursService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -121,15 +153,14 @@ export class AddTourComponent {
         ],
       ],
       category: ["", [Validators.required]],
+      subcategory: [""],
+      isUnlimited: [false],
       priceType: ["", [Validators.required]],
       duration: [
         "",
-        [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(50),
-        ],
+        [Validators.required],
       ],
+      schedule: [[], [Validators.required]],
 
       totalNumberOfPeoples: [""], // Initially no validators
       minAge: [
@@ -250,6 +281,21 @@ export class AddTourComponent {
         }
       }
     });
+
+    this.getCategories();
+  }
+
+  getCategories() {
+    this.searchToursService.categoriesPublic().subscribe({
+      next: (data) => {
+        if (data) {
+          this.backendCategories = data;
+        }
+      },
+      error: (err) => {
+        console.error("Error getting categories", err);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -258,13 +304,7 @@ export class AddTourComponent {
 
   get isValidCategory(): boolean {
     const categoryValue = +this.tourForm.get("category")?.value;
-
-    const categories = Object.values(Category).filter(
-      (value) => typeof value === "number"
-    );
-
-    const found = categories.find((category) => category === categoryValue);
-
+    const found = this.backendCategories.find((category) => category.id === categoryValue);
     return !!found;
   }
 
@@ -731,8 +771,11 @@ export class AddTourComponent {
       name,
       description,
       category,
+      subcategory,
+      isUnlimited,
       priceType,
       duration,
+      schedule,
       minAge,
       totalNumberOfPeoples,
       locations,
@@ -809,9 +852,13 @@ export class AddTourComponent {
       name: this.i18nService.createI18nField(name),
       description: this.i18nService.createI18nField(description),
       tourCategoryId: +category,
-      priceType: priceType,
-      duration,
-      maxPeople: totalNumberOfPeoples,
+      priceType: priceType === PriceType.GROUP ? 'grupo' : 'individual',
+      duration: duration,
+      durationEnum: duration,
+      maxPeople: totalNumberOfPeoples ? +totalNumberOfPeoples : 0,
+      isUnlimitedCapacity: isUnlimited,
+      subCategory: subcategory,
+      timeOfDay: schedule,
       minAge: +minAge,
 
       locations: locationMap,
@@ -950,12 +997,24 @@ export class AddTourComponent {
         if (data) {
           this.tour = data;
 
+          // @ts-ignore
+          const subCategoryValue = this.tour?.subCategory;
+          // @ts-ignore
+          const isUnlimitedValue = this.tour?.isUnlimitedCapacity;
+          // @ts-ignore
+          const durationEnumValue = this.tour?.durationEnum;
+          // @ts-ignore
+          const timeOfDayValue = this.tour?.timeOfDay;
+
           this.tourForm.patchValue({
             id: this.tour?.id,
             name: this.i18nService.getValue(this.tour?.name),
             category: this.tour?.tourCategoryId,
-            priceType: this.tour?.priceType,
-            duration: this.tour?.duration,
+            priceType: this.tour?.priceType?.toUpperCase() === 'GRUPO' ? PriceType.GROUP : PriceType.INDIVIDUAL,
+            duration: durationEnumValue || this.tour?.duration,
+            schedule: timeOfDayValue || [],
+            subcategory: subCategoryValue || "",
+            isUnlimited: isUnlimitedValue || false,
             totalNumberOfPeoples: this.tour?.maxPeople,
             minAge: this.tour?.minAge,
             description: this.i18nService.getValue(this.tour?.description),

@@ -116,6 +116,12 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       isRescheduling?: boolean; // Flag para indicar modo de reagendamiento
       reservationId?: string; // ID de la reserva para reagendar
       originalPrice?: number; // Precio original de la reserva
+      travellersData?: {
+        adults: number;
+        children: number;
+        infants: number;
+        cabinClass: string;
+      };
       tourAdded: (cartItem: CartItem) => void;
     }
   ) {
@@ -206,6 +212,39 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     this.participants = this.cartService.createParticipantSelections(
       slot.prices ?? []
     );
+
+    // Actualizar maxQuantity dinámicamente según la capacidad del slot (o 99 si no tiene o es ilimitado)
+    const capacityLimit = (slot.maxCapacity && slot.maxCapacity > 0) ? slot.maxCapacity : 99;
+    this.participants.forEach(p => {
+      p.maxQuantity = capacityLimit;
+    });
+
+    // Aplicar valores predeterminados de travellersData si existen
+    if (this.data.travellersData) {
+      const td = this.data.travellersData;
+      const totalRequested = (td.adults || 0) + (td.children || 0) + (td.infants || 0);
+
+      if (this.participants.length === 1) {
+        // Si hay una única tarifa ("Cualquiera"), sumamos todos los pasajeros
+        this.participants[0].quantity = Math.min(totalRequested, this.participants[0].maxQuantity);
+      } else {
+        // Distribuimos por tipo específico si existen múltiples tipos de precios
+        this.participants.forEach(p => {
+          if (p.ageType === 'ADULT') {
+            p.quantity = td.adults || 0;
+          } else if (p.ageType === 'CHILD') {
+            p.quantity = td.children || 0;
+          } else if (p.ageType === 'INFANT') {
+            p.quantity = td.infants || 0;
+          }
+          
+          // Asegurar que no exceda maxQuantity
+          p.quantity = Math.min(p.quantity, p.maxQuantity);
+        });
+      }
+    }
+
+    this.updateTotals();
     this.updateValidation();
   }
 
