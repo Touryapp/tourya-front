@@ -1,5 +1,6 @@
 export interface CartItem {
   id: string; // UUID único para el item
+  groupCount?: number; // Cantidad de grupos (para priceType group)
   dayDate: string; // Fecha del día seleccionado (YYYY-MM-DD) - fecha inicio
   startDate?: string; // Fecha de inicio del tour (YYYY-MM-DD)
   endDate?: string; // Fecha de fin del tour (YYYY-MM-DD) - para tours multi-día

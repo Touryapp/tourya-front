@@ -124,9 +124,10 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public selectedState: string = ""; // kept for URL param compatibility (stateId)
   selectedCity: string = "";
   
-  public selectedTags: string[] = [];
+  public selectedTags: number[] = [];
   public selectedCategoryIds: number[] = [];
-  public selectedSubCategoryIds: number[] = [];
+  public selectedSubCategories: string[] = [];
+  public selectedSubCategoryIds: number[] = []; // Keep for internal filtering if needed
   public selectedSchedules: string[] = [];
   public selectedDurations: string[] = [];
 
@@ -141,6 +142,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
   public minPrice: number = 0;
   public maxPrice: number = 100000000;
+  public language: string = 'es';
 
   get minPriceFormatted(): string {
     return this.minPrice !== null && this.minPrice !== undefined ? this.minPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '0';
@@ -419,6 +421,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.selectedLocation = null;
     this.selectedTags = [];
     this.selectedCategoryIds = [];
+    this.selectedSubCategories = [];
     this.selectedSubCategoryIds = [];
     this.selectedSchedules = [];
     this.selectedDurations = [];
@@ -655,6 +658,18 @@ export class ListToursComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleSubCategory(s: any): void {
+    const value = s.code || s.name;
+    const indexStr = this.selectedSubCategories.indexOf(value);
+    if (indexStr > -1) {
+      this.selectedSubCategories.splice(indexStr, 1);
+      this.selectedSubCategoryIds = this.selectedSubCategoryIds.filter(id => id !== s.id);
+    } else {
+      this.selectedSubCategories.push(value);
+      this.selectedSubCategoryIds.push(s.id);
+    }
+  }
+
   toggleSelection(array: any[], value: any): void {
     const index = array.indexOf(value);
     if (index > -1) {
@@ -683,21 +698,19 @@ export class ListToursComponent implements OnInit, OnDestroy {
     };
     localStorage.setItem('userActionsTrace', JSON.stringify(userActionsTrace));
 
-    // Construir objeto de búsqueda con todos los filtros
-    const searchData: any = {
+    // Construir objeto de búsqueda con todos los filtros según el backend
+    const searchData: SearchTourListDto = {
       startDate: this.checkIn || undefined,
       endDate: this.checkOut || undefined,
-      providerStateId: this.selectedLocation?.stateId,
-      providerCityId: this.selectedLocation?.cityId,
+      categoryIds: this.selectedCategoryIds.length ? this.selectedCategoryIds : undefined,
+      subCategories: this.selectedSubCategories.length ? this.selectedSubCategories : undefined,
+      tagIds: this.selectedTags.length ? this.selectedTags : undefined,
+      timeOfDay: this.selectedSchedules.length ? this.selectedSchedules : undefined,
+      durationEnums: this.selectedDurations.length ? this.selectedDurations : undefined,
       minPrice: this.minPrice || undefined,
       maxPrice: this.maxPrice || undefined,
       textSearch: this.searchText || undefined,
-      
-      categoryId: this.selectedCategoryIds.length ? this.selectedCategoryIds.join(',') : undefined,
-      subCategoryId: this.selectedSubCategoryIds.length ? this.selectedSubCategoryIds.join(',') : undefined,
-      tag: this.selectedTags.length ? this.selectedTags.join(',') : undefined,
-      schedule: this.selectedSchedules.length ? this.selectedSchedules.join(',') : undefined,
-      duration: this.selectedDurations.length ? this.selectedDurations.join(',') : undefined,
+      language: this.language
     };
 
     console.log("=== DATOS ENVIADOS A LA API ===");

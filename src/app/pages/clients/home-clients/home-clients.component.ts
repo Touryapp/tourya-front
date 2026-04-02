@@ -54,6 +54,28 @@ public categories: TourCategory[] = [
   };
   public checkIn: string = '';
   public checkOut: string = '';
+  public bsRangeValue: Date[] = [new Date(), new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)];
+
+  onDateRangeChange(event: any): void {
+    if (Array.isArray(event) && event.length === 2 && event[0] instanceof Date && event[1] instanceof Date) {
+      this.bsRangeValue = event as Date[];
+      this.updateCheckInCheckOutRange();
+    }
+  }
+
+  private updateCheckInCheckOutRange(): void {
+    if (this.bsRangeValue && this.bsRangeValue.length === 2) {
+      const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+      this.checkIn = formatDate(this.bsRangeValue[0]);
+      this.checkOut = formatDate(this.bsRangeValue[1]);
+    }
+  }
+
   constructor(
     private router: Router,
     private countryService: CountryService,
@@ -322,6 +344,8 @@ ngOnInit(): void {
   this.travelDestination = localStorage.getItem('travelDestination') || '';
   this.startDate = localStorage.getItem('startDate') || '';
   this.endDate = localStorage.getItem('endDate') || '';
+  // Inicializar checkIn y checkOut desde el principio
+  this.updateCheckInCheckOutRange();
 }
 toggleClass(index: number){
   this.isClassAdded[index] = !this.isClassAdded[index]
@@ -426,11 +450,14 @@ getTravellersDetails(): string {
     return hasCity && hasCheckIn && hasCheckOut;
   }
 
-onSearch(): void {
-  // Evitar envío si no hay datos seleccionados
-  if (!this.isSearchEnabled) {
-    return;
-  }
+  onSearch(): void {
+    // Asegurar que estén actualizados (aunque ya deberían estarlo por onDateRangeChange)
+    this.updateCheckInCheckOutRange();
+
+    // Evitar envío si no hay datos seleccionados
+    if (!this.isSearchEnabled) {
+      return;
+    }
 
   const userActionsTrace = {
     city: this.selectedCity,

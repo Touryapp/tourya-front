@@ -28,7 +28,8 @@ export class SearchToursService {
     const pageZeroBased = Math.max(0, (page || 1) -1);
     const pageSize = size || 10;
     const url = `${this.baseUrl}/search?page=${pageZeroBased}&size=${pageSize}`;
-    return this.http.post<PaginationDto<TourScheduleResponseDto>>(url, body);
+   // return this.http.post<PaginationDto<TourScheduleResponseDto>>(url, body);
+    return this.http.post<PaginationDto<TourScheduleResponseDto>>("https://c5683a55-ac29-4dab-b77c-cf29f0f19101.mock.pstmn.io/api/v1/public/tours/schedule/search?page=0&size=10", body);
   }
 
   tagPublic(): Observable<TagDto[]> {
@@ -36,8 +37,7 @@ export class SearchToursService {
   }
 
   categoriesPublic(): Observable<CategoryDto[]> {
-    // return this.http.get<CategoryDto[]>(`${environment.apiUrl}/public/search/categories`);
-    return this.http.get<CategoryDto[]>(`https://c5683a55-ac29-4dab-b77c-cf29f0f19101.mock.pstmn.io/api/v1/public/search/categories`);
+    return this.http.get<CategoryDto[]>(`${environment.apiUrl}/public/search/categories`);
   }
 
   ageTypesPublic(): Observable<{name:string}[]> {

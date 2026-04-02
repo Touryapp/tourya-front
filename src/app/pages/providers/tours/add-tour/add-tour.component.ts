@@ -82,32 +82,12 @@ export class AddTourComponent {
   tourId: number = 0;
   tour: Tour | null = null;
 
-  subcategories = [
-    { value: 'paseo_al_cayo', label: 'Paseo al Cayo' },
-    { value: 'tour_bahia_diurno', label: 'Tour Bahía Diurno' },
-    { value: 'ponton', label: 'Pontón' },
-    { value: 'yate_de_lujo', label: 'Yate de Lujo' },
-    { value: 'bar_en_el_agua', label: 'Bar en el Agua' },
-    { value: 'semi_submarino', label: 'Semi Submarino' },
-    { value: 'snorkeling', label: 'Snorkeling' },
-    { value: 'buceo', label: 'Buceo' },
-    { value: 'snuba', label: 'Snuba' },
-    { value: 'windsurf', label: 'Windsurf' },
-    { value: 'esqui_acuatico', label: 'Esquí Acuático' },
-    { value: 'wakeboard', label: 'Wakeboard' },
-    { value: 'fly_board', label: 'Fly Board' },
-    { value: 'kayak', label: 'Kayak' },
-    { value: 'vuelta_a_la_isla_city_tour', label: 'Vuelta a la isla (City Tour)' },
-    { value: 'parasail', label: 'Parasail' },
-    { value: 'jet_ski', label: 'Jet Ski' },
-    { value: 'fiesta_noche_blanca', label: 'Fiesta Noche Blanca' },
-    { value: 'paddle_board', label: 'Paddle Board' },
-    { value: 'aquanautas', label: 'Aquanautas' },
-    { value: 'picnic', label: 'Picnic' },
-    { value: 'cocina_local', label: 'Cocina Local' },
-    { value: 'moto', label: 'Moto' },
-    { value: 'bicicleta', label: 'Bicicleta' },
-    { value: 'carro_playero', label: 'Carro Playero' },
+  subcategories: any[] = [];
+
+  scheduleOptions = [
+    { value: 'manana', label: 'Mañana' },
+    { value: 'tarde', label: 'Tarde' },
+    { value: 'noche', label: 'Noche' },
   ];
 
   submitted: boolean = false;
@@ -280,6 +260,7 @@ export class AddTourComponent {
           this.tourForm.get("category")?.setValue("");
         }
       }
+      this.updateSubcategories();
     });
 
     this.getCategories();
@@ -290,12 +271,31 @@ export class AddTourComponent {
       next: (data) => {
         if (data) {
           this.backendCategories = data;
+          this.updateSubcategories();
         }
       },
       error: (err) => {
         console.error("Error getting categories", err);
       }
     });
+  }
+
+  updateSubcategories() {
+    const categoryId = this.tourForm.get('category')?.value;
+    if (categoryId) {
+      const category = this.backendCategories.find(c => c.id === categoryId);
+      this.subcategories = category ? (category.subCategories || []) : [];
+    } else {
+      let allSubcategories: any[] = [];
+      this.backendCategories.forEach(cat => {
+        if (cat.subCategories) {
+          allSubcategories = allSubcategories.concat(cat.subCategories);
+        }
+      });
+      const unique = new Map<string, any>();
+      allSubcategories.forEach(sub => unique.set(sub.code, sub));
+      this.subcategories = Array.from(unique.values());
+    }
   }
 
   ngOnDestroy(): void {
@@ -348,10 +348,22 @@ export class AddTourComponent {
 
   onCategoryBlur(event: FocusEvent) {}
 
-  onDurationBlur(event: FocusEvent) {
-    this.tourForm
-      .get("duration")
-      ?.setValue((event.target as HTMLInputElement).value.trim());
+  isScheduleSelected(value: string): boolean {
+    const current: string[] = this.tourForm.get('schedule')?.value || [];
+    return current.includes(value);
+  }
+
+  onScheduleChange(value: string, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const current: string[] = [...(this.tourForm.get('schedule')?.value || [])];
+    if (checked) {
+      if (!current.includes(value)) current.push(value);
+    } else {
+      const idx = current.indexOf(value);
+      if (idx > -1) current.splice(idx, 1);
+    }
+    this.tourForm.get('schedule')?.setValue(current);
+    this.tourForm.get('schedule')?.markAsDirty();
   }
 
   onTotalNumberOfPeopleBlur(event: FocusEvent) {}
@@ -853,12 +865,11 @@ export class AddTourComponent {
       description: this.i18nService.createI18nField(description),
       tourCategoryId: +category,
       priceType: priceType === PriceType.GROUP ? 'grupo' : 'individual',
-      duration: duration,
-      durationEnum: duration,
+      durationEnum: Array.isArray(duration) ? duration[0] : duration,
       maxPeople: totalNumberOfPeoples ? +totalNumberOfPeoples : 0,
       isUnlimitedCapacity: isUnlimited,
       subCategory: subcategory,
-      timeOfDay: schedule,
+      timeOfDay: Array.isArray(schedule) ? schedule : schedule ? [schedule] : [],
       minAge: +minAge,
 
       locations: locationMap,
@@ -1011,8 +1022,17 @@ export class AddTourComponent {
             name: this.i18nService.getValue(this.tour?.name),
             category: this.tour?.tourCategoryId,
             priceType: this.tour?.priceType?.toUpperCase() === 'GRUPO' ? PriceType.GROUP : PriceType.INDIVIDUAL,
-            duration: durationEnumValue || this.tour?.duration,
-            schedule: timeOfDayValue || [],
+            // duration now single-select (string); normalize from array if needed
+            duration: Array.isArray(durationEnumValue)
+              ? (durationEnumValue[0] || "")
+              : durationEnumValue || 
+                (Array.isArray(this.tour?.duration) ? this.tour?.duration[0] : this.tour?.duration) || "",
+            // schedule now multi-select (array); normalize from string if needed
+            schedule: Array.isArray(timeOfDayValue)
+              ? timeOfDayValue
+              : timeOfDayValue
+              ? [timeOfDayValue]
+              : [],
             subcategory: subCategoryValue || "",
             isUnlimited: isUnlimitedValue || false,
             totalNumberOfPeoples: this.tour?.maxPeople,

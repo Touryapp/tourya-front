@@ -235,8 +235,8 @@
                                             <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
                                                 <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let s of filteredSubCategories; let i = index">
                                                     <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'subcat_'+i" 
-                                                        [checked]="selectedSubCategoryIds.includes(s.id)"
-                                                        (change)="toggleSelection(selectedSubCategoryIds, s.id)">
+                                                        [checked]="selectedSubCategories.includes(s.code || s.name)"
+                                                        (change)="toggleSubCategory(s)">
                                                     <label class="form-check-label ms-2" [for]="'subcat_'+i">
                                                         {{ s.name }}
                                                     </label>
@@ -261,8 +261,8 @@
                                             <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
                                                 <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let t of tags; let i = index">
                                                     <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'tag_'+i" 
-                                                        [checked]="selectedTags.includes(t.name)"
-                                                        (change)="toggleSelection(selectedTags, t.name)">
+                                                        [checked]="selectedTags.includes(t.id)"
+                                                        (change)="toggleSelection(selectedTags, t.id)">
                                                     <label class="form-check-label ms-2" [for]="'tag_'+i">
                                                         {{ t.name }}
                                                     </label>

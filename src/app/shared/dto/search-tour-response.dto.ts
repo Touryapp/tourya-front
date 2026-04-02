@@ -1,21 +1,29 @@
 export interface SearchTourListDto {
-  providerStateId: number;
-  providerCityId: number;
-  categoryId: number;
-  page: number;
-  size: number;
-  startDate: string;
-  endDate: string;
-  duration: string;
-  ageType: string;
-  minPrice: number;
-  maxPrice: number;
-  durationType: string;
+  categoryIds?: number[];
+  subCategories?: string[];
+  durationEnums?: string[];
+  timeOfDay?: string[];
+  tagIds?: number[];
+  minPrice?: number;
+  maxPrice?: number;
+  startDate?: string;
+  endDate?: string;
+  language?: string;
+  textSearch?: string;
+  
+  // Legacy fields (might be used for mapping or external references)
+  providerStateId?: number;
+  providerCityId?: number;
+  categoryId?: number | string;
+  page?: number;
+  size?: number;
+  duration?: string;
+  ageType?: string;
+  durationType?: string;
   sort_by?: string;
   sort_dir?: string;
   tourId?: number;
-  tag: string;
-  textSearch:string;
+  tag?: string;
 }
 
 export interface ScheduleDto {
@@ -28,6 +36,7 @@ export interface ScheduleDto {
   reservedCapacity: number;
   isUnlimitedCapacity: boolean;
   status: string;
+  availability?: number;
   config?: ConfigDto;
 }
 export interface TourDto {
@@ -41,6 +50,8 @@ export interface TourDto {
   tags: TagDto[];
   address: AddressDto;
   gallery: GalleryDto[];
+  priceType?: string;
+  maxPeople?: number;
 }
 
 export interface AddressDto {
@@ -80,6 +91,7 @@ export interface SlotDto {
   endTime: string;
   minCapacity: number;
   maxCapacity: number;
+  availability?: number;
   prices: PriceDto[];
 }
 

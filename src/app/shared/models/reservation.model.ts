@@ -149,4 +149,5 @@ export interface RescheduleReservationRequest {
     ageType: string;
     quantity: number;
   }[];
+  groupCount?: number;
 }

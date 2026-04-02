@@ -5,8 +5,13 @@ export interface CreateTourDto {
   name: I18nField;
   description: I18nField;
   tourCategoryId: number;
-  duration: string;
+  priceType?: string;
+  duration?: string;
+  durationEnum?: string;
   maxPeople: number;
+  isUnlimitedCapacity?: boolean;
+  subCategory?: string;
+  timeOfDay?: string[];
   minAge: number;
   locations: CreateLocationDto[];
   mainAttractions: CreateMainAttractionDto[];
