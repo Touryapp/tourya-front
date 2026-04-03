@@ -19,6 +19,7 @@ export interface RescheduleConfirmationData {
   configQuantity: { ageType: string; quantity: number }[];
   newTotalPrice: number;
   originalPrice: number;
+  groupCount?: number;
 }
 
 @Component({
@@ -55,7 +56,8 @@ export class RescheduleConfirmationModalComponent {
       slotId: this.data.slotId,
       startTime: this.data.startTime,
       endTime: this.data.endTime,
-      configQuantity: this.data.configQuantity
+      configQuantity: this.data.configQuantity,
+      ...(this.data.groupCount != null && { groupCount: this.data.groupCount })
     };
 
     this.reservationService.rescheduleReservation(numericId, body).subscribe({

@@ -39,6 +39,8 @@ export interface ProviderTourBooking {
   bookingDate: string;
   checkInDate: string;
   returnDate: string;
+  rawCheckInDate?: string; // ISO date YYYY-MM-DD
+  rawReturnDate?: string;  // ISO date YYYY-MM-DD
   status: 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed';
   destination: string;
   extraServices?: string[];
@@ -275,6 +277,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       bookingDate: formatDate(reservation.createdDate),
       checkInDate: formatDateTime(reservation.checkInDate),
       returnDate: formatDateTime(reservation.returnDate),
+      rawCheckInDate: reservation.checkInDate ? reservation.checkInDate.split('T')[0] : '',
+      rawReturnDate: reservation.returnDate ? reservation.returnDate.split('T')[0] : '',
       status: this.mapReservationStatus(reservation.deliveryStatus),
       destination: reservation.destination || 'N/A',
       extraServices: reservation.extraServices || [],
@@ -444,6 +448,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         month: 'short',
         year: 'numeric'
       })}, ${reservation.slotTimeEnd}`,
+      rawCheckInDate: reservation.scheduleDate,
+      rawReturnDate: reservation.scheduleDate,
       status: this.mapReservationStatus(reservation.reservationDeliveryStatus),
       destination: 'N/A',
       extraServices: [],
@@ -487,6 +493,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         month: 'short',
         year: 'numeric'
       })}, ${reservation.slotTimeEnd}`,
+      rawCheckInDate: reservation.scheduleDate,
+      rawReturnDate: reservation.scheduleDate,
       status: this.mapReservationStatus(reservation.reservationDeliveryStatus),
       destination: 'N/A', // El API no devuelve destino
       extraServices: [],
@@ -1493,9 +1501,13 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    * Abre el modal de selección de fechas para reagendar
    */
   public openRescheduleDateModal(booking: any): void {
+    console.log('📅 Modal reagendar: Estableciendo fechas por defecto:', booking.rawCheckInDate, booking.rawReturnDate);
     this.rescheduleDateModalBooking = booking;
-    this.rescheduleCheckIn = new Date().toISOString().split('T')[0]; // Fecha de hoy
-    this.rescheduleCheckOut = ''; // Vacío para que el usuario seleccione
+    
+    // Prioridad: 1. Fecha original de la reserva, 2. Fecha de hoy
+    this.rescheduleCheckIn = booking.rawCheckInDate || new Date().toISOString().split('T')[0];
+    this.rescheduleCheckOut = booking.rawReturnDate || this.rescheduleCheckIn;
+    
     this.showRescheduleDateModal = true;
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, take } from "rxjs";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 import { environment } from '../../../environments/environment';
@@ -219,6 +219,9 @@ export class CartService {
     this.setCartItemsIfChanged([...currentItems]);
     this.updateDaySelection(cartItem.dayDate, cartItem);
     
+    // Tracking de acción del usuario
+    this.updateUserActionsTrace('add', cartItem);
+
     // Guardar en caché los horarios del slot para este ID (por si el backend no los devuelve en el reload)
     if (cartItem.selectedSlot && cartItem.selectedSlot.slotId) {
       this.slotTimeCache.set(cartItem.selectedSlot.slotId, {
@@ -303,6 +306,9 @@ export class CartService {
     this.setCartItemsIfChanged(filteredItems);
     this.updateDaySelection(dayDate, undefined);
     this.updateCartSummary();
+
+    // Tracking de acción del usuario
+    this.updateUserActionsTrace('remove', currentItems.find(item => item.dayDate === dayDate));
   }
 
   /**
@@ -394,15 +400,19 @@ export class CartService {
       this.setCartItemsIfChanged([]);
       this.cartSummarySubject.next(null);
 
-      // Resetear las selecciones de días
-      const currentDays = this.daySelectionsSubject.getValue();
-      const resetDays = currentDays.map((day) => ({
-        ...day,
-        isSelected: false,
-        tourSelected: undefined,
-      }));
+      this.daySelections$
+      .pipe(take(1))
+      .subscribe((currentDays: DaySelection[]) => {
+        const resetDays = currentDays.map((day: DaySelection) => ({
+            ...day,
+            isSelected: false,
+            tourSelected: undefined,
+          }));
+          this.daySelectionsSubject.next(resetDays);
+        });
 
-      this.daySelectionsSubject.next(resetDays);
+      // Tracking de acción del usuario
+      this.updateUserActionsTrace('clear');
 
     } catch (error) {
       console.error('❌ Error al limpiar el carrito:', error);
@@ -424,9 +434,17 @@ export class CartService {
       );
     });
 
-    return schedule && schedule.config && schedule.config.slots
-      ? schedule.config.slots
-      : [];
+    if (schedule && schedule.config && schedule.config.slots) {
+      return schedule.config.slots.map((slot: any) => ({
+        ...slot,
+        // Conservar la capacidad específica del slot si existe, de lo contrario usar la del schedule
+        capacity: schedule.isUnlimitedCapacity 
+          ? 999 
+          : (slot.capacity !== null && slot.capacity !== undefined ? slot.capacity : (schedule.capacity || 0)),
+      }));
+    }
+    
+    return [];
   }
 
   /**
@@ -476,14 +494,13 @@ export class CartService {
    */
   validateParticipantQuantity(
     participants: ParticipantSelection[],
-    minCapacity: number,
-    maxCapacity: number
+    capacity: number
   ): boolean {
     const totalParticipants = participants.reduce(
       (sum, p) => sum + p.quantity,
       0
     );
-    return totalParticipants >= minCapacity && totalParticipants <= maxCapacity;
+    return totalParticipants <= capacity;
   }
 
   /**
@@ -521,6 +538,13 @@ export class CartService {
     // Si ya se cargó y no es forzado, no recargar
     if (this.hasLoadedFromBackend && !force) {
       console.log('✅ CartService: Carrito ya cargado previamente');
+      return;
+    }
+
+    // Si no está autenticado, no intentar cargar del backend
+    if (!this.authService.isAuthenticated()) {
+      console.log('🚪 CartService: Usuario no autenticado, abortando carga del backend');
+      this.setCartItemsIfChanged([]);
       return;
     }
 
@@ -759,6 +783,13 @@ export class CartService {
       
       // Actualizar UI inmediatamente
       this.setCartItemsIfChanged(filteredItems);
+
+      // Tracking de acción del usuario
+      const removedItem = currentItems.find(item => {
+        const id = typeof item.id === 'string' ? parseInt(item.id, 10) : item.id;
+        return id === itemId;
+      });
+      this.updateUserActionsTrace('remove', removedItem);
       
       // Luego eliminar del backend
       const cartResponse = await this.http.get(
@@ -798,6 +829,40 @@ export class CartService {
   }
 
   /**
+   * Actualiza el objeto userActionsTrace en localStorage
+   */
+  private updateUserActionsTrace(action: 'add' | 'remove' | 'clear', item?: CartItem): void {
+    try {
+      const traceKey = 'userActionsTrace';
+      let trace: any = JSON.parse(localStorage.getItem(traceKey) || '{}');
+
+      if (action === 'add' && item) {
+        trace.tourAddedInCart = {
+          tourId: item.tour.id,
+          tourName: item.tour.name,
+          totalPrice: item.totalPrice,
+          dayDate: item.dayDate,
+          time: `${item.selectedSlot.startTime} - ${item.selectedSlot.endTime}`,
+          totalParticipants: item.totalParticipants,
+          addedAt: new Date().toISOString()
+        };
+      } else if (action === 'remove' && item) {
+        // Solo limpiar si el que estamos eliminando es el que está en el trace
+        if (trace.tourAddedInCart && trace.tourAddedInCart.tourId === item.tour.id && trace.tourAddedInCart.dayDate === item.dayDate) {
+          trace.tourAddedInCart = null;
+        }
+      } else if (action === 'clear') {
+        trace.tourAddedInCart = null;
+      }
+
+      localStorage.setItem(traceKey, JSON.stringify(trace));
+      console.log(`📊 CartService: userActionsTrace actualizado (${action})`, trace);
+    } catch (error) {
+      console.error('❌ CartService: Error actualizando userActionsTrace', error);
+    }
+  }
+
+  /**
    * Mapear respuesta de API a CartItems del frontend
    */
   private mapApiResponseToCartItems(apiItems: any[]): CartItem[] {
@@ -827,8 +892,7 @@ export class CartService {
           slotId: slotId, // ✅ API: item.slotId o item.slot.id
           startTime: item.startTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
           endTime: item.endTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00',
-          minCapacity: item.minCapacity || (item.slot ? item.slot.minCapacity : 2),
-          maxCapacity: item.maxCapacity || (item.slot ? item.slot.maxCapacity : 15)
+          capacity: item.capacity || (item.slot ? item.slot.capacity : 15)
         },
         participants: item.details.map((detail: any) => ({
           ageType: detail.ageType.name, // ✅ API: detail.ageType.name

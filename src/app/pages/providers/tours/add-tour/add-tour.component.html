@@ -116,14 +116,8 @@
                                         <label class="form-label">{{ 'tour-form.fields.category.label' | translate }}</label>
                                         <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.category.placeholder' | translate }}"
                                             formControlName="category" (blur)="onCategoryBlur($event)">
-                                            <mat-option [value]="Category.AQUATIC">{{ 'tour-form.fields.category.options.aquatic' | translate }}</mat-option>
-                                            <mat-option [value]="Category.LAND">{{ 'tour-form.fields.category.options.land' | translate }}</mat-option>
-                                            <mat-option [value]="Category.ADVENTURE">{{ 'tour-form.fields.category.options.adventure' | translate }}</mat-option>
-                                            <mat-option [value]="Category.NIGHT">{{ 'tour-form.fields.category.options.night' | translate }}</mat-option>
-                                            <mat-option [value]="Category.EXPERIENCES">{{ 'tour-form.fields.category.options.experiences' | translate }}</mat-option>
-                                            <mat-option [value]="Category.CULTURAL">{{ 'tour-form.fields.category.options.cultural' | translate }}</mat-option>
-                                            <mat-option [value]="Category.TRANSPORT_RENTAL">
-                                                {{ 'tour-form.fields.category.options.transportRental' | translate }}
+                                            <mat-option *ngFor="let cat of backendCategories" [value]="cat.id">
+                                                {{ cat.name }}
                                             </mat-option>
                                         </mat-select>
 
@@ -134,6 +128,23 @@
                                                 {{ 'tour-form.fields.category.errors.required' | translate }}
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Subcategoría</label>
+                                        <mat-select class="custom-mat-select select" placeholder="Selecciona subcategoría"
+                                            formControlName="subcategory">
+                                            <mat-option *ngFor="let item of subcategories" [value]="item.code">
+                                                {{ item.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label d-block mb-1">Ilimitado</label>
+                                        <mat-slide-toggle class="mat-slide-toogle mt-1" formControlName="isUnlimited"></mat-slide-toggle>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6">
@@ -155,28 +166,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-6">
-
-                                    <div class="mb-3">
-                                        <label class="form-label">{{ 'tour-form.fields.duration.label' | translate }}</label>
-                                        <input type="text" class="form-control" formControlName="duration"
-                                            (blur)="onDurationBlur($event)">
-                                        <div *ngIf="tourForm.controls['duration'].invalid && (tourForm.controls['duration'].dirty || tourForm.controls['duration'].touched)"
-                                            class="text-danger">
-                                            <div *ngIf="tourForm.controls['duration'].errors?.['required']">
-                                                {{ 'tour-form.fields.duration.errors.required' | translate }}
-                                            </div>
-                                            <div *ngIf="tourForm.controls['duration'].errors?.['minlength']">
-                                                {{ 'tour-form.fields.duration.errors.minlength' | translate }}
-                                            </div>
-
-                                            <div *ngIf="tourForm.controls['duration'].errors?.['maxlength']">
-                                                {{ 'tour-form.fields.duration.errors.maxlength' | translate }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="col-lg-4 col-md-6" *ngIf="tourForm.get('priceType')?.value === PriceType.GROUP">
                                     <div class="mb-3">
                                         <label class="form-label">{{ 'tour-form.fields.totalNumberOfPeoples.label' | translate }}</label>
@@ -191,8 +180,26 @@
                                         </div>
                                     </div>
                                 </div>
-
-
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.duration.label' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" placeholder="Selecciona duración"
+                                            formControlName="duration">
+                                            <mat-option value="1_a_2_horas">1 a 2 horas</mat-option>
+                                            <mat-option value="2_a_4_horas">de 2 a 4</mat-option>
+                                            <mat-option value="4_a_6_horas">de 4 a 6 horas</mat-option>
+                                            <mat-option value="hasta_1_dia">hasta 1 día</mat-option>
+                                            <mat-option value="hasta_3_dias">hasta 3 días</mat-option>
+                                            <mat-option value="hasta_5_dias">hasta 5 días</mat-option>
+                                        </mat-select>
+                                        <div *ngIf="tourForm.controls['duration'].invalid && (tourForm.controls['duration'].dirty || tourForm.controls['duration'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['duration'].errors?.['required']">
+                                                {{ 'tour-form.fields.duration.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">{{ 'tour-form.fields.minAge.label' | translate }} </label>
@@ -202,6 +209,26 @@
                                             class="text-danger">
                                             <div *ngIf="tourForm.controls['minAge'].errors?.['required']">
                                                 {{ 'tour-form.fields.minAge.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Horario</label>
+                                        <div class="d-flex flex-wrap gap-2 mt-1">
+                                            <label class="duration-check-label" *ngFor="let opt of scheduleOptions">
+                                                <input type="checkbox"
+                                                    [value]="opt.value"
+                                                    [checked]="isScheduleSelected(opt.value)"
+                                                    (change)="onScheduleChange(opt.value, $event)">
+                                                <span>{{ opt.label }}</span>
+                                            </label>
+                                        </div>
+                                        <div *ngIf="tourForm.controls['schedule'].invalid && (tourForm.controls['schedule'].dirty || tourForm.controls['schedule'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['schedule'].errors?.['required']">
+                                                Requerido
                                             </div>
                                         </div>
                                     </div>

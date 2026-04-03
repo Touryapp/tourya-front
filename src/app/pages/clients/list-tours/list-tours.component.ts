@@ -123,10 +123,16 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
   public selectedState: string = ""; // kept for URL param compatibility (stateId)
   selectedCity: string = "";
-  public selectedTag: string = "";
-  public selectedCategoryId?: number;
+  
+  public selectedTags: number[] = [];
+  public selectedCategoryIds: number[] = [];
+  public selectedSubCategories: string[] = [];
+  public selectedSubCategoryIds: number[] = []; // Keep for internal filtering if needed
+  public selectedSchedules: string[] = [];
+  public selectedDurations: string[] = [];
+
   public travellersData = {
-    adults: 1,
+    adults: 2,
     children: 0,
     infants: 0,
     cabinClass: 'Economy'
@@ -134,23 +140,49 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public checkIn: string = "";
   public checkOut: string = "";
 
-  // Nuevas propiedades para filtros basados en SearchTourListDto
-  public selectedDurationOption: string = ""; // e.g., 'DAYS:1' or 'WEEKS:3'
-  public selectedAgeType: string = "";
   public minPrice: number = 0;
-  public maxPrice: number = 0;
+  public maxPrice: number = 100000000;
+  public language: string = 'es';
+
+  get minPriceFormatted(): string {
+    return this.minPrice !== null && this.minPrice !== undefined ? this.minPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '0';
+  }
+
+  set minPriceFormatted(value: string) {
+    const numericValue = value.replace(/\./g, '');
+    this.minPrice = numericValue ? parseInt(numericValue, 10) : 0;
+    if (this.minPrice > this.maxPrice) {
+      this.maxPrice = this.minPrice;
+    }
+  }
+
+  get maxPriceFormatted(): string {
+    return this.maxPrice !== null && this.maxPrice !== undefined ? this.maxPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '0';
+  }
+
+  set maxPriceFormatted(value: string) {
+    const numericValue = value.replace(/\./g, '');
+    this.maxPrice = numericValue ? parseInt(numericValue, 10) : 0;
+    if (this.maxPrice < this.minPrice) {
+      this.minPrice = this.maxPrice;
+    }
+  }
+
   public searchText: string = "";
 
-  // Opciones para los filtros
-  public durationUnifiedOptions = [
-    { value: 'DAYS:1', label: '1 día' },
-    { value: 'DAYS:2', label: '2 días' },
-    { value: 'DAYS:3', label: '3 días' },
-    { value: 'DAYS:4', label: '4 días' },
-    { value: 'WEEKS:1', label: '1 semana' },
-    { value: 'WEEKS:2', label: '2 semanas' },
-    { value: 'WEEKS:3', label: '3 semanas' },
-    { value: 'WEEKS:4', label: '4 semanas' },
+  public durationOptions = [
+    { value: '1_a_2_horas', label: '1 a 2 horas' },
+    { value: '2_a_4_horas', label: 'de 2 a 4' },
+    { value: '4_a_6_horas', label: 'de 4 a 6 horas' },
+    { value: 'hasta_1_dia', label: 'hasta 1 día' },
+    { value: 'hasta_3_dias', label: 'hasta 3 días' },
+    { value: 'hasta_5_dias', label: 'hasta 5 días' }
+  ];
+
+  public scheduleOptions = [
+    { value: 'manana', label: 'Mañana' },
+    { value: 'tarde', label: 'Tarde' },
+    { value: 'noche', label: 'Noche' }
   ];
 
   public ageTypeOptions = [
@@ -195,7 +227,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
       
       this.selectedCity = params["city"] || ""; // stateId desde Home
       this.travellersData = {
-        adults: Number(params["adults"]) || 1,
+        adults: Number(params["adults"]) || 2,
         children: Number(params["children"]) || 0,
         infants: Number(params["infants"]) || 0,
         cabinClass: params["cabinClass"] || 'Economy'
@@ -295,7 +327,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     });
     // Categorías
     this.searchToursService.categoriesPublic().subscribe({
-      next: (data) => this.categories = data,
+      next: (data: any[]) => this.categories = data,
       error: (err) => console.error('Error cargando categorías', err)
     });
     // Tipos de edad
@@ -323,20 +355,18 @@ export class ListToursComponent implements OnInit, OnDestroy {
         this.daySelections = days;
       });
 
-    // Subscribe to cart items - cargar del backend la primera vez
+    // Subscribe to cart items - cargar del backend siempre al iniciar para sincronizar
     this.cartService.cartItems$
       .pipe(takeUntil(this.destroy$))
       .subscribe((items) => {
         console.log('🛒 ListTours: CartItems actualizado', items.length, 'items');
         this.isCartVisible = items.length > 0;
-        
-        // Cargar del backend solo si está vacío y no se ha cargado aún
-        if (items.length === 0) {
-          this.cartService.loadCartFromBackend().catch(err => {
-            console.error('❌ ListTours: Error cargando carrito inicial', err);
-          });
-        }
       });
+
+    // Forzar carga desde el backend al iniciar la pantalla
+    this.cartService.loadCartFromBackend(true).catch(err => {
+      console.error('❌ ListTours: Error cargando carrito desde backend', err);
+    });
   }
 
   // Show more/less functionality
@@ -387,20 +417,22 @@ export class ListToursComponent implements OnInit, OnDestroy {
     console.log("Reseteando filtros...");
     this.selectedCity = "";
     this.selectedLocation = null;
-    this.selectedTag = "";
-    this.selectedCategoryId = undefined;
+    this.selectedTags = [];
+    this.selectedCategoryIds = [];
+    this.selectedSubCategories = [];
+    this.selectedSubCategoryIds = [];
+    this.selectedSchedules = [];
+    this.selectedDurations = [];
     this.travellersData = {
-      adults: 1,
+      adults: 2,
       children: 0,
       infants: 0,
       cabinClass: 'Economy'
     };
     this.checkIn = "";
     this.checkOut = "";
-    this.selectedDurationOption = "";
-    this.selectedAgeType = "";
     this.minPrice = 0;
-    this.maxPrice = 0;
+    this.maxPrice = 100000000;
     this.searchText = "";
     this.currentPage = 1;
     this.page = 1;
@@ -533,8 +565,11 @@ export class ListToursComponent implements OnInit, OnDestroy {
     console.log("Datos de viajeros:", this.travellersData);
     console.log("Fecha de entrada:", this.checkIn);
     console.log("Fecha de salida:", this.checkOut);
-    console.log("Duración seleccionada (opción):", this.selectedDurationOption, "=> horas:", this.computeDurationHours(this.selectedDurationOption));
-    console.log("Tipo de edad seleccionado:", this.selectedAgeType);
+    console.log("Categorias:", this.selectedCategoryIds);
+    console.log("SubCategorias:", this.selectedSubCategoryIds);
+    console.log("Tags:", this.selectedTags);
+    console.log("Horarios:", this.selectedSchedules);
+    console.log("Duraciones:", this.selectedDurations);
     console.log("Precio mínimo:", this.minPrice);
     console.log("Precio máximo:", this.maxPrice);
     console.log("Texto de búsqueda:", this.searchText);
@@ -610,25 +645,70 @@ export class ListToursComponent implements OnInit, OnDestroy {
     return `${details.join(', ')}, ${this.travellersData.cabinClass}`;
   }
 
+  public get filteredSubCategories(): any[] {
+    if (this.selectedCategoryIds.length === 0) {
+      if (!this.categories) return [];
+      return this.categories.reduce((acc: any[], cat: any) => acc.concat(cat.subCategories || []), []);
+    } else {
+      return this.categories
+        .filter((cat: any) => this.selectedCategoryIds.includes(cat.id))
+        .reduce((acc: any[], cat: any) => acc.concat(cat.subCategories || []), []);
+    }
+  }
+
+  toggleSubCategory(s: any): void {
+    const value = s.code || s.name;
+    const indexStr = this.selectedSubCategories.indexOf(value);
+    if (indexStr > -1) {
+      this.selectedSubCategories.splice(indexStr, 1);
+      this.selectedSubCategoryIds = this.selectedSubCategoryIds.filter(id => id !== s.id);
+    } else {
+      this.selectedSubCategories.push(value);
+      this.selectedSubCategoryIds.push(s.id);
+    }
+  }
+
+  toggleSelection(array: any[], value: any): void {
+    const index = array.indexOf(value);
+    if (index > -1) {
+      array.splice(index, 1);
+    } else {
+      array.push(value);
+    }
+    
+    if (array === this.selectedCategoryIds) {
+      const validSubCatIds = this.filteredSubCategories.map((s: any) => s.id);
+      this.selectedSubCategoryIds = this.selectedSubCategoryIds.filter(id => validSubCatIds.includes(id));
+    }
+  }
+
   searchToursList(): void {
     this.loading = true;
 
-    // Construir objeto de búsqueda con todos los filtros
-    const durationHours = this.computeDurationHours(this.selectedDurationOption);
-    const searchData: Partial<SearchTourListDto> = {
+    const userActionsTrace = {
+      city: this.selectedCity,
+      adults: this.travellersData.adults,
+      children: this.travellersData.children,
+      infants: this.travellersData.infants,
+      cabinClass: this.travellersData.cabinClass,
+      checkIn: this.checkIn,
+      checkOut: this.checkOut
+    };
+    localStorage.setItem('userActionsTrace', JSON.stringify(userActionsTrace));
+
+    // Construir objeto de búsqueda con todos los filtros según el backend
+    const searchData: SearchTourListDto = {
       startDate: this.checkIn || undefined,
       endDate: this.checkOut || undefined,
-      providerStateId: this.selectedLocation?.stateId,
-      providerCityId: this.selectedLocation?.cityId,
-      ...(durationHours !== undefined ? { durationType: 'HORAS', duration: String(durationHours) } : {}),
-      categoryId: this.selectedCategoryId,
-      ageType: this.selectedAgeType || undefined,
+      categoryIds: this.selectedCategoryIds.length ? this.selectedCategoryIds : undefined,
+      subCategories: this.selectedSubCategories.length ? this.selectedSubCategories : undefined,
+      tagIds: this.selectedTags.length ? this.selectedTags : undefined,
+      timeOfDay: this.selectedSchedules.length ? this.selectedSchedules : undefined,
+      durationEnums: this.selectedDurations.length ? this.selectedDurations : undefined,
       minPrice: this.minPrice || undefined,
       maxPrice: this.maxPrice || undefined,
-      tag: this.selectedTag || undefined,
       textSearch: this.searchText || undefined,
-      // sort_by: "price",
-      // sort_dir: "DESC",
+      language: this.language
     };
 
     console.log("=== DATOS ENVIADOS A LA API ===");
@@ -752,6 +832,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
         tour,
         checkIn: this.checkIn,
         checkOut: this.checkOut,
+        travellersData: this.travellersData, // Pass search parameters
         tourAdded: this.onTourAddedToCart.bind(this),
       },
     });

@@ -57,7 +57,7 @@ export interface ClientReservation {
   slotTimeStart: string;
   slotTimeEnd: string;
   minCapacity: number;
-  maxCapacity: number;
+  capacity: number;
   serviceResponsibleName: string;
   serviceResponsibleEmail: string;
   serviceResponsiblePhone: string;
@@ -149,4 +149,5 @@ export interface RescheduleReservationRequest {
     ageType: string;
     quantity: number;
   }[];
+  groupCount?: number;
 }

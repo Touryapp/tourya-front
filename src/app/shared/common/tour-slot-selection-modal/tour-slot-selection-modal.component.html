@@ -49,8 +49,11 @@
         <div class="date-carousel">
           <owl-carousel-o [options]="customOptions">
             <ng-template *ngFor="let date of dates" carouselSlide>
-              <div class="date-item" [ngClass]="{'selected': selectedDate === date}" (click)="selectDate(date)">
-                <span class="text">{{date | date: 'dd/MM/yyyy'}}</span>
+              <div class="date-item d-flex flex-column align-items-center justify-content-center" [ngClass]="{'selected': selectedDate === date}" (click)="selectDate(date)">
+                <span class="text text-center mb-1 m-0" style="line-height: 1;">{{date | date: 'dd/MM/yyyy'}}</span>
+                <span class="text-center w-100 m-0" 
+                      [ngClass]="{'text-danger font-weight-bold': hasCapacityError(date)}" 
+                      style="font-size: 0.75rem; opacity: 0.85; line-height: 1; transition: color 0.3s;">Disponibles: {{ getDayAvailability(date) }}</span>
               </div>
             </ng-template>
           </owl-carousel-o>
@@ -80,7 +83,7 @@
                   <div class="available-capacity">
                     <i class="isax isax-profile-2user me-1"></i>
                     <span *ngIf="!isSlotFull(slot)">
-                      {{ slot.maxCapacity }} espacios disponibles
+                      {{ slot.availability || slot.capacity }} {{ selectedTour?.tour?.priceType === 'group' ? 'grupos disponibles' : 'cupos disponibles' }}
                     </span>
                     <span *ngIf="isSlotFull(slot)" class="text-danger">
                       Completo
@@ -121,15 +124,53 @@
         </div>
 
         <!-- Participants Selection Section -->
-        <div class="participants-section" *ngIf="selectedSlot">
+        <div class="participants-section" *ngIf="participants.length > 0">
           <div class="section-header">
             <h6 class="section-title">
               <i class="isax isax-people me-2"></i>
-              Seleccionar Participantes
+              {{ selectedTour?.tour?.priceType === 'group' ? 'Participantes por Grupo' : 'Seleccionar Participantes' }}
             </h6>
-            <span class="section-subtitle">
-              Capacidad: {{ selectedSlot.minCapacity }} - {{ selectedSlot.maxCapacity }} personas
+            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType !== 'group'">
+              Disponibles: {{ selectedSlot.availability }} personas
             </span>
+            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType === 'group'">
+              Máximo {{ selectedTour?.tour?.maxPeople || 99 }} personas por grupo
+            </span>
+            <span class="section-subtitle" *ngIf="!selectedSlot">
+              {{ availableSlots.length > 0 ? 'Selecciona un horario para ver la capacidad exacta' : '' }}
+            </span>
+          </div>
+
+          <!-- Group Selection (Only for Price Type "group") -->
+          <div class="participants-list group-selection-list mb-3" *ngIf="selectedTour?.tour?.priceType === 'group'">
+            <div class="participant-item">
+              <div class="participant-info">
+                <div class="participant-type">Seleccionar Grupos</div>
+                <div class="participant-details">
+                  <span class="age-range">Cantidad de grupos a reservar</span>
+                  <span class="price d-block fw-bold text-primary mt-1" *ngIf="participants.length > 0">{{ formatPrice(participants[0].price) }} por grupo</span>
+                </div>
+              </div>
+
+              <div class="quantity-controls">
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  [disabled]="groupCount <= 1" (click)="decrementGroup()">
+                  <i class="isax isax-minus"></i>
+                </button>
+
+                <input type="number" class="form-control quantity-input" [value]="groupCount" min="1"
+                  (input)="updateGroupCount($any($event.target).value)" readonly>
+
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  (click)="incrementGroup()">
+                  <i class="isax isax-add"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Error message for groups -->
+            <div class="availability-error text-danger small mt-1 text-end" *ngIf="showGroupError">
+              Limite maximo de disponibilidad
+            </div>
           </div>
 
           <div class="participants-list">
@@ -138,7 +179,7 @@
                 <div class="participant-type">{{ participant.label }}</div>
                 <div class="participant-details">
                   <span class="age-range">{{ getAgeRange(participant) }}</span>
-                  <span class="price">{{ formatPrice(participant.price) }} c/u</span>
+                  <span class="price" *ngIf="selectedTour?.tour?.priceType !== 'group'">{{ formatPrice(participant.price) }} c/u</span>
                 </div>
               </div>
 
@@ -153,10 +194,14 @@
                   (input)="updateParticipantQuantity(participant, $any($event.target).value)" readonly>
 
                 <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
-                  [disabled]="!canIncrement(participant)" (click)="incrementParticipant(participant)">
+                  (click)="incrementParticipant(participant)">
                   <i class="isax isax-add"></i>
                 </button>
               </div>
+            </div>
+            <!-- Error message for groups -->
+            <div class="availability-error text-danger small mt-1 text-end" *ngIf="showParticipantError">
+              Limite maximo de disponibilidad
             </div>
           </div>
 
@@ -164,7 +209,7 @@
           <div class="selection-summary" *ngIf="totalParticipants > 0">
             <div class="summary-card">
               <div class="summary-item">
-                <span class="label">Total de Participantes:</span>
+                <span class="label">Total de Participantes{{ selectedTour?.tour?.priceType === 'group' ? ' (Total)' : '' }}:</span>
                 <span class="value">{{ totalParticipants }}</span>
               </div>
               <div class="summary-item">
@@ -193,7 +238,7 @@
             Cancelar
           </button>
 
-          <button type="button" class="btn btn-primary" [disabled]="!isValid || isProcessing" (click)="confirmSelection()">
+          <button type="button" class="btn btn-primary" [disabled]="isProcessing || (!isValid && !isCurrentScheduleUnlimited)" (click)="confirmSelection()">
             <span *ngIf="!isProcessing">
               <i class="isax isax-add-circle me-1" *ngIf="!isRescheduling"></i>
               <i class="isax isax-calendar me-1" *ngIf="isRescheduling"></i>

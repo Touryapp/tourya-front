@@ -67,3 +67,38 @@ fieldset:disabled {
   opacity: 0.6;
   pointer-events: none;
 }
+
+// Checkboxes de Duración (estilo píldora)
+.duration-check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 14px 6px 10px;
+  border: 1.5px solid #dee2e6;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+  background: #fff;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  user-select: none;
+
+  input[type="checkbox"] {
+    accent-color: var(--bs-primary, #0d6efd);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &:has(input:checked) {
+    border-color: var(--bs-primary, #0d6efd);
+    background: rgba(13, 110, 253, 0.08);
+    color: var(--bs-primary, #0d6efd);
+  }
+
+  &:hover {
+    border-color: var(--bs-primary, #0d6efd);
+  }
+}

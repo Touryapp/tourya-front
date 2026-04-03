@@ -1161,14 +1161,37 @@
                                               </select>
                                             </div>
                                             <!-- Check In -->
-                                            <div class="form-item">
+                                            <div class="form-item position-relative">
                                               <label class="form-label fs-14 text-default mb-1">Check In</label>
-                                                <input type="date" class="form-control" [(ngModel)]="checkIn" name="checkIn">
+                                              <input
+                                                type="text"
+                                                class="form-control datetimepicker"
+                                                placeholder="DD-MM-YYYY"
+                                                [value]="bsRangeValue[0] | date: 'dd-MM-yyyy'"
+                                                readonly
+                                              />
+                                              <!-- Transparent Picker Trigger -->
+                                              <input
+                                                type="text"
+                                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 1;"
+                                                bsDaterangepicker
+                                                #drp="bsDaterangepicker"
+                                                [bsConfig]="{ displayMonths: 2, showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true, containerClass: 'theme-green' }"
+                                                container="body"
+                                                [bsValue]="bsRangeValue"
+                                                (bsValueChange)="onDateRangeChange($event)"
+                                              />
                                             </div>
                                             <!-- Check Out -->
-                                            <div class="form-item">
+                                            <div class="form-item" (click)="drp.show()">
                                               <label class="form-label fs-14 text-default mb-1">Check Out</label>
-                                                <input type="date" class="form-control" [(ngModel)]="checkOut" name="checkOut">
+                                              <input
+                                                type="text"
+                                                class="form-control datetimepicker"
+                                                placeholder="DD-MM-YYYY"
+                                                [value]="bsRangeValue[1] | date: 'dd-MM-yyyy'"
+                                                readonly
+                                              />
                                             </div>
                                              <div class="form-item dropdown">
                                                 <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">

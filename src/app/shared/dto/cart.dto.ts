@@ -1,5 +1,6 @@
 export interface CartItem {
   id: string; // UUID único para el item
+  groupCount?: number; // Cantidad de grupos (para priceType group)
   dayDate: string; // Fecha del día seleccionado (YYYY-MM-DD) - fecha inicio
   startDate?: string; // Fecha de inicio del tour (YYYY-MM-DD)
   endDate?: string; // Fecha de fin del tour (YYYY-MM-DD) - para tours multi-día
@@ -20,8 +21,7 @@ export interface CartItem {
     slotId: number;
     startTime: string;
     endTime: string;
-    minCapacity?: number;
-    maxCapacity: number;
+    capacity: number;
   };
   participants: {
     ageType: string; // ADULT, CHILD, INFANT, SENIOR
@@ -66,9 +66,8 @@ export interface SlotWithPrices {
   slotId: number;
   startTime: string;
   endTime: string;
-  minCapacity?: number;
-  maxCapacity: number;
-  availableCapacity: number; // maxCapacity - currentBookings
+  capacity: number;
+  availableCapacity: number; // capacity - currentBookings
   prices?: {
     ageType: string;
     minAge: number;

@@ -10,6 +10,7 @@ export interface ReferenceGenerationResponseDto {
 export interface PaymentRequestDto {
   transactionId: string;
   transactionData?: string | null; // Todo el objeto de Wompi como JSON string, o null si es 100% crédito
+  reservationIds: number[]; // ✨ Nuevo campo requerido
   paymentType: 'PLATFORM' | 'CREDIT' | 'CREDIT_AND_PLATFORM'; // ✨ Nuevo campo
   amountCredit?: number; // ✨ Nuevo campo
   amountPlatform?: number; // ✨ Nuevo campo

@@ -26,6 +26,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { CancellationPolicyType } from "../../../../shared/enums/cancellation-policy-type";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 import { PriceType } from "../../../../shared/enums/price-type.enum";
+import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
 
 
 @Component({
@@ -81,11 +82,21 @@ export class AddTourComponent {
   tourId: number = 0;
   tour: Tour | null = null;
 
+  subcategories: any[] = [];
+
+  scheduleOptions = [
+    { value: 'manana', label: 'Mañana' },
+    { value: 'tarde', label: 'Tarde' },
+    { value: 'noche', label: 'Noche' },
+  ];
+
   submitted: boolean = false;
 
   countries: Country[] = [];
   departments: Department[][] = [];
   cities: City[][] = [];
+
+  backendCategories: any[] = [];
 
   @ViewChildren("addressInput") addressInputs!: QueryList<ElementRef>;
 
@@ -107,7 +118,8 @@ export class AddTourComponent {
     private cityService: CityService,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private i18nService: I18nFieldService
+    private i18nService: I18nFieldService,
+    private searchToursService: SearchToursService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -121,15 +133,14 @@ export class AddTourComponent {
         ],
       ],
       category: ["", [Validators.required]],
+      subcategory: [""],
+      isUnlimited: [false],
       priceType: ["", [Validators.required]],
       duration: [
         "",
-        [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(50),
-        ],
+        [Validators.required],
       ],
+      schedule: [[], [Validators.required]],
 
       totalNumberOfPeoples: [""], // Initially no validators
       minAge: [
@@ -249,7 +260,42 @@ export class AddTourComponent {
           this.tourForm.get("category")?.setValue("");
         }
       }
+      this.updateSubcategories();
     });
+
+    this.getCategories();
+  }
+
+  getCategories() {
+    this.searchToursService.categoriesPublic().subscribe({
+      next: (data) => {
+        if (data) {
+          this.backendCategories = data;
+          this.updateSubcategories();
+        }
+      },
+      error: (err) => {
+        console.error("Error getting categories", err);
+      }
+    });
+  }
+
+  updateSubcategories() {
+    const categoryId = this.tourForm.get('category')?.value;
+    if (categoryId) {
+      const category = this.backendCategories.find(c => c.id === categoryId);
+      this.subcategories = category ? (category.subCategories || []) : [];
+    } else {
+      let allSubcategories: any[] = [];
+      this.backendCategories.forEach(cat => {
+        if (cat.subCategories) {
+          allSubcategories = allSubcategories.concat(cat.subCategories);
+        }
+      });
+      const unique = new Map<string, any>();
+      allSubcategories.forEach(sub => unique.set(sub.code, sub));
+      this.subcategories = Array.from(unique.values());
+    }
   }
 
   ngOnDestroy(): void {
@@ -258,13 +304,7 @@ export class AddTourComponent {
 
   get isValidCategory(): boolean {
     const categoryValue = +this.tourForm.get("category")?.value;
-
-    const categories = Object.values(Category).filter(
-      (value) => typeof value === "number"
-    );
-
-    const found = categories.find((category) => category === categoryValue);
-
+    const found = this.backendCategories.find((category) => category.id === categoryValue);
     return !!found;
   }
 
@@ -308,10 +348,22 @@ export class AddTourComponent {
 
   onCategoryBlur(event: FocusEvent) {}
 
-  onDurationBlur(event: FocusEvent) {
-    this.tourForm
-      .get("duration")
-      ?.setValue((event.target as HTMLInputElement).value.trim());
+  isScheduleSelected(value: string): boolean {
+    const current: string[] = this.tourForm.get('schedule')?.value || [];
+    return current.includes(value);
+  }
+
+  onScheduleChange(value: string, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const current: string[] = [...(this.tourForm.get('schedule')?.value || [])];
+    if (checked) {
+      if (!current.includes(value)) current.push(value);
+    } else {
+      const idx = current.indexOf(value);
+      if (idx > -1) current.splice(idx, 1);
+    }
+    this.tourForm.get('schedule')?.setValue(current);
+    this.tourForm.get('schedule')?.markAsDirty();
   }
 
   onTotalNumberOfPeopleBlur(event: FocusEvent) {}
@@ -731,8 +783,11 @@ export class AddTourComponent {
       name,
       description,
       category,
+      subcategory,
+      isUnlimited,
       priceType,
       duration,
+      schedule,
       minAge,
       totalNumberOfPeoples,
       locations,
@@ -809,9 +864,12 @@ export class AddTourComponent {
       name: this.i18nService.createI18nField(name),
       description: this.i18nService.createI18nField(description),
       tourCategoryId: +category,
-      priceType: priceType,
-      duration,
-      maxPeople: totalNumberOfPeoples,
+      priceType: priceType === PriceType.GROUP ? 'grupo' : 'individual',
+      durationEnum: Array.isArray(duration) ? duration[0] : duration,
+      maxPeople: totalNumberOfPeoples ? +totalNumberOfPeoples : 0,
+      isUnlimitedCapacity: isUnlimited,
+      subCategory: subcategory,
+      timeOfDay: Array.isArray(schedule) ? schedule : schedule ? [schedule] : [],
       minAge: +minAge,
 
       locations: locationMap,
@@ -950,12 +1008,33 @@ export class AddTourComponent {
         if (data) {
           this.tour = data;
 
+          // @ts-ignore
+          const subCategoryValue = this.tour?.subCategory;
+          // @ts-ignore
+          const isUnlimitedValue = this.tour?.isUnlimitedCapacity;
+          // @ts-ignore
+          const durationEnumValue = this.tour?.durationEnum;
+          // @ts-ignore
+          const timeOfDayValue = this.tour?.timeOfDay;
+
           this.tourForm.patchValue({
             id: this.tour?.id,
             name: this.i18nService.getValue(this.tour?.name),
             category: this.tour?.tourCategoryId,
-            priceType: this.tour?.priceType,
-            duration: this.tour?.duration,
+            priceType: this.tour?.priceType?.toUpperCase() === 'GRUPO' ? PriceType.GROUP : PriceType.INDIVIDUAL,
+            // duration now single-select (string); normalize from array if needed
+            duration: Array.isArray(durationEnumValue)
+              ? (durationEnumValue[0] || "")
+              : durationEnumValue || 
+                (Array.isArray(this.tour?.duration) ? this.tour?.duration[0] : this.tour?.duration) || "",
+            // schedule now multi-select (array); normalize from string if needed
+            schedule: Array.isArray(timeOfDayValue)
+              ? timeOfDayValue
+              : timeOfDayValue
+              ? [timeOfDayValue]
+              : [],
+            subcategory: subCategoryValue || "",
+            isUnlimited: isUnlimitedValue || false,
             totalNumberOfPeoples: this.tour?.maxPeople,
             minAge: this.tour?.minAge,
             description: this.i18nService.getValue(this.tour?.description),
