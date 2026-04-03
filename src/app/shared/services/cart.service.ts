@@ -435,10 +435,12 @@ export class CartService {
     });
 
     if (schedule && schedule.config && schedule.config.slots) {
-      return schedule.config.slots.map(slot => ({
+      return schedule.config.slots.map((slot: any) => ({
         ...slot,
-        maxCapacity: schedule.isUnlimitedCapacity ? 999 : (schedule.maxCapacity || 0),
-        minCapacity: slot.minCapacity || 1
+        // Conservar la capacidad específica del slot si existe, de lo contrario usar la del schedule
+        capacity: schedule.isUnlimitedCapacity 
+          ? 999 
+          : (slot.capacity !== null && slot.capacity !== undefined ? slot.capacity : (schedule.capacity || 0)),
       }));
     }
     
@@ -492,14 +494,13 @@ export class CartService {
    */
   validateParticipantQuantity(
     participants: ParticipantSelection[],
-    minCapacity: number,
-    maxCapacity: number
+    capacity: number
   ): boolean {
     const totalParticipants = participants.reduce(
       (sum, p) => sum + p.quantity,
       0
     );
-    return totalParticipants >= minCapacity && totalParticipants <= maxCapacity;
+    return totalParticipants <= capacity;
   }
 
   /**
@@ -537,6 +538,13 @@ export class CartService {
     // Si ya se cargó y no es forzado, no recargar
     if (this.hasLoadedFromBackend && !force) {
       console.log('✅ CartService: Carrito ya cargado previamente');
+      return;
+    }
+
+    // Si no está autenticado, no intentar cargar del backend
+    if (!this.authService.isAuthenticated()) {
+      console.log('🚪 CartService: Usuario no autenticado, abortando carga del backend');
+      this.setCartItemsIfChanged([]);
       return;
     }
 
@@ -884,8 +892,7 @@ export class CartService {
           slotId: slotId, // ✅ API: item.slotId o item.slot.id
           startTime: item.startTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
           endTime: item.endTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00',
-          minCapacity: item.minCapacity || (item.slot ? item.slot.minCapacity : 2),
-          maxCapacity: item.maxCapacity || (item.slot ? item.slot.maxCapacity : 15)
+          capacity: item.capacity || (item.slot ? item.slot.capacity : 15)
         },
         participants: item.details.map((detail: any) => ({
           ageType: detail.ageType.name, // ✅ API: detail.ageType.name

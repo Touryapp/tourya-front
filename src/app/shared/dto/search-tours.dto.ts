@@ -1,14 +1,30 @@
 export interface SearchToursDto {
-    schedule: {
+    schedules: {
         id: number;
+        tourId: number;
         scheduleDate: string;
         startTime: string;
         endTime: string;
-        maxCapacity: number;
+        capacity: number;
         reservedCapacity: number;
         isUnlimitedCapacity: boolean;
         status: string;
-    };
+        config: {
+            id: number;
+            slots: {
+                slotId: number;
+                startTime: string;
+                endTime: string;
+                capacity: number;
+                prices: {
+                    ageType: string;
+                    minAge: number;
+                    maxAge: number;
+                    price: number;
+                }[];
+            }[];
+        };
+    }[];
     tour: {
         id: number;
         name: string;
@@ -31,8 +47,7 @@ export interface SearchToursDto {
         slotId: number;
         startTime: string;
         endTime: string;
-        minCapacity: number;
-        maxCapacity: number;
+        capacity: number;
         prices: {
             ageType: string;
             minAge: number;

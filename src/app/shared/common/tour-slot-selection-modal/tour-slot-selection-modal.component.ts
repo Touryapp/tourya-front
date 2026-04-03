@@ -100,16 +100,22 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     );
     if (!schedule || schedule.isUnlimitedCapacity) return 99;
 
-    // availability puede venir en el slot (nivel config.slots[].availability)
-    // o en el selectedSlot ya mapeado
-    const slotAvailability = this.selectedSlot?.availability
-      ?? schedule?.config?.slots?.[0]?.availability;
+    // Priorizar availability del slot seleccionado
+    // Campo: slot.availability
+    const slotAvailability = this.selectedSlot?.availability;
 
     if (slotAvailability !== null && slotAvailability !== undefined) {
       return slotAvailability;
     }
 
-    return Math.max(0, (schedule.maxCapacity || 0) - (schedule.reservedCapacity || 0));
+    // Fallback al primer slot si no hay seleccionado
+    const firstSlotAvailability = schedule?.config?.slots?.[0]?.availability;
+    if (firstSlotAvailability !== null && firstSlotAvailability !== undefined) {
+      return firstSlotAvailability;
+    }
+
+    // Último recurso: capacidad calculada
+    return Math.max(0, (schedule.capacity || 0) - (schedule.reservedCapacity || 0));
   }
 
   /**
@@ -130,7 +136,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       return schedule.config.slots.reduce((total: number, slot: any) => total + (slot.availability || 0), 0);
     }
     
-    return (schedule.maxCapacity || 0) - (schedule.reservedCapacity || 0);
+    return (schedule.capacity || 0) - (schedule.reservedCapacity || 0);
   }
 
   customOptions: OwlOptions = {
@@ -278,7 +284,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     this.totalPrice = 0;
     this.isValid = false;
     this.validationErrors = [];
-    this.groupCount = 1;
+    // Mantrar groupCount previo
     this.showGroupError = false;
     this.showParticipantError = false;
   }
@@ -296,12 +302,11 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   selectSlot(slot: SlotDto): void {
     this.selectedSlot = slot;
     
-    const capacityLimit = (slot.maxCapacity && slot.maxCapacity > 0) ? slot.maxCapacity : 99;
+    const capacityLimit = (slot.capacity && slot.capacity > 0) ? slot.capacity : 99;
     const participantMax = (slot.availability || capacityLimit);
 
     this.initOrUpdateParticipants(slot.prices ?? [], participantMax);
 
-    this.groupCount = 1;
     this.showGroupError = false;
     this.showParticipantError = false;
 
@@ -365,6 +370,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       this.showGroupError = false;
       this.groupCount = Math.max(1, count);
     }
+    this.updateParticipantLimits();
     this.updateTotals();
     this.updateValidation();
   }
@@ -380,6 +386,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     } else {
       this.showGroupError = true;
     }
+    this.updateParticipantLimits();
     this.updateTotals();
     this.updateValidation();
   }
@@ -392,6 +399,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       this.groupCount--;
       this.showGroupError = false;
     }
+    this.updateParticipantLimits();
     this.updateTotals();
     this.updateValidation();
   }
@@ -403,14 +411,38 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     const isGroup = this.selectedTour?.tour?.priceType === 'group';
 
     if (isGroup) {
-      // Para tours grupo: el límite de personas por grupo es maxPeople
+      // 1. Para tours grupo: el límite de personas total es (maxPeople * groupCount)
       const maxPeople = this.selectedTour?.tour?.maxPeople || 99;
-      return this.totalParticipants < maxPeople;
+      const totalCapacity = maxPeople * this.groupCount;
+      return this.totalParticipants < totalCapacity;
     }
 
     // Para individual, se debe comparar contra la limitante de availability.
     // (Asegurando que la sumatoria total no exceda la capacidad disponible actual).
     return this.totalParticipants < this.currentAvailability;
+  }
+
+  /**
+   * Actualiza los límites (maxQuantity) de los participantes basándose en el tipo de tour y disponibilidad
+   */
+  private updateParticipantLimits(): void {
+    if (!this.selectedTour) return;
+
+    const isGroup = this.selectedTour?.tour?.priceType === 'group';
+    let maxCap = 99;
+
+    if (isGroup) {
+      // Para grupos: capacidad total = maxPeople * groupCount
+      const maxPeoplePerGroup = this.selectedTour?.tour?.maxPeople || 99;
+      maxCap = maxPeoplePerGroup * this.groupCount;
+    } else {
+      // Para individuales: disponibilidad directa del slot
+      maxCap = this.currentAvailability;
+    }
+
+    this.participants.forEach(p => {
+      p.maxQuantity = maxCap;
+    });
   }
 
   /**
@@ -448,37 +480,39 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (
-      this.selectedSlot.minCapacity &&
-      this.totalParticipants < this.selectedSlot.minCapacity
-    ) {
-      this.validationErrors.push(
-        `Mínimo ${this.selectedSlot.minCapacity} participantes requeridos`
-      );
-      this.isValid = false;
-      return;
-    }
+    // minCapacity verification removed
 
-    const maxCap = this.selectedSlot.maxCapacity;
     const availability = this.currentAvailability;
     const isGroup = this.selectedTour?.tour?.priceType === 'group';
 
     if (isGroup) {
+      // 1. Validar grupos disponibles (Campo: slot.availability)
       if (this.groupCount > availability) {
-        this.validationErrors.push(`Límite máximo de disponibilidad (${availability} grupos)`);
+        this.validationErrors.push(`No hay suficientes grupos disponibles (${availability} disponibles)`);
         this.isValid = false;
         return;
       }
       
+      // 2. Validar participantes por grupo (Campo: tour.maxPeople)
       const maxPeoplePerGroup = this.selectedTour?.tour?.maxPeople || 99;
-      if (this.totalParticipants > maxPeoplePerGroup) {
-        this.validationErrors.push(`Máximo ${maxPeoplePerGroup} personas por grupo permitidas`);
+      const totalCapacity = maxPeoplePerGroup * this.groupCount;
+      
+      if (this.totalParticipants > totalCapacity) {
+        this.validationErrors.push(`El número de participantes excede la capacidad total de los grupos seleccionados (${totalCapacity} personas)`);
+        this.isValid = false;
+        return;
+      }
+
+      // Advertencia de sillas vacías
+      if (this.totalParticipants > 0 && this.totalParticipants < this.groupCount) {
+        this.validationErrors.push(`Estás seleccionando menos participantes que la cantidad de grupos "vas a tener sillas vacías"`);
         this.isValid = false;
         return;
       }
     } else {
+      // 1. Validar cupos disponibles (Individual - Campo: slot.availability)
       if (this.totalParticipants > availability) {
-        this.validationErrors.push(`Máximo ${availability} participantes permitidos`);
+        this.validationErrors.push(`No hay suficiente cupo para la cantidad de participantes seleccionada. Disponibles: ${availability}`);
         this.isValid = false;
         return;
       }
@@ -800,8 +834,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         slotId: this.selectedSlot.slotId,
         startTime: this.selectedSlot.startTime,
         endTime: this.selectedSlot.endTime,
-        minCapacity: this.selectedSlot.minCapacity,
-        maxCapacity: this.selectedSlot.maxCapacity,
+        capacity: this.selectedSlot.capacity,
       },
       participants: this.participants
         .filter((p) => p.quantity > 0)
@@ -901,17 +934,20 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       }
       
       // Otros errores
-      let errorMessage = "Error agregando el tour al carrito. Por favor, intenta de nuevo.";
+      let errorMessage = error?.error?.message || error?.error || "Error agregando el tour al carrito. Por favor, intenta de nuevo.";
       
-      if (error.status === 400) {
-        errorMessage = "Datos inválidos. Por favor, verifica tu selección.";
-      } else if (error.status === 409) {
+      if (error.status === 409) {
         errorMessage = "Este tour ya existe en tu carrito para esta fecha.";
       } else if (error.status === 500) {
         errorMessage = "Error en el servidor. Por favor, contacta a soporte.";
       }
       
-      alert(errorMessage); // TODO: Reemplazar con un toast/snackbar más elegante
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#3085d6'
+      });
       
     } finally {
       // Desactivar estado de procesamiento
@@ -947,7 +983,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       classes += " selected";
     }
 
-    if (slot.maxCapacity === 0) {
+    if (slot.capacity === 0 || (slot.availability !== undefined && slot.availability === 0)) {
       classes += " full";
     }
 
@@ -958,7 +994,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Verifica si un slot está lleno
    */
   isSlotFull(slot: SlotDto): boolean {
-    return slot.maxCapacity === 0;
+    return slot.capacity === 0 || (slot.availability !== undefined && slot.availability === 0);
   }
 
   /**
@@ -1140,19 +1176,19 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     });
 
     // 4. Limitar por customMaxQuantity o por comportamiento de grupo
-    const isGroup = this.selectedTour?.tour?.priceType === 'group';
-    if (isGroup && this.selectedTour?.tour?.maxPeople) {
-      const maxPeople = this.selectedTour.tour.maxPeople;
-      this.participants.forEach(p => {
-        p.maxQuantity = maxPeople;
-        p.quantity = Math.min(p.quantity, maxPeople);
-      });
-    } else if (customMaxQuantity !== undefined) {
+    this.updateParticipantLimits();
+
+    // Si hay un customMaxQuantity manual (fallback), aplicarlo
+    if (customMaxQuantity !== undefined) {
       this.participants.forEach(p => {
         p.maxQuantity = customMaxQuantity;
-        p.quantity = Math.min(p.quantity, customMaxQuantity);
       });
     }
+
+    // Asegurar que las cantidades previas no excedan el nuevo límite
+    this.participants.forEach(p => {
+      p.quantity = Math.min(p.quantity, p.maxQuantity);
+    });
 
     // 5. Aplicar lógica de predeterminados
     const hasPreviousQuantities = Array.from(currentQuantities.values()).some(q => q > 0);

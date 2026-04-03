@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, takeUntil, take } from 'rxjs';
+import { Subject, takeUntil, take, firstValueFrom } from 'rxjs';
 import { routes } from '../../../shared/routes/routes';
 import { CartService } from '../../../shared/services/cart.service';
 import { CartItem, CartSummary } from '../../../shared/dto/cart.dto';
@@ -11,6 +11,7 @@ import { environment } from '../../../../environments/environment';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { CreditService } from '../../../shared/services/credit.service';
 import { ClientCredit } from '../../../shared/models/credit.model';
+import { SearchToursService } from '../list-tours/search-tours.service';
 
 // Interface for traveler information per tour
 interface TravelerInfo {
@@ -41,6 +42,9 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   totalCreditsValue = 0;
   loading = false;
   processing = false;
+
+  // Reservation state
+  private reservationIds: number[] = []; // ✨ Almacena los IDs devueltos por la pre-reserva
 
   // Contact information (quien realiza el pago)
   contactForm = {
@@ -86,7 +90,8 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     private wompiService: WompiService,
     private paymentService: PaymentService,
     public i18nService: I18nFieldService,
-    private creditService: CreditService
+    private creditService: CreditService,
+    private searchToursService: SearchToursService
   ) {}
 
   ngOnInit(): void {
@@ -496,6 +501,13 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   async proceedToPayment(): Promise<void> {
     console.log('CartSummary: Iniciando proceso de pago con Wompi...');
     
+    // 🔍 Trigger search validation before proceeding
+    const isValid = await this.triggerSearchValidation();
+    if (!isValid) {
+      this.processing = false;
+      return;
+    }
+
     // 🔍 Debug: revisar estado del formulario antes de sincronizar
     console.log('📋 Estado ANTES de sincronizar:');
     this.debugFormState();
@@ -522,6 +534,36 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     }
 
     this.processing = true;
+
+    // 🚀 NUEVO PASO: Crear pre-reserva antes de Wompi
+    try {
+      console.log('📝 Creando pre-reserva en el backend...');
+      const reservationPayload = {
+        shoppingCartItemIds: this.cartItems.map(item => parseInt(item.id, 10)),
+        serviceResponsible: {
+          name: `${this.contactForm.firstName} ${this.contactForm.lastName}`,
+          email: this.contactForm.email,
+          phone: this.contactForm.phone
+        }
+      };
+
+      const response = await this.paymentService.createPreReservation(reservationPayload);
+      if (response && response.reservationIds) {
+        this.reservationIds = response.reservationIds;
+      }
+      console.log('✅ Pre-reserva exitosa, IDs:', this.reservationIds);
+    } catch (error: any) {
+      console.error('❌ Error en pre-reserva:', error);
+      let errorMsg = 'No pudimos confirmar la reserva en este momento. Por favor, intenta de nuevo.';
+      if (error.error && error.error.message) {
+        errorMsg = error.error.message;
+      } else if (error.error && error.error.error) {
+        errorMsg = error.error.error;
+      }
+      alert(errorMsg);
+      this.processing = false;
+      return;
+    }
 
     // ✨ Bypass scenario: User has applied credits that cover the ENTIRE cost
     if (this.finalTotalToPay === 0 && this.appliedCreditsValue > 0) {
@@ -698,6 +740,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
         wompiResponse,
         activeItems,
         payerInfo,
+        this.reservationIds, // ✨ IDs de las reservas obtenidas previamente
         {
           appliedCreditsValue: this.appliedCreditsValue,
           finalTotalToPay: this.finalTotalToPay,
@@ -752,6 +795,104 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('❌ Error creando reserva:', error);
       // No detener el flujo, el pago ya fue procesado
+    }
+  }
+
+  /**
+   * Dispara el servicio de búsqueda y valida la capacidad antes de pagar
+   */
+  private async triggerSearchValidation(): Promise<boolean> {
+    try {
+      const traceStr = localStorage.getItem('userActionsTrace');
+      if (!traceStr) return true;
+
+      const trace = JSON.parse(traceStr);
+      const tourId = trace.tourAddedInCart?.tourId;
+      const startDate = trace.checkIn || trace.tourAddedInCart?.dayDate;
+      const endDate = trace.checkOut || trace.tourAddedInCart?.dayDate;
+
+      if (!tourId || !startDate || !endDate) return true;
+
+      const searchPayload = {
+        tourId: tourId,
+        language: 'es',
+        startDate: startDate,
+        endDate: endDate
+      };
+
+      console.log('📊 CartSummary: Validando capacidad con servicio /search:', searchPayload);
+
+      // Consumir el servicio y esperar respuesta
+      const results = await firstValueFrom(this.searchToursService.searchTours(searchPayload, 1, 10));
+      
+      if (!results || !results.content || results.content.length === 0) {
+        console.warn('CartSummary: No se encontraron resultados para validación');
+        return true;
+      }
+
+      // Encontrar el tour en los resultados
+      const tourResult = results.content.find(r => r.tour.id === tourId);
+      if (!tourResult) return true;
+
+      // Encontrar el item en el carrito que corresponde a este tour y fecha
+      const cartItem = this.cartItems.find(item => 
+        item.tour.id === tourId && 
+        item.dayDate === (trace.tourAddedInCart?.dayDate || startDate)
+      );
+      if (!cartItem) return true;
+
+      // Encontrar el schedule y slot específico
+      const schedule = tourResult.schedules.find(s => s.scheduleDate === cartItem.dayDate);
+      if (!schedule) return true;
+
+      const slot = schedule.config?.slots.find(sl => sl.slotId === cartItem.selectedSlot.slotId);
+      if (!slot) {
+        console.warn('CartSummary: No se encontró el slot en los resultados de búsqueda');
+        return true;
+      }
+
+      const priceType = tourResult.tour.priceType;
+      const maxPeople = tourResult.tour.maxPeople || 0;
+      const availability = slot.availability || 0;
+
+      console.log(`🔍 Validando ${priceType}: disponiblidad=${availability}, maxPeople=${maxPeople}`);
+
+      if (priceType === 'group') {
+        const groupsRequested = cartItem.groupCount || 1;
+        const totalCapacity = maxPeople * groupsRequested;
+
+        // 1. Validar grupos disponibles
+        if (groupsRequested > availability) {
+          alert(`Lo sentimos, solo quedan ${availability} grupos disponibles para este horario.`);
+          return false;
+        }
+        
+        // 2. Validar participantes totales (capacidad escalada)
+        if (cartItem.totalParticipants > totalCapacity) {
+          alert(`Lo sentimos, el número de participantes (${cartItem.totalParticipants}) excede la capacidad total para ${groupsRequested} grupos (${totalCapacity} personas).`);
+          return false;
+        }
+
+        // 3. Validar sillas vacías (al menos 1 persona por grupo)
+        if (cartItem.totalParticipants < groupsRequested) {
+          alert(`Estás seleccionando menos participantes (${cartItem.totalParticipants}) que la cantidad de grupos reservados (${groupsRequested}). Vas a tener sillas vacías.`);
+          return false;
+        }
+      } else if (priceType === 'individual') {
+        // 1. Validar participantes totales (individual)
+        if (cartItem.totalParticipants > availability) {
+          alert(`Lo sentimos, no hay suficiente cupo para la cantidad de participantes seleccionada. Disponibles: ${availability}`);
+          return false;
+        }
+      }
+
+      console.log('✅ CartSummary: Validación de capacidad exitosa');
+      return true;
+
+    } catch (error) {
+      console.error('❌ CartSummary: Error en validación de capacidad', error);
+      // En caso de error técnico en la validación, permitimos continuar para no bloquear al usuario
+      return true;
     }
   }
 

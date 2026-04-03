@@ -127,6 +127,10 @@ export class TourScheduleComponent {
     }
   }
 
+  get isGroupTour(): boolean {
+    return this.tour?.priceType === 'group';
+  }
+
   onSubmit() {
     this.loading = true;
     this.submitted = true;
@@ -288,6 +292,7 @@ export class TourScheduleComponent {
       id: ["", []],
       startTime: ["", [Validators.required]],
       endTime: ["", [Validators.required]],
+      capacity: [1, [Validators.required, Validators.min(1)]],
       prices: this.fb.array([]),
     });
   }
@@ -295,7 +300,11 @@ export class TourScheduleComponent {
   addSlot() {
     if (this.slots.valid) {
       this.slots.push(this.newSlot());
-      this.prices(this.slots.length - 1).push(this.newPrice());
+      const newPriceGroup = this.newPrice();
+      if (this.isGroupTour) {
+        newPriceGroup.get('ageType')?.setValue(TypeOfPersonLabel.ANY);
+      }
+      this.prices(this.slots.length - 1).push(newPriceGroup);
     } else {
       this.slots.markAllAsTouched();
     }
@@ -319,6 +328,10 @@ export class TourScheduleComponent {
   }
 
   addPrice(index: number) {
+    if (this.isGroupTour) {
+      return; // Do not allow multiple prices for group tours
+    }
+
     // Check if first price has ANY selected
     const firstPrice = this.prices(index).at(0);
     if (firstPrice && firstPrice.get('ageType')?.value === TypeOfPersonLabel.ANY) {
@@ -406,6 +419,9 @@ export class TourScheduleComponent {
 
   // Check if ANY option should be available for a specific price
   isAnyOptionAvailable(indexSlot: number, indexPrice: number): boolean {
+    if (this.isGroupTour) {
+      return true;
+    }
     // ANY is only available for the first price (index 0) AND only if there's only one price
     const pricesCount = this.prices(indexSlot).length;
     return indexPrice === 0 && pricesCount === 1;
@@ -474,6 +490,7 @@ export class TourScheduleComponent {
           id: [slot.id || ""],
           startTime: [slot.startTime || ""],
           endTime: [slot.endTime || ""],
+          capacity: [slot.capacity !== null && slot.capacity !== undefined ? slot.capacity : (slot as any).maxCapacity || 0],
           prices: this.fb.array([]),
         });
 
@@ -574,6 +591,20 @@ export class TourScheduleComponent {
       next: (data: Tour) => {
         if (data) {
           this.tour = data;
+
+          if (this.isGroupTour) {
+            // If it's a group tour, ensure that all slots have only one price set to ANY
+            this.slots.controls.forEach((slot, index) => {
+              const pricesArray = this.prices(index);
+              if (pricesArray.length > 0) {
+                pricesArray.at(0).get('ageType')?.setValue(TypeOfPersonLabel.ANY);
+                // Remove other prices if any
+                while (pricesArray.length > 1) {
+                  pricesArray.removeAt(1);
+                }
+              }
+            });
+          }
         } else {
           this.tour = {};
           this.openSnackBar("Error getting tour.");
@@ -928,6 +959,7 @@ export class TourScheduleComponent {
           id: [slot.id || ""],
           startTime: [slot.startTime || ""],
           endTime: [slot.endTime || ""],
+          capacity: [slot.capacity !== null && slot.capacity !== undefined ? slot.capacity : (slot as any).maxCapacity || 0],
           prices: this.fb.array([]),
         });
 
@@ -996,7 +1028,6 @@ export class TourScheduleComponent {
           const batchEntry = {
             tourId: this.tourId,
             scheduleDate: scheduleDate,
-            maxCapacity: slot.maxCapacity || 0,
             reservedCapacity: 0,
             isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
             status: "available",
@@ -1012,6 +1043,7 @@ export class TourScheduleComponent {
               slots: slots.map((s: any) => ({
                 startTime: s.startTime,
                 endTime: s.endTime,
+                capacity: s.capacity,
                 prices: s.prices.map((p: any) => ({
                   ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,
                   price: p.price,
@@ -1073,7 +1105,6 @@ export class TourScheduleComponent {
         const batchEntry = {
           tourId: this.tourId,
           scheduleDate: scheduleDate,
-          maxCapacity: slots.reduce((sum: number, slot: any) => sum + (slot.maxCapacity || 0), 0),
           reservedCapacity: 0,
           isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
           status: "AVAILABLE",
@@ -1086,6 +1117,7 @@ export class TourScheduleComponent {
               id: s.id || 0, // Incluir ID del slot si existe
               startTime: s.startTime,
               endTime: s.endTime,
+              capacity: s.capacity,
               prices: s.prices.map((p: any) => ({
                 id: p.id || 0, // Incluir ID del precio si existe
                 ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,

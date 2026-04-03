@@ -15,8 +15,7 @@ export interface TourScheduleSlot {
   id?: number;
   startTime: string;
   endTime: string;
-  minCapacity: number;
-  maxCapacity: number;
+  capacity: number;
   prices: TourSchedulePrice[];
 }
 
@@ -32,7 +31,6 @@ export interface TourScheduleConfigResponseDto {
   "id": number,
   "tourId": number,
   "scheduleDate": string,
-  "maxCapacity": number,
   "reservedCapacity": number,
   "isUnlimitedCapacity": boolean,
   "status": string,

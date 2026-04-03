@@ -32,7 +32,7 @@ export interface ScheduleDto {
   scheduleDate: string;
   startTime: string;
   endTime: string;
-  maxCapacity: number;
+  capacity: number;
   reservedCapacity: number;
   isUnlimitedCapacity: boolean;
   status: string;
@@ -89,8 +89,7 @@ export interface SlotDto {
   slotId: number;
   startTime: string;
   endTime: string;
-  minCapacity: number;
-  maxCapacity: number;
+  capacity: number;
   availability?: number;
   prices: PriceDto[];
 }

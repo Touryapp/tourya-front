@@ -76,38 +76,26 @@ export class TemplateFormComponent implements OnInit {
     this.templateForm.get("isUnlimitedCapacity")?.valueChanges.subscribe((value) => {
       if (value) {
         this.slots.controls.forEach((control) => {
-          const maxCapacityControl = control.get("maxCapacity");
-          maxCapacityControl?.setValue("");
-          maxCapacityControl?.setValidators([]);
-          maxCapacityControl?.updateValueAndValidity();
+          const capacityControl = control.get("capacity");
+          capacityControl?.setValue("");
+          capacityControl?.setValidators([]);
+          capacityControl?.updateValueAndValidity();
         });
       } else {
         this.slots.controls.forEach((control) => {
-          const maxCapacityControl = control.get("maxCapacity");
-          maxCapacityControl?.setValidators([
+          const capacityControl = control.get("capacity");
+          capacityControl?.setValidators([
             Validators.required,
             onlyNumberValidator(),
           ]);
-          maxCapacityControl?.updateValueAndValidity();
+          capacityControl?.updateValueAndValidity();
         });
       }
     });
 
     this.slots.valueChanges.subscribe(() => {
       this.slots.controls.forEach((control, index) => {
-        // Check min capacity
-        if (!this.templateForm.get("isUnlimitedCapacity")?.value) {
-          const minCapacityControl = control.get("minCapacity");
-          const maxCapacityControl = control.get("maxCapacity");
-
-          const minCapacityValue = +(minCapacityControl?.value || 0);
-          const maxCapacityValue = +(maxCapacityControl?.value || 0);
-
-          if (minCapacityValue > maxCapacityValue) {
-            maxCapacityControl?.setErrors({ min: true });
-          }
-        }
-
+        // Capacity validation is now handled by built-in required and onlyNumber validators
         // Check min age
         this.prices(index).controls.forEach((priceControl) => {
           const minAgeControl = priceControl.get("minAge");
@@ -142,16 +130,15 @@ export class TemplateFormComponent implements OnInit {
         // Limpiar y reconstruir slots completamente
         this.slots.clear();
         
-        template.slots?.forEach((slot, slotIndex) => {
-          // Crear nuevo slot
-          const newSlot = this.fb.group({
-            id: [slot.id || ""],
-            startTime: [slot.startTime || ""],
-            endTime: [slot.endTime || ""],
-            minCapacity: [slot.minCapacity || ""],
-            maxCapacity: [slot.maxCapacity || ""],
-            prices: this.fb.array([]),
-          });
+          template.slots?.forEach((slot, slotIndex) => {
+            // Crear nuevo slot
+            const newSlot = this.fb.group({
+              id: [slot.id || ""],
+              startTime: [slot.startTime || ""],
+              endTime: [slot.endTime || ""],
+              capacity: [slot.capacity || ""],
+              prices: this.fb.array([]),
+            });
 
           // Agregar el slot al FormArray
           this.slots.push(newSlot);
@@ -278,7 +265,7 @@ export class TemplateFormComponent implements OnInit {
   // Métodos para slots
   newSlot(): FormGroup {
     const isUnlimitedCapacityValue = this.templateForm.get("isUnlimitedCapacity")?.value;
-    const maxCapacityValidators = isUnlimitedCapacityValue
+    const capacityValidators = isUnlimitedCapacityValue
       ? []
       : [Validators.required, onlyNumberValidator()];
 
@@ -286,8 +273,7 @@ export class TemplateFormComponent implements OnInit {
       id: ["", []],
       startTime: ["", [Validators.required]],
       endTime: ["", [Validators.required]],
-      minCapacity: ["", [Validators.required, onlyNumberValidator()]],
-      maxCapacity: ["", maxCapacityValidators],
+      capacity: ["", capacityValidators],
       prices: this.fb.array([]),
     });
   }
@@ -372,13 +358,7 @@ export class TemplateFormComponent implements OnInit {
     return typesOfPeople.includes(typeOfPerson);
   }
 
-  onKeypressMinCapacity(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onKeypressMaxCapacity(event: KeyboardEvent): void {
+  onKeypressCapacity(event: KeyboardEvent): void {
     if (/[^0-9]/.test(event.key)) {
       event.preventDefault();
     }

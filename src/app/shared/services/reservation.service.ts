@@ -85,8 +85,7 @@ export class ReservationService {
   } = {}): Observable<PaginatedResponse<ClientReservation>> {
     const queryParams: any = {
       page: (params.page || 0).toString(),
-      size: (params.size || 10).toString(),
-      _t: new Date().getTime().toString()
+      size: (params.size || 10).toString()
     };
 
     if (params.status) {
@@ -114,8 +113,7 @@ export class ReservationService {
   } = {}): Observable<PaginatedResponse<ClientReservation>> {
     const queryParams: any = {
       page: (params.page || 0).toString(),
-      size: (params.size || 10).toString(),
-      _t: new Date().getTime().toString()
+      size: (params.size || 10).toString()
     };
 
     return this.http.get<PaginatedResponse<ClientReservation>>(

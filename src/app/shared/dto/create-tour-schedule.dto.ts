@@ -16,8 +16,7 @@ export interface CreateTourScheduleSlot {
   id?: number;
   startTime: string;
   endTime: string;
-  minCapacity: number;
-  maxCapacity: number;
+  capacity: number;
   prices: CreateTourSchedulePrice[];
 }
 

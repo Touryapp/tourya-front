@@ -155,48 +155,21 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6" *ngIf="!templateForm.get('isUnlimitedCapacity')?.value">
                                     <div class="mb-3">
-                                        <label class="form-label">Min capacity</label>
+                                        <label class="form-label">Capacidad</label>
                                         <input type="number" class="form-control"
-                                            formControlName="minCapacity"
-                                            (keypress)="onKeypressMinCapacity($event)" [min]="0">
+                                            formControlName="capacity"
+                                            (keypress)="onKeypressCapacity($event)" [min]="1">
 
-                                        <div *ngIf="slot.get('minCapacity')?.invalid && (slot.get('minCapacity')?.touched || slot.get('minCapacity')?.dirty)"
+                                        <div *ngIf="slot.get('capacity')?.invalid && (slot.get('capacity')?.touched || slot.get('capacity')?.dirty)"
                                             class="text-danger">
-                                            <div *ngIf="slot.get('minCapacity')?.errors?.['required']">
-                                                Min capacity is required
+                                            <div *ngIf="slot.get('capacity')?.errors?.['required']">
+                                                Capacidad is required
                                             </div>
 
-                                            <div *ngIf="slot.get('minCapacity')?.errors?.['onlyNumber']">
-                                                Min capacity must be a number
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6"
-                                    *ngIf="!templateForm.get('isUnlimitedCapacity')?.value">
-                                    <div class="mb-3">
-                                        <label class="form-label">Max capacity</label>
-                                        <input type="number" class="form-control"
-                                            formControlName="maxCapacity"
-                                            (keypress)="onKeypressMaxCapacity($event)"
-                                            [min]="+slot.get('minCapacity')?.value">
-
-                                        <div *ngIf="slot.get('maxCapacity')?.invalid && (slot.get('maxCapacity')?.touched || slot.get('maxCapacity')?.dirty)"
-                                            class="text-danger">
-                                            <div *ngIf="slot.get('maxCapacity')?.errors?.['required']">
-                                                Max capacity is required
-                                            </div>
-
-                                            <div *ngIf="slot.get('maxCapacity')?.errors?.['onlyNumber']">
-                                                Max capacity must be a number
-                                            </div>
-
-                                            <div *ngIf="slot.get('maxCapacity')?.errors?.['min']">
-                                                Max capacity must be greater than or equal to
-                                                {{slot.get('minCapacity')?.value}}
+                                            <div *ngIf="slot.get('capacity')?.errors?.['onlyNumber']">
+                                                Capacidad must be a number
                                             </div>
                                         </div>
                                     </div>

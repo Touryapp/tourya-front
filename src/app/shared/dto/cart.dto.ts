@@ -21,8 +21,7 @@ export interface CartItem {
     slotId: number;
     startTime: string;
     endTime: string;
-    minCapacity?: number;
-    maxCapacity: number;
+    capacity: number;
   };
   participants: {
     ageType: string; // ADULT, CHILD, INFANT, SENIOR
@@ -67,9 +66,8 @@ export interface SlotWithPrices {
   slotId: number;
   startTime: string;
   endTime: string;
-  minCapacity?: number;
-  maxCapacity: number;
-  availableCapacity: number; // maxCapacity - currentBookings
+  capacity: number;
+  availableCapacity: number; // capacity - currentBookings
   prices?: {
     ageType: string;
     minAge: number;

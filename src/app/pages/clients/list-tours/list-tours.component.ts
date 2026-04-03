@@ -355,20 +355,18 @@ export class ListToursComponent implements OnInit, OnDestroy {
         this.daySelections = days;
       });
 
-    // Subscribe to cart items - cargar del backend la primera vez
+    // Subscribe to cart items - cargar del backend siempre al iniciar para sincronizar
     this.cartService.cartItems$
       .pipe(takeUntil(this.destroy$))
       .subscribe((items) => {
         console.log('🛒 ListTours: CartItems actualizado', items.length, 'items');
         this.isCartVisible = items.length > 0;
-        
-        // Cargar del backend solo si está vacío y no se ha cargado aún
-        if (items.length === 0) {
-          this.cartService.loadCartFromBackend().catch(err => {
-            console.error('❌ ListTours: Error cargando carrito inicial', err);
-          });
-        }
       });
+
+    // Forzar carga desde el backend al iniciar la pantalla
+    this.cartService.loadCartFromBackend(true).catch(err => {
+      console.error('❌ ListTours: Error cargando carrito desde backend', err);
+    });
   }
 
   // Show more/less functionality

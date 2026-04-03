@@ -22,6 +22,28 @@ export class PaymentService {
   ) { }
 
   /**
+   * Crear pre-reserva antes del pago
+   */
+  async createPreReservation(payload: { shoppingCartItemIds: number[], serviceResponsible: any }): Promise<any> {
+    try {
+      const headers = this.getAuthHeaders();
+      
+      const response = await this.http.post<any>(
+        `${environment.apiUrl}/reservations`,
+        payload,
+        { headers }
+      ).toPromise();
+
+      console.log('Pre-reservation created:', response);
+      return response;
+      
+    } catch (error) {
+      console.error('Error creating pre-reservation:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Obtener carrito del usuario desde backend
    */
   async getUserShoppingCart(): Promise<ShoppingCartResponseDto> {
@@ -47,11 +69,13 @@ export class PaymentService {
    * @param wompiResponse - Respuesta completa de Wompi
    * @param cartItems - Items del carrito a procesar
    * @param payerInfo - Información del pagador
+   * @param reservationIds - IDs de las reservas previas
    */
   async processPayment(
     wompiResponse: Partial<WompiResponseDto>,
     cartItems: ShoppingCartItemDto[],
     payerInfo: any,
+    reservationIds: number[],
     creditDetails?: { appliedCreditsValue: number; finalTotalToPay: number; selectedCredits: number[] }
   ): Promise<PaymentResponseDto> {
     try {
@@ -92,16 +116,17 @@ export class PaymentService {
       const paymentRequest: PaymentRequestDto = {
         transactionId: wompiResponse.id || `CREDIT-PAYMENT-${new Date().getTime()}`,
         transactionData: paymentType === 'CREDIT' ? null : JSON.stringify(wompiResponse),
+        reservationIds, // Mandar los IDs obtenidos en el paso de pre-reserva
         paymentType,
-        amountCredit,
         amountPlatform,
+        amountCredit,
         creditData,
         items: cartItems.map(item => ({
           shoppingCartItemId: item.id,
           serviceResponsible: {
-            name: "Tourya Support", // TODO: Obtener de configuración o item
-            email: "support@tourya.com", // TODO: Obtener de configuración
-            phone: "+57 300 123 4567" // TODO: Obtener de configuración
+            name: payerInfo.fullName || payerInfo.firstName + ' ' + payerInfo.lastName || "Tourya User",
+            email: payerInfo.email,
+            phone: payerInfo.phone
           }
         })),
         payer: this.createPayerData(payerInfo)
