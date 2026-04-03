@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TypeOfPersonLabel } from "../../../../shared/enums/type-of-person.enum";
@@ -35,6 +35,7 @@ import { I18nFieldService } from "../../../../shared/services/i18n-field.service
   styleUrl: "./tour-schedule.component.scss",
 })
 export class TourScheduleComponent {
+  @ViewChild("calendarContainer") calendarContainer!: ElementRef;
   public routes = routes;
   loading = false;
   tourScheduleForm: FormGroup;
@@ -76,6 +77,7 @@ export class TourScheduleComponent {
   events: CalendarEvent[] = [];
   activeDayIsOpen: boolean = true;
   refresh = new Subject<void>();
+  eventsOnSelectedDay: CalendarEvent[] = [];
 
   allMonthSelected: boolean = false;
 
@@ -393,6 +395,8 @@ export class TourScheduleComponent {
         this.tourScheduleForm.get("daysOfWeek")?.setErrors({ required: true });
       }
     }
+
+    this.checkTourScheduleByStartDateAndEndDate();
   }
 
   isDaySelected(day: string): boolean {
@@ -426,33 +430,54 @@ export class TourScheduleComponent {
     const pricesCount = this.prices(indexSlot).length;
     return indexPrice === 0 && pricesCount === 1;
   }
-
-  checkTourScheduleByStartDateAndEndDate() {
+  checkTourScheduleByStartDateAndEndDate() {
     const startDate = this.tourScheduleForm.get("startDate")?.value;
     const endDate = this.tourScheduleForm.get("endDate")?.value;
+    const daysOfWeek: string[] = this.tourScheduleForm.get("daysOfWeek")?.value || [];
+
+    if (!startDate || !endDate) {
+      this.tourScheduleId = 0;
+      return;
+    }
 
     const startDateDayJs = dayjs(startDate);
     const endDateDayJs = dayjs(endDate);
+    const daysDifference = endDateDayJs.diff(startDateDayJs, "day");
+    const filterByDays = daysOfWeek.length > 0;
 
-    if (startDate && endDate) {
-      const startDateFormatted = startDateDayJs.format("YYYY-MM-DD");
-      const endDateFormatted = endDateDayJs.format("YYYY-MM-DD");
+    let allDaysHaveSlots = true;
+    let firstFoundConfigId = 0;
+    let countTargetDates = 0;
 
-      // Buscar si hay schedules en el rango de fechas especificado
-      const found = this.tourSchedules.find((schedule) => {
-        const scheduleDate = dayjs(schedule.scheduleDate);
-        return (scheduleDate.isAfter(startDateDayJs) || scheduleDate.isSame(startDateDayJs)) && 
-               (scheduleDate.isBefore(endDateDayJs) || scheduleDate.isSame(endDateDayJs));
-      });
+    for (let i = 0; i <= daysDifference; i++) {
+      const currentDate = startDateDayJs.add(i, "day");
+      const dayOfWeekVal = this.DAYS_OF_WEEK[currentDate.day()].value;
 
-      if (found && found.configId) {
-        this.openSnackBarWithAction(
-          "There is a configuration that meets these dates. Would you like to edit the configuration?",
-          "Edit",
-          found.configId
-        );
+      // Si hay días de semana configurados, filtrar solo esos; si no, revisar todos
+      if (!filterByDays || daysOfWeek.includes(dayOfWeekVal)) {
+        countTargetDates++;
+        const dateStr = currentDate.format("YYYY-MM-DD");
+        const found = this.tourSchedules.find(s => s.scheduleDate === dateStr);
+
+        if (!found) {
+          allDaysHaveSlots = false;
+          break;
+        } else if (found.configId && firstFoundConfigId === 0) {
+          firstFoundConfigId = found.configId;
+        }
       }
     }
+
+    if (countTargetDates > 0 && allDaysHaveSlots && firstFoundConfigId > 0) {
+      this.tourScheduleId = firstFoundConfigId;
+    } else {
+      this.tourScheduleId = 0;
+    }
+  }
+
+
+  get allDaysHaveSlots(): boolean {
+    return this.tourScheduleId > 0;
   }
 
   loadConfig(configId: number) {
@@ -460,12 +485,16 @@ export class TourScheduleComponent {
     const found = this.tourSchedules.find((schedule) => schedule.configId === configId);
 
     if (found && found.config) {
-      this.tourScheduleId = found.config.id; // Usar el ID de la configuración, no el configId
+      // Preservar las fechas seleccionadas por el usuario en el calendario
+      const currentStartDate = this.tourScheduleForm.get("startDate")?.value;
+      const currentEndDate = this.tourScheduleForm.get("endDate")?.value;
+
+      this.tourScheduleId = found.config.id;
       this.tourSchedule = {
         id: found.config.id,
         tourId: found.tourId,
         label: found.config.label,
-        startDate: found.scheduleDate, // Usar la fecha del schedule específico
+        startDate: found.scheduleDate,
         endDate: found.scheduleDate,
         daysOfWeek: found.config.daysOfWeek,
         isUnlimitedCapacity: found.config.isUnlimitedCapacity,
@@ -475,17 +504,19 @@ export class TourScheduleComponent {
       this.tourScheduleForm.patchValue({
         label: found.config.label,
         isUnlimitedCapacity: found.config.isUnlimitedCapacity,
-      });
+      }, { emitEvent: false });
 
-      found.config.daysOfWeek.map((dayOfWeek) => {
+      // Limpiar y rellenar días de semana sin duplicados
+      this.daysOfWeek.clear();
+      const uniqueDays = [...new Set(found.config.daysOfWeek)];
+      uniqueDays.forEach((dayOfWeek) => {
         this.daysOfWeek.push(new FormControl(dayOfWeek));
       });
 
-      // Limpiar slots existentes
+      // Limpiar slots existentes y cargar nuevos
       this.slots.clear();
       
       found.config.slots?.forEach((slot, slotIndex) => {
-        // Crear nuevo slot
         const newSlot = this.fb.group({
           id: [slot.id || ""],
           startTime: [slot.startTime || ""],
@@ -494,27 +525,26 @@ export class TourScheduleComponent {
           prices: this.fb.array([]),
         });
 
-        // Agregar el slot al FormArray
         this.slots.push(newSlot);
 
-        // Procesar precios del slot
         slot.prices?.forEach((price, priceIndex) => {
-          // Manejar ageType que puede venir como objeto o string
           const ageTypeValue = typeof price.ageType === 'object' 
             ? price.ageType.name 
             : price.ageType;
 
-          // Crear nuevo precio
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
             price: [price.price || ""],
           });
 
-          // Agregar el precio al FormArray de precios del slot
           this.prices(slotIndex).push(newPrice);
         });
       });
+
+      // Restaurar fechas seleccionadas por el usuario (sin disparar eventos que reseteen el form)
+      this.tourScheduleForm.get("startDate")?.setValue(currentStartDate, { emitEvent: false });
+      this.tourScheduleForm.get("endDate")?.setValue(currentEndDate, { emitEvent: false });
     }
   }
 
@@ -527,6 +557,33 @@ export class TourScheduleComponent {
     this.tourSchedule = null;
     this.submitted = false;
     this.errorMessage = "";
+  }
+
+  resetFormExceptDates(isSingleDay: boolean = false) {
+    const startDate = this.tourScheduleForm.get("startDate")?.value;
+    const endDate = this.tourScheduleForm.get("endDate")?.value;
+
+    this.tourScheduleForm.patchValue({
+      label: "",
+      isUnlimitedCapacity: false
+    }, { emitEvent: false });
+
+    this.daysOfWeek.clear();
+    if (isSingleDay && startDate) {
+      const dayName = this.DAYS_OF_WEEK[dayjs(startDate).day()].value;
+      this.daysOfWeek.push(new FormControl(dayName));
+    }
+
+    this.slots.clear();
+    this.addSlot();
+    this.tourScheduleId = 0;
+    this.tourSchedule = null;
+    this.submitted = false;
+    this.errorMessage = "";
+
+    // Restaurar fechas
+    this.tourScheduleForm.get("startDate")?.setValue(startDate, { emitEvent: false });
+    this.tourScheduleForm.get("endDate")?.setValue(endDate, { emitEvent: false });
   }
 
   saveTourSchedule() {
@@ -730,50 +787,87 @@ export class TourScheduleComponent {
     const endDateDayJs = dayjs(endDateValue);
 
     if (dateDayJs.isValid() && !dateDayJs.isBefore(today)) {
-      if (!startDateValue) {
+      const hasStart = !!startDateValue;
+      const hasEnd = !!endDateValue;
+      const isSingleDayActive = hasStart && hasEnd && isSameDay(startDateValue, endDateValue);
+      const isRangeActive = hasStart && hasEnd && !isSameDay(startDateValue, endDateValue);
+
+      if (!hasStart) {
+        // Caso 1: Sin selección → asignar inicio y fin al mismo día
         startDateControl?.setValue(date);
-      } else {
-        if (
-          startDateDayJs.isSame(endDateDayJs) &&
-          startDateDayJs.isSame(dateDayJs)
-        ) {
-          startDateControl?.setValue(null);
-          endDateControl?.setValue(null);
-        } else if (endDateDayJs.isSame(dateDayJs)) {
-          endDateControl?.setValue(null);
+        endDateControl?.setValue(date);
+      } else if (isSingleDayActive && startDateDayJs.isSame(dateDayJs, 'day')) {
+        // Caso 2: Un día seleccionado, clic en el mismo → deseleccionar
+        startDateControl?.setValue(null);
+        endDateControl?.setValue(null);
+      } else if (isSingleDayActive && !startDateDayJs.isSame(dateDayJs, 'day')) {
+        // Caso 3: Un día seleccionado, clic en otro → crear rango respetando orden
+        if (dateDayJs.isBefore(startDateDayJs)) {
+          startDateControl?.setValue(date);
+          // endDate queda como estaba (= el día previamente seleccionado)
         } else {
-          if (dateDayJs.isSame(startDateDayJs, "month")) {
-            if (dateDayJs.isBefore(startDateDayJs)) {
-              startDateControl?.setValue(date);
-              endDateControl?.setValue(startDateValue);
-            } else {
-              startDateControl?.setValue(startDateValue);
-              endDateControl?.setValue(date);
-            }
-          } else {
-            startDateControl?.setValue(date);
-            endDateControl?.setValue(null);
-          }
+          // endDate = nuevo día, startDate queda como estaba
+          endDateControl?.setValue(date);
+        }
+      } else if (isRangeActive) {
+        // Caso 4: Rango activo
+        const clickedStart = startDateDayJs.isSame(dateDayJs, 'day');
+        const clickedEnd = endDateDayJs.isSame(dateDayJs, 'day');
+
+        if (clickedEnd) {
+          // Clic en la fecha fin → colapsar al día inicio (inicio = fin = startDate)
+          endDateControl?.setValue(startDateValue);
+        } else if (clickedStart) {
+          // Clic en la fecha inicio → colapsar al día fin (inicio = fin = endDate)
+          startDateControl?.setValue(endDateValue);
+        } else if (dateDayJs.isBefore(startDateDayJs)) {
+          // Clic antes del inicio → mover inicio
+          startDateControl?.setValue(date);
+        } else {
+          // Clic después del fin → mover fin
+          endDateControl?.setValue(date);
         }
       }
     }
 
-    // Console log para verificar si hay algo seleccionado
-    const hasSelection = !!this.tourScheduleForm.get("startDate")?.value;
-    console.log("¿Hay fechas seleccionadas en el calendario?", hasSelection);
-    console.log("Start Date:", this.tourScheduleForm.get("startDate")?.value);
-    console.log("End Date:", this.tourScheduleForm.get("endDate")?.value);
+    const startDate = this.tourScheduleForm.get("startDate")?.value;
+    const endDate = this.tourScheduleForm.get("endDate")?.value;
+    const isSingleDaySelection = startDate && (!endDate || isSameDay(startDate, endDate));
+    const isMultiDaySelection = startDate && endDate && !isSameDay(startDate, endDate);
 
     if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
+      if (isMultiDaySelection) {
         this.activeDayIsOpen = false;
-      } else {
+        this.eventsOnSelectedDay = [];
+        this.resetFormExceptDates(false);
+      } else if (isSingleDaySelection) {
         this.activeDayIsOpen = true;
+        this.eventsOnSelectedDay = events;
+
+        const dateStr = dayjs(date).format("YYYY-MM-DD");
+        const existingSchedule = this.tourSchedules.find(s => s.scheduleDate === dateStr);
+        
+        if (existingSchedule && existingSchedule.configId) {
+          this.loadConfig(existingSchedule.configId);
+        } else {
+          this.resetFormExceptDates(true);
+        }
+      } else {
+        // No hay selección o se deseleccionó
+        if (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) {
+          this.activeDayIsOpen = false;
+          this.eventsOnSelectedDay = [];
+          this.resetForm();
+        } else if (events.length > 0) {
+          this.activeDayIsOpen = true;
+          this.eventsOnSelectedDay = events;
+        } else {
+          this.resetForm();
+        }
       }
       this.viewDate = date;
+      this.refresh.next();
+      this.checkTourScheduleByStartDateAndEndDate();
     }
   }
 
@@ -838,6 +932,7 @@ export class TourScheduleComponent {
     }
   }
 
+
   getRandomHexColor() {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
     return "#" + randomColor.padStart(6, "0");
@@ -890,6 +985,11 @@ export class TourScheduleComponent {
     } else {
       startDateControl?.setValue("");
       endDateControl?.setValue("");
+    }
+    
+    // Hide the open day events view if a month is selected
+    if (this.allMonthSelected) {
+      this.activeDayIsOpen = false;
     }
   }
 
@@ -1165,5 +1265,56 @@ export class TourScheduleComponent {
       return ageType.name;
     }
     return ageType || '';
+  }
+
+  getSlotsByDate(event: any, date: Date): any[] {
+    if (event.meta && event.meta.schedules) {
+      const dateStr = dayjs(date).format("YYYY-MM-DD");
+      const foundSchedule = event.meta.schedules.find((s: any) => s.scheduleDate === dateStr);
+      if (foundSchedule && foundSchedule.config && foundSchedule.config.slots) {
+        return foundSchedule.config.slots;
+      }
+    }
+    return [];
+  }
+
+  getDayMetrics(event: any, date: Date): { capacity: number, availability: number, bookings: number } | null {
+    if (event.meta && event.meta.schedules) {
+      const dateStr = dayjs(date).format("YYYY-MM-DD");
+      const foundSchedule = event.meta.schedules.find((s: any) => s.scheduleDate === dateStr);
+      if (foundSchedule) {
+        const slots = foundSchedule.config?.slots || [];
+        const metrics = slots.reduce((acc: any, s: any) => ({
+          capacity: acc.capacity + (Number(s.capacity) || 0),
+          availability: acc.availability + (Number(s.availability) || 0),
+          bookings: acc.bookings + (Number(s.bookings) || 0)
+        }), { capacity: 0, availability: 0, bookings: 0 });
+        return metrics;
+      }
+    }
+    return null;
+  }
+
+  @HostListener("document:mousedown", ["$event"])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.calendarContainer) return;
+
+    const clickedInside = this.calendarContainer.nativeElement.contains(event.target);
+    const formElement = document.getElementById("template_selection");
+    const formElement2 = document.querySelector(".col-lg-4");
+    const clickedInForm = formElement?.contains(event.target as Node) || formElement2?.contains(event.target as Node);
+    const clickedInOverlay = document.querySelector('.cdk-overlay-container')?.contains(event.target as Node);
+
+    if (!clickedInside && !clickedInForm && !clickedInOverlay) {
+      const startDateControl = this.tourScheduleForm.get("startDate");
+      const endDateControl = this.tourScheduleForm.get("endDate");
+      
+      if (startDateControl?.value || endDateControl?.value) {
+        startDateControl?.setValue(null);
+        endDateControl?.setValue(null);
+        this.activeDayIsOpen = false;
+        this.refresh.next();
+      }
+    }
   }
 }
