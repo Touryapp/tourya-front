@@ -821,6 +821,10 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       ? dayjs(this.selectedDate).format("YYYY-MM-DD")
       : "";
 
+    const matchingSchedule = this.selectedTour.schedules.find(s => 
+      dayjs(s.scheduleDate).format("YYYY-MM-DD") === dayDate
+    ) || this.selectedTour.schedules[0];
+
     const cartItem: CartItem = {
       id: this.cartService.generateCartItemId(),
       groupCount: this.selectedTour?.tour?.priceType === 'group' ? this.groupCount : undefined,
@@ -829,7 +833,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         ...this.selectedTour.tour,
         duration: this.selectedTour?.tour?.duration?.toString(),
       },
-      schedule: this.selectedTour.schedules[0],
+      schedule: matchingSchedule,
       selectedSlot: {
         slotId: this.selectedSlot.slotId,
         startTime: this.selectedSlot.startTime,
