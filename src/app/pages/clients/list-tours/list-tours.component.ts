@@ -139,6 +139,40 @@ export class ListToursComponent implements OnInit, OnDestroy {
   };
   public checkIn: string = "";
   public checkOut: string = "";
+  public bsRangeValue: Date[] = [new Date(), new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)];
+
+  onDateRangeChange(event: any): void {
+    if (Array.isArray(event) && event.length === 2 && event[0] instanceof Date && event[1] instanceof Date) {
+      this.bsRangeValue = event as Date[];
+      this.updateCheckInCheckOutRange();
+    }
+  }
+
+  private updateCheckInCheckOutRange(): void {
+    if (this.bsRangeValue && this.bsRangeValue.length === 2) {
+      const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+      this.checkIn = formatDate(this.bsRangeValue[0]);
+      this.checkOut = formatDate(this.bsRangeValue[1]);
+    }
+  }
+
+  private syncUserActionsTrace(): void {
+    const userActionsTrace = {
+      city: this.selectedLocation?.cityId || this.selectedCity,
+      adults: this.travellersData.adults,
+      children: this.travellersData.children,
+      infants: this.travellersData.infants,
+      cabinClass: this.travellersData.cabinClass,
+      checkIn: this.checkIn,
+      checkOut: this.checkOut
+    };
+    localStorage.setItem('userActionsTrace', JSON.stringify(userActionsTrace));
+  }
 
   public minPrice: number = 0;
   public maxPrice: number = 100000000;
@@ -234,6 +268,10 @@ export class ListToursComponent implements OnInit, OnDestroy {
       };
       this.checkIn = params["checkIn"] || "";
       this.checkOut = params["checkOut"] || "";
+      
+      if (this.checkIn && this.checkOut) {
+        this.bsRangeValue = [new Date(`${this.checkIn}T00:00:00`), new Date(`${this.checkOut}T00:00:00`)];
+      }
 
       // Initialize cart with dates if available
       if (this.checkIn && this.checkOut) {
@@ -544,10 +582,22 @@ export class ListToursComponent implements OnInit, OnDestroy {
     console.log("Fecha de entrada:", this.checkIn);
     console.log("Fecha de salida:", this.checkOut);
 
+    this.syncUserActionsTrace();
+
     // Inicializar el carrito si hay fechas válidas
     if (this.checkIn && this.checkOut) {
-      this.router.navigate(["/clients/list-tours"], {
-        queryParams: { checkIn: this.checkIn, checkOut: this.checkOut },
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          city: this.selectedLocation?.cityId || this.selectedCity || undefined,
+          adults: this.travellersData.adults,
+          children: this.travellersData.children,
+          infants: this.travellersData.infants,
+          cabinClass: this.travellersData.cabinClass,
+          checkIn: this.checkIn,
+          checkOut: this.checkOut
+        },
+        queryParamsHandling: 'merge'
       });
       console.log("Inicializando carrito desde búsqueda principal");
       this.cartService.initializeCart(this.checkIn, this.checkOut);
@@ -573,6 +623,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
     console.log("Precio mínimo:", this.minPrice);
     console.log("Precio máximo:", this.maxPrice);
     console.log("Texto de búsqueda:", this.searchText);
+
+    this.syncUserActionsTrace();
 
     //setear el checkin y checkout en el carrito
     this.cartService.initializeCart(this.checkIn, this.checkOut);
@@ -615,6 +667,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     if (type === 'adults' && this.travellersData.adults < 1) {
       this.travellersData.adults = 1; // At least one adult required
     }
+    this.syncUserActionsTrace();
   }
 
   updateCabinClass(cabinClass: string): void {
@@ -832,7 +885,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
         tour,
         checkIn: this.checkIn,
         checkOut: this.checkOut,
-        travellersData: this.travellersData, // Pass search parameters
+        travellersData: { ...this.travellersData }, // Pass search parameters
         tourAdded: this.onTourAddedToCart.bind(this),
       },
     });

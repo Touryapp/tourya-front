@@ -41,7 +41,7 @@ export interface ProviderTourBooking {
   returnDate: string;
   rawCheckInDate?: string; // ISO date YYYY-MM-DD
   rawReturnDate?: string;  // ISO date YYYY-MM-DD
-  status: 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed';
+  status: 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal';
   destination: string;
   extraServices?: string[];
   activities?: string[];
@@ -509,13 +509,14 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   /**
    * Mapea el estado de la reserva del API al formato de la tabla
    */
-  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED' | 'RESCHEDULED'): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' {
-    const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed'> = {
+  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED' | 'RESCHEDULED' | 'TEMPORAL' | string): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal' {
+    const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal'> = {
       'PENDING': 'Pending',
       'RESCHEDULED': 'Pending', // Tratamos reagendado como pendiente para acciones
       'DELIVERED': 'Completed',
       'CANCELLED': 'Cancelled',
-      'CANCELED': 'Cancelled'  // API usa ortografía americana
+      'CANCELED': 'Cancelled',  // API usa ortografía americana
+      'TEMPORAL': 'Temporal'
     };
     return statusMap[apiStatus] || 'Pending';
   }
@@ -1014,6 +1015,10 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    * Obtiene la etiqueta traducida de un estado
    */
   public getStatusLabel(status: string): string {
+    if (status === 'TEMPORAL' || status === 'Temporal') {
+      return 'Temporal';
+    }
+
     const statusKeys: Record<string, string> = {
       'Upcoming': 'provider-tour-management.status.upcoming',
       'Pending': 'provider-tour-management.status.pending',
@@ -1037,7 +1042,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       'Pending': 'badge-secondary',
       'Confirmed': 'badge-primary',
       'Cancelled': 'badge-danger',
-      'Completed': 'badge-success'
+      'Completed': 'badge-success',
+      'Temporal': 'badge-warning',
+      'TEMPORAL': 'badge-warning'
     };
     return statusClasses[status] || 'badge-secondary';
   }
