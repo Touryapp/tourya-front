@@ -135,3 +135,18 @@
     }
   }
 }
+.card-custome{
+  margin-bottom: 1.5rem;
+  background-color: transparent !important;
+  position: relative;
+  border: 1px solid transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: none !important;
+  border-radius: none !important;
+  box-shadow: none !important;
+  color: none !important;
+  width: none !important;
+}

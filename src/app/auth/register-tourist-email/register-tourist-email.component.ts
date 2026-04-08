@@ -14,6 +14,7 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
   public routes = routes;
 
   loading: boolean = false;
+  showSuccessModal: boolean = false;
   errorMessage: string = "";
   successMessage: string = "";
   password: boolean[] = [false, false]; // Add more as needed
@@ -78,16 +79,12 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
       };
 
       this.authService.register(data).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.loading = false;
-          
-            this.successMessage = "¡Registro exitoso! Se ha enviado un correo electrónico para confirmar tu cuenta.";
-            setTimeout(() => {
-              this.router.navigate(["login"]);
-            }, 3000);
-          
+          this.showSuccessModal = true;
+          console.log('Tourist registered successfully.');
         },
-        error: (error) => {
+        error: (error: any) => {
           this.loading = false;
 
           if (error?.error?.statusCode === 409) {
@@ -104,5 +101,10 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
       this.registerTouristEmailForm.markAllAsTouched();
       this.loading = false;
     }
+  }
+
+  closeModal() {
+    this.showSuccessModal = false;
+    this.router.navigate(["/login"]);
   }
 }

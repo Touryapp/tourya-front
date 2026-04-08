@@ -24,6 +24,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
   password: boolean[] = [false, false]; // Add more as needed
 
   loading: boolean = false;
+  showDisabledModal: boolean = false;
   errorMessage: string = "";
   googleLoading: boolean = false;
   facebookLoading: boolean = false;
@@ -125,11 +126,15 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
               "Ha ocurrido un error, por favor intente de nuevo";
           }
         },
-        error: (err) => {
+        error: (err: any) => {
           this.loading = false;
+          console.error('Error de login:', err);
 
-          this.errorMessage =
-            "Ha ocurrido un error, por favor intente de nuevo";
+          if (err?.error?.errorCode === 303) {
+            this.showDisabledModal = true;
+          } else {
+            this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
+          }
         },
       });
     } else {
@@ -321,5 +326,9 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
         console.error('Error al obtener las revisiones pendientes:', error);
       }
     })
+  }
+
+  closeDisabledModal() {
+    this.showDisabledModal = false;
   }
 }
