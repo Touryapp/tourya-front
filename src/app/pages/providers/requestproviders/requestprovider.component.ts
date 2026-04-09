@@ -14,6 +14,7 @@ import { ProviderDocumentType } from '../../../shared/enums/provider-document-ty
 import { ProviderDocumentTypeDto } from '../../../shared/dto/provider-document-type.dt';
 import { ProviderServiceType } from '../../../shared/enums/provider-document-type.enum';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 @Component({
@@ -76,7 +77,8 @@ export class RequestproviderComponent implements OnInit {
     private countryService: CountryService,
     private departmentService: DepartmentService,
     private cityService: CityService,
-    private requestProviderService: RequestProvidersService
+    private requestProviderService: RequestProvidersService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -117,7 +119,8 @@ export class RequestproviderComponent implements OnInit {
         "cityId": formData.city,
         "department": formData.department,
         "address": formData.address,
-        "phone": formData.phone
+        "phone": formData.phone,
+        "userEmail": this.authService.getUser()?.email
       }
       console.log('Data to save:', datasaveforprovider);
       // Simular envío de datos

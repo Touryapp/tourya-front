@@ -131,3 +131,31 @@
                 class="text-primary fw-medium">Tourya</a></p>
     </div>
 </div>
+
+<!-- Modal Cuenta no Activa -->
+<div class="modal fade show d-block" *ngIf="showDisabledModal" tabindex="-1" role="dialog" aria-modal="true" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+            <div class="modal-body text-center p-5">
+                <div class="mb-4">
+                    <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="isax isax-info-circle5 fs-40"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold mb-3 text-dark">Cuenta no Activa</h4>
+                <p class="text-muted fs-15 mb-4 px-3">
+                    Lo sentimos, tu cuenta no se encuentra activa en este momento.
+                </p>
+                <div class="alert alert-light border-0 py-3 mb-4" style="background-color: #fcf8e3; border-radius: 12px; border: 1px solid #faebcc !important;">
+                    <p class="mb-0 fs-14 text-dark">
+                        <i class="isax isax-sms me-2 text-warning"></i>
+                        Por favor, revisa tu correo electrónico para <strong>activar tu cuenta</strong> o contacta a soporte.
+                    </p>
+                </div>
+                <button type="button" class="btn btn-warning btn-xl rounded w-100 fw-bold shadow-sm text-white" (click)="closeDisabledModal()">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

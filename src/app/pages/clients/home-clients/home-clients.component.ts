@@ -487,6 +487,15 @@ getLocationsPublic(): void {
     next: (data) => {
       this.locationsPublic = data;
       console.log('Locations Public Data:', data);
+      
+      // Asignar automáticamente "San Andrés - San Andrés y Providencia"
+      const defaultLocation = data.find(l => 
+        l.cityName === 'San Andrés' && l.stateName === 'San Andrés y Providencia'
+      );
+      if (defaultLocation) {
+        // Asignamos el ID (convertido a string para coincidir con el tipo de selectedCity)
+        this.selectedCity = defaultLocation.cityId.toString();
+      }
     },
     error: (err) => {
       console.error('Error fetching locations public data', err);

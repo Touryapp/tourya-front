@@ -9,6 +9,7 @@ import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.
 import { RegisterTouristComponent } from "./auth/register-tourist/register-tourist.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
+import { RegisterProviderEmailComponent } from "./auth/register-provider-email/register-provider-email.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: "register-tourist-email",
     component: RegisterTouristEmailComponent,
+  },
+  {
+    path: "register-provider-email",
+    component: RegisterProviderEmailComponent,
   },
   {
     path: "change-password",

@@ -213,3 +213,31 @@
                 class="text-primary fw-medium">Tourya</a></p>
     </div>
 </div>
+
+<!-- Modal de Éxito -->
+<div class="modal fade show d-block" *ngIf="showSuccessModal" tabindex="-1" role="dialog" aria-modal="true" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+            <div class="modal-body text-center p-5">
+                <div class="mb-4">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="isax isax-tick-circle5 fs-40"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold mb-3 text-dark">¡Registro Exitoso!</h4>
+                <p class="text-muted fs-15 mb-4 px-3">
+                    Tu cuenta ha sido creada.
+                </p>
+                <div class="alert alert-light border-0 py-3 mb-4" style="background-color: #f8f9fa; border-radius: 12px;">
+                    <p class="mb-0 fs-14 text-dark">
+                        <i class="isax isax-sms me-2 text-primary"></i>
+                        Revisa tu correo electrónico para <strong>activar tu cuenta</strong>.
+                    </p>
+                </div>
+                <button type="button" class="btn btn-primary btn-xl rounded w-100 fw-bold shadow-sm" (click)="closeModal()">
+                    Entendido, Ir al Inicio
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

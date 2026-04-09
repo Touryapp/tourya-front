@@ -23,6 +23,7 @@ import { ComingSoonComponent } from "./auth/coming-soon/coming-soon.component";
 import { UnderMaintenanceComponent } from "./auth/under-maintenance/under-maintenance.component";
 import { LoginTouristComponent } from "./auth/login-tourist/login-tourist.component";
 import { RegisterTouristEmailComponent } from "./auth/register-tourist-email/register-tourist-email.component";
+import { RegisterProviderEmailComponent } from "./auth/register-provider-email/register-provider-email.component";
 
 // import ngx-translate and the http loader
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
@@ -44,6 +45,7 @@ export const auth = getAuth(app);
     ForgotPasswordComponent,
     RegisterTouristComponent,
     RegisterTouristEmailComponent,
+    RegisterProviderEmailComponent,
     ChangePasswordComponent,
     Error404Component,
     Error500Component,
