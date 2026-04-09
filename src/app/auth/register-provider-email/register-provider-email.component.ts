@@ -204,7 +204,8 @@ export class RegisterProviderEmailComponent implements OnInit, OnDestroy {
         "cityId": +formData.city,
         "department": formData.department.toString(),
         "address": formData.address,
-        "phone": formData.phone
+        "phone": formData.phone,
+        "userEmail": formData.email
       };
 
       // Ejecutar flujo secuencial
