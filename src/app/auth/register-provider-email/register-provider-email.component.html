@@ -129,36 +129,36 @@
 
                                 <h6 class="mt-4 mb-3 text-primary border-bottom pb-2">Información de la Empresa</h6>
 
-                                <div class="mb-3">
-                                    <label class="form-label" for="name">Nombre Completo de Empresa</label>
-                                    <input type="text" id="name" formControlName="name" class="form-control form-control-lg" placeholder="Ingresa nombre de la empresa" minlength="3">
-                                    <div *ngIf="registerProviderEmailForm.controls['name'].invalid && (registerProviderEmailForm.controls['name'].dirty || registerProviderEmailForm.controls['name'].touched)" class="text-danger">
-                                        <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['required']">Nombre de la empresa es requerido</div>
-                                        <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['minlength']">Nombre debe tener al menos 3 caracteres</div>
-                                    </div>
-                                </div>
-
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label" for="documentType">Tipo de Documento de Empresa</label>
-                                        <select class="form-select form-control-lg" formControlName="documentType" id="documentType">
-                                            <option value="">Selecciona tipo de documento</option>
-                                            <option *ngFor="let docType of documentTypes" [value]="docType.id">
-                                                {{ docType.description }}
-                                            </option>
-                                        </select>
-                                        <div *ngIf="registerProviderEmailForm.controls['documentType'].invalid && (registerProviderEmailForm.controls['documentType'].dirty || registerProviderEmailForm.controls['documentType'].touched)" class="text-danger">
-                                            <div *ngIf="registerProviderEmailForm.controls['documentType'].errors?.['required']">Tipo de documento es requerido</div>
+                                        <label class="form-label text-nowrap" for="name">Nombre Completo de Empresa</label>
+                                        <input type="text" id="name" formControlName="name" class="form-control form-control-lg" placeholder="Ingresa nombre de la empresa" minlength="3">
+                                        <div *ngIf="registerProviderEmailForm.controls['name'].invalid && (registerProviderEmailForm.controls['name'].dirty || registerProviderEmailForm.controls['name'].touched)" class="text-danger">
+                                            <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['required']">Nombre de la empresa es requerido</div>
+                                            <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['minlength']">Nombre debe tener al menos 3 caracteres</div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label" for="documentNumber">Número de Documento de Empresa</label>
+                                        <label class="form-label text-nowrap" for="documentNumber">Número de Documento de Empresa</label>
                                         <input type="text" id="documentNumber" formControlName="documentNumber" class="form-control form-control-lg" placeholder="Ingresa número de documento" minlength="6">
                                         <div *ngIf="registerProviderEmailForm.controls['documentNumber'].invalid && (registerProviderEmailForm.controls['documentNumber'].dirty || registerProviderEmailForm.controls['documentNumber'].touched)" class="text-danger">
                                             <div *ngIf="registerProviderEmailForm.controls['documentNumber'].errors?.['required']">Número de documento es requerido</div>
                                             <div *ngIf="registerProviderEmailForm.controls['documentNumber'].errors?.['minlength']">Debe tener al menos 6 caracteres</div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="documentType">Tipo de Documento de Empresa</label>
+                                    <select class="form-select form-control-lg" formControlName="documentType" id="documentType">
+                                        <option value="">Selecciona tipo de documento</option>
+                                        <option *ngFor="let docType of documentTypes" [value]="docType.id">
+                                            {{ docType.description }}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="registerProviderEmailForm.controls['documentType'].invalid && (registerProviderEmailForm.controls['documentType'].dirty || registerProviderEmailForm.controls['documentType'].touched)" class="text-danger">
+                                        <div *ngIf="registerProviderEmailForm.controls['documentType'].errors?.['required']">Tipo de documento es requerido</div>
                                     </div>
                                 </div>
 
@@ -175,50 +175,48 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label" for="country">País</label>
-                                        <select class="form-select form-control-lg" formControlName="country" id="country" (change)="onCountryChange($event)">
-                                            <option value="">Selecciona país</option>
-                                            <option *ngFor="let c of countries" [value]="c.id">
-                                                {{c.name}}
-                                            </option>
-                                        </select>
-                                        <div *ngIf="registerProviderEmailForm.controls['country'].invalid && (registerProviderEmailForm.controls['country'].dirty || registerProviderEmailForm.controls['country'].touched)" class="text-danger">
-                                            <div *ngIf="registerProviderEmailForm.controls['country'].errors?.['required']">País es requerido</div>
-                                        </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="country">País</label>
+                                    <select class="form-select form-control-lg" formControlName="country" id="country" (change)="onCountryChange($event)">
+                                        <option value="">Selecciona país</option>
+                                        <option *ngFor="let c of countries" [value]="c.id">
+                                            {{c.name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="registerProviderEmailForm.controls['country'].invalid && (registerProviderEmailForm.controls['country'].dirty || registerProviderEmailForm.controls['country'].touched)" class="text-danger">
+                                        <div *ngIf="registerProviderEmailForm.controls['country'].errors?.['required']">País es requerido</div>
                                     </div>
+                                </div>
 
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label" for="department">Departamento</label>
-                                        <select class="form-select form-control-lg" formControlName="department" id="department" (change)="onDepartmentChange($event)">
-                                            <option value="">Selecciona departamento</option>
-                                            <option *ngFor="let d of departments" [value]="d.id">
-                                                {{d.name}}
-                                            </option>
-                                        </select>
-                                        <div *ngIf="registerProviderEmailForm.controls['department'].invalid && (registerProviderEmailForm.controls['department'].dirty || registerProviderEmailForm.controls['department'].touched)" class="text-danger">
-                                            <div *ngIf="registerProviderEmailForm.controls['department'].errors?.['required']">Departamento es requerido</div>
-                                        </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="department">Departamento</label>
+                                    <select class="form-select form-control-lg" formControlName="department" id="department" (change)="onDepartmentChange($event)">
+                                        <option value="">Selecciona departamento</option>
+                                        <option *ngFor="let d of departments" [value]="d.id">
+                                            {{d.name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="registerProviderEmailForm.controls['department'].invalid && (registerProviderEmailForm.controls['department'].dirty || registerProviderEmailForm.controls['department'].touched)" class="text-danger">
+                                        <div *ngIf="registerProviderEmailForm.controls['department'].errors?.['required']">Departamento es requerido</div>
                                     </div>
+                                </div>
 
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label" for="city">Ciudad</label>
-                                        <select class="form-select form-control-lg" formControlName="city" id="city">
-                                            <option value="">Selecciona ciudad</option>
-                                            <option *ngFor="let ci of cities" [value]="ci.id">
-                                                {{ci.name}}
-                                            </option>
-                                        </select>
-                                        <div *ngIf="registerProviderEmailForm.controls['city'].invalid && (registerProviderEmailForm.controls['city'].dirty || registerProviderEmailForm.controls['city'].touched)" class="text-danger">
-                                            <div *ngIf="registerProviderEmailForm.controls['city'].errors?.['required']">Ciudad es requerida</div>
-                                        </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="city">Ciudad</label>
+                                    <select class="form-select form-control-lg" formControlName="city" id="city">
+                                        <option value="">Selecciona ciudad</option>
+                                        <option *ngFor="let ci of cities" [value]="ci.id">
+                                            {{ci.name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="registerProviderEmailForm.controls['city'].invalid && (registerProviderEmailForm.controls['city'].dirty || registerProviderEmailForm.controls['city'].touched)" class="text-danger">
+                                        <div *ngIf="registerProviderEmailForm.controls['city'].errors?.['required']">Ciudad es requerida</div>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label" for="phone">Teléfono de Empresa</label>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-nowrap" for="phone">Teléfono de Empresa</label>
                                         <input type="text" id="phone" formControlName="phone" class="form-control form-control-lg" placeholder="1234567890" minlength="10">
                                         <div *ngIf="registerProviderEmailForm.controls['phone'].invalid && (registerProviderEmailForm.controls['phone'].dirty || registerProviderEmailForm.controls['phone'].touched)" class="text-danger">
                                             <div *ngIf="registerProviderEmailForm.controls['phone'].errors?.['required']">Teléfono es requerido</div>
@@ -226,8 +224,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-8 mb-3">
-                                        <label class="form-label" for="address">Dirección de Empresa</label>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-nowrap" for="address">Dirección de Empresa</label>
                                         <input type="text" id="address" formControlName="address" class="form-control form-control-lg" placeholder="Dirección completa">
                                         <div *ngIf="registerProviderEmailForm.controls['address'].invalid && (registerProviderEmailForm.controls['address'].dirty || registerProviderEmailForm.controls['address'].touched)" class="text-danger">
                                             <div *ngIf="registerProviderEmailForm.controls['address'].errors?.['required']">Dirección es requerida</div>
