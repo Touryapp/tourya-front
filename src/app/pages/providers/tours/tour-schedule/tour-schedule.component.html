@@ -525,7 +525,7 @@
 <!-- MontCellTemplate -->
 <ng-template #monthCellTemplate let-day="day">
     <div class="cal-cell" [class.cal-today]="day.isToday" [class.cal-weekend]="day.isWeekend"
-        [class.cal-in-month]="day.inMonth" [class.cal-out-month]="!day.inMonth"
+        [class.cal-in-month]="day.inMonth" [class.cal-out-month]="!day.inMonth || isPast(day.date)"
         [class.cal-selected-range]="isDateInSelectedRange(day.date)">
         <div class="cal-cell-top">
             <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>

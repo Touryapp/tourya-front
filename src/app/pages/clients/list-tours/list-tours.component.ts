@@ -46,6 +46,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
   // Date picker
   bsValue = new Date();
+  minDate = new Date();
 
   // Slider values
   startValue = 200;

@@ -405,6 +405,7 @@
                                                     class="form-control datetimepicker"
                                                     bsDatepicker
                                                     [(bsValue)]="checkIn"
+                                                    [minDate]="minDate"
                                                     [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }"
                                                     placeholder="21-10-2024"
                                                     />
@@ -416,6 +417,7 @@
                                                     class="form-control datetimepicker"
                                                     bsDatepicker
                                                     [(bsValue)]="checkOut"
+                                                    [minDate]="minDate"
                                                     [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }"
                                                     placeholder="21-10-2024"
                                                     />
