@@ -84,6 +84,7 @@ public categories: TourCategory[] = [
   ) {
   }
   bsValue=new Date();
+  minDate = new Date();
   isChecked=false;
   isChecked2=false;
   isChecked3=false;

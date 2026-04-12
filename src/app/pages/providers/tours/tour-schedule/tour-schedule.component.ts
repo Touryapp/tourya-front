@@ -1317,4 +1317,9 @@ export class TourScheduleComponent {
       }
     }
   }
+
+  isPast(date: Date): boolean {
+    const today = dayjs().hour(0).minute(0).second(0).millisecond(0);
+    return dayjs(date).isBefore(today);
+  }
 }

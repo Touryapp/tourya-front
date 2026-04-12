@@ -13,6 +13,7 @@ export class BookingToursComponent implements OnInit {
   
   // Date picker
   bsValue = new Date();
+  minDate = new Date();
   
   // Form for booking
   bookingForm: FormGroup;

@@ -33,6 +33,7 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   // Date pickers bound to template
   checkIn: Date =new Date();
   checkOut: Date=new Date();
+  minDate = new Date();
   
   // Show more/less functionality
   isMore: boolean[] = [false, false, false, false, false, false, false, false];

@@ -46,6 +46,7 @@
                                     bsDaterangepicker #drp="bsDaterangepicker"
                                     [bsConfig]="{ displayMonths: 2, showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true, containerClass: 'theme-green' }"
                                     container="body" [bsValue]="bsRangeValue"
+                                    [minDate]="minDate"
                                     (bsValueChange)="onDateRangeChange($event)" />
                             </div>
                             <!-- Check Out (click opens range picker) -->
