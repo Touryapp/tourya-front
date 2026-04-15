@@ -1,0 +1,608 @@
+<!-- Breadcrumb -->
+<div class="tour-schedule-test-page">
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Tour Schedule</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'">Providers Panel</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Tour Schedule
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <div class="row">
+
+            <!-- Inline Calendar -->
+            <div class="col-lg-8">
+                <div class="card border-0 mb-4 mb-lg-0" style="overflow: hidden;">
+                    <div class="card-body p-0 inline-calendar-wrapper"
+                         style="display: block; width: 100%;">
+                        <bs-daterangepicker-inline
+                            [bsConfig]="{
+                                displayMonths: 1,
+                                showWeekNumbers: false,
+                                dateInputFormat: 'DD-MM-YYYY',
+                                containerClass: 'theme-green inline-schedule-calendar',
+                                selectFromOtherMonth: true
+                            }"
+                            [minDate]="minDateStartDate"
+                            [bsValue]="inlineDateValue"
+                            (bsValueChange)="onInlineDateChange($event)"
+                        ></bs-daterangepicker-inline>
+
+                        <!-- Fecha seleccionada info -->
+                        <div class="selected-range-info px-3 py-2" *ngIf="tourScheduleForm.get('startDate')?.value">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <div class="range-badge">
+                                    <span class="text-muted small">Inicio</span>
+                                    <strong class="d-block">{{ tourScheduleForm.get('startDate')?.value | date:'dd/MM/yyyy' }}</strong>
+                                </div>
+                                <i class="isax isax-arrow-right-3 text-primary"></i>
+                                <div class="range-badge">
+                                    <span class="text-muted small">Fin</span>
+                                    <strong class="d-block">{{ tourScheduleForm.get('endDate')?.value | date:'dd/MM/yyyy' }}</strong>
+                                </div>
+                                <button class="btn btn-sm btn-outline-secondary ms-auto" (click)="resetInlineDate()">
+                                    <i class="isax isax-close-circle me-1"></i> Limpiar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja de info del día seleccionado -->
+                <div *ngIf="activeDayIsOpen && eventsOnSelectedDay.length > 0"
+                     class="card border-0 mt-3 cal-open-day-events-custom">
+                    <div class="card-body">
+                        <h6 class="mb-3 text-primary">
+                            <i class="isax isax-calendar-tick me-2"></i>
+                            Horarios del {{ viewDate | date:'dd/MM/yyyy' }}
+                        </h6>
+                        <div *ngFor="let event of eventsOnSelectedDay">
+                            <ng-container *ngTemplateOutlet="monthEventTitleTemplate; context: {event: event}">
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Inline Calendar -->
+
+            <!-- Add Tour Schedule -->
+            <div class="col-lg-4">
+                <!-- Template Selection -->
+                <div class="card shadow-none mb-4" id="template_selection">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 class="fs-18">Seleccionar Template</h5>
+                        </div>
+                    </div>
+                    <div class="card-body pb-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Template</label>
+                                    <mat-select class="custom-mat-select select" 
+                                        placeholder="Seleccionar template" 
+                                        [(ngModel)]="selectedTemplateId"
+                                        (selectionChange)="onTemplateSelectionChange($event)"
+                                        [disabled]="templatesLoading">
+                                        <mat-option *ngIf="templatesLoading" disabled>
+                                            Cargando templates...
+                                        </mat-option>
+                                        <mat-option *ngFor="let template of templates" [value]="template.id">
+                                            {{ template.label }}
+                                        </mat-option>
+                                        <mat-option *ngIf="!templatesLoading && templates.length === 0" disabled>
+                                            No hay templates disponibles
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="selectedTemplateId">
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-success btn-sm" 
+                                        (click)="applyTemplate()">
+                                        <i class="isax isax-check me-1"></i>
+                                        Aplicar Template
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form [formGroup]="tourScheduleForm" (ngSubmit)="onSubmit()">
+                    <div class="card shadow-none" id="basic_info">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Tour Schedule Config</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+
+                                <div class="col-md-12 d-flex justify-content-end">
+                                    <div class="mt-3 mb-3">
+                                        <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                            (click)="resetForm()"><i class=""></i>
+                                            Reset form
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Label</label>
+                                        <input type="text" class="form-control" formControlName="label"
+                                            (blur)="onLabelBlur($event)">
+                                        <div *ngIf="tourScheduleForm.controls['label'].invalid && (tourScheduleForm.controls['label'].dirty || tourScheduleForm.controls['label'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourScheduleForm.controls['label'].errors?.['required']">
+                                                Label is required
+                                            </div>
+                                            <div *ngIf="tourScheduleForm.controls['label'].errors?.['minlength']">
+                                                Label must be at least 3 characters long
+                                            </div>
+                                            <div *ngIf="tourScheduleForm.controls['label'].errors?.['maxlength']">
+                                                Label cannot be more than 50 characters long
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="birthdate">Start Date</label>
+                                        <div class=" input-icon">
+
+                                            <div class="input-icon-end position-relative">
+                                                <span class=" input-icon-addon">
+                                                    <i class="fa-regular fa-calendar-days"></i>
+                                                </span>
+
+                                                <input type="text" class="form-control form-control-lg datetimepicker"
+                                                    bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                    placeholder="dd-mm-yyyy" [bsValue]="bsValueStartDate"
+                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                                    formControlName="startDate" id="start_date"
+                                                    [minDate]="minDateStartDate" readonly
+                                                    (keypress)="onKeypressStartDatePicker($event)"
+                                                    (keydown)="onKeydownStartDatePicker($event)" />
+
+                                                <div *ngIf="tourScheduleForm.controls['startDate'].invalid && (tourScheduleForm.controls['startDate'].dirty || tourScheduleForm.controls['startDate'].touched)"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['startDate'].errors?.['required']">
+                                                        Start date is required
+                                                    </div>
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['startDate'].errors?.['invalidDayjsDate']">
+                                                        Start date is invalid
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="birthdate">End date</label>
+                                        <div class=" input-icon">
+
+                                            <div class="input-icon-end position-relative">
+                                                <span class=" input-icon-addon">
+                                                    <i class="fa-regular fa-calendar-days"></i>
+                                                </span>
+
+                                                <input type="text" class="form-control form-control-lg datetimepicker"
+                                                    bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                    placeholder="dd-mm-yyyy" [bsValue]="bsValueEndDate"
+                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                                                    formControlName="endDate" id="end_date" [minDate]="minDateEndDate"
+                                                    [maxDate]="maxDateEndDate" readonly
+                                                    (keypress)=" onKeypressEndDatePicker($event)"
+                                                    (keydown)="onKeydownEndDatePicker($event)" />
+
+                                                <div *ngIf="tourScheduleForm.controls['endDate'].invalid && (tourScheduleForm.controls['endDate'].dirty || tourScheduleForm.controls['endDate'].touched)"
+                                                    class="text-danger">
+
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['required']">
+                                                        End date is required
+                                                    </div>
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidDayjsDate']">
+                                                        End date is invalid
+                                                    </div>
+
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidRangeDate']">
+                                                        End date is invalid.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Unlimited capacity</label>
+                                        <mat-slide-toggle class="mat-slide-toogle"
+                                            formControlName="isUnlimitedCapacity"></mat-slide-toggle>
+
+                                        <div *ngIf="tourScheduleForm.controls['isUnlimitedCapacity'].invalid && (tourScheduleForm.controls['isUnlimitedCapacity'].dirty || tourScheduleForm.controls['isUnlimitedCapacity'].touched)"
+                                            class="text-danger">
+                                            <div
+                                                *ngIf="tourScheduleForm.controls['isUnlimitedCapacity'].errors?.['required']">
+                                                Unlimited capacity is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="mb-3 checkbox-group">
+                                        <label class="form-label">Days of the week</label>
+
+                                        <ul>
+                                            <li *ngFor="let day of DAYS_OF_WEEK">
+                                                <mat-checkbox 
+                                                    [checked]="isDaySelected(day.value)"
+                                                    (change)="onDayChange(day.value, $event)">
+                                                    {{ day.label }}
+                                                </mat-checkbox>
+                                            </li>
+                                        </ul>
+
+                                        <div *ngIf="tourScheduleForm.controls['daysOfWeek'].invalid && (tourScheduleForm.controls['daysOfWeek'].dirty || tourScheduleForm.controls['daysOfWeek'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourScheduleForm.controls['daysOfWeek'].errors?.['required']">
+                                                Days of the week are required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="card shadow-none" id="slots">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">Slots</h5>
+                            </div>
+                        </div>
+
+                        <div class="card-body pb-1">
+                            <div formArrayName="slots">
+                                <ng-container *ngFor="let slot of slots.controls; let i=index" [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="mb-3">
+                                                <h6>Slot #{{i + 1}}</h6>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <a *ngIf="slots.length > 1"
+                                                class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                (click)="removeSlot(i)">
+                                                <i class="isax isax-trash"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Start time</label>
+                                                <input type="text" type="time" class="form-control"
+                                                    formControlName="startTime" (blur)="onStartTimeBlur(i)">
+
+                                                <div *ngIf=" slot.get('startTime')?.invalid &&
+                                                    (slot.get('startTime')?.touched || slot.get('startTime')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="slot.get('startTime')?.errors?.['required']">
+                                                        Start time is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">End time</label>
+                                                <input type="text" type="time" class="form-control"
+                                                    formControlName="endTime" (blur)="onEndTimeBlur(i)">
+
+                                                <div *ngIf="slot.get('endTime')?.invalid && (slot.get('endTime')?.touched || slot.get('endTime')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="slot.get('endTime')?.errors?.['required']">
+                                                        End time is required
+                                                    </div>
+
+                                                    <div *ngIf="slot.get('endTime')?.errors?.['invalidRangeTime']">
+                                                        Invalid time range
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Capacidad</label>
+                                                <input type="number" class="form-control"
+                                                    formControlName="capacity" min="1">
+
+                                                <div *ngIf="slot.get('capacity')?.invalid && (slot.get('capacity')?.touched || slot.get('capacity')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="slot.get('capacity')?.errors?.['required']">
+                                                        Capacity is required
+                                                    </div>
+                                                    <div *ngIf="slot.get('capacity')?.errors?.['min']">
+                                                        Capacity must be at least 1
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card shadow-none" id="prices">
+                                            <div class="card-header">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h5 class="fs-18">Prices</h5>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body pb-1">
+
+                                                <div formArrayName="prices">
+                                                    <ng-container *ngFor="let price of prices(i).controls; let j=index"
+                                                        [formGroupName]="j">
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <div class="mb-3">
+                                                                    <h6>Price #{{j + 1}}</h6>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-2">
+                                                                <a *ngIf="prices(i).length > 1"
+                                                                    class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                    (click)="removePrice(i, j)">
+                                                                    <i class="isax isax-trash"></i>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Age type</label>
+
+                                                                    <mat-select class="custom-mat-select select"
+                                                                        placeholder="Select" formControlName="ageType">
+                                                                        <ng-container *ngIf="isGroupTour">
+                                                                            <mat-option [value]="TypeOfPersonLabel.ANY">
+                                                                                ANY (CUALQUIERA)
+                                                                            </mat-option>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="!isGroupTour">
+                                                                            <mat-option
+                                                                                *ngIf="isAnyOptionAvailable(i, j)"
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ANY, i, j)"
+                                                                                [value]="TypeOfPersonLabel.ANY">
+                                                                                ANY (CUALQUIERA)
+                                                                            </mat-option>
+                                                                            <mat-option
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ADULT, i, j)"
+                                                                                [value]="TypeOfPersonLabel.ADULT">
+                                                                                ADULT
+                                                                            </mat-option>
+                                                                            <mat-option
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.CHILD, i, j)"
+                                                                                [value]="TypeOfPersonLabel.CHILD">
+                                                                                CHILD
+                                                                            </mat-option>
+                                                                            <mat-option
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.INFANT, i, j)"
+                                                                                [value]="TypeOfPersonLabel.INFANT">
+                                                                                INFANT
+                                                                            </mat-option>
+                                                                        </ng-container>
+                                                                    </mat-select>
+
+                                                                    <div *ngIf=" price.get('ageType')?.invalid && (price.get('ageType')?.touched || price.get('ageType')?.dirty)"
+                                                                        class="text-danger">
+                                                                        <div
+                                                                            *ngIf="price.get('ageType')?.errors?.['required']">
+                                                                            Age type is required
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Price</label>
+                                                                    <input type="text" type="number"
+                                                                        class="form-control" formControlName="price"
+                                                                        (blur)="onPriceBlur(i, j)" [min]="0">
+
+                                                                    <div *ngIf="price.get('price')?.invalid && (price.get('price')?.touched || price.get('price')?.dirty)"
+                                                                        class="text-danger">
+                                                                        <div
+                                                                            *ngIf="price.get('price')?.errors?.['required']">
+                                                                            Price is required
+                                                                        </div>
+
+                                                                        <div
+                                                                            *ngIf="price.get('price')?.errors?.['min']">
+                                                                            Price must be greater than zero
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <div class="mt-3 mb-3" *ngIf="!isGroupTour">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-primary btn-sm add-highlight"
+                                                            (click)="addPrice(i)"><i
+                                                                class="isax isax-add-circle me-1"></i>
+                                                            Add New Price
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <div class="mt-3 mb-3">
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                        (click)="addSlot()"><i class="isax isax-add-circle me-1"></i>
+                                        Add New Slot
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="save">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="loading || (submitted && tourScheduleForm.touched && tourScheduleForm.invalid)">
+                                <span *ngIf="!allDaysHaveSlots">Add new tour schedule</span>
+                                <span *ngIf="allDaysHaveSlots">Edit tour schedule</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm">
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="errorMessage" class="mt-3">
+                        <p class="text-danger text-center">
+                            {{ errorMessage }}
+                        </p>
+                    </div>
+
+                </form>
+            </div>
+            <!-- /Add Tour Schedule -->
+
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+
+
+<!-- MontCellTemplate -->
+<ng-template #monthCellTemplate let-day="day">
+    <div class="cal-cell" [class.cal-today]="day.isToday" [class.cal-weekend]="day.isWeekend"
+        [class.cal-in-month]="day.inMonth" [class.cal-out-month]="!day.inMonth || isPast(day.date)"
+        [class.cal-selected-range]="isDateInSelectedRange(day.date)">
+        <div class="cal-cell-top">
+            <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+            <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber' }}</span>
+        </div>
+        <div class="cal-events">
+            <div class="cal-event" *ngFor="let event of day.events" [style.backgroundColor]="event.color?.primary">
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- /MontCellTemplate -->
+
+<!-- monthEventTitleTemplate -->
+<ng-template #monthEventTitleTemplate let-event="event" class="cal-event">
+    <div *ngIf="event.meta?.slots" class="mt-3 mb-3">
+        <div class="mb-2">
+            <strong>Configuración:</strong> {{ event.meta.label }}
+        </div>
+        <div class="mb-2">
+            <strong>Días:</strong> 
+            <span *ngFor="let day of event.meta.daysOfWeek; let i = index">
+                {{ getDayAbbreviation(day) }}<span *ngIf="i < event.meta.daysOfWeek.length - 1">, </span>
+            </span>
+        </div>
+        <div class="mb-2" *ngIf="getDayMetrics(event, viewDate) as metrics">
+            <strong>Capacidad:</strong> {{ metrics.capacity }}, 
+            <strong>Disponibilidad:</strong> {{ metrics.availability }}, 
+            <strong>Reservados:</strong> {{ metrics.bookings }}
+        </div>
+        
+        <div class="mt-3">
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <span><strong>Horario</strong></span>
+                </div>
+                <div class="col-md-6">
+                    <span><strong>Precios</strong></span>
+                </div>
+            </div>
+
+            <ul class="list-unstyled">
+                <li *ngFor="let slot of getSlotsByDate(event, viewDate)" class="mt-2">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <span class="badge bg-primary">{{ slot.startTime }} - {{ slot.endTime }}</span>
+                        </div>
+                        <div class="col-md-7 text-end">
+                            <div *ngFor="let price of slot.prices" class="mb-1">
+                                <span class="badge bg-info me-1">
+                                    {{ getAgeTypeDisplay(price.ageType) }}: {{ price.price | currency }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+    <hr>
+</ng-template>
+<!-- /monthEventTitleTemplate -->
+
+<!-- Modal for ANY to ADULT conversion -->
+<div class="modal fade show" *ngIf="showAnyModal" style="display: block; background-color: rgba(0,0,0,0.5);" 
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar cambio de tipo de edad</h5>
+                <button type="button" class="btn-close" (click)="closeAnyModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Has seleccionado "ANY (CUALQUIERA)" en el Price #1.</p>
+                <p>Para agregar un nuevo precio, el Price #1 se cambiará automáticamente de "ANY" a "ADULT".</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeAnyModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="confirmAnyToAdultConversion()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Modal for ANY to ADULT conversion -->
+</div><!-- /tour-schedule-test-page -->
