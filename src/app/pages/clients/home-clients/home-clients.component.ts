@@ -483,6 +483,37 @@ getTravellersDetails(): string {
   this.router.navigateByUrl(`/clients/list-tours?${params}`);
 }
 
+onCategoryClick(subCategory: string, event: Event): void {
+  event.preventDefault();
+  
+  this.updateCheckInCheckOutRange();
+
+  const userActionsTrace = {
+    city: this.selectedCity,
+    adults: this.travellersData.adults,
+    children: this.travellersData.children,
+    infants: this.travellersData.infants,
+    cabinClass: this.travellersData.cabinClass,
+    checkIn: this.checkIn,
+    checkOut: this.checkOut
+  };
+  localStorage.setItem('userActionsTrace', JSON.stringify(userActionsTrace));
+
+  const queryParams: any = {
+    subCategory: subCategory
+  };
+
+  if (this.selectedCity) queryParams.city = this.selectedCity;
+  if (this.travellersData.adults !== undefined) queryParams.adults = this.travellersData.adults;
+  if (this.travellersData.children !== undefined) queryParams.children = this.travellersData.children;
+  if (this.travellersData.infants !== undefined) queryParams.infants = this.travellersData.infants;
+  if (this.travellersData.cabinClass) queryParams.cabinClass = this.travellersData.cabinClass;
+  if (this.checkIn) queryParams.checkIn = this.checkIn;
+  if (this.checkOut) queryParams.checkOut = this.checkOut;
+
+  this.router.navigate(['/clients/list-tours'], { queryParams });
+}
+
 getLocationsPublic(): void {
   this.cityService.getLocationsPublic().subscribe({
     next: (data) => {

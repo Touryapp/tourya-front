@@ -235,11 +235,11 @@
                                 <!-- SubCategorías -->
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
-                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-subcats" aria-expanded="false" aria-controls="accordion-subcats" role="button">
+                                        <div class="accordion-button p-0" [ngClass]="{'collapsed': !isSubCategoriesAccordionOpen}" data-bs-toggle="collapse" data-bs-target="#accordion-subcats" [attr.aria-expanded]="isSubCategoriesAccordionOpen ? 'true' : 'false'" role="button">
                                             <i class="isax isax-category-2 me-2 text-primary"></i>SubCategorías
                                         </div>
                                     </div>
-                                    <div id="accordion-subcats" class="accordion-collapse collapse">
+                                    <div id="accordion-subcats" class="accordion-collapse collapse" [ngClass]="{'show': isSubCategoriesAccordionOpen}">
                                         <div class="accordion-body pt-2">
                                             <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
                                                 <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let s of filteredSubCategories; let i = index">
