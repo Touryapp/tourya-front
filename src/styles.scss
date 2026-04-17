@@ -1246,3 +1246,15 @@ div.owl-stage > div {
   min-height: 100% !important;
   flex: 1 !important;
 }
+
+// ─── Schedule Calendar overrides ─────────────────────────────────────────────
+// The colored circle for selected/start/end dates is drawn by the span::after
+// pseudo-element. To change the circle color, edit $circle-color below.
+// The in-range strip color is rgba of the same value.
+//
+// Rules here override both:
+//   - ngx-bootstrap bs-datepicker.css (which uses #5cb85c for theme-green)
+//   - The earlier override at line 185 (which used #1b6475 without !important)
+
+// (Los overrides del calendario inline están en tour-schedule-test.component.scss
+// bajo .tour-schedule-test-page para no afectar otros calendarios)

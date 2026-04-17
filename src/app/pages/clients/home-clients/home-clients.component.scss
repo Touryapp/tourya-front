@@ -139,3 +139,52 @@
 .work-section-six-client {
   background-color: #e6f1f4;
 }
+.categories-card {
+  position: relative;
+  border-radius: 10px;
+  transition: 0.5s all;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+.categories-card::after {
+  content: "";
+  background: linear-gradient(360deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+}
+.categories-card img {
+  border-radius: 10px;
+  width: 100%;
+  transition: 0.5s all;
+}
+.categories-card:hover img {
+  transform: scale(1.14);
+  transition: 0.5s all;
+}
+.categories-card .cat-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  z-index: 1;
+}
+
+::ng-deep .categories-slider-six .owl-dots {
+  text-align: center;
+}
+::ng-deep .categories-slider-six .owl-dots .owl-dot {
+  width: 8px;
+  height: 8px;
+  background: #E4EBF1;
+  margin-right: 8px;
+  border-radius: 30px;
+}
+::ng-deep .categories-slider-six .owl-dots .owl-dot.active {
+  width: 22px;
+  background: #CF3425;
+}

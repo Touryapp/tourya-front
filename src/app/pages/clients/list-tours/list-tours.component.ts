@@ -131,6 +131,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public selectedSubCategoryIds: number[] = []; // Keep for internal filtering if needed
   public selectedSchedules: string[] = [];
   public selectedDurations: string[] = [];
+  public isSubCategoriesAccordionOpen: boolean = false;
 
   public travellersData = {
     adults: 2,
@@ -269,6 +270,15 @@ export class ListToursComponent implements OnInit, OnDestroy {
       };
       this.checkIn = params["checkIn"] || "";
       this.checkOut = params["checkOut"] || "";
+      
+      const subCategoryParam = params["subCategory"];
+      if (subCategoryParam) {
+        this.selectedSubCategories = [subCategoryParam];
+        this.isSubCategoriesAccordionOpen = true;
+      } else {
+        this.selectedSubCategories = [];
+        this.isSubCategoriesAccordionOpen = false;
+      }
       
       if (this.checkIn && this.checkOut) {
         this.bsRangeValue = [new Date(`${this.checkIn}T00:00:00`), new Date(`${this.checkOut}T00:00:00`)];

@@ -68,6 +68,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: ":id/tour-schedule-test",
+        loadChildren: () =>
+          import("./tour-schedule-test/tour-schedule-test.module").then(
+            (m) => m.TourScheduleTestModule
+          ),
+      },
+      {
         path: "",
         redirectTo: "list",
         pathMatch: "full",
