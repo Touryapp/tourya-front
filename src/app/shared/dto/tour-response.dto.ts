@@ -56,6 +56,7 @@ export interface TourDetail {
   provider: Provider;
   profilePicture: Gallery;
   galleries: Gallery[];
+  durationEnum?: string;
 }
 
 export interface TourCategory {

@@ -24,7 +24,9 @@
 <!-- Page Wrapper -->
 <div class="content">
     <div class="container">
-        <div class="row">
+        <form [formGroup]="tourForm" (ngSubmit)="onSubmit()">
+            <fieldset [disabled]="!canEdit">
+                <div class="row">
 
             <!-- Sidebar -->
             <div class="col-lg-3 ">
@@ -82,8 +84,6 @@
                     </div>
                 </div>
                 
-                <form [formGroup]="tourForm" (ngSubmit)="onSubmit()">
-                    <fieldset [disabled]="!canEdit">
                     <div class="card shadow-none" id="basic_info">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
@@ -230,20 +230,6 @@
                                             <div *ngIf="tourForm.controls['schedule'].errors?.['required']">
                                                 Requerido
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Tags</label>
-                                        <div class="d-flex flex-wrap gap-2 mt-1 tags-scroll-container">
-                                            <label class="duration-check-label" *ngFor="let t of tagsList">
-                                                <input type="checkbox"
-                                                    [value]="t.id"
-                                                    [checked]="isTagSelected(t.id)"
-                                                    (change)="onTagChange(t.id, $event)">
-                                                <span>{{ t.name }}</span>
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -627,6 +613,23 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="card shadow-none" id="tags">
+                        <div class="card-header">
+                            <h5 class="fs-18">Tags</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap gap-2 mt-1 tags-scroll-container">
+                                <label class="duration-check-label" *ngFor="let t of tagsList">
+                                    <input type="checkbox"
+                                        [value]="t.id"
+                                        [checked]="isTagSelected(t.id)"
+                                        (change)="onTagChange(t.id, $event)">
+                                    <span>{{ t.name }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="card shadow-none" id="faq">
                         <div class="card-header">
@@ -689,12 +692,16 @@
                                                     formControlName="cancellationPolicyType"
                                                     (blur)="onCancellationPolicyTypeBlur($event, i)">
                                                     <mat-option [value]="CancellationPolicyType.FLEXIBLE">
-                                                        Flexible
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.flexible' | translate }}
                                                     </mat-option>
-                                                    <mat-option
-                                                        [value]="CancellationPolicyType.MODERATE">Moderate</mat-option>
-                                                    <mat-option [value]="CancellationPolicyType.NON_REFUNDABLE">
-                                                        Non refundable
+                                                    <mat-option [value]="CancellationPolicyType.STANDARD">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.standard' | translate }}
+                                                    </mat-option>
+                                                    <mat-option [value]="CancellationPolicyType.MODERATE">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.moderate' | translate }}
+                                                    </mat-option>
+                                                    <mat-option [value]="CancellationPolicyType.STRICT">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.strict' | translate }}
                                                     </mat-option>
                                                 </mat-select>
 
@@ -769,7 +776,6 @@
                         </div>
                     </div>
 
-                    </fieldset>
 
                     <div class="save" *ngIf="!tourId || tourId && tour">
                         <div class="d-flex align-items-center justify-content-end">
@@ -789,11 +795,13 @@
                         </p>
                     </div>
 
-                </form>
+
             </div>
             <!-- /Add Tour -->
 
-        </div>
+                </div>
+            </fieldset>
+        </form>
     </div>
 </div>
 <!-- /Page Wrapper -->

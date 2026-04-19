@@ -67,6 +67,7 @@ export class AddTourComponent {
     { id: "includes", label: "Includes" },
     { id: "excludes", label: "Excludes" },
     { id: "itineraries", label: "Itinerary" },
+    { id: "tags", label: "Tags" },
     { id: "faq", label: "FAQ" },
     { id: "cancellationPolicies", label: "Cancellation Policies" },
   ];

@@ -181,6 +181,50 @@
                         <!-- /Map -->
                     </div>
 
+                    <!-- Cancellation Policies -->
+                    <div class="bg-light-200 card-bg-light mb-4" id="cancellation-policies">
+                        <h5 class="fs-18 mb-3">Cancellation Policies</h5>
+                        <div class="card shadow-none mb-0">
+                            <div class="card-body p-3">
+                                <div *ngIf="tour?.cancellationPolicies?.length; else noPolicies">
+                                    <div class="mb-4 last-child-mb-0" *ngFor="let policy of tour.cancellationPolicies; let last = last">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-primary-transparent text-primary rounded-pill px-3 py-2 fs-14">
+                                                {{ 'tour-form.fields.cancellationPolicyType.options.' + policy.cancellationPolicyType.toLowerCase() | translate }}
+                                            </span>
+                                        </div>
+                                        <p class="fs-14 mb-3 text-gray-9">{{ i18nService.getValue(policy.observations) }}</p>
+                                        
+                                        <div class="row g-3">
+                                            <div class="col-sm-6">
+                                                <div class="d-flex align-items-center p-2 border rounded bg-white">
+                                                    <i [class]="policy.allowsRainRefund ? 'isax isax-tick-square5 text-success me-2 fs-20' : 'isax isax-close-square5 text-danger me-2 fs-20'"></i>
+                                                    <div>
+                                                        <p class="fs-13 fw-medium mb-0">Rain Refund</p>
+                                                        <p class="fs-12 mb-0 text-muted">{{ policy.allowsRainRefund ? 'Available' : 'Not available' }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="d-flex align-items-center p-2 border rounded bg-white">
+                                                    <i [class]="policy.allowsRescheduling ? 'isax isax-tick-square5 text-success me-2 fs-20' : 'isax isax-close-square5 text-danger me-2 fs-20'"></i>
+                                                    <div>
+                                                        <p class="fs-13 fw-medium mb-0">Rescheduling</p>
+                                                        <p class="fs-12 mb-0 text-muted">{{ policy.allowsRescheduling ? 'Allowed' : 'Not allowed' }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-4" *ngIf="!last">
+                                    </div>
+                                </div>
+                                <ng-template #noPolicies>
+                                    <p class="text-muted mb-0">No cancellation policies specified for this tour.</p>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- FAQ -->
                     <div class="bg-light-200 card-bg-light mb-4">
                         <h5 class="fs-18 mb-3">Frequently Asked Questions</h5>
@@ -364,26 +408,21 @@
                                     Tour Details
                                 </h5>
                                 <div>
-                                                
                                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                                    <h6 class="fw-medium">Destination</h6>
-                                                    <p class="flex-fill">{{ tour.locations.length ? i18nService.getValue(tour.locations[0].location) : '' }}</p>
+                                                    <h6 class="fw-medium">Tour</h6>
+                                                    <p class="flex-fill text-end text-sm-start text-md-end">{{ tour ? i18nService.getValue(tour.name) : '' }}</p>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                                    <h6 class="fw-medium">Duration</h6>
-                                                    <p class="flex-fill">{{ tour.duration || '' }}</p>
-                                                </div>
-                                                <!-- <div class="d-flex align-items-center justify-content-between details-info">
-                                                    <h6 class="fw-medium">Departure</h6>
-                                                    <p class="flex-fill">{{ '' /* no departure date in DTO */ }}</p>
+                                                    <h6 class="fw-medium">Duración</h6>
+                                                    <p class="flex-fill text-end text-sm-start text-md-end">{{ getDurationLabel() }}</p>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                                    <h6 class="fw-medium">Return</h6>
-                                                    <p class="flex-fill">{{ '' /* no return date in DTO */ }}</p>
-                                                </div> -->
+                                                    <h6 class="fw-medium">Edad mínima</h6>
+                                                    <p class="flex-fill text-end text-sm-start text-md-end">{{ tour?.minAge }} {{ tour?.minAge === 1 ? 'año' : 'años' }}</p>
+                                                </div>
                                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                                    <h6 class="fw-medium">Total Peoples</h6>
-                                                    <p class="flex-fill">{{ tour.maxPeople || '' }}</p>
+                                                    <h6 class="fw-medium">Precio</h6>
+                                                    <p class="flex-fill text-end text-sm-start text-md-end">{{ getPriceTypeLabel() }}</p>
                                                 </div>
                                 </div>
                             </div>
@@ -391,38 +430,95 @@
                         <div class="card shadow-none">
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <p class="fs-13 fw-medium mb-1">Starts From</p>
+                                    <p class="fs-13 fw-medium mb-1">Disponibilidad</p>
                                     <h5 class="text-primary mb-1">{{ tour.price ? ('$' + tour.price) : '—' }} <span class="fs-14 text-default fw-normal">{{ tour.price ? '/ Night' : '' }}</span></h5>
                                 </div>
                                 <div class="banner-form">
                                     <ng-container *ngIf="authService.isAuthenticated(); else loginPrompt">
                                         <form (ngSubmit)="onSubmit1()">
                                             <div class="form-info border-0">
-                                                <div class="form-item border rounded p-3 mb-3 w-100">
-                                                    <label class="form-label fs-14 text-default mb-0">From</label>
+                                                <!-- Check In -->
+                                                <div class="form-item border rounded p-3 mb-3 w-100 position-relative">
+                                                    <label class="form-label fs-14 text-default mb-0">Check In</label>
                                                     <input
-                                                    type="text"
-                                                    class="form-control datetimepicker"
-                                                    bsDatepicker
-                                                    [(bsValue)]="checkIn"
-                                                    [minDate]="minDate"
-                                                    [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }"
-                                                    placeholder="21-10-2024"
+                                                        type="text"
+                                                        class="form-control datetimepicker border-0 p-0"
+                                                        placeholder="DD-MM-YYYY"
+                                                        [value]="bsRangeValue[0] | date: 'dd-MM-yyyy'"
+                                                        readonly
+                                                    />
+                                                    <!-- Transparent Range Picker Trigger -->
+                                                    <input
+                                                        type="text"
+                                                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 1;"
+                                                        bsDaterangepicker
+                                                        #drp="bsDaterangepicker"
+                                                        [bsConfig]="{ displayMonths: 2, showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true, containerClass: 'theme-green' }"
+                                                        container="body"
+                                                        [minDate]="minDate"
+                                                        [bsValue]="bsRangeValue"
+                                                        (bsValueChange)="onDateRangeChange($event)"
                                                     />
                                                 </div>
-                                                <div class="form-item border rounded p-3 mb-3 w-100">
-                                                    <label class="form-label fs-14 text-default mb-0">To</label>
+                                                <!-- Check Out -->
+                                                <div class="form-item border rounded p-3 mb-3 w-100" (click)="drp.show()" style="cursor: pointer;">
+                                                    <label class="form-label fs-14 text-default mb-0">Check Out</label>
                                                     <input
-                                                    type="text"
-                                                    class="form-control datetimepicker"
-                                                    bsDatepicker
-                                                    [(bsValue)]="checkOut"
-                                                    [minDate]="minDate"
-                                                    [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }"
-                                                    placeholder="21-10-2024"
+                                                        type="text"
+                                                        class="form-control datetimepicker border-0 p-0"
+                                                        placeholder="DD-MM-YYYY"
+                                                        [value]="bsRangeValue[1] | date: 'dd-MM-yyyy'"
+                                                        readonly
                                                     />
                                                 </div>
-                                                
+
+                                                <h6 class="fs-16 fw-medium mt-3 mb-2">Details</h6>
+                                                <div class="form-item dropdown border rounded p-3 mb-3 w-100">
+                                                    <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu" style="cursor: pointer;">
+                                                        <label class="form-label fs-14 text-default mb-1">Travellers</label>
+                                                        <h5 class="mb-0">{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? 'Person' : 'Persons' }}</span></h5>
+                                                        <p class="fs-12 mb-0">{{ getTravellersDetails() }}</p>
+                                                    </div>
+                                                    <div class="dropdown-menu dropdown-menu-end dropdown-xl p-3">
+                                                        <h5 class="mb-3">Select Travelers</h5>
+                                                        <div class="mb-3 border br-10 info-item p-2">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                                        <label class="form-label text-gray-9 mb-0">Adult</label>
+                                                                        <app-common-counter 
+                                                                            [quantity]="travellersData.adults" 
+                                                                            [min]="1" 
+                                                                            [max]="999"
+                                                                            (quantityChange)="updateTravellersCount('adults', $event)">
+                                                                        </app-common-counter>
+                                                                    </div>
+                                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                                        <label class="form-label text-gray-9 mb-0">Children <span class="text-default fw-normal">( 2-11 Yrs )</span></label>
+                                                                        <app-common-counter 
+                                                                            [quantity]="travellersData.children" 
+                                                                            [min]="0" 
+                                                                            [max]="999"
+                                                                            (quantityChange)="updateTravellersCount('children', $event)">
+                                                                        </app-common-counter>
+                                                                    </div>
+                                                                    <div class="mb-0 d-flex align-items-center justify-content-between">
+                                                                        <label class="form-label text-gray-9 mb-0">Infants <span class="text-default fw-normal">( 0-2 Yrs )</span></label>
+                                                                        <app-common-counter 
+                                                                            [quantity]="travellersData.infants" 
+                                                                            [min]="0" 
+                                                                            [max]="999"
+                                                                            (quantityChange)="updateTravellersCount('infants', $event)">
+                                                                        </app-common-counter>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-end">
+                                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2" data-bs-toggle="dropdown">Close</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <button type="submit" class="btn btn-primary btn-lg search-btn ms-0 w-100 fs-14">Consultar Disponibilidad</button>
                                         </form>
@@ -438,13 +534,13 @@
                         </div>
                         <div class="card shadow-none">
                             <div class="card-body">
-                                <h5 class="fs-18 mb-3">Why Book With Us</h5>
+                                <h5 class="fs-18 mb-3">{{ 'tours-detail.why-book.title' | translate }}</h5>
                                 <div>
-                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-medal-star text-primary me-2"></i>Expertise and Experience</p>
-                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-menu text-primary me-2"></i>Tailored Services</p>
-                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-message-minus text-primary me-2"></i>Comprehensive Planning</p>
-                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-user-add text-primary me-2"></i>Client Satisfaction</p>
-                                    <p class="d-flex align-items-center"><i class="isax isax-grammerly text-primary me-2"></i>24/7 Support</p>
+                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-menu text-primary me-2"></i>{{ 'tours-detail.why-book.item1' | translate }}</p>
+                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-medal-star text-primary me-2"></i>{{ 'tours-detail.why-book.item2' | translate }}</p>
+                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-refresh-circle text-primary me-2"></i>{{ 'tours-detail.why-book.item3' | translate }}</p>
+                                    <p class="d-flex align-items-center mb-3"><i class="isax isax-sms text-primary me-2"></i>{{ 'tours-detail.why-book.item4' | translate }}</p>
+                                    <p class="d-flex align-items-center"><i class="isax isax-shop text-primary me-2"></i>{{ 'tours-detail.why-book.item5' | translate }}</p>
                                 </div>
                             </div>
                         </div>
@@ -478,31 +574,16 @@
                             <div class="card-body">
                                 <h5 class="fs-18 mb-3">Provider Details</h5>
                                 <div class="py-1">
-                                    <div class="bg-light-500 br-10 mb-3 d-flex align-items-center p-3">
-                                            <a href="javascript:void(0);" class="avatar avatar-lg flex-shrink-0">
-                                                <img [src]="tour.provider.profilePicture?.imageUrl || 'assets/img/users/user-05.jpg'" alt="img" class="rounded-circle">
-                                            </a>
-                                            <div class="ms-2 overflow-hidden">
-                                                <h6 class="fw-medium text-truncate"><a href="javascript:void(0);">{{ tour.provider.name || '' }}</a></h6>
-                                                
-                                            </div>
-                                        </div>
                                     <div class="border br-10 mb-3 p-3">
                                         <div class="d-flex align-items-center border-bottom pb-3 mb-3">
                                             <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-call-outgoing5"></i></span>
-                                            <p>Call Us : {{ tour.provider.phone || '' }}</p>
+                                            <p>Call Us : +57 3112182520</p>
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-message-search5"></i></span>
-                                            <p>Email : {{ tour.provider.email || '' }}</p>
+                                            <p>Email : luis.mendoza&#64;tourya.co</p>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row g-2">
-                                    <div class="col-sm-6">
-                                        <a href="javascript:void(0);" class="btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-messages5 me-2"></i>Whatsapp Us</a>                      
-                                    </div>
-                                    
                                 </div>
                             </div>
                         </div>

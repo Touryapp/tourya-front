@@ -166,7 +166,7 @@
           "answer": "Publishing is completely free. You only pay a commission when a sale is made."
         },
         "q2": {
-          "question": "When do I receive my payments?",
+          "question": "How do I receive my payments?",
           "answer": "Payments are made at the established times, in a secure and transparent manner."
         },
         "q3": {
@@ -257,9 +257,263 @@
       }
     }
   },
+  "tour-form": {
+    "breadcrumb": {
+      "home": "Home",
+      "providersPanel": "Provider Panel",
+      "addTours": "Add Tours",
+      "editTours": "Edit Tours"
+    },
+    "title": {
+      "add": "Add Tours",
+      "edit": "Edit Tours"
+    },
+    "status": {
+      "label": "Tour Status:",
+      "created": "Created",
+      "submitted": "Submitted",
+      "accepted": "Accepted",
+      "returned": "Returned",
+      "cancelled": "Cancelled",
+      "submitButton": "Submit for Review",
+      "cannotEditWarning": "This tour is under review and cannot be edited.",
+      "cannotEditMessage": "You must wait for it to be accepted, returned, or cancelled to edit it again.",
+      "autoSubmitNote": "Note:",
+      "autoSubmitMessage": "When saving changes, the tour will be automatically submitted for review."
+    },
+    "sections": {
+      "tourDetails": "Tour Details",
+      "description": "Description",
+      "locations": "Locations",
+      "mainAttractions": "Main Attractions",
+      "includes": "Includes",
+      "excludes": "Excludes",
+      "itinerary": "Itinerary",
+      "faq": "Frequently Asked Questions",
+      "cancellationPolicies": "Cancellation Policies"
+    },
+    "fields": {
+      "name": {
+        "label": "Name",
+        "errors": {
+          "required": "Name is required",
+          "minlength": "Name must be at least 3 characters",
+          "maxlength": "Name cannot exceed 50 characters"
+        }
+      },
+      "category": {
+        "label": "Category",
+        "placeholder": "Select",
+        "options": {
+          "aquatic": "Aquatic",
+          "land": "Land",
+          "adventure": "Adventure",
+          "night": "Night",
+          "experiences": "Experiences",
+          "cultural": "Cultural",
+          "transportRental": "Transport Rental"
+        },
+        "errors": {
+          "required": "Category is required"
+        }
+      },
+      "priceType": {
+        "label": "Price Type",
+        "placeholder": "Select",
+        "options": {
+          "group": "Group",
+          "individual": "Individual"
+        },
+        "errors": {
+          "required": "Price type is required"
+        }
+      },
+      "duration": {
+        "label": "Duration",
+        "errors": {
+          "required": "Duration is required",
+          "minlength": "Duration must be at least 1 character",
+          "maxlength": "Duration cannot exceed 50 characters"
+        }
+      },
+      "totalNumberOfPeoples": {
+        "label": "Total Number of People",
+        "errors": {
+          "required": "Total number of people is required"
+        }
+      },
+      "minAge": {
+        "label": "Minimum Age",
+        "errors": {
+          "required": "Minimum age is required"
+        }
+      },
+      "typeOfAddress": {
+        "label": "Address Type",
+        "placeholder": "Select",
+        "options": {
+          "meetingPoint": "Meeting Point",
+          "endPoint": "End Point",
+          "pickUpPoint": "Pick Up Point"
+        },
+        "errors": {
+          "required": "Address type is required"
+        }
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "Select",
+        "errors": {
+          "required": "Country is required"
+        }
+      },
+      "department": {
+        "label": "Department",
+        "placeholder": "Select",
+        "errors": {
+          "required": "Department is required"
+        }
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "Select",
+        "errors": {
+          "required": "City is required"
+        }
+      },
+      "location": {
+        "label": "Location",
+        "placeholder": "Enter full address",
+        "errors": {
+          "required": "Location is required"
+        }
+      },
+      "address": {
+        "label": "Address",
+        "errors": {
+          "required": "Address is required",
+          "minlength": "Address must be at least 3 characters",
+          "maxlength": "Address cannot exceed 50 characters"
+        }
+      },
+      "attraction": {
+        "label": "Attraction",
+        "errors": {
+          "required": "Attraction is required"
+        }
+      },
+      "include": {
+        "label": "Includes",
+        "errors": {
+          "required": "This field is required"
+        }
+      },
+      "exclude": {
+        "label": "Excludes",
+        "errors": {
+          "required": "This field is required"
+        }
+      },
+      "itineraryTitle": {
+        "label": "Title",
+        "errors": {
+          "required": "Title is required",
+          "minlength": "Title must be at least 3 characters",
+          "maxlength": "Title cannot exceed 50 characters"
+        }
+      },
+      "day": {
+        "label": "Day",
+        "errors": {
+          "required": "Day is required",
+          "min": "Minimum day is 1"
+        }
+      },
+      "time": {
+        "label": "Time",
+        "errors": {
+          "required": "Time is required"
+        }
+      },
+      "itineraryDescription": {
+        "label": "Description",
+        "errors": {
+          "required": "Description is required",
+          "minlength": "Description must be at least 3 characters",
+          "maxlength": "Description cannot exceed 255 characters"
+        }
+      },
+      "question": {
+        "label": "Question",
+        "errors": {
+          "required": "Question is required",
+          "minlength": "Question must be at least 3 characters",
+          "maxlength": "Question cannot exceed 50 characters"
+        }
+      },
+      "answer": {
+        "label": "Answer",
+        "errors": {
+          "required": "Answer is required",
+          "minlength": "Answer must be at least 3 characters",
+          "maxlength": "Answer cannot exceed 255 characters"
+        }
+      },
+      "cancellationPolicyType": {
+        "label": "Cancellation policy type",
+        "placeholder": "Select",
+        "options": {
+          "flexible": "Flexible (up to 24 hours before)",
+          "standard": "Standard (up to 48 hours before)",
+          "moderate": "Moderate (up to 4 days before)",
+          "strict": "Strict (up to 7 days before)"
+        },
+        "errors": {
+          "required": "Cancellation policy type is required"
+        }
+      },
+      "observations": {
+        "label": "Observations",
+        "errors": {
+          "required": "Observations are required",
+          "maxlength": "Observations cannot exceed 255 characters"
+        }
+      },
+      "allowsRainRefund": {
+        "label": "Allows refund for rain",
+        "errors": {
+          "required": "This field is required"
+        }
+      },
+      "allowsRescheduling": {
+        "label": "Allows rescheduling",
+        "errors": {
+          "required": "This field is required"
+        }
+      }
+    },
+    "buttons": {
+      "addNew": "Add New",
+      "addTour": "Add new tour",
+      "editTour": "Edit tour",
+      "save": "Save",
+      "cancel": "Cancel",
+      "close": "Close"
+    },
+    "modals": {
+      "itinerary": {
+        "titleAdd": "Add new itinerary",
+        "titleEdit": "Edit itinerary"
+      },
+      "faq": {
+        "titleAdd": "Add new question",
+        "titleEdit": "Edit question"
+      }
+    }
+  },
   "legal": {
-    "terms": "<div class=\"mb-4\">\n  <p class=\"mb-2\">TERMS AND CONDITIONS OF USE</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Last updated: [April 16, 2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identification of the Platform Operator</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The Tourya digital platform is operated by:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Company Name: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Type of company: Sociedad por Acciones Simplificada (S.A.S.)</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tax ID: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Address: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Email: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Phone: +57 311 218 2520</p>\n</div>\n<h6 class=\"mb-2\">2. Acceptance of the Terms</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Accessing, browsing, and using the Tourya platform, as well as making reservations for tours or tourist experiences, implies the express, free, and voluntary acceptance of these Terms and Conditions.</p>\n  <p class=\"mb-2\">If the user does not agree with these Terms, they must refrain from using the platform.</p>\n</div>\n<h6 class=\"mb-2\">3. Definitions</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">For the purposes of these Terms:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Tourya”: A digital platform acting as a technological and commercial intermediary.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “User” or “Customer”: An individual who books tours through the platform.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Tour Operator” or “Provider”: An independent third party that directly offers and provides the tourism services published on Tourya.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Tour” or “Experience”: A tourism service offered by a Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Reservation”: A contract entered into between the User and the Tour Operator for the provision of a tour.</p>\n</div>\n<h6 class=\"mb-2\">4. Nature of Tourya’s Service</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya is NOT a provider of tourism services.</p>\n  <p class=\"mb-2\">Tourya operates exclusively as a digital marketplace, whose function is to:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitate the publication, promotion, and marketing of tours.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Process payments on behalf of tour operators.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitate communication between Users and Operators.</p>\n  <p class=\"mb-2\">The tourism service is provided solely and exclusively by the Tour Operator, who acts independently and under their own responsibility.</p>\n</div>\n<h6 class=\"mb-2\">5. Contractual Relationship</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">When making a reservation:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The contract for the provision of the tourism service is entered into directly between the User and the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya is not a party to said contract, nor does it assume any obligations arising from the execution of the tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya does not guarantee the quality, safety, suitability, or outcome of the tourism service.</p>\n</div>\n<h6 class=\"mb-2\">6. Obligations of the Tour Operator</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The Tour Operator is solely responsible for:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Complying with all applicable Colombian regulations, including being registered in the National Tourism Registry (RNT).</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Maintaining valid mandatory insurance and necessary legal permits.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Providing the service as described on the platform.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Addressing claims, complaints, and requests from the User.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Being liable for accidents, injuries, losses, damages, or breaches occurring during the tour.</p>\n  <p class=\"mb-2\">Tourya may request documentation at any time to verify compliance with these obligations.</p>\n</div>\n<h6 class=\"mb-2\">7. Tourya’s Liability</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya shall be liable solely for:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The proper functioning of the technology platform.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The management of the payment process in accordance with published policies.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The protection of users’ personal data in accordance with the law.</p>\n</div>\n<h6 class=\"mb-2\">8. Exclusion and Limitation of Liability</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya shall NOT be liable for:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The execution of the tour or experience.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cancellations, delays, modifications, or breaches by the Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Accidents, damages, injuries, illnesses, or losses suffered during the tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Acts or omissions of the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Inaccurate information provided by the Operator.</p>\n  <p class=\"mb-2\">To the fullest extent permitted by Colombian law, Tourya shall not be liable for indirect damages, lost profits, or consequential damages.</p>\n</div>\n<h6 class=\"mb-2\">9. Payments and Commissions</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya receives payments made by Users on behalf of the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya retains a commission for its intermediary services, as previously agreed upon with the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The remaining balance will be transferred to the Tour Operator in accordance with the platform’s internal timelines.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Payment does not imply that Tourya assumes responsibility for the provision of the service.</p>\n</div>\n<h6 class=\"mb-2\">10. Cancellation and Refund Policies</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Each tour will have a specific cancellation policy, which will be displayed before booking:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Flexible: cancellation up to 24 hours in advance</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estándar: cancellation up to 48 hours in advance</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Moderada: cancellation up to 4 days in advance</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estricta: cancellation up to 7 days in advance</p>\n  <p class=\"mb-2\">Cancellations and refunds are governed by the selected policy and are the responsibility of the Tour Operator. Tourya may act as an intermediary in managing the refund, without assuming direct liability.</p>\n</div>\n<h6 class=\"mb-2\">11. Suspension and Delisting of Operators</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya may, at its discretion, suspend, restrict, or remove tour operators who:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Fail to comply with applicable legal regulations.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Fail to comply with cancellation or service policies.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Damage the platform’s reputation.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Generate repeated user complaints.</p>\n</div>\n<h6 class=\"mb-2\">12. Intellectual Property</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">All content on the platform (brand, logos, text, software) is the property of Tourya or its licensors and is protected by intellectual property laws.</p>\n</div>\n<h6 class=\"mb-2\">13. Protection of Personal Data</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The processing of personal data is carried out in accordance with Law 1581 of 2012 and other applicable regulations.</p>\n  <p class=\"mb-2\">The User declares that they have read and accepted Tourya’s Privacy Policy.</p>\n</div>\n<h6 class=\"mb-2\">14. Modifications</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya may modify these Terms at any time.</p>\n  <p class=\"mb-2\">Modifications will be published on the platform and will be deemed accepted upon continued use of the service.</p>\n</div>\n<h6 class=\"mb-2\">15. Governing Law and Jurisdiction</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">These Terms are governed by the laws of the Republic of Colombia.</p>\n  <p class=\"mb-2\">Any dispute shall be submitted to the competent courts of Tourya’s place of business.</p>\n</div>\n<h6 class=\"mb-2\">16. Contact</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">For inquiries or complaints:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📧 \udce7 luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📞 \udcde 311 218 2520</p>\n</div>",
-    "privacy": "<div class=\"mb-4\">\n  <p class=\"mb-2\">📄 POLÍTICA DE TRATAMENTO DE DADOS PESSOAIS</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Última atualização: [16/04/2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identificação do responsável pelo tratamento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O responsável pelo tratamento dos dados pessoais é:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Razão social: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NIT: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Endereço: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> E-mail: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Telefone: 311 218 2520</p>\n  <p class=\"mb-2\">Doravante, “TOURYA”.</p>\n</div>\n<h6 class=\"mb-2\">2. Marco Legal</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Esta Política rege-se pelo disposto em:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Lei 1581 de 2012</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Decreto 1377 de 2013</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Outras normas concordantes sobre proteção de dados pessoais na Colômbia</p>\n</div>\n<h6 class=\"mb-2\">3. Definições</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Dados Pessoais: Informações que permitem identificar ou tornar identificável uma pessoa física.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Titular: Pessoa física cujos dados pessoais são objeto de tratamento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tratamento: Qualquer operação sobre dados pessoais, como coleta, armazenamento, uso, circulação ou supressão.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responsável pelo Tratamento: TOURYA.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Encarregado do Tratamento: Terceiros que tratam dados por conta da TOURYA (por exemplo, fornecedores de tecnologia).</p>\n</div>\n<h6 class=\"mb-2\">4. Dados Pessoais Tratados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA coleta e trata apenas os dados necessários para o funcionamento do Marketplace turístico.</p>\n  <p class=\"mb-2\">Dados do Usuário/Turista:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Nome</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Sobrenome</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Número do documento de identidade</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Telefone de contato</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> E-mail</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cidade de residência</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estado/província</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> País</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A TOURYA não coleta dados sensíveis nem dados financeiros diretamente (estes últimos são gerenciados por gateways de pagamento externos).</p>\n</div>\n<h6 class=\"mb-2\">5. Finalidades do Tratamento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Os dados pessoais serão tratados para as seguintes finalidades:</p>\n</div>\n<h6 class=\"mb-2\">1. Gerenciar reservas de passeios e experiências turísticas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Facilitar a comunicação entre o Usuário e o Operador Turístico.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Processar pagamentos e reembolsos relacionados às reservas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Cumprir obrigações legais e contratuais.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Atender a solicitações, reclamações e queixas (PQR).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Enviar comunicações relacionadas à reserva (confirmações, alterações, cancelamentos).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">7. Melhorar a experiência do usuário na plataforma.</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Os dados não serão utilizados para fins distintos sem autorização prévia do titular.</p>\n</div>\n<h6 class=\"mb-2\">6. Autorização do Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O Titular autoriza de forma prévia, expressa e informada a TOURYA para o tratamento de seus dados pessoais ao:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Registrar-se na plataforma</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Fazer uma reserva</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Aceitar esta Política por meio de mecanismos digitais</p>\n  <p class=\"mb-2\">A autorização poderá ser revogada a qualquer momento, sem efeitos retroativos.</p>\n</div>\n<h6 class=\"mb-2\">7. Circulação e Transferência de Dados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA poderá compartilhar os dados pessoais exclusivamente com:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Operadoras de turismo, exclusivamente para a prestação do passeio reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Fornecedores de tecnologia (hospedagem, CRM, gateway de pagamentos), mediante acordos de confidencialidade.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Autoridades competentes, quando exigido por lei.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A TOURYA não vende nem comercializa dados pessoais.</p>\n</div>\n<h6 class=\"mb-2\">8. Direitos do Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O Titular tem o direito de:</p>\n</div>\n<h6 class=\"mb-2\">1. Conhecer, atualizar e retificar seus dados pessoais.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Solicitar comprovação da autorização concedida.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Ser informado sobre o uso de seus dados.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Apresentar reclamações à SIC por infrações.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Revogar a autorização e/ou solicitar a supressão dos dados.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Acessar gratuitamente seus dados pessoais.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">9. Procedimento para o Exercício de Direitos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">As solicitações devem ser enviadas para o e-mail:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📧 \udce7 luis.mendoza@tourya.co</p>\n  <p class=\"mb-2\">Prazos legais:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Consultas: até 10 dias úteis</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Reclamações: até 15 dias úteis</p>\n</div>\n<h6 class=\"mb-2\">10. Medidas de segurança</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA adota medidas técnicas, administrativas e organizacionais razoáveis para proteger os dados pessoais contra:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Acesso não autorizado</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Perda</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Uso indevido</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Alteração</p>\n  <p class=\"mb-2\">No entanto, o usuário reconhece que nenhum sistema é totalmente seguro.</p>\n</div>\n<h6 class=\"mb-2\">11. Tratamento por parte de operadores turísticos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Os operadores turísticos que têm acesso aos dados pessoais dos usuários:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Atuam como encarregados do tratamento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Só podem utilizar os dados para realizar o passeio reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Devem cumprir a Lei 1581 de 2012.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Não podem utilizar os dados para fins próprios sem a autorização do titular.</p>\n</div>\n<h6 class=\"mb-2\">12. Conservação dos Dados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Os dados pessoais serão conservados:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Durante a vigência da relação contratual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Enquanto existir uma obrigação legal ou contratual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Até que o Titular solicite sua exclusão (quando for legalmente pertinente)</p>\n</div>\n<h6 class=\"mb-2\">13. Alterações à Política</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA poderá alterar esta Política a qualquer momento.</p>\n  <p class=\"mb-2\">As alterações serão comunicadas por meio da plataforma.</p>\n</div>\n<h6 class=\"mb-2\">14. Vigor</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A presente Política entra em vigor a partir de sua publicação e permanecerá em vigor enquanto a TOURYA realizar o tratamento de dados pessoais.</p>\n</div>"
+    "terms": "<div class=\"mb-4\">\n  <p class=\"mb-2\">TERMS AND CONDITIONS OF USE</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Last updated: [April 16, 2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identification of the Platform Operator</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The Tourya digital platform is operated by:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Company Name: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Type of company: Sociedad por Acciones Simplificada (S.A.S.)</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tax ID: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Address: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Email: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Phone: +57 311 218 2520</p>\n</div>\n<h6 class=\"mb-2\">2. Acceptance of the Terms</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Accessing, browsing, and using the Tourya platform, as well as making reservations for tours or tourist experiences, implies the express, free, and voluntary acceptance of these Terms and Conditions.</p>\n  <p class=\"mb-2\">If the user does not agree with these Terms, they must refrain from using the platform.</p>\n</div>\n<h6 class=\"mb-2\">3. Definitions</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">For the purposes of these Terms:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Tourya”: A digital platform acting as a technological and commercial intermediary.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “User” or “Customer”: An individual who books tours through the platform.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Tour Operator” or “Provider”: An independent third party that directly offers and provides the tourism services published on Tourya.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Tour” or “Experience”: A tourism service offered by a Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Reservation”: A contract entered into between the User and the Tour Operator for the provision of a tour.</p>\n</div>\n<h6 class=\"mb-2\">4. Nature of Tourya’s Service</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya is NOT a provider of tourism services.</p>\n  <p class=\"mb-2\">Tourya operates exclusively as a digital marketplace, whose function is to:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitate the publication, promotion, and marketing of tours.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Process payments on behalf of tour operators.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitate communication between Users and Operators.</p>\n  <p class=\"mb-2\">The tourism service is provided solely and exclusively by the Tour Operator, who acts independently and under their own responsibility.</p>\n</div>\n<h6 class=\"mb-2\">5. Contractual Relationship</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">When making a reservation:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The contract for the provision of the tourism service is entered into directly between the User and the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya is not a party to said contract, nor does it assume any obligations arising from the execution of the tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya does not guarantee the quality, safety, suitability, or outcome of the tourism service.</p>\n</div>\n<h6 class=\"mb-2\">6. Obligations of the Tour Operator</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The Tour Operator is solely responsible for:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Complying with all applicable Colombian regulations, including being registered in the National Tourism Registry (RNT).</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Maintaining valid mandatory insurance and necessary legal permits.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Providing the service as described on the platform.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Addressing claims, complaints, and requests from the User.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Being liable for accidents, injuries, losses, damages, or breaches occurring during the tour.</p>\n  <p class=\"mb-2\">Tourya may request documentation at any time to verify compliance with these obligations.</p>\n</div>\n<h6 class=\"mb-2\">7. Tourya’s Liability</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya shall be liable solely for:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The proper functioning of the technology platform.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The management of the payment process in accordance with published policies.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The protection of users’ personal data in accordance with the law.</p>\n</div>\n<h6 class=\"mb-2\">8. Exclusion and Limitation of Liability</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya shall NOT be liable for:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The execution of the tour or experience.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cancellations, delays, modifications, or breaches by the Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Accidents, damages, injuries, illnesses, or losses suffered during the tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Acts or omissions of the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Inaccurate information provided by the Operator.</p>\n  <p class=\"mb-2\">To the fullest extent permitted by Colombian law, Tourya shall not be liable for indirect damages, lost profits, or consequential damages.</p>\n</div>\n<h6 class=\"mb-2\">9. Payments and Commissions</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya receives payments made by Users on behalf of the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya retains a commission for its intermediary services, as previously agreed upon with the Tour Operator.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The remaining balance will be transferred to the Tour Operator in accordance with the platform’s internal timelines.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Payment does not imply that Tourya assumes responsibility for the provision of the service.</p>\n</div>\n<h6 class=\"mb-2\">10. Cancellation and Refund Policies</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Each tour will have a specific cancellation policy, which will be displayed before booking:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Flexible: cancellation up to 24 hours in advance</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Standard: cancellation up to 48 hours in advance</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Moderate: cancellation up to 4 days in advance</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Strict: cancellation up to 7 days in advance</p>\n  <p class=\"mb-2\">Cancellations and refunds are governed by the selected policy and are the responsibility of the Tour Operator. Tourya may act as an intermediary in managing the refund, without assuming direct liability.</p>\n</div>\n<h6 class=\"mb-2\">11. Suspension and Delisting of Operators</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya may, at its discretion, suspend, restrict, or remove tour operators who:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Fail to comply with applicable legal regulations.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Fail to comply with cancellation or service policies.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Damage the platform’s reputation.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Generate repeated user complaints.</p>\n</div>\n<h6 class=\"mb-2\">12. Intellectual Property</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">All content on the platform (brand, logos, text, software) is the property of Tourya or its licensors and is protected by intellectual property laws.</p>\n</div>\n<h6 class=\"mb-2\">13. Protection of Personal Data</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The processing of personal data is carried out in accordance with Law 1581 of 2012 and other applicable regulations.</p>\n  <p class=\"mb-2\">The User declares that they have read and accepted Tourya’s Privacy Policy.</p>\n</div>\n<h6 class=\"mb-2\">14. Modifications</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya may modify these Terms at any time.</p>\n  <p class=\"mb-2\">Modifications will be published on the platform and will be deemed accepted upon continued use of the service.</p>\n</div>\n<h6 class=\"mb-2\">15. Governing Law and Jurisdiction</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">These Terms are governed by the laws of the Republic of Colombia.</p>\n  <p class=\"mb-2\">Any dispute shall be submitted to the competent courts of Tourya’s place of business.</p>\n</div>\n<h6 class=\"mb-2\">16. Contact</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">For inquiries or complaints:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📧 luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📞 +57 311 218 2520</p>\n</div>",
+    "privacy": "<div class=\"mb-4\">\n  <p class=\"mb-2\">📄 PERSONAL DATA PROCESSING POLICY</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Last updated: [April 16, 2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identification of the Data Controller</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The data controller is:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Company name: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tax ID: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Address: New Point Shopping Center, Unit 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Email: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Phone: 311 218 2520</p>\n  <p class=\"mb-2\">Hereinafter, “TOURYA”.</p>\n</div>\n<h6 class=\"mb-2\">2. Legal Framework</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">This Policy is governed by the provisions of:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Law 1581 of 2012</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Decree 1377 of 2013</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Other relevant regulations regarding personal data protection in Colombia</p>\n</div>\n<h6 class=\"mb-2\">3. Definitions</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Personal Data: Information that allows a natural person to be identified or made identifiable.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Data Subject: A natural person whose personal data is being processed.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Processing: Any operation involving personal data, such as collection, storage, use, dissemination, or deletion.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Data Controller: TOURYA.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Data Processor: Third parties that process data on behalf of TOURYA (e.g., technology providers).</p>\n</div>\n<h6 class=\"mb-2\">4. Personal Data Processed</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA collects and processes only the data necessary for the operation of the travel marketplace.</p>\n  <p class=\"mb-2\">User/Tourist Data:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> First Name</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Last Name</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ID Number</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Contact Phone Number</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Email Address</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> City of Residence</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> State/Province</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Country</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TOURYA does not collect sensitive data or financial data directly (the latter is managed by external payment gateways).</p>\n</div>\n<h6 class=\"mb-2\">5. Purposes of Processing</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Personal data will be processed for the following purposes:</p>\n</div>\n<h6 class=\"mb-2\">1. To manage reservations for tours and tourist experiences.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. To facilitate communication between the User and the Tour Operator.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. To process payments and refunds related to reservations.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. To comply with legal and contractual obligations.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. To address requests, complaints, and claims (RCC).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. To send communications related to the booking (confirmations, changes, cancellations).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">7. To improve the user experience on the platform.</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> The data will not be used for other purposes without the data subject’s prior authorization.</p>\n</div>\n<h6 class=\"mb-2\">6. Authorization of the Data Subject</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The Data Subject hereby provides TOURYA with prior, express, and informed authorization to process their personal data by:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Registering on the platform</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Making a reservation</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Accepting this Policy via digital means</p>\n  <p class=\"mb-2\">This authorization may be revoked at any time, without retroactive effect.</p>\n</div>\n<h6 class=\"mb-2\">7. Data Circulation and Transfer</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA may share personal data only with:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tour operators, exclusively for the purpose of providing the booked tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Technology providers (hosting, CRM, payment gateway), under confidentiality agreements.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Competent authorities, when required by law.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TOURYA does not sell or market personal data.</p>\n</div>\n<h6 class=\"mb-2\">8. Rights of the Data Subject</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">The Data Subject has the right to:</p>\n</div>\n<h6 class=\"mb-2\">1. Access, update, and correct their personal data.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Request proof of the authorization granted.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Be informed about the use of their data.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. File complaints with the SIC regarding violations.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Revoke authorization and/or request the deletion of data.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Access their personal data free of charge.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">9. Procedure for Exercising Rights</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Requests must be sent to the following email address:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📧 luis.mendoza@tourya.co</p>\n  <p class=\"mb-2\">Legal deadlines:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Inquiries: up to 10 business days</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Complaints: up to 15 business days</p>\n</div>\n<h6 class=\"mb-2\">10. Security Measures</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA adopts reasonable technical, administrative, and organizational measures to protect personal data against:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Unauthorized access</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Loss</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Misuse</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Alteration</p>\n  <p class=\"mb-2\">However, the user acknowledges that no system is completely secure.</p>\n</div>\n<h6 class=\"mb-2\">11. Processing by Tour Operators</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tour operators who access Users’ personal data:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Act as data processors.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> May only use the data to carry out the booked tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Must comply with Law 1581 of 2012.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> May not use the data for their own purposes without the Data Subject’s authorization.</p>\n</div>\n<h6 class=\"mb-2\">12. Data Retention</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Personal data will be retained:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> For the duration of the contractual relationship</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> As long as a legal or contractual obligation exists</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Until the Data Subject requests its deletion (when legally applicable)</p>\n</div>\n<h6 class=\"mb-2\">13. Changes to the Policy</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA may modify this Policy at any time.</p>\n  <p class=\"mb-2\">Changes will be communicated through the platform.</p>\n</div>\n<h6 class=\"mb-2\">14. Effective Date</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">This Policy is effective as of its publication and will remain in effect as long as TOURYA processes personal data.</p>\n</div>"
   },
   "aboutUs": {
     "title1": "About Tourya",
@@ -288,6 +542,16 @@
         "title": "Always supported",
         "desc": "24/7 support. You’re not alone if something happens."
       }
+    }
+  },
+  "tours-detail": {
+    "why-book": {
+      "title": "Why Book With Us",
+      "item1": "Always clear information",
+      "item2": "100% secure booking",
+      "item3": "Easy flexible cancellations",
+      "item4": "Real 24/7 support",
+      "item5": "Local physical office"
     }
   }
 }

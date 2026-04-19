@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "Reserva los Mejores Tours en San Andrés al Mejor Precio",
+    "title": "Reserve los Mejores Tours en San Andrés al Mejor Precio",
     "subtitle": "Disfruta de la isla con atención 24/7, compra segura y cancelaciones flexibles.",
     "top-tours": {
       "title": "Top Tours en San Andrés ",
@@ -463,9 +463,10 @@
         "label": "Tipo de política de cancelación",
         "placeholder": "Seleccionar",
         "options": {
-          "flexible": "Flexible",
-          "moderate": "Moderada",
-          "nonRefundable": "No reembolsable"
+          "flexible": "Flexible (hasta 24 horas antes)",
+          "standard": "Estándar (hasta 48 horas antes)",
+          "moderate": "Moderado (hasta 4 días antes)",
+          "strict": "Estricto (hasta 7 días antes)"
         },
         "errors": {
           "required": "El tipo de política de cancelación es requerido"
@@ -530,7 +531,7 @@
         "desc": "No hay miedo a estafas. Pagas seguro y recibes exactamente lo que ves."
       },
       "card2": {
-        "title": "Todo claro, sin sorpresas",
+        "title": "Todo claro, sin surpresas",
         "desc": "Precios, horarios y condiciones transparentes desde el inicio. Nada oculto."
       },
       "card3": {
@@ -541,6 +542,16 @@
         "title": "Siempre acompañado",
         "desc": "Soporte 24/7. No estás solo si algo pasa."
       }
+    }
+  },
+  "tours-detail": {
+    "why-book": {
+      "title": "Por qué reservar con nosotros",
+      "item1": "Información clara siempre",
+      "item2": "Compra 100% segura",
+      "item3": "Cancelación fácil y flexible",
+      "item4": "Atención 24/7 real",
+      "item5": "Oficina física local"
     }
   }
 }
