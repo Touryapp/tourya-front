@@ -1,4 +1,36 @@
 {
+  "shared": {
+    "available": "Available",
+    "notAvailable": "Not available",
+    "allowed": "Allowed",
+    "notAllowed": "Not allowed",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "submit": "Submit",
+    "year": "year",
+    "years": "years",
+    "night": "Night",
+    "message": "Message",
+    "adult": "Adult",
+    "adults": "Adults",
+    "child": "Child",
+    "children": "Children",
+    "infant": "Infant",
+    "infants": "Infants",
+    "messages": {
+      "error": "An error has occurred, please try again",
+      "success": "Action completed successfully",
+      "errorGettingTour": "Error getting tour",
+      "tourSubmitted": "Tour submitted for review successfully"
+    }
+  },
+  "rejectionReasons": {
+    "inappropriate": "Inappropriate content",
+    "fake": "Fake or misleading information",
+    "spam": "Spam or irrelevant content"
+  },
   "home": {
     "title": "Book the Best Tours in San Andres at the Best Price.",
     "subtitle": "Enjoy the island with 24/7 attention, secure shopping and flexible cancellations.",
@@ -279,7 +311,8 @@
       "cannotEditWarning": "This tour is under review and cannot be edited.",
       "cannotEditMessage": "You must wait for it to be accepted, returned, or cancelled to edit it again.",
       "autoSubmitNote": "Note:",
-      "autoSubmitMessage": "When saving changes, the tour will be automatically submitted for review."
+      "autoSubmitMessage": "When saving changes, the tour will be automatically submitted for review.",
+      "sendForReview": "Submit for Review"
     },
     "sections": {
       "tourDetails": "Tour Details",
@@ -290,7 +323,8 @@
       "excludes": "Excludes",
       "itinerary": "Itinerary",
       "faq": "Frequently Asked Questions",
-      "cancellationPolicies": "Cancellation Policies"
+      "cancellationPolicies": "Cancellation Policies",
+      "tags": "Tags"
     },
     "fields": {
       "name": {
@@ -317,6 +351,10 @@
           "required": "Category is required"
         }
       },
+      "subcategory": {
+        "label": "Subcategory",
+        "placeholder": "Select subcategory"
+      },
       "priceType": {
         "label": "Price Type",
         "placeholder": "Select",
@@ -330,10 +368,33 @@
       },
       "duration": {
         "label": "Duration",
+        "placeholder": "Select duration",
+        "options": {
+          "1_2_hours": "1 to 2 hours",
+          "2_4_hours": "2 to 4 hours",
+          "4_6_hours": "4 to 6 hours",
+          "up_to_1_day": "Up to 1 day",
+          "up_to_3_days": "Up to 3 days",
+          "up_to_5_days": "Up to 5 days"
+        },
         "errors": {
           "required": "Duration is required",
           "minlength": "Duration must be at least 1 character",
           "maxlength": "Duration cannot exceed 50 characters"
+        }
+      },
+      "isUnlimited": {
+        "label": "Unlimited"
+      },
+      "schedule": {
+        "label": "Schedule",
+        "options": {
+          "morning": "Morning",
+          "afternoon": "Afternoon",
+          "night": "Night"
+        },
+        "errors": {
+          "required": "Required"
         }
       },
       "totalNumberOfPeoples": {
@@ -490,6 +551,9 @@
         "errors": {
           "required": "This field is required"
         }
+      },
+      "tags": {
+        "label": "Tags"
       }
     },
     "buttons": {
@@ -508,6 +572,23 @@
       "faq": {
         "titleAdd": "Add new question",
         "titleEdit": "Edit question"
+      },
+      "submitConfirm": {
+        "title": "Confirm Submission for Review",
+        "message": "Are you sure you want to send this tour for review?",
+        "pointsTitle": "Once submitted:",
+        "point1": "You won't be able to edit the tour until it's reviewed",
+        "point2": "The administrator will evaluate your tour",
+        "point3": "You will receive notification of the result",
+        "cancel": "Cancel",
+        "confirm": "Yes, Submit for Review",
+        "submitting": "Sending..."
+      },
+      "deleteConfirm": {
+        "title": "Confirm Delete",
+        "message": "Are you sure you want to delete this item?",
+        "no": "No",
+        "yes": "Yes"
       }
     }
   },
@@ -545,6 +626,77 @@
     }
   },
   "tours-detail": {
+    "breadcrumb": {
+      "details": "Tour Details",
+      "tours": "Tours"
+    },
+    "header": {
+      "seeAll": "See All",
+      "viewLocation": "View Location",
+      "reviews": "Reviews"
+    },
+    "actions": {
+      "save": "Save",
+      "share": "Share"
+    },
+    "sections": {
+      "description": "Description",
+      "highlights": "Highlights",
+      "itinerary": "Itinerary",
+      "includesExcludes": "Includes & Excludes",
+      "gallery": "Gallery",
+      "location": "Location",
+      "cancellationPolicies": "Cancellation Policies",
+      "faq": "Frequently Asked Questions",
+      "reviews": "Reviews"
+    },
+    "policies": {
+      "rainRefund": "Rain Refund",
+      "rescheduling": "Rescheduling"
+    },
+    "reviews": {
+      "writeReview": "Write a Review",
+      "rejection": {
+        "selectReason": "Please select a reason for rejection",
+        "success": "Review rejected successfully",
+        "error": "Error rejecting review"
+      }
+    },
+    "booking": {
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "guests": "Travellers",
+      "adults": "Adults",
+      "children": "Children",
+      "infants": "Infants",
+      "selectDate": "Select Date",
+      "confirmSelection": "Confirm Selection",
+      "addToCart": "Add to Cart",
+      "selectionActive": "Your selection is active",
+      "finishBooking": "Finish booking",
+      "person": "Person",
+      "persons": "Persons",
+      "noTravellers": "No travellers",
+      "perPerson": "Per Person",
+      "group": "Group",
+      "upTo": "up to",
+      "duration": "Duration",
+      "minAge": "Min Age",
+      "price": "Price",
+      "availability": "Availability",
+      "checkAvailability": "Check Availability",
+      "loginToCheck": "To check availability you must log in.",
+      "login": "Log In"
+    },
+    "enquiry": {
+      "title": "Enquire Us",
+      "submit": "Submit Enquiry"
+    },
+    "provider": {
+      "title": "Provider Details",
+      "callUs": "Call Us",
+      "email": "Email"
+    },
     "why-book": {
       "title": "Why Book With Us",
       "item1": "Always clear information",

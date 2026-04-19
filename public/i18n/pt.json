@@ -1,4 +1,36 @@
 {
+  "shared": {
+    "available": "Disponível",
+    "notAvailable": "Não disponível",
+    "allowed": "Permitido",
+    "notAllowed": "Não permitido",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "save": "Salvar",
+    "submit": "Enviar",
+    "year": "ano",
+    "years": "anos",
+    "night": "Noite",
+    "message": "Mensagem",
+    "adult": "Adulto",
+    "adults": "Adultos",
+    "child": "Criança",
+    "children": "Crianças",
+    "infant": "Bebê",
+    "infants": "Bebês",
+    "messages": {
+      "error": "Ocorreu um erro, por favor tente novamente",
+      "success": "Ação concluída com sucesso",
+      "errorGettingTour": "Erro ao obter o passeio",
+      "tourSubmitted": "Passeio enviado para revisão com sucesso"
+    }
+  },
+  "rejectionReasons": {
+    "inappropriate": "Conteúdo inapropriado",
+    "fake": "Informação falsa ou enganosa",
+    "spam": "Spam ou conteúdo irrelevante"
+  },
   "home": {
     "title": "Reserve os melhores passeios em San Andrés com o melhor preço.",
     "subtitle": "Aproveite a ilha con atención 24 horas por día, 7 dias por semana, compras seguras e cancelamentos flexíveis.",
@@ -279,7 +311,8 @@
       "cannotEditWarning": "Este passeio está em revisão e não pode ser editado.",
       "cannotEditMessage": "Você deve esperar até que seja aceito, devolvido ou cancelado para poder editá-lo novamente.",
       "autoSubmitNote": "Nota:",
-      "autoSubmitMessage": "Ao salvar as alterações, o passeio será enviado automaticamente para revisão."
+      "autoSubmitMessage": "Ao salvar as alterações, o passeio será enviado automaticamente para revisão.",
+      "sendForReview": "Enviar para Revisão"
     },
     "sections": {
       "tourDetails": "Detalhes do Passeio",
@@ -287,10 +320,11 @@
       "locations": "Localizações",
       "mainAttractions": "Atrações Principais",
       "includes": "Inclui",
-      "excludes": "Excluye",
+      "excludes": "Exclui",
       "itinerary": "Itinerário",
       "faq": "Perguntas Frequentes",
-      "cancellationPolicies": "Políticas de Cancelamento"
+      "cancellationPolicies": "Políticas de Cancelamento",
+      "tags": "Tags"
     },
     "fields": {
       "name": {
@@ -301,21 +335,9 @@
           "maxlength": "O nome não pode ter mais de 50 caracteres"
         }
       },
-      "category": {
-        "label": "Categoria",
-        "placeholder": "Selecionar",
-        "options": {
-          "aquatic": "Aquático",
-          "land": "Terrestre",
-          "adventure": "Aventura",
-          "night": "Noturno",
-          "experiences": "Experiências",
-          "cultural": "Cultural",
-          "transportRental": "Aluguel de Transporte"
-        },
-        "errors": {
-          "required": "A categoria é obrigatória"
-        }
+      "subcategory": {
+        "label": "Subcategoria",
+        "placeholder": "Selecionar subcategoria"
       },
       "priceType": {
         "label": "Tipo de preço",
@@ -330,10 +352,33 @@
       },
       "duration": {
         "label": "Duração",
+        "placeholder": "Selecionar duração",
+        "options": {
+          "1_2_hours": "1 a 2 horas",
+          "2_4_hours": "2 a 4 horas",
+          "4_6_hours": "4 a 6 horas",
+          "up_to_1_day": "Até 1 dia",
+          "up_to_3_days": "Até 3 dias",
+          "up_to_5_days": "Até 5 dias"
+        },
         "errors": {
           "required": "A duração é obrigatória",
           "minlength": "A duração deve ter pelo menos 1 caractere",
           "maxlength": "A duração não pode ter mais de 50 caracteres"
+        }
+      },
+      "isUnlimited": {
+        "label": "Ilimitado"
+      },
+      "schedule": {
+        "label": "Horário",
+        "options": {
+          "morning": "Manhã",
+          "afternoon": "Tarde",
+          "night": "Noite"
+        },
+        "errors": {
+          "required": "Obrigatório"
         }
       },
       "totalNumberOfPeoples": {
@@ -489,6 +534,9 @@
         "errors": {
           "required": "Este campo é obrigatório"
         }
+      },
+      "tags": {
+        "label": "Tags"
       }
     },
     "buttons": {
@@ -507,6 +555,23 @@
       "faq": {
         "titleAdd": "Adicionar nova pergunta",
         "titleEdit": "Editar pergunta"
+      },
+      "submitConfirm": {
+        "title": "Confirmar envio para revisão",
+        "message": "Tem certeza de que deseja enviar este passeio para revisão?",
+        "pointsTitle": "Depois de enviado:",
+        "point1": "Você não poderá editar o passeio até que ele seja revisado",
+        "point2": "O administrador avaliará seu passeio",
+        "point3": "Você receberá uma notificação do resultado",
+        "cancel": "Cancelar",
+        "confirm": "Sim, Enviar para Revisão",
+        "submitting": "Enviando..."
+      },
+      "deleteConfirm": {
+        "title": "Confirmar exclusão",
+        "message": "Tem certeza de que deseja excluir este item?",
+        "no": "Não",
+        "yes": "Sim"
       }
     }
   },
@@ -544,6 +609,77 @@
     }
   },
   "tours-detail": {
+    "breadcrumb": {
+      "details": "Detalhes do Passeio",
+      "tours": "Passeios"
+    },
+    "header": {
+      "seeAll": "Ver Tudo",
+      "viewLocation": "Ver Localização",
+      "reviews": "Avaliações"
+    },
+    "actions": {
+      "save": "Salvar",
+      "share": "Compartilhar"
+    },
+    "sections": {
+      "description": "Descrição",
+      "highlights": "Destaques",
+      "itinerary": "Itinerário",
+      "includesExcludes": "Inclui e Exclui",
+      "gallery": "Galeria",
+      "location": "Localização",
+      "cancellationPolicies": "Políticas de Cancelamento",
+      "faq": "Perguntas Frequentes",
+      "reviews": "Avaliações"
+    },
+    "policies": {
+      "rainRefund": "Reembolso por Chuva",
+      "rescheduling": "Reagendamento"
+    },
+    "reviews": {
+      "writeReview": "Escrever uma Avaliação",
+      "rejection": {
+        "selectReason": "Por favor, selecione um motivo para rejeição",
+        "success": "Avaliação rejeitada com sucesso",
+        "error": "Erro ao rejeitar avaliação"
+      }
+    },
+    "booking": {
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "guests": "Hóspedes",
+      "adults": "Adultos",
+      "children": "Crianças",
+      "infants": "Bebês",
+      "selectDate": "Selecionar Data",
+      "confirmSelection": "Confirmar Seleção",
+      "addToCart": "Adicionar ao Carrinho",
+      "selectionActive": "Sua seleção está ativa",
+      "finishBooking": "Finalizar reserva",
+      "person": "Pessoa",
+      "persons": "Pessoas",
+      "noTravellers": "Sem viajantes",
+      "perPerson": "Por Pessoa",
+      "group": "Grupo",
+      "upTo": "até",
+      "duration": "Duração",
+      "minAge": "Idade mínima",
+      "price": "Preço",
+      "availability": "Disponibilidade",
+      "checkAvailability": "Consultar Disponibilidade",
+      "loginToCheck": "Para consultar a disponibilidade você deve fazer o login.",
+      "login": "Entrar"
+    },
+    "enquiry": {
+      "title": "Contate-nos",
+      "submit": "Enviar Consulta"
+    },
+    "provider": {
+      "title": "Detalhes do Provedor",
+      "callUs": "Ligue para nós",
+      "email": "Email"
+    },
     "why-book": {
       "title": "Por que reservar conosco",
       "item1": "Informação clara sempre",

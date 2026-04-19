@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 // usando @angular/google-maps para mapa nativo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -161,7 +162,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private cartService: CartService,
     public i18nService: I18nFieldService,
     private reviewsService: ReviewsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {}
 
   // Reviews data
@@ -174,9 +176,9 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   rejectingReviewId: string | null = null;
   selectedRejectionReason: string = '';
   rejectionReasons: string[] = [
-    'Contenido inapropiado',
-    'Información falsa o engañosa',
-    'Spam o contenido irrelevante'
+    'rejectionReasons.inappropriate',
+    'rejectionReasons.fake',
+    'rejectionReasons.spam'
   ];
 
     // Check if user is admin
@@ -358,15 +360,16 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     const value = Array.isArray(this.tour.durationEnum) ? this.tour.durationEnum[0] : this.tour.durationEnum;
 
     const mapping: { [key: string]: string } = {
-      '1_a_2_horas': '1 a 2 horas',
-      '2_a_4_horas': 'de 2 a 4',
-      '4_a_6_horas': 'de 4 a 6 horas',
-      'hasta_1_dia': 'hasta 1 día',
-      'hasta_3_dias': 'hasta 3 días',
-      'hasta_5_dias': 'hasta 5 días'
+      '1_a_2_horas': 'tour-form.fields.duration.options.1_2_hours',
+      '2_a_4_horas': 'tour-form.fields.duration.options.2_4_hours',
+      '4_a_6_horas': 'tour-form.fields.duration.options.4_6_hours',
+      'hasta_1_dia': 'tour-form.fields.duration.options.up_to_1_day',
+      'hasta_3_dias': 'tour-form.fields.duration.options.up_to_3_days',
+      'hasta_5_dias': 'tour-form.fields.duration.options.up_to_5_days'
     };
 
-    return mapping[value] || value;
+    const key = mapping[value] || value;
+    return this.translate.instant(key);
   }
 
   // Methods to update travellers data
@@ -383,22 +386,25 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   getTravellersDisplay(): string {
     const total = this.getTotalPersons();
-    const persons = total === 1 ? 'Person' : 'Persons';
+    const persons = total === 1 ? this.translate.instant('tours-detail.booking.person') : this.translate.instant('tours-detail.booking.persons');
     return `${total} ${persons}`;
   }
 
   getTravellersDetails(): string {
     const details = [];
     if (this.travellersData.adults > 0) {
-      details.push(`${this.travellersData.adults} Adult${this.travellersData.adults > 1 ? 's' : ''}`);
+      const label = this.travellersData.adults === 1 ? this.translate.instant('shared.adult') : this.translate.instant('shared.adults');
+      details.push(`${this.travellersData.adults} ${label}`);
     }
     if (this.travellersData.children > 0) {
-      details.push(`${this.travellersData.children} Child${this.travellersData.children > 1 ? 'ren' : ''}`);
+      const label = this.travellersData.children === 1 ? this.translate.instant('shared.child') : this.translate.instant('shared.children');
+      details.push(`${this.travellersData.children} ${label}`);
     }
     if (this.travellersData.infants > 0) {
-      details.push(`${this.travellersData.infants} Infant${this.travellersData.infants > 1 ? 's' : ''}`);
+      const label = this.travellersData.infants === 1 ? this.translate.instant('shared.infant') : this.translate.instant('shared.infants');
+      details.push(`${this.travellersData.infants} ${label}`);
     }
-    return details.length > 0 ? details.join(', ') : 'No travellers';
+    return details.length > 0 ? details.join(', ') : this.translate.instant('tours-detail.booking.noTravellers');
   }
 
   /**
@@ -407,9 +413,11 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   getPriceTypeLabel(): string {
     if (!this.tour) return '';
     if (this.tour.priceType === PriceType.INDIVIDUAL) {
-      return 'Por Persona';
+      return this.translate.instant('tours-detail.booking.perPerson');
     } else if (this.tour.priceType === PriceType.GROUP) {
-      return `Grupo (hasta ${this.tour.maxPeople || 0} personas)`;
+      const upTo = this.translate.instant('tours-detail.booking.upTo');
+      const persons = this.translate.instant('tours-detail.booking.persons').toLowerCase();
+      return `${this.translate.instant('tours-detail.booking.group')} (${upTo} ${this.tour.maxPeople || 0} ${persons})`;
     }
     return this.tour.priceType || '';
   }
