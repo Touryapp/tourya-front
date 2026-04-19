@@ -213,7 +213,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8 col-md-12">
+                                <div class="col-lg-6 col-md-12">
                                     <div class="mb-3">
                                         <label class="form-label">Horario</label>
                                         <div class="d-flex flex-wrap gap-2 mt-1">
@@ -230,6 +230,20 @@
                                             <div *ngIf="tourForm.controls['schedule'].errors?.['required']">
                                                 Requerido
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tags</label>
+                                        <div class="d-flex flex-wrap gap-2 mt-1 tags-scroll-container">
+                                            <label class="duration-check-label" *ngFor="let t of tagsList">
+                                                <input type="checkbox"
+                                                    [value]="t.id"
+                                                    [checked]="isTagSelected(t.id)"
+                                                    (change)="onTagChange(t.id, $event)">
+                                                <span>{{ t.name }}</span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>

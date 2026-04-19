@@ -27,6 +27,7 @@ import { CancellationPolicyType } from "../../../../shared/enums/cancellation-po
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 import { PriceType } from "../../../../shared/enums/price-type.enum";
 import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
+import { TagDto } from "../../../../shared/dto/search-tour-response.dto";
 
 
 @Component({
@@ -97,6 +98,7 @@ export class AddTourComponent {
   cities: City[][] = [];
 
   backendCategories: any[] = [];
+  tagsList: TagDto[] = [];
 
   @ViewChildren("addressInput") addressInputs!: QueryList<ElementRef>;
 
@@ -141,6 +143,7 @@ export class AddTourComponent {
         [Validators.required],
       ],
       schedule: [[], [Validators.required]],
+      tags: [[]],
 
       totalNumberOfPeoples: [""], // Initially no validators
       minAge: [
@@ -253,6 +256,7 @@ export class AddTourComponent {
 
   ngOnInit(): void {
     this.editor = new Editor();
+    this.getTags();
 
     this.tourForm.get("category")?.valueChanges.subscribe((value) => {
       if (value) {
@@ -272,10 +276,40 @@ export class AddTourComponent {
         if (data) {
           this.backendCategories = data;
           this.updateSubcategories();
+          this.syncCategoryWithSubcategory();
         }
       },
       error: (err) => {
         console.error("Error getting categories", err);
+      }
+    });
+  }
+
+  private syncCategoryWithSubcategory() {
+    const subCategoryCode = this.tour?.subCategory || this.tourForm.get('subcategory')?.value;
+    const currentCategory = this.tourForm.get('category')?.value;
+
+    if (!currentCategory && subCategoryCode && this.backendCategories.length > 0) {
+      const parentCat = this.backendCategories.find(cat => 
+        cat.subCategories && cat.subCategories.some((sub: any) => sub.code === subCategoryCode)
+      );
+      
+      if (parentCat) {
+        this.tourForm.get('category')?.setValue(parentCat.id, { emitEvent: true });
+        this.updateSubcategories();
+      }
+    }
+  }
+
+  getTags() {
+    this.searchToursService.tagPublic().subscribe({
+      next: (data) => {
+        if (data) {
+          this.tagsList = data;
+        }
+      },
+      error: (err) => {
+        console.error("Error getting tags", err);
       }
     });
   }
@@ -364,6 +398,24 @@ export class AddTourComponent {
     }
     this.tourForm.get('schedule')?.setValue(current);
     this.tourForm.get('schedule')?.markAsDirty();
+  }
+
+  isTagSelected(value: number): boolean {
+    const current: number[] = this.tourForm.get('tags')?.value || [];
+    return current.includes(value);
+  }
+
+  onTagChange(value: number, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const current: number[] = [...(this.tourForm.get('tags')?.value || [])];
+    if (checked) {
+      if (!current.includes(value)) current.push(value);
+    } else {
+      const idx = current.indexOf(value);
+      if (idx > -1) current.splice(idx, 1);
+    }
+    this.tourForm.get('tags')?.setValue(current);
+    this.tourForm.get('tags')?.markAsDirty();
   }
 
   onTotalNumberOfPeopleBlur(event: FocusEvent) {}
@@ -788,6 +840,7 @@ export class AddTourComponent {
       priceType,
       duration,
       schedule,
+      tags,
       minAge,
       totalNumberOfPeoples,
       locations,
@@ -870,6 +923,7 @@ export class AddTourComponent {
       isUnlimitedCapacity: isUnlimited,
       subCategory: subcategory,
       timeOfDay: Array.isArray(schedule) ? schedule : schedule ? [schedule] : [],
+      tagIds: tags,
       minAge: +minAge,
 
       locations: locationMap,
@@ -1033,6 +1087,7 @@ export class AddTourComponent {
               : timeOfDayValue
               ? [timeOfDayValue]
               : [],
+            tags: this.tour?.tags ? this.tour.tags.map((t: any) => typeof t === 'object' ? t.id : t) : [],
             subcategory: subCategoryValue || "",
             isUnlimited: isUnlimitedValue || false,
             totalNumberOfPeoples: this.tour?.maxPeople,
@@ -1125,6 +1180,8 @@ export class AddTourComponent {
                 cancellationPolicy?.cancellationPolicyType,
             });
           });
+          
+          this.syncCategoryWithSubcategory();
         } else {
           this.tour = {};
           this.openSnackBar("Error getting tour.");
