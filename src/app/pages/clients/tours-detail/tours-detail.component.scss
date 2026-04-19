@@ -1,1 +1,13 @@
 /* Estilos para tours-detail */ 
+
+#large-img {
+    .service-img {
+        img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: 10px; // Maintain the look from the screenshot
+        }
+    }
+}
