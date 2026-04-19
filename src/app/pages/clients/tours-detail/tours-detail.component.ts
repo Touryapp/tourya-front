@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 // usando @angular/google-maps para mapa nativo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,6 +20,7 @@ import { LightGallery } from 'lightgallery/lightgallery';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
 import { ProviderReview } from '../../../shared/models/reviews.model';
+import { PriceType } from '../../../shared/enums/price-type.enum';
 
 @Component({
   selector: 'app-tours-detail',
@@ -28,15 +30,28 @@ import { ProviderReview } from '../../../shared/models/reviews.model';
 })
 export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
   public routes = routes;
+  public PriceType = PriceType;
   
-  // Date picker
-  // Date pickers bound to template
-  checkIn: Date =new Date();
-  checkOut: Date=new Date();
+  // Date picker bound to template
+  public bsRangeValue: Date[] = [new Date(), new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)];
   minDate = new Date();
+
+  onDateRangeChange(event: any): void {
+    if (Array.isArray(event) && event.length === 2 && event[0] instanceof Date && event[1] instanceof Date) {
+      this.bsRangeValue = event as Date[];
+    }
+  }
   
   // Show more/less functionality
   isMore: boolean[] = [false, false, false, false, false, false, false, false];
+
+  // Travellers data
+  public travellersData = {
+    adults: 2,
+    children: 0,
+    infants: 0,
+    cabinClass: 'Economy'
+  };
   
   // Configuration for the main slider
   mainSliderConfig = {
@@ -147,7 +162,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private cartService: CartService,
     public i18nService: I18nFieldService,
     private reviewsService: ReviewsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {}
 
   // Reviews data
@@ -160,9 +176,9 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   rejectingReviewId: string | null = null;
   selectedRejectionReason: string = '';
   rejectionReasons: string[] = [
-    'Contenido inapropiado',
-    'Información falsa o engañosa',
-    'Spam o contenido irrelevante'
+    'rejectionReasons.inappropriate',
+    'rejectionReasons.fake',
+    'rejectionReasons.spam'
   ];
 
     // Check if user is admin
@@ -173,6 +189,32 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     // Initialize component
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? +idParam : 0;
+
+    // Sync search criteria from home selection
+    const traceJson = localStorage.getItem('userActionsTrace');
+    if (traceJson) {
+      try {
+        const trace = JSON.parse(traceJson);
+        if (trace.checkIn && trace.checkOut) {
+          this.bsRangeValue = [
+            new Date(trace.checkIn + 'T00:00:00'),
+            new Date(trace.checkOut + 'T00:00:00')
+          ];
+        } else if (trace.checkIn) {
+          this.bsRangeValue = [
+            new Date(trace.checkIn + 'T00:00:00'),
+            new Date(new Date(trace.checkIn + 'T00:00:00').getTime() + 3 * 24 * 60 * 60 * 1000)
+          ];
+        }
+        
+        if (trace.adults !== undefined) this.travellersData.adults = parseInt(trace.adults);
+        if (trace.children !== undefined) this.travellersData.children = parseInt(trace.children);
+        if (trace.infants !== undefined) this.travellersData.infants = parseInt(trace.infants);
+      } catch (e) {
+        console.warn('Could not parse userActionsTrace', e);
+      }
+    }
+
     if (id > 0) {
       this.searchService.detailTourPublic(id).subscribe({
         next: (data: TourDetail) => {
@@ -289,9 +331,6 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     });
   }
 
-  /**
-   * Build a human readable location string using tour.locations[0] and the public locations catalog.
-   */
   getLocationDisplay(): string {
     const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
     if (!loc) return '';
@@ -310,6 +349,77 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     else if (loc.stateId) parts.push(String(loc.stateId));
 
     return parts.filter(p => !!p).join(', ');
+  }
+
+  /**
+   * Helper to map durationEnum keys to human-readable labels.
+   */
+  getDurationLabel(): string {
+    if (!this.tour || !this.tour.durationEnum) return this.tour?.duration || '';
+
+    const value = Array.isArray(this.tour.durationEnum) ? this.tour.durationEnum[0] : this.tour.durationEnum;
+
+    const mapping: { [key: string]: string } = {
+      '1_a_2_horas': 'tour-form.fields.duration.options.1_2_hours',
+      '2_a_4_horas': 'tour-form.fields.duration.options.2_4_hours',
+      '4_a_6_horas': 'tour-form.fields.duration.options.4_6_hours',
+      'hasta_1_dia': 'tour-form.fields.duration.options.up_to_1_day',
+      'hasta_3_dias': 'tour-form.fields.duration.options.up_to_3_days',
+      'hasta_5_dias': 'tour-form.fields.duration.options.up_to_5_days'
+    };
+
+    const key = mapping[value] || value;
+    return this.translate.instant(key);
+  }
+
+  // Methods to update travellers data
+  updateTravellersCount(type: 'adults' | 'children' | 'infants', count: number): void {
+    this.travellersData[type] = Math.max(0, count);
+    if (type === 'adults' && this.travellersData.adults < 1) {
+      this.travellersData.adults = 1; // At least one adult required
+    }
+  }
+
+  getTotalPersons(): number {
+    return this.travellersData.adults + this.travellersData.children + this.travellersData.infants;
+  }
+
+  getTravellersDisplay(): string {
+    const total = this.getTotalPersons();
+    const persons = total === 1 ? this.translate.instant('tours-detail.booking.person') : this.translate.instant('tours-detail.booking.persons');
+    return `${total} ${persons}`;
+  }
+
+  getTravellersDetails(): string {
+    const details = [];
+    if (this.travellersData.adults > 0) {
+      const label = this.travellersData.adults === 1 ? this.translate.instant('shared.adult') : this.translate.instant('shared.adults');
+      details.push(`${this.travellersData.adults} ${label}`);
+    }
+    if (this.travellersData.children > 0) {
+      const label = this.travellersData.children === 1 ? this.translate.instant('shared.child') : this.translate.instant('shared.children');
+      details.push(`${this.travellersData.children} ${label}`);
+    }
+    if (this.travellersData.infants > 0) {
+      const label = this.travellersData.infants === 1 ? this.translate.instant('shared.infant') : this.translate.instant('shared.infants');
+      details.push(`${this.travellersData.infants} ${label}`);
+    }
+    return details.length > 0 ? details.join(', ') : this.translate.instant('tours-detail.booking.noTravellers');
+  }
+
+  /**
+   * Helper to map priceType to human-readable labels.
+   */
+  getPriceTypeLabel(): string {
+    if (!this.tour) return '';
+    if (this.tour.priceType === PriceType.INDIVIDUAL) {
+      return this.translate.instant('tours-detail.booking.perPerson');
+    } else if (this.tour.priceType === PriceType.GROUP) {
+      const upTo = this.translate.instant('tours-detail.booking.upTo');
+      const persons = this.translate.instant('tours-detail.booking.persons').toLowerCase();
+      return `${this.translate.instant('tours-detail.booking.group')} (${upTo} ${this.tour.maxPeople || 0} ${persons})`;
+    }
+    return this.tour.priceType || '';
   }
 
   getImage(i: number): string {
@@ -370,8 +480,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       tour: this.tour as any,
       schedules: this.tour ? (this.tour as any).schedules || [] : []
     };
-    const checkInStr = this.checkIn ? this.checkIn.toISOString().split('T')[0] : undefined;
-    const checkOutStr = this.checkOut ? this.checkOut.toISOString().split('T')[0] : undefined;
+    const checkInStr = this.bsRangeValue && this.bsRangeValue[0] ? this.bsRangeValue[0].toISOString().split('T')[0] : undefined;
+    const checkOutStr = this.bsRangeValue && this.bsRangeValue[1] ? this.bsRangeValue[1].toISOString().split('T')[0] : undefined;
     if(checkInStr && checkOutStr) {
       this.cartService.initializeCart(checkInStr, checkOutStr);
     }
@@ -380,8 +490,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       width: '600px',
       data: {
         tour: tourForModal,
-        checkIn: this.checkIn ? this.checkIn.toISOString().split('T')[0] : undefined,
-        checkOut: this.checkOut ? this.checkOut.toISOString().split('T')[0] : undefined,
+        checkIn: checkInStr,
+        checkOut: checkOutStr,
         tourAdded: (cartItem: CartItem) => {
           // manejar post-add: podríamos mostrar un toast o actualizar el estado local
           console.log('Tour agregado desde detalle', cartItem);
@@ -412,8 +522,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       data: {
         tour: tourForModal,
         dayDate,
-        checkIn: this.checkIn ? this.checkIn.toISOString().split('T')[0] : undefined,
-        checkOut: this.checkOut ? this.checkOut.toISOString().split('T')[0] : undefined,
+        checkIn: this.bsRangeValue && this.bsRangeValue[0] ? this.bsRangeValue[0].toISOString().split('T')[0] : undefined,
+        checkOut: this.bsRangeValue && this.bsRangeValue[1] ? this.bsRangeValue[1].toISOString().split('T')[0] : undefined,
         tourAdded: (cartItem: CartItem) => {
           console.log('Tour agregado desde floating cart (detalle)', cartItem);
         }

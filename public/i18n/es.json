@@ -1,6 +1,38 @@
 {
+  "shared": {
+    "available": "Disponible",
+    "notAvailable": "No disponible",
+    "allowed": "Permitido",
+    "notAllowed": "No permitido",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "submit": "Enviar",
+    "year": "año",
+    "years": "años",
+    "night": "Noche",
+    "message": "Mensaje",
+    "adult": "Adulto",
+    "adults": "Adultos",
+    "child": "Niño",
+    "children": "Niños",
+    "infant": "Infante",
+    "infants": "Infantes",
+    "messages": {
+      "error": "Ha ocurrido un error, por favor intente de nuevo",
+      "success": "Acción completada con éxito",
+      "errorGettingTour": "Error al obtener el tour",
+      "tourSubmitted": "Tour enviado a revisión exitosamente"
+    }
+  },
+  "rejectionReasons": {
+    "inappropriate": "Contenido inapropiado",
+    "fake": "Información falsa o engañosa",
+    "spam": "Spam o contenido irrelevante"
+  },
   "home": {
-    "title": "Reserva los Mejores Tours en San Andrés al Mejor Precio",
+    "title": "Reserve los Mejores Tours en San Andrés al Mejor Precio",
     "subtitle": "Disfruta de la isla con atención 24/7, compra segura y cancelaciones flexibles.",
     "top-tours": {
       "title": "Top Tours en San Andrés ",
@@ -279,7 +311,8 @@
       "cannotEditWarning": "Este tour está en revisión y no puede ser editado.",
       "cannotEditMessage": "Debes esperar a que sea aceptado, devuelto o cancelado para poder editarlo nuevamente.",
       "autoSubmitNote": "Nota:",
-      "autoSubmitMessage": "Al guardar los cambios, el tour será enviado automáticamente a revisión."
+      "autoSubmitMessage": "Al guardar los cambios, el tour será enviado automáticamente a revisión.",
+      "sendForReview": "Enviar a Revisión"
     },
     "sections": {
       "tourDetails": "Detalles del Tour",
@@ -290,7 +323,8 @@
       "excludes": "Excluye",
       "itinerary": "Itinerario",
       "faq": "Preguntas Frecuentes",
-      "cancellationPolicies": "Políticas de Cancelación"
+      "cancellationPolicies": "Políticas de Cancelación",
+      "tags": "Etiquetas"
     },
     "fields": {
       "name": {
@@ -301,21 +335,9 @@
           "maxlength": "El nombre no puede tener más de 50 caracteres"
         }
       },
-      "category": {
-        "label": "Categoría",
-        "placeholder": "Seleccionar",
-        "options": {
-          "aquatic": "Acuático",
-          "land": "Terrestre",
-          "adventure": "Aventura",
-          "night": "Nocturno",
-          "experiences": "Experiencias",
-          "cultural": "Cultural",
-          "transportRental": "Alquiler de Transporte"
-        },
-        "errors": {
-          "required": "La categoría es requerida"
-        }
+      "subcategory": {
+        "label": "Subcategoría",
+        "placeholder": "Seleccionar subcategoría"
       },
       "priceType": {
         "label": "Tipo de precio",
@@ -330,10 +352,33 @@
       },
       "duration": {
         "label": "Duración",
+        "placeholder": "Seleccionar duración",
+        "options": {
+          "1_2_hours": "1 a 2 horas",
+          "2_4_hours": "2 a 4 horas",
+          "4_6_hours": "4 a 6 horas",
+          "up_to_1_day": "Hasta 1 día",
+          "up_to_3_days": "Hasta 3 días",
+          "up_to_5_days": "Hasta 5 días"
+        },
         "errors": {
           "required": "La duración es requerida",
           "minlength": "La duración debe tener al menos 1 carácter",
           "maxlength": "La duración no puede tener más de 50 caracteres"
+        }
+      },
+      "isUnlimited": {
+        "label": "Ilimitado"
+      },
+      "schedule": {
+        "label": "Horario",
+        "options": {
+          "morning": "Mañana",
+          "afternoon": "Tarde",
+          "night": "Noche"
+        },
+        "errors": {
+          "required": "Requerido"
         }
       },
       "totalNumberOfPeoples": {
@@ -463,9 +508,10 @@
         "label": "Tipo de política de cancelación",
         "placeholder": "Seleccionar",
         "options": {
-          "flexible": "Flexible",
-          "moderate": "Moderada",
-          "nonRefundable": "No reembolsable"
+          "flexible": "Flexible (hasta 24 horas antes)",
+          "standard": "Estándar (hasta 48 horas antes)",
+          "moderate": "Moderado (hasta 4 días antes)",
+          "strict": "Estricto (hasta 7 días antes)"
         },
         "errors": {
           "required": "El tipo de política de cancelación es requerido"
@@ -489,6 +535,9 @@
         "errors": {
           "required": "Este campo es requerido"
         }
+      },
+      "tags": {
+        "label": "Etiquetas"
       }
     },
     "buttons": {
@@ -507,6 +556,23 @@
       "faq": {
         "titleAdd": "Agregar nueva pregunta",
         "titleEdit": "Editar pregunta"
+      },
+      "submitConfirm": {
+        "title": "Confirmar envío a revisión",
+        "message": "¿Estás seguro de que quieres enviar este tour a revisión?",
+        "pointsTitle": "Una vez enviado:",
+        "point1": "No podrás editar el tour hasta que sea revisado",
+        "point2": "El administrador evaluará tu tour",
+        "point3": "Recibirás una notificación del resultado",
+        "cancel": "Cancelar",
+        "confirm": "Sí, Enviar a Revisión",
+        "submitting": "Enviando..."
+      },
+      "deleteConfirm": {
+        "title": "Confirmar eliminación",
+        "message": "¿Estás seguro de que quieres eliminar este elemento?",
+        "no": "No",
+        "yes": "Sí"
       }
     }
   },
@@ -530,7 +596,7 @@
         "desc": "No hay miedo a estafas. Pagas seguro y recibes exactamente lo que ves."
       },
       "card2": {
-        "title": "Todo claro, sin sorpresas",
+        "title": "Todo claro, sin surpresas",
         "desc": "Precios, horarios y condiciones transparentes desde el inicio. Nada oculto."
       },
       "card3": {
@@ -541,6 +607,87 @@
         "title": "Siempre acompañado",
         "desc": "Soporte 24/7. No estás solo si algo pasa."
       }
+    }
+  },
+  "tours-detail": {
+    "breadcrumb": {
+      "details": "Detalles del Tour",
+      "tours": "Tours"
+    },
+    "header": {
+      "seeAll": "Ver Todo",
+      "viewLocation": "Ver Ubicación",
+      "reviews": "Reseñas"
+    },
+    "actions": {
+      "save": "Guardar",
+      "share": "Compartir"
+    },
+    "sections": {
+      "description": "Descripción",
+      "highlights": "Destacados",
+      "itinerary": "Itinerario",
+      "includesExcludes": "Incluye y Excluye",
+      "gallery": "Galería",
+      "location": "Ubicación",
+      "cancellationPolicies": "Políticas de Cancelación",
+      "faq": "Preguntas Frecuentes",
+      "reviews": "Reseñas"
+    },
+    "policies": {
+      "rainRefund": "Reembolso por Lluvia",
+      "rescheduling": "Reprogramación"
+    },
+    "reviews": {
+      "writeReview": "Escribir una Reseña",
+      "rejection": {
+        "selectReason": "Por favor seleccione un motivo de rechazo",
+        "success": "Reseña rechazada con éxito",
+        "error": "Error al rechazar la reseña"
+      }
+    },
+    "booking": {
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "guests": "Huéspedes",
+      "adults": "Adultos",
+      "children": "Niños",
+      "infants": "Infantes",
+      "selectDate": "Seleccionar Fecha",
+      "confirmSelection": "Confirmar Selección",
+      "addToCart": "Agregar al Carrito",
+      "selectionActive": "Tu selección está activa",
+      "finishBooking": "Finalizar reserva",
+      "person": "Persona",
+      "persons": "Personas",
+      "noTravellers": "Sin viajeros",
+      "perPerson": "Por Persona",
+      "group": "Grupo",
+      "upTo": "hasta",
+      "duration": "Duración",
+      "minAge": "Edad mínima",
+      "price": "Precio",
+      "availability": "Disponibilidad",
+      "checkAvailability": "Consultar Disponibilidad",
+      "loginToCheck": "Para consultar la disponibilidad debes iniciar sesión.",
+      "login": "Iniciar Sesión"
+    },
+    "enquiry": {
+      "title": "Contáctenos",
+      "submit": "Enviar Consulta"
+    },
+    "provider": {
+      "title": "Detalles del Proveedor",
+      "callUs": "Llámanos",
+      "email": "Correo"
+    },
+    "why-book": {
+      "title": "Por qué reservar con nosotros",
+      "item1": "Información clara siempre",
+      "item2": "Compra 100% segura",
+      "item3": "Cancelación fácil y flexible",
+      "item4": "Atención 24/7 real",
+      "item5": "Oficina física local"
     }
   }
 }

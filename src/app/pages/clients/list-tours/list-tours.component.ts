@@ -141,7 +141,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   };
   public checkIn: string = "";
   public checkOut: string = "";
-  public bsRangeValue: Date[] = [new Date(), new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)];
+  public bsRangeValue: Date[] = [new Date(), new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)];
 
   onDateRangeChange(event: any): void {
     if (Array.isArray(event) && event.length === 2 && event[0] instanceof Date && event[1] instanceof Date) {

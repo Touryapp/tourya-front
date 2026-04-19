@@ -7,6 +7,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
+import { TranslateService } from "@ngx-translate/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Editor, Toolbar } from "ngx-editor";
 import { Category } from "../../../../shared/enums/category.enum";
@@ -60,15 +61,16 @@ export class AddTourComponent {
   ];
 
   tabs = [
-    { id: "basic_info", label: "Tour Details" },
-    { id: "description", label: "Description" },
-    { id: "locations", label: "Locations" },
-    { id: "activities", label: "Main Attractions" },
-    { id: "includes", label: "Includes" },
-    { id: "excludes", label: "Excludes" },
-    { id: "itineraries", label: "Itinerary" },
-    { id: "faq", label: "FAQ" },
-    { id: "cancellationPolicies", label: "Cancellation Policies" },
+    { id: "basic_info", label: "tour-form.sections.tourDetails" },
+    { id: "description", label: "tour-form.sections.description" },
+    { id: "locations", label: "tour-form.sections.locations" },
+    { id: "activities", label: "tour-form.sections.mainAttractions" },
+    { id: "includes", label: "tour-form.sections.includes" },
+    { id: "excludes", label: "tour-form.sections.excludes" },
+    { id: "itineraries", label: "tour-form.sections.itinerary" },
+    { id: "tags", label: "tour-form.sections.tags" },
+    { id: "faq", label: "tour-form.sections.faq" },
+    { id: "cancellationPolicies", label: "tour-form.sections.cancellationPolicies" },
   ];
 
   activeTab: string = this.tabs[0].id; // Default to the first tab
@@ -86,9 +88,9 @@ export class AddTourComponent {
   subcategories: any[] = [];
 
   scheduleOptions = [
-    { value: 'manana', label: 'Mañana' },
-    { value: 'tarde', label: 'Tarde' },
-    { value: 'noche', label: 'Noche' },
+    { value: 'manana', label: 'tour-form.fields.schedule.options.morning' },
+    { value: 'tarde', label: 'tour-form.fields.schedule.options.afternoon' },
+    { value: 'noche', label: 'tour-form.fields.schedule.options.night' },
   ];
 
   submitted: boolean = false;
@@ -121,7 +123,8 @@ export class AddTourComponent {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private i18nService: I18nFieldService,
-    private searchToursService: SearchToursService
+    private searchToursService: SearchToursService,
+    private translate: TranslateService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -1000,7 +1003,7 @@ export class AddTourComponent {
         console.error("Error saving tour.");
         console.error(err);
 
-        this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
+        this.errorMessage = this.translate.instant('shared.messages.error');
       },
     });
   }
@@ -1184,13 +1187,13 @@ export class AddTourComponent {
           this.syncCategoryWithSubcategory();
         } else {
           this.tour = {};
-          this.openSnackBar("Error getting tour.");
+          this.openSnackBar(this.translate.instant('shared.messages.errorGettingTour'));
         }
       },
       error: (err) => {
         console.error("Error getting tour.");
         console.error(err);
-        this.openSnackBar("Error getting tour.");
+        this.openSnackBar(this.translate.instant('shared.messages.errorGettingTour'));
       },
     });
   }
@@ -1303,18 +1306,18 @@ export class AddTourComponent {
   }
 
   getStatusLabel(status?: string): string {
-    if (!status) return 'Sin estado';
+    if (!status) return this.translate.instant('tour-form.status.noStatus');
     switch (status) {
       case 'created':
-        return 'Creado';
+        return this.translate.instant('tour-form.status.created');
       case 'submitted':
-        return 'Enviado a revisión';
+        return this.translate.instant('tour-form.status.submitted');
       case 'returned':
-        return 'Devuelto';
+        return this.translate.instant('tour-form.status.returned');
       case 'accepted':
-        return 'Aceptado';
+        return this.translate.instant('tour-form.status.accepted');
       case 'cancelled':
-        return 'Cancelado';
+        return this.translate.instant('tour-form.status.cancelled');
       default:
         return status;
     }
@@ -1343,7 +1346,7 @@ export class AddTourComponent {
       this.tourService.submitTourById(this.tourId).subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.openSnackBar('Tour enviado a revisión exitosamente');
+          this.openSnackBar(this.translate.instant('shared.messages.tourSubmitted'));
           this.router.navigate(["/providers/provider-panel"], {
             queryParams: { submittedTour: true },
           });
@@ -1352,7 +1355,7 @@ export class AddTourComponent {
           this.isSubmitting = false;
           console.error("Error submitting tour for review.");
           console.error(err);
-          this.openSnackBar("Ha ocurrido un error, por favor intente de nuevo");
+          this.openSnackBar(this.translate.instant('shared.messages.error'));
         },
       });
     } else {

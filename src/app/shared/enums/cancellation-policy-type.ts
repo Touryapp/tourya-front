@@ -1,5 +1,6 @@
 export enum CancellationPolicyType {
   FLEXIBLE = "Flexible",
+  STANDARD = "Standard",
   MODERATE = "Moderate",
-  NON_REFUNDABLE = "Non-refundable",
+  STRICT = "Strict",
 }
