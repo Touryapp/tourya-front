@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { routes } from '../../shared/routes/routes';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { SafeHtmlPipe } from '../../shared/pipe/safe-html.pipe';
 
 @Component({
   selector: 'app-legalsite-politics',
   standalone: true,
   templateUrl: './legalsite-politics.component.html',
   styleUrl: './legalsite-politics.component.scss',
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, TranslateModule, SafeHtmlPipe]
 })
 export class LegalsitePoliticsComponent {
   routes = routes;

@@ -1,4 +1,5 @@
 import { I18nField } from '../interfaces/i18n-field.interface';
+import { TagDto } from './search-tour-response.dto';
 
 export interface Tour {
   id?: number;
@@ -24,6 +25,11 @@ export interface Tour {
   provider?: Provider;
   profilePicture?: Gallery;
   galleries?: Gallery[];
+  tags?: TagDto[];
+  subCategory?: string;
+  isUnlimitedCapacity?: boolean;
+  durationEnum?: string | string[];
+  timeOfDay?: string | string[];
 }
 
 export interface TourDetail {

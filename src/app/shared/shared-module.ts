@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule, DatePipe } from "@angular/common";
+import { RouterModule } from "@angular/router";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from "ngx-mask";
@@ -96,6 +97,7 @@ import { PendingReviewsModalComponent } from "./components/pending-reviews-modal
       useFactory: adapterFactory,
     }),
     MatOptionModule,
+    RouterModule,
   ],
   exports: [
     NgScrollbarModule,
@@ -134,7 +136,8 @@ import { PendingReviewsModalComponent } from "./components/pending-reviews-modal
     ConfirmDialogComponent,
     MatCheckboxModule,
     CalendarAngularCalendarModule,
-    PendingReviewsModalComponent
+    PendingReviewsModalComponent,
+    RouterModule
   ],
   providers: [
     provideNgxMask(),

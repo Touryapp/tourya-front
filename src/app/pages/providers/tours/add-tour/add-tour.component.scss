@@ -102,3 +102,8 @@ fieldset:disabled {
     border-color: var(--bs-primary, #0d6efd);
   }
 }
+
+.tags-scroll-container {
+  max-height: 141px;
+  overflow-y: auto;
+}
