@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: "http://localhost:3000/api/v1",
+  apiUrl: "https://tourya-dev-api-5j2nd2oflq-ue.a.run.app/api/v1",
+  apiUrlBack: "https://tourya-dev-api-5j2nd2oflq-ue.a.run.app/api/v1",
   baseUrl: "",
   firebaseConfig: {
     apiKey: "AIzaSyCJyNkzo4e80-G0eBCUrIBDt6bbJ8Osp_g",
