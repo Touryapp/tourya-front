@@ -8,13 +8,12 @@ import { TourModule } from "../tours/tour.module";
 import { TemplatesModule } from "../templates/templates.module";
 import { ProviderTourManagementModule } from "../provider-tour-management/provider-tour-management.module";
 import { ProviderReviewsComponent } from "../provider-reviews/provider-reviews.component";
-import { ProviderPaymentsComponent } from "../provider-payments/provider-payments.component";
+import { ProviderPaymentsModule } from "../provider-payments/provider-payments.module";
 
 @NgModule({
   declarations: [
     ProviderPanelComponent,
-    ProviderReviewsComponent,
-    ProviderPaymentsComponent
+    ProviderReviewsComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +23,8 @@ import { ProviderPaymentsComponent } from "../provider-payments/provider-payment
     ProviderPanelRoutingModule,
     TourModule,
     TemplatesModule,
-    ProviderTourManagementModule
+    ProviderTourManagementModule,
+    ProviderPaymentsModule
   ],
   exports: [
     ProviderReviewsComponent

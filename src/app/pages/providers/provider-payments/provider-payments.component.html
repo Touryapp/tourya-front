@@ -82,22 +82,17 @@
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Completed')">Completado</a>
+                                   (click)="filterByStatus('Pagada')">Pagada</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Pending')">Pendiente</a>
+                                   (click)="filterByStatus('Pendiente')">Pendiente</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Cancelled')">Cancelado</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Refunded')">Reembolsado</a>
+                                   (click)="filterByStatus('Cancelada')">Cancelada</a>
                             </li>
                         </ul>
                     </div>
@@ -112,50 +107,21 @@
                 <table matSort (matSortChange)="sortData($event)" class="table datatable">
                     <thead class="thead-light">
                         <tr>
-                            <th mat-sort-header="id">ID Pago</th>
-                            <th mat-sort-header="bookingId">Reserva</th>
-                            <th mat-sort-header="customerName">Cliente</th>
-                            <th mat-sort-header="tourName">Tour</th>
-                            <th mat-sort-header="paymentMethod">Método de Pago</th>
-                            <th mat-sort-header="paymentDate">Fecha</th>
-                            <th mat-sort-header="amount">Monto</th>
+                            <th mat-sort-header="id">ID</th>
+                            <th mat-sort-header="tourOperatorId">ID Operador Turístico</th>
+                            <th mat-sort-header="creationDate">Fecha de Creación</th>
+                            <th mat-sort-header="paymentDate">Fecha de Pago</th>
+                            <th mat-sort-header="amount">Monto a Pagar</th>
                             <th mat-sort-header="status">Estado</th>
-                            <th>Acciones</th>
+                            <th>Pago</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (payment of tableData; track payment.id) {
-                            <tr>
-                                <td>
-                                    <a href="javascript:void(0);" 
-                                       class="link-primary fw-medium"
-                                       (click)="viewPaymentDetails(payment.id)">
-                                        {{ payment.id }}
-                                    </a>
-                                </td>
-                                <td class="text-gray-9 fw-medium">{{ payment.bookingId }}</td>
-                                <td>
-                                    <div>
-                                        <p class="mb-0 fw-medium">{{ payment.customerName }}</p>
-                                        <span class="text-gray-6 fs-12">{{ payment.customerEmail }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <span class="avatar avatar-sm rounded flex-shrink-0 me-2">
-                                            <img src="assets/img/tours/{{ payment.tourImage }}" 
-                                                 alt="tour" 
-                                                 class="img-fluid rounded">
-                                        </span>
-                                        <span>{{ payment.tourName }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="{{ getPaymentMethodIcon(payment.paymentMethod) }} me-2 text-primary"></i>
-                                        {{ payment.paymentMethod }}
-                                    </div>
-                                </td>
+                            <tr (click)="openPaymentDetails(payment)" style="cursor: pointer;">
+                                <td>{{ payment.id }}</td>
+                                <td>{{ payment.tourOperatorId }}</td>
+                                <td>{{ payment.creationDate }}</td>
                                 <td>{{ payment.paymentDate }}</td>
                                 <td class="fw-semibold text-success">{{ payment.amount }}</td>
                                 <td>
@@ -165,22 +131,28 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <a href="javascript:void(0);" 
-                                           (click)="viewPaymentDetails(payment.id)"
-                                           class="btn btn-sm btn-light"
-                                           title="Ver detalles">
-                                            <i class="isax isax-eye"></i>
-                                        </a>
-                                        @if (payment.status === 'Completed') {
-                                            <button 
-                                                class="btn btn-sm btn-outline-primary" 
-                                                (click)="downloadInvoice(payment.id)"
-                                                title="Descargar factura">
-                                                <i class="isax isax-document-download"></i>
-                                            </button>
+                                    @if (payment.status === 'Pendiente') {
+                                        @if (authService.isAdmin()) {
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input #fileInput type="file" class="d-none" accept=".pdf,.jpg,.png" (change)="onFileSelected($event, payment)">
+                                                <button 
+                                                    class="btn btn-sm btn-outline-primary d-inline-flex align-items-center" 
+                                                    (click)="$event.stopPropagation(); fileInput.click()"
+                                                    title="Subir comprobante">
+                                                    <i class="isax isax-document-upload me-1"></i> Subir
+                                                </button>
+                                            </div>
+                                        } @else {
+                                            <span class="text-muted fs-12 d-inline-flex align-items-center"><i class="isax isax-clock me-1"></i> Pendiente</span>
                                         }
-                                    </div>
+                                    } @else if (payment.status === 'Pagada') {
+                                        <div class="d-flex align-items-center text-success">
+                                            <i class="isax isax-tick-circle me-1"></i>
+                                            <span class="fs-12 fw-medium">Ya pagado</span>
+                                        </div>
+                                    } @else {
+                                        <span class="text-muted fs-12">N/A</span>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -211,8 +183,8 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-gray-6 mb-1 fs-14">Pagos Completados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Completed') }}</h4>
+                            <p class="text-gray-6 mb-1 fs-14">Pagos Pagados</p>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pagada') }}</h4>
                         </div>
                         <div class="stats-icon bg-success-subtle">
                             <i class="isax isax-tick-circle text-success"></i>
@@ -227,7 +199,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Pagos Pendientes</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pending') }}</h4>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pendiente') }}</h4>
                         </div>
                         <div class="stats-icon bg-warning-subtle">
                             <i class="isax isax-clock text-warning"></i>
@@ -242,7 +214,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Pagos Cancelados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Cancelled') }}</h4>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('Cancelada') }}</h4>
                         </div>
                         <div class="stats-icon bg-danger-subtle">
                             <i class="isax isax-close-circle text-danger"></i>
@@ -293,3 +265,9 @@
 
 </div>
 <!-- /Provider Payments Section -->
+
+<app-provider-payment-details-modal 
+    [showModal]="showPaymentDetailsModal" 
+    [selectedPayment]="selectedPayment" 
+    (closeModal)="closePaymentDetailsModal()">
+</app-provider-payment-details-modal>

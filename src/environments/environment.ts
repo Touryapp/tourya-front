@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: "/api/v1",
-  apiUrlBack: "/api/v1",
+  apiUrl: "http://34-160-22-16.sslip.io/api/v1",
+  apiUrlBack: "http://34-160-22-16.sslip.io/api/v1",
   firebaseConfig: {
     apiKey: "AIzaSyCJyNkzo4e80-G0eBCUrIBDt6bbJ8Osp_g",
     authDomain: "tourya-169d6.firebaseapp.com",
