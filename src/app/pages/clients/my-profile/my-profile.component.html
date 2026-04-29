@@ -178,7 +178,19 @@
                             <h6>Lista de Deseos</h6>
                         </div>
                         <div class="card-body">
-                            <p class="text-muted">Sección de lista de deseos en desarrollo...</p>
+                            <app-tour-grid-view 
+                                [tours]="wishlistTours" 
+                                [loading]="wishlistLoading" 
+                                [totalItems]="wishlistTotalItems"
+                                [totalPages]="wishlistTotalPages" 
+                                [currentPage]="wishlistCurrentPage" 
+                                [size]="wishlistSize"
+                                (toggleFavorite)="onToggleFavoriteFromWishlist($event)" 
+                                (goToPage)="onGoToPageFromWishlist($event)"
+                                (goToPreviousPage)="onGoToPreviousPageFromWishlist()" 
+                                (goToNextPage)="onGoToNextPageFromWishlist()"
+                                (selectTour)="selectTourFromWishlist($event)">
+                            </app-tour-grid-view>
                         </div>
                     </div>
                 }

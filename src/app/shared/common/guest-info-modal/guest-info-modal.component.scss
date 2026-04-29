@@ -1,0 +1,16 @@
+.input-icon {
+    position: relative;
+    
+    .input-icon-addon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 15px;
+        color: #6c757d;
+        z-index: 5;
+    }
+    
+    ::ng-deep .form-control {
+        padding-left: 45px !important;
+    }
+}

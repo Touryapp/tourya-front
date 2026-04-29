@@ -8,13 +8,11 @@ import { ListToursComponent } from "./list-tours.component";
 import { SharedModule } from "../../../shared/shared-module";
 import { TourListViewComponent } from "./tour-list-view/tour-list-view.component";
 import { TourGridViewComponent } from "./tour-grid-view/tour-grid-view.component";
+import { ListToursSharedModule } from "./list-tours-shared.module";
 
 @NgModule({
   declarations: [
     ListToursComponent,
-    TourListViewComponent,
-    TourGridViewComponent,
-    
   ],
   imports: [
     CommonModule,
@@ -24,7 +22,8 @@ import { TourGridViewComponent } from "./tour-grid-view/tour-grid-view.component
     MatOptionModule,
     SharedModule,
     ListToursRoutingModule,
+    ListToursSharedModule,
   ],
-  exports: [TourListViewComponent],
+  exports: [ListToursSharedModule],
 })
 export class ListToursModule {}

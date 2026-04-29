@@ -5,6 +5,8 @@ import { ClientMenuService } from '../../../shared/data/client-menu.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
 import { ProviderReview } from '../../../shared/models/reviews.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SearchToursService } from '../list-tours/search-tours.service';
+import { TourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
 
 @Component({
   selector: 'app-my-profile',
@@ -28,12 +30,21 @@ export class MyProfileComponent implements OnInit {
   reviewsTotalPages: number = 0;
   reviewsCurrentPage: number = 1;
 
+  // Variables para wishlist (tours)
+  wishlistTours: TourScheduleResponseDto[] = [];
+  wishlistLoading: boolean = false;
+  wishlistTotalItems: number = 0;
+  wishlistTotalPages: number = 0;
+  wishlistCurrentPage: number = 1;
+  wishlistSize: number = 10;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private clientMenuService: ClientMenuService,
     private reviewsService: ReviewsService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private searchToursService: SearchToursService
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +69,10 @@ export class MyProfileComponent implements OnInit {
           } else {
             this.shouldCreateReview = false;
           }
+
+          if (section === 'wishlist') {
+            this.loadWishlistTours();
+          }
         });
       }
     });
@@ -74,6 +89,10 @@ export class MyProfileComponent implements OnInit {
             queryParams: { section: section },
             queryParamsHandling: 'merge'
           });
+
+          if (section === 'wishlist') {
+            this.loadWishlistTours();
+          }
         });
       }
     });
@@ -82,6 +101,52 @@ export class MyProfileComponent implements OnInit {
   onSectionChange(section: string): void {
     this.activeSection = section;
     this.clientMenuService.setActiveSection(section);
+  }
+
+  loadWishlistTours(): void {
+    this.wishlistLoading = true;
+    // Consumiendo el servicio de /search con parametros por defecto
+    this.searchToursService.searchTours({}, this.wishlistCurrentPage, this.wishlistSize).subscribe({
+      next: (response) => {
+        this.wishlistTours = response.content || [];
+        this.wishlistTotalItems = response.totalElements || 0;
+        this.wishlistTotalPages = response.totalPages || 0;
+        this.wishlistCurrentPage = response.number + 1;
+        this.wishlistLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading wishlist tours:', error);
+        this.wishlistLoading = false;
+      }
+    });
+  }
+
+  onToggleFavoriteFromWishlist(index: number): void {
+    // Implementar lógica de favoritos si es necesario
+    console.log('Toggle favorite for tour index:', index);
+  }
+
+  onGoToPageFromWishlist(page: number): void {
+    this.wishlistCurrentPage = page;
+    this.loadWishlistTours();
+  }
+
+  onGoToPreviousPageFromWishlist(): void {
+    if (this.wishlistCurrentPage > 1) {
+      this.wishlistCurrentPage--;
+      this.loadWishlistTours();
+    }
+  }
+
+  onGoToNextPageFromWishlist(): void {
+    if (this.wishlistCurrentPage < this.wishlistTotalPages) {
+      this.wishlistCurrentPage++;
+      this.loadWishlistTours();
+    }
+  }
+
+  selectTourFromWishlist(tour: TourScheduleResponseDto): void {
+    console.log('Tour selected from wishlist:', tour);
   }
 
   /**

@@ -78,6 +78,14 @@ export class TourGridViewComponent {
     }
   }
 
+  getPriceTypeLabel(priceType: string | undefined | null): string {
+    if (!priceType) return '';
+    const upper = priceType.toUpperCase();
+    if (upper === 'PRIVATE' || upper === 'PER_PERSON') return 'Individual';
+    if (upper === 'GROUP' || upper === 'PER_GROUP') return 'Grupo';
+    return priceType;
+  }
+
   formatTime(timeString: string | null): string {
     if (!timeString) return "N/A";
     return timeString;

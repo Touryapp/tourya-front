@@ -1,0 +1,162 @@
+<div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; max-height: 90vh; display: flex; flex-direction: column;">
+  <div class="modal-header border-bottom p-4">
+      <h5 class="modal-title fw-bold text-dark mb-0">Información del Huésped</h5>
+      <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+  </div>
+  
+  <div class="modal-body p-4" style="overflow-y: auto;">
+      <form [formGroup]="guestInfoForm" (ngSubmit)="submitForm()">
+          <h6 class="mb-3 text-primary border-bottom pb-2">Datos Personales</h6>
+
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <label class="form-label" for="firstName">Nombre</label>
+                  <div class="input-icon">
+                      <span class="input-icon-addon">
+                          <i class="fa-regular fa-user"></i>
+                      </span>
+                      <input type="text" id="firstName" formControlName="firstName"
+                          class="form-control form-control-lg" placeholder="Ingresa tu nombre"
+                          minlength="2" maxlength="50">
+                  </div>
+                  <div *ngIf="guestInfoForm.controls['firstName'].invalid && (guestInfoForm.controls['firstName'].dirty || guestInfoForm.controls['firstName'].touched)"
+                      class="text-danger mt-1 fs-14">
+                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['required']">Nombre es requerido</div>
+                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['minlength']">Nombre debe tener al menos 2 caracteres</div>
+                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['maxlength']">Nombre no puede tener más de 50 caracteres</div>
+                  </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                  <label class="form-label" for="lastName">Apellido</label>
+                  <div class="input-icon">
+                      <span class="input-icon-addon">
+                          <i class="fa-regular fa-user"></i>
+                      </span>
+                      <input type="text" id="lastName" formControlName="lastName"
+                          class="form-control form-control-lg" placeholder="Ingresa tus apellidos"
+                          minlength="2" maxlength="50">
+                  </div>
+                  <div *ngIf="guestInfoForm.controls['lastName'].invalid && (guestInfoForm.controls['lastName'].dirty || guestInfoForm.controls['lastName'].touched)"
+                      class="text-danger mt-1 fs-14">
+                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['required']">Apellido es requerido</div>
+                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['minlength']">Apellido debe tener al menos 2 caracteres</div>
+                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['maxlength']">Apellido no puede tener más de 50 caracteres</div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <label class="form-label text-nowrap" for="documentNumber">Número de Documento</label>
+                  <div class="input-icon">
+                      <span class="input-icon-addon">
+                          <i class="fa-regular fa-id-card"></i>
+                      </span>
+                      <input type="text" id="documentNumber" formControlName="documentNumber" class="form-control form-control-lg" placeholder="Ingresa tu documento" minlength="6">
+                  </div>
+                  <div *ngIf="guestInfoForm.controls['documentNumber'].invalid && (guestInfoForm.controls['documentNumber'].dirty || guestInfoForm.controls['documentNumber'].touched)" class="text-danger mt-1 fs-14">
+                      <div *ngIf="guestInfoForm.controls['documentNumber'].errors?.['required']">Número de documento es requerido</div>
+                      <div *ngIf="guestInfoForm.controls['documentNumber'].errors?.['minlength']">Debe tener al menos 6 caracteres</div>
+                  </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                  <label class="form-label text-nowrap" for="phone">Teléfono de contacto</label>
+                  <div class="input-icon">
+                      <span class="input-icon-addon">
+                          <i class="fa-solid fa-phone"></i>
+                      </span>
+                      <input type="text" id="phone" formControlName="phone" class="form-control form-control-lg" placeholder="1234567890" minlength="10">
+                  </div>
+                  <div *ngIf="guestInfoForm.controls['phone'].invalid && (guestInfoForm.controls['phone'].dirty || guestInfoForm.controls['phone'].touched)" class="text-danger mt-1 fs-14">
+                      <div *ngIf="guestInfoForm.controls['phone'].errors?.['required']">Teléfono es requerido</div>
+                      <div *ngIf="guestInfoForm.controls['phone'].errors?.['minlength']">Debe tener al menos 10 dígitos</div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="email">Correo electrónico</label>
+              <div class="input-icon">
+                  <span class="input-icon-addon">
+                      <i class="fa-regular fa-envelope"></i>
+                  </span>
+                  <input type="email" id="email" formControlName="email"
+                      class="form-control form-control-lg" placeholder="Ingresa tu correo">
+              </div>
+              <div *ngIf="guestInfoForm.controls['email'].invalid && (guestInfoForm.controls['email'].dirty || guestInfoForm.controls['email'].touched)"
+                  class="text-danger mt-1 fs-14">
+                  <div *ngIf="guestInfoForm.controls['email'].errors?.['required']">Correo es requerido</div>
+                  <div *ngIf="guestInfoForm.controls['email'].errors?.['email']">Correo no es válido</div>
+              </div>
+          </div>
+
+          <h6 class="mt-4 mb-3 text-primary border-bottom pb-2">Ubicación y Foto</h6>
+
+          <div class="mb-3">
+              <label class="form-label" for="country">País</label>
+              <select class="form-select form-control-lg" formControlName="country" id="country" (change)="onCountryChange($event)">
+                  <option value="">Selecciona país</option>
+                  <option *ngFor="let c of countries" [value]="c.id">
+                      {{c.name}}
+                  </option>
+              </select>
+              <div *ngIf="guestInfoForm.controls['country'].invalid && (guestInfoForm.controls['country'].dirty || guestInfoForm.controls['country'].touched)" class="text-danger mt-1 fs-14">
+                  <div *ngIf="guestInfoForm.controls['country'].errors?.['required']">País es requerido</div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <label class="form-label" for="department">Estado/Provincia</label>
+                  <select class="form-select form-control-lg" formControlName="department" id="department" (change)="onDepartmentChange($event)">
+                      <option value="">Selecciona estado/provincia</option>
+                      <option *ngFor="let d of departments" [value]="d.id">
+                          {{d.name}}
+                      </option>
+                  </select>
+                  <div *ngIf="guestInfoForm.controls['department'].invalid && (guestInfoForm.controls['department'].dirty || guestInfoForm.controls['department'].touched)" class="text-danger mt-1 fs-14">
+                      <div *ngIf="guestInfoForm.controls['department'].errors?.['required']">Estado/provincia es requerido</div>
+                  </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                  <label class="form-label" for="city">Ciudad</label>
+                  <select class="form-select form-control-lg" formControlName="city" id="city">
+                      <option value="">Selecciona ciudad</option>
+                      <option *ngFor="let ci of cities" [value]="ci.id">
+                          {{ci.name}}
+                      </option>
+                  </select>
+                  <div *ngIf="guestInfoForm.controls['city'].invalid && (guestInfoForm.controls['city'].dirty || guestInfoForm.controls['city'].touched)" class="text-danger mt-1 fs-14">
+                      <div *ngIf="guestInfoForm.controls['city'].errors?.['required']">Ciudad es requerida</div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="mb-4">
+              <label class="form-label" for="photo">Foto</label>
+              <div class="d-flex align-items-center gap-3">
+                  <div class="position-relative">
+                      <input type="file" id="photo" class="form-control form-control-lg" (change)="onFileChange($event)" accept="image/*" style="padding-top: 0.6rem;">
+                  </div>
+                  <div *ngIf="filePreview" class="rounded overflow-hidden shadow-sm" style="width: 50px; height: 50px; border: 1px solid #e0e0e0;">
+                      <img [src]="filePreview" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                  </div>
+              </div>
+              <div *ngIf="guestInfoForm.controls['photo'].invalid && (guestInfoForm.controls['photo'].dirty || guestInfoForm.controls['photo'].touched)" class="text-danger mt-1 fs-14">
+                  <div *ngIf="guestInfoForm.controls['photo'].errors?.['required']">La foto es requerida</div>
+              </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+              <button type="button" class="btn btn-light btn-lg" (click)="closeModal()" [disabled]="loading">Cancelar</button>
+              <button type="submit" class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" [disabled]="loading || (guestInfoForm.touched && guestInfoForm.invalid)">
+                  <span>Continuar</span>
+                  <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></div>
+              </button>
+          </div>
+      </form>
+  </div>
+</div>

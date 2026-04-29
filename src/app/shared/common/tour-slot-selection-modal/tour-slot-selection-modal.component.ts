@@ -32,6 +32,7 @@ import Swal from "sweetalert2";
 import { I18nFieldService } from "../../services/i18n-field.service";
 import { ReservationService } from "../../services/reservation.service";
 import { RescheduleConfirmationModalComponent } from "../reschedule-confirmation-modal/reschedule-confirmation-modal.component";
+import { GuestInfoModalComponent } from "../guest-info-modal/guest-info-modal.component";
 
 @Component({
   selector: "app-tour-slot-selection-modal",
@@ -53,6 +54,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   // Modal state
   showModal: boolean = false;
   isProcessing: boolean = false; // Para mostrar loading mientras se guarda en backend
+  shouldConsumeService: boolean = false; // Variable quemada a petición del usuario
 
   // Tour data
   selectedTour: TourScheduleResponseDto | null = null;
@@ -857,18 +859,37 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     this.isProcessing = true;
 
     try {
-      console.log("🛒 Agregando tour al carrito con backend...");
-      
-      // Agregar item al carrito con persistencia en backend
-      await this.cartService.addItemToCartWithBackend(cartItem);
-      
-      console.log("✅ Tour agregado exitosamente al carrito");
-      
-      // Notificar al componente padre que el tour fue agregado
-      this.data.tourAdded(cartItem);
-      
-      // Cerrar modal
-      this.closeModal();
+      if (this.shouldConsumeService) {
+        console.log("🛒 Agregando tour al carrito con backend...");
+        
+        // Agregar item al carrito con persistencia en backend
+        await this.cartService.addItemToCartWithBackend(cartItem);
+        
+        console.log("✅ Tour agregado exitosamente al carrito");
+        
+        // Notificar al componente padre que el tour fue agregado
+        this.data.tourAdded(cartItem);
+        
+        // Cerrar modal
+        this.closeModal();
+      } else {
+        console.log("⚠️ Abriendo modal de información de huésped...");
+        
+        const guestModalRef = this.dialog.open(GuestInfoModalComponent, {
+          width: '700px',
+          maxWidth: '95vw',
+          data: { cartItem }
+        });
+
+        guestModalRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log("Modal de huésped cerrado tras éxito. Resultado:", result);
+            this.closeModal();
+          } else {
+            console.log("Modal de huésped cancelado.");
+          }
+        });
+      }
       
     } catch (error: any) {
       console.error("❌ Error agregando tour al carrito:", error);
