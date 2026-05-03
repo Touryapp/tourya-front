@@ -137,6 +137,10 @@ export class TourScheduleComponent {
     return this.tour?.priceType === 'group';
   }
 
+  get isUnlimitedCapacity(): boolean {
+    return this.tour?.isUnlimitedCapacity === true;
+  }
+
   onSubmit() {
     this.loading = true;
     this.submitted = true;
