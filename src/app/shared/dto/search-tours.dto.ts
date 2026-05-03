@@ -18,8 +18,6 @@ export interface SearchToursDto {
                 capacity: number;
                 prices: {
                     ageType: string;
-                    minAge: number;
-                    maxAge: number;
                     price: number;
                 }[];
             }[];
@@ -50,8 +48,6 @@ export interface SearchToursDto {
         capacity: number;
         prices: {
             ageType: string;
-            minAge: number;
-            maxAge: number;
             price: number;
         }[];
     }[];

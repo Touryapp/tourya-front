@@ -52,7 +52,7 @@ export class TemplateFormComponent implements OnInit {
         ],
       ],
       daysOfWeek: this.fb.array([]),
-      isUnlimitedCapacity: [false, [Validators.required]],
+
       slots: this.fb.array([]),
     });
   }
@@ -73,41 +73,10 @@ export class TemplateFormComponent implements OnInit {
   }
 
   setupFormSubscriptions(): void {
-    this.templateForm.get("isUnlimitedCapacity")?.valueChanges.subscribe((value) => {
-      if (value) {
-        this.slots.controls.forEach((control) => {
-          const capacityControl = control.get("capacity");
-          capacityControl?.setValue("");
-          capacityControl?.setValidators([]);
-          capacityControl?.updateValueAndValidity();
-        });
-      } else {
-        this.slots.controls.forEach((control) => {
-          const capacityControl = control.get("capacity");
-          capacityControl?.setValidators([
-            Validators.required,
-            onlyNumberValidator(),
-          ]);
-          capacityControl?.updateValueAndValidity();
-        });
-      }
-    });
-
     this.slots.valueChanges.subscribe(() => {
       this.slots.controls.forEach((control, index) => {
         // Capacity validation is now handled by built-in required and onlyNumber validators
-        // Check min age
-        this.prices(index).controls.forEach((priceControl) => {
-          const minAgeControl = priceControl.get("minAge");
-          const maxAgeControl = priceControl.get("maxAge");
 
-          const minAgeValue = +minAgeControl?.value || 0;
-          const maxAgeValue = +maxAgeControl?.value || 0;
-
-          if (minAgeValue > maxAgeValue) {
-            maxAgeControl?.setErrors({ min: true });
-          }
-        });
       });
     });
   }
@@ -118,7 +87,6 @@ export class TemplateFormComponent implements OnInit {
       next: (template) => {
         this.templateForm.patchValue({
           label: template.label,
-          isUnlimitedCapacity: template.isUnlimitedCapacity,
         });
 
         // Limpiar y reconstruir días de la semana
@@ -154,8 +122,6 @@ export class TemplateFormComponent implements OnInit {
             const newPrice = this.fb.group({
               id: [price.id || ""],
               ageType: [ageTypeValue || ""],
-              minAge: [price.minAge || ""],
-              maxAge: [price.maxAge || ""],
               price: [price.price || ""],
             });
 
@@ -199,7 +165,6 @@ export class TemplateFormComponent implements OnInit {
         providerId: providerId, // ID del proveedor actual
         label: formData.label,
         daysOfWeek: formData.daysOfWeek,
-        isUnlimitedCapacity: formData.isUnlimitedCapacity,
         slots: formData.slots,
         isTemplate: true, // Marcar como template
         createdBy: 1,
@@ -264,10 +229,7 @@ export class TemplateFormComponent implements OnInit {
 
   // Métodos para slots
   newSlot(): FormGroup {
-    const isUnlimitedCapacityValue = this.templateForm.get("isUnlimitedCapacity")?.value;
-    const capacityValidators = isUnlimitedCapacityValue
-      ? []
-      : [Validators.required, onlyNumberValidator()];
+    const capacityValidators = [Validators.required, onlyNumberValidator()];
 
     return this.fb.group({
       id: ["", []],
@@ -301,8 +263,6 @@ export class TemplateFormComponent implements OnInit {
     return this.fb.group({
       id: ["", []],
       ageType: ["", [Validators.required]],
-      minAge: ["", [Validators.required, Validators.min(0), onlyNumberValidator()]],
-      maxAge: ["", [Validators.required, Validators.min(0), onlyNumberValidator()]],
       price: ["", [Validators.required, Validators.min(0)]],
     });
   }
@@ -364,17 +324,7 @@ export class TemplateFormComponent implements OnInit {
     }
   }
 
-  onKeypressMinAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
-  onKeypressMaxAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
   onPriceBlur(indexSlot: number, indexPrice: number): void {
     const priceControl = this.prices(indexSlot).at(indexPrice).get("price");

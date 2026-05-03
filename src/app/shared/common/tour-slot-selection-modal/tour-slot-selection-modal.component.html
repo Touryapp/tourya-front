@@ -178,7 +178,7 @@
               <div class="participant-info">
                 <div class="participant-type">{{ participant.label }}</div>
                 <div class="participant-details">
-                  <span class="age-range">{{ getAgeRange(participant) }}</span>
+
                   <span class="price" *ngIf="selectedTour?.tour?.priceType !== 'group'">{{ formatPrice(participant.price) }} c/u</span>
                 </div>
               </div>

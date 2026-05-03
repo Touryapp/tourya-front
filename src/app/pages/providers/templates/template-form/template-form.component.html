@@ -56,21 +56,6 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Unlimited capacity</label>
-                                <mat-slide-toggle class="mat-slide-toogle"
-                                    formControlName="isUnlimitedCapacity"></mat-slide-toggle>
-
-                                <div *ngIf="templateForm.controls['isUnlimitedCapacity'].invalid && (templateForm.controls['isUnlimitedCapacity'].dirty || templateForm.controls['isUnlimitedCapacity'].touched)"
-                                    class="text-danger">
-                                    <div *ngIf="templateForm.controls['isUnlimitedCapacity'].errors?.['required']">
-                                        Unlimited capacity is required
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
                             <div class="mb-3 checkbox-group">
                                 <label class="form-label">Days of the week</label>
 
@@ -155,7 +140,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6" *ngIf="!templateForm.get('isUnlimitedCapacity')?.value">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Capacidad</label>
                                         <input type="number" class="form-control"
@@ -233,50 +218,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Min age</label>
-                                                            <input type="number"
-                                                                class="form-control" formControlName="minAge"
-                                                                (keypress)="onKeypressMinAge($event)" [min]="0">
 
-                                                            <div *ngIf="price.get('minAge')?.invalid && (price.get('minAge')?.touched || price.get('minAge')?.dirty)"
-                                                                class="text-danger">
-                                                                <div *ngIf="price.get('minAge')?.errors?.['required']">
-                                                                    Min age is required
-                                                                </div>
-                                                                <div *ngIf="price.get('minAge')?.errors?.['min']">
-                                                                    Minimum 0
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Max age</label>
-                                                            <input type="number"
-                                                                class="form-control" formControlName="maxAge"
-                                                                (keypress)="onKeypressMaxAge($event)"
-                                                                [min]="+price.get('minAge')?.value">
-
-                                                            <div *ngIf="price.get('maxAge')?.invalid && (price.get('maxAge')?.touched || price.get('maxAge')?.dirty)"
-                                                                class="text-danger">
-                                                                <div *ngIf="price.get('maxAge')?.errors?.['required']">
-                                                                    Max age is required
-                                                                </div>
-
-                                                                <div *ngIf="price.get('maxAge')?.errors?.['onlyNumber']">
-                                                                    Max age must be a number
-                                                                </div>
-
-                                                                <div *ngIf="price.get('maxAge')?.errors?.['min']">
-                                                                    Max age must be greater than or equal to
-                                                                    {{price.get('minAge')?.value}}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
                                                     <div class="col-md-6">
                                                         <div class="mb-3">

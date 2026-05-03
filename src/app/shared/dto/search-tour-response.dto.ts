@@ -77,8 +77,6 @@ export interface TagDto {
 
 export interface PriceDto {
   ageType: string;
-  minAge: number;
-  maxAge: number;
   price: number;
 }
 

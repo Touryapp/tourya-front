@@ -1,25 +1,14 @@
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">{{ tour ? i18nService.getValue(tour.name) : ('tours-detail.breadcrumb.details' | translate) }}</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item">{{ 'tours-detail.breadcrumb.tours' | translate }}</li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ tour ? i18nService.getValue(tour.name) : ('tours-detail.breadcrumb.details' | translate) }}</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Breadcrumb -->
-
     <!-- Page Wrapper -->
     <div class="content" *ngIf="tour">
         <div class="container" >
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark" style="color: #000 !important;"><i class="isax isax-home5"></i></a></li>
+                    <li class="breadcrumb-item text-dark" style="color: #000 !important;">{{ 'tours-detail.breadcrumb.tours' | translate }}</li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">{{ tour ? i18nService.getValue(tour.name) : ('tours-detail.breadcrumb.details' | translate) }}</li>
+                </ol>
+            </nav>
 
             <div class="row">
                 <div class="col-xl-8">

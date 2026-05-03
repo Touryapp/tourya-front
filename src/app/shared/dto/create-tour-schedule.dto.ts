@@ -6,7 +6,7 @@ export interface CreateTourSchedule {
   startDate: string;
   endDate: string;
   daysOfWeek: string[];
-  isUnlimitedCapacity: boolean;
+
   slots: CreateTourScheduleSlot[];
   isTemplate: boolean;
   createdBy: number;
@@ -23,7 +23,5 @@ export interface CreateTourScheduleSlot {
 export interface CreateTourSchedulePrice {
   id?: number;
   ageType: TypeOfPerson;
-  minAge: number;
-  maxAge: number;
   price: number;
 }

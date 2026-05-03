@@ -54,7 +54,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   // Modal state
   showModal: boolean = false;
   isProcessing: boolean = false; // Para mostrar loading mientras se guarda en backend
-  shouldConsumeService: boolean = false; // Variable quemada a petición del usuario
+  shouldConsumeService: boolean = true; // Variable quemada a petición del usuario
 
   // Tour data
   selectedTour: TourScheduleResponseDto | null = null;
@@ -80,12 +80,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   showParticipantError: boolean = false;
 
   get isCurrentScheduleUnlimited(): boolean {
-    if (!this.selectedTour || !this.selectedDate) return false;
-    const dateStr = dayjs(this.selectedDate).format("YYYY-MM-DD");
-    const schedule = this.selectedTour.schedules.find(s => 
-      dayjs(s.scheduleDate).format("YYYY-MM-DD") === dateStr
-    );
-    return schedule?.isUnlimitedCapacity || false;
+    return false;
   }
 
   /**
@@ -100,7 +95,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     const schedule = this.selectedTour.schedules.find(s =>
       dayjs(s.scheduleDate).format("YYYY-MM-DD") === dateStr
     );
-    if (!schedule || schedule.isUnlimitedCapacity) return 99;
+    if (!schedule) return 99;
 
     // Priorizar availability del slot seleccionado
     // Campo: slot.availability
@@ -132,7 +127,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     );
     if (!schedule) return 0;
     
-    if (schedule.isUnlimitedCapacity) return '∞';
+
 
     if (schedule.config && schedule.config.slots && schedule.config.slots.length > 0) {
       return schedule.config.slots.reduce((total: number, slot: any) => total + (slot.availability || 0), 0);
@@ -1022,15 +1017,6 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     return slot.capacity === 0 || (slot.availability !== undefined && slot.availability === 0);
   }
 
-  /**
-   * Obtiene el rango de edades formateado
-   */
-  getAgeRange(participant: ParticipantSelection): string {
-    if (participant.maxAge === 999) {
-      return `${participant.minAge}+ años`;
-    }
-    return `${participant.minAge}-${participant.maxAge} años`;
-  }
 
   /**
    * Verifica si se puede incrementar un participante

@@ -1,30 +1,26 @@
-<!-- Breadcrumb -->
-<div class="breadcrumb-bar breadcrumb-bg-05 text-center">
+<!-- Page Wrapper -->
+<div class="content">
   <div class="container">
-    <div class="row">
-      <div class="col-md-12 col-12">
-        <h2 class="breadcrumb-title mb-2">Confirmación de Reserva</h2>
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item">
-              <a [routerLink]="routes.clientsListTours">
-                <i class="isax isax-home5"></i>
-              </a>
-            </li>
-            <li class="breadcrumb-item">Tours</li>
-            <li class="breadcrumb-item active" aria-current="page">Confirmación</li>
-          </ol>
-        </nav>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- /Breadcrumb -->
 
-<!-- Loading State -->
-<div *ngIf="loading" class="content">
-  <div class="container">
-    <div class="row justify-content-center">
+    <!-- Header -->
+    <div class="text-center mb-5">
+      <h2 class="mb-2">Confirmación de Reserva</h2>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
+          <li class="breadcrumb-item">
+            <a [routerLink]="routes.clientsListTours" class="text-dark" style="color: #000 !important;">
+              <i class="isax isax-home5"></i>
+            </a>
+          </li>
+          <li class="breadcrumb-item text-dark" style="color: #000 !important;">Tours</li>
+          <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">Confirmación</li>
+        </ol>
+      </nav>
+    </div>
+    <!-- /Header -->
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="row justify-content-center">
       <div class="col-lg-6 text-center py-5">
         <div class="spinner-border text-primary mb-3" role="status">
           <span class="visually-hidden">Cargando...</span>
@@ -33,13 +29,9 @@
         <p class="text-muted">Por favor espere mientras confirmamos su pago.</p>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Error State -->
-<div *ngIf="error && !loading" class="content">
-  <div class="container">
-    <div class="row justify-content-center">
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="row justify-content-center">
       <div class="col-lg-6 text-center py-5">
         <div class="alert alert-danger">
           <i class="isax isax-warning-2 fs-2 text-danger mb-2"></i>
@@ -52,14 +44,11 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Page Wrapper -->
-<div *ngIf="reservationData && !loading" class="content">
-  <div class="container">
-    
-    <!-- Success Message -->
+    <!-- Success State -->
+    <ng-container *ngIf="reservationData && !loading">
+      
+      <!-- Success Message -->
     <div class="row justify-content-center mb-4">
       <div class="col-lg-10">
         <div class="alert alert-success text-center">
@@ -376,6 +365,7 @@
       </div>
     </div>
 
+    </ng-container>
   </div>
 </div>
 
