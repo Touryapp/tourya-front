@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { OwlOptions } from "ngx-owl-carousel-o";
 import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
@@ -10,7 +10,7 @@ import { I18nFieldService } from "../../../../shared/services/i18n-field.service
   templateUrl: "./tour-grid-view.component.html",
   styleUrls: ["./tour-grid-view.component.scss"],
 })
-export class TourGridViewComponent {
+export class TourGridViewComponent implements OnChanges {
   public routes = routes;
   public Math = Math;
 
@@ -20,6 +20,8 @@ export class TourGridViewComponent {
   @Input() totalPages: number = 0;
   @Input() currentPage: number = 1;
   @Input() size: number = 10;
+  @Input() isWishlistPage: boolean = false;
+  @Input() initialFavoriteStates: boolean[] = [];
 
   @Output() toggleFavorite = new EventEmitter<number>();
   @Output() goToPage = new EventEmitter<number>();
@@ -31,6 +33,14 @@ export class TourGridViewComponent {
 
   // Favorites functionality
   isClassAdded: boolean[] = [];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialFavoriteStates'] && this.initialFavoriteStates.length > 0) {
+      this.isClassAdded = [...this.initialFavoriteStates];
+    } else if (changes['tours'] && this.isWishlistPage) {
+      this.isClassAdded = this.tours.map(() => true);
+    }
+  }
 
   // Image slider options
   imageSlider: OwlOptions = {
@@ -60,12 +70,11 @@ export class TourGridViewComponent {
 
   // Helper functions
   getLowestPrice(tour: TourScheduleResponseDto): string {
-    const prices = tour.schedules;
-    if (!prices || prices.length === 0) {
+    const price = tour.tour.priceFrom;
+    if (price === null || price === undefined) {
       return "N/A";
     }
-    // const lowestPrice = Math.min(...prices.map((p) => p.price));
-    return `$$`;
+    return `$ ${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
   }
 
   formatDate(dateString: string | null): string {

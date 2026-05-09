@@ -19,7 +19,7 @@ import { routes } from "../../../shared/routes/routes";
 import { LightGallery } from 'lightgallery/lightgallery';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
-import { ProviderReview } from '../../../shared/models/reviews.model';
+import { ProviderReview, ReviewReason, ReviewReasonsResponse } from '../../../shared/models/reviews.model';
 import { PriceType } from '../../../shared/enums/price-type.enum';
 
 @Component({
@@ -181,6 +181,29 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     'rejectionReasons.spam'
   ];
 
+  // Review modal state
+  public showReviewModal: boolean = false;
+  public reviewRating: number = 0;
+  public reviewComment: string = '';
+  public reviewImages: File[] = [];
+  public reviewSubmitting: boolean = false;
+  public reviewError: string = '';
+
+  // Review reasons catalog
+  public reviewReasonsPositive: ReviewReason[] = [];
+  public reviewReasonsNegative: ReviewReason[] = [];
+  public reviewReasonsLoading: boolean = false;
+  public selectedReasonId: number | null = null;
+  private currentTourId: number = 0;
+  public canWriteReview: boolean = false;
+
+  // Computed: reasons based on rating
+  public get activeReviewReasons(): ReviewReason[] {
+    if (this.reviewRating >= 4) return this.reviewReasonsPositive;
+    if (this.reviewRating >= 1) return this.reviewReasonsNegative;
+    return [];
+  }
+
     // Check if user is admin
   ngOnInit(): void {
     // Check if user is admin
@@ -189,6 +212,13 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     // Initialize component
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? +idParam : 0;
+    this.currentTourId = id;
+
+    // Load review reasons globally to display labels in the reviews list
+    this.loadReviewReasons();
+
+    // Check if the user can write a review for this tour
+    this.checkIfCanReview();
 
     // Sync search criteria from home selection
     const traceJson = localStorage.getItem('userActionsTrace');
@@ -542,6 +572,171 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   onCartCleared(): void {
     this.cartService.clearCart();
+  }
+
+  /**
+   * Carga el catálogo de motivos de reseña
+   */
+  private loadReviewReasons(): void {
+    console.log('🔄 Iniciando carga de motivos de reseña...');
+    this.reviewReasonsLoading = true;
+    this.reviewsService.getReviewReasons().subscribe({
+      next: (response) => {
+        console.log('✅ Motivos de reseña cargados exitosamente:', response);
+        this.reviewReasonsPositive = response.positive || [];
+        this.reviewReasonsNegative = response.negative || [];
+        this.reviewReasonsLoading = false;
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar motivos de reseña:', err);
+        this.reviewReasonsLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Obtiene el label de un motivo dado su tipo y ID
+   */
+  public getReasonLabel(reasonType: 'POSITIVE' | 'NEGATIVE' | string | undefined, reasonId: number | undefined): string {
+    if (!reasonType || !reasonId) return '';
+    if (reasonType === 'POSITIVE') {
+      const reason = this.reviewReasonsPositive.find(r => r.id === reasonId);
+      return reason ? reason.label : '';
+    } else if (reasonType === 'NEGATIVE') {
+      const reason = this.reviewReasonsNegative.find(r => r.id === reasonId);
+      return reason ? reason.label : '';
+    }
+    return '';
+  }
+
+  /**
+   * Verifica si el usuario tiene una reseña pendiente para este tour específico
+   */
+  private checkIfCanReview(): void {
+    // Si no está autenticado, no puede reseñar (o se le pedirá login)
+    // El usuario quiere que el botón SOLO salga si está en la lista de pendientes
+    if (!this.authService.isAuthenticated()) {
+      this.canWriteReview = false;
+      return;
+    }
+
+    this.reviewsService.getPendingReviews().subscribe({
+      next: (response) => {
+        if (response && response.content) {
+          // Verificar si algún pendiente coincide con el tourId actual
+          this.canWriteReview = response.content.some(review => review.tourId === this.currentTourId);
+          console.log('🔍 Can write review for tour', this.currentTourId, ':', this.canWriteReview);
+        }
+      },
+      error: (err) => {
+        console.error('❌ Error al verificar reseñas pendientes:', err);
+        this.canWriteReview = false;
+      }
+    });
+  }
+
+  /**
+   * Abre el modal de creación de reseña
+   */
+  public openReviewModal(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.goToLogin();
+      return;
+    }
+    
+    // Cargar los motivos solo si no se han cargado previamente
+    if (this.reviewReasonsPositive.length === 0 && this.reviewReasonsNegative.length === 0) {
+      this.loadReviewReasons();
+    }
+    
+    this.showReviewModal = true;
+    this.reviewRating = 0;
+    this.reviewComment = '';
+    this.reviewImages = [];
+    this.selectedReasonId = null;
+    this.reviewError = '';
+  }
+
+  /**
+   * Cierra el modal de reseña
+   */
+  public closeReviewModal(): void {
+    this.showReviewModal = false;
+    this.reviewRating = 0;
+    this.reviewComment = '';
+    this.reviewImages = [];
+    this.selectedReasonId = null;
+    this.reviewError = '';
+  }
+
+  /**
+   * Establece el rating y resetea los motivos seleccionados
+   */
+  public setReviewRating(rating: number): void {
+    this.reviewRating = rating;
+    this.selectedReasonId = null;
+  }
+
+  /**
+   * Alterna la selección de un motivo de reseña
+   */
+  public toggleReviewReason(reasonId: number): void {
+    this.selectedReasonId = this.selectedReasonId === reasonId ? null : reasonId;
+  }
+
+  /**
+   * Verifica si un motivo está seleccionado
+   */
+  public isReasonSelected(reasonId: number): boolean {
+    return this.selectedReasonId === reasonId;
+  }
+
+  /**
+   * Maneja la selección de imágenes
+   */
+  public onReviewImagesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.reviewImages = Array.from(input.files);
+    }
+  }
+
+  /**
+   * Envía la reseña al backend
+   */
+  public submitReview(): void {
+    if (!this.reviewRating) {
+      this.reviewError = 'Por favor selecciona una calificación.';
+      return;
+    }
+    if (!this.reviewComment.trim()) {
+      this.reviewError = 'Por favor escribe una reseña.';
+      return;
+    }
+
+    this.reviewSubmitting = true;
+    this.reviewError = '';
+
+    const payload = {
+      reservationId: this.currentTourId,
+      rating: this.reviewRating,
+      comment: this.reviewComment,
+      ...(this.selectedReasonId !== null ? { reasonId: this.selectedReasonId } : {})
+    };
+
+    this.reviewsService.createReview(payload, this.reviewImages).subscribe({
+      next: () => {
+        this.reviewSubmitting = false;
+        this.closeReviewModal();
+        this.loadReviews(this.currentTourId);
+        this.snackBar.open('¡Reseña enviada exitosamente!', 'Cerrar', { duration: 3000 });
+      },
+      error: (err) => {
+        console.error('Error al enviar reseña:', err);
+        this.reviewSubmitting = false;
+        this.reviewError = 'Error al enviar la reseña. Por favor inténtalo de nuevo.';
+      }
+    });
   }
 
   ngOnDestroy(): void {

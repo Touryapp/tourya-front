@@ -32,8 +32,9 @@
                     </ng-template>
                 </owl-carousel-o>
                 <span class="tour-badge" *ngIf="tour?.schedules?.at(0)?.status === 'ACTIVE'">Trending</span>
-                <button class="tour-fav-btn" [ngClass]="{ selected: isClassAdded[i] }" (click)="onToggleFavorite(i)"><i
-                        class="fa fa-heart"></i></button>
+                <button class="tour-fav-btn" (click)="onToggleFavorite(i)">
+                    <i [ngClass]="isClassAdded[i] ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+                </button>
             </div>
             <div class="tour-card-body">
                 <div class="d-flex align-items-center justify-content-between mb-1">
@@ -44,7 +45,7 @@
                     <div class="d-flex align-items-center flex-wrap">
                         <span class="tour-card-rating">
                             <i class="fa fa-star" *ngFor="let star of getStars(tour.tour.rating)"></i>
-                            <span>{{ tour.tour.rating || 'N/A' }}</span>
+                            <span>{{ tour.tour.rating ?? '...' }}</span>
                         </span>
                     </div>
                 </div>

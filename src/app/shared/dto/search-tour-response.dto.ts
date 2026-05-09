@@ -54,6 +54,7 @@ export interface TourDto {
   maxPeople?: number;
   subCategory?: string;
   subCategoryName?: string;
+  priceFrom?: number;
 }
 
 export interface AddressDto {

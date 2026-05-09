@@ -435,24 +435,22 @@
                     </div>
 
 
-
-
-
-
                     <!-- Grid View -->
                     <div *ngIf="viewMode === 'grid'">
                         <app-tour-grid-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
                             [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
+                            [initialFavoriteStates]="favoriteStates"
                             (toggleFavorite)="onToggleFavoriteFromGrid($event)" (goToPage)="onGoToPageFromGrid($event)"
                             (goToPreviousPage)="onGoToPreviousPageFromGrid()" (goToNextPage)="onGoToNextPageFromGrid()"
                             (selectTour)="selectTour($event)">
                         </app-tour-grid-view>
                     </div>
-
+ 
                     <!-- List View -->
                     <div *ngIf="viewMode === 'list'">
                         <app-tour-list-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
                             [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
+                            [initialFavoriteStates]="favoriteStates"
                             (toggleFavorite)="onToggleFavorite($event)" (goToPage)="onGoToPageFromList($event)"
                             (goToPreviousPage)="onGoToPreviousPageFromList()" (goToNextPage)="onGoToNextPageFromList()"
                             (selectTour)="selectTour($event)">

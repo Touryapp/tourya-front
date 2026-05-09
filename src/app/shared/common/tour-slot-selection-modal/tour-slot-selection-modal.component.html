@@ -238,8 +238,8 @@
             Cancelar
           </button>
 
-          <button type="button" class="btn btn-primary" [disabled]="isProcessing || (!isValid && !isCurrentScheduleUnlimited)" (click)="confirmSelection()">
-            <span *ngIf="!isProcessing">
+          <button type="button" class="btn btn-primary" [disabled]="isProcessing || isAddressCheckLoading || (!isValid && !isCurrentScheduleUnlimited)" (click)="confirmSelection()">
+            <span *ngIf="!isProcessing && !isAddressCheckLoading">
               <i class="isax isax-add-circle me-1" *ngIf="!isRescheduling"></i>
               <i class="isax isax-calendar me-1" *ngIf="isRescheduling"></i>
               {{ isRescheduling ? 'Reagendar' : 'Agregar al Itinerario' }}
@@ -247,9 +247,9 @@
                 ({{ formatPrice(totalPrice) }})
               </span>
             </span>
-            <span *ngIf="isProcessing">
+            <span *ngIf="isProcessing || isAddressCheckLoading">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              {{ isRescheduling ? 'Reagendando...' : 'Agregando...' }}
+              {{ isAddressCheckLoading ? 'Verificando perfil...' : (isRescheduling ? 'Reagendando...' : 'Agregando...') }}
             </span>
           </button>
         </div>

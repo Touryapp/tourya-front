@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, Input, OnChanges, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { routes } from '../../../shared/routes/routes';
+import Swal from 'sweetalert2';
 import { Sort } from '@angular/material/sort';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReservationService } from '../../../shared/services/reservation.service';
@@ -16,6 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
+import { ReviewReason, ReviewReasonsResponse } from '../../../shared/models/reviews.model';
 import { MatDialog } from '@angular/material/dialog';
 import { TourSlotSelectionModalComponent } from '../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component';
 import { SearchToursService } from '../../clients/list-tours/search-tours.service';
@@ -41,7 +43,7 @@ export interface ProviderTourBooking {
   returnDate: string;
   rawCheckInDate?: string; // ISO date YYYY-MM-DD
   rawReturnDate?: string;  // ISO date YYYY-MM-DD
-  status: 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal';
+  status: 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal' | 'No_Show';
   destination: string;
   extraServices?: string[];
   activities?: string[];
@@ -101,6 +103,19 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   public reviewRating: number = 0;
   public reviewComment: string = '';
   public reviewImages: File[] = [];
+
+  // Review reasons catalog
+  public reviewReasonsPositive: ReviewReason[] = [];
+  public reviewReasonsNegative: ReviewReason[] = [];
+  public reviewReasonsLoading: boolean = false;
+  public selectedReasonId: number | null = null;
+
+  // Computed: which reasons to show based on current rating
+  public get activeReviewReasons(): ReviewReason[] {
+    if (this.reviewRating >= 4) return this.reviewReasonsPositive;
+    if (this.reviewRating >= 1) return this.reviewReasonsNegative;
+    return [];
+  }
 
   // Cancellation modal state
   public showCancelModal: boolean = false;
@@ -509,14 +524,15 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   /**
    * Mapea el estado de la reserva del API al formato de la tabla
    */
-  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED' | 'RESCHEDULED' | 'TEMPORAL' | string): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal' {
-    const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal'> = {
+  private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED' | 'RESCHEDULED' | 'TEMPORAL' | 'NO_SHOW' | string): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal' | 'No_Show' {
+    const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal' | 'No_Show'> = {
       'PENDING': 'Pending',
       'RESCHEDULED': 'Pending', // Tratamos reagendado como pendiente para acciones
       'DELIVERED': 'Completed',
       'CANCELLED': 'Cancelled',
       'CANCELED': 'Cancelled',  // API usa ortografía americana
-      'TEMPORAL': 'Temporal'
+      'TEMPORAL': 'Temporal',
+      'NO_SHOW': 'No_Show'
     };
     return statusMap[apiStatus] || 'Pending';
   }
@@ -651,6 +667,26 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     this.tableData = [...mockData];
     this.tableDataCopy = [...mockData];
     this.totalBookings = mockData.length;
+  }
+
+  /**
+   * Carga el catálogo de motivos de reseña desde el API
+   */
+  private loadReviewReasons(): void {
+    console.log('🔄 Iniciando carga de motivos de reseña...');
+    this.reviewReasonsLoading = true;
+    this.reviewsService.getReviewReasons().subscribe({
+      next: (response) => {
+        console.log('✅ Motivos de reseña cargados exitosamente:', response);
+        this.reviewReasonsPositive = response.positive || [];
+        this.reviewReasonsNegative = response.negative || [];
+        this.reviewReasonsLoading = false;
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar motivos de reseña:', error);
+        this.reviewReasonsLoading = false;
+      }
+    });
   }
 
   /**
@@ -1018,6 +1054,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     if (status === 'TEMPORAL' || status === 'Temporal') {
       return 'Temporal';
     }
+    if (status === 'NO_SHOW' || status === 'No_Show') {
+      return 'No show';
+    }
 
     const statusKeys: Record<string, string> = {
       'Upcoming': 'provider-tour-management.status.upcoming',
@@ -1044,7 +1083,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       'Cancelled': 'badge-danger',
       'Completed': 'badge-success',
       'Temporal': 'badge-warning',
-      'TEMPORAL': 'badge-warning'
+      'TEMPORAL': 'badge-warning',
+      'No_Show': 'badge-dark',
+      'NO_SHOW': 'badge-dark'
     };
     return statusClasses[status] || 'badge-secondary';
   }
@@ -1225,6 +1266,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.reviewRating = 0;
         this.reviewComment = '';
         this.reviewImages = [];
+        this.selectedReasonId = null;
+
+        // Cargar los motivos solo si no se han cargado previamente
+        if (this.reviewReasonsPositive.length === 0 && this.reviewReasonsNegative.length === 0) {
+          this.loadReviewReasons();
+        }
       }, 300);
     } else {
       console.error('❌ No se encontró la reserva con ID:', bookingId);
@@ -1243,6 +1290,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     this.reviewRating = 0;
     this.reviewComment = '';
     this.reviewImages = [];
+    this.selectedReasonId = null;
     
     // Limpiar los query params al cerrar el modal
     this.clearQueryParams();
@@ -1256,10 +1304,27 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Establece el rating de la reseña
+   * Establece el rating de la reseña y reinicia los motivos seleccionados
    */
   public setReviewRating(rating: number): void {
     this.reviewRating = rating;
+    // Al cambiar la calificación se limpian los motivos seleccionados
+    // ya que cambia entre positivos y negativos
+    this.selectedReasonId = null;
+  }
+
+  /**
+   * Alterna la selección de un motivo de reseña
+   */
+  public toggleReviewReason(reasonId: number): void {
+    this.selectedReasonId = this.selectedReasonId === reasonId ? null : reasonId;
+  }
+
+  /**
+   * Verifica si un motivo está seleccionado
+   */
+  public isReasonSelected(reasonId: number): boolean {
+    return this.selectedReasonId === reasonId;
   }
 
   /**
@@ -1272,7 +1337,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       
       // 1. Validar cantidad máxima (5 archivos)
       if (fileList.length > 5) {
-        alert('Solo puedes adjuntar un máximo de 5 imágenes.');
+        Swal.fire({
+          icon: 'warning',
+          title: 'Límite excedido',
+          text: 'Solo puedes adjuntar un máximo de 5 imágenes.',
+          confirmButtonColor: '#3085d6'
+        });
         // Limpiar el input
         event.target.value = '';
         this.reviewImages = [];
@@ -1297,7 +1367,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       });
 
       if (invalidFiles.length > 0) {
-        alert(`Algunos archivos no son válidos:\n${invalidFiles.join('\n')}\n\nSolo se permiten imágenes PNG/JPG de máximo 5MB.`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Archivos no válidos',
+          html: `Algunos archivos no son válidos:<br>${invalidFiles.join('<br>')}<br><br>Solo se permiten imágenes PNG/JPG de máximo 5MB.`,
+          confirmButtonColor: '#3085d6'
+        });
         // Limpiar el input si hay error para obligar a seleccionar de nuevo correctamente
         // O podríamos dejar los válidos, pero el input file UI no se sincroniza bien
         event.target.value = '';
@@ -1313,12 +1388,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   public submitReview(): void {
     if (!this.reviewRating || !this.reviewComment.trim()) {
-      alert('Por favor completa todos los campos requeridos (rating y comentario)');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos requeridos',
+        text: 'Por favor completa todos los campos requeridos (rating y comentario)',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
     if (!this.reviewModalBooking) {
-      alert('Error: No se encontró la reserva');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se encontró la reserva asociada.',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
@@ -1331,7 +1416,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const reviewPayload = {
       reservationId: reservationId,
       rating: this.reviewRating,
-      comment: this.reviewComment
+      comment: this.reviewComment,
+      ...(this.selectedReasonId !== null ? { reasonId: this.selectedReasonId } : {})
     };
 
     console.log('🔄 Enviando reseña:', reviewPayload);
@@ -1340,12 +1426,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     this.reviewsService.createReview(reviewPayload, this.reviewImages).subscribe({
       next: (response: any) => {
         console.log('✅ Reseña guardada exitosamente:', response);
-        alert(`¡Reseña enviada exitosamente para ${this.reviewModalBooking!.tourName}!`);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Reseña enviada!',
+          text: `Tu reseña para ${this.reviewModalBooking!.tourName} ha sido guardada exitosamente.`,
+          confirmButtonColor: '#28a745'
+        });
         this.closeReviewModal();
       },
       error: (error: any) => {
         console.error('❌ Error al guardar la reseña:', error);
-        alert('❌ Error al enviar la reseña. Por favor intenta nuevamente.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '❌ Error al enviar la reseña. Por favor intenta nuevamente.',
+          confirmButtonColor: '#d33'
+        });
       }
     });
   }

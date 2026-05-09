@@ -11,6 +11,10 @@ import { CountryService } from '../../services/country.service';
 import { DepartmentService } from '../../services/department.service';
 import { CityService } from '../../services/city.service';
 import { GuestInfoService } from '../../services/guest-info.service';
+import { TouristService } from "../../services/tourist.service";
+import { TouristProfileDto } from "../../dto/tourist-profile.dto";
+
+
 
 @Component({
   selector: "app-guest-info-modal",
@@ -32,6 +36,10 @@ export class GuestInfoModalComponent implements OnInit {
   cities: City[] = [];
   selectedFile: File | null = null;
   filePreview: string | null = null;
+  isPhotoDisabled: boolean = false;
+  profileData: TouristProfileDto | null = null;
+
+
 
   constructor(
     public dialogRef: MatDialogRef<GuestInfoModalComponent>,
@@ -39,8 +47,10 @@ export class GuestInfoModalComponent implements OnInit {
     private countryService: CountryService,
     private departmentService: DepartmentService,
     private cityService: CityService,
-    private guestInfoService: GuestInfoService
+    private guestInfoService: GuestInfoService,
+    private touristService: TouristService
   ) {
+
     this.guestInfoForm = new FormGroup({
       firstName: new FormControl("", [
         Validators.required,
@@ -73,17 +83,55 @@ export class GuestInfoModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCountries();
+    this.loadProfile();
   }
+
+  loadProfile() {
+    this.touristService.getProfile().subscribe({
+      next: (profile: TouristProfileDto) => {
+        this.profileData = profile;
+        if (!profile) return;
+
+        const simpleFields: (keyof TouristProfileDto)[] = ['firstName', 'lastName', 'documentNumber', 'phone', 'email'];
+        simpleFields.forEach(field => {
+          if (profile[field]) {
+            this.guestInfoForm.get(field as string)?.patchValue(profile[field]);
+            this.guestInfoForm.get(field as string)?.disable();
+          }
+        });
+
+        if (profile.photoUrl) {
+          this.filePreview = profile.photoUrl;
+          this.guestInfoForm.get('photo')?.patchValue(profile.photoUrl);
+          this.guestInfoForm.get('photo')?.disable();
+          this.isPhotoDisabled = true;
+        }
+      },
+      error: (err) => {
+        console.error('Error loading profile', err);
+      }
+    });
+  }
+
+
 
   getCountries() {
     this.countryService.getCountries().subscribe({
       next: (data: any) => {
-        if (data) {
-          this.countries = data;
-        } else {
-          this.countries = [];
+        this.countries = data || [];
+        
+        if (this.profileData?.country && this.countries.length > 0) {
+          const matchedCountry = this.countries.find(c => 
+            c.name.toLowerCase() === this.profileData?.country?.toLowerCase()
+          );
+          if (matchedCountry) {
+            this.guestInfoForm.get('country')?.patchValue(matchedCountry.id);
+            this.guestInfoForm.get('country')?.disable();
+            this.getDepartments(matchedCountry.id);
+          }
         }
       },
+
       error: (err: any) => {
         console.error("Error getting countries.", err);
         this.countries = [];
@@ -105,12 +153,20 @@ export class GuestInfoModalComponent implements OnInit {
   getDepartments(countryId: number) {
     this.departmentService.getDepartmentsByCountryId(countryId).subscribe({
       next: (data: any) => {
-        if (data) {
-          this.departments = data;
-        } else {
-          this.departments = [];
+        this.departments = data || [];
+
+        if (this.profileData?.state && this.departments.length > 0) {
+          const matchedDept = this.departments.find(d => 
+            d.name.toLowerCase() === this.profileData?.state?.toLowerCase()
+          );
+          if (matchedDept) {
+            this.guestInfoForm.get('department')?.patchValue(matchedDept.id);
+            this.guestInfoForm.get('department')?.disable();
+            this.getCities(matchedDept.id);
+          }
         }
       },
+
       error: (err: any) => {
         console.error("Error getting departments.", err);
         this.departments = [];
@@ -130,12 +186,19 @@ export class GuestInfoModalComponent implements OnInit {
   getCities(departmentId: number) {
     this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
       next: (data: any) => {
-        if (data) {
-          this.cities = data;
-        } else {
-          this.cities = [];
+        this.cities = data || [];
+
+        if (this.profileData?.city && this.cities.length > 0) {
+          const matchedCity = this.cities.find(c => 
+            c.name.toLowerCase() === this.profileData?.city?.toLowerCase()
+          );
+          if (matchedCity) {
+            this.guestInfoForm.get('city')?.patchValue(matchedCity.id);
+            this.guestInfoForm.get('city')?.disable();
+          }
         }
       },
+
       error: (err: any) => {
         console.error("Error getting cities.", err);
         this.cities = [];
@@ -166,44 +229,84 @@ export class GuestInfoModalComponent implements OnInit {
   }
 
   submitForm() {
+    console.log('🚀 Iniciando submitForm en GuestInfoModalComponent');
     if (this.guestInfoForm.invalid) {
+      console.warn('⚠️ Formulario inválido:', this.guestInfoForm.errors);
       this.guestInfoForm.markAllAsTouched();
       return;
     }
 
     this.loading = true;
 
-    // Preparar el payload
-    const formData = this.guestInfoForm.value;
-    const payload = {
+    // Usar getRawValue para obtener campos deshabilitados
+    const formData = this.guestInfoForm.getRawValue();
+    console.log('📋 Datos del formulario (Raw):', formData);
+
+    // Mapear IDs de ubicación a nombres
+    const countryObj = this.countries.find(c => c.id == formData.country);
+    const stateObj = this.departments.find(d => d.id == formData.department);
+    const cityObj = this.cities.find(c => c.id == formData.city);
+
+    const payload: TouristProfileDto = {
       ...formData,
-      photo: this.selectedFile?.name // Solo enviamos el nombre para mockear, o base64 si fuera real
+      country: countryObj ? countryObj.name : formData.country,
+      state: stateObj ? stateObj.name : formData.department,
+      city: cityObj ? cityObj.name : formData.city,
     };
 
-    // Consumir el servicio REST PUT MOCK
-    this.guestInfoService.updateGuestInfo(payload).subscribe({
-      next: (response) => {
-        this.loading = false;
-        
-        Swal.fire({
-          icon: 'success',
-          title: 'Información guardada',
-          text: 'Tus datos se han guardado exitosamente.',
-          confirmButtonColor: '#3085d6'
-        }).then(() => {
-          this.dialogRef.close(payload); // Cerrar y enviar payload de vuelta por si sirve
-        });
+    if ((payload as any).department) delete (payload as any).department;
+    if ((payload as any).photo) delete (payload as any).photo;
+    if (payload.photoUrl) delete payload.photoUrl;
+
+    console.log('📤 Payload final para updateProfile:', payload);
+
+    // Si hay una nueva foto, primero actualizamos la foto y luego el perfil
+    if (this.selectedFile) {
+      console.log('📸 Subiendo nueva foto:', this.selectedFile.name);
+      this.touristService.updateProfilePhoto(this.selectedFile).subscribe({
+        next: (res) => {
+          console.log('✅ Foto de perfil actualizada (200 OK):', res);
+          this.executeProfileUpdate(payload, true);
+        },
+        error: (error) => {
+          console.error('❌ Error al actualizar foto:', error);
+          this.executeProfileUpdate(payload, false);
+        }
+      });
+    } else {
+      console.log('⏭️ Sin foto nueva seleccionada, omitiendo updateProfilePhoto');
+      this.executeProfileUpdate(payload, null);
+    }
+  }
+
+  /**
+   * Cierra el modal devolviendo los resultados al componente padre
+   */
+  private closeModalWithResults(photoSuccess: boolean | null, profileSuccess: boolean) {
+    console.log('🏁 Proceso terminado, cerrando modal con resultados:', { photoSuccess, profileSuccess });
+    this.loading = false;
+    this.dialogRef.close({
+      profileSuccess,
+      photoSuccess,
+      photoAttempted: photoSuccess !== null
+    });
+  }
+
+  /**
+   * Ejecuta la actualización de los datos del perfil
+   */
+  private executeProfileUpdate(payload: TouristProfileDto, photoSuccess: boolean | null) {
+    console.log('👤 Iniciando executeProfileUpdate...');
+    this.touristService.updateProfile(payload).subscribe({
+      next: (res) => {
+        console.log('✅ Perfil actualizado exitosamente (200 OK):', res);
+        this.closeModalWithResults(photoSuccess, true);
       },
       error: (error) => {
-        this.loading = false;
-        console.error('Error in PUT request:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ha ocurrido un error al guardar tu información. Por favor, intenta de nuevo.',
-          confirmButtonColor: '#3085d6'
-        });
+        console.error('❌ Error al actualizar perfil:', error);
+        this.closeModalWithResults(photoSuccess, false);
       }
     });
   }
 }
+

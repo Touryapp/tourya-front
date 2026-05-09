@@ -10,6 +10,8 @@ import { CartService } from "../../../../shared/services/cart.service";
 import { CityService } from "../../../../shared/services/city.service";
 import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
+import { ReviewsService } from "../../../../core/services/reviews.service";
+import { ProviderReview, ReviewReason, ReviewReasonsResponse } from "../../../../shared/models/reviews.model";
 
 @Component({
   selector: "app-tour-details-provider",
@@ -132,8 +134,25 @@ export class TourDetailsProviderComponent implements OnInit, OnDestroy, AfterVie
     public authService: AuthService,
     private cartService: CartService,
     private router: Router,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private reviewsService: ReviewsService
   ) {}
+
+  // Reviews data
+  reviews: ProviderReview[] = [];
+  totalReviews: number = 0;
+  reviewsLoading: boolean = false;
+  
+  // Review reasons catalog
+  public reviewReasonsPositive: ReviewReason[] = [];
+  public reviewReasonsNegative: ReviewReason[] = [];
+  public reviewReasonsLoading: boolean = false;
+  
+  // Reviews Pagination
+  reviewsPageNumber: number = 0; // 0-indexed for backend
+  reviewsPageSize: number = 5;
+  reviewsTotalPages: number = 0;
+  Math = Math;
 
   ngOnInit(): void {
     // Initialize component
@@ -181,7 +200,121 @@ export class TourDetailsProviderComponent implements OnInit, OnDestroy, AfterVie
           console.error('Error loading tour detail', err);
         }
       });
+
+      // Load review reasons globally to display labels in the reviews list
+      this.loadReviewReasons();
+
+      // Load reviews
+      this.loadReviews(id);
     }
+  }
+
+  /**
+   * Load reviews for the current tour
+   */
+  loadReviews(tourId?: number): void {
+    const id = tourId || this.route.snapshot.paramMap.get('id');
+    if (!id) return;
+    
+    this.reviewsLoading = true;
+    this.reviewsService.getReviews({
+      tourId: id.toString(),
+      pageNumber: this.reviewsPageNumber,
+      pageSize: this.reviewsPageSize
+    }).subscribe({
+      next: (response) => {
+        this.reviews = response.content;
+        this.totalReviews = response.totalElements;
+        this.reviewsTotalPages = response.totalPages || Math.ceil(this.totalReviews / this.reviewsPageSize);
+        this.reviewsLoading = false;
+      },
+      error: (error) => {
+        console.error('❌ Error loading reviews:', error);
+        this.reviewsLoading = false;
+      }
+    });
+  }
+
+  // --- Reviews Pagination Methods ---
+  
+  onGoToPreviousReviewPage(): void {
+    if (!this.isFirstReviewPage()) {
+      this.reviewsPageNumber--;
+      this.loadReviews();
+    }
+  }
+
+  onGoToNextReviewPage(): void {
+    if (!this.isLastReviewPage()) {
+      this.reviewsPageNumber++;
+      this.loadReviews();
+    }
+  }
+
+  onGoToReviewPage(pageNum: number): void {
+    // pageNum is 1-indexed from UI, reviewsPageNumber is 0-indexed
+    const backendPage = pageNum - 1;
+    if (backendPage !== this.reviewsPageNumber && backendPage >= 0 && backendPage < this.reviewsTotalPages) {
+      this.reviewsPageNumber = backendPage;
+      this.loadReviews();
+    }
+  }
+
+  isFirstReviewPage(): boolean {
+    return this.reviewsPageNumber === 0;
+  }
+
+  isLastReviewPage(): boolean {
+    return this.reviewsPageNumber >= this.reviewsTotalPages - 1;
+  }
+
+  getReviewPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, (this.reviewsPageNumber + 1) - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(this.reviewsTotalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  /**
+   * Carga el catálogo de motivos de reseña
+   */
+  private loadReviewReasons(): void {
+    this.reviewReasonsLoading = true;
+    this.reviewsService.getReviewReasons().subscribe({
+      next: (response) => {
+        this.reviewReasonsPositive = response.positive || [];
+        this.reviewReasonsNegative = response.negative || [];
+        this.reviewReasonsLoading = false;
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar motivos de reseña:', err);
+        this.reviewReasonsLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Obtiene el label de un motivo dado su tipo y ID
+   */
+  public getReasonLabel(reasonType: 'POSITIVE' | 'NEGATIVE' | string | undefined, reasonId: number | undefined): string {
+    if (!reasonType || !reasonId) return '';
+    if (reasonType === 'POSITIVE') {
+      const reason = this.reviewReasonsPositive.find(r => r.id === reasonId);
+      return reason ? reason.label : '';
+    } else if (reasonType === 'NEGATIVE') {
+      const reason = this.reviewReasonsNegative.find(r => r.id === reasonId);
+      return reason ? reason.label : '';
+    }
+    return '';
   }
 
   /**

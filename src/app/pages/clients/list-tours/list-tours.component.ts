@@ -25,6 +25,7 @@ import { LocationsPublicDto } from "../../../shared/dto/locations-public.dto";
 import { TagDto } from "../../../shared/dto/search-tour-response.dto";
 import { CategoryDto } from "../../../shared/dto/category.dto";
 import { PendingActionService } from "../../../shared/services/pending-action.service";
+import { TouristService } from "../../../shared/services/tourist.service";
 import Swal from "sweetalert2";
 
 @Component({
@@ -234,6 +235,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public totalPages: number = 0;
   public currentPage: number = 1;
   public viewMode: "grid" | "list" = "grid";
+  public wishlistIds: number[] = [];
+  public favoriteStates: boolean[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -244,7 +247,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private paymentService: PaymentService,
     private cityService: CityService,
-    private pendingActionService: PendingActionService
+    private pendingActionService: PendingActionService,
+    private touristService: TouristService
   ) {}
 
   ngOnInit(): void {
@@ -257,6 +261,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
     // Cargar catálogos para filtros
     this.loadFiltersCatalogs();
+    this.loadWishlistIds();
 
     this.route.queryParams.subscribe((params) => {
       console.log('� queryParams recibidos:', params);
@@ -430,6 +435,59 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
   toggleClass(index: number): void {
     this.isClassAdded[index] = !this.isClassAdded[index];
+    this.favoriteStates[index] = this.isClassAdded[index];
+    
+    // Si se acaba de seleccionar (corazón relleno), agregar a wishlist
+    if (this.isClassAdded[index]) {
+      const tourId = this.tours[index].tour.id;
+      this.touristService.addToWishlist(tourId).subscribe({
+        next: (response) => {
+          console.log('✅ Tour agregado a wishlist:', tourId);
+          if (!this.wishlistIds.includes(tourId)) {
+            this.wishlistIds.push(tourId);
+          }
+        },
+        error: (error) => {
+          console.error('❌ Error al agregar a wishlist:', error);
+        }
+      });
+    } else {
+      // Si se acaba de deseleccionar (corazón vacío), quitar de wishlist
+      const tourId = this.tours[index].tour.id;
+      this.touristService.removeFromWishlist(tourId).subscribe({
+        next: (response) => {
+          console.log('🗑️ Tour quitado de wishlist:', tourId);
+          this.wishlistIds = this.wishlistIds.filter(id => id !== tourId);
+        },
+        error: (error) => {
+          console.error('❌ Error al quitar de wishlist:', error);
+        }
+      });
+    }
+  }
+
+  loadWishlistIds(): void {
+    this.touristService.getWishlistIds().subscribe({
+      next: (response) => {
+        this.wishlistIds = response.tourIds || [];
+        this.updateFavoriteStates();
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar IDs de wishlist:', error);
+      }
+    });
+  }
+
+  updateFavoriteStates(): void {
+    if (!this.tours || this.tours.length === 0) {
+      this.favoriteStates = [];
+      this.isClassAdded = [];
+      return;
+    }
+    this.favoriteStates = this.tours.map(tour => 
+      this.wishlistIds.includes(tour.tour.id)
+    );
+    this.isClassAdded = [...this.favoriteStates];
   }
 
   // Slider label formatter
@@ -789,6 +847,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
           this.totalItems = response.totalElements || 0;
           this.totalPages = response.totalPages || 0;
           this.currentPage = response.number + 1;
+          this.updateFavoriteStates();
         }
 
         console.log("=== RESULTADOS PROCESADOS ===");

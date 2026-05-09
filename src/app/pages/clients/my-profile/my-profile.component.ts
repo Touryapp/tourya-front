@@ -7,6 +7,7 @@ import { ProviderReview } from '../../../shared/models/reviews.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SearchToursService } from '../list-tours/search-tours.service';
 import { TourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
+import { TouristService } from '../../../shared/services/tourist.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -44,7 +45,8 @@ export class MyProfileComponent implements OnInit {
     private clientMenuService: ClientMenuService,
     private reviewsService: ReviewsService,
     private _snackBar: MatSnackBar,
-    private searchToursService: SearchToursService
+    private searchToursService: SearchToursService,
+    private touristService: TouristService
   ) {}
 
   ngOnInit(): void {
@@ -105,8 +107,8 @@ export class MyProfileComponent implements OnInit {
 
   loadWishlistTours(): void {
     this.wishlistLoading = true;
-    // Consumiendo el servicio de /search con parametros por defecto
-    this.searchToursService.searchTours({}, this.wishlistCurrentPage, this.wishlistSize).subscribe({
+    // Consumiendo el servicio especializado de búsqueda en wishlist
+    this.touristService.searchWishlist(this.wishlistCurrentPage, this.wishlistSize).subscribe({
       next: (response) => {
         this.wishlistTours = response.content || [];
         this.wishlistTotalItems = response.totalElements || 0;
@@ -122,8 +124,18 @@ export class MyProfileComponent implements OnInit {
   }
 
   onToggleFavoriteFromWishlist(index: number): void {
-    // Implementar lógica de favoritos si es necesario
-    console.log('Toggle favorite for tour index:', index);
+    const tourId = this.wishlistTours[index].tour.id;
+    this.touristService.removeFromWishlist(tourId).subscribe({
+      next: () => {
+        console.log('🗑️ Tour quitado de wishlist desde perfil:', tourId);
+        // Quitar el tour de la lista local para que desaparezca inmediatamente
+        this.wishlistTours.splice(index, 1);
+        this.wishlistTotalItems--;
+      },
+      error: (error) => {
+        console.error('❌ Error al quitar de wishlist desde perfil:', error);
+      }
+    });
   }
 
   onGoToPageFromWishlist(page: number): void {

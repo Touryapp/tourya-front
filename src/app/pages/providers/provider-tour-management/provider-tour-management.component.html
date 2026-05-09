@@ -432,37 +432,73 @@
                     </div>
 
                     <div class="row">
+                        <!-- Calificación + Motivos (layout de 2 columnas) -->
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label">Tu Calificación <span class="text-danger">*</span></label>
-                                <div class="selection-wrap">
-                                    <div class="d-inline-block">
-                                        <div class="rating-selction">
-                                            <input type="radio" name="rating" value="5" id="rating5" 
-                                                   [checked]="reviewRating === 5"
-                                                   (change)="setReviewRating(5)">
-                                            <label for="rating5"><i class="fa-solid fa-star"></i></label>
-                                            <input type="radio" name="rating" value="4" id="rating4"
-                                                   [checked]="reviewRating === 4"
-                                                   (change)="setReviewRating(4)">
-                                            <label for="rating4"><i class="fa-solid fa-star"></i></label>
-                                            <input type="radio" name="rating" value="3" id="rating3"
-                                                   [checked]="reviewRating === 3"
-                                                   (change)="setReviewRating(3)">
-                                            <label for="rating3"><i class="fa-solid fa-star"></i></label>
-                                            <input type="radio" name="rating" value="2" id="rating2"
-                                                   [checked]="reviewRating === 2"
-                                                   (change)="setReviewRating(2)">
-                                            <label for="rating2"><i class="fa-solid fa-star"></i></label>
-                                            <input type="radio" name="rating" value="1" id="rating1"
-                                                   [checked]="reviewRating === 1"
-                                                   (change)="setReviewRating(1)">
-                                            <label for="rating1"><i class="fa-solid fa-star"></i></label>
+                                <div class="row align-items-start g-3">
+                                    <!-- Columna Izquierda: Rating -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tu Calificación <span class="text-danger">*</span></label>
+                                        <div class="selection-wrap">
+                                            <div class="d-inline-block">
+                                                <div class="rating-selction">
+                                                    <input type="radio" name="rating" value="5" id="rating5" 
+                                                           [checked]="reviewRating === 5"
+                                                           (change)="setReviewRating(5)">
+                                                    <label for="rating5"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="4" id="rating4"
+                                                           [checked]="reviewRating === 4"
+                                                           (change)="setReviewRating(4)">
+                                                    <label for="rating4"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="3" id="rating3"
+                                                           [checked]="reviewRating === 3"
+                                                           (change)="setReviewRating(3)">
+                                                    <label for="rating3"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="2" id="rating2"
+                                                           [checked]="reviewRating === 2"
+                                                           (change)="setReviewRating(2)">
+                                                    <label for="rating2"><i class="fa-solid fa-star"></i></label>
+                                                    <input type="radio" name="rating" value="1" id="rating1"
+                                                           [checked]="reviewRating === 1"
+                                                           (change)="setReviewRating(1)">
+                                                    <label for="rating1"><i class="fa-solid fa-star"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Columna Derecha: Motivos (condicional por puntaje) -->
+                                    <div class="col-md-6" *ngIf="reviewRating > 0 && activeReviewReasons.length > 0">
+                                        <label class="form-label">
+                                            <ng-container *ngIf="reviewRating >= 4">
+                                                <i class="fa-solid fa-thumbs-up text-success me-1"></i>¿Qué te gustó?
+                                            </ng-container>
+                                            <ng-container *ngIf="reviewRating > 0 && reviewRating < 4">
+                                                <i class="fa-solid fa-thumbs-down text-danger me-1"></i>¿Qué mejorarías?
+                                            </ng-container>
+                                        </label>
+                                        <div *ngIf="reviewReasonsLoading" class="text-muted fs-13">
+                                            <span class="spinner-border spinner-border-sm me-1"></span>Cargando motivos...
+                                        </div>
+                                        <div class="review-reasons-list" *ngIf="!reviewReasonsLoading">
+                                            <div class="form-check mb-1" *ngFor="let reason of activeReviewReasons">
+                                                <input 
+                                                    class="form-check-input" 
+                                                    type="radio"
+                                                    name="reviewReasonGroup"
+                                                    [id]="'reason_' + reason.id"
+                                                    [checked]="isReasonSelected(reason.id)"
+                                                    (change)="toggleReviewReason(reason.id)">
+                                                <label class="form-check-label fs-14" [for]="'reason_' + reason.id">
+                                                    {{ reason.label }}
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Imágenes</label>
