@@ -24,14 +24,18 @@ export class TemplateFormComponent implements OnInit {
   readonly TypeOfPersonLabel = TypeOfPersonLabel;
   public routes = routes;
 
+  // Modal para conversión ANY a ADULT
+  showAnyModal = false;
+  pendingSlotIndex: number | null = null;
+
   DAYS_OF_WEEK = [
-    { label: "DOMINGO", value: "SUNDAY", day: 0 },
-    { label: "LUNES", value: "MONDAY", day: 1 },
-    { label: "MARTES", value: "TUESDAY", day: 2 },
-    { label: "MIÉRCOLES", value: "WEDNESDAY", day: 3 },
-    { label: "JUEVES", value: "THURSDAY", day: 4 },
-    { label: "VIERNES", value: "FRIDAY", day: 5 },
-    { label: "SÁBADO", value: "SATURDAY", day: 6 },
+    { label: "tour-schedule.config.daysOfWeek.SUNDAY", value: "SUNDAY", day: 0 },
+    { label: "tour-schedule.config.daysOfWeek.MONDAY", value: "MONDAY", day: 1 },
+    { label: "tour-schedule.config.daysOfWeek.TUESDAY", value: "TUESDAY", day: 2 },
+    { label: "tour-schedule.config.daysOfWeek.WEDNESDAY", value: "WEDNESDAY", day: 3 },
+    { label: "tour-schedule.config.daysOfWeek.THURSDAY", value: "THURSDAY", day: 4 },
+    { label: "tour-schedule.config.daysOfWeek.FRIDAY", value: "FRIDAY", day: 5 },
+    { label: "tour-schedule.config.daysOfWeek.SATURDAY", value: "SATURDAY", day: 6 },
   ];
 
   constructor(
@@ -52,7 +56,7 @@ export class TemplateFormComponent implements OnInit {
         ],
       ],
       daysOfWeek: this.fb.array([]),
-      isUnlimitedCapacity: [false, [Validators.required]],
+
       slots: this.fb.array([]),
     });
   }
@@ -73,41 +77,10 @@ export class TemplateFormComponent implements OnInit {
   }
 
   setupFormSubscriptions(): void {
-    this.templateForm.get("isUnlimitedCapacity")?.valueChanges.subscribe((value) => {
-      if (value) {
-        this.slots.controls.forEach((control) => {
-          const capacityControl = control.get("capacity");
-          capacityControl?.setValue("");
-          capacityControl?.setValidators([]);
-          capacityControl?.updateValueAndValidity();
-        });
-      } else {
-        this.slots.controls.forEach((control) => {
-          const capacityControl = control.get("capacity");
-          capacityControl?.setValidators([
-            Validators.required,
-            onlyNumberValidator(),
-          ]);
-          capacityControl?.updateValueAndValidity();
-        });
-      }
-    });
-
     this.slots.valueChanges.subscribe(() => {
       this.slots.controls.forEach((control, index) => {
         // Capacity validation is now handled by built-in required and onlyNumber validators
-        // Check min age
-        this.prices(index).controls.forEach((priceControl) => {
-          const minAgeControl = priceControl.get("minAge");
-          const maxAgeControl = priceControl.get("maxAge");
 
-          const minAgeValue = +minAgeControl?.value || 0;
-          const maxAgeValue = +maxAgeControl?.value || 0;
-
-          if (minAgeValue > maxAgeValue) {
-            maxAgeControl?.setErrors({ min: true });
-          }
-        });
       });
     });
   }
@@ -118,7 +91,6 @@ export class TemplateFormComponent implements OnInit {
       next: (template) => {
         this.templateForm.patchValue({
           label: template.label,
-          isUnlimitedCapacity: template.isUnlimitedCapacity,
         });
 
         // Limpiar y reconstruir días de la semana
@@ -154,8 +126,6 @@ export class TemplateFormComponent implements OnInit {
             const newPrice = this.fb.group({
               id: [price.id || ""],
               ageType: [ageTypeValue || ""],
-              minAge: [price.minAge || ""],
-              maxAge: [price.maxAge || ""],
               price: [price.price || ""],
             });
 
@@ -195,12 +165,16 @@ export class TemplateFormComponent implements OnInit {
       }
 
       const templateData: any = {
-        tourId: 0, // Para templates no necesitamos tourId
         providerId: providerId, // ID del proveedor actual
         label: formData.label,
         daysOfWeek: formData.daysOfWeek,
-        isUnlimitedCapacity: formData.isUnlimitedCapacity,
-        slots: formData.slots,
+        slots: formData.slots.map((slot: any) => ({
+          ...slot,
+          prices: slot.prices.map((price: any) => ({
+            ...price,
+            ageType: price.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : price.ageType
+          }))
+        })),
         isTemplate: true, // Marcar como template
         createdBy: 1,
       };
@@ -264,10 +238,7 @@ export class TemplateFormComponent implements OnInit {
 
   // Métodos para slots
   newSlot(): FormGroup {
-    const isUnlimitedCapacityValue = this.templateForm.get("isUnlimitedCapacity")?.value;
-    const capacityValidators = isUnlimitedCapacityValue
-      ? []
-      : [Validators.required, onlyNumberValidator()];
+    const capacityValidators = [Validators.required, onlyNumberValidator()];
 
     return this.fb.group({
       id: ["", []],
@@ -301,17 +272,55 @@ export class TemplateFormComponent implements OnInit {
     return this.fb.group({
       id: ["", []],
       ageType: ["", [Validators.required]],
-      minAge: ["", [Validators.required, Validators.min(0), onlyNumberValidator()]],
-      maxAge: ["", [Validators.required, Validators.min(0), onlyNumberValidator()]],
       price: ["", [Validators.required, Validators.min(0)]],
     });
   }
 
   addPrice(index: number): void {
+    // Check if first price has ANY selected
+    const firstPrice = this.prices(index).at(0);
+    if (firstPrice && firstPrice.get('ageType')?.value === TypeOfPersonLabel.ANY) {
+      // Show modal to confirm conversion from ANY to ADULT
+      this.pendingSlotIndex = index;
+      this.showAnyModal = true;
+      return;
+    }
+
     if (this.prices(index).valid) {
       this.prices(index).push(this.newPrice());
     } else {
       this.prices(index).markAllAsTouched();
+    }
+  }
+
+  confirmAnyToAdultConversion() {
+    if (this.pendingSlotIndex !== null) {
+      const firstPrice = this.prices(this.pendingSlotIndex).at(0);
+      if (firstPrice) {
+        // Convert ANY to ADULT
+        firstPrice.get('ageType')?.setValue(TypeOfPersonLabel.ADULT);
+        // Add new price
+        this.prices(this.pendingSlotIndex).push(this.newPrice());
+      }
+    }
+    this.closeAnyModal();
+  }
+
+  closeAnyModal() {
+    this.showAnyModal = false;
+    this.pendingSlotIndex = null;
+  }
+
+  isAnyOptionAvailable(indexSlot: number, indexPrice: number): boolean {
+    // ANY is only available for the first price (index 0) AND only if there's only one price
+    const pricesCount = this.prices(indexSlot).length;
+    return indexPrice === 0 && pricesCount === 1;
+  }
+
+  onAgeTypeChange(indexSlot: number, indexPrice: number) {
+    const priceGroup = this.prices(indexSlot).at(indexPrice) as FormGroup;
+    if (priceGroup.get('ageType')?.value === TypeOfPersonLabel.INFANT) {
+      priceGroup.get('price')?.setValue(0);
     }
   }
 
@@ -364,17 +373,7 @@ export class TemplateFormComponent implements OnInit {
     }
   }
 
-  onKeypressMinAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
-  onKeypressMaxAge(event: KeyboardEvent): void {
-    if (/[^0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 
   onPriceBlur(indexSlot: number, indexPrice: number): void {
     const priceControl = this.prices(indexSlot).at(indexPrice).get("price");

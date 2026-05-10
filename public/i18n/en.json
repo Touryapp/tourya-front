@@ -637,6 +637,7 @@
     },
     "actions": {
       "save": "Save",
+      "saved": "Saved",
       "share": "Share"
     },
     "sections": {
@@ -705,5 +706,119 @@
       "item4": "Real 24/7 support",
       "item5": "Local physical office"
     }
+  },
+  "tour-schedule": {
+    "breadcrumb": {
+      "title": "Tour Schedule",
+      "providersPanel": "Providers Panel"
+    },
+    "calendar": {
+      "previous": "Previous",
+      "today": "Today",
+      "next": "Next",
+      "scheduleFor": "Schedule for"
+    },
+    "template": {
+      "selectionTitle": "Select Template",
+      "label": "Template",
+      "placeholder": "Select template",
+      "loading": "Loading templates...",
+      "noTemplates": "No templates available",
+      "apply": "Apply Template"
+    },
+    "config": {
+      "title": "Tour Schedule Config",
+      "reset": "Reset form",
+      "label": {
+        "label": "Label",
+        "required": "Label is required",
+        "minlength": "Label must be at least 3 characters long",
+        "maxlength": "Label cannot be more than 50 characters long"
+      },
+      "startDate": {
+        "label": "Start Date",
+        "required": "Start date is required",
+        "invalid": "Start date is invalid"
+      },
+      "endDate": {
+        "label": "End date",
+        "required": "End date is required",
+        "invalid": "End date is invalid",
+        "invalidRange": "End date is invalid."
+      },
+      "daysOfWeek": {
+        "label": "Days of the week",
+        "required": "Days of the week are required",
+        "SUNDAY": "SUNDAY",
+        "MONDAY": "MONDAY",
+        "TUESDAY": "TUESDAY",
+        "WEDNESDAY": "WEDNESDAY",
+        "THURSDAY": "THURSDAY",
+        "FRIDAY": "FRIDAY",
+        "SATURDAY": "SATURDAY"
+      }
+    },
+    "slots": {
+      "title": "Slots",
+      "slotNumber": "Slot #",
+      "startTime": {
+        "label": "Start time",
+        "required": "Start time is required"
+      },
+      "endTime": {
+        "label": "End time",
+        "required": "End time is required",
+        "invalidRange": "Invalid time range"
+      },
+      "capacity": {
+        "label": "Capacity",
+        "required": "Capacity is required",
+        "min": "Capacity must be at least 1",
+        "unlimited": "Unlimited"
+      }
+    },
+    "prices": {
+      "title": "Prices",
+      "priceNumber": "Price #",
+      "ageType": {
+        "label": "Age type",
+        "required": "Age type is required",
+        "ANY": "ANY",
+        "ADULT": "ADULT",
+        "CHILD": "CHILD",
+        "INFANT": "INFANT"
+      },
+      "price": {
+        "label": "Price",
+        "required": "Price is required",
+        "min": "Price must be greater than zero"
+      },
+      "addNew": "Add New Price"
+    },
+    "actions": {
+      "addNewSlot": "Add New Slot",
+      "addSchedule": "Add new tour schedule",
+      "editSchedule": "Edit tour schedule"
+    },
+    "messages": {
+      "noSlots": "No schedules configured for this day",
+      "config": "Configuration:",
+      "days": "Days:",
+      "schedule": "Schedule",
+      "availability": "Availability",
+      "capacity": "Capacity:",
+      "success": "Tour schedule saved successfully.",
+      "error": "An error has occurred, please try again",
+      "errorGettingTour": "Error getting tour.",
+      "errorGettingSchedules": "Error getting tour schedules."
+    },
+    "anyModal": {
+      "title": "Confirm age type change",
+      "p1": "You have selected \"ANY\" in Price #1.",
+      "p2": "To add a new price, Price #1 will automatically change from \"ANY\" to \"ADULT\".",
+      "p3": "Do you wish to continue?",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    }
   }
-}
+}

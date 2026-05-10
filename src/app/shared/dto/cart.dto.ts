@@ -55,8 +55,6 @@ export interface DaySelection {
 export interface ParticipantSelection {
   ageType: string;
   label: string;
-  minAge: number;
-  maxAge: number;
   price: number;
   quantity: number;
   maxQuantity: number;
@@ -70,8 +68,6 @@ export interface SlotWithPrices {
   availableCapacity: number; // capacity - currentBookings
   prices?: {
     ageType: string;
-    minAge: number;
-    maxAge: number;
     price: number;
   }[];
 }

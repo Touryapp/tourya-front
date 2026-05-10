@@ -17,7 +17,7 @@ import { TourSchedule } from "../../../../shared/dto/tour-schedule.response.dto"
 import { dayjsDateValidator } from "../../../../shared/validators/date-format.validator";
 import { onlyNumberValidator } from "../../../../shared/validators/only-number.validator";
 import dayjs from "dayjs";
-import { endOfDay, isSameDay, isSameMonth, startOfDay } from "date-fns";
+import { isSameDay, isSameMonth } from "date-fns";
 import {
   CalendarEvent,
   CalendarEventTimesChangedEvent,
@@ -28,6 +28,7 @@ import { TemplateService } from "../../templates/template.service";
 import { AuthService } from "../../../../core/services/auth.service";
 import { TourScheduleConfigResponseDto } from "../../../../shared/dto/tour-schedule.response.dto";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
+import { TranslateService } from "@ngx-translate/core";
 @Component({
   selector: "app-tour-schedule",
   standalone: false,
@@ -53,6 +54,10 @@ export class TourScheduleComponent {
 
   bsValueStartDate = undefined;
   bsValueEndDate = undefined;
+  bsRangeValue: Date[] | undefined = undefined;
+
+  // Fecha seleccionada en el calendario grande (independiente del formulario)
+  calendarSelectedDate: Date | null = null;
   minDateStartDate: Date = dayjs()
     .hour(0)
     .minute(0)
@@ -63,13 +68,13 @@ export class TourScheduleComponent {
   maxDateEndDate: Date | undefined = undefined;
 
   DAYS_OF_WEEK = [
-    { label: "SUNDAY", value: "SUNDAY", day: 0 },
-    { label: "MONDAY", value: "MONDAY", day: 1 },
-    { label: "TUESDAY", value: "TUESDAY", day: 2 },
-    { label: "WEDNESDAY", value: "WEDNESDAY", day: 3 },
-    { label: "THURSDAY", value: "THURSDAY", day: 4 },
-    { label: "FRIDAY", value: "FRIDAY", day: 5 },
-    { label: "SATURDAY", value: "SATURDAY", day: 6 },
+    { label: "tour-schedule.config.daysOfWeek.SUNDAY", value: "SUNDAY", day: 0 },
+    { label: "tour-schedule.config.daysOfWeek.MONDAY", value: "MONDAY", day: 1 },
+    { label: "tour-schedule.config.daysOfWeek.TUESDAY", value: "TUESDAY", day: 2 },
+    { label: "tour-schedule.config.daysOfWeek.WEDNESDAY", value: "WEDNESDAY", day: 3 },
+    { label: "tour-schedule.config.daysOfWeek.THURSDAY", value: "THURSDAY", day: 4 },
+    { label: "tour-schedule.config.daysOfWeek.FRIDAY", value: "FRIDAY", day: 5 },
+    { label: "tour-schedule.config.daysOfWeek.SATURDAY", value: "SATURDAY", day: 6 },
   ];
 
   view: CalendarView = CalendarView.Month;
@@ -99,7 +104,8 @@ export class TourScheduleComponent {
     private _snackBar: MatSnackBar,
     private templateService: TemplateService,
     private authService: AuthService,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private translate: TranslateService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -115,7 +121,7 @@ export class TourScheduleComponent {
       startDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
       endDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
       daysOfWeek: this.fb.array([]),
-      isUnlimitedCapacity: [false, [Validators.required]],
+
       slots: this.fb.array([]),
     });
 
@@ -131,6 +137,10 @@ export class TourScheduleComponent {
 
   get isGroupTour(): boolean {
     return this.tour?.priceType === 'group';
+  }
+
+  get isUnlimitedCapacity(): boolean {
+    return this.tour?.isUnlimitedCapacity === true;
   }
 
   onSubmit() {
@@ -164,6 +174,8 @@ export class TourScheduleComponent {
   }
 
   ngOnInit(): void {
+    // Los campos de fecha del formulario (Start Date / End Date) ya NO sincronizan
+    // con el calendario grande. Cada lógica es independiente.
     this.tourScheduleForm
       .get("startDate")
       ?.valueChanges.subscribe((startDate) => {
@@ -186,20 +198,27 @@ export class TourScheduleComponent {
           });
         }
 
+        // Sync bsRangeValue solo para el picker del formulario (NO afecta el calendario grande)
+        if (startDate && endDate) {
+          this.bsRangeValue = [startDateDayJs.toDate(), dayjs(endDate).toDate()];
+        } else if (startDate) {
+          this.bsRangeValue = [startDateDayJs.toDate(), startDateDayJs.toDate()];
+        } else {
+          this.bsRangeValue = undefined;
+        }
+
         this.checkAllMonthSelected();
         this.checkTourScheduleByStartDateAndEndDate();
       });
 
     this.tourScheduleForm.get("endDate")?.valueChanges.subscribe((endDate) => {
+      const startDate = this.tourScheduleForm.get("startDate")?.value;
+      if (startDate && endDate) {
+        this.bsRangeValue = [dayjs(startDate).toDate(), dayjs(endDate).toDate()];
+      }
       this.checkAllMonthSelected();
       this.checkTourScheduleByStartDateAndEndDate();
     });
-
-    this.tourScheduleForm
-      .get("isUnlimitedCapacity")
-      ?.valueChanges.subscribe((value) => {
-        // isUnlimitedCapacity logic removed as capacity fields are removed
-      });
 
     this.slots.valueChanges.subscribe((value) => {
       // Age and capacity validation removed
@@ -254,6 +273,13 @@ export class TourScheduleComponent {
   onKeydownEndDatePicker(event: KeyboardEvent) {
     if (event.key === "Backspace") {
       this.tourScheduleForm.get("endDate")?.setValue("");
+    }
+  }
+
+  onFormDateRangeChange(dates: (Date | undefined)[] | undefined | null) {
+    if (dates && dates.length === 2 && dates[0] && dates[1]) {
+      this.tourScheduleForm.get("startDate")?.setValue(dates[0]);
+      this.tourScheduleForm.get("endDate")?.setValue(dates[1]);
     }
   }
 
@@ -430,6 +456,13 @@ export class TourScheduleComponent {
     const pricesCount = this.prices(indexSlot).length;
     return indexPrice === 0 && pricesCount === 1;
   }
+
+  onAgeTypeChange(indexSlot: number, indexPrice: number) {
+    const priceGroup = this.prices(indexSlot).at(indexPrice) as FormGroup;
+    if (priceGroup.get('ageType')?.value === TypeOfPersonLabel.INFANT) {
+      priceGroup.get('price')?.setValue(0);
+    }
+  }
   checkTourScheduleByStartDateAndEndDate() {
     const startDate = this.tourScheduleForm.get("startDate")?.value;
     const endDate = this.tourScheduleForm.get("endDate")?.value;
@@ -497,13 +530,13 @@ export class TourScheduleComponent {
         startDate: found.scheduleDate,
         endDate: found.scheduleDate,
         daysOfWeek: found.config.daysOfWeek,
-        isUnlimitedCapacity: found.config.isUnlimitedCapacity,
+
         slots: found.config.slots
       };
 
       this.tourScheduleForm.patchValue({
         label: found.config.label,
-        isUnlimitedCapacity: found.config.isUnlimitedCapacity,
+
       }, { emitEvent: false });
 
       // Limpiar y rellenar días de semana sin duplicados
@@ -564,8 +597,7 @@ export class TourScheduleComponent {
     const endDate = this.tourScheduleForm.get("endDate")?.value;
 
     this.tourScheduleForm.patchValue({
-      label: "",
-      isUnlimitedCapacity: false
+      label: ""
     }, { emitEvent: false });
 
     this.daysOfWeek.clear();
@@ -592,7 +624,7 @@ export class TourScheduleComponent {
       startDate,
       endDate,
       daysOfWeek,
-      isUnlimitedCapacity,
+
       slots,
     } = this.tourScheduleForm.value;
 
@@ -611,7 +643,7 @@ export class TourScheduleComponent {
       startDate: dayjs(startDate).format("YYYY-MM-DD"),
       endDate: dayjs(endDate).format("YYYY-MM-DD"),
       daysOfWeek,
-      isUnlimitedCapacity,
+
       slots: processedSlots,
       createdBy: 1,
     };
@@ -620,12 +652,12 @@ export class TourScheduleComponent {
       next: (data) => {
         this.loading = false;
         if (data) {
-          this.openSnackBar("Tour schedule saved successfully.");
+          this.openSnackBar(this.translate.instant("tour-schedule.messages.success"));
           this.getSchedules();
           this.resetForm();
         } else {
           this.errorMessage =
-            "Ha ocurrido un error, por favor intente de nuevo";
+            this.translate.instant("tour-schedule.messages.error");
         }
       },
       error: (err) => {
@@ -633,7 +665,7 @@ export class TourScheduleComponent {
         console.error("Error saving tour schedule.");
         console.error(err);
 
-        this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
+        this.errorMessage = this.translate.instant("tour-schedule.messages.error");
       },
     });
   }
@@ -664,14 +696,14 @@ export class TourScheduleComponent {
           }
         } else {
           this.tour = {};
-          this.openSnackBar("Error getting tour.");
+          this.openSnackBar(this.translate.instant("tour-schedule.messages.errorGettingTour"));
         }
       },
       error: (err: any) => {
         console.error("Error getting tour.");
         console.error(err);
         this.tour = {};
-        this.openSnackBar("Error getting tour.");
+        this.openSnackBar(this.translate.instant("tour-schedule.messages.errorGettingTour"));
       },
     });
   }
@@ -710,7 +742,7 @@ export class TourScheduleComponent {
                 tourId: this.tourId,
                 label: config.label,
                 daysOfWeek: config.daysOfWeek,
-                isUnlimitedCapacity: config.isUnlimitedCapacity,
+
                 slots: config.slots,
                 schedules: group // Incluir todos los días de esta configuración
               },
@@ -721,14 +753,14 @@ export class TourScheduleComponent {
           this.refresh.next();
         } else {
           this.tourSchedules = [];
-          this.openSnackBar("Error getting tour schedules.");
+          this.openSnackBar(this.translate.instant("tour-schedule.messages.errorGettingSchedules"));
         }
       },
       error: (err: any) => {
         console.error("Error getting tour schedules.");
         console.error(err);
         this.tourSchedules = [];
-        this.openSnackBar("Error getting tour schedules.");
+        this.openSnackBar(this.translate.instant("tour-schedule.messages.errorGettingSchedules"));
       },
     });
   }
@@ -774,101 +806,20 @@ export class TourScheduleComponent {
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    const today = dayjs().hour(0).minute(0).second(0).millisecond(0);
-    const dateDayJs = dayjs(date);
-
-    const startDateControl = this.tourScheduleForm.get("startDate");
-    const endDateControl = this.tourScheduleForm.get("endDate");
-
-    const startDateValue = startDateControl?.value;
-    const endDateValue = endDateControl?.value;
-
-    const startDateDayJs = dayjs(startDateValue);
-    const endDateDayJs = dayjs(endDateValue);
-
-    if (dateDayJs.isValid() && !dateDayJs.isBefore(today)) {
-      const hasStart = !!startDateValue;
-      const hasEnd = !!endDateValue;
-      const isSingleDayActive = hasStart && hasEnd && isSameDay(startDateValue, endDateValue);
-      const isRangeActive = hasStart && hasEnd && !isSameDay(startDateValue, endDateValue);
-
-      if (!hasStart) {
-        // Caso 1: Sin selección → asignar inicio y fin al mismo día
-        startDateControl?.setValue(date);
-        endDateControl?.setValue(date);
-      } else if (isSingleDayActive && startDateDayJs.isSame(dateDayJs, 'day')) {
-        // Caso 2: Un día seleccionado, clic en el mismo → deseleccionar
-        startDateControl?.setValue(null);
-        endDateControl?.setValue(null);
-      } else if (isSingleDayActive && !startDateDayJs.isSame(dateDayJs, 'day')) {
-        // Caso 3: Un día seleccionado, clic en otro → crear rango respetando orden
-        if (dateDayJs.isBefore(startDateDayJs)) {
-          startDateControl?.setValue(date);
-          // endDate queda como estaba (= el día previamente seleccionado)
-        } else {
-          // endDate = nuevo día, startDate queda como estaba
-          endDateControl?.setValue(date);
-        }
-      } else if (isRangeActive) {
-        // Caso 4: Rango activo
-        const clickedStart = startDateDayJs.isSame(dateDayJs, 'day');
-        const clickedEnd = endDateDayJs.isSame(dateDayJs, 'day');
-
-        if (clickedEnd) {
-          // Clic en la fecha fin → colapsar al día inicio (inicio = fin = startDate)
-          endDateControl?.setValue(startDateValue);
-        } else if (clickedStart) {
-          // Clic en la fecha inicio → colapsar al día fin (inicio = fin = endDate)
-          startDateControl?.setValue(endDateValue);
-        } else if (dateDayJs.isBefore(startDateDayJs)) {
-          // Clic antes del inicio → mover inicio
-          startDateControl?.setValue(date);
-        } else {
-          // Clic después del fin → mover fin
-          endDateControl?.setValue(date);
-        }
-      }
+    if (this.calendarSelectedDate && isSameDay(this.calendarSelectedDate, date)) {
+      // Clic en el mismo día → deseleccionar
+      this.calendarSelectedDate = null;
+      this.activeDayIsOpen = false;
+      this.eventsOnSelectedDay = [];
+    } else {
+      // Clic en un día diferente → seleccionar ese día
+      this.calendarSelectedDate = date;
+      this.activeDayIsOpen = true;
+      this.eventsOnSelectedDay = events;
     }
 
-    const startDate = this.tourScheduleForm.get("startDate")?.value;
-    const endDate = this.tourScheduleForm.get("endDate")?.value;
-    const isSingleDaySelection = startDate && (!endDate || isSameDay(startDate, endDate));
-    const isMultiDaySelection = startDate && endDate && !isSameDay(startDate, endDate);
-
-    if (isSameMonth(date, this.viewDate)) {
-      if (isMultiDaySelection) {
-        this.activeDayIsOpen = false;
-        this.eventsOnSelectedDay = [];
-        this.resetFormExceptDates(false);
-      } else if (isSingleDaySelection) {
-        this.activeDayIsOpen = true;
-        this.eventsOnSelectedDay = events;
-
-        const dateStr = dayjs(date).format("YYYY-MM-DD");
-        const existingSchedule = this.tourSchedules.find(s => s.scheduleDate === dateStr);
-        
-        if (existingSchedule && existingSchedule.configId) {
-          this.loadConfig(existingSchedule.configId);
-        } else {
-          this.resetFormExceptDates(true);
-        }
-      } else {
-        // No hay selección o se deseleccionó
-        if (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) {
-          this.activeDayIsOpen = false;
-          this.eventsOnSelectedDay = [];
-          this.resetForm();
-        } else if (events.length > 0) {
-          this.activeDayIsOpen = true;
-          this.eventsOnSelectedDay = events;
-        } else {
-          this.resetForm();
-        }
-      }
-      this.viewDate = date;
-      this.refresh.next();
-      this.checkTourScheduleByStartDateAndEndDate();
-    }
+    this.viewDate = date;
+    this.refresh.next();
   }
 
   monthIsAfterToday() {
@@ -908,18 +859,9 @@ export class TourScheduleComponent {
   }
 
   isDateInSelectedRange(date: Date): boolean {
-    const startDateControl = this.tourScheduleForm.get("startDate");
-    const endDateControl = this.tourScheduleForm.get("endDate");
-
-    const startDateValue = startDateControl?.value;
-    const endDateValue = endDateControl?.value;
-
-    if (startDateValue && endDateValue) {
-      return (
-        date >= startOfDay(startDateValue) && date <= endOfDay(endDateValue)
-      );
-    } else if (startDateValue && !endDateValue) {
-      return isSameDay(date, startDateValue);
+    // El calendario grande solo resalta el único día seleccionado (calendarSelectedDate)
+    if (this.calendarSelectedDate) {
+      return isSameDay(date, this.calendarSelectedDate);
     }
     return false;
   }
@@ -1019,7 +961,7 @@ export class TourScheduleComponent {
       error: (error) => {
         console.error("Error loading templates:", error);
         this.templatesLoading = false;
-        this.openSnackBar("Error al cargar los templates");
+        this.openSnackBar(this.translate.instant("tour-schedule.messages.error"));
       }
     });
   }
@@ -1031,7 +973,7 @@ export class TourScheduleComponent {
 
   applyTemplate(): void {
     if (!this.selectedTemplate) {
-      this.openSnackBar("Por favor selecciona un template");
+      this.openSnackBar(this.translate.instant("tour-schedule.template.placeholder"));
       return;
     }
 
@@ -1041,7 +983,7 @@ export class TourScheduleComponent {
     // Aplicar los datos del template al formulario
     this.tourScheduleForm.patchValue({
       label: this.selectedTemplate.label,
-      isUnlimitedCapacity: this.selectedTemplate.isUnlimitedCapacity,
+
     });
 
     // Aplicar días de la semana
@@ -1077,8 +1019,6 @@ export class TourScheduleComponent {
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
-            minAge: [price.minAge || ""],
-            maxAge: [price.maxAge || ""],
             price: [price.price || ""],
           });
 
@@ -1091,7 +1031,7 @@ export class TourScheduleComponent {
       this.addSlot();
     }
 
-    this.openSnackBar("Template aplicado correctamente");
+    this.openSnackBar(this.translate.instant("tour-schedule.messages.success"));
   }
 
   // Método para guardar configuraciones por fecha usando batch
@@ -1102,7 +1042,7 @@ export class TourScheduleComponent {
     const slots = this.tourScheduleForm.get("slots")?.value;
 
     if (!startDate || !endDate || !daysOfWeek || daysOfWeek.length === 0) {
-      this.openSnackBar("Por favor completa todos los campos requeridos");
+      this.openSnackBar(this.translate.instant("tour-schedule.messages.error"));
       return;
     }
 
@@ -1129,7 +1069,7 @@ export class TourScheduleComponent {
             tourId: this.tourId,
             scheduleDate: scheduleDate,
             reservedCapacity: 0,
-            isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
             status: "available",
             config: {
               tourId: this.tourId,
@@ -1138,7 +1078,7 @@ export class TourScheduleComponent {
               startDate: startDateDayJs.format("YYYY-MM-DD"),
               endDate: endDateDayJs.format("YYYY-MM-DD"),
               daysOfWeek: daysOfWeek,
-              isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
               isTemplate: false,
               slots: slots.map((s: any) => ({
                 startTime: s.startTime,
@@ -1160,14 +1100,14 @@ export class TourScheduleComponent {
     this.tourService.saveTourScheduleBatch(batchData).subscribe({
       next: (data) => {
         this.loading = false;
-        this.openSnackBar("Configuraciones guardadas correctamente");
+        this.openSnackBar(this.translate.instant("tour-schedule.messages.success"));
         this.getSchedules();
         this.resetForm();
       },
       error: (error) => {
         this.loading = false;
         console.error("Error saving batch tour schedules:", error);
-        this.openSnackBar("Error al guardar las configuraciones");
+        this.openSnackBar(this.translate.instant("tour-schedule.messages.error"));
       }
     });
   }
@@ -1180,7 +1120,7 @@ export class TourScheduleComponent {
     const slots = this.tourScheduleForm.get("slots")?.value;
 
     if (!startDate || !endDate || !daysOfWeek || daysOfWeek.length === 0) {
-      this.openSnackBar("Por favor completa todos los campos requeridos");
+      this.openSnackBar(this.translate.instant("tour-schedule.messages.error"));
       return;
     }
 
@@ -1206,13 +1146,13 @@ export class TourScheduleComponent {
           tourId: this.tourId,
           scheduleDate: scheduleDate,
           reservedCapacity: 0,
-          isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
           status: "AVAILABLE",
           config: {
             id: this.tourScheduleId, // Incluir el ID de la configuración existente
             label: this.tourScheduleForm.get("label")?.value,
             daysOfWeek: daysOfWeek,
-            isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
             slots: slots.map((s: any) => ({
               id: s.id || 0, // Incluir ID del slot si existe
               startTime: s.startTime,
@@ -1234,43 +1174,39 @@ export class TourScheduleComponent {
     this.tourService.saveTourScheduleBatch(batchData).subscribe({
       next: (data) => {
         this.loading = false;
-        this.openSnackBar("Configuraciones actualizadas correctamente");
+        this.openSnackBar(this.translate.instant("tour-schedule.messages.success"));
         this.getSchedules();
         this.resetForm();
       },
       error: (error) => {
         this.loading = false;
         console.error("Error updating batch tour schedules:", error);
-        this.openSnackBar("Error al actualizar las configuraciones");
+        this.openSnackBar(this.translate.instant("tour-schedule.messages.error"));
       }
     });
   }
 
   // Métodos auxiliares para el template
   getDayAbbreviation(day: string): string {
-    const dayAbbreviations: { [key: string]: string } = {
-      'SUNDAY': 'DOM',
-      'MONDAY': 'LUN',
-      'TUESDAY': 'MAR',
-      'WEDNESDAY': 'MIÉ',
-      'THURSDAY': 'JUE',
-      'FRIDAY': 'VIE',
-      'SATURDAY': 'SÁB'
-    };
-    return dayAbbreviations[day] || day;
+    const translation = this.translate.instant('tour-schedule.config.daysOfWeek.' + day);
+    return translation.substring(0, 3).toUpperCase();
   }
 
   getAgeTypeDisplay(ageType: any): string {
     if (typeof ageType === 'object' && ageType.name) {
       return ageType.name;
     }
-    return ageType || '';
+    if (!ageType) return '';
+    return this.translate.instant('tour-schedule.prices.ageType.' + ageType);
   }
 
   getSlotsByDate(event: any, date: Date): any[] {
     if (event.meta && event.meta.schedules) {
-      const dateStr = dayjs(date).format("YYYY-MM-DD");
-      const foundSchedule = event.meta.schedules.find((s: any) => s.scheduleDate === dateStr);
+      const d = new Date(date);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const foundSchedule = event.meta.schedules.find(
+        (s: any) => s.scheduleDate === dateStr
+      );
       if (foundSchedule && foundSchedule.config && foundSchedule.config.slots) {
         return foundSchedule.config.slots;
       }
@@ -1280,16 +1216,21 @@ export class TourScheduleComponent {
 
   getDayMetrics(event: any, date: Date): { capacity: number, availability: number, bookings: number } | null {
     if (event.meta && event.meta.schedules) {
-      const dateStr = dayjs(date).format("YYYY-MM-DD");
+      const d = new Date(date);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       const foundSchedule = event.meta.schedules.find((s: any) => s.scheduleDate === dateStr);
+
       if (foundSchedule) {
-        const slots = foundSchedule.config?.slots || [];
-        const metrics = slots.reduce((acc: any, s: any) => ({
-          capacity: acc.capacity + (Number(s.capacity) || 0),
-          availability: acc.availability + (Number(s.availability) || 0),
-          bookings: acc.bookings + (Number(s.bookings) || 0)
-        }), { capacity: 0, availability: 0, bookings: 0 });
-        return metrics;
+        const slots: any[] = foundSchedule.config?.slots || [];
+        // Capacidad total = suma de capacidades de cada slot
+        const totalCapacity = slots.reduce((acc: number, s: any) => acc + (Number(s.capacity) || 0), 0);
+        // Reservas reales = reservedCapacity del schedule (nivel día)
+        const reserved = Number(foundSchedule.reservedCapacity) || 0;
+        return {
+          capacity: totalCapacity,
+          bookings: reserved,
+          availability: Math.max(0, totalCapacity - reserved)
+        };
       }
     }
     return null;
@@ -1306,12 +1247,8 @@ export class TourScheduleComponent {
     const clickedInOverlay = document.querySelector('.cdk-overlay-container')?.contains(event.target as Node);
 
     if (!clickedInside && !clickedInForm && !clickedInOverlay) {
-      const startDateControl = this.tourScheduleForm.get("startDate");
-      const endDateControl = this.tourScheduleForm.get("endDate");
-      
-      if (startDateControl?.value || endDateControl?.value) {
-        startDateControl?.setValue(null);
-        endDateControl?.setValue(null);
+      if (this.calendarSelectedDate) {
+        this.calendarSelectedDate = null;
         this.activeDayIsOpen = false;
         this.refresh.next();
       }
@@ -1319,7 +1256,7 @@ export class TourScheduleComponent {
   }
 
   isPast(date: Date): boolean {
-    const today = dayjs().hour(0).minute(0).second(0).millisecond(0);
+    const today = dayjs().startOf('day');
     return dayjs(date).isBefore(today);
   }
 }

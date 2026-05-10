@@ -111,9 +111,9 @@
                                             <!-- Direct user options -->
                                             <ul class="list-unstyled mb-0">
                                                 <li *ngIf="isUser">
-                                                    <a class="d-block py-2 px-2" [routerLink]="routes.customerHotelBooking" (click)="closeMenu()">My Booking</a>
+                                                    <a class="d-block py-2 px-2" href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">My Booking</a>
                                                 </li>
-                                                <li *ngIf="isAdmin || isUser || isProvider">
+                                                <li *ngIf="isAdmin || isProvider">
                                                     <a class="d-block py-2 px-2" [routerLink]="routes.profileSettings" (click)="closeMenu()">Settings</a>
                                                 </li>
                                                 <li>
@@ -348,7 +348,7 @@
                                     </li>
                                     <li *ngIf="isUser">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.customerHotelBooking">My Booking</a>
+                                            href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">My Booking</a>
                                     </li>
                                     <li *ngIf="isUser && !isProvider">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
@@ -361,7 +361,7 @@
                                     <li *ngIf="isAdmin || isUser || isProvider">
                                         <hr class="dropdown-divider my-2">
                                     </li>
-                                    <li *ngIf="isAdmin || isUser || isProvider">
+                                    <li *ngIf="isAdmin || isProvider">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
                                             [routerLink]="routes.profileSettings">Settings</a>
                                     </li>

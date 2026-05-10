@@ -82,22 +82,17 @@
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Completed')">Completado</a>
+                                   (click)="filterByStatus('Pagada')">Pagada</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Pending')">Pendiente</a>
+                                   (click)="filterByStatus('Pendiente')">Pendiente</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Cancelled')">Cancelado</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" 
-                                   class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Refunded')">Reembolsado</a>
+                                   (click)="filterByStatus('Cancelada')">Cancelada</a>
                             </li>
                         </ul>
                     </div>
@@ -109,94 +104,90 @@
 
             <!-- Table -->
             <div class="custom-datatable-filter table-responsive">
-                <table matSort (matSortChange)="sortData($event)" class="table datatable">
-                    <thead class="thead-light">
-                        <tr>
-                            <th mat-sort-header="id">ID Pago</th>
-                            <th mat-sort-header="bookingId">Reserva</th>
-                            <th mat-sort-header="customerName">Cliente</th>
-                            <th mat-sort-header="tourName">Tour</th>
-                            <th mat-sort-header="paymentMethod">Método de Pago</th>
-                            <th mat-sort-header="paymentDate">Fecha</th>
-                            <th mat-sort-header="amount">Monto</th>
-                            <th mat-sort-header="status">Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (payment of tableData; track payment.id) {
+                @if (loading) {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Cargando órdenes de pago...</p>
+                    </div>
+                } @else {
+                    <table matSort (matSortChange)="sortData($event)" class="table datatable">
+                        <thead class="thead-light">
                             <tr>
-                                <td>
-                                    <a href="javascript:void(0);" 
-                                       class="link-primary fw-medium"
-                                       (click)="viewPaymentDetails(payment.id)">
-                                        {{ payment.id }}
-                                    </a>
-                                </td>
-                                <td class="text-gray-9 fw-medium">{{ payment.bookingId }}</td>
-                                <td>
-                                    <div>
-                                        <p class="mb-0 fw-medium">{{ payment.customerName }}</p>
-                                        <span class="text-gray-6 fs-12">{{ payment.customerEmail }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <span class="avatar avatar-sm rounded flex-shrink-0 me-2">
-                                            <img src="assets/img/tours/{{ payment.tourImage }}" 
-                                                 alt="tour" 
-                                                 class="img-fluid rounded">
+                                <th mat-sort-header="id">ID</th>
+                                <th mat-sort-header="providerId">ID Proveedor</th>
+                                <th mat-sort-header="createdAt">Fecha de Creación</th>
+                                <th mat-sort-header="payDate">Fecha de Pago</th>
+                                <th mat-sort-header="amountTotal">Monto Total</th>
+                                <th mat-sort-header="status">Estado</th>
+                                <th>Comprobante</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (payment of tableData; track payment.id) {
+                                <tr (click)="openPaymentDetails(payment)" style="cursor: pointer;">
+                                    <td>#{{ payment.id }}</td>
+                                    <td>{{ payment.providerId }}</td>
+                                    <td>{{ payment.createdAt | date:'shortDate' }}</td>
+                                    <td>{{ payment.payDate ? (payment.payDate | date:'shortDate') : '-' }}</td>
+                                    <td class="fw-semibold text-success">${{ payment.amountTotal | number:'1.2-2' }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                              [ngClass]="getStatusClass(payment.status)">
+                                            <i class="fa-solid fa-circle fs-5 me-1"></i>{{ getStatusLabel(payment.status) }}
                                         </span>
-                                        <span>{{ payment.tourName }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="{{ getPaymentMethodIcon(payment.paymentMethod) }} me-2 text-primary"></i>
-                                        {{ payment.paymentMethod }}
-                                    </div>
-                                </td>
-                                <td>{{ payment.paymentDate }}</td>
-                                <td class="fw-semibold text-success">{{ payment.amount }}</td>
-                                <td>
-                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
-                                          [ngClass]="getStatusClass(payment.status)">
-                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ payment.status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <a href="javascript:void(0);" 
-                                           (click)="viewPaymentDetails(payment.id)"
-                                           class="btn btn-sm btn-light"
-                                           title="Ver detalles">
-                                            <i class="isax isax-eye"></i>
-                                        </a>
-                                        @if (payment.status === 'Completed') {
-                                            <button 
-                                                class="btn btn-sm btn-outline-primary" 
-                                                (click)="downloadInvoice(payment.id)"
-                                                title="Descargar factura">
-                                                <i class="isax isax-document-download"></i>
-                                            </button>
+                                    </td>
+                                    <td>
+                                        @if (payment.proofUrl) {
+                                            <a [href]="payment.proofUrl" target="_blank" class="btn btn-sm btn-outline-info" (click)="$event.stopPropagation()">
+                                                <i class="isax isax-document-text me-1"></i> Ver
+                                            </a>
+                                        } @else {
+                                            <span class="text-muted fs-12 italic">No disponible</span>
                                         }
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                        @if (tableData.length === 0) {
-                            <tr>
-                                <td colspan="9" class="text-center py-5">
-                                    <div class="text-muted">
-                                        <i class="isax isax-wallet-money fs-1 mb-3 d-block"></i>
-                                        <h5>No se encontraron pagos</h5>
-                                        <p>Intenta ajustar tus filtros de búsqueda</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                    </td>
+                                    <td>
+                                        @if (payment.status === 'PENDING') {
+                                            @if (authService.isAdmin()) {
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input #fileInput type="file" class="d-none" accept=".pdf,.jpg,.png" (change)="onFileSelected($event, payment)">
+                                                    <button 
+                                                        class="btn btn-sm btn-primary d-inline-flex align-items-center" 
+                                                        (click)="$event.stopPropagation(); fileInput.click()"
+                                                        title="Subir comprobante">
+                                                        <i class="isax isax-document-upload me-1"></i> Subir
+                                                    </button>
+                                                </div>
+                                            } @else {
+                                                <span class="text-muted fs-12 d-inline-flex align-items-center"><i class="isax isax-clock me-1"></i> Pendiente</span>
+                                            }
+                                        } @else if (payment.status === 'PAID') {
+                                            <div class="d-flex align-items-center text-success">
+                                                <i class="isax isax-tick-circle me-1"></i>
+                                                <span class="fs-12 fw-medium">Pagado</span>
+                                            </div>
+                                        } @else {
+                                            <span class="text-muted fs-12">N/A</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @if (tableData.length === 0) {
+                                <tr>
+                                    <td colspan="9" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="isax isax-wallet-money fs-1 mb-3 d-block"></i>
+                                            <h5>No se encontraron órdenes de pago</h5>
+                                            <p>Intenta ajustar tus filtros de búsqueda</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
             <!-- /Table -->
 
@@ -211,8 +202,8 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-gray-6 mb-1 fs-14">Pagos Completados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Completed') }}</h4>
+                            <p class="text-gray-6 mb-1 fs-14">Pagos Pagados</p>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pagada') }}</h4>
                         </div>
                         <div class="stats-icon bg-success-subtle">
                             <i class="isax isax-tick-circle text-success"></i>
@@ -227,7 +218,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Pagos Pendientes</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pending') }}</h4>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pendiente') }}</h4>
                         </div>
                         <div class="stats-icon bg-warning-subtle">
                             <i class="isax isax-clock text-warning"></i>
@@ -242,7 +233,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Pagos Cancelados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Cancelled') }}</h4>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('Cancelada') }}</h4>
                         </div>
                         <div class="stats-icon bg-danger-subtle">
                             <i class="isax isax-close-circle text-danger"></i>
@@ -293,3 +284,9 @@
 
 </div>
 <!-- /Provider Payments Section -->
+
+<app-provider-payment-details-modal 
+    [showModal]="showPaymentDetailsModal" 
+    [selectedPayment]="selectedPayment" 
+    (closeModal)="closePaymentDetailsModal()">
+</app-provider-payment-details-modal>

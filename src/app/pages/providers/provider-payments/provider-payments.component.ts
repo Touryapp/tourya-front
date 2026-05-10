@@ -1,26 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
-
-// Interfaz para los pagos recibidos por el proveedor
-export interface ProviderPayment {
-  sNo?: number;
-  id: string;
-  bookingId: string;
-  customerName: string;
-  customerEmail: string;
-  tourName: string;
-  tourImage: string;
-  amount: string;
-  amountNumber: number;
-  paymentMethod: string;
-  paymentDate: string;
-  transactionId: string;
-  status: 'Completed' | 'Pending' | 'Cancelled' | 'Refunded';
-  commission?: string;
-  netAmount?: string;
-  isSelected?: boolean;
-}
+import { AuthService } from '../../../core/services/auth.service';
+import { PayoutOrdersService } from '../../../shared/services/payout-orders.service';
+import { PayoutOrder } from '../../../shared/dto/payout-order.dto';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-provider-payments',
@@ -38,16 +22,23 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   public totalAmount = 0;
   public searchDataValue = '';
   public selectedStatus = '';
+  public loading = false;
   
   // Datos de la tabla
-  public tableData: ProviderPayment[] = [];
-  public tableDataCopy: ProviderPayment[] = [];
+  public tableData: PayoutOrder[] = [];
+  public tableDataCopy: PayoutOrder[] = [];
 
-  constructor() {}
+  public selectedPayment: PayoutOrder | null = null;
+  public showPaymentDetailsModal: boolean = false;
+
+  constructor(
+    public authService: AuthService,
+    private payoutOrdersService: PayoutOrdersService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.loadMockData();
-    this.calculateTotals();
+    this.loadData();
   }
 
   ngOnDestroy(): void {
@@ -55,193 +46,38 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Carga datos mock para simular los pagos recibidos
+   * Carga datos reales desde el servicio
    */
-  private loadMockData(): void {
-    const mockData: ProviderPayment[] = [
-      {
-        id: 'PAY-001',
-        bookingId: 'TB-1001',
-        customerName: 'Sarah Johnson',
-        customerEmail: 'sarah.j@example.com',
-        tourName: 'LaughFest Carnival',
-        tourImage: 'tours-21.jpg',
-        amount: '$1,200.00',
-        amountNumber: 1200,
-        paymentMethod: 'Credit Card',
-        paymentDate: '2024-10-20',
-        transactionId: 'TXN-2024102001',
-        status: 'Completed',
-        commission: '$120.00',
-        netAmount: '$1,080.00',
-        isSelected: false
+  public loadData(): void {
+    this.loading = true;
+    const observer = {
+      next: (data: PayoutOrder[]) => {
+        this.tableData = data;
+        this.tableDataCopy = [...data];
+        this.totalPayments = data.length;
+        this.calculateTotals();
+        this.loading = false;
       },
-      {
-        id: 'PAY-002',
-        bookingId: 'TB-1002',
-        customerName: 'Michael Chen',
-        customerEmail: 'm.chen@example.com',
-        tourName: 'Beach Paradise Adventure',
-        tourImage: 'tours-22.jpg',
-        amount: '$2,500.00',
-        amountNumber: 2500,
-        paymentMethod: 'Wompi',
-        paymentDate: '2024-10-18',
-        transactionId: 'TXN-2024101801',
-        status: 'Completed',
-        commission: '$250.00',
-        netAmount: '$2,250.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-003',
-        bookingId: 'TB-1003',
-        customerName: 'Emma Wilson',
-        customerEmail: 'emma.w@example.com',
-        tourName: 'Mountain Expedition',
-        tourImage: 'tours-23.jpg',
-        amount: '$1,800.00',
-        amountNumber: 1800,
-        paymentMethod: 'PayPal',
-        paymentDate: '2024-10-15',
-        transactionId: 'TXN-2024101501',
-        status: 'Pending',
-        commission: '$180.00',
-        netAmount: '$1,620.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-004',
-        bookingId: 'TB-1004',
-        customerName: 'David Martinez',
-        customerEmail: 'd.martinez@example.com',
-        tourName: 'City Lights Tour',
-        tourImage: 'tours-24.jpg',
-        amount: '$950.00',
-        amountNumber: 950,
-        paymentMethod: 'Credit Card',
-        paymentDate: '2024-10-12',
-        transactionId: 'TXN-2024101201',
-        status: 'Completed',
-        commission: '$95.00',
-        netAmount: '$855.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-005',
-        bookingId: 'TB-1005',
-        customerName: 'Lisa Anderson',
-        customerEmail: 'lisa.a@example.com',
-        tourName: 'Tropical Getaway',
-        tourImage: 'tours-25.jpg',
-        amount: '$3,400.00',
-        amountNumber: 3400,
-        paymentMethod: 'Wompi',
-        paymentDate: '2024-10-10',
-        transactionId: 'TXN-2024101001',
-        status: 'Cancelled',
-        commission: '$340.00',
-        netAmount: '$3,060.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-006',
-        bookingId: 'TB-1006',
-        customerName: 'James Brown',
-        customerEmail: 'james.b@example.com',
-        tourName: 'Historic Route 66',
-        tourImage: 'tours-26.jpg',
-        amount: '$1,600.00',
-        amountNumber: 1600,
-        paymentMethod: 'Debit Card',
-        paymentDate: '2024-10-08',
-        transactionId: 'TXN-2024100801',
-        status: 'Completed',
-        commission: '$160.00',
-        netAmount: '$1,440.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-007',
-        bookingId: 'TB-1007',
-        customerName: 'Maria Garcia',
-        customerEmail: 'm.garcia@example.com',
-        tourName: 'LaughFest Carnival',
-        tourImage: 'tours-21.jpg',
-        amount: '$1,350.00',
-        amountNumber: 1350,
-        paymentMethod: 'Credit Card',
-        paymentDate: '2024-10-05',
-        transactionId: 'TXN-2024100501',
-        status: 'Completed',
-        commission: '$135.00',
-        netAmount: '$1,215.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-008',
-        bookingId: 'TB-1008',
-        customerName: 'Robert Taylor',
-        customerEmail: 'r.taylor@example.com',
-        tourName: 'Beach Paradise Adventure',
-        tourImage: 'tours-22.jpg',
-        amount: '$2,200.00',
-        amountNumber: 2200,
-        paymentMethod: 'Wompi',
-        paymentDate: '2024-10-03',
-        transactionId: 'TXN-2024100301',
-        status: 'Refunded',
-        commission: '$220.00',
-        netAmount: '$1,980.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-009',
-        bookingId: 'TB-1009',
-        customerName: 'Jennifer Lee',
-        customerEmail: 'j.lee@example.com',
-        tourName: 'Mountain Expedition',
-        tourImage: 'tours-23.jpg',
-        amount: '$1,750.00',
-        amountNumber: 1750,
-        paymentMethod: 'Credit Card',
-        paymentDate: '2024-10-01',
-        transactionId: 'TXN-2024100101',
-        status: 'Pending',
-        commission: '$175.00',
-        netAmount: '$1,575.00',
-        isSelected: false
-      },
-      {
-        id: 'PAY-010',
-        bookingId: 'TB-1010',
-        customerName: 'Christopher White',
-        customerEmail: 'c.white@example.com',
-        tourName: 'City Lights Tour',
-        tourImage: 'tours-24.jpg',
-        amount: '$1,100.00',
-        amountNumber: 1100,
-        paymentMethod: 'PayPal',
-        paymentDate: '2024-09-28',
-        transactionId: 'TXN-2024092801',
-        status: 'Completed',
-        commission: '$110.00',
-        netAmount: '$990.00',
-        isSelected: false
+      error: (error: any) => {
+        console.error('Error loading payout orders:', error);
+        this.snackBar.open('Error al cargar las órdenes de pago', 'Cerrar', { duration: 3000 });
+        this.loading = false;
       }
-    ];
+    };
 
-    this.tableData = [...mockData];
-    this.tableDataCopy = [...mockData];
-    this.totalPayments = mockData.length;
+    if (this.authService.isAdmin()) {
+      this.payoutOrdersService.getAdminPayoutOrders().subscribe(observer);
+    } else {
+      this.payoutOrdersService.getPayoutOrders().subscribe(observer);
+    }
   }
 
   /**
    * Calcula totales
    */
   private calculateTotals(): void {
-    const completedPayments = this.tableData.filter(p => p.status === 'Completed');
-    this.totalAmount = completedPayments.reduce((sum, payment) => sum + payment.amountNumber, 0);
+    const completedPayments = this.tableData.filter(p => p.status === 'PAID');
+    this.totalAmount = completedPayments.reduce((sum, payment) => sum + payment.amountTotal, 0);
   }
 
   /**
@@ -253,11 +89,8 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
     } else {
       const searchTerm = value.trim().toLowerCase();
       this.tableData = this.tableDataCopy.filter(payment => 
-        payment.id.toLowerCase().includes(searchTerm) ||
-        payment.bookingId.toLowerCase().includes(searchTerm) ||
-        payment.customerName.toLowerCase().includes(searchTerm) ||
-        payment.tourName.toLowerCase().includes(searchTerm) ||
-        payment.transactionId.toLowerCase().includes(searchTerm)
+        payment.id.toString().includes(searchTerm) ||
+        payment.providerId.toString().includes(searchTerm)
       );
     }
   }
@@ -293,8 +126,8 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
       this.tableData = data;
     } else {
       this.tableData = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
+        const aValue = (a as any)[sort.active];
+        const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
@@ -312,12 +145,23 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
    */
   public getStatusClass(status: string): string {
     const statusClasses: { [key: string]: string } = {
-      'Completed': 'badge-success',
-      'Pending': 'badge-secondary',
-      'Cancelled': 'badge-danger',
-      'Refunded': 'badge-warning'
+      'PAID': 'badge-success',
+      'PENDING': 'badge-secondary',
+      'CANCELLED': 'badge-danger'
     };
     return statusClasses[status] || 'badge-secondary';
+  }
+
+  /**
+   * Traduce el estado para visualización
+   */
+  public getStatusLabel(status: string): string {
+    const statusLabels: { [key: string]: string } = {
+      'PAID': 'Pagada',
+      'PENDING': 'Pendiente',
+      'CANCELLED': 'Cancelada'
+    };
+    return statusLabels[status] || status;
   }
 
   /**
@@ -341,17 +185,54 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
     return this.tableDataCopy.filter(payment => payment.status === status).length;
   }
 
-  /**
-   * Ver detalles de un pago
-   */
-  public viewPaymentDetails(paymentId: string): void {
-    alert(`Ver detalles del pago ${paymentId} - Próximamente`);
+  public openPaymentDetails(payment: PayoutOrder): void {
+    this.selectedPayment = payment;
+    this.showPaymentDetailsModal = true;
+  }
+
+  public closePaymentDetailsModal(): void {
+    this.showPaymentDetailsModal = false;
+    this.selectedPayment = null;
   }
 
   /**
    * Descargar factura
    */
-  public downloadInvoice(paymentId: string): void {
+  public downloadInvoice(paymentId: number): void {
     alert(`Descargando factura para ${paymentId} - Próximamente`);
+  }
+
+  /**
+   * Subir archivo para pago pendiente (Solo Admin)
+   */
+  public onFileSelected(event: any, payment: PayoutOrder): void {
+    event.stopPropagation();
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 5242880) { // 5MB en bytes (ajustado de 1MB a 5MB)
+        this.snackBar.open('El archivo excede el tamaño máximo permitido de 5MB.', 'Cerrar', { duration: 3000 });
+        event.target.value = ''; // Limpiar el input
+        return;
+      }
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        this.snackBar.open('Solo se permiten archivos .pdf, .jpg y .png.', 'Cerrar', { duration: 3000 });
+        event.target.value = ''; // Limpiar el input
+        return;
+      }
+      
+      this.loading = true;
+      this.payoutOrdersService.uploadPaymentProof(payment.id, file).subscribe({
+        next: (response) => {
+          this.snackBar.open(`Comprobante subido exitosamente para la orden #${payment.id}`, 'Cerrar', { duration: 3000 });
+          this.loadData(); // Recargar datos para ver el cambio de estado y el proofUrl
+        },
+        error: (error) => {
+          console.error('Error uploading proof:', error);
+          this.snackBar.open('Error al subir el comprobante', 'Cerrar', { duration: 3000 });
+          this.loading = false;
+        }
+      });
+    }
   }
 }

@@ -218,22 +218,18 @@
 
                     <!-- Reviews -->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
-                        <h6 class="mb-3">Reviews (0)</h6>
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>Write a Review</a>
+                        <h6 class="mb-3">Reviews ({{ totalReviews }})</h6>
+                        <!-- In the provider side, usually they don't review their own tour, but leaving the button as is for now or they can see reviews -->
                     </div>
                     <div class="row">
                         <div class="col-md-6 d-flex">
                             <div class="rating-item bg-light-200 text-center flex-fill mb-3">
                                 <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
-                                <h5 class="display-6">0 / 5.0</h5>
+                                <h5 class="display-6">{{ tour.rating || 0 }} / 5.0</h5>
                                 <div class="d-inline-flex align-items-center justify-content-center mb-3">
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary me-1"></i>
-                                    <i class="ti ti-star-off text-primary"></i>
+                                    <i class="ti ti-star-filled text-warning me-1" *ngFor="let s of [1,2,3,4,5]; let i=index" [ngClass]="{'ti-star-filled text-warning': i < (tour.rating || 0), 'ti-star-off text-muted': i >= (tour.rating || 0)}"></i>
                                 </div>
-                                <p>Based On 0 Reviews</p>
+                                <p>Based On {{ totalReviews }} Reviews</p>
                             </div>
                         </div>
                         <div class="col-md-6 d-flex">
@@ -278,8 +274,127 @@
                             </div>
                         </div>
                     </div>
-                    <div class="text-center mb-4 mb-xl-0">
-                        <a href="javascript:void(0);" class="btn btn-primary btn-md d-inline-flex align-items-center justify-content-center mt-2">See all 0 reviews<i class="isax isax-arrow-right-3 ms-1"></i></a>
+
+                    <!-- Reviews List -->
+                    <div *ngIf="reviewsLoading" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <ng-container *ngFor="let review of reviews">
+                        <div class="card review-item shadow-none mb-3">
+                            <div class="card-body p-3">
+                                <div class="review-info">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="avatar avatar-lg me-2 flex-shrink-0">
+                                                <img [src]="review.customerImage || 'assets/img/users/user-01.jpg'" class="rounded-circle" alt="img">
+                                            </span>
+                                            <div>
+                                                <h6 class="fs-16 fw-medium mb-1">{{ review.customerName }}</h6>
+                                                <div class="d-flex align-items-center flex-wrap date-info">
+                                                    <p class="fs-14 mb-0">{{ review.date | date:'mediumDate' }}</p>
+                                                    <p class="fs-14 d-inline-flex align-items-center mb-0 ms-2">
+                                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ review.rating }}</span>
+                                                        <span *ngIf="review.reasonId && getReasonLabel(review.reasonType, review.reasonId)" 
+                                                              class="badge bg-light text-dark border ms-1" 
+                                                              style="font-size: 0.70rem; padding: 0.35em 0.5em;">
+                                                            <i class="fa-solid fa-check text-success me-1" *ngIf="review.reasonType === 'POSITIVE'"></i>
+                                                            <i class="fa-solid fa-xmark text-danger me-1" *ngIf="review.reasonType === 'NEGATIVE'"></i>
+                                                            {{ getReasonLabel(review.reasonType, review.reasonId) }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mb-2">{{ i18nService.getValue(review.comment) }}</p>
+                                    
+                                    <!-- Review Images -->
+                                    <div class="mb-2" *ngIf="review.attachmentUrls && review.attachmentUrls.length > 0">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a *ngFor="let imageUrl of review.attachmentUrls" 
+                                               [href]="imageUrl" 
+                                               target="_blank" 
+                                               class="review-image-thumbnail">
+                                                <img [src]="imageUrl" 
+                                                     alt="Review attachment" 
+                                                     class="rounded"
+                                                     style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-inline-flex align-items-center">
+                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>{{ review.likes || 0 }}</a>
+                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>{{ review.dislikes || 0 }}</a>
+                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>{{ review.hearts || 0 }}</a>
+                                    </div>
+
+                                    <!-- Provider Answer -->
+                                    <div *ngIf="review.answer" class="bg-light-500 rounded p-3 mt-3 ms-4 border-start border-primary border-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="avatar avatar-sm me-2">
+                                                <img [src]="review.answer.providerImage || 'assets/img/profiles/avatar-02.jpg'" class="rounded-circle" alt="provider">
+                                            </span>
+                                            <div>
+                                                <h6 class="fs-14 fw-medium mb-0">{{ review.answer.providerName || 'Provider Response' }}</h6>
+                                                <small class="text-muted">{{ review.answer.date | date:'mediumDate' }}</small>
+                                            </div>
+                                        </div>
+                                        <p class="fs-14 mb-0">{{ i18nService.getValue(review.answer.comment) }}</p>
+                                        
+                                        <!-- Answer Images -->
+                                        <div class="mb-2" *ngIf="review.answer.attachmentUrls && review.answer.attachmentUrls.length > 0">
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <a *ngFor="let imageUrl of review.answer.attachmentUrls" 
+                                                   [href]="imageUrl" 
+                                                   target="_blank" 
+                                                   class="review-image-thumbnail">
+                                                    <img [src]="imageUrl" 
+                                                         alt="Answer attachment" 
+                                                         class="rounded"
+                                                         style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <div *ngIf="reviewsTotalPages > 1" class="mt-4 mb-4">
+                        <nav class="pagination-nav">
+                            <ul class="pagination justify-content-center">
+                                <!-- Botón Anterior -->
+                                <li class="page-item" [ngClass]="{ disabled: isFirstReviewPage() }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="onGoToPreviousReviewPage()" aria-label="Previous">
+                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                                    </a>
+                                </li>
+
+                                <!-- Números de página -->
+                                <li class="page-item" *ngFor="let pageNum of getReviewPageNumbers()" [ngClass]="{ active: pageNum === (reviewsPageNumber + 1) }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="onGoToReviewPage(pageNum)">{{ pageNum }}</a>
+                                </li>
+
+                                <!-- Botón Siguiente -->
+                                <li class="page-item" [ngClass]="{ disabled: isLastReviewPage() }">
+                                    <a class="page-link" href="javascript:void(0);" (click)="onGoToNextReviewPage()" aria-label="Next">
+                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- Información de paginación -->
+                            <div class="text-center mt-2">
+                                <small class="text-muted">
+                                    Mostrando {{ reviewsPageNumber * reviewsPageSize + 1 }} - {{ Math.min((reviewsPageNumber + 1) * reviewsPageSize, totalReviews) }} de {{ totalReviews }} reseñas
+                                </small>
+                            </div>
+                        </nav>
                     </div>
                 </div>
                 <!-- /Reviews -->

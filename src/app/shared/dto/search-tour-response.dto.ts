@@ -52,6 +52,9 @@ export interface TourDto {
   gallery: GalleryDto[];
   priceType?: string;
   maxPeople?: number;
+  subCategory?: string;
+  subCategoryName?: string;
+  priceFrom?: number;
 }
 
 export interface AddressDto {
@@ -75,8 +78,6 @@ export interface TagDto {
 
 export interface PriceDto {
   ageType: string;
-  minAge: number;
-  maxAge: number;
   price: number;
 }
 

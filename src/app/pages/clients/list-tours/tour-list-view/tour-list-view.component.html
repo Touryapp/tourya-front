@@ -59,7 +59,7 @@
                                 || 'N/A' }}
                             </p>
                             <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{
-                                tour.tour.rating || 'N/A' }}</span>
+                                tour.tour.rating ?? '...' }}</span>
                             <p class="fs-14">({{ tour.tour.rating ? 'Reviews' : 'Sin reviews' }})</p>
                         </div>
                     </div>

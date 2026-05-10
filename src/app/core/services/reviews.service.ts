@@ -10,7 +10,8 @@ import {
   CreateReviewRequest, 
   CreateReviewSimpleRequest,
   ProviderAnswerRequest,
-  UpdateReviewWithAnswerRequest
+  UpdateReviewWithAnswerRequest,
+  ReviewReasonsResponse
 } from '../../shared/models/reviews.model';
 
 @Injectable({
@@ -177,7 +178,8 @@ export class ReviewsService {
         en: currentLang === 'en' ? reviewData.comment : '',
         pt: currentLang === 'pt' ? reviewData.comment : ''
       },
-      date: new Date().toISOString().split('T')[0] // Formato YYYY-MM-DD
+      date: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+      ...(reviewData.reasonId !== undefined && reviewData.reasonId !== null ? { reasonId: reviewData.reasonId } : {})
     };
     
     // Crear FormData para enviar JSON + Archivos
@@ -192,5 +194,23 @@ export class ReviewsService {
     }
     
     return this.http.post(url, formData);
+  }
+
+  /**
+   * Obtiene el catálogo de motivos de reseña (positivos y negativos)
+   */
+  getReviewReasons(): Observable<ReviewReasonsResponse> {
+    const timestamp = new Date().getTime();
+    const url = `${this.baseUrl}/public/review/reasons?_t=${timestamp}`;
+    return this.http.get<ReviewReasonsResponse>(url);
+  }
+
+  /**
+   * Obtiene el resumen de reseñas de un tour
+   * @param tourId ID del tour
+   */
+  getReviewSummary(tourId: number): Observable<any> {
+    const url = `${this.baseUrl}/public/tour/${tourId}/reviews/summary`;
+    return this.http.get<any>(url);
   }
 }

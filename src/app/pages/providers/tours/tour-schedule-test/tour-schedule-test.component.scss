@@ -18,15 +18,21 @@
 
 .inline-calendar-wrapper {
 
-  // 1. Make the host element and container fill full width
-  bs-daterangepicker-inline,
-  .bs-datepicker-container,
-  .bs-datepicker,
-  bs-calendar-layout,
-  .bs-calendar-layout,
-  bs-days-calendar-view {
+  // 1. Make ONLY the inline host element fill full width.
+  // DO NOT use global selectors like .bs-datepicker, bs-calendar-layout, etc.
+  // because they will leak to the popup calendar and destroy its flexbox layout (displayMonths: 2).
+  bs-daterangepicker-inline {
     display: block !important;
     width: 100% !important;
+    
+    .bs-datepicker-container,
+    .bs-datepicker,
+    bs-calendar-layout,
+    .bs-calendar-layout,
+    bs-days-calendar-view {
+      display: block !important;
+      width: 100% !important;
+    }
   }
 
   .bs-datepicker-container {
@@ -81,7 +87,7 @@
   }
 
   // 6. Day cells — tall enough to be comfortable, span fills the circle
-  table tbody td {
+  bs-daterangepicker-inline table tbody td {
     text-align: center !important;
     padding: 2px !important;
     height: 56px !important;

@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard.component';
 import { SharedModule } from '../../../shared/shared-module';
 import { TourAdminModule } from '../tour-admin/tour-admin.module';
 import { MaritimeActivityReportsComponent } from '../../maritime-activity-reports/maritime-activity-reports.component';
+import { ProviderPaymentsModule } from '../../providers/provider-payments/provider-payments.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { MaritimeActivityReportsComponent } from '../../maritime-activity-report
     DashboardRoutingModule,
     SharedModule,
     TourAdminModule,
-    MaritimeActivityReportsComponent
+    MaritimeActivityReportsComponent,
+    ProviderPaymentsModule
   ]
 })
 export class DashboardModule { } 

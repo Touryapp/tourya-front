@@ -1,24 +1,22 @@
-<!-- Breadcrumb -->
-<div class="breadcrumb-bar breadcrumb-bg-01 text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Mi Perfil</h2>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Mi Perfil</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Breadcrumb -->
-
 <!-- Page Wrapper -->
 <div class="content">
     <div class="container">
+        
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h2 class="mb-2">Mi Perfil</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="routes.index" class="text-dark" style="color: #000 !important;">
+                            <i class="isax isax-home5"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">Mi Perfil</li>
+                </ol>
+            </nav>
+        </div>
+        <!-- /Header -->
 
         <div class="row">
 
@@ -178,7 +176,20 @@
                             <h6>Lista de Deseos</h6>
                         </div>
                         <div class="card-body">
-                            <p class="text-muted">Sección de lista de deseos en desarrollo...</p>
+                            <app-tour-grid-view 
+                                [tours]="wishlistTours" 
+                                [loading]="wishlistLoading" 
+                                [totalItems]="wishlistTotalItems"
+                                [totalPages]="wishlistTotalPages" 
+                                [currentPage]="wishlistCurrentPage" 
+                                [size]="wishlistSize"
+                                [isWishlistPage]="true"
+                                (toggleFavorite)="onToggleFavoriteFromWishlist($event)" 
+                                (goToPage)="onGoToPageFromWishlist($event)"
+                                (goToPreviousPage)="onGoToPreviousPageFromWishlist()" 
+                                (goToNextPage)="onGoToNextPageFromWishlist()"
+                                (selectTour)="selectTourFromWishlist($event)">
+                            </app-tour-grid-view>
                         </div>
                     </div>
                 }

@@ -438,9 +438,7 @@ export class CartService {
       return schedule.config.slots.map((slot: any) => ({
         ...slot,
         // Conservar la capacidad específica del slot si existe, de lo contrario usar la del schedule
-        capacity: schedule.isUnlimitedCapacity 
-          ? 999 
-          : (slot.capacity !== null && slot.capacity !== undefined ? slot.capacity : (schedule.capacity || 0)),
+        capacity: (slot.capacity !== null && slot.capacity !== undefined ? slot.capacity : (schedule.capacity || 0)),
       }));
     }
     
@@ -473,8 +471,6 @@ export class CartService {
       return {
         ageType: price.ageType,
         label: label,
-        minAge: price.minAge,
-        maxAge: price.maxAge,
         price: price.price,
         quantity: 0,
         maxQuantity: 10, // Límite por defecto, se puede ajustar según la capacidad del slot

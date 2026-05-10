@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+﻿/* You can add global styles to this file, and also import other style files */
 @import './assets/tabler-icons/tabler-icons.min.css';
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lightgallery.css");
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css");
@@ -1247,7 +1247,7 @@ div.owl-stage > div {
   flex: 1 !important;
 }
 
-// ─── Schedule Calendar overrides ─────────────────────────────────────────────
+// â”€â”€â”€ Schedule Calendar overrides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // The colored circle for selected/start/end dates is drawn by the span::after
 // pseudo-element. To change the circle color, edit $circle-color below.
 // The in-range strip color is rgba of the same value.
@@ -1256,5 +1256,10 @@ div.owl-stage > div {
 //   - ngx-bootstrap bs-datepicker.css (which uses #5cb85c for theme-green)
 //   - The earlier override at line 185 (which used #1b6475 without !important)
 
-// (Los overrides del calendario inline están en tour-schedule-test.component.scss
+// (Los overrides del calendario inline estÃ¡n en tour-schedule-test.component.scss
 // bajo .tour-schedule-test-page para no afectar otros calendarios)
+
+
+
+.swal2-container { z-index: 100000 !important; }
+.cdk-overlay-container { z-index: 9999 !important; }

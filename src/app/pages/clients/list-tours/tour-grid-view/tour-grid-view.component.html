@@ -32,19 +32,20 @@
                     </ng-template>
                 </owl-carousel-o>
                 <span class="tour-badge" *ngIf="tour?.schedules?.at(0)?.status === 'ACTIVE'">Trending</span>
-                <button class="tour-fav-btn" [ngClass]="{ selected: isClassAdded[i] }" (click)="onToggleFavorite(i)"><i
-                        class="fa fa-heart"></i></button>
+                <button class="tour-fav-btn" (click)="onToggleFavorite(i)">
+                    <i [ngClass]="isClassAdded[i] ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+                </button>
             </div>
             <div class="tour-card-body">
                 <div class="d-flex align-items-center justify-content-between mb-1">
                     <div class="d-flex flex-wrap align-items-center">
                         <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
-                        <p class="fs-14 text-gray-9 mb-0">{{ i18nService.getValue(tour.tour.name) || 'N/A' }}</p>
+                        <p class="fs-14 text-gray-9 mb-0">{{ tour?.tour?.subCategoryName || tour?.tour?.subCategory || 'N/A' }}</p>
                     </div>
                     <div class="d-flex align-items-center flex-wrap">
                         <span class="tour-card-rating">
                             <i class="fa fa-star" *ngFor="let star of getStars(tour.tour.rating)"></i>
-                            <span>{{ tour.tour.rating || 'N/A' }}</span>
+                            <span>{{ tour.tour.rating ?? '...' }}</span>
                         </span>
                     </div>
                 </div>
@@ -56,7 +57,10 @@
                 </p>
                 <div class="mb-2">
                     <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">
-                        Precio desde
+                        <ng-container *ngIf="getPriceTypeLabel(tour?.tour?.priceType) as pType">
+                            {{ pType }} |&nbsp;
+                        </ng-container>
+                        Precio desde:
                         <span class="ms-1 fs-18 fw-semibold text-primary"> {{ getLowestPrice(tour) }}</span>
                     </h6>
                 </div>

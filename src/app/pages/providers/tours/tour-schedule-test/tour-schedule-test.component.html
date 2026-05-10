@@ -166,96 +166,83 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="birthdate">Start Date</label>
-                                        <div class=" input-icon">
-
+                                    <div class="mb-3 position-relative">
+                                        <label class="form-label" for="start_date">Start Dates</label>
+                                        <div class="input-icon">
                                             <div class="input-icon-end position-relative">
-                                                <span class=" input-icon-addon">
+                                                <span class="input-icon-addon">
                                                     <i class="fa-regular fa-calendar-days"></i>
                                                 </span>
 
-                                                <input type="text" class="form-control form-control-lg datetimepicker"
-                                                    bsDatepicker [bsConfig]="{ adaptivePosition: true }"
-                                                    placeholder="dd-mm-yyyy" [bsValue]="bsValueStartDate"
-                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
-                                                    formControlName="startDate" id="start_date"
-                                                    [minDate]="minDateStartDate" readonly
-                                                    (keypress)="onKeypressStartDatePicker($event)"
-                                                    (keydown)="onKeydownStartDatePicker($event)" />
+                                                <input type="text" class="form-control form-control-lg"
+                                                    placeholder="dd-mm-yyyy"
+                                                    [value]="tourScheduleForm.get('startDate')?.value | date: 'dd-MM-yyyy'" readonly 
+                                                    style="cursor: pointer;"
+                                                    (click)="drp.toggle()" />
+                                                
+                                                <input type="text"
+                                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;"
+                                                    bsDaterangepicker #drp="bsDaterangepicker"
+                                                    [bsConfig]="{ displayMonths: 2, showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true, containerClass: 'theme-green' }"
+                                                    container="body"
+                                                    [bsValue]="bsRangeValue"
+                                                    [minDate]="minDateStartDate"
+                                                    (bsValueChange)="onFormDateRangeChange($event)" />
 
-                                                <div *ngIf="tourScheduleForm.controls['startDate'].invalid && (tourScheduleForm.controls['startDate'].dirty || tourScheduleForm.controls['startDate'].touched)"
-                                                    class="text-danger">
-                                                    <div
-                                                        *ngIf="tourScheduleForm.controls['startDate'].errors?.['required']">
-                                                        Start date is required
-                                                    </div>
-                                                    <div
-                                                        *ngIf="tourScheduleForm.controls['startDate'].errors?.['invalidDayjsDate']">
-                                                        Start date is invalid
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="birthdate">End date</label>
-                                        <div class=" input-icon">
-
-                                            <div class="input-icon-end position-relative">
-                                                <span class=" input-icon-addon">
-                                                    <i class="fa-regular fa-calendar-days"></i>
-                                                </span>
-
-                                                <input type="text" class="form-control form-control-lg datetimepicker"
-                                                    bsDatepicker [bsConfig]="{ adaptivePosition: true }"
-                                                    placeholder="dd-mm-yyyy" [bsValue]="bsValueEndDate"
-                                                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
-                                                    formControlName="endDate" id="end_date" [minDate]="minDateEndDate"
-                                                    [maxDate]="maxDateEndDate" readonly
-                                                    (keypress)=" onKeypressEndDatePicker($event)"
-                                                    (keydown)="onKeydownEndDatePicker($event)" />
-
-                                                <div *ngIf="tourScheduleForm.controls['endDate'].invalid && (tourScheduleForm.controls['endDate'].dirty || tourScheduleForm.controls['endDate'].touched)"
-                                                    class="text-danger">
-
-                                                    <div
-                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['required']">
-                                                        End date is required
-                                                    </div>
-                                                    <div
-                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidDayjsDate']">
-                                                        End date is invalid
-                                                    </div>
-
-                                                    <div
-                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidRangeDate']">
-                                                        End date is invalid.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Unlimited capacity</label>
-                                        <mat-slide-toggle class="mat-slide-toogle"
-                                            formControlName="isUnlimitedCapacity"></mat-slide-toggle>
-
-                                        <div *ngIf="tourScheduleForm.controls['isUnlimitedCapacity'].invalid && (tourScheduleForm.controls['isUnlimitedCapacity'].dirty || tourScheduleForm.controls['isUnlimitedCapacity'].touched)"
-                                            class="text-danger">
+                                        <div *ngIf="tourScheduleForm.controls['startDate'].invalid && (tourScheduleForm.controls['startDate'].dirty || tourScheduleForm.controls['startDate'].touched)"
+                                            class="text-danger mt-1">
                                             <div
-                                                *ngIf="tourScheduleForm.controls['isUnlimitedCapacity'].errors?.['required']">
-                                                Unlimited capacity is required
+                                                *ngIf="tourScheduleForm.controls['startDate'].errors?.['required']">
+                                                Start date is required
+                                            </div>
+                                            <div
+                                                *ngIf="tourScheduleForm.controls['startDate'].errors?.['invalidDayjsDate']">
+                                                Start date is invalid
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3" (click)="drp.show()">
+                                        <label class="form-label" for="end_date">End date</label>
+                                        <div class="input-icon">
+                                            <div class="input-icon-end position-relative">
+                                                <span class="input-icon-addon">
+                                                    <i class="fa-regular fa-calendar-days"></i>
+                                                </span>
+
+                                                <input type="text" class="form-control form-control-lg"
+                                                    placeholder="dd-mm-yyyy"
+                                                    [value]="tourScheduleForm.get('endDate')?.value | date: 'dd-MM-yyyy'" readonly 
+                                                    style="cursor: pointer;"
+                                                    (click)="drp.toggle()" />
+
+                                            </div>
+                                        </div>
+                                        <div *ngIf="tourScheduleForm.controls['endDate'].invalid && (tourScheduleForm.controls['endDate'].dirty || tourScheduleForm.controls['endDate'].touched)"
+                                            class="text-danger mt-1">
+
+                                            <div
+                                                *ngIf="tourScheduleForm.controls['endDate'].errors?.['required']">
+                                                End date is required
+                                            </div>
+                                            <div
+                                                *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidDayjsDate']">
+                                                End date is invalid
+                                            </div>
+
+                                            <div
+                                                *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidRangeDate']">
+                                                End date is invalid.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
 
 
                                 <div class="col-md-6">

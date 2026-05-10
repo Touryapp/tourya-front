@@ -1,25 +1,14 @@
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">{{ tour ? i18nService.getValue(tour.name) : ('tours-detail.breadcrumb.details' | translate) }}</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item">{{ 'tours-detail.breadcrumb.tours' | translate }}</li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ tour ? i18nService.getValue(tour.name) : ('tours-detail.breadcrumb.details' | translate) }}</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Breadcrumb -->
-
     <!-- Page Wrapper -->
     <div class="content" *ngIf="tour">
         <div class="container" >
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark" style="color: #000 !important;"><i class="isax isax-home5"></i></a></li>
+                    <li class="breadcrumb-item text-dark" style="color: #000 !important;">{{ 'tours-detail.breadcrumb.tours' | translate }}</li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">{{ tour ? i18nService.getValue(tour.name) : ('tours-detail.breadcrumb.details' | translate) }}</li>
+                </ol>
+            </nav>
 
             <div class="row">
                 <div class="col-xl-8">
@@ -62,14 +51,20 @@
                                         <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2" (click)="scrollToLocation($event)">{{ 'tours-detail.header.viewLocation' | translate }}</a>
                                     </p>
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ tour.rating || '—' }}</span>
-                                        <p class="fs-14"><a href="#reviews">({{ tour && tour.rating ? '' : '—' }} {{ 'tours-detail.header.reviews' | translate }})</a></p>
+                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ (reviewSummary ? reviewSummary.averageRating : tour.rating) || '—' }}</span>
+                                        <p class="fs-14"><a href="#reviews">({{ totalReviews }} {{ 'tours-detail.header.reviews' | translate }})</a></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mb-3">
                                 <a href="javascript:void(0);" class="btn btn-outline-light btn-icon btn-sm d-flex align-items-center justify-content-center me-2" [title]="'tours-detail.actions.share' | translate"><i class="isax isax-share"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-outline-light btn-sm d-inline-flex align-items-center"><i class="isax isax-heart5 text-danger me-1"></i>{{ 'tours-detail.actions.save' | translate }}</a>
+                                <a href="javascript:void(0);" 
+                                   class="btn btn-sm d-inline-flex align-items-center text-nowrap"
+                                   [ngClass]="isInWishlist ? 'btn-primary' : 'btn-outline-light'"
+                                   (click)="toggleWishlist()">
+                                    <i class="me-1" [ngClass]="isInWishlist ? 'isax isax-heart5' : 'isax isax-heart text-danger'"></i>
+                                    <span>{{ (isInWishlist ? 'tours-detail.actions.saved' : 'tours-detail.actions.save') | translate }}</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -253,33 +248,39 @@
                     <!-- Reviews -->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
                         <h6 class="mb-3">{{ 'tours-detail.sections.reviews' | translate }} ({{ totalReviews }})</h6>
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>{{ 'tours-detail.reviews.writeReview' | translate }}</a>
+                        <a href="javascript:void(0);" *ngIf="canWriteReview" (click)="openReviewModal()" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>{{ 'tours-detail.reviews.writeReview' | translate }}</a>
                     </div>
                     
-                    <!-- Review Stats (Placeholder for now as API doesn't return aggregated stats yet) -->
-                    <div class="row">
+                    <!-- Review Stats -->
+                    <div class="row" *ngIf="reviewSummary">
                         <div class="col-md-6 d-flex">
                             <div class="rating-item bg-light-200 text-center flex-fill mb-3">
                                 <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
-                                <h5 class="display-6">{{ tour.rating || 0 }} / 5.0</h5>
+                                <h5 class="display-6">{{ reviewSummary.averageRating || 0 | number:'1.1-1' }} / 5.0</h5>
                                 <div class="d-inline-flex align-items-center justify-content-center mb-3">
-                                    <i class="ti ti-star-filled text-warning me-1" *ngFor="let s of [1,2,3,4,5]; let i=index" [ngClass]="{'ti-star-filled text-warning': i < (tour.rating || 0), 'ti-star-off text-muted': i >= (tour.rating || 0)}"></i>
+                                    <i class="ti fs-20 me-1" *ngFor="let s of [1,2,3,4,5]; let i=index" 
+                                       [ngClass]="{
+                                           'ti-star-filled text-warning': i < Math.floor(reviewSummary.averageRating || 0), 
+                                           'ti-star-half-filled text-warning': i === Math.floor(reviewSummary.averageRating || 0) && (reviewSummary.averageRating % 1) >= 0.5, 
+                                           'ti-star text-muted': i >= Math.ceil(reviewSummary.averageRating || 0)
+                                       }"></i>
                                 </div>
                                 <p>Based On {{ totalReviews }} Reviews</p>
                             </div>
                         </div>
                         <div class="col-md-6 d-flex">
-                             <!-- Progress bars placeholder - keeping static for layout -->
                             <div class="card rating-progress shadow-none flex-fill mb-3">
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">5 Star Ratings</p>
-                                        <div class="progress w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
+                                    <div class="d-flex align-items-center mb-2" *ngFor="let star of [5,4,3,2,1]">
+                                        <p class="me-2 text-nowrap mb-0">{{ star }} Star Ratings</p>
+                                        <div class="progress w-100" role="progressbar" 
+                                             [attr.aria-valuenow]="reviewSummary.totalReviews > 0 ? (reviewSummary.countByStars[star] / reviewSummary.totalReviews * 100) : 0" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            <div class="progress-bar bg-primary" 
+                                                 [style.width.%]="reviewSummary.totalReviews > 0 ? (reviewSummary.countByStars[star] / reviewSummary.totalReviews * 100) : 0"></div>
                                         </div>
-                                        <p class="progress-count ms-2">0</p>
+                                        <p class="progress-count ms-2">{{ reviewSummary.countByStars[star] || 0 }}</p>
                                     </div>
-                                    <!-- ... other bars ... -->
                                 </div>
                             </div>
                         </div>
@@ -307,6 +308,13 @@
                                                 <p class="fs-14 mb-0">{{ review.date | date:'mediumDate' }}</p>
                                                 <p class="fs-14 d-inline-flex align-items-center mb-0 ms-2">
                                                     <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ review.rating }}</span>
+                                                    <span *ngIf="review.reasonId && getReasonLabel(review.reasonType, review.reasonId)" 
+                                                          class="badge bg-light text-dark border ms-1" 
+                                                          style="font-size: 0.70rem; padding: 0.35em 0.5em;">
+                                                        <i class="fa-solid fa-check text-success me-1" *ngIf="review.reasonType === 'POSITIVE'"></i>
+                                                        <i class="fa-solid fa-xmark text-danger me-1" *ngIf="review.reasonType === 'NEGATIVE'"></i>
+                                                        {{ getReasonLabel(review.reasonType, review.reasonId) }}
+                                                    </span>
                                                 </p>
                                             </div>
                                         </div>
@@ -392,9 +400,40 @@
                     </div>
                     </ng-container>
                 
-                    <div class="text-center mb-4 mb-xl-0" *ngIf="totalReviews > reviews.length">
-                        <a href="javascript:void(0);" class="btn btn-primary btn-md d-inline-flex align-items-center justify-content-center mt-2">See all reviews<i class="isax isax-arrow-right-3 ms-1"></i></a>
-                    </div>
+                    <!-- Pagination -->
+                    <nav class="pagination-nav mt-4" *ngIf="totalPages > 1">
+                        <ul class="pagination justify-content-center">
+                            <!-- Botón Anterior -->
+                            <li class="page-item" [ngClass]="{ disabled: isFirstPage() }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-left fs-12"></i></span>
+                                </a>
+                            </li>
+
+                            <!-- Números de página -->
+                            <li class="page-item" *ngFor="let pageNum of getPageNumbers()"
+                                [ngClass]="{ active: pageNum === currentPage }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToPage(pageNum)">{{ pageNum }}</a>
+                            </li>
+
+                            <!-- Botón Siguiente -->
+                            <li class="page-item" [ngClass]="{ disabled: isLastPage() }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()"
+                                    aria-label="Next">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-right fs-12"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Información de paginación -->
+                        <div class="text-center mt-2" *ngIf="totalReviews > 0">
+                            <small class="text-muted">
+                                Mostrando {{ (currentPage - 1) * size + 1 }} - {{ Math.min(currentPage * size, totalReviews) }} de {{ totalReviews }} reseñas
+                            </small>
+                        </div>
+                    </nav>
+                    <!-- /Pagination -->
                 </div>
                 <!-- /Reviews -->
 
@@ -601,72 +640,144 @@
             (cartToggled)="onCartToggled($event)" (clearCart)="onCartCleared()">
         </app-floating-cart>
 
-        <!-- Review Modal -->
-        <div class="modal fade" id="add_review">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header d-flex align-items-center justify-content-between">
-                        <h5>Write a Review</h5>
-                        <a href="javascript:void(0);" data-bs-dismiss="modal" aria-label="Close">
-                            <i class="ti ti-x fs-16"></i>
-                        </a>
-                    </div>
-                    <form>
+        <!-- Review Modal (Angular-driven, igual al de provider-tour-management) -->
+        @if (showReviewModal) {
+            <!-- Backdrop -->
+            <div class="modal-backdrop fade show" style="z-index: 1050;"></div>
+
+            <!-- Modal -->
+            <div class="modal fade show d-block" tabindex="-1" style="z-index: 1055;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="isax isax-edit-2 me-1"></i>{{ 'tours-detail.reviews.writeReview' | translate }}
+                            </h5>
+                            <button type="button" class="btn-close" (click)="closeReviewModal()" aria-label="Close"></button>
+                        </div>
+
                         <div class="modal-body pb-0">
+                            <!-- Tour Info -->
+                            <div class="mb-3 p-3 bg-light rounded" *ngIf="tour">
+                                <h6 class="mb-0">{{ i18nService.getValue(tour.name) }}</h6>
+                            </div>
+
                             <div class="row">
+                                <!-- Calificación + Motivos (layout de 2 columnas) -->
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label class="form-label">{{ 'provider-reviews.stats.averageRating' | translate }} <span class="text-danger">*</span></label>
-                                        <div class="selection-wrap">
-                                            <div class="d-inline-block">
-                                                <div class="rating-selction">
-                                                    <input type="radio" name="rating" value="5" id="rating5">
-                                                    <label for="rating5"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="4" id="rating4">
-                                                    <label for="rating4"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="3" id="rating3">
-                                                    <label for="rating3"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="2" id="rating2">
-                                                    <label for="rating2"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="1" id="rating1">
-                                                    <label for="rating1"><i class="fa-solid fa-star"></i></label>
+                                        <div class="row align-items-start g-3">
+                                            <!-- Columna Izquierda: Rating -->
+                                            <div class="col-md-6">
+                                                <label class="form-label">Tu Calificación <span class="text-danger">*</span></label>
+                                                <div class="selection-wrap">
+                                                    <div class="d-inline-block">
+                                                        <div class="rating-selction">
+                                                            <input type="radio" name="td_rating" value="5" id="td_rating5"
+                                                                   [checked]="reviewRating === 5"
+                                                                   (change)="setReviewRating(5)">
+                                                            <label for="td_rating5"><i class="fa-solid fa-star"></i></label>
+                                                            <input type="radio" name="td_rating" value="4" id="td_rating4"
+                                                                   [checked]="reviewRating === 4"
+                                                                   (change)="setReviewRating(4)">
+                                                            <label for="td_rating4"><i class="fa-solid fa-star"></i></label>
+                                                            <input type="radio" name="td_rating" value="3" id="td_rating3"
+                                                                   [checked]="reviewRating === 3"
+                                                                   (change)="setReviewRating(3)">
+                                                            <label for="td_rating3"><i class="fa-solid fa-star"></i></label>
+                                                            <input type="radio" name="td_rating" value="2" id="td_rating2"
+                                                                   [checked]="reviewRating === 2"
+                                                                   (change)="setReviewRating(2)">
+                                                            <label for="td_rating2"><i class="fa-solid fa-star"></i></label>
+                                                            <input type="radio" name="td_rating" value="1" id="td_rating1"
+                                                                   [checked]="reviewRating === 1"
+                                                                   (change)="setReviewRating(1)">
+                                                            <label for="td_rating1"><i class="fa-solid fa-star"></i></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Columna Derecha: Motivos (condicional por puntaje) -->
+                                            <div class="col-md-6" *ngIf="reviewRating > 0 && activeReviewReasons.length > 0">
+                                                <label class="form-label">
+                                                    <ng-container *ngIf="reviewRating >= 4">
+                                                        <i class="fa-solid fa-thumbs-up text-success me-1"></i>¿Qué te gustó?
+                                                    </ng-container>
+                                                    <ng-container *ngIf="reviewRating > 0 && reviewRating < 4">
+                                                        <i class="fa-solid fa-thumbs-down text-danger me-1"></i>¿Qué mejorarías?
+                                                    </ng-container>
+                                                </label>
+                                                <div *ngIf="reviewReasonsLoading" class="text-muted fs-13">
+                                                    <span class="spinner-border spinner-border-sm me-1"></span>Cargando motivos...
+                                                </div>
+                                                <div class="review-reasons-list" *ngIf="!reviewReasonsLoading">
+                                                    <div class="form-check mb-1" *ngFor="let reason of activeReviewReasons">
+                                                        <input
+                                                            class="form-check-input"
+                                                            type="radio"
+                                                            name="reviewReasonGroup"
+                                                            [id]="'td_reason_' + reason.id"
+                                                            [checked]="isReasonSelected(reason.id)"
+                                                            (change)="toggleReviewReason(reason.id)">
+                                                        <label class="form-check-label fs-14" [for]="'td_reason_' + reason.id">
+                                                            {{ reason.label }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">{{ 'tour-form.fields.name.label' | translate }} <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">{{ 'provider-tour-management.modal.fields.email' | translate }} <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control">
-                                    </div>
-                                </div>
+
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label class="form-label">{{ 'provider-reviews.replyForm.title' | translate }} <span class="text-danger">*</span></label>
-                                        <textarea class="form-control" rows="3"></textarea>
+                                        <label class="form-label">Imágenes</label>
+                                        <input type="file" class="form-control" accept=".jpg, .jpeg, .png" multiple
+                                               (change)="onReviewImagesSelected($event)">
+                                        @if (reviewImages.length > 0) {
+                                            <small class="text-muted">{{ reviewImages.length }} imagen(es) seleccionada(s)</small>
+                                        }
                                     </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Escribe tu Reseña <span class="text-danger">*</span></label>
+                                        <textarea
+                                            class="form-control"
+                                            rows="3"
+                                            [value]="reviewComment"
+                                            (input)="reviewComment = $any($event.target).value"
+                                            placeholder="Comparte tu experiencia con este tour..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Error message -->
+                                <div class="col-md-12" *ngIf="reviewError">
+                                    <div class="alert alert-danger py-2 mb-2">{{ reviewError }}</div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal-footer">
-                            <div class="d-flex align-items-center justify-content-end m-0">
-                                <button type="submit" data-bs-dismiss="modal" class="btn btn-primary btn-md"><i class="isax isax-edit-2 me-1"></i>{{ 'provider-reviews.replyForm.submit' | translate }}</button>
+                            <div class="d-flex align-items-center justify-content-end m-0 gap-2">
+                                <button type="button" class="btn btn-secondary btn-md" (click)="closeReviewModal()" [disabled]="reviewSubmitting">
+                                    Cancelar
+                                </button>
+                                <button type="button" class="btn btn-primary btn-md" (click)="submitReview()" [disabled]="reviewSubmitting">
+                                    <span *ngIf="reviewSubmitting" class="spinner-border spinner-border-sm me-1"></span>
+                                    <i *ngIf="!reviewSubmitting" class="isax isax-edit-2 me-1"></i>Enviar Reseña
+                                </button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- /Review Modal -->    
-    
-    
-    
-    
-    
+        }
+        <!-- /Review Modal -->
+
+
+
+
+

@@ -20,6 +20,10 @@ import {
   TourScheduleResponseDto,
 } from "../../dto/search-tour-response.dto";
 import { SearchToursService } from "../../../pages/clients/list-tours/search-tours.service";
+import { AddressCompleteResponseDto } from "../../dto/tourist-profile.dto";
+import Swal from "sweetalert2";
+
+
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SlickCarouselModule } from "ngx-slick-carousel";
@@ -28,10 +32,13 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { Router } from "@angular/router";
 import { AuthService } from "../../../core/services/auth.service";
 import { PendingActionService, PendingCartAction } from "../../services/pending-action.service";
-import Swal from "sweetalert2";
+
 import { I18nFieldService } from "../../services/i18n-field.service";
 import { ReservationService } from "../../services/reservation.service";
 import { RescheduleConfirmationModalComponent } from "../reschedule-confirmation-modal/reschedule-confirmation-modal.component";
+import { GuestInfoModalComponent } from "../guest-info-modal/guest-info-modal.component";
+import { TouristService } from "../../services/tourist.service";
+
 
 @Component({
   selector: "app-tour-slot-selection-modal",
@@ -53,6 +60,9 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   // Modal state
   showModal: boolean = false;
   isProcessing: boolean = false; // Para mostrar loading mientras se guarda en backend
+  shouldConsumeService: boolean = true; // Variable quemada a petición del usuario
+  isAddressCheckLoading: boolean = false;
+
 
   // Tour data
   selectedTour: TourScheduleResponseDto | null = null;
@@ -78,12 +88,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   showParticipantError: boolean = false;
 
   get isCurrentScheduleUnlimited(): boolean {
-    if (!this.selectedTour || !this.selectedDate) return false;
-    const dateStr = dayjs(this.selectedDate).format("YYYY-MM-DD");
-    const schedule = this.selectedTour.schedules.find(s => 
-      dayjs(s.scheduleDate).format("YYYY-MM-DD") === dateStr
-    );
-    return schedule?.isUnlimitedCapacity || false;
+    return false;
   }
 
   /**
@@ -98,7 +103,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     const schedule = this.selectedTour.schedules.find(s =>
       dayjs(s.scheduleDate).format("YYYY-MM-DD") === dateStr
     );
-    if (!schedule || schedule.isUnlimitedCapacity) return 99;
+    if (!schedule) return 99;
 
     // Priorizar availability del slot seleccionado
     // Campo: slot.availability
@@ -130,7 +135,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     );
     if (!schedule) return 0;
     
-    if (schedule.isUnlimitedCapacity) return '∞';
+
 
     if (schedule.config && schedule.config.slots && schedule.config.slots.length > 0) {
       return schedule.config.slots.reduce((total: number, slot: any) => total + (slot.availability || 0), 0);
@@ -173,7 +178,9 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     public i18nService: I18nFieldService,
     private reservationService: ReservationService, // Para reagendamiento
     private dialog: MatDialog, // Para abrir el modal de confirmación
+    private touristService: TouristService,
     public dialogRef: MatDialogRef<TourSlotSelectionModalComponent>,
+
     @Inject(MAT_DIALOG_DATA)
     public data: {
       tour: TourScheduleResponseDto;
@@ -264,7 +271,50 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         // Verificar si hay acción pendiente después de cargar los datos
         this.checkAndExecutePendingAction();
       });
+
+    // Cargar dinámicamente si debe consumir el servicio (si el perfil está completo)
+    if (this.authService.isAuthenticated()) {
+      this.isAddressCheckLoading = true;
+      this.touristService.checkAddressComplete().subscribe({
+        next: (res: AddressCompleteResponseDto) => {
+          this.shouldConsumeService = res.addressComplete;
+          this.isAddressCheckLoading = false;
+          console.log('📄 Estado de perfil (addressComplete):', res.addressComplete);
+        },
+        error: (err) => {
+          console.error('❌ Error al verificar completitud de perfil:', err);
+          this.shouldConsumeService = true; // Fallback a true para no bloquear el flujo
+          this.isAddressCheckLoading = false;
+        }
+      });
+    } else {
+
+      this.shouldConsumeService = true; // Por defecto true si no está autenticado (seguirá flujo de login)
+      this.isAddressCheckLoading = false;
+    }
   }
+
+  /**
+   * Refresca el estado de completitud del perfil
+   */
+  private refreshProfileCheck() {
+    this.isAddressCheckLoading = true;
+    this.touristService.checkAddressComplete().subscribe({
+      next: (res: AddressCompleteResponseDto) => {
+        this.shouldConsumeService = res.addressComplete;
+        this.isAddressCheckLoading = false;
+        console.log('🔄 Estado de perfil refrescado:', res.addressComplete);
+      },
+      error: (err) => {
+        console.error('❌ Error al refrescar estado de perfil:', err);
+        this.shouldConsumeService = true;
+        this.isAddressCheckLoading = false;
+      }
+    });
+  }
+
+
+
 
   ngAfterViewInit() {
     this.dialogRef.afterOpened().subscribe(() => {
@@ -525,6 +575,11 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Confirma la selección y agrega al carrito o reagenda
    */
   async confirmSelection(): Promise<void> {
+    if (this.isAddressCheckLoading) {
+      console.log('⏳ Esperando respuesta de validación de perfil...');
+      return;
+    }
+
 
     // Si es ilimitado pero no es válido (por ej: 0 participantes), mostrar alerta
     if (this.isCurrentScheduleUnlimited && !this.isValid) {
@@ -857,18 +912,72 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     this.isProcessing = true;
 
     try {
-      console.log("🛒 Agregando tour al carrito con backend...");
-      
-      // Agregar item al carrito con persistencia en backend
-      await this.cartService.addItemToCartWithBackend(cartItem);
-      
-      console.log("✅ Tour agregado exitosamente al carrito");
-      
-      // Notificar al componente padre que el tour fue agregado
-      this.data.tourAdded(cartItem);
-      
-      // Cerrar modal
-      this.closeModal();
+      if (this.shouldConsumeService) {
+        console.log("🛒 Agregando tour al carrito con backend...");
+        
+        // Agregar item al carrito con persistencia en backend
+        await this.cartService.addItemToCartWithBackend(cartItem);
+        
+        console.log("✅ Tour agregado exitosamente al carrito");
+        
+        // Notificar al componente padre que el tour fue agregado
+        this.data.tourAdded(cartItem);
+        
+        // Cerrar modal
+        this.closeModal();
+      } else {
+        console.log("⚠️ Abriendo modal de información de huésped...");
+        
+        const guestModalRef = this.dialog.open(GuestInfoModalComponent, {
+          width: '700px',
+          maxWidth: '95vw',
+          data: { cartItem }
+        });
+
+        guestModalRef.afterClosed().subscribe(result => {
+          this.isProcessing = false;
+          
+          if (result && typeof result === 'object') {
+            const { profileSuccess, photoSuccess, photoAttempted } = result;
+            
+            let htmlContent = '<div style="text-align: left; margin-top: 10px; font-size: 1.1rem;">';
+            if (photoAttempted) {
+              htmlContent += `<p>${photoSuccess ? '✅' : '❌'} <strong>Foto de perfil:</strong> ${photoSuccess ? 'Cargada correctamente' : 'Error al cargar'}</p>`;
+            }
+            htmlContent += `<p>${profileSuccess ? '✅' : '❌'} <strong>Datos del perfil:</strong> ${profileSuccess ? 'Actualizados correctamente' : 'Error al actualizar'}</p>`;
+            htmlContent += '</div>';
+
+            const isTotalSuccess = (!photoAttempted || photoSuccess) && profileSuccess;
+
+            // Forzamos el Swal a que se dispare con un target global o específico si es necesario
+            setTimeout(() => {
+              Swal.fire({
+                title: isTotalSuccess ? '¡Proceso Completado!' : 'Resultado de la actualización',
+                html: htmlContent,
+                icon: isTotalSuccess ? 'success' : (profileSuccess || photoSuccess ? 'warning' : 'error'),
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6',
+                allowOutsideClick: false,
+                backdrop: true,
+                // Intentar forzar que se renderice en el body pero con un z-index superior
+                target: 'body' 
+              }).then(() => {
+                if (profileSuccess) {
+                  this.refreshProfileCheck();
+                }
+              });
+            }, 150);
+
+          } else if (result === true) {
+            this.refreshProfileCheck();
+          }
+        });
+
+
+
+
+
+      }
       
     } catch (error: any) {
       console.error("❌ Error agregando tour al carrito:", error);
@@ -1001,15 +1110,6 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     return slot.capacity === 0 || (slot.availability !== undefined && slot.availability === 0);
   }
 
-  /**
-   * Obtiene el rango de edades formateado
-   */
-  getAgeRange(participant: ParticipantSelection): string {
-    if (participant.maxAge === 999) {
-      return `${participant.minAge}+ años`;
-    }
-    return `${participant.minAge}-${participant.maxAge} años`;
-  }
 
   /**
    * Verifica si se puede incrementar un participante

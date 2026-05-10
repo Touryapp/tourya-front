@@ -82,6 +82,9 @@ export class TourScheduleTestComponent {
 
   // Inline datepicker (bs-datepicker-inline) - rango de fechas
   inlineDateValue: Date[] = [];
+  
+  // Rango para el popup de doble calendario (Start/End Date)
+  bsRangeValue: Date[] | undefined = [new Date(), new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)];
 
   allMonthSelected: boolean = false;
 
@@ -120,7 +123,7 @@ export class TourScheduleTestComponent {
       startDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
       endDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
       daysOfWeek: this.fb.array([]),
-      isUnlimitedCapacity: [false, [Validators.required]],
+
       slots: this.fb.array([]),
     });
 
@@ -200,11 +203,7 @@ export class TourScheduleTestComponent {
       this.checkTourScheduleByStartDateAndEndDate();
     });
 
-    this.tourScheduleForm
-      .get("isUnlimitedCapacity")
-      ?.valueChanges.subscribe((value) => {
-        // isUnlimitedCapacity logic removed as capacity fields are removed
-      });
+
 
     this.slots.valueChanges.subscribe((value) => {
       // Age and capacity validation removed
@@ -270,6 +269,26 @@ export class TourScheduleTestComponent {
   onKeydownEndDatePicker(event: KeyboardEvent) {
     if (event.key === "Backspace") {
       this.tourScheduleForm.get("endDate")?.setValue("");
+      this.bsRangeValue = undefined;
+    }
+  }
+
+  onFormDateRangeChange(event: any): void {
+    if (Array.isArray(event) && event.length === 2 && event[0] instanceof Date && event[1] instanceof Date) {
+      const startDateControl = this.tourScheduleForm.get('startDate');
+      const endDateControl = this.tourScheduleForm.get('endDate');
+
+      const currentStart = startDateControl?.value instanceof Date ? startDateControl.value.getTime() : null;
+      const currentEnd = endDateControl?.value instanceof Date ? endDateControl.value.getTime() : null;
+      
+      if (currentStart !== event[0].getTime() || currentEnd !== event[1].getTime()) {
+        startDateControl?.setValue(event[0]);
+        endDateControl?.setValue(event[1]);
+        this.inlineDateValue = [event[0], event[1]];
+        this.bsRangeValue = [event[0], event[1]];
+      }
+    } else {
+      this.bsRangeValue = undefined;
     }
   }
 
@@ -513,13 +532,13 @@ export class TourScheduleTestComponent {
         startDate: found.scheduleDate,
         endDate: found.scheduleDate,
         daysOfWeek: found.config.daysOfWeek,
-        isUnlimitedCapacity: found.config.isUnlimitedCapacity,
+
         slots: found.config.slots
       };
 
       this.tourScheduleForm.patchValue({
         label: found.config.label,
-        isUnlimitedCapacity: found.config.isUnlimitedCapacity,
+
       }, { emitEvent: false });
 
       // Limpiar y rellenar días de semana sin duplicados
@@ -561,6 +580,9 @@ export class TourScheduleTestComponent {
       // Restaurar fechas seleccionadas por el usuario (sin disparar eventos que reseteen el form)
       this.tourScheduleForm.get("startDate")?.setValue(currentStartDate, { emitEvent: false });
       this.tourScheduleForm.get("endDate")?.setValue(currentEndDate, { emitEvent: false });
+      if (currentStartDate instanceof Date && currentEndDate instanceof Date) {
+        this.bsRangeValue = [currentStartDate, currentEndDate];
+      }
     }
   }
 
@@ -694,6 +716,8 @@ export class TourScheduleTestComponent {
       // (which would call checkTourScheduleByStartDateAndEndDate again)
       startDateControl?.setValue(start, { emitEvent: false });
       endDateControl?.setValue(end,     { emitEvent: false });
+      
+      this.bsRangeValue = [start as Date, end as Date];
 
       // Sync tour schedule detection (single call)
       this.checkTourScheduleByStartDateAndEndDate();
@@ -735,6 +759,7 @@ export class TourScheduleTestComponent {
     this._lastInlineStart = null;
     this._lastInlineEnd   = null;
     this.inlineDateValue  = [];
+    this.bsRangeValue = undefined;
     this.tourScheduleForm.get('startDate')?.setValue(null, { emitEvent: false });
     this.tourScheduleForm.get('endDate')?.setValue(null,   { emitEvent: false });
     this.resetForm();
@@ -751,6 +776,7 @@ export class TourScheduleTestComponent {
     this.tourSchedule = null;
     this.submitted = false;
     this.errorMessage = "";
+    this.bsRangeValue = undefined;
   }
 
   resetFormExceptDates(isSingleDay: boolean = false) {
@@ -759,8 +785,7 @@ export class TourScheduleTestComponent {
     const endDate = this.tourScheduleForm.get("endDate")?.value;
 
     this.tourScheduleForm.patchValue({
-      label: "",
-      isUnlimitedCapacity: false
+      label: ""
     }, { emitEvent: false });
 
     this.daysOfWeek.clear();
@@ -779,6 +804,11 @@ export class TourScheduleTestComponent {
     // Restaurar fechas
     this.tourScheduleForm.get("startDate")?.setValue(startDate, { emitEvent: false });
     this.tourScheduleForm.get("endDate")?.setValue(endDate, { emitEvent: false });
+    if (startDate instanceof Date && endDate instanceof Date) {
+      this.bsRangeValue = [startDate, endDate];
+    } else {
+      this.bsRangeValue = undefined;
+    }
   }
 
   saveTourSchedule() {
@@ -787,7 +817,7 @@ export class TourScheduleTestComponent {
       startDate,
       endDate,
       daysOfWeek,
-      isUnlimitedCapacity,
+
       slots,
     } = this.tourScheduleForm.value;
 
@@ -806,7 +836,7 @@ export class TourScheduleTestComponent {
       startDate: dayjs(startDate).format("YYYY-MM-DD"),
       endDate: dayjs(endDate).format("YYYY-MM-DD"),
       daysOfWeek,
-      isUnlimitedCapacity,
+
       slots: processedSlots,
       createdBy: 1,
     };
@@ -906,7 +936,7 @@ export class TourScheduleTestComponent {
                 tourId: this.tourId,
                 label: config.label,
                 daysOfWeek: config.daysOfWeek,
-                isUnlimitedCapacity: config.isUnlimitedCapacity,
+
                 slots: config.slots,
                 schedules: group // Incluir todos los días de esta configuración
               },
@@ -1236,7 +1266,7 @@ export class TourScheduleTestComponent {
     // Aplicar los datos del template al formulario
     this.tourScheduleForm.patchValue({
       label: this.selectedTemplate.label,
-      isUnlimitedCapacity: this.selectedTemplate.isUnlimitedCapacity,
+
     });
 
     // Aplicar días de la semana
@@ -1272,8 +1302,6 @@ export class TourScheduleTestComponent {
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
-            minAge: [price.minAge || ""],
-            maxAge: [price.maxAge || ""],
             price: [price.price || ""],
           });
 
@@ -1324,7 +1352,7 @@ export class TourScheduleTestComponent {
             tourId: this.tourId,
             scheduleDate: scheduleDate,
             reservedCapacity: 0,
-            isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
             status: "available",
             config: {
               tourId: this.tourId,
@@ -1333,7 +1361,7 @@ export class TourScheduleTestComponent {
               startDate: startDateDayJs.format("YYYY-MM-DD"),
               endDate: endDateDayJs.format("YYYY-MM-DD"),
               daysOfWeek: daysOfWeek,
-              isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
               isTemplate: false,
               slots: slots.map((s: any) => ({
                 startTime: s.startTime,
@@ -1401,13 +1429,13 @@ export class TourScheduleTestComponent {
           tourId: this.tourId,
           scheduleDate: scheduleDate,
           reservedCapacity: 0,
-          isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
           status: "AVAILABLE",
           config: {
             id: this.tourScheduleId, // Incluir el ID de la configuración existente
             label: this.tourScheduleForm.get("label")?.value,
             daysOfWeek: daysOfWeek,
-            isUnlimitedCapacity: this.tourScheduleForm.get("isUnlimitedCapacity")?.value,
+
             slots: slots.map((s: any) => ({
               id: s.id || 0, // Incluir ID del slot si existe
               startTime: s.startTime,

@@ -67,6 +67,9 @@ export interface ProviderReview {
   dislikes?: number;
   hearts?: number;
   status?: string;
+  rejectionReason?: string;
+  reasonType?: 'POSITIVE' | 'NEGATIVE';
+  reasonId?: number;
   answer?: ProviderReviewAsk;
   attachmentUrls?: string[]; // URLs of review images
 }
@@ -98,6 +101,7 @@ export interface CreateReviewRequest {
   rating: number;
   comment: MultilingualComment;
   date: string;
+  reasonId?: number;
 }
 
 /**
@@ -107,6 +111,24 @@ export interface CreateReviewSimpleRequest {
   reservationId: number;
   rating: number;
   comment: string;
+  reasonId?: number;
+}
+
+/**
+ * Motivo de reseña devuelto por el catálogo
+ */
+export interface ReviewReason {
+  id: number;
+  label: string;
+  description?: string;
+}
+
+/**
+ * Respuesta del catálogo de motivos de reseña
+ */
+export interface ReviewReasonsResponse {
+  positive: ReviewReason[];
+  negative: ReviewReason[];
 }
 
 /**
