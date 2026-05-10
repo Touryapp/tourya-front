@@ -14,6 +14,9 @@ import { City } from '../../../shared/dto/city.dto';
 import { State } from '../../../shared/dto/requestProvider-response.dto';
 import { TourCategory } from '../../../shared/dto/tour-response.dto';
 import { LocationsPublicDto } from '../../../shared/dto/locations-public.dto';
+import { CartService } from '../../../shared/services/cart.service';
+import { Subject, takeUntil } from 'rxjs';
+import { CartSummary, DaySelection } from '../../../shared/dto/cart.dto';
 @Component({
   selector: 'app-home-clients',
   standalone: false,
@@ -56,6 +59,12 @@ public categories: TourCategory[] = [
   public checkOut: string = '';
   public bsRangeValue: Date[] = [new Date(), new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)];
 
+  // Cart properties
+  public isCartVisible: boolean = false;
+  public cartSummary: CartSummary | null = null;
+  public daySelections: DaySelection[] = [];
+  private destroy$ = new Subject<void>();
+
   onDateRangeChange(event: any): void {
     if (Array.isArray(event) && event.length === 2 && event[0] instanceof Date && event[1] instanceof Date) {
       this.bsRangeValue = event as Date[];
@@ -73,6 +82,11 @@ public categories: TourCategory[] = [
       };
       this.checkIn = formatDate(this.bsRangeValue[0]);
       this.checkOut = formatDate(this.bsRangeValue[1]);
+
+      // Sincronizar el carrito con las fechas seleccionadas para mostrar el conteo de días correcto
+      if (this.cartService) {
+        this.cartService.initializeCart(this.checkIn, this.checkOut);
+      }
     }
   }
 
@@ -80,7 +94,8 @@ public categories: TourCategory[] = [
     private router: Router,
     private countryService: CountryService,
     private departmentService: DepartmentService,
-    private cityService: CityService
+    private cityService: CityService,
+    private cartService: CartService
   ) {
   }
   bsValue=new Date();
@@ -335,19 +350,72 @@ reset() :void{
   this.isChecked6=false;
   this.toreset=true;
 }
-ngOnInit(): void {
-  // Set the default time to 10:30 AM
-  const defaultTime = new Date();
-  defaultTime.setHours(10, 30, 0, 0); // Set hours, minutes, seconds, milliseconds
-  this.time = defaultTime;
-  // Cargar países al iniciar el componente
-  this.getLocationsPublic();
-  this.travelDestination = localStorage.getItem('travelDestination') || '';
-  this.startDate = localStorage.getItem('startDate') || '';
-  this.endDate = localStorage.getItem('endDate') || '';
-  // Inicializar checkIn y checkOut desde el principio
-  this.updateCheckInCheckOutRange();
-}
+  ngOnInit(): void {
+    // Set the default time to 10:30 AM
+    const defaultTime = new Date();
+    defaultTime.setHours(10, 30, 0, 0); // Set hours, minutes, seconds, milliseconds
+    this.time = defaultTime;
+    // Cargar países al iniciar el componente
+    this.getLocationsPublic();
+    this.travelDestination = localStorage.getItem('travelDestination') || '';
+    this.startDate = localStorage.getItem('startDate') || '';
+    this.endDate = localStorage.getItem('endDate') || '';
+    // Inicializar checkIn y checkOut desde el principio
+    this.updateCheckInCheckOutRange();
+
+    // Inicializar carrito
+    this.initCartSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initCartSubscription(): void {
+    // Cargar carrito desde el backend (especialmente útil si el usuario acaba de loguearse)
+    this.cartService.loadCartFromBackend(true);
+
+    // Suscribirse a los items para determinar visibilidad
+    this.cartService.cartItems$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(items => {
+        this.isCartVisible = items.length > 0;
+      });
+
+    // Suscribirse al resumen
+    this.cartService.cartSummary$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(summary => {
+        this.cartSummary = summary;
+      });
+
+    // Suscribirse a los días
+    this.cartService.daySelections$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(days => {
+        this.daySelections = days;
+      });
+  }
+
+  onFloatingCartClick(): void {
+    // Redirigir usando la misma lógica de búsqueda
+    this.onSearch();
+  }
+
+  onDaySelected(date: string): void {
+    console.log('Día seleccionado en el carrito:', date);
+    // Podríamos filtrar por fecha si fuera necesario, pero el requerimiento es ir a la lista general
+    this.onSearch();
+  }
+
+  onCartToggled(isExpanded: boolean): void {
+    console.log('Carrito expandido:', isExpanded);
+  }
+
+  onCartCleared(): void {
+    this.isCartVisible = false;
+  }
 toggleClass(index: number){
   this.isClassAdded[index] = !this.isClassAdded[index]
 }

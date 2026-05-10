@@ -1615,6 +1615,10 @@
 </section>
 <!-- /FAQ Section -->
 
-
-
-
+<!-- Floating Cart -->
+<app-floating-cart 
+    [isVisible]="isCartVisible" 
+    (daySelected)="onDaySelected($event)"
+    (cartToggled)="onFloatingCartClick()"
+    (clearCart)="onCartCleared()">
+</app-floating-cart>

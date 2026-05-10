@@ -54,6 +54,8 @@ export interface PaymentResponseDto {
   lastModifiedBy: number;
   totalAmount?: number; // ✨ Total original antes de créditos
   appliedCredits?: number; // ✨ Valor de créditos aplicados
+  amountCredit: number | null; // ✨ Nuevo campo del servicio
+  creditsUsed: number | null; // ✨ Nuevo campo del servicio
 }
 
 export interface ReservationDto {
@@ -68,6 +70,25 @@ export interface ReservationDto {
   lastModifiedDate: string;
   createdBy: number;
   lastModifiedBy: number;
+  
+  // ✨ Nuevos campos informativos del tour
+  tourId: number;
+  tourName: string;
+  tourImageUrl: string;
+  tourType: string;
+  duration: string | null;
+  checkInDate: string;
+  returnDate: string | null;
+  destination: string;
+  price: number;
+  travellers: string;
+  activities: string[];
+  extraServices: string[];
+  maxCancellationDate: string;
+  maxReschedulingDate: string;
+  cancellationReason: string | null;
+  cancellationDate: string | null;
+  credit: any | null;
 }
 
 // ✨ Enum para estados de entrega

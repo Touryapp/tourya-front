@@ -131,7 +131,24 @@ export class TourBookingConfirmationComponent implements OnInit {
         createdDate: res.reservationCreatedDate,
         lastModifiedDate: res.reservationCreatedDate,
         createdBy: 0,
-        lastModifiedBy: 0
+        lastModifiedBy: 0,
+        tourId: res.tourId,
+        tourName: res.tourName,
+        tourImageUrl: '', // No disponible en lista básica
+        tourType: res.productType,
+        duration: null,
+        checkInDate: res.scheduleDate,
+        returnDate: null,
+        destination: '', // No disponible en lista básica
+        price: res.shoppingTotalPrice,
+        travellers: `${res.totalTourists} personas`,
+        activities: [],
+        extraServices: [],
+        maxCancellationDate: res.maxCancellationDate || '',
+        maxReschedulingDate: res.maxReschedulingDate || '',
+        cancellationReason: null,
+        cancellationDate: null,
+        credit: null
       })),
       payer: {
         id: 0,
@@ -145,7 +162,9 @@ export class TourBookingConfirmationComponent implements OnInit {
       lastModifiedDate: first.reservationCreatedDate,
       createdBy: 0,
       lastModifiedBy: 0,
-      totalAmount: first.shoppingTotalPrice
+      totalAmount: first.shoppingTotalPrice,
+      amountCredit: null,
+      creditsUsed: null
     };
 
     this.wompiData = this.parseWompiData();
@@ -509,6 +528,13 @@ export class TourBookingConfirmationComponent implements OnInit {
       }
     }
     
+    // Opción 2: Desde campos directos del DTO (amountCredit/creditsUsed)
+    if (this.reservationData?.totalAmount !== undefined) {
+      const total = (this.reservationData.totalAmount || 0) - (this.reservationData.creditsUsed || 0);
+      console.log('✅ Total calculado desde DTO (totalAmount - creditsUsed):', total);
+      return total;
+    }
+    
     // Opción 2: Desde wompiData parseado (amount_in_cents)
     if (this.wompiData?.amount_in_cents) {
       const total = this.wompiData.amount_in_cents / 100;
@@ -604,6 +630,8 @@ export class TourBookingConfirmationComponent implements OnInit {
       lastModifiedDate: '2024-12-15T10:30:00Z',
       createdBy: 1,
       lastModifiedBy: 1,
+      amountCredit: null,
+      creditsUsed: null,
       reservations: [ // ✨ Ahora es un array con múltiples reservas
         {
           reservationId: 1001,
@@ -620,7 +648,24 @@ export class TourBookingConfirmationComponent implements OnInit {
           createdDate: '2024-12-15T10:30:00Z',
           lastModifiedDate: '2024-12-15T10:30:00Z',
           createdBy: 1,
-          lastModifiedBy: 1
+          lastModifiedBy: 1,
+          tourId: 36,
+          tourName: 'Eco-Aventura en el Archipiélago',
+          tourImageUrl: 'https://storage.googleapis.com/tourya-dev-storage/tours/36/1760456194034_cayos1.png',
+          tourType: 'Acuático',
+          duration: '6 horas',
+          checkInDate: '2025-10-20T08:00:00',
+          returnDate: '2025-10-20T14:00:00',
+          destination: 'Cartagena de Indias',
+          price: 185000,
+          travellers: '2 Adultos',
+          activities: ['Snorkeling', 'Almuerzo típico', 'Transporte en lancha'],
+          extraServices: ['Seguro médico', 'Guía bilingüe'],
+          maxCancellationDate: '2025-10-18',
+          maxReschedulingDate: '2025-10-19',
+          cancellationReason: null,
+          cancellationDate: null,
+          credit: null
         },
         {
           reservationId: 1002,
@@ -637,7 +682,24 @@ export class TourBookingConfirmationComponent implements OnInit {
           createdDate: '2024-12-15T10:30:00Z',
           lastModifiedDate: '2024-12-15T10:30:00Z',
           createdBy: 1,
-          lastModifiedBy: 1
+          lastModifiedBy: 1,
+          tourId: 40,
+          tourName: 'Safari Nocturno en la Selva',
+          tourImageUrl: 'https://storage.googleapis.com/tourya-dev-storage/tours/36/1760456194034_cayos1.png',
+          tourType: 'Terrestre',
+          duration: '4 horas',
+          checkInDate: '2025-10-21T18:00:00',
+          returnDate: '2025-10-21T22:00:00',
+          destination: 'Amazonas',
+          price: 120000,
+          travellers: '2 Adultos',
+          activities: ['Caminata nocturna', 'Avistamiento de caimanes'],
+          extraServices: ['Linternas', 'Repelente biodegradable'],
+          maxCancellationDate: '2025-10-20',
+          maxReschedulingDate: '2025-10-21',
+          cancellationReason: null,
+          cancellationDate: null,
+          credit: null
         },
         {
           reservationId: 1003,
@@ -654,7 +716,24 @@ export class TourBookingConfirmationComponent implements OnInit {
           createdDate: '2024-12-15T10:30:00Z',
           lastModifiedDate: '2024-12-15T10:30:00Z',
           createdBy: 1,
-          lastModifiedBy: 1
+          lastModifiedBy: 1,
+          tourId: 45,
+          tourName: 'Ruta del Café Premium',
+          tourImageUrl: 'https://storage.googleapis.com/tourya-dev-storage/tours/36/1760456194034_cayos1.png',
+          tourType: 'Cultura',
+          duration: '5 horas',
+          checkInDate: '2025-10-22T09:00:00',
+          returnDate: '2025-10-22T14:00:00',
+          destination: 'Quindío',
+          price: 150000,
+          travellers: '2 Adultos',
+          activities: ['Cata de café', 'Recorrido por cafetales'],
+          extraServices: ['Transporte desde hotel', 'Kit de degustación'],
+          maxCancellationDate: '2025-10-21',
+          maxReschedulingDate: '2025-10-22',
+          cancellationReason: null,
+          cancellationDate: null,
+          credit: null
         }
       ],
       payer: {
@@ -690,8 +769,11 @@ export class TourBookingConfirmationComponent implements OnInit {
     this.initializeReservations(); // ✨ Inicializar reservas
     
     // Inject mock credits to see UI changes
-    this.reservationData.totalAmount = 52500000 / 100;
-    this.reservationData.appliedCredits = 7000000 / 100;
+    if (this.reservationData) {
+      this.reservationData.totalAmount = 525000;
+      this.reservationData.creditsUsed = 70000;
+      this.reservationData.amountCredit = 0;
+    }
 
     console.log('✅ Mock data loaded successfully for maquetación:', this.reservationData);
     console.log('✅ Wompi mock data parsed:', this.wompiData);

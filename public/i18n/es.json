@@ -690,5 +690,119 @@
       "item4": "Atención 24/7 real",
       "item5": "Oficina física local"
     }
+  },
+  "tour-schedule": {
+    "breadcrumb": {
+      "title": "Calendario del Tour",
+      "providersPanel": "Panel de Proveedores"
+    },
+    "calendar": {
+      "previous": "Anterior",
+      "today": "Hoy",
+      "next": "Siguiente",
+      "scheduleFor": "Horarios del"
+    },
+    "template": {
+      "selectionTitle": "Seleccionar Template",
+      "label": "Template",
+      "placeholder": "Seleccionar template",
+      "loading": "Cargando templates...",
+      "noTemplates": "No hay templates disponibles",
+      "apply": "Aplicar Template"
+    },
+    "config": {
+      "title": "Configuración de Calendario",
+      "reset": "Limpiar formulario",
+      "label": {
+        "label": "Etiqueta",
+        "required": "La etiqueta es requerida",
+        "minlength": "La etiqueta debe tener al menos 3 caracteres",
+        "maxlength": "La etiqueta no puede tener más de 50 caracteres"
+      },
+      "startDate": {
+        "label": "Fecha de Inicio",
+        "required": "La fecha de inicio es requerida",
+        "invalid": "La fecha de inicio es inválida"
+      },
+      "endDate": {
+        "label": "Fecha de Fin",
+        "required": "La fecha de fin es requerida",
+        "invalid": "La fecha de fin es inválida",
+        "invalidRange": "La fecha de fin es inválida."
+      },
+      "daysOfWeek": {
+        "label": "Días de la semana",
+        "required": "Los días de la semana son requeridos",
+        "SUNDAY": "DOMINGO",
+        "MONDAY": "LUNES",
+        "TUESDAY": "MARTES",
+        "WEDNESDAY": "MIÉRCOLES",
+        "THURSDAY": "JUEVES",
+        "FRIDAY": "VIERNES",
+        "SATURDAY": "SÁBADO"
+      }
+    },
+    "slots": {
+      "title": "Slots",
+      "slotNumber": "Slot #",
+      "startTime": {
+        "label": "Hora de inicio",
+        "required": "La hora de inicio es requerida"
+      },
+      "endTime": {
+        "label": "Hora de fin",
+        "required": "La hora de fin es requerida",
+        "invalidRange": "Rango de tiempo inválido"
+      },
+      "capacity": {
+        "label": "Capacidad",
+        "required": "La capacidad es requerida",
+        "min": "La capacidad debe ser al menos 1",
+        "unlimited": "Ilimitada"
+      }
+    },
+    "prices": {
+      "title": "Precios",
+      "priceNumber": "Precio #",
+      "ageType": {
+        "label": "Tipo de edad",
+        "required": "El tipo de edad es requerido",
+        "ANY": "CUALQUIERA",
+        "ADULT": "ADULTO",
+        "CHILD": "NIÑO",
+        "INFANT": "INFANTE"
+      },
+      "price": {
+        "label": "Precio",
+        "required": "El precio es requerido",
+        "min": "El precio debe ser mayor a cero"
+      },
+      "addNew": "Agregar Nuevo Precio"
+    },
+    "actions": {
+      "addNewSlot": "Agregar Nuevo Slot",
+      "addSchedule": "Agregar nuevo calendario",
+      "editSchedule": "Editar calendario"
+    },
+    "messages": {
+      "noSlots": "No hay horarios configurados para este día",
+      "config": "Configuración:",
+      "days": "Días:",
+      "schedule": "Horario",
+      "availability": "Disponibilidad",
+      "capacity": "Capacidad:",
+      "success": "Calendario del tour guardado exitosamente.",
+      "error": "Ha ocurrido un error, por favor intente de nuevo",
+      "errorGettingTour": "Error al obtener el tour.",
+      "errorGettingSchedules": "Error al obtener los calendarios del tour."
+    },
+    "anyModal": {
+      "title": "Confirmar cambio de tipo de edad",
+      "p1": "Has seleccionado \"ANY (CUALQUIERA)\" en el Precio #1.",
+      "p2": "Para agregar un nuevo precio, el Precio #1 se cambiará automáticamente de \"ANY\" a \"ADULT\".",
+      "p3": "¿Deseas continuar?",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    }
   }
-}
+}

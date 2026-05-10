@@ -63,7 +63,7 @@
                                     <li *ngFor="let day of DAYS_OF_WEEK">
                                         <mat-checkbox [checked]="isDaySelected(day.value)"
                                             (change)="onDayChange(day.value, $event)">
-                                            {{ day.label }}
+                                            {{ day.label | translate }}
                                         </mat-checkbox>
                                     </li>
                                 </ul>
@@ -191,23 +191,30 @@
                                                             <label class="form-label">Age type</label>
 
                                                             <mat-select class="custom-mat-select select"
-                                                                placeholder="Select" formControlName="ageType">
-                                                                <mat-option
-                                                                    [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ADULT, i, j)"
-                                                                    [value]="TypeOfPersonLabel.ADULT">
-                                                                    ADULT
-                                                                </mat-option>
-                                                                <mat-option
-                                                                    [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.CHILD, i, j)"
-                                                                    [value]="TypeOfPersonLabel.CHILD">
-                                                                    CHILD
-                                                                </mat-option>
-                                                                <mat-option
-                                                                    [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.INFANT, i, j)"
-                                                                    [value]="TypeOfPersonLabel.INFANT">
-                                                                    INFANT
-                                                                </mat-option>
-                                                            </mat-select>
+                                                                 [placeholder]="'tour-form.fields.category.placeholder' | translate" formControlName="ageType"
+                                                                 (selectionChange)="onAgeTypeChange(i, j)">
+                                                                 <mat-option
+                                                                     *ngIf="isAnyOptionAvailable(i, j)"
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ANY, i, j)"
+                                                                     [value]="TypeOfPersonLabel.ANY">
+                                                                     {{ 'tour-schedule.prices.ageType.ANY' | translate }}
+                                                                 </mat-option>
+                                                                 <mat-option
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ADULT, i, j)"
+                                                                     [value]="TypeOfPersonLabel.ADULT">
+                                                                     {{ 'tour-schedule.prices.ageType.ADULT' | translate }}
+                                                                 </mat-option>
+                                                                 <mat-option
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.CHILD, i, j)"
+                                                                     [value]="TypeOfPersonLabel.CHILD">
+                                                                     {{ 'tour-schedule.prices.ageType.CHILD' | translate }}
+                                                                 </mat-option>
+                                                                 <mat-option
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.INFANT, i, j)"
+                                                                     [value]="TypeOfPersonLabel.INFANT">
+                                                                     {{ 'tour-schedule.prices.ageType.INFANT' | translate }}
+                                                                 </mat-option>
+                                                             </mat-select>
 
                                                             <div *ngIf="price.get('ageType')?.invalid && (price.get('ageType')?.touched || price.get('ageType')?.dirty)"
                                                                 class="text-danger">
@@ -225,7 +232,8 @@
                                                             <label class="form-label">Price</label>
                                                             <input type="number"
                                                                 class="form-control" formControlName="price"
-                                                                (blur)="onPriceBlur(i, j)" [min]="0">
+                                                                (blur)="onPriceBlur(i, j)" [min]="0"
+                                                                [readonly]="price.get('ageType')?.value === TypeOfPersonLabel.INFANT">
 
                                                             <div *ngIf="price.get('price')?.invalid && (price.get('price')?.touched || price.get('price')?.dirty)"
                                                                 class="text-danger">
@@ -277,5 +285,27 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal for ANY to ADULT conversion -->
+<div class="modal fade show" *ngIf="showAnyModal" style="display: block; background-color: rgba(0,0,0,0.5);" 
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'tour-schedule.anyModal.title' | translate }}</h5>
+                <button type="button" class="btn-close" (click)="closeAnyModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'tour-schedule.anyModal.p1' | translate }}</p>
+                <p>{{ 'tour-schedule.anyModal.p2' | translate }}</p>
+                <p>{{ 'tour-schedule.anyModal.p3' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeAnyModal()">{{ 'tour-schedule.anyModal.cancel' | translate }}</button>
+                <button type="button" class="btn btn-primary" (click)="confirmAnyToAdultConversion()">{{ 'tour-schedule.anyModal.confirm' | translate }}</button>
+            </div>
+        </div>
     </div>
 </div>
