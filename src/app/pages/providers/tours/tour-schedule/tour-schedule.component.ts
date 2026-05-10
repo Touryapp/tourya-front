@@ -977,13 +977,29 @@ export class TourScheduleComponent {
       return;
     }
 
+    // Preservar fechas actuales
+    const startDate = this.tourScheduleForm.get("startDate")?.value;
+    const endDate = this.tourScheduleForm.get("endDate")?.value;
+
     // Limpiar el formulario actual
     this.resetForm();
+
+    // Restaurar fechas
+    if (startDate) {
+      this.tourScheduleForm.get("startDate")?.setValue(startDate, { emitEvent: false });
+    }
+    if (endDate) {
+      this.tourScheduleForm.get("endDate")?.setValue(endDate, { emitEvent: false });
+    }
+
+    // Sincronizar bsRangeValue para que el picker visualmente mantenga la selección
+    if (startDate && endDate) {
+      this.bsRangeValue = [dayjs(startDate).toDate(), dayjs(endDate).toDate()];
+    }
 
     // Aplicar los datos del template al formulario
     this.tourScheduleForm.patchValue({
       label: this.selectedTemplate.label,
-
     });
 
     // Aplicar días de la semana
@@ -1030,6 +1046,9 @@ export class TourScheduleComponent {
       // Si no hay slots en el template, agregar uno por defecto
       this.addSlot();
     }
+
+    // Verificar si las fechas restauradas ya tienen horarios configurados con esta nueva configuración de días
+    this.checkTourScheduleByStartDateAndEndDate();
 
     this.openSnackBar(this.translate.instant("tour-schedule.messages.success"));
   }
