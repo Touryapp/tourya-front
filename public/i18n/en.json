@@ -637,6 +637,7 @@
     },
     "actions": {
       "save": "Save",
+      "saved": "Saved",
       "share": "Share"
     },
     "sections": {

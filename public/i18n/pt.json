@@ -620,6 +620,7 @@
     },
     "actions": {
       "save": "Salvar",
+      "saved": "Salvo",
       "share": "Compartilhar"
     },
     "sections": {

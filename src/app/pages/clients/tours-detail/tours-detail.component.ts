@@ -21,6 +21,7 @@ import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
 import { ProviderReview, ReviewReason, ReviewReasonsResponse } from '../../../shared/models/reviews.model';
 import { PriceType } from '../../../shared/enums/price-type.enum';
+import { TouristService } from '../../../shared/services/tourist.service';
 
 @Component({
   selector: 'app-tours-detail',
@@ -31,6 +32,7 @@ import { PriceType } from '../../../shared/enums/price-type.enum';
 export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
   public routes = routes;
   public PriceType = PriceType;
+  public Math = Math;
   
   // Date picker bound to template
   public bsRangeValue: Date[] = [new Date(), new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)];
@@ -162,6 +164,7 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private cartService: CartService,
     public i18nService: I18nFieldService,
     private reviewsService: ReviewsService,
+    private touristService: TouristService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) {}
@@ -203,6 +206,17 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     if (this.reviewRating >= 1) return this.reviewReasonsNegative;
     return [];
   }
+
+  // Review summary data
+  public reviewSummary: any;
+
+  // Wishlist state
+  public isInWishlist: boolean = false;
+
+  // Pagination
+  public currentPage: number = 1;
+  public size: number = 5;
+  public totalPages: number = 0;
 
     // Check if user is admin
   ngOnInit(): void {
@@ -249,6 +263,7 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       this.searchService.detailTourPublic(id).subscribe({
         next: (data: TourDetail) => {
           this.tour = data;
+          this.checkWishlistStatus();
           // Map galleries to sliders if available
           // Prefer `galleries` array, otherwise use `profilePicture` (single image)
           const galleries: Gallery[] | undefined = (this.tour as any).galleries && (this.tour as any).galleries.length ? (this.tour as any).galleries : (this.tour as any).profilePicture ? [(this.tour as any).profilePicture] : undefined;
@@ -289,7 +304,25 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
       // Load reviews
       this.loadReviews(id);
+
+      // Load review summary
+      this.loadReviewSummary(id);
     }
+  }
+
+  /**
+   * Load review summary for the current tour
+   */
+  loadReviewSummary(tourId: number): void {
+    this.reviewsService.getReviewSummary(tourId).subscribe({
+      next: (summary) => {
+        this.reviewSummary = summary;
+        console.log('✅ Review summary loaded:', this.reviewSummary);
+      },
+      error: (error) => {
+        console.error('❌ Error loading review summary:', error);
+      }
+    });
   }
 
   /**
@@ -299,12 +332,13 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     this.reviewsLoading = true;
     this.reviewsService.getReviews({
       tourId: tourId.toString(),
-      pageNumber: 0,
-      pageSize: 10
+      pageNumber: this.currentPage - 1,
+      pageSize: this.size
     }).subscribe({
       next: (response) => {
         this.reviews = response.content;
         this.totalReviews = response.totalElements;
+        this.totalPages = response.totalPages;
         this.reviewsLoading = false;
         console.log('✅ Reviews loaded:', this.reviews);
       },
@@ -313,6 +347,62 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         this.reviewsLoading = false;
       }
     });
+  }
+
+  /**
+   * Pagination helper methods
+   */
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxVisiblePages = 5;
+
+    if (this.totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      let start = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+      let end = Math.min(this.totalPages, start + maxVisiblePages - 1);
+
+      if (end - start < maxVisiblePages - 1) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+    return pages;
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.currentPage = page;
+      this.loadReviews(this.currentTourId);
+      // Scroll to reviews section
+      const el = document.getElementById('reviews');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  isFirstPage(): boolean {
+    return this.currentPage === 1;
+  }
+
+  isLastPage(): boolean {
+    return this.currentPage === this.totalPages;
   }
 
   /**
@@ -737,6 +827,49 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         this.reviewError = 'Error al enviar la reseña. Por favor inténtalo de nuevo.';
       }
     });
+  }
+
+  /**
+   * Verifica si el tour actual está en la wishlist
+   */
+  private checkWishlistStatus(): void {
+    if (this.authService.isAuthenticated() && this.currentTourId > 0) {
+      this.touristService.getWishlistIds().subscribe({
+        next: (response) => {
+          this.isInWishlist = response.tourIds.includes(this.currentTourId);
+          console.log('🔍 Wishlist status for tour', this.currentTourId, ':', this.isInWishlist);
+        },
+        error: (err) => console.error('❌ Error al verificar estado de wishlist:', err)
+      });
+    }
+  }
+
+  /**
+   * Alterna el estado de wishlist del tour actual
+   */
+  public toggleWishlist(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.goToLogin();
+      return;
+    }
+
+    if (this.isInWishlist) {
+      this.touristService.removeFromWishlist(this.currentTourId).subscribe({
+        next: () => {
+          this.isInWishlist = false;
+          this.snackBar.open('Tour quitado de tu lista de deseos', 'Cerrar', { duration: 3000 });
+        },
+        error: (err) => console.error('❌ Error al quitar de wishlist:', err)
+      });
+    } else {
+      this.touristService.addToWishlist(this.currentTourId).subscribe({
+        next: () => {
+          this.isInWishlist = true;
+          this.snackBar.open('Tour agregado a tu lista de deseos', 'Cerrar', { duration: 3000 });
+        },
+        error: (err) => console.error('❌ Error al agregar a wishlist:', err)
+      });
+    }
   }
 
   ngOnDestroy(): void {

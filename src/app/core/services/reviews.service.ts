@@ -204,4 +204,13 @@ export class ReviewsService {
     const url = `${this.baseUrl}/public/review/reasons?_t=${timestamp}`;
     return this.http.get<ReviewReasonsResponse>(url);
   }
+
+  /**
+   * Obtiene el resumen de reseñas de un tour
+   * @param tourId ID del tour
+   */
+  getReviewSummary(tourId: number): Observable<any> {
+    const url = `${this.baseUrl}/public/tour/${tourId}/reviews/summary`;
+    return this.http.get<any>(url);
+  }
 }

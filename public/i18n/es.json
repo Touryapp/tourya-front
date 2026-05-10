@@ -621,6 +621,7 @@
     },
     "actions": {
       "save": "Guardar",
+      "saved": "Guardado",
       "share": "Compartir"
     },
     "sections": {

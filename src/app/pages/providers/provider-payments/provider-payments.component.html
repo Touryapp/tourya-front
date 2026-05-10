@@ -104,71 +104,90 @@
 
             <!-- Table -->
             <div class="custom-datatable-filter table-responsive">
-                <table matSort (matSortChange)="sortData($event)" class="table datatable">
-                    <thead class="thead-light">
-                        <tr>
-                            <th mat-sort-header="id">ID</th>
-                            <th mat-sort-header="tourOperatorId">ID Operador Turístico</th>
-                            <th mat-sort-header="creationDate">Fecha de Creación</th>
-                            <th mat-sort-header="paymentDate">Fecha de Pago</th>
-                            <th mat-sort-header="amount">Monto a Pagar</th>
-                            <th mat-sort-header="status">Estado</th>
-                            <th>Pago</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (payment of tableData; track payment.id) {
-                            <tr (click)="openPaymentDetails(payment)" style="cursor: pointer;">
-                                <td>{{ payment.id }}</td>
-                                <td>{{ payment.tourOperatorId }}</td>
-                                <td>{{ payment.creationDate }}</td>
-                                <td>{{ payment.paymentDate }}</td>
-                                <td class="fw-semibold text-success">{{ payment.amount }}</td>
-                                <td>
-                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
-                                          [ngClass]="getStatusClass(payment.status)">
-                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ payment.status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @if (payment.status === 'Pendiente') {
-                                        @if (authService.isAdmin()) {
-                                            <div class="d-flex align-items-center gap-2">
-                                                <input #fileInput type="file" class="d-none" accept=".pdf,.jpg,.png" (change)="onFileSelected($event, payment)">
-                                                <button 
-                                                    class="btn btn-sm btn-outline-primary d-inline-flex align-items-center" 
-                                                    (click)="$event.stopPropagation(); fileInput.click()"
-                                                    title="Subir comprobante">
-                                                    <i class="isax isax-document-upload me-1"></i> Subir
-                                                </button>
+                @if (loading) {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Cargando órdenes de pago...</p>
+                    </div>
+                } @else {
+                    <table matSort (matSortChange)="sortData($event)" class="table datatable">
+                        <thead class="thead-light">
+                            <tr>
+                                <th mat-sort-header="id">ID</th>
+                                <th mat-sort-header="providerId">ID Proveedor</th>
+                                <th mat-sort-header="createdAt">Fecha de Creación</th>
+                                <th mat-sort-header="payDate">Fecha de Pago</th>
+                                <th mat-sort-header="amountTotal">Monto Total</th>
+                                <th mat-sort-header="status">Estado</th>
+                                <th>Comprobante</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (payment of tableData; track payment.id) {
+                                <tr (click)="openPaymentDetails(payment)" style="cursor: pointer;">
+                                    <td>#{{ payment.id }}</td>
+                                    <td>{{ payment.providerId }}</td>
+                                    <td>{{ payment.createdAt | date:'shortDate' }}</td>
+                                    <td>{{ payment.payDate ? (payment.payDate | date:'shortDate') : '-' }}</td>
+                                    <td class="fw-semibold text-success">${{ payment.amountTotal | number:'1.2-2' }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                              [ngClass]="getStatusClass(payment.status)">
+                                            <i class="fa-solid fa-circle fs-5 me-1"></i>{{ getStatusLabel(payment.status) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (payment.proofUrl) {
+                                            <a [href]="payment.proofUrl" target="_blank" class="btn btn-sm btn-outline-info" (click)="$event.stopPropagation()">
+                                                <i class="isax isax-document-text me-1"></i> Ver
+                                            </a>
+                                        } @else {
+                                            <span class="text-muted fs-12 italic">No disponible</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (payment.status === 'PENDING') {
+                                            @if (authService.isAdmin()) {
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input #fileInput type="file" class="d-none" accept=".pdf,.jpg,.png" (change)="onFileSelected($event, payment)">
+                                                    <button 
+                                                        class="btn btn-sm btn-primary d-inline-flex align-items-center" 
+                                                        (click)="$event.stopPropagation(); fileInput.click()"
+                                                        title="Subir comprobante">
+                                                        <i class="isax isax-document-upload me-1"></i> Subir
+                                                    </button>
+                                                </div>
+                                            } @else {
+                                                <span class="text-muted fs-12 d-inline-flex align-items-center"><i class="isax isax-clock me-1"></i> Pendiente</span>
+                                            }
+                                        } @else if (payment.status === 'PAID') {
+                                            <div class="d-flex align-items-center text-success">
+                                                <i class="isax isax-tick-circle me-1"></i>
+                                                <span class="fs-12 fw-medium">Pagado</span>
                                             </div>
                                         } @else {
-                                            <span class="text-muted fs-12 d-inline-flex align-items-center"><i class="isax isax-clock me-1"></i> Pendiente</span>
+                                            <span class="text-muted fs-12">N/A</span>
                                         }
-                                    } @else if (payment.status === 'Pagada') {
-                                        <div class="d-flex align-items-center text-success">
-                                            <i class="isax isax-tick-circle me-1"></i>
-                                            <span class="fs-12 fw-medium">Ya pagado</span>
+                                    </td>
+                                </tr>
+                            }
+                            @if (tableData.length === 0) {
+                                <tr>
+                                    <td colspan="9" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="isax isax-wallet-money fs-1 mb-3 d-block"></i>
+                                            <h5>No se encontraron órdenes de pago</h5>
+                                            <p>Intenta ajustar tus filtros de búsqueda</p>
                                         </div>
-                                    } @else {
-                                        <span class="text-muted fs-12">N/A</span>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                        @if (tableData.length === 0) {
-                            <tr>
-                                <td colspan="9" class="text-center py-5">
-                                    <div class="text-muted">
-                                        <i class="isax isax-wallet-money fs-1 mb-3 d-block"></i>
-                                        <h5>No se encontraron pagos</h5>
-                                        <p>Intenta ajustar tus filtros de búsqueda</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
             <!-- /Table -->
 

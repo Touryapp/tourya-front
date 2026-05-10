@@ -2,17 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
 import { AuthService } from '../../../core/services/auth.service';
-
-// Interfaz para los pagos recibidos por el proveedor
-export interface ProviderPayment {
-  id: string;
-  tourOperatorId: string;
-  creationDate: string;
-  paymentDate: string;
-  amount: string;
-  amountNumber: number;
-  status: 'Pendiente' | 'Pagada' | 'Cancelada';
-}
+import { PayoutOrdersService } from '../../../shared/services/payout-orders.service';
+import { PayoutOrder } from '../../../shared/dto/payout-order.dto';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-provider-payments',
@@ -30,19 +22,23 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   public totalAmount = 0;
   public searchDataValue = '';
   public selectedStatus = '';
+  public loading = false;
   
   // Datos de la tabla
-  public tableData: ProviderPayment[] = [];
-  public tableDataCopy: ProviderPayment[] = [];
+  public tableData: PayoutOrder[] = [];
+  public tableDataCopy: PayoutOrder[] = [];
 
-  public selectedPayment: ProviderPayment | null = null;
+  public selectedPayment: PayoutOrder | null = null;
   public showPaymentDetailsModal: boolean = false;
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    private payoutOrdersService: PayoutOrdersService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.loadMockData();
-    this.calculateTotals();
+    this.loadData();
   }
 
   ngOnDestroy(): void {
@@ -50,68 +46,38 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Carga datos mock para simular los pagos recibidos
+   * Carga datos reales desde el servicio
    */
-  private loadMockData(): void {
-    const mockData: ProviderPayment[] = [
-      {
-        id: 'PAY-001',
-        tourOperatorId: 'OP-1001',
-        creationDate: '2024-10-15',
-        paymentDate: '2024-10-20',
-        amount: '$1,200.00',
-        amountNumber: 1200,
-        status: 'Pagada'
+  public loadData(): void {
+    this.loading = true;
+    const observer = {
+      next: (data: PayoutOrder[]) => {
+        this.tableData = data;
+        this.tableDataCopy = [...data];
+        this.totalPayments = data.length;
+        this.calculateTotals();
+        this.loading = false;
       },
-      {
-        id: 'PAY-002',
-        tourOperatorId: 'OP-1002',
-        creationDate: '2024-10-10',
-        paymentDate: '-',
-        amount: '$2,500.00',
-        amountNumber: 2500,
-        status: 'Pendiente'
-      },
-      {
-        id: 'PAY-003',
-        tourOperatorId: 'OP-1003',
-        creationDate: '2024-10-05',
-        paymentDate: '-',
-        amount: '$1,800.00',
-        amountNumber: 1800,
-        status: 'Cancelada'
-      },
-      {
-        id: 'PAY-004',
-        tourOperatorId: 'OP-1001',
-        creationDate: '2024-09-20',
-        paymentDate: '2024-09-25',
-        amount: '$950.00',
-        amountNumber: 950,
-        status: 'Pagada'
-      },
-      {
-        id: 'PAY-005',
-        tourOperatorId: 'OP-1005',
-        creationDate: '2024-09-15',
-        paymentDate: '-',
-        amount: '$3,400.00',
-        amountNumber: 3400,
-        status: 'Pendiente'
+      error: (error: any) => {
+        console.error('Error loading payout orders:', error);
+        this.snackBar.open('Error al cargar las órdenes de pago', 'Cerrar', { duration: 3000 });
+        this.loading = false;
       }
-    ];
+    };
 
-    this.tableData = [...mockData];
-    this.tableDataCopy = [...mockData];
-    this.totalPayments = mockData.length;
+    if (this.authService.isAdmin()) {
+      this.payoutOrdersService.getAdminPayoutOrders().subscribe(observer);
+    } else {
+      this.payoutOrdersService.getPayoutOrders().subscribe(observer);
+    }
   }
 
   /**
    * Calcula totales
    */
   private calculateTotals(): void {
-    const completedPayments = this.tableData.filter(p => p.status === 'Pagada');
-    this.totalAmount = completedPayments.reduce((sum, payment) => sum + payment.amountNumber, 0);
+    const completedPayments = this.tableData.filter(p => p.status === 'PAID');
+    this.totalAmount = completedPayments.reduce((sum, payment) => sum + payment.amountTotal, 0);
   }
 
   /**
@@ -123,8 +89,8 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
     } else {
       const searchTerm = value.trim().toLowerCase();
       this.tableData = this.tableDataCopy.filter(payment => 
-        payment.id.toLowerCase().includes(searchTerm) ||
-        payment.tourOperatorId.toLowerCase().includes(searchTerm)
+        payment.id.toString().includes(searchTerm) ||
+        payment.providerId.toString().includes(searchTerm)
       );
     }
   }
@@ -160,8 +126,8 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
       this.tableData = data;
     } else {
       this.tableData = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
+        const aValue = (a as any)[sort.active];
+        const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
@@ -179,11 +145,23 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
    */
   public getStatusClass(status: string): string {
     const statusClasses: { [key: string]: string } = {
-      'Pagada': 'badge-success',
-      'Pendiente': 'badge-secondary',
-      'Cancelada': 'badge-danger'
+      'PAID': 'badge-success',
+      'PENDING': 'badge-secondary',
+      'CANCELLED': 'badge-danger'
     };
     return statusClasses[status] || 'badge-secondary';
+  }
+
+  /**
+   * Traduce el estado para visualización
+   */
+  public getStatusLabel(status: string): string {
+    const statusLabels: { [key: string]: string } = {
+      'PAID': 'Pagada',
+      'PENDING': 'Pendiente',
+      'CANCELLED': 'Cancelada'
+    };
+    return statusLabels[status] || status;
   }
 
   /**
@@ -207,14 +185,7 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
     return this.tableDataCopy.filter(payment => payment.status === status).length;
   }
 
-  /**
-   * Ver detalles de un pago
-   */
-  public viewPaymentDetails(paymentId: string): void {
-    alert(`Ver detalles del pago ${paymentId} - Próximamente`);
-  }
-
-  public openPaymentDetails(payment: ProviderPayment): void {
+  public openPaymentDetails(payment: PayoutOrder): void {
     this.selectedPayment = payment;
     this.showPaymentDetailsModal = true;
   }
@@ -227,31 +198,41 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   /**
    * Descargar factura
    */
-  public downloadInvoice(paymentId: string): void {
+  public downloadInvoice(paymentId: number): void {
     alert(`Descargando factura para ${paymentId} - Próximamente`);
   }
 
   /**
-   * Subir archivo para pago pendiente
+   * Subir archivo para pago pendiente (Solo Admin)
    */
-  public onFileSelected(event: any, payment: ProviderPayment): void {
+  public onFileSelected(event: any, payment: PayoutOrder): void {
     event.stopPropagation();
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 1048576) { // 1MB en bytes
-        alert('El archivo excede el tamaño máximo permitido de 1MB.');
+      if (file.size > 5242880) { // 5MB en bytes (ajustado de 1MB a 5MB)
+        this.snackBar.open('El archivo excede el tamaño máximo permitido de 5MB.', 'Cerrar', { duration: 3000 });
         event.target.value = ''; // Limpiar el input
         return;
       }
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
       if (!allowedTypes.includes(file.type)) {
-        alert('Solo se permiten archivos .pdf, .jpg y .png.');
+        this.snackBar.open('Solo se permiten archivos .pdf, .jpg y .png.', 'Cerrar', { duration: 3000 });
         event.target.value = ''; // Limpiar el input
         return;
       }
       
-      alert(`Archivo ${file.name} seleccionado para el pago ${payment.id}`);
-      // Lógica para subir el archivo
+      this.loading = true;
+      this.payoutOrdersService.uploadPaymentProof(payment.id, file).subscribe({
+        next: (response) => {
+          this.snackBar.open(`Comprobante subido exitosamente para la orden #${payment.id}`, 'Cerrar', { duration: 3000 });
+          this.loadData(); // Recargar datos para ver el cambio de estado y el proofUrl
+        },
+        error: (error) => {
+          console.error('Error uploading proof:', error);
+          this.snackBar.open('Error al subir el comprobante', 'Cerrar', { duration: 3000 });
+          this.loading = false;
+        }
+      });
     }
   }
 }

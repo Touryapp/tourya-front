@@ -14,96 +14,96 @@
                     <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Payment Info Header -->
-                    <div class="upcoming-title mb-4 d-flex align-items-center justify-content-between p-3 rounded bg-light">
-                        <div class="d-flex align-items-center flex-wrap">
-                            <div>
-                                <h6 class="mb-2">Monto a pagar: {{ selectedPayment.amount }}</h6>
-                                <div class="d-flex flex-wrap gap-3">
-                                    <p class="d-flex align-items-center mb-0 fs-14">
-                                        <i class="isax isax-calendar me-2"></i>Fecha: {{ selectedPayment.paymentDate }}
-                                    </p>
-                                    <p class="d-flex align-items-center mb-0 fs-14">
-                                        <i class="isax isax-shop me-2"></i>Operador: {{ selectedPayment.tourOperatorId }}
-                                    </p>
+                    <!-- Loading state -->
+                    @if (loading) {
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Cargando detalles de la reserva...</p>
+                        </div>
+                    } @else {
+                        <!-- Payment Info Header -->
+                        <div class="upcoming-title mb-4 d-flex align-items-center justify-content-between p-3 rounded bg-light">
+                            <div class="d-flex align-items-center flex-wrap">
+                                <div>
+                                    <h6 class="mb-2">Monto total: ${{ selectedPayment.amountTotal | number:'1.2-2' }}</h6>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <p class="d-flex align-items-center mb-0 fs-14">
+                                            <i class="isax isax-calendar me-2"></i>Fecha Creación: {{ selectedPayment.createdAt | date:'shortDate' }}
+                                        </p>
+                                        <p class="d-flex align-items-center mb-0 fs-14">
+                                            <i class="isax isax-shop me-2"></i>Proveedor: {{ selectedPayment.providerId }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
+                            <div>
+                                <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                      [ngClass]="selectedPayment.status === 'PAID' ? 'badge-success' : (selectedPayment.status === 'PENDING' ? 'badge-secondary' : 'badge-danger')">
+                                    <i class="fa-solid fa-circle fs-5 me-1"></i>{{ selectedPayment.status === 'PAID' ? 'Pagada' : (selectedPayment.status === 'PENDING' ? 'Pendiente' : 'Cancelada') }}
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
-                                  [ngClass]="selectedPayment.status === 'Pagada' ? 'badge-success' : (selectedPayment.status === 'Pendiente' ? 'badge-secondary' : 'badge-danger')">
-                                <i class="fa-solid fa-circle fs-5 me-1"></i>{{ selectedPayment.status }}
-                            </span>
-                        </div>
-                    </div>
 
-                    <!-- Associated Bookings Table -->
-                    <div class="upcoming-details mb-4">
-                        <h6 class="mb-3">Reservas Asociadas</h6>
-                        <div class="table-responsive">
-                            <table class="table datatable">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>Tour</th>
-                                        <th>Nombre del Tour</th>
-                                        <th>Email</th>
-                                        <th>Fecha Inicio</th>
-                                        <th>Precio</th>
-                                        <th>Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for (booking of associatedBookings; track booking.id) {
-                                        <tr (click)="toggleRow(booking.id)" class="clickable-row" [class.bg-light]="expandedBookingId === booking.id">
-                                            <td>
-                                                <img src="assets/img/tours/{{ booking.tourImage }}" alt="tour" class="avatar avatar-md rounded" style="object-fit: cover;">
-                                            </td>
-                                            <td class="fw-medium">{{ booking.tourName }}</td>
-                                            <td><span class="text-gray-6 fs-12">{{ booking.customerEmail }}</span></td>
-                                            <td>{{ booking.startDate }}</td>
-                                            <td class="fw-semibold text-success">{{ booking.price }}</td>
-                                            <td>
-                                                <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
-                                                      [ngClass]="getStatusClass(booking.status)">
-                                                    <i class="fa-solid fa-circle fs-5 me-1"></i>{{ booking.status }}
-                                                </span>
-                                            </td>
+                        <!-- Associated Bookings Table -->
+                        <div class="upcoming-details mb-4">
+                            <h6 class="mb-3">Reservas Asociadas</h6>
+                            <div class="table-responsive">
+                                <table class="table datatable">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>ID Reserva</th>
+                                            <th>Monto</th>
+                                            <th>Fecha Disponible Pago</th>
+                                            <th>Estado Pago</th>
                                         </tr>
-                                        @if (expandedBookingId === booking.id) {
-                                            <tr>
-                                                <td colspan="6" class="p-0 border-0">
-                                                    <div class="bg-light p-3 m-2 rounded border fade-in-row">
-                                                        <h6 class="mb-3 fs-14">Detalles Adicionales de la Reserva</h6>
-                                                        <div class="row gy-3">
-                                                            <div class="col-md-4">
-                                                                <span class="text-muted fs-12 d-block mb-1">Cliente</span>
-                                                                <span class="fw-medium text-dark">{{ booking.customerName }}</span>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <span class="text-muted fs-12 d-block mb-1">Teléfono</span>
-                                                                <span class="fw-medium text-dark">{{ booking.customerPhone }}</span>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <span class="text-muted fs-12 d-block mb-1">Viajeros</span>
-                                                                <span class="fw-medium text-dark">{{ booking.travellers }}</span>
+                                    </thead>
+                                    <tbody>
+                                        @for (booking of associatedBookings; track booking.reservationId) {
+                                            <tr (click)="toggleRow(booking.reservationId)" class="clickable-row" [class.bg-light]="expandedBookingId === booking.reservationId">
+                                                <td class="fw-medium">#{{ booking.reservationId }}</td>
+                                                <td class="fw-semibold text-success">${{ booking.amount | number:'1.2-2' }}</td>
+                                                <td>{{ booking.payoutAvailableDate | date:'shortDate' }}</td>
+                                                <td>
+                                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                                          [ngClass]="getStatusClass(booking.payoutStatus)">
+                                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ booking.payoutStatus }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            @if (expandedBookingId === booking.reservationId) {
+                                                <tr>
+                                                    <td colspan="4" class="p-0 border-0">
+                                                        <div class="bg-light p-3 m-2 rounded border fade-in-row">
+                                                            <h6 class="mb-3 fs-14">Detalles Adicionales de la Cuenta por Pagar</h6>
+                                                            <div class="row gy-3">
+                                                                <div class="col-md-6">
+                                                                    <span class="text-muted fs-12 d-block mb-1">ID Cuenta por Pagar</span>
+                                                                    <span class="fw-medium text-dark">#{{ booking.accountPayableId }}</span>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <span class="text-muted fs-12 d-block mb-1">Monto de la Reserva</span>
+                                                                    <span class="fw-medium text-dark">${{ booking.amount | number:'1.2-2' }}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        @if (associatedBookings.length === 0) {
+                                            <tr>
+                                                <td colspan="4" class="text-center py-4 text-muted">
+                                                    No hay reservas asociadas a este pago.
                                                 </td>
                                             </tr>
                                         }
-                                    }
-                                    @if (associatedBookings.length === 0) {
-                                        <tr>
-                                            <td colspan="6" class="text-center py-4 text-muted">
-                                                No hay reservas asociadas a este pago.
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     <!-- Actions -->
                     <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
