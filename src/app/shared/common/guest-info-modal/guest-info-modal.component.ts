@@ -36,8 +36,8 @@ export class GuestInfoModalComponent implements OnInit {
   cities: City[] = [];
   selectedFile: File | null = null;
   filePreview: string | null = null;
-  isPhotoDisabled: boolean = false;
   profileData: TouristProfileDto | null = null;
+  isLoadingData: boolean = true;
 
 
 
@@ -82,7 +82,7 @@ export class GuestInfoModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCountries();
+    this.isLoadingData = true;
     this.loadProfile();
   }
 
@@ -90,51 +90,56 @@ export class GuestInfoModalComponent implements OnInit {
     this.touristService.getProfile().subscribe({
       next: (profile: TouristProfileDto) => {
         this.profileData = profile;
-        if (!profile) return;
+        if (!profile) {
+          this.getCountries(true);
+          return;
+        }
 
         const simpleFields: (keyof TouristProfileDto)[] = ['firstName', 'lastName', 'documentNumber', 'phone', 'email'];
         simpleFields.forEach(field => {
           if (profile[field]) {
             this.guestInfoForm.get(field as string)?.patchValue(profile[field]);
-            this.guestInfoForm.get(field as string)?.disable();
           }
         });
 
         if (profile.photoUrl) {
           this.filePreview = profile.photoUrl;
           this.guestInfoForm.get('photo')?.patchValue(profile.photoUrl);
-          this.guestInfoForm.get('photo')?.disable();
-          this.isPhotoDisabled = true;
         }
+
+        this.getCountries(true);
       },
       error: (err) => {
         console.error('Error loading profile', err);
+        this.getCountries(true);
       }
     });
   }
 
 
 
-  getCountries() {
+  getCountries(isInit: boolean = false) {
     this.countryService.getCountries().subscribe({
       next: (data: any) => {
         this.countries = data || [];
         
-        if (this.profileData?.country && this.countries.length > 0) {
+        if (isInit && this.profileData?.country && this.countries.length > 0) {
           const matchedCountry = this.countries.find(c => 
             c.name.toLowerCase() === this.profileData?.country?.toLowerCase()
           );
           if (matchedCountry) {
             this.guestInfoForm.get('country')?.patchValue(matchedCountry.id);
-            this.guestInfoForm.get('country')?.disable();
-            this.getDepartments(matchedCountry.id);
+            this.getDepartments(matchedCountry.id, isInit);
+            return;
           }
         }
+        if (isInit) this.isLoadingData = false;
       },
 
       error: (err: any) => {
         console.error("Error getting countries.", err);
         this.countries = [];
+        if (isInit) this.isLoadingData = false;
       },
     });
   }
@@ -146,30 +151,32 @@ export class GuestInfoModalComponent implements OnInit {
     this.guestInfoForm.get('department')?.setValue("");
     this.guestInfoForm.get('city')?.setValue("");
     if(value) {
-        this.getDepartments(+value);
+        this.getDepartments(+value, false);
     }
   }
 
-  getDepartments(countryId: number) {
+  getDepartments(countryId: number, isInit: boolean = false) {
     this.departmentService.getDepartmentsByCountryId(countryId).subscribe({
       next: (data: any) => {
         this.departments = data || [];
 
-        if (this.profileData?.state && this.departments.length > 0) {
+        if (isInit && this.profileData?.state && this.departments.length > 0) {
           const matchedDept = this.departments.find(d => 
             d.name.toLowerCase() === this.profileData?.state?.toLowerCase()
           );
           if (matchedDept) {
             this.guestInfoForm.get('department')?.patchValue(matchedDept.id);
-            this.guestInfoForm.get('department')?.disable();
-            this.getCities(matchedDept.id);
+            this.getCities(matchedDept.id, isInit);
+            return;
           }
         }
+        if (isInit) this.isLoadingData = false;
       },
 
       error: (err: any) => {
         console.error("Error getting departments.", err);
         this.departments = [];
+        if (isInit) this.isLoadingData = false;
       },
     });
   }
@@ -179,29 +186,30 @@ export class GuestInfoModalComponent implements OnInit {
     this.cities = [];
     this.guestInfoForm.get('city')?.setValue("");
     if(value) {
-        this.getCities(+value);
+        this.getCities(+value, false);
     }
   }
 
-  getCities(departmentId: number) {
+  getCities(departmentId: number, isInit: boolean = false) {
     this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
       next: (data: any) => {
         this.cities = data || [];
 
-        if (this.profileData?.city && this.cities.length > 0) {
+        if (isInit && this.profileData?.city && this.cities.length > 0) {
           const matchedCity = this.cities.find(c => 
             c.name.toLowerCase() === this.profileData?.city?.toLowerCase()
           );
           if (matchedCity) {
             this.guestInfoForm.get('city')?.patchValue(matchedCity.id);
-            this.guestInfoForm.get('city')?.disable();
           }
         }
+        if (isInit) this.isLoadingData = false;
       },
 
       error: (err: any) => {
         console.error("Error getting cities.", err);
         this.cities = [];
+        if (isInit) this.isLoadingData = false;
       },
     });
   }
