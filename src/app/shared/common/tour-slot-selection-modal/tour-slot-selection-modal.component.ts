@@ -196,6 +196,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         infants: number;
         cabinClass: string;
       };
+      originalTravellers?: number;
       tourAdded: (cartItem: CartItem) => void;
     }
   ) {
@@ -209,68 +210,47 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    // Recuperar datos de búsqueda del localStorage
-    const userActionsTraceStr = localStorage.getItem('userActionsTrace');
-    let searchBody: any = {
-      tourId: this.selectedTour?.tour?.id,
-      language: 'es'
-    };
+    if (this.isRescheduling) {
+      // Si estamos reagendando, provider-tour-management ya hizo la búsqueda 
+      // con las fechas exactas y nos pasó los datos completos en this.selectedTour
+      this.initializeFromExistingTour();
+      this.checkAndExecutePendingAction();
+    } else {
+      // Para el flujo normal, configurar la búsqueda de horarios
+      let searchBody: any = {
+        tourId: this.selectedTour?.tour?.id,
+        language: 'es'
+      };
 
-    if (userActionsTraceStr) {
-      try {
-        const trace = JSON.parse(userActionsTraceStr);
-        if (trace.checkIn) searchBody.startDate = trace.checkIn;
-        if (trace.checkOut) searchBody.endDate = trace.checkOut;
-      } catch (e) {
-        console.error('Error parsing userActionsTrace', e);
-      }
-    }
-
-    this.searchToursService
-      .searchTours(searchBody, 1, 10)
-      .subscribe((data) => {
-        if (data && data.content) {
-          this.selectedTour = data.content[0];
-
-          const startDateDayjs = dayjs(this.data.checkIn, "YYYY-MM-DD");
-          const endDateDayjs = dayjs(this.data.checkOut, "YYYY-MM-DD");
-
-          if (startDateDayjs.isValid() && endDateDayjs.isValid()) {
-            this.dates = this.generateDateRange(
-              startDateDayjs.toDate(),
-              endDateDayjs.toDate()
-            );
-
-            const scheduleDates = (this.selectedTour.schedules || []).map(
-              (schedule) => {
-                return dayjs(schedule.scheduleDate).format("YYYY-MM-DD");
-              }
-            );
-
-            this.dates = this.dates.filter((date) => {
-              const dateString = dayjs(date).format("YYYY-MM-DD");
-              return scheduleDates.includes(dateString);
-            });
-
-            const matchedDate = this.dates.find((date) => {
-              return dayjs(date).format("YYYY-MM-DD") === this.data.dayDate;
-            });
-            this.selectedDate = matchedDate || null;
-
-            // Inicializar participantes genéricamente para que la sección sea visible aunque no haya fecha elegida
-            if (!this.selectedDate) {
-              const allSlots = this.selectedTour.schedules.flatMap(s => s.config?.slots || []);
-              const firstPrices = allSlots.length > 0 ? (allSlots[0].prices || []) : [];
-              this.initOrUpdateParticipants(firstPrices, this.currentAvailability);
-            }
-
-            this.updateAvailableSlots();
+      if (this.data.checkIn && this.data.checkOut) {
+        searchBody.startDate = this.data.checkIn;
+        searchBody.endDate = this.data.checkOut;
+      } else {
+        // Recuperar datos de búsqueda del localStorage como fallback
+        const userActionsTraceStr = localStorage.getItem('userActionsTrace');
+        if (userActionsTraceStr) {
+          try {
+            const trace = JSON.parse(userActionsTraceStr);
+            if (trace.checkIn) searchBody.startDate = trace.checkIn;
+            if (trace.checkOut) searchBody.endDate = trace.checkOut;
+          } catch (e) {
+            console.error('Error parsing userActionsTrace', e);
           }
         }
-        
-        // Verificar si hay acción pendiente después de cargar los datos
-        this.checkAndExecutePendingAction();
-      });
+      }
+
+      this.searchToursService
+        .searchTours(searchBody, 1, 10)
+        .subscribe((data) => {
+          if (data && data.content) {
+            this.selectedTour = data.content[0];
+            this.initializeFromExistingTour();
+          }
+          
+          // Verificar si hay acción pendiente después de cargar los datos
+          this.checkAndExecutePendingAction();
+        });
+    }
 
     // Cargar dinámicamente si debe consumir el servicio (si el perfil está completo)
     if (this.authService.isAuthenticated()) {
@@ -288,9 +268,50 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         }
       });
     } else {
-
       this.shouldConsumeService = true; // Por defecto true si no está autenticado (seguirá flujo de login)
       this.isAddressCheckLoading = false;
+    }
+  }
+
+  /**
+   * Inicializa las fechas y slots disponibles usando el tour ya cargado
+   */
+  private initializeFromExistingTour(): void {
+    if (!this.selectedTour) return;
+
+    const startDateDayjs = dayjs(this.data.checkIn, "YYYY-MM-DD");
+    const endDateDayjs = dayjs(this.data.checkOut, "YYYY-MM-DD");
+
+    if (startDateDayjs.isValid() && endDateDayjs.isValid()) {
+      this.dates = this.generateDateRange(
+        startDateDayjs.toDate(),
+        endDateDayjs.toDate()
+      );
+
+      const scheduleDates = (this.selectedTour.schedules || []).map(
+        (schedule) => {
+          return dayjs(schedule.scheduleDate).format("YYYY-MM-DD");
+        }
+      );
+
+      this.dates = this.dates.filter((date) => {
+        const dateString = dayjs(date).format("YYYY-MM-DD");
+        return scheduleDates.includes(dateString);
+      });
+
+      const matchedDate = this.dates.find((date) => {
+        return dayjs(date).format("YYYY-MM-DD") === this.data.dayDate;
+      });
+      this.selectedDate = matchedDate || null;
+
+      // Inicializar participantes genéricamente para que la sección sea visible aunque no haya fecha elegida
+      if (!this.selectedDate) {
+        const allSlots = this.selectedTour.schedules.flatMap(s => s.config?.slots || []);
+        const firstPrices = allSlots.length > 0 ? (allSlots[0].prices || []) : [];
+        this.initOrUpdateParticipants(firstPrices, this.currentAvailability);
+      }
+
+      this.updateAvailableSlots();
     }
   }
 
@@ -1306,7 +1327,33 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * con lógica distributiva ('inteligencia' o cascada)
    */
   private applyDefaultTravellers(): void {
-    if (!this.data.travellersData || this.participants.length === 0) return;
+    if (this.participants.length === 0) return;
+
+    if (this.isRescheduling && this.data.originalTravellers) {
+      const originalCount = this.data.originalTravellers;
+      const isGroup = this.selectedTour?.tour?.priceType === 'group';
+
+      if (isGroup) {
+        this.updateGroupCount(Math.ceil(originalCount / (this.selectedTour?.tour?.maxPeople || 1)));
+        if (this.participants.length === 1) {
+          this.participants[0].quantity = Math.min(originalCount, this.participants[0].maxQuantity);
+        }
+      } else {
+        if (this.participants.length === 1) {
+          this.participants[0].quantity = Math.min(originalCount, this.participants[0].maxQuantity);
+        } else {
+          const pAdult = this.participants.find(p => p.ageType === 'ADULT') || this.participants[0];
+          if (pAdult) {
+            pAdult.quantity = Math.min(originalCount, pAdult.maxQuantity);
+          }
+        }
+      }
+      this.updateTotals();
+      this.updateValidation();
+      return;
+    }
+
+    if (!this.data.travellersData) return;
 
     const td = this.data.travellersData;
     const totalRequested = (td.adults || 0) + (td.children || 0) + (td.infants || 0);

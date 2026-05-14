@@ -355,6 +355,14 @@
                             </div>
                         }
 
+                        <!-- QR Code -->
+                        @if (selectedBooking.qrUrl) {
+                            <div class="upcoming-details mb-4 text-center border-top pt-4">
+                                <h6 class="mb-3">{{ 'provider-tour-management.modal.qrCode' | translate }}</h6>
+                                <img [src]="selectedBooking.qrUrl" alt="QR Code" class="img-fluid rounded shadow-sm" style="max-width: 200px;">
+                            </div>
+                        }
+
                         <!-- Actions -->
                         <div class="d-flex justify-content-between gap-2 mt-4 pt-3 border-top">
                             <div class="d-flex gap-2">
@@ -378,7 +386,7 @@
                                         <i class="isax isax-tick-square me-2"></i>{{ 'provider-tour-management.modal.actions.complete' | translate }}
                                     </button>
                                 }
-                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING')) {
+                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING' || selectedBooking.status === 'Rescheduled')) {
                                     <button 
                                         class="btn btn-success" 
                                         (click)="confirmBookingFromModal(selectedBooking.id)"
