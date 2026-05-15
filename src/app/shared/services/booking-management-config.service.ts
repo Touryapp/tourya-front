@@ -185,6 +185,11 @@ export class BookingManagementConfigService {
           icon: 'fa fa-times-circle',
           color: 'danger',
           visible: (row) => {
+            // Use the new canCancel field from API if available
+            if (row.canCancel !== undefined) {
+              return row.canCancel;
+            }
+
             // Check if status is Pending or Rescheduled
             const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
             
@@ -352,6 +357,7 @@ export class BookingManagementConfigService {
           icon: 'fa fa-times-circle',
           color: 'danger',
           visible: (row) => {
+            if (row.canCancel !== undefined) return row.canCancel;
             const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
             if (!row.maxCancellationDate) return false;
             const now = new Date();

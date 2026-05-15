@@ -8,6 +8,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SearchToursService } from '../list-tours/search-tours.service';
 import { TourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
 import { TouristService } from '../../../shared/services/tourist.service';
+import { TouristProfileDto } from '../../../shared/dto/tourist-profile.dto';
+import { MatDialog } from '@angular/material/dialog';
+import { GuestInfoModalComponent } from '../../../shared/common/guest-info-modal/guest-info-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-my-profile',
@@ -18,6 +22,10 @@ import { TouristService } from '../../../shared/services/tourist.service';
 export class MyProfileComponent implements OnInit {
   public routes = routes;
   activeSection: string = 'profile'; // 'profile' | 'bookings' | 'reviews' | 'wishlist'
+
+  // Variables para profile
+  profileData: TouristProfileDto | null = null;
+  profileLoading: boolean = false;
 
   // Variables para bookings
   highlightedReservationId: number | null = null;
@@ -46,7 +54,8 @@ export class MyProfileComponent implements OnInit {
     private reviewsService: ReviewsService,
     private _snackBar: MatSnackBar,
     private searchToursService: SearchToursService,
-    private touristService: TouristService
+    private touristService: TouristService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +84,9 @@ export class MyProfileComponent implements OnInit {
           if (section === 'wishlist') {
             this.loadWishlistTours();
           }
+          if (section === 'profile') {
+            this.loadProfile();
+          }
         });
       }
     });
@@ -95,14 +107,79 @@ export class MyProfileComponent implements OnInit {
           if (section === 'wishlist') {
             this.loadWishlistTours();
           }
+          if (section === 'profile') {
+            this.loadProfile();
+          }
         });
       }
     });
+
+    // Cargar perfil inicialmente si la sección activa es 'profile'
+    if (this.activeSection === 'profile') {
+      this.loadProfile();
+    }
   }
 
   onSectionChange(section: string): void {
     this.activeSection = section;
     this.clientMenuService.setActiveSection(section);
+  }
+
+  loadProfile(): void {
+    this.profileLoading = true;
+    this.touristService.getProfile().subscribe({
+      next: (data) => {
+        this.profileData = data;
+        this.profileLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading profile:', error);
+        this.profileLoading = false;
+      }
+    });
+  }
+
+  openEditProfileModal(): void {
+    const dialogRef = this.dialog.open(GuestInfoModalComponent, {
+      width: '700px',
+      maxWidth: '95vw',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && typeof result === 'object') {
+        const { profileSuccess, photoSuccess, photoAttempted } = result;
+        
+        let htmlContent = '<div style="text-align: left; margin-top: 10px; font-size: 1.1rem;">';
+        if (photoAttempted) {
+          htmlContent += `<p>${photoSuccess ? '✅' : '❌'} <strong>Foto de perfil:</strong> ${photoSuccess ? 'Cargada correctamente' : 'Error al cargar'}</p>`;
+        }
+        htmlContent += `<p>${profileSuccess ? '✅' : '❌'} <strong>Datos del perfil:</strong> ${profileSuccess ? 'Actualizados correctamente' : 'Error al actualizar'}</p>`;
+        htmlContent += '</div>';
+
+        const isTotalSuccess = (!photoAttempted || photoSuccess) && profileSuccess;
+
+        setTimeout(() => {
+          Swal.fire({
+            title: isTotalSuccess ? '¡Proceso Completado!' : 'Resultado de la actualización',
+            html: htmlContent,
+            icon: isTotalSuccess ? 'success' : (profileSuccess || photoSuccess ? 'warning' : 'error'),
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#3085d6',
+            allowOutsideClick: false,
+            backdrop: true,
+            target: 'body' 
+          }).then(() => {
+            if (profileSuccess) {
+              this.loadProfile();
+            }
+          });
+        }, 150);
+
+      } else if (result === true) {
+        this.loadProfile();
+      }
+    });
   }
 
   loadWishlistTours(): void {

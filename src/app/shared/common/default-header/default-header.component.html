@@ -61,8 +61,8 @@
                         </a>
                     </div>
                     <div class="fav-dropdown mb-2 me-3">
-                        <a [routerLink]="routes.wishlist" class="position-relative">
-                            <i class="isax isax-heart"></i><span class="count-icon bg-secondary text-gray-9">0</span>
+                        <a [routerLink]="['/clients/my-profile']" [queryParams]="{ section: 'wishlist' }" class="position-relative">
+                            <i class="isax isax-heart"></i>
                         </a>
                     </div>
                     <div>

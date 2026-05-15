@@ -12,6 +12,7 @@ import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { CreditService } from '../../../shared/services/credit.service';
 import { ClientCredit } from '../../../shared/models/credit.model';
 import { SearchToursService } from '../list-tours/search-tours.service';
+import { TouristService } from '../../../shared/services/tourist.service';
 
 // Interface for traveler information per tour
 interface TravelerInfo {
@@ -91,18 +92,67 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     public i18nService: I18nFieldService,
     private creditService: CreditService,
-    private searchToursService: SearchToursService
+    private searchToursService: SearchToursService,
+    private touristService: TouristService
   ) {}
 
   ngOnInit(): void {
     console.log('CartSummary: Iniciando componente...');
     this.loadCartData();
     this.loadUserCredits();
+    this.loadUserProfile();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Carga los datos del perfil del usuario y pre-llena el formulario
+   */
+  private loadUserProfile(): void {
+    this.touristService.getProfile()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (profile) => {
+          if (profile) {
+            console.log('CartSummary: Perfil de usuario cargado:', profile);
+            this.contactForm.firstName = profile.firstName || this.contactForm.firstName;
+            this.contactForm.lastName = profile.lastName || this.contactForm.lastName;
+            this.contactForm.email = profile.email || this.contactForm.email;
+            this.contactForm.phone = profile.phone || this.contactForm.phone;
+            this.contactForm.country = this.mapCountryToIsoCode(profile.country) || this.contactForm.country;
+            this.contactForm.city = profile.city || this.contactForm.city;
+            
+            // Asignar campos adicionales si el backend los envía (dirección, info adicional)
+            if ((profile as any).address) {
+              this.contactForm.address1 = (profile as any).address || this.contactForm.address1;
+            }
+            if ((profile as any).additionalInfo) {
+              this.contactForm.additionalInfo = (profile as any).additionalInfo || this.contactForm.additionalInfo;
+            }
+
+            this.syncFormsData();
+          }
+        },
+        error: (error) => {
+          console.error('CartSummary: Error cargando perfil de usuario:', error);
+        }
+      });
+  }
+
+  /**
+   * Mapea el nombre del país al código ISO requerido por el select y Wompi
+   */
+  private mapCountryToIsoCode(countryName: string): string {
+    if (!countryName) return '';
+    const name = countryName.toLowerCase().trim();
+    if (name === 'colombia' || name === 'co') return 'CO';
+    if (name === 'estados unidos' || name === 'united states' || name === 'usa' || name === 'us') return 'US';
+    if (name === 'españa' || name === 'spain' || name === 'es') return 'ES';
+    // Si ya es código de 2 letras o es otro país, devolverlo (aunque el form sólo tenga 3 opciones)
+    return countryName.length === 2 ? countryName.toUpperCase() : countryName;
   }
 
   /**
