@@ -161,60 +161,76 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
   private loadCartData(): void {
     this.loading = true;
     
-    // Load cart data from backend API
-    this.cartService.loadCartFromBackend()
-      .then(() => {
-        // Subscribe to cart items from service
-        this.cartService.cartItems$.pipe(take(1)).subscribe(cartItems => {
-          this.cartItems = cartItems;
-          this.updateCartSummary();
-          
-          console.log('CartSummary: Datos del carrito cargados desde API:', cartItems.length, 'items');
-          
-          if (cartItems.length === 0) {
-            console.log('CartSummary: Carrito vacío');
-            this.handleEmptyCart();
-          } else {
-            // Initialize traveler information for each cart item
-            this.initializeTravelersInfo();
-          }
-          
-          this.loading = false;
-        });
-      })
-      .catch((error) => {
-        console.error('CartSummary: Error cargando datos del carrito:', error);
-        
-        // Show user-friendly error message
-        let errorMessage = 'Error cargando el carrito. Por favor, intenta de nuevo.';
-        if (error.status === 401) {
-          errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
-          // Redirect to login or show login modal
-        }
-        
-        alert(errorMessage); // TODO: Replace with proper toast/snackbar
-        
-        // Handle empty cart on error
-        this.handleEmptyCart();
-        this.loading = false;
-      });
-
-    // Obtener items del carrito
+    // Subscribe to cart items from service
     this.cartService.cartItems$
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (items: CartItem[]) => {
+          this.cartItems = items;
+          this.updateCartSummary();
+          
           if (items && items.length > 0) {
-            this.cartItems = items;
-            console.log('CartSummary: Items reales del carrito:', items);
+            console.log('CartSummary: Items del carrito recibidos:', items.length);
+            this.initializeTravelersInfo();
+            this.enrichCartItemsWithImages();
+          } else {
+            console.log('CartSummary: Carrito vacío');
+            this.handleEmptyCart();
           }
-          // Inicializar información de viajeros
-          this.initializeTravelersInfo();
+          
+          this.loading = false;
         },
         error: (error: any) => {
-          console.error('CartSummary: Error cargando items, usando mock data:', error);
+          console.error('CartSummary: Error cargando items:', error);
+          this.handleEmptyCart();
+          this.loading = false;
         }
       });
+
+    // Asegurar que el carrito se cargue desde el backend al inicio
+    this.cartService.loadCartFromBackend().catch(err => {
+      console.error('CartSummary: Error inicializando carga desde backend:', err);
+    });
+  }
+
+  /**
+   * Enriquecer los items del carrito con la imagen del tour si falta
+   */
+  private enrichCartItemsWithImages(): void {
+    if (!this.cartItems || this.cartItems.length === 0) return;
+
+    this.cartItems.forEach(item => {
+      // Si el item tiene tourId pero no tiene galería o imagen
+      const hasNoImage = !item.gallery || item.gallery.length === 0 || !item.gallery[0]?.imageUrl;
+      
+      if (item.tour?.id && hasNoImage) {
+        console.log(`CartSummary: Cargando imagen para tour ${item.tour.id}...`);
+        this.searchToursService.detailTourPublic(item.tour.id)
+          .pipe(take(1))
+          .subscribe({
+            next: (details) => {
+              if (details) {
+                // Priorizar profilePicture si existe
+                if (details.profilePicture && details.profilePicture.imageUrl) {
+                  item.gallery = [{
+                    imageUrl: details.profilePicture.imageUrl,
+                    description: '',
+                    order: 0
+                  }];
+                } else if (details.galleries && details.galleries.length > 0) {
+                  // Fallback a la primera imagen de la galería
+                  item.gallery = details.galleries.map(g => ({
+                    imageUrl: g.imageUrl,
+                    description: '',
+                    order: g.orderIndex || 0
+                  }));
+                }
+              }
+            },
+            error: (err) => console.error(`CartSummary: Error cargando imagen para tour ${item.tour.id}:`, err)
+          });
+      }
+    });
   }
 
   /**

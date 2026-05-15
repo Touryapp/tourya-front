@@ -123,19 +123,32 @@ export interface ReservationDetails {
   tourId: number;
   tourName: string;
   tourType: string;
-  duration: string;
+  duration: string | null;
   checkInDate: string;
-  returnDate: string;
+  returnDate: string | null;
   destination: string;
   price: number;
   travellers: string;
   activities: string[];
   extraServices: string[];
-  payer: {
+  maxCancellationDate?: string;
+  maxReschedulingDate?: string;
+  cancellationDate?: string | null;
+  cancellationReason?: string | null;
+  canReschedule?: boolean;
+  canCancel?: boolean;
+  credit?: any;
+  payer?: {
     name: string;
     email: string;
     phone: string;
   };
+  // List API payer fields (may come from reservation list)
+  payerName?: string;
+  payerEmail?: string;
+  payerPhone?: string;
+  payerDocumentType?: string;
+  payerDocumentNumber?: string;
 }
 
 /**
