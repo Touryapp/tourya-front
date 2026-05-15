@@ -55,6 +55,7 @@ export interface TourDto {
   subCategory?: string;
   subCategoryName?: string;
   priceFrom?: number;
+  profilePicture?: { imageUrl: string };
 }
 
 export interface AddressDto {

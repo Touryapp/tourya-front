@@ -137,6 +137,7 @@ import { PendingReviewsModalComponent } from "./components/pending-reviews-modal
     MatCheckboxModule,
     CalendarAngularCalendarModule,
     PendingReviewsModalComponent,
+    GoogleMapsModule,
     RouterModule
   ],
   providers: [

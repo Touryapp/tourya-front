@@ -54,6 +54,17 @@ export interface ProviderTourBooking {
   canCancel?: boolean; // New field from API
   qrUrl?: string;
   totalTourists?: number;
+  serviceResponsible?: any; // New field for reservation contact
+  tourDetails?: any; // New field for public tour details
+  // Payer info (for PROVIDER/ADMIN view)
+  payerName?: string;
+  payerDocumentType?: string;
+  payerDocumentNumber?: string;
+  payerEmail?: string;
+  payerPhone?: string;
+  // Cancellation info
+  cancellationDate?: string;
+  cancellationReason?: string;
 }
 
 @Component({
@@ -195,11 +206,59 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         // Llamar al servicio para obtener los datos reales de la reserva
         this.reservationService.getReservationById(params['reservationId']).subscribe({
           next: (reservation) => {
-            console.log('âœ… Reserva obtenida del backend:', reservation);
+            console.log('✅ Reserva obtenida del backend:', reservation);
             
             // Convertir la reserva del backend al formato ProviderTourBooking
             this.selectedBooking = this.mapReservationToBooking(reservation);
             
+            if (reservation.tourId) {
+              const startDate = reservation.checkInDate ? reservation.checkInDate.split('T')[0] : '';
+              const endDate = reservation.returnDate ? reservation.returnDate.split('T')[0] : '';
+              
+              const searchBody = {
+                tourId: reservation.tourId,
+                language: this.translate.currentLang || 'es',
+                startDate: startDate,
+                endDate: endDate
+              };
+
+              this.searchToursService.searchTours(searchBody, 0, 10).subscribe({
+                next: (scheduleDetails) => {
+                  console.log('✅ Detalles de schedule obtenidos automáticamente:', scheduleDetails);
+                  if (scheduleDetails?.content?.length > 0) {
+                    const tourInfo = scheduleDetails.content[0].tour;
+                    if (tourInfo) {
+                      if (tourInfo.profilePicture?.imageUrl) {
+                        this.selectedBooking.img = tourInfo.profilePicture.imageUrl;
+                      }
+                      if (tourInfo.subCategoryName) {
+                        this.selectedBooking.tourType = tourInfo.subCategoryName;
+                      }
+                      if (tourInfo.address?.address) {
+                        this.selectedBooking.destination = tourInfo.address.address;
+                      }
+                    }
+                  }
+                },
+                error: (err) => {
+                  console.error('❌ Error al obtener detalles de schedule:', err);
+                }
+              });
+
+              this.searchToursService.detailTourPublic(reservation.tourId).subscribe({
+                next: (tourDetails) => {
+                  console.log('✅ Detalles adicionales del tour obtenidos:', tourDetails);
+                  if (this.selectedBooking) {
+                    this.selectedBooking.tourDetails = tourDetails;
+                    this.cdr.detectChanges();
+                  }
+                },
+                error: (err) => {
+                  console.error('❌ Error al obtener detalles adicionales del tour:', err);
+                }
+              });
+            }
+
             // Abrir el modal con retry para asegurar que el DOM estÃ© listo
             this.openModalWithRetry();
           },
@@ -289,6 +348,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       customerName: reservation.serviceResponsible?.name || 'N/A',
       customerEmail: reservation.serviceResponsible?.email || 'N/A',
       customerPhone: reservation.serviceResponsible?.phone || 'N/A',
+      serviceResponsible: reservation.serviceResponsible,
       travellers: reservation.travellers || 'N/A',
       duration: reservation.duration ? `${reservation.duration} dÃ­as` : 'N/A',
       price: reservation.price ? `$${reservation.price.toFixed(2)}` : '$0.00',
@@ -302,7 +362,16 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       extraServices: reservation.extraServices || [],
       activities: reservation.activities || [],
       isSelected: false,
-      qrUrl: reservation.qrUrl
+      qrUrl: reservation.qrUrl,
+      // Payer info
+      payerName: reservation.payerName || undefined,
+      payerDocumentType: reservation.payerDocumentType || undefined,
+      payerDocumentNumber: reservation.payerDocumentNumber || undefined,
+      payerEmail: reservation.payerEmail || undefined,
+      payerPhone: reservation.payerPhone || undefined,
+      // Cancellation info
+      cancellationDate: reservation.cancellationDate || undefined,
+      cancellationReason: reservation.cancellationReason || undefined,
     };
   }
   
@@ -478,7 +547,13 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       maxCancellationDate: reservation.maxCancellationDate,
       maxReschedulingDate: reservation.maxReschedulingDate,
       canReschedule: reservation.canReschedule,
-      canCancel: reservation.canCancel
+      canCancel: reservation.canCancel,
+      // Payer info from list API
+      payerName: reservation.payerName,
+      payerEmail: reservation.payerEmail,
+      payerPhone: reservation.payerPhone,
+      payerDocumentType: reservation.payerDocumentType,
+      payerDocumentNumber: reservation.payerDocumentNumber
     };
   }
 
@@ -525,7 +600,13 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       maxCancellationDate: reservation.maxCancellationDate,
       maxReschedulingDate: reservation.maxReschedulingDate,
       canReschedule: reservation.canReschedule,
-      canCancel: reservation.canCancel
+      canCancel: reservation.canCancel,
+      // Payer info from list API
+      payerName: reservation.payerName,
+      payerEmail: reservation.payerEmail,
+      payerPhone: reservation.payerPhone,
+      payerDocumentType: reservation.payerDocumentType,
+      payerDocumentNumber: reservation.payerDocumentNumber
     };
   }
 
@@ -787,8 +868,65 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     
     this.reservationService.getReservationById(numericId).subscribe({
       next: (reservation) => {
-        console.log('âœ… Detalles de la reserva obtenidos:', reservation);
-        this.selectedBooking = this.mapReservationToBooking(reservation);
+        console.log('✅ Detalles de la reserva obtenidos:', reservation);
+        const mapped = this.mapReservationToBooking(reservation);
+        // Preserve payer info from the table row (comes from list API, not detail API)
+        this.selectedBooking = {
+          ...mapped,
+          payerName: mapped.payerName || booking.payerName,
+          payerEmail: mapped.payerEmail || booking.payerEmail,
+          payerPhone: mapped.payerPhone || booking.payerPhone,
+          payerDocumentType: mapped.payerDocumentType || booking.payerDocumentType,
+          payerDocumentNumber: mapped.payerDocumentNumber || booking.payerDocumentNumber,
+        };
+        
+        if (reservation.tourId) {
+          const startDate = reservation.checkInDate ? reservation.checkInDate.split('T')[0] : '';
+          const endDate = reservation.returnDate ? reservation.returnDate.split('T')[0] : '';
+          
+          const searchBody = {
+            tourId: reservation.tourId,
+            language: this.translate.currentLang || 'es',
+            startDate: startDate,
+            endDate: endDate
+          };
+
+          this.searchToursService.searchTours(searchBody, 0, 10).subscribe({
+            next: (scheduleDetails) => {
+              console.log('✅ Detalles de schedule obtenidos automáticamente:', scheduleDetails);
+              if (scheduleDetails?.content?.length > 0) {
+                const tourInfo = scheduleDetails.content[0].tour;
+                if (tourInfo) {
+                  if (tourInfo.profilePicture?.imageUrl) {
+                    this.selectedBooking.img = tourInfo.profilePicture.imageUrl;
+                  }
+                  if (tourInfo.subCategoryName) {
+                    this.selectedBooking.tourType = tourInfo.subCategoryName;
+                  }
+                  if (tourInfo.address?.address) {
+                    this.selectedBooking.destination = tourInfo.address.address;
+                  }
+                }
+              }
+            },
+            error: (err) => {
+              console.error('❌ Error al obtener detalles de schedule:', err);
+            }
+          });
+
+          this.searchToursService.detailTourPublic(reservation.tourId).subscribe({
+            next: (tourDetails) => {
+              console.log('✅ Detalles adicionales del tour obtenidos:', tourDetails);
+              if (this.selectedBooking) {
+                this.selectedBooking.tourDetails = tourDetails;
+                this.cdr.detectChanges();
+              }
+            },
+            error: (err) => {
+              console.error('❌ Error al obtener detalles adicionales del tour:', err);
+            }
+          });
+        }
         
         // Abrir el modal programÃ¡ticamente
         setTimeout(() => {
@@ -1203,6 +1341,44 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     }
     
     return pages;
+  }
+
+  /**
+   * Convierte el durationEnum del tour a una etiqueta legible
+   */
+  public getDurationLabelFromEnum(durationEnum: string | string[] | undefined): string {
+    if (!durationEnum) return '—';
+    const value = Array.isArray(durationEnum) ? durationEnum[0] : durationEnum;
+    const mapping: { [key: string]: string } = {
+      '1_a_2_horas': '1 a 2 horas',
+      '2_a_4_horas': '2 a 4 horas',
+      '4_a_6_horas': '4 a 6 horas',
+      'hasta_1_dia': 'Hasta 1 día',
+      'hasta_3_dias': 'Hasta 3 días',
+      'hasta_5_dias': 'Hasta 5 días'
+    };
+    return mapping[value] || value;
+  }
+
+  /**
+   * Formatea el string de viajeros del API (ej: "2 ADULTs, 1 CHILD") al español
+   */
+  public formatTravellers(travellers: string | undefined): string {
+    if (!travellers) return '—';
+    const replacements: [RegExp, string][] = [
+      [/\bADULTs\b/gi, 'Adultos'],
+      [/\bADULT\b/gi, 'Adulto'],
+      [/\bCHILDREN\b/gi, 'Niños'],
+      [/\bCHILDs\b/gi, 'Niños'],
+      [/\bCHILD\b/gi, 'Niño'],
+      [/\bINFANTs\b/gi, 'Bebés'],
+      [/\bINFANT\b/gi, 'Bebé'],
+    ];
+    let result = travellers;
+    for (const [pattern, replacement] of replacements) {
+      result = result.replace(pattern, replacement);
+    }
+    return result;
   }
 
   /**

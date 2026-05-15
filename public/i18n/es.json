@@ -1,4 +1,4 @@
-﻿{
+{
   "shared": {
     "available": "Disponible",
     "notAvailable": "No disponible",
@@ -9,93 +9,93 @@
     "close": "Cerrar",
     "save": "Guardar",
     "submit": "Enviar",
-    "year": "aÃ±o",
-    "years": "aÃ±os",
+    "year": "año",
+    "years": "años",
     "night": "Noche",
     "message": "Mensaje",
     "adult": "Adulto",
     "adults": "Adultos",
-    "child": "NiÃ±o",
-    "children": "NiÃ±os",
+    "child": "Niño",
+    "children": "Niños",
     "infant": "Infante",
     "infants": "Infantes",
     "messages": {
       "error": "Ha ocurrido un error, por favor intente de nuevo",
-      "success": "AcciÃ³n completada con Ã©xito",
+      "success": "Acción completada con éxito",
       "errorGettingTour": "Error al obtener el tour",
-      "tourSubmitted": "Tour enviado a revisiÃ³n exitosamente"
+      "tourSubmitted": "Tour enviado a revisión exitosamente"
     }
   },
   "rejectionReasons": {
     "inappropriate": "Contenido inapropiado",
-    "fake": "InformaciÃ³n falsa o engaÃ±osa",
+    "fake": "Información falsa o engañosa",
     "spam": "Spam o contenido irrelevante"
   },
   "home": {
-    "title": "Reserve los Mejores Tours en San AndrÃ©s al Mejor Precio",
-    "subtitle": "Disfruta de la isla con atenciÃ³n 24/7, compra segura y cancelaciones flexibles.",
+    "title": "Reserve los Mejores Tours en San Andrés al Mejor Precio",
+    "subtitle": "Disfruta de la isla con atención 24/7, compra segura y cancelaciones flexibles.",
     "top-tours": {
-      "title": "Top Tours en San AndrÃ©s ",
-      "subtitle": "Tourya es un Marketplace diseÃ±ada para conectar turistas con las mejores experiencias en la isla de san AndrÃ©s."
+      "title": "Top Tours en San Andrés ",
+      "subtitle": "Tourya es un Marketplace diseñada para conectar turistas con las mejores experiencias en la isla de san Andrés."
     },
     "how-it-works": {
       "title": "Â¿Como reservar tu tour en Tourya?",
       "step1": {
         "title": "Verifica disponibilidad",
-        "description": "Filtra por tipo de tour, revisa opiniones y asegÃºrate de que el tour estÃ© disponible en las fechas de tu viaje."
+        "description": "Filtra por tipo de tour, revisa opiniones y asegúrate de que el tour esté disponible en las fechas de tu viaje."
       },
       "step2": {
         "title": "Elige y paga",
-        "description": "Selecciona los tours que mejor se adaptan a tus gustos, intereses y ritmo de viaje. Paga fÃ¡cil y seguro con tu mÃ©todo favorito."
+        "description": "Selecciona los tours que mejor se adaptan a tus gustos, intereses y ritmo de viaje. Paga fácil y seguro con tu método favorito."
       },
       "step3": {
         "title": "Recibe tu QR y Disfruta",
-        "description": "Recibe un cÃ³digo QR en tu celular. MuÃ©stralo al proveedor y Â¡vive la experiencia sin complicaciones!"
+        "description": "Recibe un código QR en tu celular. Muéstralo al proveedor y Â¡vive la experiencia sin complicaciones!"
       }
     },
     "carousel": {
-      "title": "Â¿Por quÃ© reservar con nosotros? Chat y llamadas 24/7, oficina en san AndrÃ©s, Compra 100% segura, Cancelaciones flexibles."
+      "title": "Â¿Por qué reservar con nosotros? Chat y llamadas 24/7, oficina en san Andrés, Compra 100% segura, Cancelaciones flexibles."
     },
     "faq": {
       "title": "Preguntas Frecuentes",
       "one": {
-        "question": "Â¿CuÃ¡l es el tour mÃ¡s popular en San AndrÃ©s?",
-        "answer": "El tour mÃ¡s solicitado por los turistas es el Tour Johnny Cay + Acuario, que incluye transporte marÃ­timo, entradas y guÃ­a local. Es ideal para conocer dos de los lugares mÃ¡s icÃ³nicos de la isla en un solo dÃ­a. Hay otros tours que son muy solicitados como el Parasail, el buceo y la noche blanca."
+        "question": "Â¿Cuál es el tour más popular en San Andrés?",
+        "answer": "El tour más solicitado por los turistas es el Tour Johnny Cay + Acuario, que incluye transporte marítimo, entradas y guía local. Es ideal para conocer dos de los lugares más icónicos de la isla en un solo día. Hay otros tours que son muy solicitados como el Parasail, el buceo y la noche blanca."
       },
       "two": {
-        "question": "Â¿QuÃ© pasa si llueve el dÃ­a del tour?",
-        "answer": "Hay tours que ofrecen cancelaciÃ³n por mal clima. En esos casos si el tour se cancela por mal clima, te ofreceremos reprogramaciÃ³n gratuita o reembolso total. Nuestra prioridad es tu seguridad y experiencia."
+        "question": "Â¿Qué pasa si llueve el día del tour?",
+        "answer": "Hay tours que ofrecen cancelación por mal clima. En esos casos si el tour se cancela por mal clima, te ofreceremos reprogramación gratuita o reembolso total. Nuestra prioridad es tu seguridad y experiencia."
       },
       "three": {
-        "question": "Â¿CÃ³mo puedo pagar los tours?",
-        "answer": "Puedes pagar con tarjeta de crÃ©dito, dÃ©bito, PSE, Nequi, Daviplata o en efectivo en nuestra oficina en la isla. Todas las transacciones estÃ¡n protegidas con certificados de seguridad."
+        "question": "Â¿Cómo puedo pagar los tours?",
+        "answer": "Puedes pagar con tarjeta de crédito, débito, PSE, Nequi, Daviplata o en efectivo en nuestra oficina en la isla. Todas las transacciones están protegidas con certificados de seguridad."
       },
       "four": {
         "question": "Â¿Los tours incluyen transporte?",
-        "answer": "Tenemos algunos tours donde el transporte estÃ¡ incluido dentro del costo. En caso de que el tour no incluya transporte y requieras de este servicio, uno de nuestros aliados puede recogerte en tu sitio de hospedaje y llevarte hasta el punto de encuentro del tour."
+        "answer": "Tenemos algunos tours donde el transporte está incluido dentro del costo. En caso de que el tour no incluya transporte y requieras de este servicio, uno de nuestros aliados puede recogerte en tu sitio de hospedaje y llevarte hasta el punto de encuentro del tour."
       },
       "five": {
         "question": "Â¿Puedo cancelar o cambiar la fecha de un tour?",
-        "answer": "SÃ­, la mayorÃ­a de nuestros tours los puedes cancelar hasta 24 horas antes del inicio del tour sin penalizaciÃ³n. TambiÃ©n puedes cambiar la fecha contactando a nuestro equipo de atenciÃ³n 24/7. Te recomendamos revisar la polÃ­tica de cancelaciÃ³n antes de reservar el tour."
+        "answer": "Sí, la mayoría de nuestros tours los puedes cancelar hasta 24 horas antes del inicio del tour sin penalización. También puedes cambiar la fecha contactando a nuestro equipo de atención 24/7. Te recomendamos revisar la política de cancelación antes de reservar el tour."
       },
       "six": {
-        "question": "Â¿QuÃ© debo llevar a un tour en San AndrÃ©s?",
-        "answer": "Te recomendamos llevar traje de baÃ±o, bloqueador solar, gorra, toalla y una botella de agua. Algunos tours tambiÃ©n requieren zapatos de agua o identificaciÃ³n."
+        "question": "Â¿Qué debo llevar a un tour en San Andrés?",
+        "answer": "Te recomendamos llevar traje de baño, bloqueador solar, gorra, toalla y una botella de agua. Algunos tours también requieren zapatos de agua o identificación."
       },
       "seven": {
-        "question": "Â¿Los tours son aptos para niÃ±os o adultos mayores?",
-        "answer": "Muchos tours son familiares y seguros para todas las edades. Verifica las recomendaciones especÃ­ficas en la pÃ¡gina de cada actividad."
+        "question": "Â¿Los tours son aptos para niños o adultos mayores?",
+        "answer": "Muchos tours son familiares y seguros para todas las edades. Verifica las recomendaciones específicas en la página de cada actividad."
       },
       "eight": {
-        "question": "Â¿DÃ³nde queda la oficina de Tourya en San AndrÃ©s?",
-        "answer": "Nuestra oficina principal estÃ¡ en el centro de San AndrÃ©s (Centro comercial Newpoint Local 227), a pocos metros del muelle turÃ­stico, y estÃ¡ abierta todos los dÃ­as. TambiÃ©n atendemos por WhatsApp y llamadas 24/7."
+        "question": "Â¿Dónde queda la oficina de Tourya en San Andrés?",
+        "answer": "Nuestra oficina principal está en el centro de San Andrés (Centro comercial Newpoint Local 227), a pocos metros del muelle turístico, y está abierta todos los días. También atendemos por WhatsApp y llamadas 24/7."
       }
     }
   },
   "provider-reviews": {
     "title": "Calificaciones de Clientes",
     "filters": {
-      "rating": "Filtrar por calificaciÃ³n",
+      "rating": "Filtrar por calificación",
       "tour": "Filtrar por tour",
       "provider": "Filtrar por proveedor",
       "user": "Filtrar por usuario",
@@ -107,7 +107,7 @@
       "clearFilters": "Limpiar Filtros"
     },
     "stats": {
-      "totalReviews": "Total de ReseÃ±as",
+      "totalReviews": "Total de Reseñas",
       "averageRating": "Rating Promedio"
     },
     "actions": {
@@ -118,7 +118,7 @@
     },
     "replyForm": {
       "title": "Escribe tu respuesta",
-      "placeholder": "Escribe tu respuesta al cliente aquÃ­...",
+      "placeholder": "Escribe tu respuesta al cliente aquí...",
       "charactersCount": "caracteres",
       "cancel": "Cancelar",
       "submit": "Enviar Respuesta"
@@ -129,7 +129,7 @@
       "placeholder": "Selecciona un motivo",
       "reasons": {
         "inappropriate": "Contenido inapropiado",
-        "false": "InformaciÃ³n falsa o engaÃ±osa",
+        "false": "Información falsa o engañosa",
         "spam": "Spam o contenido irrelevante"
       },
       "cancel": "Cancelar",
@@ -137,21 +137,21 @@
     },
     "empty": {
       "noResults": "No se encontraron calificaciones",
-      "adjustFilters": "Intenta ajustar tus filtros de bÃºsqueda",
-      "noReviews": "AÃºn no tienes calificaciones",
-      "noReviewsMessage": "Las calificaciones de tus clientes aparecerÃ¡n aquÃ­"
+      "adjustFilters": "Intenta ajustar tus filtros de búsqueda",
+      "noReviews": "Aún no tienes calificaciones",
+      "noReviewsMessage": "Las calificaciones de tus clientes aparecerán aquí"
     }
   },
   "provider-home": {
     "hero": {
-      "title": "Vende mÃ¡s tours en San AndrÃ©s con el 1er marketplace de la isla",
-      "subtitle": "Nosotros hacemos el marketing, atendemos a los turistas 24/7 y garantizamos pagos seguros. TÃº solo te enfocas en ofrecer experiencias inolvidables.",
+      "title": "Vende más tours en San Andrés con el 1er marketplace de la isla",
+      "subtitle": "Nosotros hacemos el marketing, atendemos a los turistas 24/7 y garantizamos pagos seguros. Tú solo te enfocas en ofrecer experiencias inolvidables.",
       "cta-heading": "Comienza a vender tus tours hoy mismo",
       "cta-button": "Registrate como proveedor"
     },
     "benefits": {
-      "title": "Â¿Por quÃ© unirte a nuestro Marketplace?",
-      "subtitle": "Tourya es un Marketplace que conecta tus servicios de tour con turistas que buscan vivir las mejores experiencias en la isla de san AndrÃ©s.",
+      "title": "Â¿Por qué unirte a nuestro Marketplace?",
+      "subtitle": "Tourya es un Marketplace que conecta tus servicios de tour con turistas que buscan vivir las mejores experiencias en la isla de san Andrés.",
       "cards": {
         "marketing": {
           "title": "Marketing incluido",
@@ -162,22 +162,22 @@
           "description": "Recibe tu dinero de forma confiable en los tiempos establecidos."
         },
         "support": {
-          "title": "AtenciÃ³n al turista 24/7",
-          "description": "Atendemos consultas y reservas por diferentes canales (telÃ©fono, correo y WhatsApp) y en 3 idiomas (espaÃ±ol, inglÃ©s y portuguÃ©s)."
+          "title": "Atención al turista 24/7",
+          "description": "Atendemos consultas y reservas por diferentes canales (teléfono, correo y WhatsApp) y en 3 idiomas (español, inglés y portugués)."
         },
         "office": {
-          "title": "Oficina fÃ­sica en la isla",
-          "description": "AtenciÃ³n directa de quejas y reclamos, lo que genera confianza al turista."
+          "title": "Oficina física en la isla",
+          "description": "Atención directa de quejas y reclamos, lo que genera confianza al turista."
         }
       }
     },
     "how-it-works": {
-      "badge": "Â¿CÃ³mo Funciona?",
+      "badge": "Â¿Cómo Funciona?",
       "title": "Vende tus tours en 3 pasos simples",
       "steps": {
         "step1": {
           "title": "Crea tu cuenta",
-          "description": "RegÃ­strate gratis en nuestro marketplace como operador turÃ­stico."
+          "description": "Regístrate gratis en nuestro marketplace como operador turístico."
         },
         "step2": {
           "title": "Configura tus tours",
@@ -194,24 +194,24 @@
       "subtitle": "Preguntas frecuentes sobre nuestro marketplace",
       "items": {
         "q1": {
-          "question": "Â¿CuÃ¡nto cuesta publicar mis tours?",
-          "answer": "Publicar es totalmente gratis. Solo pagas una comisiÃ³n cuando se concrete una venta."
+          "question": "Â¿Cuánto cuesta publicar mis tours?",
+          "answer": "Publicar es totalmente gratis. Solo pagas una comisión cuando se concrete una venta."
         },
         "q2": {
-          "question": "Â¿CuÃ¡ndo recibo mis pagos?",
+          "question": "Â¿Cuándo recibo mis pagos?",
           "answer": "Los pagos se realizan en los tiempos establecidos, de manera segura y transparente."
         },
         "q3": {
-          "question": "Â¿QuiÃ©n atiende a los turistas?",
-          "answer": "Nuestro equipo se encarga de toda la atenciÃ³n al cliente 24/7 en espaÃ±ol, inglÃ©s y portuguÃ©s."
+          "question": "Â¿Quién atiende a los turistas?",
+          "answer": "Nuestro equipo se encarga de toda la atención al cliente 24/7 en español, inglés y portugués."
         },
         "q4": {
-          "question": "Â¿Necesito tener una oficina fÃ­sica?",
+          "question": "Â¿Necesito tener una oficina física?",
           "answer": "No es necesario. Nosotros contamos con oficina propia en la isla para dar soporte a los turistas."
         },
         "q5": {
-          "question": "Â¿Puedo subir mÃ¡s de un tour?",
-          "answer": "SÃ­, puedes publicar todos los tours que ofrezcas y aumentar tus ingresos."
+          "question": "Â¿Puedo subir más de un tour?",
+          "answer": "Sí, puedes publicar todos los tours que ofrezcas y aumentar tus ingresos."
         }
       }
     }
@@ -230,8 +230,8 @@
       "search": "Buscar...",
       "sortBy": "Ordenar:",
       "recent": "Recientes",
-      "mostRecent": "MÃ¡s Recientes",
-      "oldest": "MÃ¡s Antiguos",
+      "mostRecent": "Más Recientes",
+      "oldest": "Más Antiguos",
       "priceAsc": "Precio Ascendente",
       "priceDesc": "Precio Descendente"
     },
@@ -242,7 +242,7 @@
       "tourType": "Tipo de Tour",
       "customer": "Cliente",
       "travellers": "Viajeros",
-      "duration": "DuraciÃ³n",
+      "duration": "Duración",
       "price": "Precio",
       "bookingDate": "Fecha de Reserva",
       "checkIn": "Fecha de Inicio",
@@ -252,7 +252,7 @@
       "actions": "Acciones"
     },
     "status": {
-      "upcoming": "PrÃ³xima",
+      "upcoming": "Próxima",
       "pending": "Pendiente",
       "confirmed": "Confirmada",
       "cancelled": "Cancelada",
@@ -261,19 +261,19 @@
     },
     "empty": {
       "noBookings": "No se encontraron reservas",
-      "adjustFilters": "Intenta ajustar tus filtros de bÃºsqueda"
+      "adjustFilters": "Intenta ajustar tus filtros de búsqueda"
     },
     "modal": {
       "title": "Detalles de Reserva",
       "close": "Cerrar",
-      "tourInfo": "InformaciÃ³n del Tour",
-      "bookingInfo": "InformaciÃ³n de la Reserva",
-      "customerInfo": "InformaciÃ³n del Cliente",
-      "extraServices": "Servicios Adicionales",
-      "activities": "Actividades Incluidas",
+      "tourInfo": "Información del Tour",
+      "bookingInfo": "Información de la Reserva",
+      "customerInfo": "Información del Cliente",
+      "extraServices": "Incluye",
+      "activities": "Destacados",
       "fields": {
         "destination": "Destino",
-        "duration": "DuraciÃ³n",
+        "duration": "Duración",
         "bookingDate": "Fecha de Reserva",
         "totalPrice": "Precio Total",
         "checkInDate": "Fecha de Inicio",
@@ -281,7 +281,7 @@
         "travellers": "Viajeros",
         "name": "Nombre",
         "email": "Email",
-        "phone": "TelÃ©fono"
+        "phone": "Teléfono"
       },
       "actions": {
         "complete": "Marcar como Completada",
@@ -309,23 +309,23 @@
       "accepted": "Aceptado",
       "returned": "Devuelto",
       "cancelled": "Cancelado",
-      "submitButton": "Enviar a RevisiÃ³n",
-      "cannotEditWarning": "Este tour estÃ¡ en revisiÃ³n y no puede ser editado.",
+      "submitButton": "Enviar a Revisión",
+      "cannotEditWarning": "Este tour está en revisión y no puede ser editado.",
       "cannotEditMessage": "Debes esperar a que sea aceptado, devuelto o cancelado para poder editarlo nuevamente.",
       "autoSubmitNote": "Nota:",
-      "autoSubmitMessage": "Al guardar los cambios, el tour serÃ¡ enviado automÃ¡ticamente a revisiÃ³n.",
-      "sendForReview": "Enviar a RevisiÃ³n"
+      "autoSubmitMessage": "Al guardar los cambios, el tour será enviado automáticamente a revisión.",
+      "sendForReview": "Enviar a Revisión"
     },
     "sections": {
       "tourDetails": "Detalles del Tour",
-      "description": "DescripciÃ³n",
+      "description": "Descripción",
       "locations": "Ubicaciones",
       "mainAttractions": "Atracciones Principales",
       "includes": "Incluye",
       "excludes": "Excluye",
       "itinerary": "Itinerario",
       "faq": "Preguntas Frecuentes",
-      "cancellationPolicies": "PolÃ­ticas de CancelaciÃ³n",
+      "cancellationPolicies": "Políticas de Cancelación",
       "tags": "Etiquetas"
     },
     "fields": {
@@ -334,12 +334,12 @@
         "errors": {
           "required": "El nombre es requerido",
           "minlength": "El nombre debe tener al menos 3 caracteres",
-          "maxlength": "El nombre no puede tener mÃ¡s de 50 caracteres"
+          "maxlength": "El nombre no puede tener más de 50 caracteres"
         }
       },
       "subcategory": {
-        "label": "SubcategorÃ­a",
-        "placeholder": "Seleccionar subcategorÃ­a"
+        "label": "Subcategoría",
+        "placeholder": "Seleccionar subcategoría"
       },
       "priceType": {
         "label": "Tipo de precio",
@@ -353,20 +353,20 @@
         }
       },
       "duration": {
-        "label": "DuraciÃ³n",
-        "placeholder": "Seleccionar duraciÃ³n",
+        "label": "Duración",
+        "placeholder": "Seleccionar duración",
         "options": {
           "1_2_hours": "1 a 2 horas",
           "2_4_hours": "2 a 4 horas",
           "4_6_hours": "4 a 6 horas",
-          "up_to_1_day": "Hasta 1 dÃ­a",
-          "up_to_3_days": "Hasta 3 dÃ­as",
-          "up_to_5_days": "Hasta 5 dÃ­as"
+          "up_to_1_day": "Hasta 1 día",
+          "up_to_3_days": "Hasta 3 días",
+          "up_to_5_days": "Hasta 5 días"
         },
         "errors": {
-          "required": "La duraciÃ³n es requerida",
-          "minlength": "La duraciÃ³n debe tener al menos 1 carÃ¡cter",
-          "maxlength": "La duraciÃ³n no puede tener mÃ¡s de 50 caracteres"
+          "required": "La duración es requerida",
+          "minlength": "La duración debe tener al menos 1 carácter",
+          "maxlength": "La duración no puede tener más de 50 caracteres"
         }
       },
       "isUnlimited": {
@@ -375,7 +375,7 @@
       "schedule": {
         "label": "Horario",
         "options": {
-          "morning": "MaÃ±ana",
+          "morning": "Mañana",
           "afternoon": "Tarde",
           "night": "Noche"
         },
@@ -384,19 +384,19 @@
         }
       },
       "totalNumberOfPeoples": {
-        "label": "NÃºmero Total de Personas",
+        "label": "Número Total de Personas",
         "errors": {
-          "required": "El nÃºmero total de personas es requerido"
+          "required": "El número total de personas es requerido"
         }
       },
       "minAge": {
-        "label": "Edad MÃ­nima",
+        "label": "Edad Mínima",
         "errors": {
-          "required": "La edad mÃ­nima es requerida"
+          "required": "La edad mínima es requerida"
         }
       },
       "typeOfAddress": {
-        "label": "Tipo de DirecciÃ³n",
+        "label": "Tipo de Dirección",
         "placeholder": "Seleccionar",
         "options": {
           "meetingPoint": "Punto de Encuentro",
@@ -404,14 +404,14 @@
           "pickUpPoint": "Punto de Recogida"
         },
         "errors": {
-          "required": "El tipo de direcciÃ³n es requerido"
+          "required": "El tipo de dirección es requerido"
         }
       },
       "country": {
-        "label": "PaÃ­s",
+        "label": "País",
         "placeholder": "Seleccionar",
         "errors": {
-          "required": "El paÃ­s es requerido"
+          "required": "El país es requerido"
         }
       },
       "department": {
@@ -429,24 +429,24 @@
         }
       },
       "location": {
-        "label": "UbicaciÃ³n",
-        "placeholder": "Ingrese la direcciÃ³n completa",
+        "label": "Ubicación",
+        "placeholder": "Ingrese la dirección completa",
         "errors": {
-          "required": "La ubicaciÃ³n es requerida"
+          "required": "La ubicación es requerida"
         }
       },
       "address": {
-        "label": "DirecciÃ³n",
+        "label": "Dirección",
         "errors": {
-          "required": "La direcciÃ³n es requerida",
-          "minlength": "La direcciÃ³n debe tener al menos 3 caracteres",
-          "maxlength": "La direcciÃ³n no puede tener mÃ¡s de 50 caracteres"
+          "required": "La dirección es requerida",
+          "minlength": "La dirección debe tener al menos 3 caracteres",
+          "maxlength": "La dirección no puede tener más de 50 caracteres"
         }
       },
       "attraction": {
-        "label": "AtracciÃ³n",
+        "label": "Atracción",
         "errors": {
-          "required": "La atracciÃ³n es requerida"
+          "required": "La atracción es requerida"
         }
       },
       "include": {
@@ -462,18 +462,18 @@
         }
       },
       "itineraryTitle": {
-        "label": "TÃ­tulo",
+        "label": "Título",
         "errors": {
-          "required": "El tÃ­tulo es requerido",
-          "minlength": "El tÃ­tulo debe tener al menos 3 caracteres",
-          "maxlength": "El tÃ­tulo no puede tener mÃ¡s de 50 caracteres"
+          "required": "El título es requerido",
+          "minlength": "El título debe tener al menos 3 caracteres",
+          "maxlength": "El título no puede tener más de 50 caracteres"
         }
       },
       "day": {
-        "label": "DÃ­a",
+        "label": "Día",
         "errors": {
-          "required": "El dÃ­a es requerido",
-          "min": "El dÃ­a mÃ­nimo es 1"
+          "required": "El día es requerido",
+          "min": "El día mínimo es 1"
         }
       },
       "time": {
@@ -483,11 +483,11 @@
         }
       },
       "itineraryDescription": {
-        "label": "DescripciÃ³n",
+        "label": "Descripción",
         "errors": {
-          "required": "La descripciÃ³n es requerida",
-          "minlength": "La descripciÃ³n debe tener al menos 3 caracteres",
-          "maxlength": "La descripciÃ³n no puede tener mÃ¡s de 255 caracteres"
+          "required": "La descripción es requerida",
+          "minlength": "La descripción debe tener al menos 3 caracteres",
+          "maxlength": "La descripción no puede tener más de 255 caracteres"
         }
       },
       "question": {
@@ -495,7 +495,7 @@
         "errors": {
           "required": "La pregunta es requerida",
           "minlength": "La pregunta debe tener al menos 3 caracteres",
-          "maxlength": "La pregunta no puede tener mÃ¡s de 50 caracteres"
+          "maxlength": "La pregunta no puede tener más de 50 caracteres"
         }
       },
       "answer": {
@@ -503,27 +503,27 @@
         "errors": {
           "required": "La respuesta es requerida",
           "minlength": "La respuesta debe tener al menos 3 caracteres",
-          "maxlength": "La respuesta no puede tener mÃ¡s de 255 caracteres"
+          "maxlength": "La respuesta no puede tener más de 255 caracteres"
         }
       },
       "cancellationPolicyType": {
-        "label": "Tipo de polÃ­tica de cancelaciÃ³n",
+        "label": "Tipo de política de cancelación",
         "placeholder": "Seleccionar",
         "options": {
           "flexible": "Flexible (hasta 24 horas antes)",
-          "standard": "EstÃ¡ndar (hasta 48 horas antes)",
-          "moderate": "Moderado (hasta 4 dÃ­as antes)",
-          "strict": "Estricto (hasta 7 dÃ­as antes)"
+          "standard": "Estándar (hasta 48 horas antes)",
+          "moderate": "Moderado (hasta 4 días antes)",
+          "strict": "Estricto (hasta 7 días antes)"
         },
         "errors": {
-          "required": "El tipo de polÃ­tica de cancelaciÃ³n es requerido"
+          "required": "El tipo de política de cancelación es requerido"
         }
       },
       "observations": {
         "label": "Observaciones",
         "errors": {
           "required": "Las observaciones son requeridas",
-          "maxlength": "Las observaciones no pueden tener mÃ¡s de 255 caracteres"
+          "maxlength": "Las observaciones no pueden tener más de 255 caracteres"
         }
       },
       "allowsRainRefund": {
@@ -533,7 +533,7 @@
         }
       },
       "allowsRescheduling": {
-        "label": "Permite reprogramaciÃ³n",
+        "label": "Permite reprogramación",
         "errors": {
           "required": "Este campo es requerido"
         }
@@ -560,38 +560,38 @@
         "titleEdit": "Editar pregunta"
       },
       "submitConfirm": {
-        "title": "Confirmar envÃ­o a revisiÃ³n",
-        "message": "Â¿EstÃ¡s seguro de que quieres enviar este tour a revisiÃ³n?",
+        "title": "Confirmar envío a revisión",
+        "message": "Â¿Estás seguro de que quieres enviar este tour a revisión?",
         "pointsTitle": "Una vez enviado:",
-        "point1": "No podrÃ¡s editar el tour hasta que sea revisado",
-        "point2": "El administrador evaluarÃ¡ tu tour",
-        "point3": "RecibirÃ¡s una notificaciÃ³n del resultado",
+        "point1": "No podrás editar el tour hasta que sea revisado",
+        "point2": "El administrador evaluará tu tour",
+        "point3": "Recibirás una notificación del resultado",
         "cancel": "Cancelar",
-        "confirm": "SÃ­, Enviar a RevisiÃ³n",
+        "confirm": "Sí, Enviar a Revisión",
         "submitting": "Enviando..."
       },
       "deleteConfirm": {
-        "title": "Confirmar eliminaciÃ³n",
-        "message": "Â¿EstÃ¡s seguro de que quieres eliminar este elemento?",
+        "title": "Confirmar eliminación",
+        "message": "Â¿Estás seguro de que quieres eliminar este elemento?",
         "no": "No",
-        "yes": "SÃ­"
+        "yes": "Sí"
       }
     }
   },
   "legal": {
-    "terms": "<div class=\"mb-4\">\n  <p class=\"mb-2\">TÃ‰RMINOS Y CONDICIONES DE USO</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Ãšltima actualizaciÃ³n: [16/04/2026]</p>\n</div>\n<h6 class=\"mb-2\">1. IdentificaciÃ³n del responsable de la Plataforma</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">La plataforma digital Tourya es operada por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> RazÃ³n social: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tipo de sociedad: Sociedad por Acciones Simplificada (S.A.S.)</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NIT: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Domicilio: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correo electrÃ³nico: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TelÃ©fono: 311 218 2520</p>\n</div>\n<h6 class=\"mb-2\">2. AceptaciÃ³n de los TÃ©rminos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El acceso, navegaciÃ³n y uso de la plataforma Tourya, asÃ­ como la realizaciÃ³n de reservas de tours o experiencias turÃ­sticas, implica la aceptaciÃ³n expresa, libre y voluntaria de los presentes TÃ©rminos y Condiciones.</p>\n  <p class=\"mb-2\">Si el usuario no estÃ¡ de acuerdo con estos TÃ©rminos, deberÃ¡ abstenerse de utilizar la plataforma.</p>\n</div>\n<h6 class=\"mb-2\">3. Definiciones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Para efectos de estos TÃ©rminos:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œTouryaâ€: Plataforma digital que actÃºa como intermediario tecnolÃ³gico y comercial.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œUsuarioâ€ o â€œClienteâ€: Persona natural que reserva tours a travÃ©s de la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œOperador TurÃ­sticoâ€ o â€œProveedorâ€: Tercero independiente que ofrece y presta directamente los servicios turÃ­sticos publicados en Tourya.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œTourâ€ o â€œExperienciaâ€: Servicio turÃ­stico ofrecido por un Operador TurÃ­stico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œReservaâ€: Contrato celebrado entre el Usuario y el Operador TurÃ­stico para la prestaciÃ³n de un tour.</p>\n</div>\n<h6 class=\"mb-2\">4. Naturaleza del Servicio de Tourya</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya NO es un prestador de servicios turÃ­sticos.</p>\n  <p class=\"mb-2\">Tourya opera exclusivamente como un marketplace digital, cuya funciÃ³n es:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitar la publicaciÃ³n, promociÃ³n y comercializaciÃ³n de tours.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Procesar pagos en nombre de los operadores turÃ­sticos.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitar la comunicaciÃ³n entre Usuarios y Operadores.</p>\n  <p class=\"mb-2\">El servicio turÃ­stico es prestado Ãºnica y exclusivamente por el Operador TurÃ­stico, quien actÃºa de forma independiente y bajo su propia responsabilidad.</p>\n</div>\n<h6 class=\"mb-2\">5. RelaciÃ³n Contractual</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Al realizar una reserva:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El contrato de prestaciÃ³n del servicio turÃ­stico se celebra directamente entre el Usuario y el Operador TurÃ­stico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya no es parte de dicho contrato, ni asume obligaciones derivadas de la ejecuciÃ³n del tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya no garantiza la calidad, seguridad, idoneidad o resultado del servicio turÃ­stico.</p>\n</div>\n<h6 class=\"mb-2\">6. Obligaciones del Operador TurÃ­stico</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El Operador TurÃ­stico es el Ãºnico responsable de:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cumplir con toda la normativa colombiana aplicable, incluyendo estar inscrito en el Registro Nacional de Turismo (RNT).</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Contar con seguros obligatorios vigentes y permisos legales necesarios.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Prestar el servicio conforme a lo descrito en la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Atender reclamos, quejas y solicitudes del Usuario.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responder por accidentes, lesiones, pÃ©rdidas, daÃ±os o incumplimientos ocurridos durante el tour.</p>\n  <p class=\"mb-2\">Tourya podrÃ¡ solicitar en cualquier momento la documentaciÃ³n que acredite el cumplimiento de estas obligaciones.</p>\n</div>\n<h6 class=\"mb-2\">7. Responsabilidad de Tourya</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya serÃ¡ responsable Ãºnicamente de:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El correcto funcionamiento de la plataforma tecnolÃ³gica.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> La gestiÃ³n del proceso de pago conforme a las polÃ­ticas publicadas.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> La protecciÃ³n de los datos personales de los usuarios conforme a la ley.</p>\n</div>\n<h6 class=\"mb-2\">8. ExclusiÃ³n y LimitaciÃ³n de Responsabilidad</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya NO serÃ¡ responsable por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> La ejecuciÃ³n del tour o experiencia.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cancelaciones, retrasos, modificaciones o incumplimientos del Operador.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Accidentes, daÃ±os, lesiones, enfermedades o pÃ©rdidas sufridas durante el tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Actos u omisiones del Operador TurÃ­stico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> InformaciÃ³n inexacta proporcionada por el Operador.</p>\n  <p class=\"mb-2\">En la mÃ¡xima medida permitida por la ley colombiana, Tourya no serÃ¡ responsable por daÃ±os indirectos, lucro cesante o perjuicios consecuenciales.</p>\n</div>\n<h6 class=\"mb-2\">9. Pagos y Comisiones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya recibe los pagos realizados por los Usuarios en nombre del Operador TurÃ­stico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya retiene una comisiÃ³n por intermediaciÃ³n, previamente acordada con el Operador.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El saldo restante serÃ¡ transferido al Operador conforme a los plazos internos de la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El pago no implica que Tourya asuma responsabilidad sobre la prestaciÃ³n del servicio.</p>\n</div>\n<h6 class=\"mb-2\">10. PolÃ­ticas de CancelaciÃ³n y Reembolsos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Cada tour contarÃ¡ con una polÃ­tica de cancelaciÃ³n especÃ­fica, visible antes de la reserva:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Flexible: cancelaciÃ³n hasta 24 horas antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> EstÃ¡ndar: cancelaciÃ³n hasta 48 horas antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Moderada: cancelaciÃ³n hasta 4 dÃ­as antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estricta: cancelaciÃ³n hasta 7 dÃ­as antes</p>\n  <p class=\"mb-2\">Las cancelaciones y reembolsos se rigen por la polÃ­tica seleccionada y son responsabilidad del Operador TurÃ­stico. Tourya podrÃ¡ actuar como intermediario en la gestiÃ³n del reembolso, sin asumir responsabilidad directa.</p>\n</div>\n<h6 class=\"mb-2\">11. SuspensiÃ³n y Deslistado de Operadores</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya podrÃ¡, a su discreciÃ³n, suspender, limitar o eliminar operadores turÃ­sticos que:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Incumplan la normativa legal aplicable.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Incumplan polÃ­ticas de cancelaciÃ³n o servicio.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Afecten la reputaciÃ³n de la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Generen reclamos reiterados de usuarios.</p>\n</div>\n<h6 class=\"mb-2\">12. Propiedad Intelectual</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Todos los contenidos de la plataforma (marca, logotipos, textos, software) son propiedad de Tourya o de sus licenciantes y estÃ¡n protegidos por la legislaciÃ³n de propiedad intelectual.</p>\n</div>\n<h6 class=\"mb-2\">13. ProtecciÃ³n de Datos Personales</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El tratamiento de datos personales se realiza conforme a la Ley 1581 de 2012 y demÃ¡s normas aplicables.</p>\n  <p class=\"mb-2\">El Usuario declara haber leÃ­do y aceptado la PolÃ­tica de Privacidad de Tourya.</p>\n</div>\n<h6 class=\"mb-2\">14. Modificaciones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya podrÃ¡ modificar estos TÃ©rminos en cualquier momento.</p>\n  <p class=\"mb-2\">Las modificaciones serÃ¡n publicadas en la plataforma y se entenderÃ¡n aceptadas con el uso continuado del servicio.</p>\n</div>\n<h6 class=\"mb-2\">15. Ley Aplicable y JurisdicciÃ³n</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Estos TÃ©rminos se rigen por las leyes de la RepÃºblica de Colombia.</p>\n  <p class=\"mb-2\">Cualquier controversia serÃ¡ sometida a los jueces competentes del domicilio de Tourya.</p>\n</div>\n<h6 class=\"mb-2\">16. Contacto</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Para consultas o reclamos:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ðŸ“§ \udce7 luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ðŸ“ž \udcde 311 218 2520</p>\n</div>",
-    "privacy": "<div class=\"mb-4\">\n  <p class=\"mb-2\">ðŸ“„ POLÃTICA DE TRATAMIENTO DE DATOS PERSONALES</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Ãšltima actualizaciÃ³n: [16/04/2026]</p>\n</div>\n<h6 class=\"mb-2\">1. IdentificaciÃ³n del responsable del Tratamiento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El responsable del tratamiento de los datos personales es:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> RazÃ³n social: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NIT: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Domicilio: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correo electrÃ³nico: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TelÃ©fono: 311 218 2520</p>\n  <p class=\"mb-2\">En adelante, â€œTOURYAâ€.</p>\n</div>\n<h6 class=\"mb-2\">2. Marco Legal</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Esta PolÃ­tica se rige por lo dispuesto en:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Ley 1581 de 2012</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Decreto 1377 de 2013</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> DemÃ¡s normas concordantes sobre protecciÃ³n de datos personales en Colombia</p>\n</div>\n<h6 class=\"mb-2\">3. Definiciones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Datos Personales: InformaciÃ³n que permite identificar o hacer identificable a una persona natural.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Titular: Persona natural cuyos datos personales son objeto de tratamiento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tratamiento: Cualquier operaciÃ³n sobre datos personales, como recolecciÃ³n, almacenamiento, uso, circulaciÃ³n o supresiÃ³n.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responsable del Tratamiento: TOURYA.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Encargado del Tratamiento: Terceros que tratan datos por cuenta de TOURYA (por ejemplo, proveedores tecnolÃ³gicos).</p>\n</div>\n<h6 class=\"mb-2\">4. Datos Personales Tratados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA recolecta y trata Ãºnicamente los datos necesarios para la operaciÃ³n del Marketplace turÃ­stico.</p>\n  <p class=\"mb-2\">Datos del Usuario / Turista:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Nombre</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Apellido</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NÃºmero de documento de identidad</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TelÃ©fono de contacto</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correo electrÃ³nico</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Ciudad de residencia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estado/provincia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> PaÃ­s</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TOURYA no recolecta datos sensibles ni datos financieros directamente (estos Ãºltimos son gestionados por pasarelas de pago externas).</p>\n</div>\n<h6 class=\"mb-2\">5. Finalidades del Tratamiento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los datos personales serÃ¡n tratados para las siguientes finalidades:</p>\n</div>\n<h6 class=\"mb-2\">1. Gestionar reservas de tours y experiencias turÃ­sticas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Facilitar la comunicaciÃ³n entre el Usuario y el Operador TurÃ­stico.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Procesar pagos y reembolsos relacionados con las reservas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Cumplir obligaciones legales y contractuales.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Atender solicitudes, quejas y reclamos (PQR).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Enviar comunicaciones relacionadas con la reserva (confirmaciones, cambios, cancelaciones).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">7. Mejorar la experiencia del usuario en la plataforma.</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Los datos no serÃ¡n utilizados para fines distintos sin autorizaciÃ³n previa del titular.</p>\n</div>\n<h6 class=\"mb-2\">6. AutorizaciÃ³n del Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El Titular autoriza de manera previa, expresa e informada a TOURYA para el tratamiento de sus datos personales al:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Registrarse en la plataforma</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Realizar una reserva</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Aceptar esta PolÃ­tica mediante mecanismos digitales</p>\n  <p class=\"mb-2\">La autorizaciÃ³n podrÃ¡ ser revocada en cualquier momento, sin efectos retroactivos.</p>\n</div>\n<h6 class=\"mb-2\">7. CirculaciÃ³n y Transferencia de Datos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA podrÃ¡ compartir los datos personales Ãºnicamente con:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Operadores TurÃ­sticos, exclusivamente para la prestaciÃ³n del tour reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Proveedores tecnolÃ³gicos (hosting, CRM, pasarela de pagos), bajo acuerdos de confidencialidad.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Autoridades competentes, cuando sea requerido por ley.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TOURYA no vende ni comercializa datos personales.</p>\n</div>\n<h6 class=\"mb-2\">8. Derechos del Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El Titular tiene derecho a:</p>\n</div>\n<h6 class=\"mb-2\">1. Conocer, actualizar y rectificar sus datos personales.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Solicitar prueba de la autorizaciÃ³n otorgada.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Ser informado sobre el uso de sus datos.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Presentar quejas ante la SIC por infracciones.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Revocar la autorizaciÃ³n y/o solicitar la supresiÃ³n del dato.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Acceder gratuitamente a sus datos personales.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">9. Procedimiento para el Ejercicio de Derechos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Las solicitudes deberÃ¡n enviarse al correo:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ðŸ“§ \udce7 luis.mendoza@tourya.co</p>\n  <p class=\"mb-2\">Plazos legales:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Consultas: hasta 10 dÃ­as hÃ¡biles</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Reclamos: hasta 15 dÃ­as hÃ¡biles</p>\n</div>\n<h6 class=\"mb-2\">10. Medidas de Seguridad</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA adopta medidas tÃ©cnicas, administrativas y organizacionales razonables para proteger los datos personales contra:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Acceso no autorizado</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> PÃ©rdida</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Uso indebido</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> AlteraciÃ³n</p>\n  <p class=\"mb-2\">No obstante, el usuario reconoce que ningÃºn sistema es completamente seguro.</p>\n</div>\n<h6 class=\"mb-2\">11. Tratamiento por Parte de Operadores TurÃ­sticos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los Operadores TurÃ­sticos que acceden a datos personales de los Usuarios:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ActÃºan como Encargados del Tratamiento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Solo pueden usar los datos para ejecutar el tour reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Deben cumplir la Ley 1581 de 2012.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> No pueden usar los datos con fines propios sin autorizaciÃ³n del Titular.</p>\n</div>\n<h6 class=\"mb-2\">12. ConservaciÃ³n de los Datos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los datos personales serÃ¡n conservados:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Durante la vigencia de la relaciÃ³n contractual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Mientras exista una obligaciÃ³n legal o contractual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Hasta que el Titular solicite su supresiÃ³n (cuando sea legalmente procedente)</p>\n</div>\n<h6 class=\"mb-2\">13. Modificaciones a la PolÃ­tica</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA podrÃ¡ modificar esta PolÃ­tica en cualquier momento.</p>\n  <p class=\"mb-2\">Las modificaciones serÃ¡n informadas a travÃ©s de la plataforma.</p>\n</div>\n<h6 class=\"mb-2\">14. Vigencia</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">La presente PolÃ­tica rige a partir de su publicaciÃ³n y permanecerÃ¡ vigente mientras TOURYA realice tratamiento de datos personales.</p>\n</div>"
+    "terms": "<div class=\"mb-4\">\n  <p class=\"mb-2\">TÃ‰RMINOS Y CONDICIONES DE USO</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Ãšltima actualización: [16/04/2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identificación del responsable de la Plataforma</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">La plataforma digital Tourya es operada por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Razón social: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tipo de sociedad: Sociedad por Acciones Simplificada (S.A.S.)</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NIT: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Domicilio: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correo electrónico: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Teléfono: 311 218 2520</p>\n</div>\n<h6 class=\"mb-2\">2. Aceptación de los Términos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El acceso, navegación y uso de la plataforma Tourya, así como la realización de reservas de tours o experiencias turísticas, implica la aceptación expresa, libre y voluntaria de los presentes Términos y Condiciones.</p>\n  <p class=\"mb-2\">Si el usuario no está de acuerdo con estos Términos, deberá abstenerse de utilizar la plataforma.</p>\n</div>\n<h6 class=\"mb-2\">3. Definiciones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Para efectos de estos Términos:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œTouryaâ€: Plataforma digital que actúa como intermediario tecnológico y comercial.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œUsuarioâ€ o â€œClienteâ€: Persona natural que reserva tours a través de la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œOperador Turísticoâ€ o â€œProveedorâ€: Tercero independiente que ofrece y presta directamente los servicios turísticos publicados en Tourya.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œTourâ€ o â€œExperienciaâ€: Servicio turístico ofrecido por un Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> â€œReservaâ€: Contrato celebrado entre el Usuario y el Operador Turístico para la prestación de un tour.</p>\n</div>\n<h6 class=\"mb-2\">4. Naturaleza del Servicio de Tourya</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya NO es un prestador de servicios turísticos.</p>\n  <p class=\"mb-2\">Tourya opera exclusivamente como un marketplace digital, cuya función es:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitar la publicación, promoción y comercialización de tours.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Procesar pagos en nombre de los operadores turísticos.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitar la comunicación entre Usuarios y Operadores.</p>\n  <p class=\"mb-2\">El servicio turístico es prestado única y exclusivamente por el Operador Turístico, quien actúa de forma independiente y bajo su propia responsabilidad.</p>\n</div>\n<h6 class=\"mb-2\">5. Relación Contractual</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Al realizar una reserva:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El contrato de prestación del servicio turístico se celebra directamente entre el Usuario y el Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya no es parte de dicho contrato, ni asume obligaciones derivadas de la ejecución del tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya no garantiza la calidad, seguridad, idoneidad o resultado del servicio turístico.</p>\n</div>\n<h6 class=\"mb-2\">6. Obligaciones del Operador Turístico</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El Operador Turístico es el único responsable de:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cumplir con toda la normativa colombiana aplicable, incluyendo estar inscrito en el Registro Nacional de Turismo (RNT).</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Contar con seguros obligatorios vigentes y permisos legales necesarios.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Prestar el servicio conforme a lo descrito en la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Atender reclamos, quejas y solicitudes del Usuario.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responder por accidentes, lesiones, pérdidas, daños o incumplimientos ocurridos durante el tour.</p>\n  <p class=\"mb-2\">Tourya podrá solicitar en cualquier momento la documentación que acredite el cumplimiento de estas obligaciones.</p>\n</div>\n<h6 class=\"mb-2\">7. Responsabilidad de Tourya</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya será responsable únicamente de:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El correcto funcionamiento de la plataforma tecnológica.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> La gestión del proceso de pago conforme a las políticas publicadas.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> La protección de los datos personales de los usuarios conforme a la ley.</p>\n</div>\n<h6 class=\"mb-2\">8. Exclusión y Limitación de Responsabilidad</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya NO será responsable por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> La ejecución del tour o experiencia.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cancelaciones, retrasos, modificaciones o incumplimientos del Operador.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Accidentes, daños, lesiones, enfermedades o pérdidas sufridas durante el tour.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Actos u omisiones del Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Información inexacta proporcionada por el Operador.</p>\n  <p class=\"mb-2\">En la máxima medida permitida por la ley colombiana, Tourya no será responsable por daños indirectos, lucro cesante o perjuicios consecuenciales.</p>\n</div>\n<h6 class=\"mb-2\">9. Pagos y Comisiones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya recibe los pagos realizados por los Usuarios en nombre del Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya retiene una comisión por intermediación, previamente acordada con el Operador.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El saldo restante será transferido al Operador conforme a los plazos internos de la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El pago no implica que Tourya asuma responsabilidad sobre la prestación del servicio.</p>\n</div>\n<h6 class=\"mb-2\">10. Políticas de Cancelación y Reembolsos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Cada tour contará con una política de cancelación específica, visible antes de la reserva:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Flexible: cancelación hasta 24 horas antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estándar: cancelación hasta 48 horas antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Moderada: cancelación hasta 4 días antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estricta: cancelación hasta 7 días antes</p>\n  <p class=\"mb-2\">Las cancelaciones y reembolsos se rigen por la política seleccionada y son responsabilidad del Operador Turístico. Tourya podrá actuar como intermediario en la gestión del reembolso, sin asumir responsabilidad directa.</p>\n</div>\n<h6 class=\"mb-2\">11. Suspensión y Deslistado de Operadores</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya podrá, a su discreción, suspender, limitar o eliminar operadores turísticos que:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Incumplan la normativa legal aplicable.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Incumplan políticas de cancelación o servicio.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Afecten la reputación de la plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Generen reclamos reiterados de usuarios.</p>\n</div>\n<h6 class=\"mb-2\">12. Propiedad Intelectual</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Todos los contenidos de la plataforma (marca, logotipos, textos, software) son propiedad de Tourya o de sus licenciantes y están protegidos por la legislación de propiedad intelectual.</p>\n</div>\n<h6 class=\"mb-2\">13. Protección de Datos Personales</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El tratamiento de datos personales se realiza conforme a la Ley 1581 de 2012 y demás normas aplicables.</p>\n  <p class=\"mb-2\">El Usuario declara haber leído y aceptado la Política de Privacidad de Tourya.</p>\n</div>\n<h6 class=\"mb-2\">14. Modificaciones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya podrá modificar estos Términos en cualquier momento.</p>\n  <p class=\"mb-2\">Las modificaciones serán publicadas en la plataforma y se entenderán aceptadas con el uso continuado del servicio.</p>\n</div>\n<h6 class=\"mb-2\">15. Ley Aplicable y Jurisdicción</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Estos Términos se rigen por las leyes de la República de Colombia.</p>\n  <p class=\"mb-2\">Cualquier controversia será sometida a los jueces competentes del domicilio de Tourya.</p>\n</div>\n<h6 class=\"mb-2\">16. Contacto</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Para consultas o reclamos:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ðŸ“§ \udce7 luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ðŸ“ž \udcde 311 218 2520</p>\n</div>",
+    "privacy": "<div class=\"mb-4\">\n  <p class=\"mb-2\">ðŸ“„ POLÍTICA DE TRATAMIENTO DE DATOS PERSONALES</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Ãšltima actualización: [16/04/2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identificación del responsable del Tratamiento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El responsable del tratamiento de los datos personales es:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Razón social: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NIT: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Domicilio: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correo electrónico: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Teléfono: 311 218 2520</p>\n  <p class=\"mb-2\">En adelante, â€œTOURYAâ€.</p>\n</div>\n<h6 class=\"mb-2\">2. Marco Legal</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Esta Política se rige por lo dispuesto en:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Ley 1581 de 2012</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Decreto 1377 de 2013</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Demás normas concordantes sobre protección de datos personales en Colombia</p>\n</div>\n<h6 class=\"mb-2\">3. Definiciones</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Datos Personales: Información que permite identificar o hacer identificable a una persona natural.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Titular: Persona natural cuyos datos personales son objeto de tratamiento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tratamiento: Cualquier operación sobre datos personales, como recolección, almacenamiento, uso, circulación o supresión.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responsable del Tratamiento: TOURYA.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Encargado del Tratamiento: Terceros que tratan datos por cuenta de TOURYA (por ejemplo, proveedores tecnológicos).</p>\n</div>\n<h6 class=\"mb-2\">4. Datos Personales Tratados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA recolecta y trata únicamente los datos necesarios para la operación del Marketplace turístico.</p>\n  <p class=\"mb-2\">Datos del Usuario / Turista:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Nombre</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Apellido</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Número de documento de identidad</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Teléfono de contacto</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correo electrónico</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Ciudad de residencia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estado/provincia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> País</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TOURYA no recolecta datos sensibles ni datos financieros directamente (estos últimos son gestionados por pasarelas de pago externas).</p>\n</div>\n<h6 class=\"mb-2\">5. Finalidades del Tratamiento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los datos personales serán tratados para las siguientes finalidades:</p>\n</div>\n<h6 class=\"mb-2\">1. Gestionar reservas de tours y experiencias turísticas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Facilitar la comunicación entre el Usuario y el Operador Turístico.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Procesar pagos y reembolsos relacionados con las reservas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Cumplir obligaciones legales y contractuales.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Atender solicitudes, quejas y reclamos (PQR).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Enviar comunicaciones relacionadas con la reserva (confirmaciones, cambios, cancelaciones).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">7. Mejorar la experiencia del usuario en la plataforma.</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Los datos no serán utilizados para fines distintos sin autorización previa del titular.</p>\n</div>\n<h6 class=\"mb-2\">6. Autorización del Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El Titular autoriza de manera previa, expresa e informada a TOURYA para el tratamiento de sus datos personales al:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Registrarse en la plataforma</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Realizar una reserva</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Aceptar esta Política mediante mecanismos digitales</p>\n  <p class=\"mb-2\">La autorización podrá ser revocada en cualquier momento, sin efectos retroactivos.</p>\n</div>\n<h6 class=\"mb-2\">7. Circulación y Transferencia de Datos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA podrá compartir los datos personales únicamente con:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Operadores Turísticos, exclusivamente para la prestación del tour reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Proveedores tecnológicos (hosting, CRM, pasarela de pagos), bajo acuerdos de confidencialidad.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Autoridades competentes, cuando sea requerido por ley.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> TOURYA no vende ni comercializa datos personales.</p>\n</div>\n<h6 class=\"mb-2\">8. Derechos del Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El Titular tiene derecho a:</p>\n</div>\n<h6 class=\"mb-2\">1. Conocer, actualizar y rectificar sus datos personales.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Solicitar prueba de la autorización otorgada.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Ser informado sobre el uso de sus datos.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Presentar quejas ante la SIC por infracciones.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Revocar la autorización y/o solicitar la supresión del dato.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Acceder gratuitamente a sus datos personales.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">9. Procedimiento para el Ejercicio de Derechos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Las solicitudes deberán enviarse al correo:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ðŸ“§ \udce7 luis.mendoza@tourya.co</p>\n  <p class=\"mb-2\">Plazos legales:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Consultas: hasta 10 días hábiles</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Reclamos: hasta 15 días hábiles</p>\n</div>\n<h6 class=\"mb-2\">10. Medidas de Seguridad</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA adopta medidas técnicas, administrativas y organizacionales razonables para proteger los datos personales contra:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Acceso no autorizado</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Pérdida</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Uso indebido</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Alteración</p>\n  <p class=\"mb-2\">No obstante, el usuario reconoce que ningún sistema es completamente seguro.</p>\n</div>\n<h6 class=\"mb-2\">11. Tratamiento por Parte de Operadores Turísticos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los Operadores Turísticos que acceden a datos personales de los Usuarios:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Actúan como Encargados del Tratamiento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Solo pueden usar los datos para ejecutar el tour reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Deben cumplir la Ley 1581 de 2012.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> No pueden usar los datos con fines propios sin autorización del Titular.</p>\n</div>\n<h6 class=\"mb-2\">12. Conservación de los Datos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los datos personales serán conservados:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Durante la vigencia de la relación contractual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Mientras exista una obligación legal o contractual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Hasta que el Titular solicite su supresión (cuando sea legalmente procedente)</p>\n</div>\n<h6 class=\"mb-2\">13. Modificaciones a la Política</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">TOURYA podrá modificar esta Política en cualquier momento.</p>\n  <p class=\"mb-2\">Las modificaciones serán informadas a través de la plataforma.</p>\n</div>\n<h6 class=\"mb-2\">14. Vigencia</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">La presente Política rige a partir de su publicación y permanecerá vigente mientras TOURYA realice tratamiento de datos personales.</p>\n</div>"
   },
   "aboutUs": {
     "title1": "Acerca de Tourya",
-    "desc1": "Tourya es un Marketplace diseÃ±ada para conectar turistas con las mejores experiencias en la isla de san AndrÃ©s.",
-    "desc2": "Tourya es una app que conecta turistas con los mejores tours de forma fÃ¡cil y segura. Permite descubrir, comparar y reservar experiencias desde el celular en minutos.",
-    "point1": "Ofrece informaciÃ³n clara, precios transparentes y confirmaciÃ³n inmediata con QR. EncontrarÃ¡s informaciÃ³n clara, precisa y completa de cada tour antes de comprar. Las reseÃ±as reales les ayudarÃ¡n a elegir con confianza y sin sorpresas.",
-    "point2": "Explora, compara y reserva tours fÃ¡cilmente desde su celular en pocos pasos. Recibe confirmaciÃ³n inmediata con QR y gestiona cambios o cancelaciones sin complicaciones. Todo con soporte 24/7 para que viajes sin preocupaciones.",
+    "desc1": "Tourya es un Marketplace diseñada para conectar turistas con las mejores experiencias en la isla de san Andrés.",
+    "desc2": "Tourya es una app que conecta turistas con los mejores tours de forma fácil y segura. Permite descubrir, comparar y reservar experiencias desde el celular en minutos.",
+    "point1": "Ofrece información clara, precios transparentes y confirmación inmediata con QR. Encontrarás información clara, precisa y completa de cada tour antes de comprar. Las reseñas reales les ayudarán a elegir con confianza y sin sorpresas.",
+    "point2": "Explora, compara y reserva tours fácilmente desde su celular en pocos pasos. Recibe confirmación inmediata con QR y gestiona cambios o cancelaciones sin complicaciones. Todo con soporte 24/7 para que viajes sin preocupaciones.",
     "missionTitle": "Nuestra mision",
-    "missionDesc": "En Tourya ayudamos a los turistas a vivir experiencias memorables en San AndrÃ©s. Conectamos viajeros con tours seguros, confiables y fÃ¡ciles de reservar. Brindamos una plataforma transparente para disfrutar sin preocupaciones.",
+    "missionDesc": "En Tourya ayudamos a los turistas a vivir experiencias memorables en San Andrés. Conectamos viajeros con tours seguros, confiables y fáciles de reservar. Brindamos una plataforma transparente para disfrutar sin preocupaciones.",
     "whyChooseUs": {
-      "title": "Â¿Por quÃ© ",
+      "title": "Â¿Por qué ",
       "titlePrimary": "elegirnos?",
       "card1": {
         "title": "Compra sin riesgo",
@@ -602,12 +602,12 @@
         "desc": "Precios, horarios y condiciones transparentes desde el inicio. Nada oculto."
       },
       "card3": {
-        "title": "Cancelas fÃ¡cil",
-        "desc": "Cambios o cancelaciones sin lÃ­os. Flexibilidad real para el viajero."
+        "title": "Cancelas fácil",
+        "desc": "Cambios o cancelaciones sin líos. Flexibilidad real para el viajero."
       },
       "card4": {
-        "title": "Siempre acompaÃ±ado",
-        "desc": "Soporte 24/7. No estÃ¡s solo si algo pasa."
+        "title": "Siempre acompañado",
+        "desc": "Soporte 24/7. No estás solo si algo pasa."
       }
     }
   },
@@ -618,8 +618,8 @@
     },
     "header": {
       "seeAll": "Ver Todo",
-      "viewLocation": "Ver UbicaciÃ³n",
-      "reviews": "ReseÃ±as"
+      "viewLocation": "Ver Ubicación",
+      "reviews": "Reseñas"
     },
     "actions": {
       "save": "Guardar",
@@ -627,39 +627,39 @@
       "share": "Compartir"
     },
     "sections": {
-      "description": "DescripciÃ³n",
+      "description": "Descripción",
       "highlights": "Destacados",
       "itinerary": "Itinerario",
       "includesExcludes": "Incluye y Excluye",
-      "gallery": "GalerÃ­a",
-      "location": "UbicaciÃ³n",
-      "cancellationPolicies": "PolÃ­ticas de CancelaciÃ³n",
+      "gallery": "Galería",
+      "location": "Ubicación",
+      "cancellationPolicies": "Políticas de Cancelación",
       "faq": "Preguntas Frecuentes",
-      "reviews": "ReseÃ±as"
+      "reviews": "Reseñas"
     },
     "policies": {
       "rainRefund": "Reembolso por Lluvia",
-      "rescheduling": "ReprogramaciÃ³n"
+      "rescheduling": "Reprogramación"
     },
     "reviews": {
-      "writeReview": "Escribir una ReseÃ±a",
+      "writeReview": "Escribir una Reseña",
       "rejection": {
         "selectReason": "Por favor seleccione un motivo de rechazo",
-        "success": "ReseÃ±a rechazada con Ã©xito",
-        "error": "Error al rechazar la reseÃ±a"
+        "success": "Reseña rechazada con éxito",
+        "error": "Error al rechazar la reseña"
       }
     },
     "booking": {
       "checkIn": "Check-in",
       "checkOut": "Check-out",
-      "guests": "HuÃ©spedes",
+      "guests": "Huéspedes",
       "adults": "Adultos",
-      "children": "NiÃ±os",
+      "children": "Niños",
       "infants": "Infantes",
       "selectDate": "Seleccionar Fecha",
-      "confirmSelection": "Confirmar SelecciÃ³n",
+      "confirmSelection": "Confirmar Selección",
       "addToCart": "Agregar al Carrito",
-      "selectionActive": "Tu selecciÃ³n estÃ¡ activa",
+      "selectionActive": "Tu selección está activa",
       "finishBooking": "Finalizar reserva",
       "person": "Persona",
       "persons": "Personas",
@@ -667,30 +667,30 @@
       "perPerson": "Por Persona",
       "group": "Grupo",
       "upTo": "hasta",
-      "duration": "DuraciÃ³n",
-      "minAge": "Edad mÃ­nima",
+      "duration": "Duración",
+      "minAge": "Edad mínima",
       "price": "Precio",
       "availability": "Disponibilidad",
       "checkAvailability": "Consultar Disponibilidad",
-      "loginToCheck": "Para consultar la disponibilidad debes iniciar sesiÃ³n.",
-      "login": "Iniciar SesiÃ³n"
+      "loginToCheck": "Para consultar la disponibilidad debes iniciar sesión.",
+      "login": "Iniciar Sesión"
     },
     "enquiry": {
-      "title": "ContÃ¡ctenos",
+      "title": "Contáctenos",
       "submit": "Enviar Consulta"
     },
     "provider": {
       "title": "Detalles del Proveedor",
-      "callUs": "LlÃ¡manos",
+      "callUs": "Llámanos",
       "email": "Correo"
     },
     "why-book": {
-      "title": "Por quÃ© reservar con nosotros",
-      "item1": "InformaciÃ³n clara siempre",
+      "title": "Por qué reservar con nosotros",
+      "item1": "Información clara siempre",
       "item2": "Compra 100% segura",
-      "item3": "CancelaciÃ³n fÃ¡cil y flexible",
-      "item4": "AtenciÃ³n 24/7 real",
-      "item5": "Oficina fÃ­sica local"
+      "item3": "Cancelación fácil y flexible",
+      "item4": "Atención 24/7 real",
+      "item5": "Oficina física local"
     }
   },
   "tour-schedule": {
@@ -713,35 +713,35 @@
       "apply": "Aplicar Template"
     },
     "config": {
-      "title": "ConfiguraciÃ³n de Calendario",
+      "title": "Configuración de Calendario",
       "reset": "Limpiar formulario",
       "label": {
         "label": "Etiqueta",
         "required": "La etiqueta es requerida",
         "minlength": "La etiqueta debe tener al menos 3 caracteres",
-        "maxlength": "La etiqueta no puede tener mÃ¡s de 50 caracteres"
+        "maxlength": "La etiqueta no puede tener más de 50 caracteres"
       },
       "startDate": {
         "label": "Fecha de Inicio",
         "required": "La fecha de inicio es requerida",
-        "invalid": "La fecha de inicio es invÃ¡lida"
+        "invalid": "La fecha de inicio es inválida"
       },
       "endDate": {
         "label": "Fecha de Fin",
         "required": "La fecha de fin es requerida",
-        "invalid": "La fecha de fin es invÃ¡lida",
-        "invalidRange": "La fecha de fin es invÃ¡lida."
+        "invalid": "La fecha de fin es inválida",
+        "invalidRange": "La fecha de fin es inválida."
       },
       "daysOfWeek": {
-        "label": "DÃ­as de la semana",
-        "required": "Los dÃ­as de la semana son requeridos",
+        "label": "Días de la semana",
+        "required": "Los días de la semana son requeridos",
         "SUNDAY": "DOMINGO",
         "MONDAY": "LUNES",
         "TUESDAY": "MARTES",
         "WEDNESDAY": "MIÃ‰RCOLES",
         "THURSDAY": "JUEVES",
         "FRIDAY": "VIERNES",
-        "SATURDAY": "SÃBADO"
+        "SATURDAY": "SÁBADO"
       }
     },
     "slots": {
@@ -754,7 +754,7 @@
       "endTime": {
         "label": "Hora de fin",
         "required": "La hora de fin es requerida",
-        "invalidRange": "Rango de tiempo invÃ¡lido"
+        "invalidRange": "Rango de tiempo inválido"
       },
       "capacity": {
         "label": "Capacidad",
@@ -787,9 +787,9 @@
       "editSchedule": "Editar calendario"
     },
     "messages": {
-      "noSlots": "No hay horarios configurados para este dÃ­a",
-      "config": "ConfiguraciÃ³n:",
-      "days": "DÃ­as:",
+      "noSlots": "No hay horarios configurados para este día",
+      "config": "Configuración:",
+      "days": "Días:",
       "schedule": "Horario",
       "availability": "Disponibilidad",
       "capacity": "Capacidad:",
@@ -801,7 +801,7 @@
     "anyModal": {
       "title": "Confirmar cambio de tipo de edad",
       "p1": "Has seleccionado \"ANY (CUALQUIERA)\" en el Precio #1.",
-      "p2": "Para agregar un nuevo precio, el Precio #1 se cambiarÃ¡ automÃ¡ticamente de \"ANY\" a \"ADULT\".",
+      "p2": "Para agregar un nuevo precio, el Precio #1 se cambiará automáticamente de \"ANY\" a \"ADULT\".",
       "p3": "Â¿Deseas continuar?",
       "cancel": "Cancelar",
       "confirm": "Confirmar"
