@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, Input, OnChanges, NgZone, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { routes } from '../../../shared/routes/routes';
 import Swal from 'sweetalert2';
 import { Sort } from '@angular/material/sort';
@@ -304,41 +305,46 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   /**
    * Mapea una ReservationDetails del backend a ProviderTourBooking
    */
+  /**
+   * Formatea una fecha ISO a formato legible: "15 Oct 2025"
+   */
+  public formatDate(dateString: string | undefined): string {
+    if (!dateString) return '—';
+    try {
+      const date = this.parseLocalDate(dateString);
+      return date.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch {
+      return dateString || '—';
+    }
+  }
+
+  /**
+   * Formatea una fecha y hora ISO a formato legible: "15 Oct 2025, 09:00 AM"
+   */
+  public formatDateTime(dateString: string | undefined): string {
+    if (!dateString) return '—';
+    try {
+      const date = this.parseLocalDate(dateString);
+      const dateStr = date.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+      const timeStr = date.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      return `${dateStr}, ${timeStr}`;
+    } catch {
+      return dateString || '—';
+    }
+  }
+
   private mapReservationToBooking(reservation: any): ProviderTourBooking {
-    // Formatear las fechas correctamente
-    const formatDate = (dateString: string) => {
-      if (!dateString) return 'N/A';
-      try {
-        const date = this.parseLocalDate(dateString);
-        return date.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric'
-        });
-      } catch {
-        return 'N/A';
-      }
-    };
-
-    const formatDateTime = (dateString: string) => {
-      if (!dateString) return 'N/A';
-      try {
-        const date = this.parseLocalDate(dateString);
-        const dateStr = date.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric'
-        });
-        const timeStr = date.toLocaleTimeString('es-ES', {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        return `${dateStr}, ${timeStr}`;
-      } catch {
-        return 'N/A';
-      }
-    };
-
     return {
       id: `RES-${reservation.reservationId}`,
       tourId: reservation.tourId, // Mapear el ID del tour
@@ -348,13 +354,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       customerName: reservation.serviceResponsible?.name || 'N/A',
       customerEmail: reservation.serviceResponsible?.email || 'N/A',
       customerPhone: reservation.serviceResponsible?.phone || 'N/A',
-      serviceResponsible: reservation.serviceResponsible,
       travellers: reservation.travellers || 'N/A',
       duration: reservation.duration ? `${reservation.duration} dÃ­as` : 'N/A',
       price: reservation.price ? `$${reservation.price.toFixed(2)}` : '$0.00',
-      bookingDate: formatDate(reservation.createdDate),
-      checkInDate: formatDateTime(reservation.checkInDate),
-      returnDate: formatDateTime(reservation.returnDate),
+      bookingDate: this.formatDate(reservation.createdDate),
+      checkInDate: this.formatDateTime(reservation.checkInDate),
+      returnDate: this.formatDateTime(reservation.returnDate),
       rawCheckInDate: reservation.checkInDate ? reservation.checkInDate.split('T')[0] : '',
       rawReturnDate: reservation.returnDate ? reservation.returnDate.split('T')[0] : '',
       status: this.mapReservationStatus(reservation.deliveryStatus),
@@ -369,38 +374,19 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       payerDocumentNumber: reservation.payerDocumentNumber || undefined,
       payerEmail: reservation.payerEmail || undefined,
       payerPhone: reservation.payerPhone || undefined,
-      // Cancellation info
-      cancellationDate: reservation.cancellationDate || undefined,
+      // Cancellation and Rescheduling info
+      maxCancellationDate: reservation.maxCancellationDate,
+      maxReschedulingDate: reservation.maxReschedulingDate,
+      canReschedule: reservation.canReschedule,
+      canCancel: reservation.canCancel,
+      cancellationDate: this.formatDate(reservation.cancellationDate),
       cancellationReason: reservation.cancellationReason || undefined,
+      // Service Responsible
+      serviceResponsible: reservation.serviceResponsible || undefined
     };
   }
   
-  /**
-   * Formatea una fecha ISO a formato legible: "15 Oct 2025, 09:00 AM"
-   */
-  private formatDateTime(dateString: string): string {
-    const date = new Date(dateString);
-    
-    // Opciones para el formato de fecha
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    };
-    
-    // Opciones para el formato de hora
-    const timeOptions: Intl.DateTimeFormatOptions = {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    };
-    
-    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
-    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
-    
-    return `${formattedDate}, ${formattedTime}`;
-  }
-  
+
   /**
    * Crea un objeto de reserva desde los parÃ¡metros del QR
    */
@@ -861,16 +847,25 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    * Abre el modal con los detalles de la reserva
    */
   public viewBookingDetails(booking: ProviderTourBooking): void {
-    // Extract the numeric ID from the format "RES-10" or "TB-1001"
     const numericId = booking.id.includes('-') ? booking.id.split('-')[1] : booking.id;
     
-    console.log('ðŸ”„ Obteniendo detalles de la reserva:', numericId);
+    console.log('ðŸ”„ Iniciando carga completa de reserva:', numericId);
+
+    // Mostrar loading
+    Swal.fire({
+      title: 'Cargando detalles...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
     
     this.reservationService.getReservationById(numericId).subscribe({
       next: (reservation) => {
-        console.log('✅ Detalles de la reserva obtenidos:', reservation);
+        console.log('✅ 1/3 Reserva obtenida:', reservation);
+        
         const mapped = this.mapReservationToBooking(reservation);
-        // Preserve payer info from the table row (comes from list API, not detail API)
+        // Preservar info del pagador de la fila (lista)
         this.selectedBooking = {
           ...mapped,
           payerName: mapped.payerName || booking.payerName,
@@ -891,66 +886,72 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
             endDate: endDate
           };
 
-          this.searchToursService.searchTours(searchBody, 0, 10).subscribe({
-            next: (scheduleDetails) => {
-              console.log('✅ Detalles de schedule obtenidos automáticamente:', scheduleDetails);
-              if (scheduleDetails?.content?.length > 0) {
-                const tourInfo = scheduleDetails.content[0].tour;
+          // Ejecutar peticiones secundarias en paralelo y esperar ambas
+          forkJoin({
+            schedule: this.searchToursService.searchTours(searchBody, 0, 10).pipe(catchError(err => {
+              console.error('❌ Error en searchTours:', err);
+              return of(null);
+            })),
+            details: this.searchToursService.detailTourPublic(reservation.tourId).pipe(catchError(err => {
+              console.error('❌ Error en detailTourPublic:', err);
+              return of(null);
+            }))
+          }).subscribe({
+            next: (results) => {
+              console.log('✅ 2/3 y 3/3 Servicios secundarios completados');
+              
+              // Procesar Schedule (Imagen, Tipo, Destino)
+              const scheduleContent = results.schedule?.content;
+              if (scheduleContent && scheduleContent.length > 0) {
+                const tourInfo = scheduleContent[0].tour;
                 if (tourInfo) {
-                  if (tourInfo.profilePicture?.imageUrl) {
-                    this.selectedBooking.img = tourInfo.profilePicture.imageUrl;
-                  }
-                  if (tourInfo.subCategoryName) {
-                    this.selectedBooking.tourType = tourInfo.subCategoryName;
-                  }
-                  if (tourInfo.address?.address) {
-                    this.selectedBooking.destination = tourInfo.address.address;
-                  }
+                  if (tourInfo.profilePicture?.imageUrl) this.selectedBooking.img = tourInfo.profilePicture.imageUrl;
+                  if (tourInfo.subCategoryName) this.selectedBooking.tourType = tourInfo.subCategoryName;
+                  if (tourInfo.address?.address) this.selectedBooking.destination = tourInfo.address.address;
                 }
               }
-            },
-            error: (err) => {
-              console.error('❌ Error al obtener detalles de schedule:', err);
-            }
-          });
-
-          this.searchToursService.detailTourPublic(reservation.tourId).subscribe({
-            next: (tourDetails) => {
-              console.log('✅ Detalles adicionales del tour obtenidos:', tourDetails);
-              if (this.selectedBooking) {
-                this.selectedBooking.tourDetails = tourDetails;
-                this.cdr.detectChanges();
+              
+              // Procesar Detalles (Políticas)
+              if (results.details) {
+                this.selectedBooking.tourDetails = results.details;
               }
+              
+              this.cdr.detectChanges();
+              Swal.close();
+              this.openDetailModal();
             },
-            error: (err) => {
-              console.error('❌ Error al obtener detalles adicionales del tour:', err);
+            error: () => {
+              // En caso de error crítico en forkJoin (que no debería por el catchError)
+              Swal.close();
+              this.openDetailModal();
             }
           });
+        } else {
+          // Si no hay tourId, terminar carga
+          Swal.close();
+          this.openDetailModal();
         }
-        
-        // Abrir el modal programÃ¡ticamente
-        setTimeout(() => {
-          const modalElement = document.getElementById('bookingDetailModal');
-          if (modalElement) {
-            const modal = new (window as any).bootstrap.Modal(modalElement);
-            modal.show();
-          }
-        }, 0);
       },
       error: (error) => {
-        console.error('âŒ Error al obtener los detalles de la reserva:', error);
-        // Fallback: usar los datos de la fila de la tabla si falla la peticiÃ³n
-        this.selectedBooking = booking;
-        
-        setTimeout(() => {
-          const modalElement = document.getElementById('bookingDetailModal');
-          if (modalElement) {
-            const modal = new (window as any).bootstrap.Modal(modalElement);
-            modal.show();
-          }
-        }, 0);
+        console.error('â Œ Error al obtener los detalles de la reserva:', error);
+        Swal.close();
+        this.selectedBooking = booking; // Fallback a datos de lista
+        this.openDetailModal();
       }
     });
+  }
+
+  /**
+   * Helper para abrir el modal de detalles programáticamente
+   */
+  private openDetailModal(): void {
+    setTimeout(() => {
+      const modalElement = document.getElementById('bookingDetailModal');
+      if (modalElement) {
+        const modal = new (window as any).bootstrap.Modal(modalElement);
+        modal.show();
+      }
+    }, 0);
   }
 
   /**
@@ -979,86 +980,105 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Navega al escÃ¡ner QR para confirmar la reserva
+   * Navega al escáner QR para confirmar la reserva
    */
   public navigateToQrScanner(bookingId?: string): void {
     this.router.navigate(['/providers/scan-qr']);
   }
 
   /**
-   * Confirma una reserva (solo UI - mock)
+   * Actualiza el estado de una reserva en las listas locales
    */
-  public confirmBooking(bookingId: string): void {
+  private updateLocalBookingStatus(bookingId: string, apiStatus: string): void {
+    const uiStatus = this.mapReservationStatus(apiStatus);
+    
+    // Actualizar en tableData
     const booking = this.tableData.find(b => b.id === bookingId);
-    if (booking) {
-      booking.status = 'Confirmed';
-      alert(`Reserva ${bookingId} confirmada exitosamente`);
+    if (booking) booking.status = uiStatus;
+    
+    // Actualizar en tableDataCopy (para filtros)
+    const bookingCopy = this.tableDataCopy.find(b => b.id === bookingId);
+    if (bookingCopy) bookingCopy.status = uiStatus;
+    
+    // Actualizar en selectedBooking (modal)
+    if (this.selectedBooking && this.selectedBooking.id === bookingId) {
+      this.selectedBooking.status = uiStatus;
     }
   }
 
   /**
-   * Confirma/Consume una reserva desde el modal
+   * Confirma/Consume una reserva (Servicio Real)
    */
-  public confirmBookingFromModal(bookingId: string): void {
-    // Extraer el ID numÃ©rico del formato "RES-10" o "TB-1001"
+  public confirmBooking(bookingId: string): void {
     const numericId = bookingId.includes('-') ? bookingId.split('-')[1] : bookingId;
     
-    console.log('ðŸ”„ Consumiendo reserva:', numericId);
-    
-    this.reservationService.confirmReservation(numericId).subscribe({
-      next: (response) => {
-        console.log('âœ… Reserva consumida exitosamente:', response);
-        
-        // Actualizar el estado en la tabla local segÃºn la respuesta del API
-        const booking = this.tableData.find(b => b.id === bookingId);
-        if (booking) {
-          // Mapear el deliveryStatus de la respuesta al status de la UI
-          booking.status = response.deliveryStatus === 'DELIVERED' ? 'Completed' : 
-                          response.deliveryStatus === 'PENDING' ? 'Pending' : 
-                          'Cancelled';
-        }
-        
-        // Actualizar tambiÃ©n en tableDataCopy
-        const bookingCopy = this.tableDataCopy.find(b => b.id === bookingId);
-        if (bookingCopy) {
-          bookingCopy.status = response.deliveryStatus === 'DELIVERED' ? 'Completed' : 
-                              response.deliveryStatus === 'PENDING' ? 'Pending' : 
-                              'Cancelled';
-        }
-        
-        // Actualizar el selectedBooking si es el que estÃ¡ en el modal
-        if (this.selectedBooking && this.selectedBooking.id === bookingId) {
-          this.selectedBooking.status = response.deliveryStatus === 'DELIVERED' ? 'Completed' : 
-                                       response.deliveryStatus === 'PENDING' ? 'Pending' : 
-                                       'Cancelled';
-        }
-        
-        // Cerrar el modal automÃ¡ticamente
-        const modalElement = document.getElementById('bookingDetailModal');
-        if (modalElement) {
-          const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
-          if (modal) {
-            modal.hide();
+    Swal.fire({
+      title: '¿Confirmar entrega?',
+      text: "Esta acción marcará la reserva como entregada y procesará el pago.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Procesando...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
           }
-        }
-        
-        alert(`âœ… Reserva ${bookingId} confirmada y entregada exitosamente`);
-      },
-      error: (error) => {
-        console.error('âŒ Error al confirmar la reserva:', error);
-        alert(`âŒ Error al confirmar la reserva. Por favor intenta nuevamente.`);
+        });
+
+        this.reservationService.confirmReservation(numericId).subscribe({
+          next: (response) => {
+            Swal.fire(
+              '¡Confirmada!',
+              'La reserva ha sido marcada como entregada exitosamente.',
+              'success'
+            );
+            this.updateLocalBookingStatus(bookingId, response.deliveryStatus);
+            
+            // Si el modal está abierto, cerrarlo
+            const modalElement = document.getElementById('bookingDetailModal');
+            if (modalElement) {
+              const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
+              if (modal) modal.hide();
+            }
+          },
+          error: (error) => {
+            console.error('❌ Error confirmando reserva:', error);
+            Swal.fire(
+              'Error',
+              'No se pudo confirmar la reserva. Por favor intente nuevamente.',
+              'error'
+            );
+          }
+        });
       }
     });
+  }
+
+  /**
+   * Alias para confirmBooking usado desde el modal
+   */
+  public confirmBookingFromModal(bookingId: string): void {
+    this.confirmBooking(bookingId);
   }
 
   /**
    * Cancela una reserva (solo UI - mock)
    */
   public cancelBooking(bookingId: string): void {
+    Swal.fire({
+      title: 'Reserva cancelada',
+      text: `La reserva ${bookingId} ha sido marcada como cancelada.`,
+      icon: 'info'
+    });
     const booking = this.tableData.find(b => b.id === bookingId);
     if (booking) {
       booking.status = 'Cancelled';
-      alert(`Reserva ${bookingId} cancelada`);
     }
   }
 
@@ -1066,18 +1086,34 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    * Marca una reserva como completada (solo UI - mock)
    */
   public completeBooking(bookingId: string): void {
-    const booking = this.tableData.find(b => b.id === bookingId);
-    if (booking) {
-      booking.status = 'Completed';
-      alert(`Reserva ${bookingId} marcada como completada`);
-    }
+    Swal.fire({
+      title: '¿Marcar como completada?',
+      text: "Se registrará que el tour ha sido finalizado exitosamente.",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, completar',
+      cancelButtonText: 'Volver'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // En un escenario real, aquí se llamaría a un servicio
+        this.updateLocalBookingStatus(bookingId, 'DELIVERED');
+        Swal.fire('¡Completada!', 'La reserva ha sido marcada como completada.', 'success');
+      }
+    });
   }
 
   /**
    * Exporta los datos (mock)
    */
   public exportData(format: 'pdf' | 'excel'): void {
-    alert(`Exportando datos como ${format.toUpperCase()}...`);
+    Swal.fire({
+      title: `Exportando ${format.toUpperCase()}`,
+      text: 'Tu archivo se está generando y se descargará en unos segundos.',
+      icon: 'success',
+      timer: 3000,
+      timerProgressBar: true,
+      showConfirmButton: false
+    });
   }
 
   /**
@@ -1127,14 +1163,10 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.viewBookingDetails(booking);
         break;
       case 'confirm':
-        if (confirm('Â¿Confirmar esta reserva?')) {
-          this.confirmBooking(booking.id);
-        }
+        this.confirmBooking(booking.id);
         break;
       case 'complete':
-        if (confirm('Â¿Marcar esta reserva como completada?')) {
-          this.completeBooking(booking.id);
-        }
+        this.completeBooking(booking.id);
         break;
       case 'reschedule':
         this.handleReschedule(booking);
@@ -1156,26 +1188,49 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.viewBookingDetails(booking);
         break;
       case 'approve':
-        if (confirm('Â¿Aprobar esta reserva?')) {
-          this.confirmBooking(booking.id);
-          alert('Reserva aprobada');
-        }
+        Swal.fire({
+          title: '¿Aprobar esta reserva?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, aprobar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.confirmBooking(booking.id);
+          }
+        });
         break;
       case 'suspend':
-        if (confirm('Â¿Suspender esta reserva?')) {
-          booking.status = 'Cancelled';
-          alert('Reserva suspendida');
-        }
+        Swal.fire({
+          title: '¿Suspender esta reserva?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, suspender',
+          confirmButtonColor: '#d33'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            booking.status = 'Cancelled';
+            Swal.fire('Suspendida', 'La reserva ha sido suspendida.', 'success');
+          }
+        });
         break;
       case 'delete':
-        if (confirm('Â¿Eliminar permanentemente esta reserva?')) {
-          const index = this.tableData.findIndex(b => b.id === booking.id);
-          if (index > -1) {
-            this.tableData.splice(index, 1);
-            this.tableDataCopy = [...this.tableData];
-            alert('Reserva eliminada');
+        Swal.fire({
+          title: '¿Eliminar permanentemente?',
+          text: "Esta acción no se puede deshacer.",
+          icon: 'error',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, eliminar',
+          confirmButtonColor: '#d33'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const index = this.tableData.findIndex(b => b.id === booking.id);
+            if (index > -1) {
+              this.tableData.splice(index, 1);
+              this.tableDataCopy = [...this.tableData];
+              Swal.fire('Eliminada', 'La reserva ha sido eliminada.', 'success');
+            }
           }
-        }
+        });
         break;
       default:
         console.warn('AcciÃ³n no reconocida:', actionId);
@@ -1190,6 +1245,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       return true;
     }
     return action.visible(row);
+  }
+
+  /**
+   * Verifica si una acción específica debe mostrarse en el modal de detalles
+   */
+  public shouldShowModalAction(actionId: string): boolean {
+    if (!this.selectedBooking || !this.config || !this.config.actions) return false;
+    const action = this.config.actions.find(a => a.id === actionId);
+    if (!action) return false;
+    
+    // Para el modal, usamos el objeto selectedBooking
+    return this.isActionVisible(action, this.selectedBooking);
   }
 
   /**
@@ -1344,6 +1411,26 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
+   * Traduce el código de motivo de cancelación al español
+   */
+  public formatCancellationReason(reason: string | undefined): string {
+    if (!reason) return '—';
+    const mapping: { [key: string]: string } = {
+      'CANNOT_ATTEND': 'No puede asistir',
+      'ILLNESS': 'Enfermedad',
+      'WEATHER': 'Condiciones climáticas',
+      'EMERGENCY': 'Emergencia',
+      'CHANGE_OF_PLANS': 'Cambio de planes',
+      'DISSATISFIED': 'Insatisfacción con el servicio',
+      'DUPLICATE': 'Reserva duplicada',
+      'OTHER': 'Otro motivo',
+      'PROVIDER_CANCELLED': 'Cancelado por el proveedor',
+      'FORCE_MAJEURE': 'Fuerza mayor',
+    };
+    return mapping[reason] ?? reason.replace(/_/g, ' ').toLowerCase().replace(/^\w/, c => c.toUpperCase());
+  }
+
+  /**
    * Convierte el durationEnum del tour a una etiqueta legible
    */
   public getDurationLabelFromEnum(durationEnum: string | string[] | undefined): string {
@@ -1410,7 +1497,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         },
         error: (error) => {
           console.error('âŒ Error al obtener reserva para review:', error);
-          alert('Error al cargar los detalles de la reserva. Por favor intenta nuevamente.');
+          Swal.fire('Error', 'No se pudieron cargar los detalles de la reserva.', 'error');
         }
       });
       
@@ -1694,12 +1781,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   public confirmCancellation(): void {
     if (!this.cancellationReason) {
-      alert('Por favor selecciona un motivo de cancelaciÃ³n');
+      Swal.fire('Atención', 'Por favor selecciona un motivo de cancelación', 'warning');
       return;
     }
 
     if (!this.cancelModalBooking) {
-      alert('Error: No se encontrÃ³ la reserva');
+      Swal.fire('Error', 'No se encontró la reserva seleccionada', 'error');
       return;
     }
 
@@ -1714,7 +1801,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const apiReason = reasonMap[this.cancellationReason];
     
     if (!apiReason) {
-      alert('Error: Motivo de cancelaciÃ³n no vÃ¡lido');
+      Swal.fire('Error', 'Motivo de cancelación no válido', 'error');
       return;
     }
 
@@ -1846,18 +1933,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   public confirmRescheduleDates(): void {
     if (!this.rescheduleDateModalBooking) {
-      alert('Error: No se encontrÃ³ la reserva');
+      Swal.fire('Error', 'No se encontró la reserva', 'error');
       return;
     }
 
     if (!this.rescheduleCheckIn || !this.rescheduleCheckOut) {
-      alert('Por favor selecciona las fechas de Check In y Check Out');
+      Swal.fire('Atención', 'Por favor selecciona las fechas de Check In y Check Out', 'warning');
       return;
     }
 
     // Comparar fechas como strings (formato YYYY-MM-DD)
     if (this.rescheduleCheckIn >= this.rescheduleCheckOut) {
-      alert('La fecha de Check Out debe ser posterior a la fecha de Check In');
+      Swal.fire('Atención', 'La fecha de Check Out debe ser posterior a la fecha de Check In', 'warning');
       return;
     }
 
@@ -1877,7 +1964,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Validar que tengamos el tourId
     if (!tourId) {
       console.error('âŒ tourId es undefined. Datos de la reserva:', bookingData);
-      alert('Error: No se pudo obtener el ID del tour. Por favor, intenta nuevamente.');
+      Swal.fire('Error', 'No se pudo obtener el ID del tour. Por favor, intenta nuevamente.', 'error');
       return;
     }
 
@@ -1929,22 +2016,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
                 });
               } else {
                 console.error('âŒ No se encontraron horarios disponibles para las fechas seleccionadas');
-                alert('No hay horarios disponibles para las fechas seleccionadas. Por favor, intenta con otras fechas.');
+                Swal.fire('Atención', 'No hay horarios disponibles para las fechas seleccionadas. Por favor, intenta con otras fechas.', 'info');
               }
             },
             error: (error) => {
               console.error('âŒ Error cargando schedules:', error);
-              alert('Error al cargar los horarios disponibles. Por favor, intenta nuevamente.');
+              Swal.fire('Error', 'Error al cargar los horarios disponibles. Por favor, intenta nuevamente.', 'error');
             }
           });
         } else {
           console.error('âŒ No se encontraron datos del tour');
-          alert('No se pudo cargar la informaciÃ³n del tour. Por favor, intenta nuevamente.');
+          Swal.fire('Error', 'No se pudo cargar la información del tour. Por favor, intenta nuevamente.', 'error');
         }
       },
       error: (error) => {
         console.error('âŒ Error cargando datos del tour:', error);
-        alert('Error al cargar la informaciÃ³n del tour. Por favor, intenta nuevamente.');
+        Swal.fire('Error', 'Error al cargar la información del tour. Por favor, intenta nuevamente.', 'error');
       }
     });
   }

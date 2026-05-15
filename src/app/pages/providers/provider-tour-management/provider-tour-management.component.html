@@ -297,18 +297,32 @@
                                     <h6 class="fs-14 text-gray-6">Fecha de compra</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.bookingDate }}</p>
                                 </div>
+                                <!-- Fecha max cancelación: siempre si existe -->
                                 @if (selectedBooking.maxCancellationDate) {
                                     <div class="col-lg-4">
-                                        <h6 class="fs-14 text-gray-6">Fecha límite de cancelación</h6>
-                                        <p class="text-dark fs-16 fw-medium text-danger">{{ selectedBooking.maxCancellationDate }}</p>
+                                        <h6 class="fs-14 text-gray-6">Fecha máxima de cancelación</h6>
+                                        <p class="text-dark fs-16 fw-medium text-danger">{{ formatDate(selectedBooking.maxCancellationDate) }}</p>
                                     </div>
                                 }
-                                @if (selectedBooking.maxReschedulingDate) {
+                                <!-- Fecha max reagendamiento: solo si la política lo permite -->
+                                @if (selectedBooking.tourDetails?.cancellationPolicies?.[0]?.allowsRescheduling && selectedBooking.maxReschedulingDate) {
                                     <div class="col-lg-4">
-                                        <h6 class="fs-14 text-gray-6">Fecha límite de reagendamiento</h6>
-                                        <p class="text-dark fs-16 fw-medium text-warning">{{ selectedBooking.maxReschedulingDate }}</p>
+                                        <h6 class="fs-14 text-gray-6">Fecha máxima de reagendamiento</h6>
+                                        <p class="text-dark fs-16 fw-medium text-warning">{{ formatDate(selectedBooking.maxReschedulingDate) }}</p>
                                     </div>
                                 }
+                                <!-- Permite cancelación por lluvia: si la política lo define -->
+                                @if (selectedBooking.tourDetails?.cancellationPolicies?.length) {
+                                    <div class="col-lg-4">
+                                        <h6 class="fs-14 text-gray-6">Permite cancelación por lluvia</h6>
+                                        @if (selectedBooking.tourDetails.cancellationPolicies[0].allowsRainRefund) {
+                                            <p class="text-dark fs-16 fw-medium text-success"><i class="isax isax-tick-circle me-1"></i>Sí</p>
+                                        } @else {
+                                            <p class="text-dark fs-16 fw-medium text-muted"><i class="isax isax-close-circle me-1"></i>No</p>
+                                        }
+                                    </div>
+                                }
+                                <!-- Fecha de cancelación efectiva -->
                                 @if (selectedBooking.cancellationDate) {
                                     <div class="col-lg-4">
                                         <h6 class="fs-14 text-gray-6">Fecha de cancelación</h6>
@@ -318,11 +332,12 @@
                                 @if (selectedBooking.cancellationReason) {
                                     <div class="col-lg-4">
                                         <h6 class="fs-14 text-gray-6">Motivo de cancelación</h6>
-                                        <p class="text-dark fs-16 fw-medium text-danger">{{ selectedBooking.cancellationReason }}</p>
+                                        <p class="text-dark fs-16 fw-medium text-danger">{{ formatCancellationReason(selectedBooking.cancellationReason) }}</p>
                                     </div>
                                 }
                             </div>
                         </div>
+
 
                         <!-- ===== SOLO PROVIDER / ADMIN ===== -->
                         @if (currentRole !== 'CLIENT') {
@@ -527,33 +542,20 @@
                                 }
                             </div>
                             
-                            <div class="d-flex gap-2">
-                                <!-- Botones de gestión solo para PROVIDER y ADMIN -->
-                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && (selectedBooking.status === 'Confirmed' || selectedBooking.status === 'Upcoming')) {
-                                    <button 
-                                        class="btn btn-primary" 
-                                        (click)="completeBooking(selectedBooking.id)"
-                                        data-bs-dismiss="modal">
-                                        <i class="isax isax-tick-square me-2"></i>{{ 'provider-tour-management.modal.actions.complete' | translate }}
-                                    </button>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <!-- Botones dinámicos según configuración del rol (Reagendar, Cancelar, Confirmar, etc.) -->
+                                @for (action of config.actions; track action.id) {
+                                    @if (action.id !== 'view' && shouldShowModalAction(action.id)) {
+                                        <button 
+                                            class="btn btn-sm"
+                                            [ngClass]="'btn-' + action.color"
+                                            (click)="onAction(action.id, selectedBooking); $event.stopPropagation()"
+                                            data-bs-dismiss="modal">
+                                            <i [class]="action.icon + ' me-2'"></i>{{ action.label }}
+                                        </button>
+                                    }
                                 }
-                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && (selectedBooking.status === 'Pending' || selectedBooking.status === 'PENDING' || selectedBooking.status === 'Rescheduled')) {
-                                    <button 
-                                        class="btn btn-success" 
-                                        (click)="confirmBookingFromModal(selectedBooking.id)"
-                                        data-bs-dismiss="modal">
-                                        <i class="isax isax-tick-circle me-2"></i>{{ 'provider-tour-management.modal.actions.confirm' | translate }}
-                                    </button>
-                                }
-                                @if ((currentRole === 'PROVIDER' || currentRole === 'ADMIN') && selectedBooking.status !== 'Cancelled' && selectedBooking.status !== 'Completed') {
-                                    <button 
-                                        class="btn btn-danger" 
-                                        (click)="openCancelModal(selectedBooking)"
-                                        data-bs-dismiss="modal">
-                                        <i class="isax isax-close-circle me-2"></i>{{ 'provider-tour-management.modal.actions.cancel' | translate }}
-                                    </button>
-                                }
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
                                     {{ 'provider-tour-management.modal.close' | translate }}
                                 </button>
                             </div>

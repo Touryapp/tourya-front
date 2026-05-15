@@ -165,7 +165,7 @@ export class BookingManagementConfigService {
             }
             
             // Fallback to legacy logic if canReschedule is not present
-            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
+            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED' || row.status === 'Rescheduled';
             
             if (!row.maxReschedulingDate) return false;
             
@@ -191,7 +191,7 @@ export class BookingManagementConfigService {
             }
 
             // Check if status is Pending or Rescheduled
-            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED';
+            const isActionable = row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED' || row.status === 'Rescheduled';
             
             // Check if current date is before or equal to maxCancellationDate
             // We use startOf('day') for both to ensure same-day comparison works correctly
@@ -333,7 +333,7 @@ export class BookingManagementConfigService {
           label: 'Confirmar',
           icon: 'fa fa-check-circle',
           color: 'success',
-          visible: (row) => row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED'
+          visible: (row) => row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED' || row.status === 'Rescheduled'
         },
         {
           id: 'reschedule',
