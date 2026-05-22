@@ -102,7 +102,10 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
             const hasPendingAction = this.pendingActionService.hasPendingAction();
             console.log(`✅ Login exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
 
-            if (hasPendingAction) {
+            if (isProvider) {
+              console.log('👤 Redirigiendo proveedor a su panel');
+              this.router.navigate(["providers/provider-panel"]);
+            } else if (hasPendingAction) {
               const pendingAction = this.pendingActionService.getPendingCartAction();
               console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
               console.log('📍 URL de retorno:', pendingAction?.returnUrl);
@@ -187,7 +190,10 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
           const hasPendingAction = this.pendingActionService.hasPendingAction();
           console.log(`✅ Login Google exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
 
-          if (hasPendingAction) {
+          if (isProvider) {
+            console.log('👤 Redirigiendo proveedor a su panel');
+            this.router.navigate(["providers/provider-panel"]);
+          } else if (hasPendingAction) {
             const pendingAction = this.pendingActionService.getPendingCartAction();
             console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
             console.log('📍 URL de retorno:', pendingAction?.returnUrl);
@@ -255,7 +261,10 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
           const hasPendingAction = this.pendingActionService.hasPendingAction();
           console.log(`✅ Login Facebook exitoso - ¿Hay acción pendiente? ${hasPendingAction}`);
 
-          if (hasPendingAction) {
+          if (isProvider) {
+            console.log('👤 Redirigiendo proveedor a su panel');
+            this.router.navigate(["providers/provider-panel"]);
+          } else if (hasPendingAction) {
             const pendingAction = this.pendingActionService.getPendingCartAction();
             console.log('🔄 Redirigiendo a la página anterior con acción pendiente:', pendingAction);
             console.log('📍 URL de retorno:', pendingAction?.returnUrl);

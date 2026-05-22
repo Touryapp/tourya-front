@@ -94,6 +94,7 @@ export class RegisterProviderEmailComponent implements OnInit, OnDestroy {
         city: new FormControl("", [Validators.required]), 
         phone: new FormControl("", [Validators.required, Validators.minLength(10)]), 
         address: new FormControl("", [Validators.required, Validators.minLength(10)]), 
+        rnt: new FormControl("", [Validators.required]),
         terms: new FormControl(false, [Validators.requiredTrue]),
       },
       { validators: [passwordMatchValidator("password", "confirmPassword")] }
@@ -205,7 +206,8 @@ export class RegisterProviderEmailComponent implements OnInit, OnDestroy {
         "department": formData.department.toString(),
         "address": formData.address,
         "phone": formData.phone,
-        "userEmail": formData.email
+        "userEmail": formData.email,
+        "RNT": formData.rnt
       };
 
       // Ejecutar flujo secuencial

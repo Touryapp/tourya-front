@@ -131,11 +131,15 @@
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label text-nowrap" for="name">Nombre Completo de Empresa</label>
-                                        <input type="text" id="name" formControlName="name" class="form-control form-control-lg" placeholder="Ingresa nombre de la empresa" minlength="3">
-                                        <div *ngIf="registerProviderEmailForm.controls['name'].invalid && (registerProviderEmailForm.controls['name'].dirty || registerProviderEmailForm.controls['name'].touched)" class="text-danger">
-                                            <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['required']">Nombre de la empresa es requerido</div>
-                                            <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['minlength']">Nombre debe tener al menos 3 caracteres</div>
+                                        <label class="form-label text-nowrap" for="documentType">Tipo de Documento de Empresa</label>
+                                        <select class="form-select form-control-lg" formControlName="documentType" id="documentType">
+                                            <option value="">Selecciona tipo de documento</option>
+                                            <option *ngFor="let docType of documentTypes" [value]="docType.id">
+                                                {{ docType.description }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="registerProviderEmailForm.controls['documentType'].invalid && (registerProviderEmailForm.controls['documentType'].dirty || registerProviderEmailForm.controls['documentType'].touched)" class="text-danger">
+                                            <div *ngIf="registerProviderEmailForm.controls['documentType'].errors?.['required']">Tipo de documento es requerido</div>
                                         </div>
                                     </div>
 
@@ -150,23 +154,19 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="documentType">Tipo de Documento de Empresa</label>
-                                    <select class="form-select form-control-lg" formControlName="documentType" id="documentType">
-                                        <option value="">Selecciona tipo de documento</option>
-                                        <option *ngFor="let docType of documentTypes" [value]="docType.id">
-                                            {{ docType.description }}
-                                        </option>
-                                    </select>
-                                    <div *ngIf="registerProviderEmailForm.controls['documentType'].invalid && (registerProviderEmailForm.controls['documentType'].dirty || registerProviderEmailForm.controls['documentType'].touched)" class="text-danger">
-                                        <div *ngIf="registerProviderEmailForm.controls['documentType'].errors?.['required']">Tipo de documento es requerido</div>
+                                    <label class="form-label text-nowrap" for="name">Nombre Completo de Empresa</label>
+                                    <input type="text" id="name" formControlName="name" class="form-control form-control-lg" placeholder="Ingresa nombre de la empresa" minlength="3">
+                                    <div *ngIf="registerProviderEmailForm.controls['name'].invalid && (registerProviderEmailForm.controls['name'].dirty || registerProviderEmailForm.controls['name'].touched)" class="text-danger">
+                                        <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['required']">Nombre de la empresa es requerido</div>
+                                        <div *ngIf="registerProviderEmailForm.controls['name'].errors?.['minlength']">Nombre debe tener al menos 3 caracteres</div>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="serviceType">Tipo de Servicio</label>
                                     <select class="form-select form-control-lg" formControlName="serviceType" id="serviceType">
-                                        <option value="">Selecciona tipo de servicio</option>
-                                        <option *ngFor="let srvType of serviceTypes" [value]="srvType">
+                                        <option value="" disabled>Selecciona tipo de servicio</option>
+                                        <option *ngFor="let srvType of serviceTypes" [value]="srvType" [disabled]="srvType !== 'Tour'">
                                             {{ srvType }}
                                         </option>
                                     </select>
@@ -225,15 +225,22 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label text-nowrap" for="address">Dirección de Empresa</label>
-                                        <input type="text" id="address" formControlName="address" class="form-control form-control-lg" placeholder="Dirección completa">
-                                        <div *ngIf="registerProviderEmailForm.controls['address'].invalid && (registerProviderEmailForm.controls['address'].dirty || registerProviderEmailForm.controls['address'].touched)" class="text-danger">
-                                            <div *ngIf="registerProviderEmailForm.controls['address'].errors?.['required']">Dirección es requerida</div>
-                                            <div *ngIf="registerProviderEmailForm.controls['address'].errors?.['minlength']">Debe tener al menos 10 caracteres</div>
+                                        <label class="form-label text-nowrap" for="rnt">RNT</label>
+                                        <input type="text" id="rnt" formControlName="rnt" class="form-control form-control-lg" placeholder="Ingresa RNT">
+                                        <div *ngIf="registerProviderEmailForm.controls['rnt'].invalid && (registerProviderEmailForm.controls['rnt'].dirty || registerProviderEmailForm.controls['rnt'].touched)" class="text-danger">
+                                            <div *ngIf="registerProviderEmailForm.controls['rnt'].errors?.['required']">RNT es requerido</div>
                                         </div>
                                     </div>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label class="form-label text-nowrap" for="address">Dirección de Empresa</label>
+                                    <input type="text" id="address" formControlName="address" class="form-control form-control-lg" placeholder="Dirección completa">
+                                    <div *ngIf="registerProviderEmailForm.controls['address'].invalid && (registerProviderEmailForm.controls['address'].dirty || registerProviderEmailForm.controls['address'].touched)" class="text-danger">
+                                        <div *ngIf="registerProviderEmailForm.controls['address'].errors?.['required']">Dirección es requerida</div>
+                                        <div *ngIf="registerProviderEmailForm.controls['address'].errors?.['minlength']">Debe tener al menos 10 caracteres</div>
+                                    </div>
+                                </div>
 
                                 <div class="mt-3 mb-3">
                                     <div class="d-flex">
@@ -241,8 +248,8 @@
                                             <input class="form-check-input mt-0" type="checkbox" formControlName="terms"
                                                 id="agree">
                                             <label class="form-check-label ms-2 text-gray-9 fs-14" for="agree">
-                                                Acepto los <a [routerLink]="routes.termsConditions"
-                                                    class="link-primary fw-medium">Términos De Servicio.</a>
+                                                Acepto <a [routerLink]="routes.termsConditions"
+                                                    class="link-primary fw-medium">políticas operativas para operadores</a>
                                             </label>
 
                                         </div>
@@ -250,10 +257,11 @@
                                     <div *ngIf="registerProviderEmailForm.controls['terms'].invalid && (registerProviderEmailForm.controls['terms'].dirty || registerProviderEmailForm.controls['terms'].touched)"
                                         class="text-danger">
                                         <div *ngIf="registerProviderEmailForm.controls['terms'].errors?.['required']">
-                                            Los términos de servicio deben ser aceptados
+                                            Las políticas operativas deben ser aceptadas
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="mb-3">
                                     <button type="submit"
                                         class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"

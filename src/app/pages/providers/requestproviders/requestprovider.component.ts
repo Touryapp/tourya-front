@@ -88,6 +88,7 @@ export class RequestproviderComponent implements OnInit {
     this.loadRequestProviderDocumentTypes();
   }
 
+
   private initializeForm(): void {
     this.requestProviderForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -365,8 +366,12 @@ export class RequestproviderComponent implements OnInit {
               address: data.provider.address,
               phone: data.provider.phone
             });
-            // Deshabilitar el formulario
-            this.requestProviderForm.disable();
+            // Deshabilitar el formulario salvo en estado Incomplete Information
+            if (data.status === 'Incomplete Information') {
+              this.requestProviderForm.enable();
+            } else {
+              this.requestProviderForm.disable();
+            }
             
             // Cargar archivos existentes si existen
             this.loadExistingFiles(data);
@@ -604,6 +609,10 @@ export class RequestproviderComponent implements OnInit {
     const newFiles = Object.values(this.documentFiles).filter(file => file !== null).length;
     const deletedFiles = this.agregarGaleria.deletedGalleries.length;
     
+    if (this.dataRequestProvider.status !== 'Incomplete Information') {
+      return 'Solo lectura - Los documentos no se pueden modificar';
+    }
+    
     if (mandatoryPending > 0) {
       return `Faltan ${mandatoryPending} documento(s) obligatorio(s) por cargar`;
     } else if (newFiles === 0 && deletedFiles === 0) {
@@ -622,6 +631,9 @@ export class RequestproviderComponent implements OnInit {
   }
 
   canSendDocuments(): boolean {
+    if (this.dataRequestProvider.status !== 'Incomplete Information') {
+      return false;
+    }
     const hasNewFiles = Object.values(this.documentFiles).some(file => file !== null);
     const hasDeletedFiles = this.agregarGaleria.deletedGalleries.length > 0;
     const mandatoryPending = this.getTotalMandatoryPending() === 0;
@@ -693,7 +705,7 @@ export class RequestproviderComponent implements OnInit {
 
   // Verifica si se debe mostrar el panel de carga de archivos
   shouldShowGalleryPanel(): boolean {
-    return this.isExistingData && this.dataRequestProvider.status === 'Pre-Approved';
+    return this.isExistingData && (this.dataRequestProvider.status === 'Pre-Approved' || this.dataRequestProvider.status === 'Incomplete Information');
   }
 
   // Abre el archivo en una nueva pestaña

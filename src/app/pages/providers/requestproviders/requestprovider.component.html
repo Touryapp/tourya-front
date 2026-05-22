@@ -32,7 +32,7 @@
                                 <li *ngFor="let tab of tabs">
                                     <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
                                         (click)="scrollTo(tab.id)" 
-                                        *ngIf="tab.id !== 'gallery' || isExistingData">
+                                        *ngIf="tab.id !== 'gallery' || shouldShowGalleryPanel()">
                                         {{ tab.label }}
                                     </a>
                                 </li>
@@ -242,11 +242,11 @@
                     <!-- Submit Button -->
                     <div class="save">
                         <div class="d-flex align-items-center justify-content-end">
-                            <!-- Botón Submit Request (solo cuando no hay datos existentes) -->
+                            <!-- Botón Submit/Resubmit Request -->
                             <button type="submit" class="btn btn-primary"
                                 [disabled]="loading || (requestProviderForm.touched && requestProviderForm.invalid)"
-                                *ngIf="!isExistingData">
-                                <span>Submit Request</span>
+                                *ngIf="!isExistingData || dataRequestProvider.status === 'Incomplete Information'">
+                                <span>{{ !isExistingData ? 'Submit Request' : 'Resubmit Request' }}</span>
                                 <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
                                 </div>
                             </button>
@@ -352,8 +352,7 @@
                                                             [class.btn-danger]="docType.mandatory"
                                                             [class.btn-secondary]="!docType.mandatory"
                                                             (click)="triggerFileInput(docType.id)"
-                                                            [disabled]="dataRequestProvider.status !== 'Pre-Approved'"
-                                                            >
+                                                            [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
                                                             <i class="isax isax-document-upload me-2"></i>
                                                             Cargar {{ docType.name }}
                                                         </button>
@@ -388,7 +387,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-info"
                                                                 (click)="openFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
+                                                                [disabled]="false">
                                                                 <i class="isax isax-eye me-1"></i>
                                                                 Ver archivo
                                                             </button>
@@ -396,7 +395,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-primary"
                                                                 (click)="triggerFileInput(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
                                                                 <i class="isax isax-refresh me-1"></i>
                                                                 Cambiar {{ docType.name }}
                                                             </button>
@@ -404,7 +403,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-danger"
                                                                 (click)="removeDocumentFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
                                                                 <i class="isax isax-trash me-1"></i>
                                                                 Eliminar
                                                             </button>
@@ -416,7 +415,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-primary"
                                                                 (click)="triggerFileInput(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
                                                                 <i class="isax isax-refresh me-1"></i>
                                                                 Cambiar {{ docType.name }}
                                                             </button>
@@ -424,7 +423,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-danger"
                                                                 (click)="removeDocumentFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Pre-Approved'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
                                                                 <i class="isax isax-trash me-1"></i>
                                                                 Eliminar
                                                             </button>
