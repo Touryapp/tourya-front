@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit, Renderer2, Inject } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit, Renderer2, Inject, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { routes } from "../../shared/routes/routes";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -22,7 +22,7 @@ import { of } from 'rxjs';
   templateUrl: "./register-provider-email.component.html",
   styleUrl: "./register-provider-email.component.scss",
 })
-export class RegisterProviderEmailComponent implements OnInit, OnDestroy {
+export class RegisterProviderEmailComponent implements OnInit, OnDestroy, AfterViewInit {
   public routes = routes;
 
   loading: boolean = false;
@@ -32,13 +32,15 @@ export class RegisterProviderEmailComponent implements OnInit, OnDestroy {
   password: boolean[] = [false, false];
 
 
+  @ViewChild('addressInput') addressInput!: ElementRef;
+
   countries: Country[] = [];
   departments: Department[] = [];
   cities: City[] = [];
 
   documentTypes: ProviderDocumentTypeDto[] = [
-    { id: ProviderDocumentType.NIT, description: 'NIT' },
-    { id: ProviderDocumentType.RNT, description: 'RNT' },
+    { id: ProviderDocumentType.NIT, description: 'Nit' },
+    { id: ProviderDocumentType.CC, description: 'Cédula de ciudadanía' },
   ];
   
   serviceTypes: ProviderServiceType[] = [
@@ -108,6 +110,44 @@ export class RegisterProviderEmailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, "bg-light-200");
+  }
+
+  ngAfterViewInit(): void {
+    this.checkGoogleMaps();
+  }
+
+  checkGoogleMaps(attempts: number = 0): void {
+    // @ts-ignore
+    if (window.google && window.google.maps && window.google.maps.places) {
+      this.initAutocomplete();
+    } else if (attempts < 20) {
+      setTimeout(() => this.checkGoogleMaps(attempts + 1), 200);
+    }
+  }
+
+  initAutocomplete(): void {
+    if (!this.addressInput) return;
+    
+    const inputElement = this.addressInput.nativeElement;
+    // @ts-ignore
+    if (inputElement && window.google && window.google.maps && window.google.maps.places) {
+      // @ts-ignore
+      const autocomplete = new window.google.maps.places.Autocomplete(inputElement, {
+        types: ["address"],
+        componentRestrictions: { country: ["COL"] },
+      });
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+          // Si el usuario selecciona un lugar con geometry, actualizamos el control de la dirección
+          this.registerProviderEmailForm.get('address')?.setValue(inputElement.value);
+          this.registerProviderEmailForm.get('address')?.markAsDirty();
+        } else {
+          console.warn("No geometry for selected place:", place);
+        }
+      });
+    }
   }
 
   getCountries() {
@@ -207,7 +247,7 @@ export class RegisterProviderEmailComponent implements OnInit, OnDestroy {
         "address": formData.address,
         "phone": formData.phone,
         "userEmail": formData.email,
-        "RNT": formData.rnt
+        "rnt": formData.rnt
       };
 
       // Ejecutar flujo secuencial

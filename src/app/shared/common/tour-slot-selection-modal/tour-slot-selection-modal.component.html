@@ -238,7 +238,14 @@
             Cancelar
           </button>
 
-          <button type="button" class="btn btn-primary" [disabled]="isProcessing || isAddressCheckLoading || (!isValid && !isCurrentScheduleUnlimited)" (click)="confirmSelection()">
+          <!-- Botón de Cerrar Sesión para proveedores Cancelados -->
+          <button *ngIf="isProviderCancelled" type="button" class="btn btn-primary" (click)="logout()">
+            <i class="isax isax-logout me-1"></i>
+            Cerrar sesión
+          </button>
+
+          <!-- Botón normal para agregar/reagendar -->
+          <button *ngIf="!isProviderCancelled" type="button" class="btn btn-primary" [disabled]="isProcessing || isAddressCheckLoading || (!isValid && !isCurrentScheduleUnlimited)" (click)="confirmSelection()">
             <span *ngIf="!isProcessing && !isAddressCheckLoading">
               <i class="isax isax-add-circle me-1" *ngIf="!isRescheduling"></i>
               <i class="isax isax-calendar me-1" *ngIf="isRescheduling"></i>

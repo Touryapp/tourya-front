@@ -20,7 +20,15 @@
 <!-- Page Wrapper -->
 <div class="content">
     <div class="container">
-        <div class="row">
+        <!-- Center Loading Spinner -->
+        <div *ngIf="isLoadingData" class="d-flex flex-column align-items-center justify-content-center py-5 my-5">
+            <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+                <span class="visually-hidden">Cargando datos...</span>
+            </div>
+            <h4 class="mt-4 text-muted">Cargando información del proveedor...</h4>
+        </div>
+
+        <div class="row" *ngIf="!isLoadingData && dataRequestProvider?.status !== 'Cancelled'">
 
             <!-- Sidebar -->
             <div class="col-lg-3 ">
@@ -352,7 +360,7 @@
                                                             [class.btn-danger]="docType.mandatory"
                                                             [class.btn-secondary]="!docType.mandatory"
                                                             (click)="triggerFileInput(docType.id)"
-                                                            [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
+                                                            [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved' && dataRequestProvider.status !== 'Submitted'">
                                                             <i class="isax isax-document-upload me-2"></i>
                                                             Cargar {{ docType.name }}
                                                         </button>
@@ -395,7 +403,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-primary"
                                                                 (click)="triggerFileInput(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-refresh me-1"></i>
                                                                 Cambiar {{ docType.name }}
                                                             </button>
@@ -403,7 +411,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-danger"
                                                                 (click)="removeDocumentFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-trash me-1"></i>
                                                                 Eliminar
                                                             </button>
@@ -415,7 +423,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-primary"
                                                                 (click)="triggerFileInput(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-refresh me-1"></i>
                                                                 Cambiar {{ docType.name }}
                                                             </button>
@@ -423,7 +431,7 @@
                                                                 type="button" 
                                                                 class="btn btn-outline-danger"
                                                                 (click)="removeDocumentFile(docType.id)"
-                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information'">
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
                                                                 <i class="isax isax-trash me-1"></i>
                                                                 Eliminar
                                                             </button>
@@ -505,6 +513,26 @@
             </div>
             <!-- /Request Provider Form -->
 
+        </div>
+        
+        <!-- Cancelled State -->
+        <div class="row" *ngIf="!isLoadingData && dataRequestProvider?.status === 'Cancelled'">
+            <div class="col-12 text-center py-5 my-5">
+                <div class="card border-0 shadow-sm p-5 mx-auto" style="max-width: 600px; border-radius: 20px;">
+                    <div class="mb-4">
+                        <i class="isax isax-close-circle text-danger" style="font-size: 5rem;"></i>
+                    </div>
+                    <h3 class="text-danger mb-3">Tu Solicitud ha sido Cancelada</h3>
+                    <p class="text-muted mb-4 fs-16">
+                        Lamentablemente tu solicitud de proveedor ha sido cancelada.<br><br>
+                        Motivo: <strong>{{ dataRequestProvider?.declinedReason || 'No especificado' }}</strong><br><br>
+                        Por favor, cierra sesión.
+                    </p>
+                    <button class="btn btn-primary btn-lg px-4 py-2" (click)="logout()">
+                        <i class="isax isax-logout me-2"></i> Cerrar sesión
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -11,6 +11,7 @@ import { ProviderReview } from "../../../shared/models/reviews.model";
 import { ProviderPanelStateService } from "../../../shared/services/provider-panel-state.service";
 import { I18nFieldService } from "../../../shared/services/i18n-field.service";
 import { AuthService } from "../../../core/services/auth.service";
+import { RequestsProvidersStatus } from "../../../shared/enums/requests-providers-status.enum";
 
 @Component({
   selector: "app-provider-panel",
@@ -66,6 +67,13 @@ export class ProviderPanelComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const requestProviderStatus = this.authService.getRequestProviderStatus();
+    if (requestProviderStatus && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
+      console.log('🚫 Proveedor no aprobado. Redirigiendo a requestproviders. Estado actual:', requestProviderStatus);
+      this.router.navigate(['/providers/requestproviders']);
+      return;
+    }
+
     const added = !!this.route.snapshot.queryParamMap.get("addedTour");
     const edited = !!this.route.snapshot.queryParamMap.get("editedTour");
     const openModal = this.route.snapshot.queryParamMap.get("openModal");

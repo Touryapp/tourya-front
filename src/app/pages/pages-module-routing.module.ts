@@ -34,7 +34,8 @@ const routes: Routes = [
       { path: "conocenos", loadComponent: () => import('./conocenos/conocenos.component').then(m => m.ConocenosComponent) },
       { path: "blogsite", loadComponent: () => import('./blogsite/blogsite.component').then(m => m.BlogsiteComponent) },
       { path: "legal-site-politics", loadComponent: () => import('./legalsite-politics/legalsite-politics.component').then(m => m.LegalsitePoliticsComponent) },
-      { path: "legal-site", loadComponent: () => import('./legal-site/legal-site.component').then(m => m.LegalSiteComponent) }
+      { path: "legal-site", loadComponent: () => import('./legal-site/legal-site.component').then(m => m.LegalSiteComponent) },
+      { path: "operator-policies", loadComponent: () => import('./operator-policies/operator-policies.component').then(m => m.OperatorPoliciesComponent) }
     ],
   },
 ];

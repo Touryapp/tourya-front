@@ -38,6 +38,7 @@ import { ReservationService } from "../../services/reservation.service";
 import { RescheduleConfirmationModalComponent } from "../reschedule-confirmation-modal/reschedule-confirmation-modal.component";
 import { GuestInfoModalComponent } from "../guest-info-modal/guest-info-modal.component";
 import { TouristService } from "../../services/tourist.service";
+import { RequestProvidersService } from "../../../pages/providers/requestproviders/request-providers.service";
 
 
 @Component({
@@ -62,6 +63,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   isProcessing: boolean = false; // Para mostrar loading mientras se guarda en backend
   shouldConsumeService: boolean = true; // Variable quemada a petición del usuario
   isAddressCheckLoading: boolean = false;
+  isProviderCancelled: boolean = false;
 
 
   // Tour data
@@ -179,6 +181,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     private reservationService: ReservationService, // Para reagendamiento
     private dialog: MatDialog, // Para abrir el modal de confirmación
     private touristService: TouristService,
+    private requestProvidersService: RequestProvidersService,
     public dialogRef: MatDialogRef<TourSlotSelectionModalComponent>,
 
     @Inject(MAT_DIALOG_DATA)
@@ -270,6 +273,18 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     } else {
       this.shouldConsumeService = true; // Por defecto true si no está autenticado (seguirá flujo de login)
       this.isAddressCheckLoading = false;
+    }
+
+    // Comprobar si el usuario es proveedor y está Cancelado
+    if (this.authService.isProvider()) {
+      this.requestProvidersService.consultData().subscribe({
+        next: (data) => {
+          if (data && data.status === 'Cancelled') {
+            this.isProviderCancelled = true;
+          }
+        },
+        error: (err) => console.error('Error verificando estado del proveedor:', err)
+      });
     }
   }
 
@@ -1409,4 +1424,10 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       });
     }
   }
+    logout(): void {
+    this.closeModal();
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
 }

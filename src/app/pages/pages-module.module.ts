@@ -6,7 +6,6 @@ import { SharedModule } from "../shared/shared-module";
 import { FormsModule } from "@angular/forms";
 import { DefaultHeaderComponent } from "../shared/common/default-header/default-header.component";
 
-
 @NgModule({
   declarations: [PagesModuleComponent, DefaultHeaderComponent],
   imports: [CommonModule, PagesModuleRoutingModule, SharedModule, FormsModule],

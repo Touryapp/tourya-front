@@ -32,7 +32,7 @@ export interface RequestProvider {
     address: string;
     phone: string;
     status: string;
-    RNT?: string;
+    rnt?: string;
   }
   export interface RequestProviderGallery {
     description: string;
