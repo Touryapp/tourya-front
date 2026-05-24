@@ -277,11 +277,16 @@ export class DefaultHeaderComponent {
     }
   }
 
-  /**
-   * Navega al panel de proveedor y cambia la vista usando el servicio compartido
-   */
   navigateToProviderPanel(view: ProviderPanelView): void {
     console.log('🔄 Navegando a provider panel con vista:', view);
+    
+    const requestProviderStatus = this.authService.getRequestProviderStatus();
+    if (requestProviderStatus && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
+      console.log('🔄 Proveedor no aprobado, redirigiendo a requestproviders. Estado actual:', requestProviderStatus);
+      this.router.navigate(['/providers/requestproviders']);
+      this.closeMenu();
+      return;
+    }
     
     // Primero navegar a la ruta del provider panel
     this.router.navigate(['/providers/provider-panel']).then(() => {

@@ -1,5 +1,5 @@
 export enum ProviderDocumentType {
-  // DNI = 'DNI',
+  CC = 'CC',
   NIT = 'NIT',
   RNT = 'RNT',
   // PASSPORT = 'PASSPORT',

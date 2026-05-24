@@ -25,7 +25,7 @@ export class AppComponent {
     private geoService: GeolocationService,
     private authService: AuthService
   ) {
-    console.log('version 1.0.6');
+    console.log('version 1.0.7');
     setTheme("bs5");
     this.common.base.subscribe((res: string) => {
       this.base = res;
@@ -70,7 +70,7 @@ export class AppComponent {
 
     // 2. Verificar si ya hay un idioma guardado por el usuario (no proveedor)
     const savedLang = localStorage.getItem("lang");
-    
+
     if (savedLang) {
       this.translate.use(savedLang);
       return;
@@ -79,12 +79,12 @@ export class AppComponent {
     // 3. Detectar país desde el navegador
     const countryCode = this.geoService.getCountryFromBrowser();
     const detectedLang = this.geoService.mapCountryToLanguage(countryCode);
-    
+
     // 4. Usar el idioma detectado o el del navegador como fallback, con español como default
     const languageToUse = detectedLang || this.translate.getBrowserLang() || "es";
-    
+
     this.translate.use(languageToUse);
-    
+
     console.log(`País detectado: ${countryCode}, Idioma: ${languageToUse}`);
   }
 

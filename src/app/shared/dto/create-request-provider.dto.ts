@@ -10,4 +10,5 @@ export interface CreateRequestProviderDto {
     address: string;
     phone: string;
     userEmail: string;
+    rnt?: string;
   }

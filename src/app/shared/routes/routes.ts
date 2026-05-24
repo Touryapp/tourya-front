@@ -257,7 +257,10 @@ export class routes {
     return this.pages + "/destination";
   }
   public static get termsConditions(): string {
-    return this.pages + "/terms-conditions";
+    return this.baseUrl + "/legal-site";
+  }
+  public static get operatorPolicies(): string {
+    return this.baseUrl + "/operator-policies";
   }
   public static get privacyPolicy(): string {
     return this.pages + "/privacy-policy";

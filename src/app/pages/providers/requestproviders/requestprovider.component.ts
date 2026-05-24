@@ -15,6 +15,8 @@ import { ProviderDocumentTypeDto } from '../../../shared/dto/provider-document-t
 import { ProviderServiceType } from '../../../shared/enums/provider-document-type.enum';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
 import { AuthService } from '../../../core/services/auth.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -26,6 +28,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class RequestproviderComponent implements OnInit {
   requestProviderForm!: FormGroup;
   loading = false;
+  isLoadingData = true;
   successMessage = '';
   errorMessage = '';
   countries: Country[] = [];
@@ -33,10 +36,8 @@ export class RequestproviderComponent implements OnInit {
   cities: City[] = [];
   imageUrls: string[] = [];
   documentTypes: ProviderDocumentTypeDto[] = [
-    // { id: ProviderDocumentType.DNI, description: 'Cédula de Ciudadanía' },
-    { id: ProviderDocumentType.NIT, description: 'NIT' },
-    { id: ProviderDocumentType.RNT, description: 'RNT' },
-    // { id: ProviderDocumentType.PASSPORT, description: 'Pasaporte' },
+    { id: ProviderDocumentType.NIT, description: 'Nit' },
+    { id: ProviderDocumentType.CC, description: 'Cédula de ciudadanía' },
   ];
   serviceTypes: ProviderServiceType[] = [
     ProviderServiceType.TOUR,
@@ -78,15 +79,190 @@ export class RequestproviderComponent implements OnInit {
     private departmentService: DepartmentService,
     private cityService: CityService,
     private requestProviderService: RequestProvidersService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.consultaData();
     this.initializeForm();
-    this.getCountries();
-    this.loadRequestProviderDocumentTypes();
+    this.loadInitialData();
   }
+
+  async loadInitialData() {
+    this.isLoadingData = true;
+    try {
+      // Cargar países y tipos de documentos en paralelo
+      await Promise.all([
+        this.loadCountriesPromise(),
+        this.loadDocTypesPromise()
+      ]);
+      // Cargar datos del proveedor (esto anida la carga de departamentos y ciudades si hay datos existentes)
+      await this.loadConsultDataPromise();
+    } catch (error) {
+      console.error('Error al cargar datos iniciales del proveedor:', error);
+    } finally {
+      this.isLoadingData = false;
+    }
+  }
+
+  loadCountriesPromise(): Promise<void> {
+    return new Promise((resolve) => {
+      this.countryService.getCountries().subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.countries = data;
+          } else {
+            this.countries = [];
+          }
+          resolve();
+        },
+        error: (err: any) => {
+          console.error("Error getting countries:", err);
+          this.countries = [];
+          resolve();
+        }
+      });
+    });
+  }
+
+  private processDocumentTypes(data: RequestProviderDocumentType[]): void {
+    const mandatoryDocumentNames = [
+      'camara de comercio',
+      'rut',
+      'rnt',
+      'cedula del representante legal',
+      'seguros de operacion',
+      'contrato de mandato (firmado)',
+      'contrato de vinculacion (firmado)'
+    ];
+
+    const normalizeString = (str: string) => {
+      return str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim() : '';
+    };
+
+    data.forEach(doc => {
+      const docNameNormalized = normalizeString(doc.name);
+      doc.mandatory = mandatoryDocumentNames.includes(docNameNormalized);
+    });
+
+    this.requestProviderDocumentTypes = data;
+    this.documentFiles = {};
+    data.forEach(docType => {
+      this.documentFiles[docType.id] = null;
+    });
+  }
+
+  loadDocTypesPromise(): Promise<void> {
+    return new Promise((resolve) => {
+      this.requestProviderService.typeDocuments().subscribe({
+        next: (data: RequestProviderDocumentType[]) => {
+          this.processDocumentTypes(data);
+          resolve();
+        },
+        error: (err: any) => {
+          console.error('Error al cargar tipos de documentos:', err);
+          resolve();
+        }
+      });
+    });
+  }
+
+  loadConsultDataPromise(): Promise<void> {
+    return new Promise((resolve) => {
+      this.requestProviderService.consultData().subscribe({
+        next: async (data: RequestProvider) => {
+          if (data && data.id && data.provider) {
+            this.isExistingData = true;
+            this.dataRequestProvider.status = data.status;
+            
+            // Sincronizar el estado en el local storage
+            this.authService.setRequestProviderStatus(data.status as any);
+            
+            // Si el estado es Approved, redirigir inmediatamente al panel de proveedor
+            if (data.status === 'Approved') {
+              this.router.navigate(['/providers/provider-panel']);
+              resolve();
+              return;
+            }
+            
+            this.dataRequestProvider.declinedReason = data.declinedReason;
+            this.dataRequestProvider.incompleteReason = data.incompleteReason;
+            this.requestProviderById = data.id;
+            this.canChangeToSubmitted = data.status === 'Created';
+            
+            await this.loadDepartmentsPromise(data.provider.country.id);
+            await this.loadCitiesPromise(data.provider.state.id);
+            
+            this.requestProviderForm.patchValue({
+              name: data.provider.name,
+              documentNumber: data.provider.documentNumber,
+              documentType: data.provider.documentType,
+              serviceType: data.provider.serviceType,
+              country: data.provider.country.id,
+              department: data.provider.state.id,
+              city: data.provider.city.id,
+              address: data.provider.address,
+              phone: data.provider.phone
+            });
+            
+            if (data.status === 'Incomplete Information') {
+              this.requestProviderForm.enable();
+            } else {
+              this.requestProviderForm.disable();
+            }
+            
+            this.loadExistingFiles(data);
+          }
+          resolve();
+        },
+        error: (err: any) => {
+          console.error('Error al consultar datos de proveedor:', err);
+          resolve();
+        }
+      });
+    });
+  }
+
+  loadDepartmentsPromise(countryId: number): Promise<void> {
+    return new Promise((resolve) => {
+      this.departmentService.getDepartmentsByCountryId(countryId).subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.departments = data;
+          } else {
+            this.departments = [];
+          }
+          resolve();
+        },
+        error: (err: any) => {
+          console.error("Error getting departments:", err);
+          this.departments = [];
+          resolve();
+        }
+      });
+    });
+  }
+
+  loadCitiesPromise(departmentId: number): Promise<void> {
+    return new Promise((resolve) => {
+      this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
+        next: (data) => {
+          if (data) {
+            this.cities = data;
+          } else {
+            this.cities = [];
+          }
+          resolve();
+        },
+        error: (err) => {
+          console.error("Error getting cities:", err);
+          this.cities = [];
+          resolve();
+        }
+      });
+    });
+  }
+
 
   private initializeForm(): void {
     this.requestProviderForm = this.fb.group({
@@ -130,9 +306,10 @@ export class RequestproviderComponent implements OnInit {
           this.loading = false;
           this.successMessage = 'Provider request submitted successfully. We will contact you soon.';
           this.requestProviderForm.reset();
-          // Refrescar la página después de 3 segundos
+          // Refrescar la vista después de 3 segundos
           setTimeout(() => {
-            window.location.reload();
+            this.successMessage = '';
+            this.loadInitialData();
           }, 3000);
         },
         error: (err: any) => {
@@ -213,7 +390,13 @@ export class RequestproviderComponent implements OnInit {
             ).subscribe({
          next: (response: any) => {
            console.log('✅ Todos los documentos enviados exitosamente al servidor:', response);
-           alert('¡Documentos enviados exitosamente al servidor!');
+          Swal.fire({
+            title: '¡Éxito!',
+            text: '¡Documentos enviados exitosamente al servidor!',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
            
            // Limpiar archivos nuevos después de envío exitoso
            this.documentFiles = {};
@@ -230,7 +413,13 @@ export class RequestproviderComponent implements OnInit {
        },
        error: (error: any) => {
          console.error('❌ Error al enviar los documentos al servidor:', error);
-         alert('Error al enviar los documentos al servidor. Por favor, inténtalo de nuevo.');
+        Swal.fire({
+          title: 'Error',
+          text: 'Error al enviar los documentos al servidor. Por favor, inténtalo de nuevo.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#0062ff'
+        });
        }
      });
    }
@@ -365,8 +554,12 @@ export class RequestproviderComponent implements OnInit {
               address: data.provider.address,
               phone: data.provider.phone
             });
-            // Deshabilitar el formulario
-            this.requestProviderForm.disable();
+            // Deshabilitar el formulario salvo en estado Incomplete Information
+            if (data.status === 'Incomplete Information') {
+              this.requestProviderForm.enable();
+            } else {
+              this.requestProviderForm.disable();
+            }
             
             // Cargar archivos existentes si existen
             this.loadExistingFiles(data);
@@ -413,12 +606,7 @@ export class RequestproviderComponent implements OnInit {
   loadRequestProviderDocumentTypes() {
     this.requestProviderService.typeDocuments().subscribe({
       next: (data: RequestProviderDocumentType[]) => {
-        this.requestProviderDocumentTypes = data;
-        // Inicializar el objeto documentFiles con los IDs dinámicos
-        this.documentFiles = {};
-        data.forEach(docType => {
-          this.documentFiles[docType.id] = null;
-        });
+        this.processDocumentTypes(data);
         console.log('Tipos de documentos cargados:', this.requestProviderDocumentTypes);
       },
       error: (err: any) => {
@@ -468,7 +656,13 @@ export class RequestproviderComponent implements OnInit {
       // Validar tamaño del archivo (máximo 10MB)
       const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
       if (file.size > maxSizeInBytes) {
-        alert('El archivo es demasiado grande. El tamaño máximo permitido es 10MB.');
+        Swal.fire({
+          title: 'Atención',
+          text: 'El archivo es demasiado grande. El tamaño máximo permitido es 10MB.',
+          icon: 'warning',
+          confirmButtonText: 'Entendido',
+          confirmButtonColor: '#0062ff'
+        });
         event.target.value = '';
         return;
       }
@@ -484,7 +678,13 @@ export class RequestproviderComponent implements OnInit {
       ];
       
       if (!allowedTypes.includes(file.type)) {
-        alert('Tipo de archivo no permitido. Solo se aceptan: PDF, JPG, JPEG, PNG, DOC, DOCX');
+        Swal.fire({
+          title: 'Atención',
+          text: 'Tipo de archivo no permitido. Solo se aceptan: PDF, JPG, JPEG, PNG, DOC, DOCX',
+          icon: 'warning',
+          confirmButtonText: 'Entendido',
+          confirmButtonColor: '#0062ff'
+        });
         event.target.value = '';
         return;
       }
@@ -573,7 +773,13 @@ export class RequestproviderComponent implements OnInit {
           inputElement.value = '';
         }
         // Mostrar mensaje de error al usuario
-        alert(`Error al guardar el archivo ${documentName}. Por favor, inténtalo de nuevo.`);
+        Swal.fire({
+          title: 'Error',
+          text: `Error al guardar el archivo ${documentName}. Por favor, inténtalo de nuevo.`,
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#0062ff'
+        });
       }
     });
   }
@@ -604,6 +810,10 @@ export class RequestproviderComponent implements OnInit {
     const newFiles = Object.values(this.documentFiles).filter(file => file !== null).length;
     const deletedFiles = this.agregarGaleria.deletedGalleries.length;
     
+    if (this.dataRequestProvider.status !== 'Incomplete Information' && this.dataRequestProvider.status !== 'Pre-Approved') {
+      return 'Solo lectura - Los documentos no se pueden modificar';
+    }
+    
     if (mandatoryPending > 0) {
       return `Faltan ${mandatoryPending} documento(s) obligatorio(s) por cargar`;
     } else if (newFiles === 0 && deletedFiles === 0) {
@@ -622,6 +832,9 @@ export class RequestproviderComponent implements OnInit {
   }
 
   canSendDocuments(): boolean {
+    if (this.dataRequestProvider.status !== 'Incomplete Information' && this.dataRequestProvider.status !== 'Pre-Approved') {
+      return false;
+    }
     const hasNewFiles = Object.values(this.documentFiles).some(file => file !== null);
     const hasDeletedFiles = this.agregarGaleria.deletedGalleries.length > 0;
     const mandatoryPending = this.getTotalMandatoryPending() === 0;
@@ -693,7 +906,7 @@ export class RequestproviderComponent implements OnInit {
 
   // Verifica si se debe mostrar el panel de carga de archivos
   shouldShowGalleryPanel(): boolean {
-    return this.isExistingData && this.dataRequestProvider.status === 'Pre-Approved';
+    return this.isExistingData && (this.dataRequestProvider.status === 'Pre-Approved' || this.dataRequestProvider.status === 'Incomplete Information');
   }
 
   // Abre el archivo en una nueva pestaña
@@ -704,7 +917,7 @@ export class RequestproviderComponent implements OnInit {
     const existingFile = this.existingFiles[docTypeId];
     if (!existingFile) {
       console.warn(`⚠️ No se encontró archivo existente para documentTypeId: ${docTypeId}`);
-      alert('No se encontró el archivo.');
+      Swal.fire('Atención', 'No se encontró el archivo.', 'warning');
       return;
     }
     
@@ -717,11 +930,11 @@ export class RequestproviderComponent implements OnInit {
         console.log(`✅ Archivo abierto exitosamente: ${fileUrl}`);
       } catch (error) {
         console.error(`❌ Error al abrir archivo:`, error);
-        alert('Error al abrir el archivo.');
+        Swal.fire('Error', 'Error al abrir el archivo.', 'error');
       }
     } else {
       console.warn(`⚠️ URL vacía o inválida para el documento ${docTypeId}: "${fileUrl}"`);
-      alert('La URL del archivo no está disponible o es inválida.');
+      Swal.fire('Error', 'La URL del archivo no está disponible o es inválida.', 'error');
     }
   }
 
@@ -748,9 +961,10 @@ export class RequestproviderComponent implements OnInit {
         this.dataRequestProvider.status = 'Submitted';
         this.canChangeToSubmitted = false;
         
-        // Recargar la página después de 2 segundos
+        // Refrescar la vista después de 2 segundos
         setTimeout(() => {
-          window.location.reload();
+          this.successMessage = '';
+          this.loadInitialData();
         }, 2000);
       },
       error: (error: any) => {
@@ -779,6 +993,10 @@ export class RequestproviderComponent implements OnInit {
     });
   }
 
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl("/login");
+  }
   
 } 
 

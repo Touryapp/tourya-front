@@ -3,6 +3,7 @@ import { RequestProvider } from '../../../shared/dto/requestProvider-response.dt
 import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
 import { RequestsProvidersStatus } from '../../../shared/enums/requests-providers-status.enum';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -50,6 +51,10 @@ export class DashboardComponent implements OnInit {
     this.mostrarMaritimeReports = false;
     this.mostrarProviderPayments = false;
     this.mostrarSolicitudes = !this.mostrarSolicitudes;
+    
+    if (this.mostrarSolicitudes) {
+      this.cargarSolicitudes();
+    }
   }
 
   toggleMaritimeReports(): void {
@@ -134,9 +139,23 @@ export class DashboardComponent implements OnInit {
           this.cargarSolicitudes(); // Recargar la lista después de pre-aprobar
           this.closeModal();
           this.closePreApproveConfirmModal();
+          Swal.fire({
+            title: '¡Éxito!',
+            text: 'La solicitud ha sido pre-aprobada exitosamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         },
         error: (error) => {
           console.error('Error al pre-aprobar la solicitud:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al pre-aprobar la solicitud. Por favor, inténtalo de nuevo.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         }
       });
     }
@@ -149,9 +168,23 @@ export class DashboardComponent implements OnInit {
           this.cargarSolicitudes(); // Recargar la lista después de aprobar
           this.closeModal();
           this.closeConfirmModal();
+          Swal.fire({
+            title: '¡Éxito!',
+            text: 'La solicitud ha sido aprobada exitosamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         },
         error: (error) => {
           console.error('Error al aprobar la solicitud:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al aprobar la solicitud. Por favor, inténtalo de nuevo.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         }
       });
     }
@@ -165,9 +198,23 @@ export class DashboardComponent implements OnInit {
           this.closeModal();
           this.closeDeclineConfirmModal();
           this.declinedReason = '';
+          Swal.fire({
+            title: '¡Rechazada!',
+            text: 'La solicitud ha sido rechazada exitosamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         },
         error: (error) => {
           console.error('Error al rechazar la solicitud:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al rechazar la solicitud. Por favor, inténtalo de nuevo.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         }
       });
     }
@@ -177,7 +224,13 @@ export class DashboardComponent implements OnInit {
     if (this.selectedProvider) {
       // Aquí iría la lógica para solicitar más información
       // Por ejemplo, abrir otro modal o enviar una notificación
-      alert('Se ha enviado una solicitud de información adicional al proveedor.');
+      Swal.fire({
+        title: 'Atención',
+        text: 'Se ha enviado una solicitud de información adicional al proveedor.',
+        icon: 'info',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#0062ff'
+      });
       this.closeModal();
     }
   }
@@ -197,10 +250,25 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.cargarSolicitudes();
           this.closeRequestInfoModal();
+          this.closeModal();
           this.requestInfoMessage = '';
+          Swal.fire({
+            title: '¡Enviado!',
+            text: 'Se ha solicitado más información al proveedor exitosamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         },
         error: (error) => {
           console.error('Error al solicitar información:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al enviar la solicitud de información. Por favor, inténtalo de nuevo.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#0062ff'
+          });
         }
       });
     }

@@ -47,7 +47,7 @@ export class RequestProvidersService {
 
   // Endpoint para rechazar solicitud (admin)
   declineRequest(requestProviderById: number, declinedReason: string): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/admin/decline/${requestProviderById}`, { declinedReason: declinedReason });
+    return this.http.put<any>(`${this.baseUrl}/admin/cancel/${requestProviderById}`, { declinedReason: declinedReason, incompleteReason: null });
   }
 
   // Endpoint para solicitar información adicional (admin)
