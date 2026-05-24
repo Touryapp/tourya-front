@@ -205,7 +205,7 @@ export class RequestproviderComponent implements OnInit {
               phone: data.provider.phone
             });
             
-            if (data.status === 'Incomplete Information') {
+            if (data.status === 'Incomplete Information' || data.status === 'Created') {
               this.requestProviderForm.enable();
             } else {
               this.requestProviderForm.disable();
@@ -554,8 +554,8 @@ export class RequestproviderComponent implements OnInit {
               address: data.provider.address,
               phone: data.provider.phone
             });
-            // Deshabilitar el formulario salvo en estado Incomplete Information
-            if (data.status === 'Incomplete Information') {
+            // Deshabilitar el formulario salvo en estado Incomplete Information o Created
+            if (data.status === 'Incomplete Information' || data.status === 'Created') {
               this.requestProviderForm.enable();
             } else {
               this.requestProviderForm.disable();
