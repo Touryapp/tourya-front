@@ -533,12 +533,18 @@
                         <div class="d-flex justify-content-between gap-2 mt-4 pt-3 border-top">
                             <div class="d-flex gap-2">
                                 <!-- Botón Reseñar para clientes con reservas completadas -->
-                                @if (currentRole === 'CLIENT' && selectedBooking.status === 'Completed') {
-                                    <button 
-                                        class="btn btn-primary" 
-                                        (click)="openReviewModalForBooking(selectedBooking.id)">
-                                        <i class="isax isax-star me-2"></i>Reseñar
-                                    </button>
+                                @if (currentRole === 'CLIENT') {
+                                    @if (hasPendingReview(selectedBooking)) {
+                                        <button 
+                                            class="btn btn-primary" 
+                                            (click)="openReviewModalForBooking(selectedBooking.id)">
+                                            <i class="isax isax-star me-2"></i>Reseñar
+                                        </button>
+                                    } @else if (selectedBooking.status === 'Completed') {
+                                        <span class="text-success fw-medium d-flex align-items-center p-2 bg-success-transparent rounded">
+                                            <i class="isax isax-tick-circle me-2 fs-20"></i>Ya hice la reseña
+                                        </span>
+                                    }
                                 }
                             </div>
                             

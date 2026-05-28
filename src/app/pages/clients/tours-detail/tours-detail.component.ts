@@ -173,6 +173,7 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   reviews: ProviderReview[] = [];
   totalReviews: number = 0;
   reviewsLoading: boolean = false;
+  public selectedRating: number | null = null;
   
   // Admin rejection state
   isBackoffice: boolean = false;
@@ -330,11 +331,18 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
    */
   loadReviews(tourId: number): void {
     this.reviewsLoading = true;
-    this.reviewsService.getReviews({
+    
+    const params: any = {
       tourId: tourId.toString(),
       pageNumber: this.currentPage - 1,
       pageSize: this.size
-    }).subscribe({
+    };
+    
+    if (this.selectedRating !== null) {
+      params.rating = this.selectedRating;
+    }
+
+    this.reviewsService.getReviews(params).subscribe({
       next: (response) => {
         this.reviews = response.content;
         this.totalReviews = response.totalElements;
@@ -347,6 +355,19 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         this.reviewsLoading = false;
       }
     });
+  }
+
+  /**
+   * Filter reviews by rating
+   */
+  filterByRating(rating: number): void {
+    if (this.selectedRating === rating) {
+      this.selectedRating = null;
+    } else {
+      this.selectedRating = rating;
+    }
+    this.currentPage = 1;
+    this.loadReviews(this.currentTourId);
   }
 
   /**

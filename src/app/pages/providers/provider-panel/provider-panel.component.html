@@ -135,7 +135,65 @@
           </div>
         </div>
         <!-- Fin tarjetas de estadísticas -->
-        <!-- Aquí puedes poner el contenido personalizado cuando mostrarTours sea true -->
+        
+        <!-- Información del proveedor -->
+        <div class="card shadow-none mb-4" *ngIf="providerData && providerData.provider">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h6>Información del Proveedor</h6>
+          </div>
+          <div class="card-body text-start">
+            <h6 class="fs-16 mb-3">Información Básica</h6>
+            <div class="row border-bottom pb-2 mb-3">
+              <div class="col-md-6">
+                <div class="mb-2">
+                  <h6 class="fs-14">Nombre</h6>
+                  <p>{{ providerData.provider.name }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-2">
+                  <h6 class="fs-14">Tipo de Documento</h6>
+                  <p>{{ providerData.provider.documentType }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-2">
+                  <h6 class="fs-14">Número de Documento</h6>
+                  <p>{{ providerData.provider.documentNumber }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-2">
+                  <h6 class="fs-14">Teléfono</h6>
+                  <p>{{ providerData.provider.phone }}</p>
+                </div>
+              </div>
+            </div>
+
+            <h6 class="fs-16 mb-3">Información de Dirección</h6>
+            <div class="row g-2">
+              <div class="col-md-12">
+                <div>
+                  <h6 class="fs-14">Dirección</h6>
+                  <p>{{ providerData.provider.address }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div>
+                  <h6 class="fs-14">Ciudad</h6>
+                  <p>{{ providerData.provider.city?.name }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div>
+                  <h6 class="fs-14">Departamento</h6>
+                  <p>{{ providerData.provider.state?.name || providerData.provider.department }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Información del proveedor -->
       </div>
       <div *ngIf="mostrarTours">
         <div class="d-flex justify-content-end">

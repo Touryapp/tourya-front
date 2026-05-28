@@ -45,6 +45,7 @@ export class ProviderPanelComponent implements OnInit {
   public totalPages: number = 0;
   public currentPage: number = 1;
   
+  providerData: RequestProvider | null = null;
   // Variables para reviews
   reviews: ProviderReview[] = [];
   totalReviews: number = 0;
@@ -132,6 +133,7 @@ export class ProviderPanelComponent implements OnInit {
     // this.router.navigate([], { queryParams: null });
 
     this.getToursProvider();
+    this.getProviderData();
   }
   
   /**
@@ -143,6 +145,17 @@ export class ProviderPanelComponent implements OnInit {
     this.mostrarTourManagement = view === 'reservas';
     this.mostrarReviews = view === 'reviews';
     this.mostrarPagos = view === 'pagos';
+  }
+
+  getProviderData() {
+    this.requestProvidersService.consultData().subscribe({
+      next: (response) => {
+        this.providerData = response;
+      },
+      error: (error) => {
+        console.error("Error fetching provider data:", error);
+      }
+    });
   }
 
   getToursProvider() {

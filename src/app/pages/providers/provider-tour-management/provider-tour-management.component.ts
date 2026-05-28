@@ -146,6 +146,10 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     return new Date().toISOString().split('T')[0];
   }
 
+  // Set of pending review reservation IDs
+  public pendingReviewReservationIds = new Set<number>();
+
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -171,6 +175,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Cargar datos segÃºn el rol
     if (this.currentRole === 'CLIENT') {
       this.loadClientReservations();
+      this.loadPendingReviews();
     } else if (this.currentRole === 'PROVIDER') {
       this.loadProviderReservations();
     } else {
@@ -183,6 +188,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.ngZone.run(() => {
           if (this.currentRole === 'CLIENT') {
             this.loadClientReservations();
+            this.loadPendingReviews();
           } else if (this.currentRole === 'PROVIDER') {
             this.loadProviderReservations();
           }
@@ -429,6 +435,33 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       return 'CLIENT';
     }
     throw new Error('Usuario sin rol vÃ¡lido asignado');
+  }
+
+  /**
+   * Carga los IDs de las reservas que tienen reseñas pendientes
+   */
+  private loadPendingReviews(): void {
+    this.reviewsService.getPendingReviews().subscribe({
+      next: (response) => {
+        if (response && response.content) {
+          const ids = response.content.map(review => review.reservationId);
+          this.pendingReviewReservationIds = new Set<number>(ids);
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar pending reviews', err);
+      }
+    });
+  }
+
+  /**
+   * Verifica si la reserva actualmente seleccionada tiene una reseña pendiente
+   */
+  public hasPendingReview(booking: ProviderTourBooking): boolean {
+    if (!booking || !booking.id) return false;
+    const resId = parseInt(booking.id.replace('RES-', ''), 10);
+    return this.pendingReviewReservationIds.has(resId);
   }
 
   /**
@@ -1722,13 +1755,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     this.reviewsService.createReview(reviewPayload, this.reviewImages).subscribe({
       next: (response: any) => {
         console.log('âœ… ReseÃ±a guardada exitosamente:', response);
+
+        // Remove from pending reviews so "Ya hice la reseña" shows immediately
+        if (this.reviewModalBooking && this.reviewModalBooking.id) {
+          const resId = parseInt(this.reviewModalBooking.id.replace('RES-', ''), 10);
+          this.pendingReviewReservationIds.delete(resId);
+          this.cdr.detectChanges();
+        }
+
         Swal.fire({
           icon: 'success',
           title: 'Â¡ReseÃ±a enviada!',
           text: `Tu reseÃ±a para ${this.reviewModalBooking!.tourName} ha sido guardada exitosamente.`,
           confirmButtonColor: '#28a745'
+        }).then(() => {
+          this.closeReviewModal();
         });
-        this.closeReviewModal();
       },
       error: (error: any) => {
         console.error('âŒ Error al guardar la reseÃ±a:', error);
