@@ -5,6 +5,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { PayoutOrdersService } from '../../../shared/services/payout-orders.service';
 import { PayoutOrder } from '../../../shared/dto/payout-order.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
 
 @Component({
   selector: 'app-provider-payments',
@@ -34,7 +35,8 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   constructor(
     public authService: AuthService,
     private payoutOrdersService: PayoutOrdersService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private panelStateService: ProviderPanelStateService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +59,14 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
         this.totalPayments = data.length;
         this.calculateTotals();
         this.loading = false;
+        
+        const paymentToOpenId = this.panelStateService.getPaymentToOpen();
+        if (paymentToOpenId) {
+          const paymentToOpen = this.tableData.find(p => p.id === paymentToOpenId);
+          if (paymentToOpen) {
+            setTimeout(() => this.openPaymentDetails(paymentToOpen), 300);
+          }
+        }
       },
       error: (error: any) => {
         console.error('Error loading payout orders:', error);

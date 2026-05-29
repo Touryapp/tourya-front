@@ -16,6 +16,13 @@ export interface PayoutOrderReservation {
   customerName?: string;
   customerEmail?: string;
   customerPhone?: string;
+  checkInDate?: string;
+  duration?: string;
+  travellers?: string;
+  bookingDate?: string;
+  maxCancellationDate?: string;
+  maxReschedulingDate?: string;
+  allowsRainRefund?: boolean;
 }
 
 export interface PayoutOrder {

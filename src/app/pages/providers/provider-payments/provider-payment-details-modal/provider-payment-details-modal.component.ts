@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 import { PayoutOrder, PayoutOrderReservation } from '../../../../shared/dto/payout-order.dto';
 import { PayoutOrdersService } from '../../../../shared/services/payout-orders.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { Router } from '@angular/router';
+import { ProviderPanelStateService } from '../../../../shared/services/provider-panel-state.service';
 
 @Component({
   selector: 'app-provider-payment-details-modal',
@@ -20,7 +22,9 @@ export class ProviderPaymentDetailsModalComponent implements OnChanges {
 
   constructor(
     private payoutOrdersService: PayoutOrdersService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private panelStateService: ProviderPanelStateService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -40,6 +44,20 @@ export class ProviderPaymentDetailsModalComponent implements OnChanges {
       this.expandedBookingId = null;
     } else {
       this.expandedBookingId = bookingId;
+    }
+  }
+
+  goToReservation(reservationId: number): void {
+    if (this.selectedPayment) {
+      this.panelStateService.setReturnToPayment(this.selectedPayment.id);
+    }
+    this.close();
+    this.panelStateService.setReservationToOpen(reservationId);
+    
+    if (this.authService.isAdmin()) {
+      this.router.navigate(['/admin/bookings-management']);
+    } else {
+      this.panelStateService.setView('reservas');
     }
   }
 

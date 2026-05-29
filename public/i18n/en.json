@@ -1,4 +1,4 @@
-﻿{
+{
   "shared": {
     "available": "Available",
     "notAvailable": "Not available",
@@ -257,7 +257,7 @@
       "confirmed": "Confirmed",
       "cancelled": "Cancelled",
       "completed": "Completed",
-        "rescheduled": "Rescheduled"
+      "rescheduled": "Rescheduled"
     },
     "empty": {
       "noBookings": "No bookings found",
@@ -821,6 +821,46 @@
       "cancel": "Cancel",
       "confirm": "Confirm"
     }
+  },
+  "templates": {
+    "title": "Schedule Templates",
+    "providersPanel": "Providers Panel",
+    "breadcrumb": "Templates",
+    "form": {
+      "back": "Back",
+      "editTemplate": "Edit Template",
+      "createTemplate": "Create Template",
+      "templateInfo": "Template Information",
+      "resetForm": "Reset form",
+      "label": "Label",
+      "daysOfWeek": "Days of the week",
+      "slots": "Slots",
+      "slot": "Slot",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "capacity": "Capacity",
+      "prices": "Prices",
+      "price": "Price",
+      "ageType": "Age type",
+      "priceLabel": "Price",
+      "addNewPrice": "Add New Price",
+      "addNewSlot": "Add New Slot",
+      "updateTemplate": "Update Template",
+      "createTemplateBtn": "Create Template",
+      "errors": {
+        "labelRequired": "Label is required",
+        "labelMinLength": "Label must be at least 3 characters long",
+        "labelMaxLength": "Label cannot be more than 50 characters long",
+        "daysOfWeekRequired": "Days of the week are required",
+        "startTimeRequired": "Start time is required",
+        "endTimeRequired": "End time is required",
+        "invalidRangeTime": "Invalid time range",
+        "capacityRequired": "Capacity is required",
+        "capacityNumber": "Capacity must be a number",
+        "ageTypeRequired": "Age type is required",
+        "priceRequired": "Price is required",
+        "priceMin": "Price must be greater than zero"
+      }
+    }
   }
-}
-
+}

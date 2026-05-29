@@ -3,6 +3,7 @@ import { RequestProvider } from '../../../shared/dto/requestProvider-response.dt
 import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
 import { RequestsProvidersStatus } from '../../../shared/enums/requests-providers-status.enum';
+import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
 import Swal from 'sweetalert2';
 
 
@@ -30,11 +31,19 @@ export class DashboardComponent implements OnInit {
   // Referencia al enum para usar en el template
   readonly StatusEnum = RequestsProvidersStatus;
 
-  constructor(private requestProvidersService: RequestProvidersService) { }
+  constructor(
+    private requestProvidersService: RequestProvidersService,
+    private panelStateService: ProviderPanelStateService
+  ) { }
 
   ngOnInit(): void {
     this.cargarSolicitudes();
     this.showGalleryFiles();
+
+    // Check if we are returning from a payment details redirect
+    if (this.panelStateService.hasPaymentToOpen()) {
+      this.toggleProviderPayments();
+    }
   }
 
   toggleTourList(): void {

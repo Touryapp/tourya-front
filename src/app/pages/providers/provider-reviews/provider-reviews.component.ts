@@ -1,8 +1,10 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
-import { ProviderReview } from '../../../shared/models/reviews.model';
+import { ProviderReview, ReviewReason, ReviewReasonsResponse } from '../../../shared/models/reviews.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { ReviewsService } from '../../../core/services/reviews.service';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
+import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
 
 @Component({
   selector: 'app-provider-reviews',
@@ -80,10 +82,34 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     'Spam o contenido irrelevante'
   ];
 
+  // Reason catalogs
+  public reviewReasonsPositive: ReviewReason[] = [];
+  public reviewReasonsNegative: ReviewReason[] = [];
+  public reviewReasonsLoading: boolean = false;
+
   constructor(
     private authService: AuthService,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private panelStateService: ProviderPanelStateService,
+    private reviewsService: ReviewsService
   ) {}
+
+  public goToReservation(reservationId: string | number | undefined): void {
+    if (!reservationId) return;
+    
+    // Si se pasa un bookingId como string (ej. "TB-243"), lo mantenemos como string
+    // Si es un id de BD numerico, lo mantenemos como number
+    const finalId = reservationId;
+    
+    // 2. Establecer el flag de retorno a reseñas
+    this.panelStateService.setReturnToReviews(true);
+    
+    // 3. Decirle al panel que debe abrir la reserva con este ID
+    this.panelStateService.setReservationToOpen(finalId);
+    
+    // 4. Cambiar la vista a reservas
+    this.panelStateService.setView('reservas');
+  }
 
   ngOnInit(): void {
     // Detectar roles del usuario con lógica de exclusividad
@@ -112,6 +138,40 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.loadReviewsData();
     });
+    this.loadReviewReasons();
+  }
+  
+  private loadReviewReasons(): void {
+    if (this.reviewReasonsPositive.length > 0 || this.reviewReasonsNegative.length > 0) {
+      return;
+    }
+    
+    this.reviewReasonsLoading = true;
+    this.reviewsService.getReviewReasons().subscribe({
+      next: (response: ReviewReasonsResponse) => {
+        this.reviewReasonsPositive = response.positive || [];
+        this.reviewReasonsNegative = response.negative || [];
+        this.reviewReasonsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching review reasons', error);
+        this.reviewReasonsLoading = false;
+      }
+    });
+  }
+
+  public getReasonLabel(reasonType: 'POSITIVE' | 'NEGATIVE' | string | undefined, reasonId: number | undefined): string {
+    if (!reasonId || !reasonType) return '';
+    
+    if (reasonType === 'POSITIVE') {
+      const reason = this.reviewReasonsPositive.find(r => r.id === reasonId);
+      return reason ? reason.label : '';
+    } else if (reasonType === 'NEGATIVE') {
+      const reason = this.reviewReasonsNegative.find(r => r.id === reasonId);
+      return reason ? reason.label : '';
+    }
+    
+    return '';
   }
   
   ngOnChanges(): void {
@@ -286,6 +346,7 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     this.tourSearchTerm = 'Todos';
     this.filteredTours = [...this.availableTours];
     this.tourDropdownOpen = false;
+    this.currentPage = 1; // Reset a la primera página
     this.applyFilters();
   }
 
@@ -297,6 +358,7 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     this.providerSearchTerm = 'Todos';
     this.filteredProviders = [...this.availableProviders];
     this.providerDropdownOpen = false;
+    this.currentPage = 1; // Reset a la primera página
     this.applyFilters();
   }
 
@@ -308,6 +370,15 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     this.userSearchTerm = 'Todos';
     this.filteredUsers = [...this.availableUsers];
     this.userDropdownOpen = false;
+    this.currentPage = 1; // Reset a la primera página
+    this.applyFilters();
+  }
+
+  /**
+   * Llamado cuando cambia un select normal de filtros
+   */
+  public onFilterChange(): void {
+    this.currentPage = 1; // Reset a la primera página
     this.applyFilters();
   }
 
@@ -318,7 +389,7 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     // Preparar objeto de filtros
     const filters: any = {
       pageSize: this.pageSize,
-      pageNumber: this.currentPage
+      pageNumber: this.currentPage > 0 ? this.currentPage - 1 : 0
     };
     
     // Agregar filtros activos

@@ -438,11 +438,11 @@
                                                                 <div class="mb-3">
                                                                     <label class="form-label">{{ 'tour-schedule.prices.price.label' | translate }}</label>
                                                                     <input type="text" type="number"
-                                                                        class="form-control" formControlName="price"
+                                                                        class="form-control" formControlName="providerPrice"
                                                                         (blur)="onPriceBlur(i, j)" [min]="0"
                                                                         [readonly]="price.get('ageType')?.value === TypeOfPersonLabel.INFANT">
 
-                                                                    <div *ngIf="price.get('price')?.invalid && (price.get('price')?.touched || price.get('price')?.dirty)"
+                                                                    <div *ngIf="price.get('providerPrice')?.invalid && (price.get('providerPrice')?.touched || price.get('providerPrice')?.dirty)"
                                                                         class="text-danger">
                                                                              {{ 'tour-schedule.prices.price.required' | translate }}
 
@@ -571,7 +571,7 @@
                             <div *ngFor="let price of slot.prices" class="d-flex justify-content-between align-items-center mb-1">
                                 <span class="text-muted small me-2">{{ getAgeTypeDisplay(price.ageType) }}:</span>
                                 <span class="badge bg-info text-dark fw-semibold">
-                                    {{ price.price | currency:'COP':'symbol':'1.0-0' }}
+                                    {{ price.providerPrice | currency:'COP':'symbol':'1.0-0' }}
                                 </span>
                             </div>
                         </td>

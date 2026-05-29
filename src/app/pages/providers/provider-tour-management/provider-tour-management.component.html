@@ -419,8 +419,10 @@
                             </div>
                         </div>
 
-                        <!-- Itinerario -->
-                        @if (selectedBooking.tourDetails?.itineraries?.length) {
+                        <!-- Secciones ocultas para Proveedores -->
+                        @if (currentRole !== 'PROVIDER') {
+                            <!-- Itinerario -->
+                            @if (selectedBooking.tourDetails?.itineraries?.length) {
                             <div class="upcoming-details mb-4">
                                 <h6 class="mb-3">Itinerario</h6>
                                 <div class="card shadow-none mb-0">
@@ -527,7 +529,8 @@
                                 <img [src]="selectedBooking.qrUrl" alt="QR Code" class="img-fluid rounded shadow-sm" style="max-width: 200px;">
                             </div>
                         }
-
+                        }
+                        <!-- Fin secciones ocultas para Proveedores -->
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-between gap-2 mt-4 pt-3 border-top">

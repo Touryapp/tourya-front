@@ -3,7 +3,7 @@
     <div class="container">
         <!-- Header -->
         <div class="text-center mb-5">
-            <h2 class="mb-2">Templates de Horarios</h2>
+            <h2 class="mb-2">{{ 'templates.title' | translate }}</h2>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
                     <li class="breadcrumb-item">
@@ -12,10 +12,10 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item text-dark" style="color: #000 !important;">
-                        <a [routerLink]="'/providers/provider-panel'" class="text-dark" style="color: #000 !important;">Providers Panel</a>
+                        <a [routerLink]="'/providers/provider-panel'" class="text-dark" style="color: #000 !important;">{{ 'templates.providersPanel' | translate }}</a>
                     </li>
                     <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">
-                        Templates
+                        {{ 'templates.breadcrumb' | translate }}
                     </li>
                 </ol>
             </nav>

@@ -99,7 +99,7 @@
       "tour": "Filtrar por tour",
       "provider": "Filtrar por proveedor",
       "user": "Filtrar por usuario",
-      "all": "Todías",
+      "all": "Todas",
       "allTours": "Todos",
       "allProviders": "Todos",
       "allUsers": "Todos",
@@ -806,6 +806,47 @@
       "p3": "¿Deseas continuar?",
       "cancel": "Cancelar",
       "confirm": "Confirmar"
+    }
+  },
+  "templates": {
+    "title": "Plantillas de Horarios",
+    "providersPanel": "Panel de Proveedores",
+    "breadcrumb": "Plantillas",
+    "form": {
+      "back": "Volver",
+      "editTemplate": "Editar Template",
+      "createTemplate": "Crear Template",
+      "templateInfo": "Información del Template",
+      "resetForm": "Limpiar formulario",
+      "label": "Etiqueta",
+      "daysOfWeek": "Días de la semana",
+      "slots": "Slots",
+      "slot": "Slot",
+      "startTime": "Hora de inicio",
+      "endTime": "Hora de fin",
+      "capacity": "Capacidad",
+      "prices": "Precios",
+      "price": "Precio",
+      "ageType": "Tipo de edad",
+      "priceLabel": "Precio",
+      "addNewPrice": "Añadir Nuevo Precio",
+      "addNewSlot": "Añadir Nuevo Slot",
+      "updateTemplate": "Actualizar Template",
+      "createTemplateBtn": "Crear Template",
+      "errors": {
+        "labelRequired": "La etiqueta es obligatoria",
+        "labelMinLength": "La etiqueta debe tener al menos 3 caracteres",
+        "labelMaxLength": "La etiqueta no puede tener más de 50 caracteres",
+        "daysOfWeekRequired": "Los días de la semana son obligatorios",
+        "startTimeRequired": "La hora de inicio es obligatoria",
+        "endTimeRequired": "La hora de fin es obligatoria",
+        "invalidRangeTime": "Rango de tiempo inválido",
+        "capacityRequired": "La capacidad es obligatoria",
+        "capacityNumber": "La capacidad debe ser un número",
+        "ageTypeRequired": "El tipo de edad es obligatorio",
+        "priceRequired": "El precio es obligatorio",
+        "priceMin": "El precio debe ser mayor que cero"
+      }
     }
   }
 }

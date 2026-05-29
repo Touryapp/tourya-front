@@ -126,7 +126,7 @@ export class TemplateFormComponent implements OnInit {
             const newPrice = this.fb.group({
               id: [price.id || ""],
               ageType: [ageTypeValue || ""],
-              price: [price.price || ""],
+              providerPrice: [price.providerPrice || ""],
             });
 
             // Agregar el precio al FormArray de precios del slot
@@ -272,7 +272,7 @@ export class TemplateFormComponent implements OnInit {
     return this.fb.group({
       id: ["", []],
       ageType: ["", [Validators.required]],
-      price: ["", [Validators.required, Validators.min(0)]],
+      providerPrice: ["", [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -320,7 +320,7 @@ export class TemplateFormComponent implements OnInit {
   onAgeTypeChange(indexSlot: number, indexPrice: number) {
     const priceGroup = this.prices(indexSlot).at(indexPrice) as FormGroup;
     if (priceGroup.get('ageType')?.value === TypeOfPersonLabel.INFANT) {
-      priceGroup.get('price')?.setValue(0);
+      priceGroup.get('providerPrice')?.setValue(0);
     }
   }
 
@@ -376,7 +376,7 @@ export class TemplateFormComponent implements OnInit {
 
 
   onPriceBlur(indexSlot: number, indexPrice: number): void {
-    const priceControl = this.prices(indexSlot).at(indexPrice).get("price");
+    const priceControl = this.prices(indexSlot).at(indexPrice).get("providerPrice");
     const price = priceControl?.value;
 
     let displayPrice: number = 0;

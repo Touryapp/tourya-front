@@ -32,6 +32,7 @@ export interface ServiceResponsible {
 
 export interface ProviderReview {
   reservationId: number;
+  bookingId?: string;
   paymentId: number;
   itemId: number;
   qrUrl: string;

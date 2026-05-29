@@ -248,12 +248,12 @@ export class BookingManagementConfigService {
       apiEndpoint: '/api/v1/provider/bookings',
       columns: [
         {
-          field: 'img',
-          header: 'Tour',
-          type: 'image',
-          sortable: false,
-          filterable: false,
-          width: '80px'
+          field: 'id',
+          header: 'ID Reserva',
+          type: 'text',
+          sortable: true,
+          filterable: true,
+          width: '120px'
         },
         {
           field: 'tourName',
@@ -261,7 +261,7 @@ export class BookingManagementConfigService {
           type: 'text',
           sortable: true,
           filterable: true,
-          width: '180px'
+          width: '200px'
         },
         {
           field: 'customerName',
@@ -272,32 +272,8 @@ export class BookingManagementConfigService {
           width: '150px'
         },
         {
-          field: 'customerEmail',
-          header: 'Email',
-          type: 'text',
-          sortable: false,
-          filterable: false,
-          width: '180px'
-        },
-        {
-          field: 'customerPhone',
-          header: 'Teléfono',
-          type: 'text',
-          sortable: false,
-          filterable: false,
-          width: '120px'
-        },
-        {
-          field: 'travellers',
-          header: 'Viajeros',
-          type: 'text',
-          sortable: false,
-          filterable: false,
-          width: '80px'
-        },
-        {
           field: 'checkInDate',
-          header: 'Fecha Inicio',
+          header: 'Fecha de Reserva',
           type: 'date',
           sortable: true,
           filterable: true,

@@ -24,6 +24,7 @@ import { TourSlotSelectionModalComponent } from '../../../shared/common/tour-slo
 import { SearchToursService } from '../../clients/list-tours/search-tours.service';
 import { TourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
 import { CartItem } from '../../../shared/dto/cart.dto';
+import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
@@ -162,7 +163,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     private dialog: MatDialog,
     private searchToursService: SearchToursService,
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private panelStateService: ProviderPanelStateService
   ) {}
 
   ngOnInit(): void {
@@ -196,6 +198,37 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         });
       })
     );
+    
+    // Verificar si hay que abrir un modal específico desde otro panel (ej. Pagos)
+    const reservationToOpen = this.panelStateService.getReservationToOpen();
+    if (reservationToOpen) {
+      console.log('🔓 Abriendo reserva desde ProviderPanelStateService:', reservationToOpen);
+      setTimeout(() => {
+        this.viewBookingDetails({ id: reservationToOpen.toString() } as any);
+      }, 300);
+    }
+
+    // Escuchar el cierre del modal para el flujo de retorno
+    setTimeout(() => {
+      const modalElement = document.getElementById('bookingDetailModal');
+      if (modalElement) {
+        modalElement.addEventListener('hidden.bs.modal', () => {
+          const returnPaymentId = this.panelStateService.getReturnToPayment();
+          const returnToReviews = this.panelStateService.getReturnToReviews();
+          
+          if (returnPaymentId) {
+            this.panelStateService.setPaymentToOpen(returnPaymentId);
+            if (this.authService.isAdmin()) {
+              this.router.navigate(['/admin/dashboard']);
+            } else {
+              this.panelStateService.setView('pagos');
+            }
+          } else if (returnToReviews) {
+            this.panelStateService.setView('reviews');
+          }
+        });
+      }
+    }, 1000);
     
     // Verificar si hay parÃ¡metros de query (desde el QR scan)
     this.route.queryParams.subscribe((params: any) => {
@@ -531,16 +564,16 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     return {
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
-      tourName: this.i18nService.getValue(reservation.tourName),
+      tourName: (this.i18nService.getValue(reservation.tourName) || '').length > 20 ? (this.i18nService.getValue(reservation.tourName) || '').substring(0, 20) + '...' : (this.i18nService.getValue(reservation.tourName) || ''),
       tourType: 'Tour',
       img: 'tours-21.jpg',
-      customerName: reservation.payerName,
+      customerName: reservation.serviceResponsibleName || reservation.payerName,
       customerEmail: reservation.payerEmail,
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
-      price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
+      price: reservation.providerPrice != null ? `$${reservation.providerPrice.toFixed(2)}` : '',
       bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
@@ -593,7 +626,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
-      price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
+      price: `$${(reservation.shoppingTotalPrice || 0).toFixed(2)}`,
       bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',

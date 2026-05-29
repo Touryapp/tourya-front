@@ -42,6 +42,7 @@ export interface ClientReservation {
   payerDocumentNumber: string;
   shoppingItemId: number;
   shoppingTotalPrice: number;
+  providerPrice?: number;
   shoppingUnitPrice: number;
   shoppingQuantity: number;
   productType: string;
