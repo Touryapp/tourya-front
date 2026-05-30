@@ -238,15 +238,13 @@
                                         <p class="fs-12 text-gray-6 mb-0">
                                             <i class="isax isax-receipt-text me-1"></i>Reservation: {{ review.bookingId || review.reservationId || 'N/A' }}
                                         </p>
-                                        @if (isProveedor) {
-                                            <div class="mt-2 text-lg-end">
-                                                <button type="button" class="btn btn-sm btn-warning fw-medium py-1 px-2 fs-12" 
-                                                        (click)="goToReservation(review.bookingId || review.reservationId)"
-                                                        [disabled]="!review.bookingId && !review.reservationId">
-                                                    Ir a la reserva
-                                                </button>
-                                            </div>
-                                        }
+                                        <div class="mt-2 text-lg-end">
+                                            <button type="button" class="btn btn-sm btn-warning fw-medium py-1 px-2 fs-12" 
+                                                    (click)="goToReservation(review.bookingId || review.reservationId)"
+                                                    [disabled]="!review.bookingId && !review.reservationId">
+                                                Ir a la reserva
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

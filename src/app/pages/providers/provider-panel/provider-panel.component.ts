@@ -14,6 +14,8 @@ import { AuthService } from "../../../core/services/auth.service";
 import { RequestsProvidersStatus } from "../../../shared/enums/requests-providers-status.enum";
 import { PayoutOrdersService } from "../../../shared/services/payout-orders.service";
 import { PayoutOrder } from "../../../shared/dto/payout-order.dto";
+import { ReservationService } from "../../../shared/services/reservation.service";
+import { ClientReservation } from "../../../shared/models/reservation.model";
 
 @Component({
   selector: "app-provider-panel",
@@ -61,6 +63,13 @@ export class ProviderPanelComponent implements OnInit {
   payoutOrders: PayoutOrder[] = [];
   totalPayoutAmount: number = 0;
 
+  // Recent Dashboard Items
+  recentReservations: ClientReservation[] = [];
+  recentReviewsDashboard: ProviderReview[] = [];
+  
+  public reviewReasonsPositive: any[] = [];
+  public reviewReasonsNegative: any[] = [];
+
   constructor(
     private requestProvidersService: RequestProvidersService,
     private toursService: TourService,
@@ -72,7 +81,8 @@ export class ProviderPanelComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     public i18nService: I18nFieldService,
     public authService: AuthService,
-    private payoutOrdersService: PayoutOrdersService
+    private payoutOrdersService: PayoutOrdersService,
+    private reservationService: ReservationService
   ) {}
 
   ngOnInit(): void {
@@ -147,7 +157,34 @@ export class ProviderPanelComponent implements OnInit {
 
     this.getToursProvider();
     this.getProviderData();
+    this.onLoadReviews();
     this.loadPayoutData();
+    this.loadDashboardRecentItems();
+    this.loadReviewReasons();
+  }
+
+  private loadReviewReasons(): void {
+    this.reviewsService.getReviewReasons().subscribe({
+      next: (response) => {
+        if (response) {
+          this.reviewReasonsPositive = response.positive || [];
+          this.reviewReasonsNegative = response.negative || [];
+        }
+      },
+      error: (error) => console.error('Error loading review reasons:', error)
+    });
+  }
+
+  public getReasonLabel(reasonType: 'POSITIVE' | 'NEGATIVE' | string | undefined, reasonId: number | undefined): string {
+    if (!reasonType || !reasonId) return '';
+    if (reasonType === 'POSITIVE') {
+      const reason = this.reviewReasonsPositive.find(r => r.id === reasonId);
+      return reason ? this.i18nService.getValue(reason.label) : '';
+    } else if (reasonType === 'NEGATIVE') {
+      const reason = this.reviewReasonsNegative.find(r => r.id === reasonId);
+      return reason ? this.i18nService.getValue(reason.label) : '';
+    }
+    return '';
   }
 
   loadPayoutData(): void {
@@ -166,6 +203,35 @@ export class ProviderPanelComponent implements OnInit {
       this.payoutOrdersService.getAdminPayoutOrders().subscribe(observer);
     } else {
       this.payoutOrdersService.getPayoutOrders().subscribe(observer);
+    }
+  }
+
+  loadDashboardRecentItems(): void {
+    this.reservationService.getProviderReservations({ page: 0, size: 5 }).subscribe({
+      next: (response) => {
+        this.recentReservations = response.content || [];
+      },
+      error: (error) => {
+        console.error('Error loading recent reservations:', error);
+      }
+    });
+
+    this.reviewsService.getReviews({ pageNumber: 0, pageSize: 5 }).subscribe({
+      next: (response) => {
+        this.recentReviewsDashboard = response.content || [];
+      },
+      error: (error) => {
+        console.error('Error loading recent reviews:', error);
+      }
+    });
+  }
+
+  goToReservation(reservationId: number): void {
+    this.panelStateService.setReservationToOpen(reservationId);
+    if (this.authService.isAdmin()) {
+      this.router.navigate(['/admin/bookings-management']);
+    } else {
+      this.panelStateService.setView('reservas');
     }
   }
 
@@ -411,5 +477,9 @@ export class ProviderPanelComponent implements OnInit {
     }
     const sum = this.reviews.reduce((acc, review) => acc + (review.rating ?? 0), 0);
     this.averageRating = parseFloat((sum / this.reviews.length).toFixed(1));
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

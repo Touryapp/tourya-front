@@ -617,10 +617,10 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
       tourId: reservation.tourId, // Agregar tourId para reagendamiento
-      tourName: this.i18nService.getValue(reservation.tourName),
+      tourName: (this.i18nService.getValue(reservation.tourName) || '').length > 20 ? (this.i18nService.getValue(reservation.tourName) || '').substring(0, 20) + '...' : (this.i18nService.getValue(reservation.tourName) || ''),
       tourType: 'Tour', // El API no devuelve tipo de tour
       img: 'tours-21.jpg', // Imagen por defecto
-      customerName: reservation.payerName,
+      customerName: reservation.serviceResponsibleName || reservation.payerName,
       customerEmail: reservation.payerEmail,
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
