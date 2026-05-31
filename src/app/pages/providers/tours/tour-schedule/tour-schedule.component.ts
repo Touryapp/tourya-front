@@ -40,6 +40,7 @@ export class TourScheduleComponent {
   public routes = routes;
   loading = false;
   tourScheduleForm: FormGroup;
+  isBackoffice: boolean = false;
   readonly TypeOfPersonLabel = TypeOfPersonLabel;
 
   tourId: number = 0;
@@ -120,6 +121,7 @@ export class TourScheduleComponent {
       ],
       startDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
       endDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
+      touryaPercentage: ["", [Validators.min(0), Validators.max(100)]],
       daysOfWeek: this.fb.array([]),
 
       slots: this.fb.array([]),
@@ -174,6 +176,7 @@ export class TourScheduleComponent {
   }
 
   ngOnInit(): void {
+    this.isBackoffice = this.authService.isAdmin();
     // Los campos de fecha del formulario (Start Date / End Date) ya NO sincronizan
     // con el calendario grande. Cada lógica es independiente.
     this.tourScheduleForm

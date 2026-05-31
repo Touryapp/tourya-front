@@ -63,6 +63,53 @@
                                             <input type="text" class="form-control" [(ngModel)]="contactForm.phone" placeholder="3001234567" required>
                                         </div>
                                     </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="mb-0">
+                                            <label class="form-label">Información Adicional</label>
+                                            <textarea class="form-control" rows="3" [(ngModel)]="contactForm.additionalInfo" placeholder="Información adicional, comentarios especiales..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hospedaje -->
+                        <div class="contact-info-section mt-4">
+                            <div class="checkout-title">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-hotel me-2 text-primary"></i>
+                                    Hospedaje
+                                </h6>
+                            </div>
+                            <div class="checkout-details pb-3 border-bottom mb-4">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Nombre del hospedaje</label>
+                                            <input type="text" class="form-control" [(ngModel)]="accommodationForm.name" placeholder="Hotel XYZ">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Dirección</label>
+                                            <input #addressInput type="text" class="form-control" [(ngModel)]="accommodationForm.address" placeholder="Ubicación del hospedaje">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lugar de procedencia -->
+                        <div class="contact-info-section mt-4">
+                            <div class="checkout-title">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-plane-arrival me-2 text-primary"></i>
+                                    Lugar de procedencia
+                                </h6>
+                            </div>
+                            <div class="checkout-details pb-3 border-bottom mb-4">
+                                <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">País</label>
@@ -84,12 +131,6 @@
                                         <div class="mb-3">
                                             <label class="form-label">Dirección</label>
                                             <input type="text" class="form-control" [(ngModel)]="contactForm.address1" placeholder="Calle 123 # 45-67">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-0">
-                                            <label class="form-label">Información Adicional</label>
-                                            <textarea class="form-control" rows="3" [(ngModel)]="contactForm.additionalInfo" placeholder="Información adicional, comentarios especiales..."></textarea>
                                         </div>
                                     </div>
                                 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil, take, firstValueFrom } from 'rxjs';
 import { routes } from '../../../shared/routes/routes';
@@ -13,6 +13,8 @@ import { CreditService } from '../../../shared/services/credit.service';
 import { ClientCredit } from '../../../shared/models/credit.model';
 import { SearchToursService } from '../list-tours/search-tours.service';
 import { TouristService } from '../../../shared/services/tourist.service';
+
+declare var google: any;
 
 // Interface for traveler information per tour
 interface TravelerInfo {
@@ -30,8 +32,10 @@ interface TravelerInfo {
   templateUrl: './cart-summary.component.html',
   styleUrls: ['./cart-summary.component.scss']
 })
-export class CartSummaryComponent implements OnInit, OnDestroy {
+export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   public routes = routes;
+  
+  @ViewChild('addressInput') addressInput!: ElementRef;
   
   // Cart data properties
   cartSummary: CartSummary | null = null;
@@ -61,6 +65,14 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     state: '',
     zipCode: '',
     additionalInfo: ''
+  };
+
+  // Hospedaje form
+  accommodationForm = {
+    name: '',
+    address: '',
+    latitude: null as number | null,
+    longitude: null as number | null
   };
 
   // Traveler information per tour
@@ -101,6 +113,35 @@ export class CartSummaryComponent implements OnInit, OnDestroy {
     this.loadCartData();
     this.loadUserCredits();
     this.loadUserProfile();
+  }
+
+  ngAfterViewInit(): void {
+    // Inicializar Google Maps Autocomplete si está disponible después del render
+    setTimeout(() => {
+      this.initAutocomplete();
+    }, 500);
+  }
+
+  initAutocomplete(): void {
+    if (this.addressInput && this.addressInput.nativeElement && typeof google !== 'undefined' && google.maps && google.maps.places) {
+      const autocomplete = new google.maps.places.Autocomplete(this.addressInput.nativeElement, {
+        types: ['address'],
+        componentRestrictions: { country: ['COL'] } // As in add-tour
+      });
+
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+          this.accommodationForm.latitude = place.geometry.location.lat();
+          this.accommodationForm.longitude = place.geometry.location.lng();
+          this.accommodationForm.address = this.addressInput.nativeElement.value;
+        } else {
+          this.accommodationForm.latitude = null;
+          this.accommodationForm.longitude = null;
+          console.warn("No geometry for selected place:", place);
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

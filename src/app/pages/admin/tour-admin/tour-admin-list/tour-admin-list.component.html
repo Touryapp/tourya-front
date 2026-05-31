@@ -99,8 +99,11 @@
                     </span>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-sm btn-outline-primary" (click)="viewTourDetail(tour.id)" title="Ver detalles">
+                    <button class="btn btn-sm btn-outline-primary" [ngClass]="{'me-2': tour.status === 'accepted'}" (click)="viewTourDetail(tour.id)" title="Ver detalles">
                       <i class="isax isax-eye"></i>
+                    </button>
+                    <button *ngIf="tour.status === 'accepted'" class="btn btn-sm btn-outline-secondary" title="Porcentaje" [routerLink]="['/providers/tours', tour.id, 'tour-schedule']">
+                      %
                     </button>
                   </td>
                 </tr>

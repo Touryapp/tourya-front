@@ -53,8 +53,7 @@ import { RequestProvidersService } from "../../../pages/providers/requestprovide
     SlickCarouselModule,
     MatSlideToggleModule,
     ModalModule,
-    CarouselModule,
-    RescheduleConfirmationModalComponent
+    CarouselModule
   ],
 })
 export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {

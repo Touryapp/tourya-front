@@ -104,6 +104,11 @@
   <div class="col-xl-9 col-lg-8">
     <div class="dashboard-container">
       <div *ngIf="!mostrarTours && !mostrarTemplates && !mostrarTourManagement && !mostrarReviews && !mostrarPagos && !mostrarPerfil">
+        <!-- Date Range Filter -->
+        <div class="d-flex justify-content-end mb-4">
+            <app-date-range-picker/>
+        </div>
+
         <!-- Statistics Cards -->
         <div class="row mb-4">
             <div class="col-lg-3 col-md-6 mb-3">
@@ -168,11 +173,6 @@
             </div>
         </div>
         <!-- /Statistics Cards -->
-
-        <!-- Date Range Filter -->
-        <div class="d-flex justify-content-end mb-4">
-            <app-date-range-picker/>
-        </div>
 
         <div class="row">
           <!-- Reservaciones Recientes -->
