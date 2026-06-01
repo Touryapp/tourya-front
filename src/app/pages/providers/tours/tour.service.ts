@@ -105,4 +105,18 @@ export class TourService {
       {}
     );
   }
+
+  updateSlotPercentage(tourId: number, slotId: number, slotPercentageTourya: number): Observable<any> {
+    return this.http.put<any>(
+      `${environment.apiUrl}/tour-schedules/tours/${tourId}/percentage/${slotId}`,
+      { slotPercentageTourya }
+    );
+  }
+
+  updateTourPercentageByDateRange(tourId: number, payload: { slotPercentageTourya: number, startDate: string, endDate: string }): Observable<any> {
+    return this.http.put<any>(
+      `${environment.apiUrl}/tour-schedules/tours/${tourId}/percentage`,
+      payload
+    );
+  }
 }

@@ -105,7 +105,7 @@
                                 Edit Gallery
                             </a>
 
-                            <a class="me-2" [routerLink]="['/providers/tours/' + tour.id + '/tour-schedule']">
+                            <a class="me-2" *ngIf="tour?.status === 'accepted' || tour?.status === 'ACCEPTED'" [routerLink]="['/providers/tours/' + tour.id + '/tour-schedule']">
                                 Schedule
                             </a>
                         </div>

@@ -66,6 +66,7 @@ export interface ClientReservation {
   maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
   canReschedule?: boolean; // New field from API
   canCancel?: boolean; // New field from API
+  customerProfileImageUrl?: string;
 }
 
 /**

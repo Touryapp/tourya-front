@@ -787,6 +787,57 @@ export class TourScheduleComponent {
     });
   }
 
+  saveTouryaPercentage(slot: any) {
+    if (slot && slot.id !== undefined && slot.slotPorcentajeTourya !== undefined) {
+      this.loading = true;
+      this.tourService.updateSlotPercentage(this.tourId, slot.id, slot.slotPorcentajeTourya).subscribe({
+        next: () => {
+          this.loading = false;
+          this.openSnackBar("Porcentaje actualizado correctamente");
+          this.getSchedules();
+        },
+        error: (err) => {
+          this.loading = false;
+          console.error(err);
+          this.openSnackBar("Error al actualizar el porcentaje");
+        }
+      });
+    } else {
+      this.openSnackBar("El slot no tiene ID o porcentaje válido");
+    }
+  }
+
+  saveTouryaPercentageRange() {
+    const startDateStr = this.tourScheduleForm.get("startDate")?.value;
+    const endDateStr = this.tourScheduleForm.get("endDate")?.value;
+    const touryaPercentage = this.tourScheduleForm.get("touryaPercentage")?.value;
+
+    if (!startDateStr || !endDateStr || touryaPercentage === null || touryaPercentage === undefined || touryaPercentage === "") {
+      this.openSnackBar("Por favor complete las fechas y el porcentaje");
+      return;
+    }
+
+    const payload = {
+      slotPercentageTourya: touryaPercentage,
+      startDate: dayjs(startDateStr).format("YYYY-MM-DD"),
+      endDate: dayjs(endDateStr).format("YYYY-MM-DD")
+    };
+
+    this.loading = true;
+    this.tourService.updateTourPercentageByDateRange(this.tourId, payload).subscribe({
+      next: () => {
+        this.loading = false;
+        this.openSnackBar("Porcentaje actualizado correctamente para el rango de fechas");
+        this.getSchedules();
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error(err);
+        this.openSnackBar("Error al actualizar el porcentaje en el rango");
+      }
+    });
+  }
+
   eventTimesChanged({
     event,
     newStart,

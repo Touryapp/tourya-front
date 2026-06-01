@@ -155,8 +155,7 @@ export class ProviderPanelComponent implements OnInit {
     // No limpiar los query params aquí para que provider-tour-management pueda leerlos
     // this.router.navigate([], { queryParams: null });
 
-    this.getToursProvider();
-    this.getProviderData();
+    // this.getProviderData(); // Unused and causes duplicate API call
     this.onLoadReviews();
     this.loadPayoutData();
     this.loadDashboardRecentItems();
@@ -250,6 +249,10 @@ export class ProviderPanelComponent implements OnInit {
     this.mostrarReviews = view === 'reviews';
     this.mostrarPagos = view === 'pagos';
     this.mostrarPerfil = view === 'perfil';
+
+    if (this.mostrarTours) {
+      this.getToursProvider();
+    }
   }
 
   getProviderData() {
