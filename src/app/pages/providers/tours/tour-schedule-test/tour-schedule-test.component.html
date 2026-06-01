@@ -430,18 +430,18 @@
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Price</label>
                                                                     <input type="text" type="number"
-                                                                        class="form-control" formControlName="price"
+                                                                        class="form-control" formControlName="providerPrice"
                                                                         (blur)="onPriceBlur(i, j)" [min]="0">
 
-                                                                    <div *ngIf="price.get('price')?.invalid && (price.get('price')?.touched || price.get('price')?.dirty)"
+                                                                    <div *ngIf="price.get('providerPrice')?.invalid && (price.get('providerPrice')?.touched || price.get('providerPrice')?.dirty)"
                                                                         class="text-danger">
                                                                         <div
-                                                                            *ngIf="price.get('price')?.errors?.['required']">
+                                                                            *ngIf="price.get('providerPrice')?.errors?.['required']">
                                                                             Price is required
                                                                         </div>
 
                                                                         <div
-                                                                            *ngIf="price.get('price')?.errors?.['min']">
+                                                                            *ngIf="price.get('providerPrice')?.errors?.['min']">
                                                                             Price must be greater than zero
                                                                         </div>
                                                                     </div>
@@ -556,7 +556,7 @@
                         <div class="col-md-7 text-end">
                             <div *ngFor="let price of slot.prices" class="mb-1">
                                 <span class="badge bg-info me-1">
-                                    {{ getAgeTypeDisplay(price.ageType) }}: {{ price.price | currency }}
+                                    {{ getAgeTypeDisplay(price.ageType) }}: {{ price.providerPrice | currency }}
                                 </span>
                             </div>
                         </div>

@@ -1,26 +1,19 @@
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">Políticas de Operadores</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item">Pages</li>
-                            <li class="breadcrumb-item active" aria-current="page">Operator Policies</li>
-                        </ol>
-                    </nav>
-                </div>
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12 col-12 text-center">
+                <h2 class="breadcrumb-title mb-2 text-dark" style="color: black !important;">Políticas de Operadores</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark" style="color: black !important;"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item text-dark" style="color: black !important;">Pages</li>
+                        <li class="breadcrumb-item active text-dark" aria-current="page" style="color: black !important;">Políticas de Operadores</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-    </div>
-    <!-- /Breadcrumb -->
 
-    <!-- Page Wrapper -->
-    <div class="content">
-        <div class="container">
-
-            <div [innerHTML]="'legal.operatorTerms' | translate | safeHtml"></div>
-        </div>
+        <div [innerHTML]="'legal.operatorTerms' | translate | safeHtml"></div>
     </div>
+</div>

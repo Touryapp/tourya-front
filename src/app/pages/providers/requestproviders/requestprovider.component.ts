@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HostListener } from '@angular/core';
 import { routes } from "../../../shared/routes/routes";
@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
   styleUrl: './requestprovider.component.scss'
 })
 export class RequestproviderComponent implements OnInit {
+  @Input() isEmbedded: boolean = false;
   requestProviderForm!: FormGroup;
   loading = false;
   isLoadingData = true;
@@ -178,8 +179,8 @@ export class RequestproviderComponent implements OnInit {
             // Sincronizar el estado en el local storage
             this.authService.setRequestProviderStatus(data.status as any);
             
-            // Si el estado es Approved, redirigir inmediatamente al panel de proveedor
-            if (data.status === 'Approved') {
+            // Si el estado es Approved y no está incrustado, redirigir inmediatamente al panel de proveedor
+            if (data.status === 'Approved' && !this.isEmbedded) {
               this.router.navigate(['/providers/provider-panel']);
               resolve();
               return;
@@ -202,7 +203,8 @@ export class RequestproviderComponent implements OnInit {
               department: data.provider.state.id,
               city: data.provider.city.id,
               address: data.provider.address,
-              phone: data.provider.phone
+              phone: data.provider.phone,
+              rnt: data.provider.rnt || ''
             });
             
             if (data.status === 'Incomplete Information' || data.status === 'Created') {
@@ -275,6 +277,7 @@ export class RequestproviderComponent implements OnInit {
       address: ['', [Validators.required, Validators.minLength(10)]],
       phone: ['', [Validators.required, Validators.minLength(10)]],
       city: ['', [Validators.required]],
+      rnt: ['', [Validators.required]],
     });
   }
 
@@ -296,6 +299,7 @@ export class RequestproviderComponent implements OnInit {
         "department": formData.department,
         "address": formData.address,
         "phone": formData.phone,
+        "rnt": formData.rnt,
         "userEmail": this.authService.getUser()?.email
       }
       console.log('Data to save:', datasaveforprovider);
@@ -552,7 +556,8 @@ export class RequestproviderComponent implements OnInit {
               department: data.provider.state.id,
               city: data.provider.city.id,
               address: data.provider.address,
-              phone: data.provider.phone
+              phone: data.provider.phone,
+              rnt: data.provider.rnt || ''
             });
             // Deshabilitar el formulario salvo en estado Incomplete Information o Created
             if (data.status === 'Incomplete Information' || data.status === 'Created') {
@@ -906,6 +911,7 @@ export class RequestproviderComponent implements OnInit {
 
   // Verifica si se debe mostrar el panel de carga de archivos
   shouldShowGalleryPanel(): boolean {
+    if (this.isEmbedded) return this.isExistingData;
     return this.isExistingData && (this.dataRequestProvider.status === 'Pre-Approved' || this.dataRequestProvider.status === 'Incomplete Information');
   }
 

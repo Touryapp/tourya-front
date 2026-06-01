@@ -3,6 +3,8 @@ import { routes } from "../../../../shared/routes/routes";
 import { OwlOptions } from "ngx-owl-carousel-o";
 import { Tour } from "../../../../shared/dto/tour-response.dto";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
+import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
+import { OnInit } from "@angular/core";
 
 @Component({
   selector: "app-tour-list-view-provider",
@@ -10,7 +12,7 @@ import { I18nFieldService } from "../../../../shared/services/i18n-field.service
   templateUrl: "./tour-list-view.component.html",
   styleUrls: ["./tour-list-view.component.scss"],
 })
-export class TourListViewComponent {
+export class TourListViewComponent implements OnInit {
   public routes = routes;
   public Math = Math;
 
@@ -26,7 +28,81 @@ export class TourListViewComponent {
   @Output() goToPreviousPage = new EventEmitter<void>();
   @Output() goToNextPage = new EventEmitter<void>();
 
-  constructor(public i18nService: I18nFieldService) {}
+  private subcategoriesMap = new Map<string, string>();
+
+  constructor(
+    public i18nService: I18nFieldService,
+    private searchToursService: SearchToursService
+  ) {}
+
+  ngOnInit(): void {
+    this.searchToursService.categoriesPublic().subscribe({
+      next: (categories: any[]) => {
+        categories.forEach(cat => {
+          cat.subCategories?.forEach((sub: any) => {
+            this.subcategoriesMap.set(sub.code || sub.name, sub.name);
+          });
+        });
+      },
+      error: (err) => console.error('Error cargando categorías para traducir subcategoría', err)
+    });
+  }
+
+  getSubCategoryName(code: string | undefined): string {
+    if (!code) return '';
+    return this.subcategoriesMap.get(code) || code;
+  }
+
+  getDurationLabel(code: string | string[] | undefined): string {
+    if (!code) return '';
+    
+    // If it's an array, just take the first one or map all
+    const valueStr = Array.isArray(code) ? code[0] : code;
+    
+    const durationOptions = [
+      { value: '1_a_2_horas', label: '1 a 2 horas' },
+      { value: '2_a_4_horas', label: 'de 2 a 4 horas' },
+      { value: '4_a_6_horas', label: 'de 4 a 6 horas' },
+      { value: 'hasta_1_dia', label: 'hasta 1 día' },
+      { value: 'hasta_3_dias', label: 'hasta 3 días' },
+      { value: 'hasta_5_dias', label: 'hasta 5 días' }
+    ];
+
+    const option = durationOptions.find(o => o.value === valueStr);
+    return option ? option.label : valueStr;
+  }
+
+  getPriceTypeLabel(priceType: string | undefined | null): string {
+    if (!priceType) return '';
+    const upper = priceType.toUpperCase();
+    if (upper === 'PRIVATE' || upper === 'PER_PERSON') return 'Individual';
+    if (upper === 'GROUP' || upper === 'PER_GROUP') return 'Grupo';
+    return priceType;
+  }
+
+  getStatusBadgeClass(status: string | undefined): string {
+    if (!status) return 'bg-secondary';
+    switch (status.toLowerCase()) {
+      case 'created': return 'bg-secondary';
+      case 'submitted': return 'bg-warning';
+      case 'returned': return 'bg-info';
+      case 'accepted': return 'bg-success';
+      case 'cancelled': return 'bg-danger';
+      default: return 'bg-secondary';
+    }
+  }
+
+  getStatusLabel(status: string | undefined): string {
+    if (!status) return 'Desconocido';
+    switch (status.toLowerCase()) {
+      case 'created': return 'Creado';
+      case 'submitted': return 'Enviado';
+      case 'returned': return 'Devuelto';
+      case 'accepted': return 'Aceptado';
+      case 'cancelled': return 'Cancelado';
+      default: return status;
+    }
+  }
 
   // Favorites functionality
   isClassAdded: boolean[] = [];

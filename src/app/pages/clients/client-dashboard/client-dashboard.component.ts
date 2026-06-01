@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { CommonService } from '../../../shared/common/common.service';
 import { ClientMenuService, ClientMenuSection, ClientMenuItem } from '../../../shared/data/client-menu.service';
+import { TouristService } from '../../../shared/services/tourist.service';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -17,10 +18,16 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
   isSubdrop: boolean = false;
   isOpen = false;
   clientSidebarMenu: ClientMenuSection[] = [];
+  
+  // Perfil del cliente
+  clientFirstName: string = 'Usuario';
+  clientPhotoUrl: string = 'assets/img/users/user-01.jpg';
+  clientSinceDate: string = '';
 
   constructor(
     private common: CommonService,
-    private clientMenuService: ClientMenuService
+    private clientMenuService: ClientMenuService,
+    private touristService: TouristService
   ) {
     this.common.base.subscribe((base: string) => {
       this.base = base;
@@ -91,6 +98,23 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.expandSubMenusActive();
+    this.loadClientProfile();
+  }
+
+  private loadClientProfile(): void {
+    this.touristService.getProfile().subscribe({
+      next: (profile) => {
+        if (profile.firstName) {
+          this.clientFirstName = profile.firstName;
+        }
+        if (profile.photoUrl) {
+          this.clientPhotoUrl = profile.photoUrl;
+        }
+      },
+      error: (error) => {
+        console.error('Error cargando perfil del cliente', error);
+      }
+    });
   }
 
   ngOnDestroy(): void {

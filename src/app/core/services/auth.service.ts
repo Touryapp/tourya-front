@@ -50,6 +50,7 @@ export class AuthService {
   // Set the authentication token
   setToken(token: string): void {
     localStorage.setItem("token", token);
+    sessionStorage.removeItem("providerPanelView");
   }
 
   // Remove the authentication token
@@ -169,9 +170,15 @@ export class AuthService {
   }
 
   logout(): void {
+    // 1. Limpiar variables de usuario y seguridad
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("requestProviderStatus");
+    localStorage.removeItem("idProvider");
+    
+    // 2. Limpiar estados de navegación de la sesión
+    sessionStorage.removeItem("providerPanelView");
+    sessionStorage.removeItem("menuValue");
   }
 
   isAdmin(): boolean {

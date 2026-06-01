@@ -24,6 +24,7 @@ import { TourSlotSelectionModalComponent } from '../../../shared/common/tour-slo
 import { SearchToursService } from '../../clients/list-tours/search-tours.service';
 import { TourScheduleResponseDto } from '../../../shared/dto/search-tour-response.dto';
 import { CartItem } from '../../../shared/dto/cart.dto';
+import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
 
 // Interfaz para las reservas de tours del proveedor
 export interface ProviderTourBooking {
@@ -146,6 +147,10 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     return new Date().toISOString().split('T')[0];
   }
 
+  // Set of pending review reservation IDs
+  public pendingReviewReservationIds = new Set<number>();
+
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -158,7 +163,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     private dialog: MatDialog,
     private searchToursService: SearchToursService,
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private panelStateService: ProviderPanelStateService
   ) {}
 
   ngOnInit(): void {
@@ -171,6 +177,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Cargar datos segÃºn el rol
     if (this.currentRole === 'CLIENT') {
       this.loadClientReservations();
+      this.loadPendingReviews();
     } else if (this.currentRole === 'PROVIDER') {
       this.loadProviderReservations();
     } else {
@@ -183,6 +190,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.ngZone.run(() => {
           if (this.currentRole === 'CLIENT') {
             this.loadClientReservations();
+            this.loadPendingReviews();
           } else if (this.currentRole === 'PROVIDER') {
             this.loadProviderReservations();
           }
@@ -190,6 +198,37 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         });
       })
     );
+    
+    // Verificar si hay que abrir un modal específico desde otro panel (ej. Pagos)
+    const reservationToOpen = this.panelStateService.getReservationToOpen();
+    if (reservationToOpen) {
+      console.log('🔓 Abriendo reserva desde ProviderPanelStateService:', reservationToOpen);
+      setTimeout(() => {
+        this.viewBookingDetails({ id: reservationToOpen.toString() } as any);
+      }, 300);
+    }
+
+    // Escuchar el cierre del modal para el flujo de retorno
+    setTimeout(() => {
+      const modalElement = document.getElementById('bookingDetailModal');
+      if (modalElement) {
+        modalElement.addEventListener('hidden.bs.modal', () => {
+          const returnPaymentId = this.panelStateService.getReturnToPayment();
+          const returnToReviews = this.panelStateService.getReturnToReviews();
+          
+          if (returnPaymentId) {
+            this.panelStateService.setPaymentToOpen(returnPaymentId);
+            if (this.authService.isAdmin()) {
+              this.router.navigate(['/admin/dashboard']);
+            } else {
+              this.panelStateService.setView('pagos');
+            }
+          } else if (returnToReviews) {
+            this.panelStateService.setView('reviews');
+          }
+        });
+      }
+    }, 1000);
     
     // Verificar si hay parÃ¡metros de query (desde el QR scan)
     this.route.queryParams.subscribe((params: any) => {
@@ -432,6 +471,33 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
+   * Carga los IDs de las reservas que tienen reseñas pendientes
+   */
+  private loadPendingReviews(): void {
+    this.reviewsService.getPendingReviews().subscribe({
+      next: (response) => {
+        if (response && response.content) {
+          const ids = response.content.map(review => review.reservationId);
+          this.pendingReviewReservationIds = new Set<number>(ids);
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar pending reviews', err);
+      }
+    });
+  }
+
+  /**
+   * Verifica si la reserva actualmente seleccionada tiene una reseña pendiente
+   */
+  public hasPendingReview(booking: ProviderTourBooking): boolean {
+    if (!booking || !booking.id) return false;
+    const resId = parseInt(booking.id.replace('RES-', ''), 10);
+    return this.pendingReviewReservationIds.has(resId);
+  }
+
+  /**
    * Carga las reservas reales del proveedor desde el API
    */
   private loadProviderReservations(): void {
@@ -498,16 +564,16 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     return {
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
-      tourName: this.i18nService.getValue(reservation.tourName),
+      tourName: (this.i18nService.getValue(reservation.tourName) || '').length > 20 ? (this.i18nService.getValue(reservation.tourName) || '').substring(0, 20) + '...' : (this.i18nService.getValue(reservation.tourName) || ''),
       tourType: 'Tour',
       img: 'tours-21.jpg',
-      customerName: reservation.payerName,
+      customerName: reservation.serviceResponsibleName || reservation.payerName,
       customerEmail: reservation.payerEmail,
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
-      price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
+      price: reservation.providerPrice != null ? `$${reservation.providerPrice.toFixed(2)}` : '',
       bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
@@ -551,16 +617,16 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
       tourId: reservation.tourId, // Agregar tourId para reagendamiento
-      tourName: this.i18nService.getValue(reservation.tourName),
+      tourName: (this.i18nService.getValue(reservation.tourName) || '').length > 20 ? (this.i18nService.getValue(reservation.tourName) || '').substring(0, 20) + '...' : (this.i18nService.getValue(reservation.tourName) || ''),
       tourType: 'Tour', // El API no devuelve tipo de tour
       img: 'tours-21.jpg', // Imagen por defecto
-      customerName: reservation.payerName,
+      customerName: reservation.serviceResponsibleName || reservation.payerName,
       customerEmail: reservation.payerEmail,
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
-      price: `$${reservation.shoppingTotalPrice.toFixed(2)}`,
+      price: `$${(reservation.shoppingTotalPrice || 0).toFixed(2)}`,
       bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
         month: 'short',
@@ -1722,13 +1788,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     this.reviewsService.createReview(reviewPayload, this.reviewImages).subscribe({
       next: (response: any) => {
         console.log('âœ… ReseÃ±a guardada exitosamente:', response);
+
+        // Remove from pending reviews so "Ya hice la reseña" shows immediately
+        if (this.reviewModalBooking && this.reviewModalBooking.id) {
+          const resId = parseInt(this.reviewModalBooking.id.replace('RES-', ''), 10);
+          this.pendingReviewReservationIds.delete(resId);
+          this.cdr.detectChanges();
+        }
+
         Swal.fire({
           icon: 'success',
           title: 'Â¡ReseÃ±a enviada!',
           text: `Tu reseÃ±a para ${this.reviewModalBooking!.tourName} ha sido guardada exitosamente.`,
           confirmButtonColor: '#28a745'
+        }).then(() => {
+          this.closeReviewModal();
         });
-        this.closeReviewModal();
       },
       error: (error: any) => {
         console.error('âŒ Error al guardar la reseÃ±a:', error);

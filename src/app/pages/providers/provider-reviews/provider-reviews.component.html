@@ -77,7 +77,7 @@
                             <select 
                                 class="form-select"
                                 [(ngModel)]="selectedTourFilter"
-                                (ngModelChange)="applyFilters()">
+                                (ngModelChange)="onFilterChange()">
                                 <option value="all">{{'provider-reviews.filters.allTours' | translate}}</option>
                                 @for (tour of availableTours; track tour.id) {
                                     <option [value]="tour.id">{{ i18nService.getValue(tour.name) }}</option>
@@ -212,6 +212,15 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        <div *ngIf="review.reasonId && getReasonLabel(review.reasonType, review.reasonId)" class="mt-2">
+                                            <span class="badge bg-light text-dark border" 
+                                                  style="font-size: 0.75rem; padding: 0.4em 0.6em;">
+                                                <i class="fa-solid fa-check text-success me-1" *ngIf="review.reasonType === 'POSITIVE'"></i>
+                                                <i class="fa-solid fa-xmark text-danger me-1" *ngIf="review.reasonType === 'NEGATIVE'"></i>
+                                                {{ getReasonLabel(review.reasonType, review.reasonId) }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -222,13 +231,20 @@
                                     <span class="avatar avatar-md rounded flex-shrink-0 me-2">
                                         <img [src]="review.tourImage || 'assets/img/tours/default-tour.jpg'" 
                                              alt="tour" 
-                                             class="img-fluid rounded">
+                                             class="img-fluid rounded tour-image-aligned">
                                     </span>
                                     <div>
                                         <p class="fs-14 fw-medium text-dark mb-0">{{ review.tourName }}</p>
                                         <p class="fs-12 text-gray-6 mb-0">
-                                            <i class="isax isax-receipt-text me-1"></i>Reservation: {{ review.reservationId }}
+                                            <i class="isax isax-receipt-text me-1"></i>Reservation: {{ review.bookingId || review.reservationId || 'N/A' }}
                                         </p>
+                                        <div class="mt-2 text-lg-end">
+                                            <button type="button" class="btn btn-sm btn-warning fw-medium py-1 px-2 fs-12" 
+                                                    (click)="goToReservation(review.bookingId || review.reservationId)"
+                                                    [disabled]="!review.bookingId && !review.reservationId">
+                                                Ir a la reserva
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -291,12 +307,7 @@
                                 </button>
                             }
                             
-                            <!-- Botón Ver detalles (todos los roles) -->
-                            <a href="javascript:void(0);" 
-                               class="btn btn-sm btn-outline-secondary"
-                               [title]="'provider-reviews.actions.viewDetails' | translate">
-                                <i class="isax isax-eye"></i>
-                            </a>
+                            <!-- Botón Ver detalles removido -->
                         </div>
                     </div>
                     

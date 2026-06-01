@@ -40,6 +40,7 @@ export class TourScheduleComponent {
   public routes = routes;
   loading = false;
   tourScheduleForm: FormGroup;
+  isBackoffice: boolean = false;
   readonly TypeOfPersonLabel = TypeOfPersonLabel;
 
   tourId: number = 0;
@@ -120,6 +121,7 @@ export class TourScheduleComponent {
       ],
       startDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
       endDate: ["", [Validators.required, dayjsDateValidator("DD-MM-YYYY")]],
+      touryaPercentage: ["", [Validators.min(0), Validators.max(100)]],
       daysOfWeek: this.fb.array([]),
 
       slots: this.fb.array([]),
@@ -174,6 +176,7 @@ export class TourScheduleComponent {
   }
 
   ngOnInit(): void {
+    this.isBackoffice = this.authService.isAdmin();
     // Los campos de fecha del formulario (Start Date / End Date) ya NO sincronizan
     // con el calendario grande. Cada lógica es independiente.
     this.tourScheduleForm
@@ -232,7 +235,7 @@ export class TourScheduleComponent {
 
 
   onPriceBlur(indexSlot: number, indexPrice: number) {
-    const priceControl = this.prices(indexSlot).at(indexPrice).get("price");
+    const priceControl = this.prices(indexSlot).at(indexPrice).get("providerPrice");
     const price = priceControl?.value;
 
     let displayPrice: number = 0;
@@ -351,7 +354,7 @@ export class TourScheduleComponent {
     return this.fb.group({
       id: ["", []],
       ageType: ["", [Validators.required]],
-      price: ["", [Validators.required, Validators.min(0)]],
+      providerPrice: ["", [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -460,7 +463,7 @@ export class TourScheduleComponent {
   onAgeTypeChange(indexSlot: number, indexPrice: number) {
     const priceGroup = this.prices(indexSlot).at(indexPrice) as FormGroup;
     if (priceGroup.get('ageType')?.value === TypeOfPersonLabel.INFANT) {
-      priceGroup.get('price')?.setValue(0);
+      priceGroup.get('providerPrice')?.setValue(0);
     }
   }
   checkTourScheduleByStartDateAndEndDate() {
@@ -568,7 +571,7 @@ export class TourScheduleComponent {
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
-            price: [price.price || ""],
+            providerPrice: [price.providerPrice || ""],
           });
 
           this.prices(slotIndex).push(newPrice);
@@ -633,7 +636,8 @@ export class TourScheduleComponent {
       ...slot,
       prices: slot.prices.map((price: any) => ({
         ...price,
-        ageType: price.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : price.ageType
+        ageType: price.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : price.ageType,
+        providerPrice: price.providerPrice
       }))
     }));
 
@@ -780,6 +784,57 @@ export class TourScheduleComponent {
   openSnackBar(message: string) {
     this._snackBar.open(message, "", {
       duration: 5000,
+    });
+  }
+
+  saveTouryaPercentage(slot: any) {
+    if (slot && slot.id !== undefined && slot.slotPorcentajeTourya !== undefined) {
+      this.loading = true;
+      this.tourService.updateSlotPercentage(this.tourId, slot.id, slot.slotPorcentajeTourya).subscribe({
+        next: () => {
+          this.loading = false;
+          this.openSnackBar("Porcentaje actualizado correctamente");
+          this.getSchedules();
+        },
+        error: (err) => {
+          this.loading = false;
+          console.error(err);
+          this.openSnackBar("Error al actualizar el porcentaje");
+        }
+      });
+    } else {
+      this.openSnackBar("El slot no tiene ID o porcentaje válido");
+    }
+  }
+
+  saveTouryaPercentageRange() {
+    const startDateStr = this.tourScheduleForm.get("startDate")?.value;
+    const endDateStr = this.tourScheduleForm.get("endDate")?.value;
+    const touryaPercentage = this.tourScheduleForm.get("touryaPercentage")?.value;
+
+    if (!startDateStr || !endDateStr || touryaPercentage === null || touryaPercentage === undefined || touryaPercentage === "") {
+      this.openSnackBar("Por favor complete las fechas y el porcentaje");
+      return;
+    }
+
+    const payload = {
+      slotPercentageTourya: touryaPercentage,
+      startDate: dayjs(startDateStr).format("YYYY-MM-DD"),
+      endDate: dayjs(endDateStr).format("YYYY-MM-DD")
+    };
+
+    this.loading = true;
+    this.tourService.updateTourPercentageByDateRange(this.tourId, payload).subscribe({
+      next: () => {
+        this.loading = false;
+        this.openSnackBar("Porcentaje actualizado correctamente para el rango de fechas");
+        this.getSchedules();
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error(err);
+        this.openSnackBar("Error al actualizar el porcentaje en el rango");
+      }
     });
   }
 
@@ -1035,7 +1090,7 @@ export class TourScheduleComponent {
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
-            price: [price.price || ""],
+            providerPrice: [price.providerPrice || ""],
           });
 
           // Agregar el precio al FormArray de precios del slot
@@ -1105,7 +1160,7 @@ export class TourScheduleComponent {
                 capacity: s.capacity,
                 prices: s.prices.map((p: any) => ({
                   ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,
-                  price: p.price,
+                  providerPrice: p.providerPrice,
                 })),
               }))
             }
@@ -1180,7 +1235,7 @@ export class TourScheduleComponent {
               prices: s.prices.map((p: any) => ({
                 id: p.id || 0, // Incluir ID del precio si existe
                 ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,
-                price: p.price
+                providerPrice: p.providerPrice
               }))
             }))
           }

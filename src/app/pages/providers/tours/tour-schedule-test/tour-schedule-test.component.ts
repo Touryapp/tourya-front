@@ -228,7 +228,7 @@ export class TourScheduleTestComponent {
   }
 
   onPriceBlur(indexSlot: number, indexPrice: number) {
-    const priceControl = this.prices(indexSlot).at(indexPrice).get("price");
+    const priceControl = this.prices(indexSlot).at(indexPrice).get("providerPrice");
     const price = priceControl?.value;
 
     let displayPrice: number = 0;
@@ -358,7 +358,7 @@ export class TourScheduleTestComponent {
     return this.fb.group({
       id: ["", []],
       ageType: ["", [Validators.required]],
-      price: ["", [Validators.required, Validators.min(0)]],
+      providerPrice: ["", [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -570,7 +570,7 @@ export class TourScheduleTestComponent {
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
-            price: [price.price || ""],
+            providerPrice: [price.providerPrice || ""],
           });
 
           this.prices(slotIndex).push(newPrice);
@@ -826,7 +826,8 @@ export class TourScheduleTestComponent {
       ...slot,
       prices: slot.prices.map((price: any) => ({
         ...price,
-        ageType: price.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : price.ageType
+        ageType: price.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : price.ageType,
+        providerPrice: price.providerPrice
       }))
     }));
 
@@ -1302,7 +1303,7 @@ export class TourScheduleTestComponent {
           const newPrice = this.fb.group({
             id: [price.id || ""],
             ageType: [ageTypeValue || ""],
-            price: [price.price || ""],
+            providerPrice: [price.providerPrice || ""],
           });
 
           // Agregar el precio al FormArray de precios del slot
@@ -1369,7 +1370,7 @@ export class TourScheduleTestComponent {
                 capacity: s.capacity,
                 prices: s.prices.map((p: any) => ({
                   ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,
-                  price: p.price,
+                  providerPrice: p.providerPrice,
                 })),
               }))
             }
@@ -1444,7 +1445,7 @@ export class TourScheduleTestComponent {
               prices: s.prices.map((p: any) => ({
                 id: p.id || 0, // Incluir ID del precio si existe
                 ageType: p.ageType === TypeOfPersonLabel.ANY ? TypeOfPersonLabel.ADULT : p.ageType,
-                price: p.price
+                providerPrice: p.providerPrice
               }))
             }))
           }

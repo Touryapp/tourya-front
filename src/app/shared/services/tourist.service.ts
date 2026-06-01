@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap, shareReplay } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { TouristProfileDto, AddressCompleteResponseDto } from '../dto/tourist-profile.dto';
 import { PaginationDto } from '../dto/pagination.dto';
@@ -15,22 +16,33 @@ export class TouristService {
 
   constructor(private http: HttpClient) {}
 
+  private profileCache$: Observable<TouristProfileDto> | null = null;
+
   checkAddressComplete(): Observable<AddressCompleteResponseDto> {
     return this.http.get<AddressCompleteResponseDto>(`${this.baseUrl}/profile/address-complete`);
   }
 
-  getProfile(): Observable<TouristProfileDto> {
-    return this.http.get<TouristProfileDto>(`${this.baseUrl}/profile`);
+  getProfile(forceRefresh: boolean = false): Observable<TouristProfileDto> {
+    if (!this.profileCache$ || forceRefresh) {
+      this.profileCache$ = this.http.get<TouristProfileDto>(`${this.baseUrl}/profile`).pipe(
+        shareReplay(1)
+      );
+    }
+    return this.profileCache$;
   }
 
   updateProfile(profile: TouristProfileDto): Observable<TouristProfileDto> {
-    return this.http.put<TouristProfileDto>(`${this.baseUrl}/profile`, profile);
+    return this.http.put<TouristProfileDto>(`${this.baseUrl}/profile`, profile).pipe(
+      tap(() => this.profileCache$ = null) // invalidate cache
+    );
   }
 
   updateProfilePhoto(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.put<any>(`${this.baseUrl}/profile/photo`, formData);
+    return this.http.put<any>(`${this.baseUrl}/profile/photo`, formData).pipe(
+      tap(() => this.profileCache$ = null) // invalidate cache
+    );
   }
 
   addToWishlist(tourId: number): Observable<any> {

@@ -51,18 +51,6 @@
             <div class="list-header d-flex align-items-center justify-content-between flex-wrap p-3">
                 <h6 class="mb-0">Lista de Pagos</h6>
                 <div class="d-flex align-items-center flex-wrap gap-2">
-                    <!-- Search -->
-                    <div class="input-icon-start position-relative">
-                        <span class="icon-addon">
-                            <i class="isax isax-search-normal-1 fs-14"></i>
-                        </span>
-                        <input 
-                            [(ngModel)]="searchDataValue" 
-                            (ngModelChange)="searchData(searchDataValue)" 
-                            type="search" 
-                            class="form-control form-control-sm"
-                            placeholder="Buscar..." />
-                    </div>
 
                     <!-- Filter by Status -->
                     <div class="dropdown">
@@ -116,20 +104,20 @@
                         <thead class="thead-light">
                             <tr>
                                 <th mat-sort-header="id">ID</th>
-                                <th mat-sort-header="providerId">ID Proveedor</th>
                                 <th mat-sort-header="createdAt">Fecha de Creación</th>
                                 <th mat-sort-header="payDate">Fecha de Pago</th>
                                 <th mat-sort-header="amountTotal">Monto Total</th>
                                 <th mat-sort-header="status">Estado</th>
                                 <th>Comprobante</th>
-                                <th>Acción</th>
+                                @if (authService.isAdmin()) {
+                                    <th>Acción</th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
                             @for (payment of tableData; track payment.id) {
                                 <tr (click)="openPaymentDetails(payment)" style="cursor: pointer;">
                                     <td>#{{ payment.id }}</td>
-                                    <td>{{ payment.providerId }}</td>
                                     <td>{{ payment.createdAt | date:'shortDate' }}</td>
                                     <td>{{ payment.payDate ? (payment.payDate | date:'shortDate') : '-' }}</td>
                                     <td class="fw-semibold text-success">${{ payment.amountTotal | number:'1.2-2' }}</td>
@@ -148,9 +136,9 @@
                                             <span class="text-muted fs-12 italic">No disponible</span>
                                         }
                                     </td>
-                                    <td>
-                                        @if (payment.status === 'PENDING') {
-                                            @if (authService.isAdmin()) {
+                                    @if (authService.isAdmin()) {
+                                        <td>
+                                            @if (payment.status === 'PENDING') {
                                                 <div class="d-flex align-items-center gap-2">
                                                     <input #fileInput type="file" class="d-none" accept=".pdf,.jpg,.png" (change)="onFileSelected($event, payment)">
                                                     <button 
@@ -160,18 +148,16 @@
                                                         <i class="isax isax-document-upload me-1"></i> Subir
                                                     </button>
                                                 </div>
+                                            } @else if (payment.status === 'PAID') {
+                                                <div class="d-flex align-items-center text-success">
+                                                    <i class="isax isax-tick-circle me-1"></i>
+                                                    <span class="fs-12 fw-medium">Pagado</span>
+                                                </div>
                                             } @else {
-                                                <span class="text-muted fs-12 d-inline-flex align-items-center"><i class="isax isax-clock me-1"></i> Pendiente</span>
+                                                <span class="text-muted fs-12">N/A</span>
                                             }
-                                        } @else if (payment.status === 'PAID') {
-                                            <div class="d-flex align-items-center text-success">
-                                                <i class="isax isax-tick-circle me-1"></i>
-                                                <span class="fs-12 fw-medium">Pagado</span>
-                                            </div>
-                                        } @else {
-                                            <span class="text-muted fs-12">N/A</span>
-                                        }
-                                    </td>
+                                        </td>
+                                    }
                                 </tr>
                             }
                             @if (tableData.length === 0) {
@@ -203,7 +189,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Pagos Pagados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pagada') }}</h4>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('PAID') }}</h4>
                         </div>
                         <div class="stats-icon bg-success-subtle">
                             <i class="isax isax-tick-circle text-success"></i>
@@ -218,7 +204,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Pagos Pendientes</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Pendiente') }}</h4>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('PENDING') }}</h4>
                         </div>
                         <div class="stats-icon bg-warning-subtle">
                             <i class="isax isax-clock text-warning"></i>
@@ -233,7 +219,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Pagos Cancelados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('Cancelada') }}</h4>
+                            <h4 class="mb-0">{{ getPaymentCountByStatus('CANCELLED') }}</h4>
                         </div>
                         <div class="stats-icon bg-danger-subtle">
                             <i class="isax isax-close-circle text-danger"></i>
@@ -248,7 +234,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Total Ingresos</p>
-                            <h4 class="mb-0 text-success">${{ totalAmount | number:'1.2-2' }}</h4>
+                            <h4 class="mb-0 text-success">${{ totalAmount | number:'1.0-0' }}</h4>
                         </div>
                         <div class="stats-icon bg-primary-subtle">
                             <i class="isax isax-dollar-square text-primary"></i>

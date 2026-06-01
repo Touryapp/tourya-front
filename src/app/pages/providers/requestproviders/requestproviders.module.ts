@@ -18,6 +18,9 @@ import { SharedModule } from '../../../shared/shared-module';
     MatOptionModule,
     SharedModule,
     RequestprovidersRoutingModule
+  ],
+  exports: [
+    RequestproviderComponent
   ]
 })
 export class RequestprovidersModule { } 

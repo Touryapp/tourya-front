@@ -42,6 +42,7 @@ export interface ClientReservation {
   payerDocumentNumber: string;
   shoppingItemId: number;
   shoppingTotalPrice: number;
+  providerPrice?: number;
   shoppingUnitPrice: number;
   shoppingQuantity: number;
   productType: string;
@@ -65,6 +66,7 @@ export interface ClientReservation {
   maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
   canReschedule?: boolean; // New field from API
   canCancel?: boolean; // New field from API
+  customerProfileImageUrl?: string;
 }
 
 /**

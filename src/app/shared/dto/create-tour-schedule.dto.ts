@@ -23,5 +23,5 @@ export interface CreateTourScheduleSlot {
 export interface CreateTourSchedulePrice {
   id?: number;
   ageType: TypeOfPerson;
-  price: number;
+  providerPrice: number;
 }

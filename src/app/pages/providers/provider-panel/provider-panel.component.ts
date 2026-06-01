@@ -12,6 +12,10 @@ import { ProviderPanelStateService } from "../../../shared/services/provider-pan
 import { I18nFieldService } from "../../../shared/services/i18n-field.service";
 import { AuthService } from "../../../core/services/auth.service";
 import { RequestsProvidersStatus } from "../../../shared/enums/requests-providers-status.enum";
+import { PayoutOrdersService } from "../../../shared/services/payout-orders.service";
+import { PayoutOrder } from "../../../shared/dto/payout-order.dto";
+import { ReservationService } from "../../../shared/services/reservation.service";
+import { ClientReservation } from "../../../shared/models/reservation.model";
 
 @Component({
   selector: "app-provider-panel",
@@ -32,9 +36,10 @@ export class ProviderPanelComponent implements OnInit {
   requestProviders: any = { content: [] };
   mostrarTours: boolean = false;
   mostrarTemplates: boolean = false;
-  mostrarTourManagement: boolean = false;
-  mostrarReviews: boolean = false;
-  mostrarPagos: boolean = false;
+  mostrarTourManagement = false;
+  mostrarReviews = false;
+  mostrarPagos = false;
+  mostrarPerfil = false;
   declinedReason: string = "";
 
   tours: Tour[] = [];
@@ -45,6 +50,7 @@ export class ProviderPanelComponent implements OnInit {
   public totalPages: number = 0;
   public currentPage: number = 1;
   
+  providerData: RequestProvider | null = null;
   // Variables para reviews
   reviews: ProviderReview[] = [];
   totalReviews: number = 0;
@@ -52,6 +58,17 @@ export class ProviderPanelComponent implements OnInit {
   reviewsLoading: boolean = false;
   reviewsTotalPages: number = 0;
   reviewsCurrentPage: number = 1;
+
+  // Payout Stats
+  payoutOrders: PayoutOrder[] = [];
+  totalPayoutAmount: number = 0;
+
+  // Recent Dashboard Items
+  recentReservations: ClientReservation[] = [];
+  recentReviewsDashboard: ProviderReview[] = [];
+  
+  public reviewReasonsPositive: any[] = [];
+  public reviewReasonsNegative: any[] = [];
 
   constructor(
     private requestProvidersService: RequestProvidersService,
@@ -63,7 +80,9 @@ export class ProviderPanelComponent implements OnInit {
     private panelStateService: ProviderPanelStateService,
     private cdr: ChangeDetectorRef,
     public i18nService: I18nFieldService,
-    public authService: AuthService
+    public authService: AuthService,
+    private payoutOrdersService: PayoutOrdersService,
+    private reservationService: ReservationService
   ) {}
 
   ngOnInit(): void {
@@ -110,15 +129,20 @@ export class ProviderPanelComponent implements OnInit {
       }, 0);
     } else {
       // Establecer vista por defecto si no hay una vista específica solicitada
-      // Primero verificar si hay una vista pendiente desde el servicio
-      const currentView = this.panelStateService.getCurrentView();
-      if (currentView) {
-        console.log('📱 Vista inicial desde servicio:', currentView);
-        this.setView(currentView);
+      // Si el sessionStorage no tiene el providerPanelView, significa que es un login nuevo o se cerró sesión
+      const savedView = sessionStorage.getItem('providerPanelView');
+      if (!savedView) {
+        console.log('🏠 Vista limpia detectada (nuevo inicio de sesión), forzando: dashboard');
+        this.panelStateService.setView('dashboard');
       } else {
-        // Si no hay vista desde el servicio, establecer 'dashboard' como vista por defecto
-        console.log('🏠 Estableciendo vista por defecto: dashboard');
-        this.setView('dashboard');
+        const currentView = this.panelStateService.getCurrentView();
+        if (currentView) {
+          console.log('📱 Vista inicial desde servicio:', currentView);
+          this.setView(currentView);
+        } else {
+          console.log('🏠 Estableciendo vista por defecto: dashboard');
+          this.panelStateService.setView('dashboard');
+        }
       }
     }
 
@@ -131,18 +155,115 @@ export class ProviderPanelComponent implements OnInit {
     // No limpiar los query params aquí para que provider-tour-management pueda leerlos
     // this.router.navigate([], { queryParams: null });
 
-    this.getToursProvider();
+    // this.getProviderData(); // Unused and causes duplicate API call
+    this.onLoadReviews();
+    this.loadPayoutData();
+    this.loadDashboardRecentItems();
+    this.loadReviewReasons();
   }
-  
+
+  private loadReviewReasons(): void {
+    this.reviewsService.getReviewReasons().subscribe({
+      next: (response) => {
+        if (response) {
+          this.reviewReasonsPositive = response.positive || [];
+          this.reviewReasonsNegative = response.negative || [];
+        }
+      },
+      error: (error) => console.error('Error loading review reasons:', error)
+    });
+  }
+
+  public getReasonLabel(reasonType: 'POSITIVE' | 'NEGATIVE' | string | undefined, reasonId: number | undefined): string {
+    if (!reasonType || !reasonId) return '';
+    if (reasonType === 'POSITIVE') {
+      const reason = this.reviewReasonsPositive.find(r => r.id === reasonId);
+      return reason ? this.i18nService.getValue(reason.label) : '';
+    } else if (reasonType === 'NEGATIVE') {
+      const reason = this.reviewReasonsNegative.find(r => r.id === reasonId);
+      return reason ? this.i18nService.getValue(reason.label) : '';
+    }
+    return '';
+  }
+
+  loadPayoutData(): void {
+    const observer = {
+      next: (data: PayoutOrder[]) => {
+        this.payoutOrders = data;
+        const completedPayments = data.filter(p => p.status === 'PAID');
+        this.totalPayoutAmount = completedPayments.reduce((sum, payment) => sum + payment.amountTotal, 0);
+      },
+      error: (error: any) => {
+        console.error('Error loading payout orders:', error);
+      }
+    };
+
+    if (this.authService.isAdmin()) {
+      this.payoutOrdersService.getAdminPayoutOrders().subscribe(observer);
+    } else {
+      this.payoutOrdersService.getPayoutOrders().subscribe(observer);
+    }
+  }
+
+  loadDashboardRecentItems(): void {
+    this.reservationService.getProviderReservations({ page: 0, size: 5 }).subscribe({
+      next: (response) => {
+        this.recentReservations = response.content || [];
+      },
+      error: (error) => {
+        console.error('Error loading recent reservations:', error);
+      }
+    });
+
+    this.reviewsService.getReviews({ pageNumber: 0, pageSize: 5 }).subscribe({
+      next: (response) => {
+        this.recentReviewsDashboard = response.content || [];
+      },
+      error: (error) => {
+        console.error('Error loading recent reviews:', error);
+      }
+    });
+  }
+
+  goToReservation(reservationId: number): void {
+    this.panelStateService.setReservationToOpen(reservationId);
+    if (this.authService.isAdmin()) {
+      this.router.navigate(['/admin/bookings-management']);
+    } else {
+      this.panelStateService.setView('reservas');
+    }
+  }
+
+  getPaymentCountByStatus(status: string): number {
+    return this.payoutOrders.filter(payment => payment.status === status).length;
+  }
+
+
   /**
    * Cambia la vista activa del panel
    */
-  setView(view: 'dashboard' | 'tours' | 'templates' | 'reservas' | 'reviews' | 'pagos'): void {
+  setView(view: 'dashboard' | 'tours' | 'templates' | 'reservas' | 'reviews' | 'pagos' | 'perfil'): void {
     this.mostrarTours = view === 'tours';
     this.mostrarTemplates = view === 'templates';
     this.mostrarTourManagement = view === 'reservas';
     this.mostrarReviews = view === 'reviews';
     this.mostrarPagos = view === 'pagos';
+    this.mostrarPerfil = view === 'perfil';
+
+    if (this.mostrarTours) {
+      this.getToursProvider();
+    }
+  }
+
+  getProviderData() {
+    this.requestProvidersService.consultData().subscribe({
+      next: (response) => {
+        this.providerData = response;
+      },
+      error: (error) => {
+        console.error("Error fetching provider data:", error);
+      }
+    });
   }
 
   getToursProvider() {
@@ -359,5 +480,9 @@ export class ProviderPanelComponent implements OnInit {
     }
     const sum = this.reviews.reduce((acc, review) => acc + (review.rating ?? 0), 0);
     this.averageRating = parseFloat((sum / this.reviews.length).toFixed(1));
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }
