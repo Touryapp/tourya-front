@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
     this.mostrarMaritimeReports = false;
     this.mostrarProviderPayments = false;
     this.mostrarSolicitudes = !this.mostrarSolicitudes;
-    
+
     if (this.mostrarSolicitudes) {
       this.cargarSolicitudes();
     }
@@ -340,7 +340,7 @@ export class DashboardComponent implements OnInit {
   // Función para obtener el tipo de archivo basado en la extensión
   getFileType(url: string): string {
     if (!url) return 'unknown';
-    
+
     const extension = url.split('.').pop()?.toLowerCase();
     switch (extension) {
       case 'pdf':
@@ -425,5 +425,5 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-} 
+}
 

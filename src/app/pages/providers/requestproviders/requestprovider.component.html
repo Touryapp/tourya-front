@@ -504,6 +504,7 @@
                                         <div class="row mt-3">
                                             <div class="col-12 text-center">
                                                 <button 
+                                                    *ngIf="dataRequestProvider.status === 'Incomplete Information' || dataRequestProvider.status === 'Pre-Approved'"
                                                     type="button" 
                                                     class="btn btn-success"
                                                     (click)="saveAllDocumentsToGallery()"
@@ -513,8 +514,10 @@
                                                 </button>
                                                 <div class="mt-2">
                                                     <small class="text-muted">
-                                                        {{ getDocumentStatusMessage() }}. 
-                                                        Presiona este botón para enviarlos al servidor
+                                                        {{ getDocumentStatusMessage() }}
+                                                        <ng-container *ngIf="dataRequestProvider.status === 'Incomplete Information' || dataRequestProvider.status === 'Pre-Approved'">
+                                                            . Presiona este botón para enviarlos al servidor
+                                                        </ng-container>
                                                     </small>
                                                 </div>
                                             </div>

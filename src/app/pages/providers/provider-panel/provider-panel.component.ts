@@ -13,7 +13,7 @@ import { I18nFieldService } from "../../../shared/services/i18n-field.service";
 import { AuthService } from "../../../core/services/auth.service";
 import { RequestsProvidersStatus } from "../../../shared/enums/requests-providers-status.enum";
 import { PayoutOrdersService } from "../../../shared/services/payout-orders.service";
-import { PayoutOrder } from "../../../shared/dto/payout-order.dto";
+import { PayoutOrder, PayoutOrdersResponse } from "../../../shared/dto/payout-order.dto";
 import { ReservationService } from "../../../shared/services/reservation.service";
 import { ClientReservation } from "../../../shared/models/reservation.model";
 
@@ -61,7 +61,13 @@ export class ProviderPanelComponent implements OnInit {
 
   // Payout Stats
   payoutOrders: PayoutOrder[] = [];
+  paidTotal: number = 0;
+  pendingTotal: number = 0;
+  canceledTotal: number = 0;
   totalPayoutAmount: number = 0;
+  // Date filters for payout orders
+  fromDate?: string;
+  toDate?: string;
 
   // Recent Dashboard Items
   recentReservations: ClientReservation[] = [];
@@ -188,10 +194,12 @@ export class ProviderPanelComponent implements OnInit {
 
   loadPayoutData(): void {
     const observer = {
-      next: (data: PayoutOrder[]) => {
-        this.payoutOrders = data;
-        const completedPayments = data.filter(p => p.status === 'PAID');
-        this.totalPayoutAmount = completedPayments.reduce((sum, payment) => sum + payment.amountTotal, 0);
+      next: (data: PayoutOrdersResponse) => {
+        this.payoutOrders = data.orders || [];
+        this.paidTotal = data.paidTotal || 0;
+        this.pendingTotal = data.pendingTotal || 0;
+        this.canceledTotal = data.canceledTotal || 0;
+        this.totalPayoutAmount = data.totalIncome || 0;
       },
       error: (error: any) => {
         console.error('Error loading payout orders:', error);
@@ -199,10 +207,21 @@ export class ProviderPanelComponent implements OnInit {
     };
 
     if (this.authService.isAdmin()) {
-      this.payoutOrdersService.getAdminPayoutOrders().subscribe(observer);
+      this.payoutOrdersService.getAdminPayoutOrders(undefined, this.fromDate, this.toDate).subscribe(observer);
     } else {
-      this.payoutOrdersService.getPayoutOrders().subscribe(observer);
+      this.payoutOrdersService.getPayoutOrders(undefined, this.fromDate, this.toDate).subscribe(observer);
     }
+  }
+
+  onDateRangeChange(event: {fromDate: string, toDate: string} | null): void {
+    if (event) {
+      this.fromDate = event.fromDate;
+      this.toDate = event.toDate;
+    } else {
+      this.fromDate = undefined;
+      this.toDate = undefined;
+    }
+    this.loadPayoutData();
   }
 
   loadDashboardRecentItems(): void {

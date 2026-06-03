@@ -203,9 +203,18 @@ export class TourScheduleComponent {
 
         // Sync bsRangeValue solo para el picker del formulario (NO afecta el calendario grande)
         if (startDate && endDate) {
-          this.bsRangeValue = [startDateDayJs.toDate(), dayjs(endDate).toDate()];
+          const newStart = startDateDayJs.toDate();
+          const newEnd = dayjs(endDate).toDate();
+          if (!this.bsRangeValue || !this.bsRangeValue[0] || !this.bsRangeValue[1] || 
+              this.bsRangeValue[0].getTime() !== newStart.getTime() || 
+              this.bsRangeValue[1].getTime() !== newEnd.getTime()) {
+            this.bsRangeValue = [newStart, newEnd];
+          }
         } else if (startDate) {
-          this.bsRangeValue = [startDateDayJs.toDate(), startDateDayJs.toDate()];
+          const newStart = startDateDayJs.toDate();
+          if (!this.bsRangeValue || !this.bsRangeValue[0] || this.bsRangeValue[0].getTime() !== newStart.getTime()) {
+            this.bsRangeValue = [newStart, newStart];
+          }
         } else {
           this.bsRangeValue = undefined;
         }
@@ -217,7 +226,13 @@ export class TourScheduleComponent {
     this.tourScheduleForm.get("endDate")?.valueChanges.subscribe((endDate) => {
       const startDate = this.tourScheduleForm.get("startDate")?.value;
       if (startDate && endDate) {
-        this.bsRangeValue = [dayjs(startDate).toDate(), dayjs(endDate).toDate()];
+        const newStart = dayjs(startDate).toDate();
+        const newEnd = dayjs(endDate).toDate();
+        if (!this.bsRangeValue || !this.bsRangeValue[0] || !this.bsRangeValue[1] || 
+            this.bsRangeValue[0].getTime() !== newStart.getTime() || 
+            this.bsRangeValue[1].getTime() !== newEnd.getTime()) {
+          this.bsRangeValue = [newStart, newEnd];
+        }
       }
       this.checkAllMonthSelected();
       this.checkTourScheduleByStartDateAndEndDate();

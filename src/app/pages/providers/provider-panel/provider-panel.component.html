@@ -106,7 +106,7 @@
       <div *ngIf="!mostrarTours && !mostrarTemplates && !mostrarTourManagement && !mostrarReviews && !mostrarPagos && !mostrarPerfil">
         <!-- Date Range Filter -->
         <div class="d-flex justify-content-end mb-4">
-            <app-date-range-picker/>
+            <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)"></app-date-range-picker>
         </div>
 
         <!-- Statistics Cards -->
@@ -116,8 +116,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="text-gray-6 mb-1 fs-14">Pagos Pagados</p>
-                                <h4 class="mb-0">{{ getPaymentCountByStatus('PAID') }}</h4>
+                                <p class="text-gray-6 mb-1 fs-14">Total Pagados</p>
+                                <h4 class="mb-0">${{ paidTotal | number:'1.0-0' }}</h4>
                             </div>
                             <div class="stats-icon bg-success-subtle">
                                 <i class="isax isax-tick-circle text-success"></i>
@@ -131,8 +131,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="text-gray-6 mb-1 fs-14">Pagos Pendientes</p>
-                                <h4 class="mb-0">{{ getPaymentCountByStatus('PENDING') }}</h4>
+                                <p class="text-gray-6 mb-1 fs-14">Total Pendientes</p>
+                                <h4 class="mb-0">${{ pendingTotal | number:'1.0-0' }}</h4>
                             </div>
                             <div class="stats-icon bg-warning-subtle">
                                 <i class="isax isax-clock text-warning"></i>
@@ -146,8 +146,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="text-gray-6 mb-1 fs-14">Pagos Cancelados</p>
-                                <h4 class="mb-0">{{ getPaymentCountByStatus('CANCELLED') }}</h4>
+                                <p class="text-gray-6 mb-1 fs-14">Total Cancelados</p>
+                                <h4 class="mb-0">${{ canceledTotal | number:'1.0-0' }}</h4>
                             </div>
                             <div class="stats-icon bg-danger-subtle">
                                 <i class="isax isax-close-circle text-danger"></i>

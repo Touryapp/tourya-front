@@ -912,7 +912,11 @@ export class RequestproviderComponent implements OnInit {
   // Verifica si se debe mostrar el panel de carga de archivos
   shouldShowGalleryPanel(): boolean {
     if (this.isEmbedded) return this.isExistingData;
-    return this.isExistingData && (this.dataRequestProvider.status === 'Pre-Approved' || this.dataRequestProvider.status === 'Incomplete Information');
+    return this.isExistingData && (
+      this.dataRequestProvider.status === 'Pre-Approved' || 
+      this.dataRequestProvider.status === 'Incomplete Information' ||
+      this.dataRequestProvider.status === 'Documents Sent'
+    );
   }
 
   // Abre el archivo en una nueva pestaña
