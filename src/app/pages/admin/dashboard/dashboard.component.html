@@ -3,9 +3,11 @@
   <div class="col-xl-3 col-lg-4 admin-sidebar">
     <div class="card user-sidebar mb-4 mb-lg-0 theiaStickySidebar">
       <!-- Card de perfil -->
-      <div class="card mb-4 p-3 d-flex flex-row align-items-center justify-content-between" style="border-radius: 2rem; border: 1px solid #e3e6ef;">
+      <div class="card mb-4 p-3 d-flex flex-row align-items-center justify-content-between"
+        style="border-radius: 2rem; border: 1px solid #e3e6ef;">
         <div class="d-flex align-items-center">
-          <img src="assets/img/user-01.webp" alt="Administrador" class="rounded-circle me-3" style="width:48px;height:48px;object-fit:cover;">
+          <img src="assets/img/user-01.webp" alt="Administrador" class="rounded-circle me-3"
+            style="width:48px;height:48px;object-fit:cover;">
           <div>
             <div class="fw-bold">Jeffrey Wilson</div>
             <div class="text-muted small">Since 10 May 2025</div>
@@ -19,7 +21,9 @@
       <div class="card-header user-sidebar-header text-center bg-gray-transparent d-none">
         <div class="agent-profile d-inline-flex">
           <img src="assets/img/iconAct.jpg" alt="image" class="img-fluid rounded-circle">
-          <a href="#" class="avatar avatar-sm rounded-circle btn btn-primary d-flex align-items-center justify-content-center p-0"><i class="isax isax-edit-2 fs-14"></i></a>
+          <a href="#"
+            class="avatar avatar-sm rounded-circle btn btn-primary d-flex align-items-center justify-content-center p-0"><i
+              class="isax isax-edit-2 fs-14"></i></a>
         </div>
         <h6 class="fs-16">Administrador</h6>
         <p class="fs-14 mb-2">Desde 10 May 2025</p>
@@ -28,19 +32,24 @@
         <ul>
           <li><span class="fs-14 text-gray-3 fw-medium mb-2">Main</span></li>
           <li>
-            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleDashboard()"><i class="isax isax-grid-55"></i> Dashboard</a>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleDashboard()"><i
+                class="isax isax-grid-55"></i> Dashboard</a>
           </li>
           <li>
-            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleSolicitudes()"><i class="isax isax-user"></i> Lista de Solicitudes</a>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleSolicitudes()"><i
+                class="isax isax-user"></i> Lista de Solicitudes</a>
           </li>
           <li>
-            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleTourList()"><i class="isax isax-map"></i> Gestión de Tours</a>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleTourList()"><i
+                class="isax isax-map"></i> Gestión de Tours</a>
           </li>
           <li>
-            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleMaritimeReports()"><i class="isax isax-flag"></i> Reporte Actividades Marítimas</a>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleMaritimeReports()"><i
+                class="isax isax-flag"></i> Reporte Actividades Marítimas</a>
           </li>
           <li>
-            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleProviderPayments()"><i class="isax isax-wallet-2"></i> Ordenes de pago</a>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleProviderPayments()"><i
+                class="isax isax-wallet-2"></i> Ordenes de pago</a>
           </li>
         </ul>
       </div>
@@ -57,7 +66,7 @@
             <h3>Dashboard de Administración</h3>
           </div>
         </div>
-        
+
         <div class="row">
           <div class="col-md-3">
             <div class="card">
@@ -69,7 +78,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-3">
             <div class="card">
               <div class="card-body">
@@ -80,7 +89,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-3">
             <div class="card">
               <div class="card-body">
@@ -91,7 +100,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-3">
             <div class="card">
               <div class="card-body">
@@ -137,8 +146,7 @@
                       <td>{{ req.provider.serviceType }}</td>
                       <td>{{ req.provider.phone }}</td>
                       <td>
-                        <span class="badge rounded-pill"
-                          [ngClass]="getStatusBadgeClass(req.status)">
+                        <span class="badge rounded-pill" [ngClass]="getStatusBadgeClass(req.status)">
                           {{ req.status }}
                         </span>
                       </td>
@@ -156,32 +164,33 @@
         </div>
         <!-- Sección de lista de tours (mantenemos la fila de solicitudes intacta) -->
       </div>
-        <!-- insertar lista de tours justo debajo de la fila de solicitudes -->
-        <div *ngIf="mostrarTourList" class="row mt-3">
-          <div class="col-12">
-            <app-tour-admin-list [embedMode]="true"></app-tour-admin-list>
-          </div>
+      <!-- insertar lista de tours justo debajo de la fila de solicitudes -->
+      <div *ngIf="mostrarTourList" class="row mt-3">
+        <div class="col-12">
+          <app-tour-admin-list [embedMode]="true"></app-tour-admin-list>
         </div>
+      </div>
 
-        <!-- Reporte de Actividades Marítimas -->
-        <div *ngIf="mostrarMaritimeReports" class="row mt-3">
-          <div class="col-12">
-            <app-maritime-activity-reports [embedMode]="true"></app-maritime-activity-reports>
-          </div>
+      <!-- Reporte de Actividades Marítimas -->
+      <div *ngIf="mostrarMaritimeReports" class="row mt-3">
+        <div class="col-12">
+          <app-maritime-activity-reports [embedMode]="true"></app-maritime-activity-reports>
         </div>
+      </div>
 
-        <!-- Ordenes de pago -->
-        <div *ngIf="mostrarProviderPayments" class="row mt-3">
-          <div class="col-12">
-            <app-provider-payments></app-provider-payments>
-          </div>
+      <!-- Ordenes de pago -->
+      <div *ngIf="mostrarProviderPayments" class="row mt-3">
+        <div class="col-12">
+          <app-provider-payments></app-provider-payments>
         </div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Modal de Detalles del Proveedor -->
-<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1"
+  role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -203,7 +212,7 @@
             <li><strong>Cancelled:</strong> Solicitud rechazada</li>
           </ul>
         </div>
-        
+
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
@@ -281,13 +290,15 @@
               <p class="text-danger">{{ selectedProvider.declinedReason }}</p>
             </div>
           </div>
-          <div class="col-12" *ngIf="selectedProvider.status === 'Incomplete Information' && selectedProvider.incompleteReason">
+          <div class="col-12"
+            *ngIf="selectedProvider.status === 'Incomplete Information' && selectedProvider.incompleteReason">
             <div class="mb-3">
               <label class="form-label fw-bold text-warning">Motivo de solicitud de información:</label>
               <p class="text-warning">{{ selectedProvider.incompleteReason }}</p>
             </div>
           </div>
-          <div class="col-12" *ngIf="selectedProvider.requestProviderGalleryList && selectedProvider.requestProviderGalleryList.length > 0">
+          <div class="col-12"
+            *ngIf="selectedProvider.requestProviderGalleryList && selectedProvider.requestProviderGalleryList.length > 0">
             <div class="mb-3">
               <label class="form-label fw-bold">Documentos Subidos:</label>
               <div class="row g-3">
@@ -304,7 +315,8 @@
                             <div class="d-flex align-items-center justify-content-between">
                               <div class="d-flex align-items-center">
                                 <div class="document-icon me-2">
-                                  <i [class]="getFileIcon(doc.imageUrl)" [ngClass]="{'text-primary': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
+                                  <i [class]="getFileIcon(doc.imageUrl)"
+                                    [ngClass]="{'text-primary': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
                                 </div>
                                 <div>
                                   <div class="fw-medium small">{{ doc.documentTypeName }}</div>
@@ -316,10 +328,12 @@
                                 </div>
                               </div>
                               <div class="d-flex gap-1">
-                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
+                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
                                   <i class="isax isax-gallery"></i>
                                 </button>
-                                <button class="btn btn-outline-primary btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
+                                <button class="btn btn-outline-primary btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
                                   <i class="isax isax-eye"></i>
                                 </button>
                               </div>
@@ -330,7 +344,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Segundo recuadro: Documentos adicionales -->
                 <div class="col-md-6">
                   <div class="card h-100 border-success">
@@ -344,7 +358,8 @@
                             <div class="d-flex align-items-center justify-content-between">
                               <div class="d-flex align-items-center">
                                 <div class="document-icon me-2">
-                                  <i [class]="getFileIcon(doc.imageUrl)" [ngClass]="{'text-success': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
+                                  <i [class]="getFileIcon(doc.imageUrl)"
+                                    [ngClass]="{'text-success': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
                                 </div>
                                 <div>
                                   <div class="fw-medium small">{{ doc.documentTypeName }}</div>
@@ -356,10 +371,12 @@
                                 </div>
                               </div>
                               <div class="d-flex gap-1">
-                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
+                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
                                   <i class="isax isax-gallery"></i>
                                 </button>
-                                <button class="btn btn-outline-success btn-sm" (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
+                                <button class="btn btn-outline-success btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
                                   <i class="isax isax-eye"></i>
                                 </button>
                               </div>
@@ -371,20 +388,21 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- Información adicional -->
               <div class="mt-3">
                 <div class="alert alert-info">
                   <i class="isax isax-info-circle me-2"></i>
-                  <strong>Total de documentos:</strong> {{ selectedProvider.requestProviderGalleryList.length }} 
+                  <strong>Total de documentos:</strong> {{ selectedProvider.requestProviderGalleryList.length }}
                   | <strong>Documentos con archivo:</strong> {{ getGalleryWithImageCount() }}
                 </div>
               </div>
             </div>
           </div>
-          
+
           <!-- Mensaje cuando no hay documentos -->
-          <div class="col-12" *ngIf="!selectedProvider.requestProviderGalleryList || selectedProvider.requestProviderGalleryList.length === 0">
+          <div class="col-12"
+            *ngIf="!selectedProvider.requestProviderGalleryList || selectedProvider.requestProviderGalleryList.length === 0">
             <div class="alert alert-warning">
               <i class="isax isax-warning-2 me-2"></i>
               <strong>No hay documentos subidos</strong> - El proveedor aún no ha cargado ningún documento.
@@ -394,26 +412,20 @@
       </div>
       <div class="modal-footer justify-content-center">
         <!-- Botón Pre-Approved: solo visible cuando el estado es Created -->
-        <button type="button" class="btn btn-info me-2" 
-                (click)="openPreApproveConfirmModal()"
-                [disabled]="!canPreApprove()">
+        <button type="button" class="btn btn-info me-2" (click)="openPreApproveConfirmModal()"
+          [disabled]="!canPreApprove()">
           <i class="isax isax-tick-circle me-1"></i> Pre-Aprobar
         </button>
-        
+
         <!-- Botones de acción principal: solo visibles cuando el estado es Document-Sent -->
-        <button type="button" class="btn btn-success me-2" 
-                (click)="openConfirmModal()"
-                [disabled]="!canApprove()">
+        <button type="button" class="btn btn-success me-2" (click)="openConfirmModal()" [disabled]="!canApprove()">
           <i class="isax isax-tick-circle me-1"></i> Aprobar
         </button>
-        <button type="button" class="btn btn-danger me-2" 
-                (click)="openDeclineConfirmModal()"
-                [disabled]="!canDecline()">
+        <button type="button" class="btn btn-danger me-2" (click)="openDeclineConfirmModal()"
+          [disabled]="!canDecline()">
           <i class="isax isax-close-circle me-1"></i> Rechazar
         </button>
-        <button type="button" class="btn btn-warning" 
-                (click)="openRequestInfoModal()"
-                [disabled]="!canRequestInfo()">
+        <button type="button" class="btn btn-warning" (click)="openRequestInfoModal()" [disabled]="!canRequestInfo()">
           <i class="isax isax-info-circle me-1"></i> Solicitar más información
         </button>
       </div>
@@ -425,7 +437,8 @@
 <div class="modal-backdrop fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'"></div>
 
 <!-- Modal de Solicitud de Información -->
-<div class="modal fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+<div class="modal fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'"
+  tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -435,11 +448,7 @@
       <div class="modal-body">
         <div class="mb-3">
           <label for="requestInfo" class="form-label">Mensaje para el proveedor</label>
-          <textarea 
-            class="form-control" 
-            id="requestInfo" 
-            rows="4" 
-            [(ngModel)]="requestInfoMessage"
+          <textarea class="form-control" id="requestInfo" rows="4" [(ngModel)]="requestInfoMessage"
             placeholder="Escriba aquí el mensaje para solicitar más información al proveedor...">
           </textarea>
         </div>
@@ -453,10 +462,12 @@
 </div>
 
 <!-- Modal Backdrop para Request Info -->
-<div class="modal-backdrop fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'"></div>
+<div class="modal-backdrop fade" [class.show]="showRequestInfoModal"
+  [style.display]="showRequestInfoModal ? 'block' : 'none'"></div>
 
 <!-- Modal de Confirmación -->
-<div class="modal fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+<div class="modal fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'"
+  tabindex="-1" role="dialog">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -479,10 +490,12 @@
 </div>
 
 <!-- Modal Backdrop para Confirmación -->
-<div class="modal-backdrop fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'"></div>
+<div class="modal-backdrop fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'">
+</div>
 
 <!-- Modal de Confirmación para Rechazar -->
-<div class="modal fade" [class.show]="showDeclineConfirmModal" [style.display]="showDeclineConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+<div class="modal fade" [class.show]="showDeclineConfirmModal"
+  [style.display]="showDeclineConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -497,7 +510,8 @@
         </div>
         <div class="mb-3">
           <label for="declineReason" class="form-label">Motivo del rechazo</label>
-          <textarea id="declineReason" class="form-control" rows="3" [(ngModel)]="declinedReason" placeholder="Explica el motivo del rechazo..."></textarea>
+          <textarea id="declineReason" class="form-control" rows="3" [(ngModel)]="declinedReason"
+            placeholder="Explica el motivo del rechazo..."></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -509,10 +523,12 @@
 </div>
 
 <!-- Modal Backdrop para Confirmación de Rechazo -->
-<div class="modal-backdrop fade" [class.show]="showDeclineConfirmModal" [style.display]="showDeclineConfirmModal ? 'block' : 'none'"></div>
+<div class="modal-backdrop fade" [class.show]="showDeclineConfirmModal"
+  [style.display]="showDeclineConfirmModal ? 'block' : 'none'"></div>
 
 <!-- Modal de Confirmación para Pre-Aprobar -->
-<div class="modal fade" [class.show]="showPreApproveConfirmModal" [style.display]="showPreApproveConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+<div class="modal fade" [class.show]="showPreApproveConfirmModal"
+  [style.display]="showPreApproveConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -535,4 +551,5 @@
 </div>
 
 <!-- Modal Backdrop para Confirmación de Pre-Aprobación -->
-<div class="modal-backdrop fade" [class.show]="showPreApproveConfirmModal" [style.display]="showPreApproveConfirmModal ? 'block' : 'none'"></div> 
+<div class="modal-backdrop fade" [class.show]="showPreApproveConfirmModal"
+  [style.display]="showPreApproveConfirmModal ? 'block' : 'none'"></div>

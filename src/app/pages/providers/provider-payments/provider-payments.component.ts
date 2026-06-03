@@ -3,7 +3,7 @@ import { routes } from '../../../shared/routes/routes';
 import { Sort } from '@angular/material/sort';
 import { AuthService } from '../../../core/services/auth.service';
 import { PayoutOrdersService } from '../../../shared/services/payout-orders.service';
-import { PayoutOrder } from '../../../shared/dto/payout-order.dto';
+import { PayoutOrder, PayoutOrdersResponse } from '../../../shared/dto/payout-order.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
 
@@ -21,9 +21,17 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   public currentPage = 1;
   public totalPayments = 0;
   public totalAmount = 0;
+  public paidTotal = 0;
+  public pendingTotal = 0;
+  public canceledTotal = 0;
+  public totalIncome = 0;
   public searchDataValue = '';
   public selectedStatus = '';
   public loading = false;
+  
+  // Date Filters
+  public fromDate?: string;
+  public toDate?: string;
   
   // Datos de la tabla
   public tableData: PayoutOrder[] = [];
@@ -53,11 +61,15 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   public loadData(): void {
     this.loading = true;
     const observer = {
-      next: (data: PayoutOrder[]) => {
-        this.tableData = data;
-        this.tableDataCopy = [...data];
-        this.totalPayments = data.length;
-        this.calculateTotals();
+      next: (data: PayoutOrdersResponse) => {
+        this.tableData = data.orders || [];
+        this.tableDataCopy = [...this.tableData];
+        this.totalPayments = this.tableData.length;
+        this.paidTotal = data.paidTotal || 0;
+        this.pendingTotal = data.pendingTotal || 0;
+        this.canceledTotal = data.canceledTotal || 0;
+        this.totalIncome = data.totalIncome || 0;
+        this.totalAmount = this.paidTotal;
         this.loading = false;
         
         const paymentToOpenId = this.panelStateService.getPaymentToOpen();
@@ -76,9 +88,9 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
     };
 
     if (this.authService.isAdmin()) {
-      this.payoutOrdersService.getAdminPayoutOrders().subscribe(observer);
+      this.payoutOrdersService.getAdminPayoutOrders(this.selectedStatus, this.fromDate, this.toDate).subscribe(observer);
     } else {
-      this.payoutOrdersService.getPayoutOrders().subscribe(observer);
+      this.payoutOrdersService.getPayoutOrders(this.selectedStatus, this.fromDate, this.toDate).subscribe(observer);
     }
   }
 
@@ -109,12 +121,22 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
    * Filtra por estado
    */
   public filterByStatus(status: string): void {
-    this.selectedStatus = status;
-    if (status === '' || status === 'All') {
-      this.tableData = [...this.tableDataCopy];
+    this.selectedStatus = status === 'All' ? '' : status;
+    this.loadData();
+  }
+
+  /**
+   * Filtra por fecha
+   */
+  public onDateRangeChange(event: {fromDate: string, toDate: string} | null): void {
+    if (event) {
+      this.fromDate = event.fromDate;
+      this.toDate = event.toDate;
     } else {
-      this.tableData = this.tableDataCopy.filter(payment => payment.status === status);
+      this.fromDate = undefined;
+      this.toDate = undefined;
     }
+    this.loadData();
   }
 
   /**
@@ -123,7 +145,9 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   public clearFilters(): void {
     this.selectedStatus = '';
     this.searchDataValue = '';
-    this.tableData = [...this.tableDataCopy];
+    this.fromDate = undefined;
+    this.toDate = undefined;
+    this.loadData();
   }
 
   /**

@@ -70,23 +70,23 @@
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Pagada')">Pagada</a>
+                                   (click)="filterByStatus('PAID')">Pagada</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Pendiente')">Pendiente</a>
+                                   (click)="filterByStatus('PENDING')">Pendiente</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);" 
                                    class="dropdown-item rounded-1"
-                                   (click)="filterByStatus('Cancelada')">Cancelada</a>
+                                   (click)="filterByStatus('CANCELLED')">Cancelada</a>
                             </li>
                         </ul>
                     </div>
 
                     <!-- Date Range Picker -->
-                    <app-date-range-picker/>
+                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)"></app-date-range-picker>
                 </div>
             </div>
 
@@ -188,8 +188,8 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-gray-6 mb-1 fs-14">Pagos Pagados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('PAID') }}</h4>
+                            <p class="text-gray-6 mb-1 fs-14">Total Pagados</p>
+                            <h4 class="mb-0">${{ paidTotal | number:'1.0-0' }}</h4>
                         </div>
                         <div class="stats-icon bg-success-subtle">
                             <i class="isax isax-tick-circle text-success"></i>
@@ -203,8 +203,8 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-gray-6 mb-1 fs-14">Pagos Pendientes</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('PENDING') }}</h4>
+                            <p class="text-gray-6 mb-1 fs-14">Total Pendientes</p>
+                            <h4 class="mb-0">${{ pendingTotal | number:'1.0-0' }}</h4>
                         </div>
                         <div class="stats-icon bg-warning-subtle">
                             <i class="isax isax-clock text-warning"></i>
@@ -218,8 +218,8 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-gray-6 mb-1 fs-14">Pagos Cancelados</p>
-                            <h4 class="mb-0">{{ getPaymentCountByStatus('CANCELLED') }}</h4>
+                            <p class="text-gray-6 mb-1 fs-14">Total Cancelados</p>
+                            <h4 class="mb-0">${{ canceledTotal | number:'1.0-0' }}</h4>
                         </div>
                         <div class="stats-icon bg-danger-subtle">
                             <i class="isax isax-close-circle text-danger"></i>
@@ -234,7 +234,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <p class="text-gray-6 mb-1 fs-14">Total Ingresos</p>
-                            <h4 class="mb-0 text-success">${{ totalAmount | number:'1.0-0' }}</h4>
+                            <h4 class="mb-0 text-success">${{ totalIncome | number:'1.0-0' }}</h4>
                         </div>
                         <div class="stats-icon bg-primary-subtle">
                             <i class="isax isax-dollar-square text-primary"></i>

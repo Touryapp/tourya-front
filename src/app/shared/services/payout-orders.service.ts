@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { PayoutOrder } from '../dto/payout-order.dto';
+import { PayoutOrder, PayoutOrdersResponse } from '../dto/payout-order.dto';
 import { AuthService } from '../../core/services/auth.service';
 
 @Injectable({
@@ -23,8 +23,13 @@ export class PayoutOrdersService {
   }
 
   // Provider methods
-  getPayoutOrders(): Observable<PayoutOrder[]> {
-    return this.http.get<PayoutOrder[]>(this.apiUrl, { headers: this.getHeaders() });
+  getPayoutOrders(status?: string, fromDate?: string, toDate?: string): Observable<PayoutOrdersResponse> {
+    let params = new HttpParams();
+    if (status && status !== 'All') params = params.set('status', status);
+    if (fromDate) params = params.set('fromDate', fromDate);
+    if (toDate) params = params.set('toDate', toDate);
+
+    return this.http.get<PayoutOrdersResponse>(this.apiUrl, { headers: this.getHeaders(), params });
   }
 
   getPayoutOrderDetails(orderId: number): Observable<PayoutOrder> {
@@ -32,8 +37,13 @@ export class PayoutOrdersService {
   }
 
   // Admin/Backoffice methods
-  getAdminPayoutOrders(): Observable<PayoutOrder[]> {
-    return this.http.get<PayoutOrder[]>(`${this.apiUrl}/admin`, { headers: this.getHeaders() });
+  getAdminPayoutOrders(status?: string, fromDate?: string, toDate?: string): Observable<PayoutOrdersResponse> {
+    let params = new HttpParams();
+    if (status && status !== 'All') params = params.set('status', status);
+    if (fromDate) params = params.set('fromDate', fromDate);
+    if (toDate) params = params.set('toDate', toDate);
+
+    return this.http.get<PayoutOrdersResponse>(`${this.apiUrl}/admin`, { headers: this.getHeaders(), params });
   }
 
   getAdminPayoutOrderDetails(orderId: number): Observable<PayoutOrder> {

@@ -8,8 +8,7 @@
                 <div>
                     <h5 class="mb-1">{{'provider-reviews.title' | translate}}</h5>
                     <p class="fs-14 text-gray-6 mb-0">
-                        {{'provider-reviews.stats.totalReviews' | translate}}: <span class="fw-semibold text-dark">{{ totalReviews }}</span> | 
-                        {{'provider-reviews.stats.averageRating' | translate}}: <span class="badge badge-warning badge-xs text-dark ms-1">{{ averageRating }}</span>
+                        {{'provider-reviews.stats.totalReviews' | translate}}: <span class="fw-semibold text-dark">{{ totalReviews }}</span>
                     </p>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
@@ -53,7 +52,7 @@
             <div class="card-body">
                 <div class="row g-3">
                     <!-- Filtro de Calificación (común para todos los roles) -->
-                    <div [class]="isCliente ? 'col-md-6' : (isProveedor ? 'col-md-4' : 'col-md-3')">
+                    <div [class]="isCliente || isProveedor ? 'col-md-6' : 'col-md-4'">
                         <label class="form-label fw-medium">{{'provider-reviews.filters.rating' | translate}}:</label>
                         <select 
                             class="form-select"
@@ -69,7 +68,7 @@
                     </div>
 
                     <!-- Filtro de Tour (común para Cliente y Proveedor, autocomplete para Backoffice) -->
-                    <div [class]="isCliente ? 'col-md-6' : (isProveedor ? 'col-md-4' : 'col-md-3')">
+                    <div [class]="isCliente || isProveedor ? 'col-md-6' : 'col-md-4'">
                         <label class="form-label fw-medium">{{'provider-reviews.filters.tour' | translate}}:</label>
                         
                         <!-- Select simple para Cliente y Proveedor -->
@@ -114,7 +113,7 @@
 
                     <!-- Filtro de Proveedor (solo Backoffice) -->
                     @if (isBackoffice) {
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label fw-medium">{{'provider-reviews.filters.provider' | translate}}:</label>
                             <div class="position-relative">
                                 <input 
@@ -141,34 +140,7 @@
                         </div>
                     }
 
-                    <!-- Filtro de Usuario (Proveedor y Backoffice) -->
-                    @if (isProveedor || isBackoffice) {
-                        <div [class]="isProveedor ? 'col-md-4' : 'col-md-3'">
-                            <label class="form-label fw-medium">{{'provider-reviews.filters.user' | translate}}:</label>
-                            <div class="position-relative">
-                                <input 
-                                    type="text"
-                                    class="form-control"
-                                    [(ngModel)]="userSearchTerm"
-                                    (ngModelChange)="filterUsers()"
-                                    (focus)="userDropdownOpen = true"
-                                    [placeholder]="'provider-reviews.filters.allUsers' | translate"
-                                    autocomplete="off" />
-                                @if (userDropdownOpen && filteredUsers.length > 0) {
-                                    <div class="autocomplete-dropdown">
-                                        <div class="autocomplete-item" (click)="resetUserFilter()">
-                                            {{'provider-reviews.filters.allUsers' | translate}}
-                                        </div>
-                                        @for (user of filteredUsers; track user.id) {
-                                            <div class="autocomplete-item" (click)="selectUser(user)">
-                                                {{ user.name }}
-                                            </div>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    }
+
                 </div>
             </div>
         </div>

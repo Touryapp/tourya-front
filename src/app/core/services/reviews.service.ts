@@ -44,7 +44,7 @@ export class ReviewsService {
   getReviews(filters?: {
     rating?: number;
     tourId?: string;
-    userId?: string;
+    customerName?: string;
     pageNumber?: number;
     pageSize?: number;
   }): Observable<ReviewsApiResponse> {
@@ -65,8 +65,8 @@ export class ReviewsService {
     if (filters?.tourId && filters.tourId !== 'all') {
       params.push(`tourId=${filters.tourId}`);
     }
-    if (filters?.userId && filters.userId !== 'all') {
-      params.push(`userId=${filters.userId}`);
+    if (filters?.customerName && filters.customerName !== 'all') {
+      params.push(`customerName=${encodeURIComponent(filters.customerName)}`);
     }
     
     const queryString = params.join('&');

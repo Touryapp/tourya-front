@@ -205,25 +205,32 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
    * Inicializa los datos para los filtros basándose en las reviews cargadas
    */
   private initializeFilterData(): void {
-    // Extraer tours únicos
-    this.availableTours = this.extractUniqueItems(
-      this.reviews,
-      'tourId',
-      'tourName'
-    );
-    this.filteredTours = [...this.availableTours];
+    // Acumular tours únicos
+    const newTours = this.extractUniqueItems(this.reviews, 'tourId', 'tourName');
+    newTours.forEach(newTour => {
+      if (!this.availableTours.find(t => t.id === newTour.id)) {
+        this.availableTours.push(newTour);
+      }
+    });
+    // Si hay una búsqueda activa, no la sobreescribimos completamente, pero para simplificar, 
+    // mantenemos la lista completa si el campo de búsqueda está vacío o en 'Todos'
+    if (this.tourSearchTerm === 'Todos' || this.tourSearchTerm === '') {
+      this.filteredTours = [...this.availableTours];
+    }
     
-    // Extraer usuarios únicos (clientes que han hecho reviews)
-    this.availableUsers = this.extractUniqueItems(
-      this.reviews,
-      'customerName',
-      'customerName'
-    );
-    this.filteredUsers = [...this.availableUsers];
+    // Acumular usuarios únicos
+    const newUsers = this.extractUniqueItems(this.reviews, 'customerName', 'customerName');
+    newUsers.forEach(newUser => {
+      if (!this.availableUsers.find(u => u.id === newUser.id)) {
+        this.availableUsers.push(newUser);
+      }
+    });
+    if (this.userSearchTerm === 'Todos' || this.userSearchTerm === '') {
+      this.filteredUsers = [...this.availableUsers];
+    }
     
-    // Para backoffice, extraer proveedores únicos (si está disponible en el modelo)
-    // Por ahora usaremos datos mock o se puede extender el modelo
-    if (this.isBackoffice) {
+    // Para backoffice, extraer proveedores únicos (mock inicial)
+    if (this.isBackoffice && this.availableProviders.length === 0) {
       this.availableProviders = [
         { id: 'provider1', name: 'Proveedor 1' },
         { id: 'provider2', name: 'Proveedor 2' },
@@ -402,7 +409,7 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     }
     
     if (this.selectedUserFilter !== 'all') {
-      filters.userId = this.selectedUserFilter;
+      filters.customerName = this.selectedUserFilter;
     }
     
     if (this.selectedProviderFilter !== 'all') {

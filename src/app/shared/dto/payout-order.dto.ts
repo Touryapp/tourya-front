@@ -20,6 +20,11 @@ export interface PayoutOrderReservation {
   duration?: string;
   travellers?: string;
   bookingDate?: string;
+  scheduleDate?: string;
+  slotTimeStart?: string;
+  slotTimeEnd?: string;
+  totalTourists?: number;
+  reservationCreatedDate?: string;
   maxCancellationDate?: string;
   maxReschedulingDate?: string;
   allowsRainRefund?: boolean;
@@ -36,4 +41,12 @@ export interface PayoutOrder {
   proofUrl?: string;
   attachments?: PayoutOrderAttachment[];
   reservations?: PayoutOrderReservation[];
+}
+
+export interface PayoutOrdersResponse {
+  orders: PayoutOrder[];
+  paidTotal: number;
+  pendingTotal: number;
+  canceledTotal: number;
+  totalIncome: number;
 }
