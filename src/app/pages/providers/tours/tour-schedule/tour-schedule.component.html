@@ -591,7 +591,7 @@
                         <td *ngIf="isBackoffice" class="text-center align-middle">
                             <div class="d-flex align-items-center justify-content-center">
                                 <input type="number" class="form-control form-control-sm me-2" style="width: 70px;" min="0" max="100" [(ngModel)]="slot.slotPorcentajeTourya">
-                                <button class="btn btn-sm btn-primary" (click)="saveTouryaPercentage(slot)" title="Guardar porcentaje">
+                                <button class="btn btn-sm btn-primary" (click)="saveTouryaPercentage(slot, getScheduleIdByDate(event, calendarSelectedDate!))" title="Guardar porcentaje">
                                     <i class="fa fa-save"></i>
                                 </button>
                             </div>
