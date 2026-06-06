@@ -802,10 +802,10 @@ export class TourScheduleComponent {
     });
   }
 
-  saveTouryaPercentage(slot: any) {
-    if (slot && slot.id !== undefined && slot.slotPorcentajeTourya !== undefined) {
+  saveTouryaPercentage(slot: any, scheduleId: number | null = null) {
+    if (slot && slot.id !== undefined && slot.slotPorcentajeTourya !== undefined && scheduleId) {
       this.loading = true;
-      this.tourService.updateSlotPercentage(this.tourId, slot.id, slot.slotPorcentajeTourya).subscribe({
+      this.tourService.updateSlotPercentage(this.tourId, slot.id, scheduleId, slot.slotPorcentajeTourya).subscribe({
         next: () => {
           this.loading = false;
           this.openSnackBar("Porcentaje actualizado correctamente");
@@ -818,7 +818,7 @@ export class TourScheduleComponent {
         }
       });
     } else {
-      this.openSnackBar("El slot no tiene ID o porcentaje válido");
+      this.openSnackBar("El slot no tiene ID, porcentaje válido o no se pudo obtener el schedule");
     }
   }
 
@@ -1301,6 +1301,20 @@ export class TourScheduleComponent {
       }
     }
     return [];
+  }
+
+  getScheduleIdByDate(event: any, date: Date): number | null {
+    if (event.meta && event.meta.schedules) {
+      const d = new Date(date);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const foundSchedule = event.meta.schedules.find(
+        (s: any) => s.scheduleDate === dateStr
+      );
+      if (foundSchedule) {
+        return foundSchedule.id;
+      }
+    }
+    return null;
   }
 
   getDayMetrics(event: any, date: Date): { capacity: number, availability: number, bookings: number } | null {
