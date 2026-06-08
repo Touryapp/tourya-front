@@ -301,6 +301,7 @@
       "edit": "Editar Passeios"
     },
     "status": {
+      "noStatus": "Sem status",
       "label": "Status do Passeio:",
       "created": "Criado",
       "submitted": "Enviado",
@@ -333,6 +334,22 @@
           "required": "O nome é obrigatório",
           "minlength": "O nome deve ter pelo menos 3 caracteres",
           "maxlength": "O nome não pode ter mais de 50 caracteres"
+        }
+      },
+      "category": {
+        "label": "Categoria",
+        "placeholder": "Selecionar",
+        "options": {
+          "aquatic": "Aquático",
+          "land": "Terrestre",
+          "adventure": "Aventura",
+          "night": "Noturno",
+          "experiences": "Experiências",
+          "cultural": "Cultural",
+          "transportRental": "Aluguel de Transporte"
+        },
+        "errors": {
+          "required": "A categoria é obrigatória"
         }
       },
       "subcategory": {
@@ -391,6 +408,15 @@
         "label": "Idade Mínima",
         "errors": {
           "required": "A idade mínima é obrigatória"
+        }
+      },
+      "description": {
+        "label": "Descrição",
+        "placeholder": "Insira a descrição aqui...",
+        "errors": {
+          "required": "Descrição é obrigatória",
+          "minlength": "A descrição deve ter pelo menos 3 caracteres",
+          "maxlength": "A descrição não pode exceder 5000 caracteres"
         }
       },
       "typeOfAddress": {

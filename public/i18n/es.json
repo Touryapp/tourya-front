@@ -303,6 +303,7 @@
       "edit": "Editar Tours"
     },
     "status": {
+      "noStatus": "Sin estado",
       "label": "Estado del Tour:",
       "created": "Creado",
       "submitted": "Enviado",
@@ -335,6 +336,22 @@
           "required": "El nombre es requerido",
           "minlength": "El nombre debe tener al menos 3 caracteres",
           "maxlength": "El nombre no puede tener más de 50 caracteres"
+        }
+      },
+      "category": {
+        "label": "Categoría",
+        "placeholder": "Seleccionar",
+        "options": {
+          "aquatic": "Acuático",
+          "land": "Terrestre",
+          "adventure": "Aventura",
+          "night": "Nocturno",
+          "experiences": "Experiencias",
+          "cultural": "Cultural",
+          "transportRental": "Alquiler de Transporte"
+        },
+        "errors": {
+          "required": "La categoría es requerida"
         }
       },
       "subcategory": {
@@ -393,6 +410,15 @@
         "label": "Edad Mínima",
         "errors": {
           "required": "La edad mínima es requerida"
+        }
+      },
+      "description": {
+        "label": "Descripción",
+        "placeholder": "Ingrese la descripción aquí...",
+        "errors": {
+          "required": "La descripción es requerida",
+          "minlength": "La descripción debe tener al menos 3 caracteres",
+          "maxlength": "La descripción no puede tener más de 5000 caracteres"
         }
       },
       "typeOfAddress": {
