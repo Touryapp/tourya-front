@@ -10,6 +10,10 @@ import { routes } from '../../shared/routes/routes';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Subject, takeUntil } from 'rxjs';
+import { CountryService } from '../../shared/services/country.service';
+import { DepartmentService } from '../../shared/services/department.service';
+import { CityService } from '../../shared/services/city.service';
+import { SearchToursService } from '../clients/list-tours/search-tours.service';
 
 @Component({
   selector: 'app-maritime-activity-reports',
@@ -50,6 +54,12 @@ export class MaritimeActivityReportsComponent implements OnInit {
   selectedReportId: number | null = null;
   showFormModal = false;
 
+  countries: any[] = [];
+  departments: any[] = [];
+  cities: any[] = [];
+  categories: any[] = [];
+  subCategories: any[] = [];
+
   // Enums for UI
   maritimeFlags = Object.values(MaritimeFlag);
 
@@ -57,7 +67,11 @@ export class MaritimeActivityReportsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private reportsService: MaritimeActivityReportService
+    private reportsService: MaritimeActivityReportService,
+    private countryService: CountryService,
+    private departmentService: DepartmentService,
+    private cityService: CityService,
+    private searchToursService: SearchToursService
   ) {
     this.filterForm = this.fb.group({
       date: [''],
@@ -67,7 +81,10 @@ export class MaritimeActivityReportsComponent implements OnInit {
 
     this.reportForm = this.fb.group({
       country: ['', Validators.required],
+      department: [''],
       city: ['', Validators.required],
+      category: [''],
+      subCategory: [''],
       activity: ['', Validators.required],
       flag: [MaritimeFlag.GREEN, Validators.required],
       reportDate: ['', Validators.required]
@@ -76,6 +93,72 @@ export class MaritimeActivityReportsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadReports();
+    this.loadCountries();
+    this.loadCategories();
+  }
+
+  loadCountries(): void {
+    this.countryService.getCountries().subscribe({
+      next: (res) => this.countries = res,
+      error: (err) => console.error('Error loading countries', err)
+    });
+  }
+
+  loadCategories(): void {
+    this.searchToursService.categoriesPublic().subscribe({
+      next: (res: any[]) => this.categories = res,
+      error: (err) => console.error('Error loading categories', err)
+    });
+  }
+
+  onCountryChange(event: any): void {
+    const selectedName = event.target ? event.target.value : event;
+    const selectedCountry = this.countries.find(c => c.name === selectedName);
+    
+    if (selectedCountry) {
+      this.departmentService.getDepartmentsByCountryId(selectedCountry.id).subscribe({
+        next: (res) => {
+          this.departments = res;
+          this.cities = [];
+          this.reportForm.patchValue({ department: '', city: '' });
+        },
+        error: (err) => console.error(err)
+      });
+    } else {
+      this.departments = [];
+      this.cities = [];
+      this.reportForm.patchValue({ department: '', city: '' });
+    }
+  }
+
+  onDepartmentChange(event: any): void {
+    const selectedName = event.target ? event.target.value : event;
+    const selectedDept = this.departments.find(d => d.name === selectedName);
+    
+    if (selectedDept) {
+      this.cityService.getCitiesByDepartmentId(selectedDept.id).subscribe({
+        next: (res) => {
+          this.cities = res;
+          this.reportForm.patchValue({ city: '' });
+        },
+        error: (err) => console.error(err)
+      });
+    } else {
+      this.cities = [];
+      this.reportForm.patchValue({ city: '' });
+    }
+  }
+
+  onCategoryChange(event: any): void {
+    const selectedName = event.target ? event.target.value : event;
+    const selectedCategory = this.categories.find(c => c.name === selectedName);
+    
+    if (selectedCategory && selectedCategory.subCategories) {
+      this.subCategories = selectedCategory.subCategories;
+    } else {
+      this.subCategories = [];
+    }
+    this.reportForm.patchValue({ subCategory: '' });
   }
 
   loadReports(): void {
@@ -136,11 +219,40 @@ export class MaritimeActivityReportsComponent implements OnInit {
     this.selectedReportId = report.id!;
     this.reportForm.patchValue({
       country: report.country,
+      department: report.department || '',
       city: report.city,
+      category: report.category || '',
+      subCategory: report.subCategory || '',
       activity: report.activity,
       flag: report.flag,
       reportDate: report.reportDate
     });
+
+    // Load dependent dropdowns if they have values
+    if (report.country) {
+      const selectedCountry = this.countries.find(c => c.name === report.country);
+      if (selectedCountry) {
+        this.departmentService.getDepartmentsByCountryId(selectedCountry.id).subscribe(res => {
+          this.departments = res;
+          if (report.department) {
+            const selectedDept = this.departments.find(d => d.name === report.department);
+            if (selectedDept) {
+              this.cityService.getCitiesByDepartmentId(selectedDept.id).subscribe(resCity => {
+                this.cities = resCity;
+              });
+            }
+          }
+        });
+      }
+    }
+
+    if (report.category) {
+      const selectedCategory = this.categories.find(c => c.name === report.category);
+      if (selectedCategory && selectedCategory.subCategories) {
+        this.subCategories = selectedCategory.subCategories;
+      }
+    }
+
     this.showFormModal = true;
   }
 

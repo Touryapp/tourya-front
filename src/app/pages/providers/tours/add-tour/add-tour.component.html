@@ -1,29 +1,21 @@
-<!-- Breadcrumb -->
-<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">{{tourId ? ('tour-form.title.edit' | translate) : ('tour-form.title.add' | translate) }}</h2>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
-                        </li>
-                        <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'">{{ 'tour-form.breadcrumb.providersPanel' | translate }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            {{tourId ? ('tour-form.breadcrumb.editTours' | translate) : ('tour-form.breadcrumb.addTours' | translate) }}
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Breadcrumb -->
-
 <!-- Page Wrapper -->
 <div class="content">
     <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="breadcrumb-title mb-2 text-dark">{{tourId ? ('tour-form.title.edit' | translate) : ('tour-form.title.add' | translate) }}</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-0">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl" class="text-dark"><i class="isax isax-home5"></i></a>
+                    </li>
+                    <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'" class="text-dark">{{ 'tour-form.breadcrumb.providersPanel' | translate }}</a>
+                    </li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page">
+                        {{tourId ? ('tour-form.breadcrumb.editTours' | translate) : ('tour-form.breadcrumb.addTours' | translate) }}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
         <form [formGroup]="tourForm" (ngSubmit)="onSubmit()">
             <fieldset [disabled]="!canEdit">
                 <div class="row">
@@ -65,21 +57,21 @@
                                     class="btn btn-primary" 
                                     *ngIf="canSubmitForReview"
                                     (click)="openSubmitConfirmModal()">
-                                    <i class="isax isax-send me-2"></i>{{ 'tour-form.status.actions.submitReview' | translate }}
+                                    <i class="isax isax-send me-2"></i>{{ 'tour-form.status.submitButton' | translate }}
                                 </button>
                         </div>
                         
                         <!-- Alerta si no puede editar -->
                         <div class="alert alert-warning mt-3 mb-0" *ngIf="!canEdit">
                             <i class="isax isax-info-circle me-2"></i>
-                            <strong>{{ 'tour-form.status.messages.inReview' | translate }}</strong>
-                            {{ 'tour-form.status.messages.waitStatus' | translate }}
+                            <strong>{{ 'tour-form.status.cannotEditWarning' | translate }}</strong>
+                            {{ 'tour-form.status.cannotEditMessage' | translate }}
                         </div>
                         
                         <!-- Alerta si auto-enviará a revisión -->
                         <div class="alert alert-info mt-3 mb-0" *ngIf="shouldAutoSubmit">
                             <i class="isax isax-info-circle me-2"></i>
-                            <strong>{{ 'shared.note' | translate }}:</strong> {{ 'tour-form.status.messages.autoSubmit' | translate }}
+                            <strong>{{ 'tour-form.status.autoSubmitNote' | translate }}</strong> {{ 'tour-form.status.autoSubmitMessage' | translate }}
                         </div>
                     </div>
                 </div>
@@ -243,6 +235,7 @@
                         </div>
                         <div class="card-body text-editor">
                             <ngx-editor [editor]="editor" formControlName="description"
+                                placeholder="{{ 'tour-form.fields.description.placeholder' | translate }}"
                                 (focusOut)="onDescriptionBlur($event)">
                                 <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
                                 </ngx-editor-menu>
@@ -375,7 +368,7 @@
                                                     class="text-danger">
                                                     <div
                                                         *ngIf="location.get('location')?.errors?.['required'] || location.get('latitude')?.errors?.['required'] || location.get('longitude')?.errors?.['required']">
-                                                        Location is required
+                                                        {{ 'tour-form.fields.location.errors.required' | translate }}
                                                     </div>
 
                                                 </div>
@@ -710,7 +703,7 @@
 
                                                     <div
                                                         *ngIf="cancellationPolicy.get('cancellationPolicyType')?.errors?.['required']">
-                                                        Cancellation policy type is required
+                                                        {{ 'tour-form.fields.cancellationPolicyType.errors.required' | translate }}
                                                     </div>
                                                 </div>
                                             </div>

@@ -302,6 +302,7 @@
       "edit": "Edit Tours"
     },
     "status": {
+      "noStatus": "No Status",
       "label": "Tour Status:",
       "created": "Created",
       "submitted": "Submitted",
@@ -408,6 +409,15 @@
         "label": "Minimum Age",
         "errors": {
           "required": "Minimum age is required"
+        }
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Enter description here...",
+        "errors": {
+          "required": "Description is required",
+          "minlength": "Description must be at least 3 characters",
+          "maxlength": "Description cannot exceed 5000 characters"
         }
       },
       "typeOfAddress": {

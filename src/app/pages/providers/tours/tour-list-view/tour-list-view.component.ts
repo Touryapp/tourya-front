@@ -1,10 +1,13 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { routes } from "../../../../shared/routes/routes";
 import { OwlOptions } from "ngx-owl-carousel-o";
 import { Tour } from "../../../../shared/dto/tour-response.dto";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
 import { OnInit } from "@angular/core";
+import { TourService } from "../tour.service";
+import { AuthService } from "../../../../core/services/auth.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-tour-list-view-provider",
@@ -29,6 +32,13 @@ export class TourListViewComponent implements OnInit {
   @Output() goToNextPage = new EventEmitter<void>();
 
   private subcategoriesMap = new Map<string, string>();
+
+  private tourService = inject(TourService);
+  private authService = inject(AuthService);
+
+  get isProvider(): boolean {
+    return this.authService.isProvider();
+  }
 
   constructor(
     public i18nService: I18nFieldService,
@@ -219,5 +229,34 @@ export class TourListViewComponent implements OnInit {
 
   profilePicture(tour: Tour) {
     return tour?.profilePicture?.imageUrl || "assets/img/tours/tours-07.jpg";
+  }
+
+  submitTour(tourId: number | undefined): void {
+    if (!tourId) return;
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Una vez enviado, el tour pasará a revisión.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, enviar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tourService.submitTourById(tourId).subscribe({
+          next: () => {
+            Swal.fire('¡Enviado!', 'El tour ha sido enviado para revisión.', 'success');
+            const tour = this.tours.find(t => t.id === tourId);
+            if (tour) {
+              tour.status = 'submitted';
+            }
+          },
+          error: (err) => {
+            console.error('Error enviando tour:', err);
+            Swal.fire('Error', 'Hubo un error al enviar el tour.', 'error');
+          }
+        });
+      }
+    });
   }
 }

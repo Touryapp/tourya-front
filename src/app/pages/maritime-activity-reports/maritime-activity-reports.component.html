@@ -190,35 +190,63 @@
         <div class="modal-body p-4">
           <form [formGroup]="reportForm" (ngSubmit)="saveReport()" id="reportForm">
             <div class="row g-3">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="mb-3">
-                  <label class="form-label fw-bold">País <span class="text-danger">*</span></label>
-                  <input type="text" formControlName="country" class="form-control" placeholder="Ej. Colombia">
+                  <label class="form-label">País <span class="text-danger">*</span></label>
+                  <mat-select class="custom-mat-select select" placeholder="Seleccione País" formControlName="country" (selectionChange)="onCountryChange($event.value)">
+                    <mat-option *ngFor="let c of countries" [value]="c.name">{{ c.name }}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Departamento</label>
+                  <mat-select class="custom-mat-select select" placeholder="Seleccione Departamento" formControlName="department" (selectionChange)="onDepartmentChange($event.value)">
+                    <mat-option *ngFor="let d of departments" [value]="d.name">{{ d.name }}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label">Ciudad <span class="text-danger">*</span></label>
+                  <mat-select class="custom-mat-select select" placeholder="Seleccione Ciudad" formControlName="city">
+                    <mat-option *ngFor="let c of cities" [value]="c.name">{{ c.name }}</mat-option>
+                  </mat-select>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Ciudad <span class="text-danger">*</span></label>
-                  <input type="text" formControlName="city" class="form-control" placeholder="Ej. Cartagena">
+                  <label class="form-label">Categoría</label>
+                  <mat-select class="custom-mat-select select" placeholder="Seleccione Categoría" formControlName="category" (selectionChange)="onCategoryChange($event.value)">
+                    <mat-option *ngFor="let cat of categories" [value]="cat.name">{{ cat.name }}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Subcategoría</label>
+                  <mat-select class="custom-mat-select select" placeholder="Seleccione Subcategoría" formControlName="subCategory">
+                    <mat-option *ngFor="let sub of subCategories" [value]="sub.name">{{ sub.name }}</mat-option>
+                  </mat-select>
                 </div>
               </div>
               <div class="col-12">
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Tipo de Actividad <span class="text-danger">*</span></label>
+                  <label class="form-label">Tipo de Actividad <span class="text-danger">*</span></label>
                   <input type="text" formControlName="activity" class="form-control" placeholder="Ej. Buceo, Pesca Artesanal">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Estado (Bandera) <span class="text-danger">*</span></label>
-                  <select formControlName="flag" class="form-select">
-                    <option *ngFor="let flag of maritimeFlags" [value]="flag">{{ flag }}</option>
-                  </select>
+                  <label class="form-label">Estado (Bandera) <span class="text-danger">*</span></label>
+                  <mat-select class="custom-mat-select select" placeholder="Seleccione Estado" formControlName="flag">
+                    <mat-option *ngFor="let flag of maritimeFlags" [value]="flag">{{ flag }}</mat-option>
+                  </mat-select>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Fecha del Reporte <span class="text-danger">*</span></label>
+                  <label class="form-label">Fecha del Reporte <span class="text-danger">*</span></label>
                   <input type="date" formControlName="reportDate" class="form-control">
                 </div>
               </div>
