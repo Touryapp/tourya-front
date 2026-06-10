@@ -11,15 +11,15 @@
                         <div class="d-flex form-info">
                             <!-- Select Ciudad -->
                             <div class="form-item">
-                                <label class="form-label fs-14 text-default mb-1">Ciudad</label>
+                                <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.city' | translate }}</label>
                                 <select class="form-control" [(ngModel)]="selectedLocation" [ngModelOptions]="{standalone: true}" name="location">
-                                    <option [ngValue]="null" disabled selected>Selecciona ciudad</option>
+                                    <option [ngValue]="null" disabled selected>{{ 'searchComponent.selectCity' | translate }}</option>
                                     <option *ngFor="let loc of locationsPublic" [ngValue]="loc">{{loc.cityName}} - {{ loc.stateName }}</option>
                                 </select>
                             </div>
                             <!-- Check In (range picker trigger) -->
                             <div class="form-item position-relative">
-                                <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkIn' | translate }}</label>
                                 <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY"
                                     [value]="bsRangeValue[0] | date: 'dd-MM-yyyy'" readonly />
                                 <input type="text"
@@ -32,24 +32,24 @@
                             </div>
                             <!-- Check Out (click opens range picker) -->
                             <div class="form-item" (click)="drp.show()">
-                                <label class="form-label fs-14 text-default mb-1">Check Out</label>
+                                <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkOut' | translate }}</label>
                                 <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY"
                                     [value]="bsRangeValue[1] | date: 'dd-MM-yyyy'" readonly />
                             </div>
 
                             <div class="form-item dropdown">
                                 <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
-                                    <label class="form-label fs-14 text-default mb-1">Travellers</label>
-                                    <h5>{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? 'Person' : 'Persons' }}</span></h5>
+                                    <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.travellers' | translate }}</label>
+                                    <h5>{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? ('searchComponent.person' | translate) : ('searchComponent.persons' | translate) }}</span></h5>
                                     <p class="fs-12 mb-0">{{ getTravellersDetails() }}</p>
                                 </div>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-xl">
-                                    <h5 class="mb-3">Select Travelers</h5>
+                                    <h5 class="mb-3">{{ 'searchComponent.selectTravelers' | translate }}</h5>
                                     <div class="mb-3 border br-10 info-item pb-1">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                    <label class="form-label text-gray-9 mb-2">Adult</label>
+                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.adult' | translate }}</label>
                                                     <app-common-counter 
                                                         [quantity]="travellersData.adults" 
                                                         [min]="1" 
@@ -58,7 +58,7 @@
                                                     </app-common-counter>
                                                 </div>
                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                    <label class="form-label text-gray-9 mb-2">Children <span class="text-default fw-normal">( 2-11 Yrs )</span></label>
+                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.children' | translate }} <span class="text-default fw-normal">( 2-11 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
                                                     <app-common-counter 
                                                         [quantity]="travellersData.children" 
                                                         [min]="0" 
@@ -67,7 +67,7 @@
                                                     </app-common-counter>
                                                 </div>
                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                    <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 0-2 Yrs )</span></label>
+                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.infants' | translate }} <span class="text-default fw-normal">( 0-2 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
                                                     <app-common-counter 
                                                         [quantity]="travellersData.infants" 
                                                         [min]="0" 
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button (click)="onSearch()" class="btn btn-primary search-btn rounded ms-2">Search</button>
+                        <button (click)="onSearch()" class="btn btn-primary search-btn rounded ms-2">{{ 'searchComponent.search' | translate }}</button>
                     </form>
                 </div>
             </div>
@@ -266,7 +266,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-horarios" aria-expanded="false" aria-controls="accordion-horarios" role="button">
-                                            <i class="isax isax-clock me-2 text-primary"></i>Horarios
+                                            <i class="isax isax-clock me-2 text-primary"></i>{{ 'filters.timeOfDay' | translate }}
                                         </div>
                                     </div>
                                     <div id="accordion-horarios" class="accordion-collapse collapse">
@@ -277,7 +277,7 @@
                                                         [checked]="selectedSchedules.includes(h.value)"
                                                         (change)="toggleSelection(selectedSchedules, h.value)">
                                                     <label class="form-check-label ms-2" [for]="'horario_'+i">
-                                                        {{ h.label }}
+                                                        {{ h.label | translate }}
                                                     </label>
                                                 </div>
                                             </div>
@@ -289,7 +289,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-duraciones" aria-expanded="false" aria-controls="accordion-duraciones" role="button">
-                                            <i class="isax isax-timer-1 me-2 text-primary"></i>Duraciones
+                                            <i class="isax isax-timer-1 me-2 text-primary"></i>{{ 'filters.duration' | translate }}
                                         </div>
                                     </div>
                                     <div id="accordion-duraciones" class="accordion-collapse collapse">
@@ -300,7 +300,7 @@
                                                         [checked]="selectedDurations.includes(d.value)"
                                                         (change)="toggleSelection(selectedDurations, d.value)">
                                                     <label class="form-check-label ms-2" [for]="'duracion_'+i">
-                                                        {{ d.label }}
+                                                        {{ d.label | translate }}
                                                     </label>
                                                 </div>
                                             </div>
@@ -314,7 +314,7 @@
                                         <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse"
                                             data-bs-target="#accordion-popular" aria-expanded="false"
                                             aria-controls="accordion-popular" role="button">
-                                            <i class="isax isax-coin me-2 text-primary"></i>Rango de Precio
+                                            <i class="isax isax-coin me-2 text-primary"></i>{{ 'filters.priceRange' | translate }}
                                         </div>
                                     </div>
                                     <div id="accordion-popular" class="accordion-collapse collapse">
@@ -348,7 +348,7 @@
                                                 </div>
                                             </div>
                                             <div class="filter-range-amount">
-                                                <p class="fs-14">Rango: <span class="text-gray-9 fw-medium">${{ minPrice | number:'1.0-0' }} - ${{ maxPrice | number:'1.0-0' }}</span></p>
+                                                <p class="fs-14">{{ 'filters.range' | translate }} <span class="text-gray-9 fw-medium">${{ minPrice | number:'1.0-0' }} - ${{ maxPrice | number:'1.0-0' }}</span></p>
                                             </div>
                                         </div>
                                     </div>

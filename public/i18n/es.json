@@ -874,5 +874,134 @@
         "priceMin": "El precio debe ser mayor que cero"
       }
     }
+  },
+  "header": {
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "myProfile": "Mi Perfil",
+    "myBooking": "Mis Reservas",
+    "dashboard": "Panel de Control",
+    "menu": {
+      "tours": "Tours",
+      "tourList": "Lista de tours",
+      "schedulesTemplates": "Templates de horarios",
+      "myBookings": "Mis reservas",
+      "myReviews": "Mis reseñas",
+      "wishlist": "Lista de Deseos",
+      "myPayments": "Mis Pagos",
+      "blog": "Blog",
+      "contactUs": "Contáctenos",
+      "legal": "Legal",
+      "termsAndConditions": "Términos y condiciones",
+      "privacyPolicy": "Políticas de privacidad y tratamiento de datos personales",
+      "providers": "Proveedores",
+      "becomeExpert": "Convertirse en Experto"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "subtitle": "Inicia sesión para administrar tu cuenta de TourYa",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu correo",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "rememberMe": "Recordarme",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "button": "Iniciar Sesión",
+      "or": "O",
+      "noAccount": "¿No tienes una cuenta?",
+      "signupLink": "Regístrate"
+    },
+    "register": {
+      "title": "Registrarse",
+      "subtitle": "Crea tu cuenta de TourYa",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Ingresa tu nombre completo",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu correo",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Ingresa tu contraseña",
+      "agreeTerms": "Estoy de acuerdo con los ",
+      "termsLink": "Términos de Servicio.",
+      "button": "Registrarse",
+      "or": "O",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "loginLink": "Iniciar Sesión"
+    },
+    "changePassword": {
+      "title": "Cambiar Contraseña",
+      "subtitle": "Ingresa los detalles para cambiar tu contraseña",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Ingresa tu contraseña",
+      "button": "Cambiar Contraseña"
+    },
+    "forgotPassword": {
+      "title": "Olvidé mi Contraseña",
+      "subtitle": "Restablece tu contraseña de TourYa",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu correo",
+      "button": "Restablecer Contraseña",
+      "rememberPassword": "¿Recuerdas tu contraseña?",
+      "loginLink": "Iniciar Sesión"
+    }
+  },
+  "searchComponent": {
+    "city": "Ciudad",
+    "selectCity": "Selecciona ciudad",
+    "checkIn": "Desde (Check in)",
+    "checkOut": "Hasta (Check out)",
+    "travellers": "Viajeros",
+    "person": "Persona",
+    "persons": "Personas",
+    "selectTravelers": "Seleccionar viajeros",
+    "adult": "Adulto",
+    "children": "Niño",
+    "infants": "Bebe",
+    "search": "Buscar",
+    "yearsOld": "Años"
+  },
+  "toursCards": {
+    "aquanauts": "Aquanautas",
+    "whiteNight": "Noche blanca",
+    "cayTour": "Paseo al cayo",
+    "beachCart": "Carro playero",
+    "parasailing": "Parasail",
+    "scubaDiving": "Buceo",
+    "paddleBoard": "Paddle Board"
+  },
+  "footer": {
+    "destinations": "Destinos",
+    "company": "Compañia",
+    "aboutUs": "Quienes somos",
+    "blog": "Blog",
+    "support": "Soporte",
+    "contactUs": "Contactenos",
+    "legal": "Legal",
+    "termsAndConditions": "Terminos y conticiones",
+    "privacyPolicy": "Politicas de privacidad y tratamiento de datos personales",
+    "suppliers": "Proveedores",
+    "registerAsSupplier": "Restrate como proveedores",
+    "availableOn": "Disponible en:",
+    "email": "Correo electrónico:"
+  },
+  "filters": {
+    "timeOfDay": "Horarios",
+    "morning": "Mañana",
+    "afternoon": "Tarde",
+    "eveningAndNight": "Noche",
+    "duration": "Duración",
+    "oneToTwoHours": "1 a 2 horas",
+    "twoToFourHours": "2 a 4 horas",
+    "fourToSixHours": "4 a 6 horas",
+    "upToOneDay": "hasta 1 día",
+    "upToThreeDays": "Hasta 3 dias",
+    "upToFiveDays": "Hasta 5 dias",
+    "priceRange": "Rango de precios",
+    "range": "Rango:"
   }
 }

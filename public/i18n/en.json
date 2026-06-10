@@ -873,5 +873,134 @@
         "priceMin": "Price must be greater than zero"
       }
     }
+  },
+  "header": {
+    "login": "Login",
+    "logout": "Logout",
+    "myProfile": "My Profile",
+    "myBooking": "My Bookings",
+    "dashboard": "Dashboard",
+    "menu": {
+      "tours": "Tours",
+      "tourList": "Tour List",
+      "schedulesTemplates": "Schedule Templates",
+      "myBookings": "My Bookings",
+      "myReviews": "My Reviews",
+      "wishlist": "Wishlist",
+      "myPayments": "My Payments",
+      "blog": "Blog",
+      "contactUs": "Contact Us",
+      "legal": "Legal",
+      "termsAndConditions": "Terms and Conditions",
+      "privacyPolicy": "Privacy Policy and Personal Data Processing",
+      "providers": "Providers",
+      "becomeExpert": "Become Expert"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Login to Start Manage your TourYa Account",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter Email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter Password",
+      "rememberMe": "Remember Me",
+      "forgotPassword": "Forgot Password?",
+      "button": "Login",
+      "or": "Or",
+      "noAccount": "Don't you have an account?",
+      "signupLink": "Sign up"
+    },
+    "register": {
+      "title": "Sign Up",
+      "subtitle": "Create your TourYa Account",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter Full Name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter Email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Enter Password",
+      "agreeTerms": "I agree with the ",
+      "termsLink": "Terms Of Service.",
+      "button": "Register",
+      "or": "Or",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Login"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "subtitle": "Enter Details to Change Password",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Enter Password",
+      "button": "Change Password"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Reset Your TourYa Password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter Email",
+      "button": "Reset Password",
+      "rememberPassword": "Remember Password ?",
+      "loginLink": "Login"
+    }
+  },
+  "searchComponent": {
+    "city": "City",
+    "selectCity": "Select city",
+    "checkIn": "From",
+    "checkOut": "Until",
+    "travellers": "Travelers",
+    "person": "Person",
+    "persons": "Persons",
+    "selectTravelers": "Select travelers",
+    "adult": "Adult",
+    "children": "Children",
+    "infants": "Infants",
+    "search": "Search",
+    "yearsOld": "Yrs"
+  },
+  "toursCards": {
+    "aquanauts": "Aquanauts",
+    "whiteNight": "White Night",
+    "cayTour": "Cay Tour",
+    "beachCart": "Beach Cart",
+    "parasailing": "Parasailing",
+    "scubaDiving": "Scuba Diving",
+    "paddleBoard": "Paddle Board"
+  },
+  "footer": {
+    "destinations": "Destinations",
+    "company": "Company",
+    "aboutUs": "About Us",
+    "blog": "Blog",
+    "support": "Support",
+    "contactUs": "Contact Us",
+    "legal": "Legal",
+    "termsAndConditions": "Terms and Conditions",
+    "privacyPolicy": "Privacy Policy and Personal Data Processing",
+    "suppliers": "Suppliers",
+    "registerAsSupplier": "Register as a Supplier",
+    "availableOn": "Available on :",
+    "email": "E-mail:"
+  },
+  "filters": {
+    "timeOfDay": "Time of Day",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "eveningAndNight": "Evening and night",
+    "duration": "Duration",
+    "oneToTwoHours": "1 to 2 hours",
+    "twoToFourHours": "2 to 4 hours",
+    "fourToSixHours": "4 to 6 hours",
+    "upToOneDay": "Up to 1 day",
+    "upToThreeDays": "Up to 3 days",
+    "upToFiveDays": "Up to 5 days",
+    "priceRange": "Price",
+    "range": "Range:"
   }
 }

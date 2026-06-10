@@ -54,6 +54,7 @@ export interface ProviderTourBooking {
   maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
   canReschedule?: boolean; // New field from API
   canCancel?: boolean; // New field from API
+  canRainCancel?: boolean;
   qrUrl?: string;
   totalTourists?: number;
   serviceResponsible?: any; // New field for reservation contact
@@ -420,6 +421,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       canCancel: reservation.canCancel,
       cancellationDate: this.formatDate(reservation.cancellationDate),
       cancellationReason: reservation.cancellationReason || undefined,
+      canRainCancel: true, // reservation.canRainCancel,
       // Service Responsible
       serviceResponsible: reservation.serviceResponsible || undefined
     };
@@ -600,6 +602,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       maxReschedulingDate: reservation.maxReschedulingDate,
       canReschedule: reservation.canReschedule,
       canCancel: reservation.canCancel,
+      canRainCancel: true, // reservation.canRainCancel,
       // Payer info from list API
       payerName: reservation.payerName,
       payerEmail: reservation.payerEmail,
@@ -653,6 +656,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       maxReschedulingDate: reservation.maxReschedulingDate,
       canReschedule: reservation.canReschedule,
       canCancel: reservation.canCancel,
+      canRainCancel: true, // reservation.canRainCancel,
       // Payer info from list API
       payerName: reservation.payerName,
       payerEmail: reservation.payerEmail,
@@ -1923,6 +1927,57 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           title: 'Error',
           text: 'Hubo un error al cancelar la reserva. Por favor intenta nuevamente.',
           confirmButtonColor: '#d33'
+        });
+      }
+    });
+  }
+
+  /**
+   * Abre un modal de confirmación simplificado para cancelar por lluvia
+   */
+  public onCancelByRain(booking: any): void {
+    Swal.fire({
+      title: '¿Cancelar por lluvia?',
+      text: '¿Estás seguro que deseas cancelar esta reserva por motivo de lluvia? Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'Volver',
+      confirmButtonColor: '#d33'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Extraer ID numérico
+        const numericId = booking.id.includes('-') 
+          ? booking.id.split('-')[1] 
+          : booking.id;
+
+        // Llamar a la API de cancelación con el motivo RAIN
+        this.reservationService.cancelReservation(numericId, 'RAIN').subscribe({
+          next: (response) => {
+            console.log('✅ Reserva cancelada por lluvia exitosamente:', response);
+            Swal.fire({
+              icon: 'success',
+              title: 'Cancelación exitosa',
+              text: `La reserva ${booking.id} ha sido cancelada por lluvia.`,
+              confirmButtonColor: '#3085d6'
+            }).then(() => {
+              // Refrescar los datos
+              if (this.currentRole === 'CLIENT') {
+                this.loadClientReservations();
+              } else if (this.currentRole === 'PROVIDER') {
+                this.loadProviderReservations();
+              }
+            });
+          },
+          error: (error) => {
+            console.error('❌ Error al cancelar por lluvia:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un problema al cancelar la reserva por lluvia. Intenta de nuevo.',
+              confirmButtonColor: '#d33'
+            });
+          }
         });
       }
     });

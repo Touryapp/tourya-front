@@ -57,7 +57,7 @@
                     </div>
                     <div>
                         <a href="javascript:void(0);" (click)="navigateToLogin()" class="text-white btn btn-secondary w-100 mb-2"
-                            *ngIf="!isAuthenticated">Iniciar Sesion</a>
+                            *ngIf="!isAuthenticated">{{ 'header.login' | translate }}</a>
                     </div>
                 </div>
             </div>
@@ -101,34 +101,34 @@
                                             <!-- Direct user options -->
                                             <ul class="list-unstyled mb-0">
                                                 <li *ngIf="isUser">
-                                                    <a class="d-block py-2 px-2" href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">My Booking</a>
+                                                    <a class="d-block py-2 px-2" href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">{{ 'header.myBooking' | translate }}</a>
                                                 </li>
 
                                                 <li>
-                                                    <a class="d-block py-2 px-2" href="javascript:void(0);" (click)="logout()">Logout</a>
+                                                    <a class="d-block py-2 px-2" href="javascript:void(0);" (click)="logout()">{{ 'header.logout' | translate }}</a>
                                                 </li>
                                             </ul>
                                         </li>
 
                                         <!-- My Profile Submenu (shown only when authenticated) -->
                                         <li *ngIf="isAuthenticated" class="has-submenu border-bottom pb-3 mb-3" [class.active]="isProfileOpen">
-                                            <a href="javascript:void(0);" (click)="toggleProfile()">My Profile <i class="fa-solid fa-angle-down"></i></a>
+                                            <a href="javascript:void(0);" (click)="toggleProfile()">{{ 'header.myProfile' | translate }} <i class="fa-solid fa-angle-down"></i></a>
                                             <ul class="submenu" [style.display]="isProfileOpen ? 'block' : 'none'">
                                                 <!-- Provider-specific options -->
                                                 <li *ngIf="isProvider && !isAdmin" class="has-submenu" [class.active]="isProfileToursOpen">
-                                                    <a href="javascript:void(0);" (click)="toggleProfileTours()">Tours <i class="fa-solid fa-angle-down"></i></a>
+                                                    <a href="javascript:void(0);" (click)="toggleProfileTours()">{{ 'header.menu.tours' | translate }} <i class="fa-solid fa-angle-down"></i></a>
                                                     <ul class="submenu" [style.display]="isProfileToursOpen ? 'block' : 'none'">
-                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('tours')">Lista de tours</a></li>
-                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('templates')">Templates de horarios</a></li>
+                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('tours')">{{ 'header.menu.tourList' | translate }}</a></li>
+                                                        <li><a href="javascript:void(0);" (click)="navigateToProfileSection('templates')">{{ 'header.menu.schedulesTemplates' | translate }}</a></li>
                                                     </ul>
                                                     <a class="mean-expand" href="javascript:void(0);" (click)="toggleProfileTours()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
                                                 </li>
                                                 <!-- Common options for all authenticated users -->
-                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">Mis reservas</a></li>
-                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('reviews')">Mis reseñas</a></li>
-                                                <li *ngIf="isUser && !isProvider"><a [routerLink]="routes.wishlist" (click)="closeMenu()">Lista de Deseos</a></li>
-                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('profile')">Mi Perfil</a></li>
-                                                <li *ngIf="isProvider && !isAdmin"><a href="javascript:void(0);" (click)="navigateToProfileSection('payments')">Mis Pagos</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">{{ 'header.menu.myBookings' | translate }}</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('reviews')">{{ 'header.menu.myReviews' | translate }}</a></li>
+                                                <li *ngIf="isUser && !isProvider"><a [routerLink]="routes.wishlist" (click)="closeMenu()">{{ 'header.menu.wishlist' | translate }}</a></li>
+                                                <li><a href="javascript:void(0);" (click)="navigateToProfileSection('profile')">{{ 'header.myProfile' | translate }}</a></li>
+                                                <li *ngIf="isProvider && !isAdmin"><a href="javascript:void(0);" (click)="navigateToProfileSection('payments')">{{ 'header.menu.myPayments' | translate }}</a></li>
                                             </ul>
                                             <a class="mean-expand" href="javascript:void(0);" (click)="toggleProfile()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
                                         </li>
@@ -210,7 +210,7 @@
                                 </div>
                                 <div *ngIf="!isAuthenticated">
                                     <a href="javascript:void(0);" class="text-white btn btn-secondary w-100 mb-3"
-                                        data-bs-toggle="modal" data-bs-target="#login-modal">Iniciar Sesion</a>
+                                        data-bs-toggle="modal" data-bs-target="#login-modal">{{ 'header.login' | translate }}</a>
                                 </div>
                             </div>
                         </div>
@@ -243,7 +243,7 @@
                                 <!-- Menú simple sin submenús -->
                                 <ng-container *ngIf="!mainMenus.isSubMenu || mainMenus.menu.length === 0">
                                     <li [class.active]="base === mainMenus.base">
-                                        <a [routerLink]="mainMenus.route">{{mainMenus.tittle}}</a>
+                                        <a [routerLink]="mainMenus.route">{{ mainMenus.tittle | translate }}</a>
                                     </li>
                                 </ng-container>
                                 
@@ -253,13 +253,13 @@
                                         [class.active]="base === mainMenus.base"
                                         (mouseenter)="isHovered = true" 
                                         (mouseleave)="isHovered = false">
-                                        <a href="javascript:void(0);">{{mainMenus.tittle}} 
+                                        <a href="javascript:void(0);">{{ mainMenus.tittle | translate }} 
                                             <i class="fa-solid fa-angle-down"></i>
                                         </a>
                                         <ul class="submenu">
                                             <ng-container *ngFor="let menu of mainMenus.menu">
                                                 <li [class.active]="base === menu.base || page === menu.base">
-                                                    <a [routerLink]="menu.route">{{menu.menuValue}}</a>
+                                                    <a [routerLink]="menu.route">{{ (menu.menuValue || '') | translate }}</a>
                                                 </li>
                                             </ng-container>
                                         </ul>
@@ -285,8 +285,8 @@
                                 </a>
                             </div>
                             <div><a href="javascript:void(0);" class="btn btn-white me-3" data-bs-toggle="modal"
-                                    data-bs-target="#login-modal">Iniciar Sesion</a></div>
-                            <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary me-0">Become Expert</a>
+                                    data-bs-target="#login-modal">{{ 'header.login' | translate }}</a></div>
+                            <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary me-0">{{ 'header.menu.becomeExpert' | translate }}</a>
                             <div class="header__hamburger d-xl-none my-auto">
                                 <div class="sidebar-menu" (click)="addmenu()">
                                     <i class="isax isax-menu5"></i>
@@ -332,19 +332,19 @@
                                 <ul class="dropdown-menu dropdown-menu-end p-3">
                                     <li *ngIf="isAdmin">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            [routerLink]="routes.userDashboard">Dashboard</a>
+                                            [routerLink]="routes.userDashboard">{{ 'header.dashboard' | translate }}</a>
                                     </li>
                                     <li *ngIf="isUser">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">My Booking</a>
+                                            href="javascript:void(0);" (click)="navigateToProfileSection('bookings')">{{ 'header.myBooking' | translate }}</a>
                                     </li>
                                     <li *ngIf="isUser && !isProvider">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            href="javascript:void(0);" (click)="navigateToProfileSection('profile')">My Profile</a>
+                                            href="javascript:void(0);" (click)="navigateToProfileSection('profile')">{{ 'header.myProfile' | translate }}</a>
                                     </li>
                                     <li *ngIf="isProvider && !isAdmin">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            href="javascript:void(0);" (click)="navigateToProviderPanel('dashboard')">My Profile</a>
+                                            href="javascript:void(0);" (click)="navigateToProviderPanel('dashboard')">{{ 'header.myProfile' | translate }}</a>
                                     </li>
                                     <li *ngIf="isAdmin || isUser || isProvider">
                                         <hr class="dropdown-divider my-2">
@@ -352,7 +352,7 @@
 
                                     <li *ngIf="isAuthenticated">
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2"
-                                            (click)="logout()">Logout</a>
+                                            (click)="logout()">{{ 'header.logout' | translate }}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -371,9 +371,7 @@
             </div>
         </div>
     </header>
-</div>
-
-<!-- Login Modal -->
+</div><!-- Login Modal -->
 <div class="modal fade" id="login-modal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -384,26 +382,26 @@
             <div class="modal-body p-4 pt-0">
                 <form>
                     <div class="text-center mb-3">
-                        <h5 class="mb-1">Iniciar Sesion</h5>
-                        <p>Iniciar Sesion to Start Manage your DreamsTour Account</p>
+                        <h5 class="mb-1">{{ 'auth.login.title' | translate }}</h5>
+                        <p>{{ 'auth.login.subtitle' | translate }}</p>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Email</label>
+                        <label class="form-label">{{ 'auth.login.emailLabel' | translate }}</label>
                         <div class="input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-message"></i>
                             </span>
-                            <input type="email" class="form-control form-control-lg" placeholder="Enter Email">
+                            <input type="email" class="form-control form-control-lg" placeholder="{{ 'auth.login.emailPlaceholder' | translate }}">
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Password</label>
+                        <label class="form-label">{{ 'auth.login.passwordLabel' | translate }}</label>
                         <div class="pass-group input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-lock"></i>
                             </span>
                             <input [type]="password[0] ? 'text' : 'password'" class="pass-input form-control"
-                                placeholder="Enter Password" />
+                                placeholder="{{ 'auth.login.passwordPlaceholder' | translate }}" />
                             <span class="isax toggle-password" [ngClass]="password[0] ? 'isax-eye' : 'isax-eye-slash'"
                                 (click)="togglePassword(0)" (keydown.enter)="togglePassword(0)" tabindex="0"></span>
                         </div>
@@ -413,20 +411,20 @@
                             <div class="form-check d-flex align-items-center mb-2">
                                 <input class="form-check-input mt-0" type="checkbox" value="" id="remembers_me">
                                 <label class="form-check-label ms-2 text-gray-9 fs-14" for="remembers_me">
-                                    Remember Me
+                                    {{ 'auth.login.rememberMe' | translate }}
                                 </label>
                             </div>
                             <a href="javascript:void(0);" class="link-primary fw-medium fs-14 mb-2"
-                                data-bs-toggle="modal" data-bs-target="#forgot-modal">Forgot Password?</a>
+                                data-bs-toggle="modal" data-bs-target="#forgot-modal">{{ 'auth.login.forgotPassword' | translate }}</a>
                         </div>
                     </div>
                     <div class="mb-3">
                         <button type="submit"
                             class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
-                            data-bs-dismiss="modal">Login<i class="isax isax-arrow-right-3 ms-2"></i></button>
+                            data-bs-dismiss="modal">{{ 'auth.login.button' | translate }}<i class="isax isax-arrow-right-3 ms-2"></i></button>
                     </div>
                     <div class="login-or mb-3">
-                        <span class="span-or">Or</span>
+                        <span class="span-or">{{ 'auth.login.or' | translate }}</span>
                     </div>
                     <div class="d-flex align-items-center mb-3">
                         <a href="javascript:void(0);"
@@ -439,9 +437,9 @@
                         </a>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <p class="fs-14">Don't you have an account? <a href="javascript:void(0);"
+                        <p class="fs-14">{{ 'auth.login.noAccount' | translate }} <a href="javascript:void(0);"
                                 class="link-primary fw-medium" data-bs-toggle="modal"
-                                data-bs-target="#register-modal">Sign up</a></p>
+                                data-bs-target="#register-modal">{{ 'auth.login.signupLink' | translate }}</a></p>
                     </div>
                 </form>
             </div>
@@ -463,47 +461,47 @@
             <div class="modal-body p-4 pt-0">
                 <form (ngSubmit)="onSubmit0()">
                     <div class="text-center border-bottom mb-3">
-                        <h5 class="mb-1">Sign Up</h5>
-                        <p class="mb-3">Create your DreamsTour Account</p>
+                        <h5 class="mb-1">{{ 'auth.register.title' | translate }}</h5>
+                        <p class="mb-3">{{ 'auth.register.subtitle' | translate }}</p>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Name</label>
+                        <label class="form-label">{{ 'auth.register.nameLabel' | translate }}</label>
                         <div class="input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-user"></i>
                             </span>
-                            <input type="text" class="form-control form-control-lg" placeholder="Enter Full Name">
+                            <input type="text" class="form-control form-control-lg" placeholder="{{ 'auth.register.namePlaceholder' | translate }}">
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Email</label>
+                        <label class="form-label">{{ 'auth.register.emailLabel' | translate }}</label>
                         <div class="input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-message"></i>
                             </span>
-                            <input type="email" class="form-control form-control-lg" placeholder="Enter Email">
+                            <input type="email" class="form-control form-control-lg" placeholder="{{ 'auth.register.emailPlaceholder' | translate }}">
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Password</label>
+                        <label class="form-label">{{ 'auth.register.passwordLabel' | translate }}</label>
                         <div class="pass-group input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-lock"></i>
                             </span>
                             <input [type]="password[1] ? 'text' : 'password'" class="pass-input form-control"
-                                placeholder="Enter Password" />
+                                placeholder="{{ 'auth.register.passwordPlaceholder' | translate }}" />
                             <span class="isax toggle-password" [ngClass]="password[1] ? 'isax-eye' : 'isax-eye-slash'"
                                 (click)="togglePassword(1)" (keydown.enter)="togglePassword(1)" tabindex="0"></span>
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Confirm Password</label>
+                        <label class="form-label">{{ 'auth.register.confirmPasswordLabel' | translate }}</label>
                         <div class="pass-group input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-lock"></i>
                             </span>
                             <input [type]="password[2] ? 'text' : 'password'" class="pass-input form-control"
-                                placeholder="Enter Password" />
+                                placeholder="{{ 'auth.register.confirmPasswordPlaceholder' | translate }}" />
                             <span class="isax toggle-password" [ngClass]="password[2] ? 'isax-eye' : 'isax-eye-slash'"
                                 (click)="togglePassword(2)" (keydown.enter)="togglePassword(2)" tabindex="0"></span>
                         </div>
@@ -513,8 +511,8 @@
                             <div class="form-check d-flex align-items-center mb-2">
                                 <input class="form-check-input mt-0" type="checkbox" value="" id="agree">
                                 <label class="form-check-label ms-2 text-gray-9 fs-14" for="agree">
-                                    I agree with the <a href="javascript:void(0);" class="link-primary fw-medium">Terms
-                                        Of Service.</a>
+                                    {{ 'auth.register.agreeTerms' | translate }}<a href="javascript:void(0);" class="link-primary fw-medium">{{ 'auth.register.termsLink' | translate }}
+                                        </a>
                                 </label>
                             </div>
                         </div>
@@ -522,10 +520,10 @@
                     <div class="mb-3">
                         <button type="submit"
                             class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
-                            data-bs-dismiss="modal">Register<i class="isax isax-arrow-right-3 ms-2"></i></button>
+                            data-bs-dismiss="modal">{{ 'auth.register.button' | translate }}<i class="isax isax-arrow-right-3 ms-2"></i></button>
                     </div>
                     <div class="login-or mb-3">
-                        <span class="span-or">Or</span>
+                        <span class="span-or">{{ 'auth.register.or' | translate }}</span>
                     </div>
                     <div class="d-flex align-items-center mb-3">
                         <a href="javascript:void(0);"
@@ -538,9 +536,9 @@
                         </a>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <p class="fs-14">Already have an account? <a href="javascript:void(0);"
+                        <p class="fs-14">{{ 'auth.register.hasAccount' | translate }} <a href="javascript:void(0);"
                                 class="link-primary fw-medium" data-bs-toggle="modal"
-                                data-bs-target="#login-modal">Iniciar Sesion</a></p>
+                                data-bs-target="#login-modal">{{ 'auth.register.loginLink' | translate }}</a></p>
                     </div>
                 </form>
             </div>
@@ -561,29 +559,29 @@
             <div class="modal-body p-4 pt-0">
                 <form action="#">
                     <div class="text-center border-bottom mb-3">
-                        <h5 class="mb-1">Change Password</h5>
-                        <p class="mb-3">Enter Details to Change Password</p>
+                        <h5 class="mb-1">{{ 'auth.changePassword.title' | translate }}</h5>
+                        <p class="mb-3">{{ 'auth.changePassword.subtitle' | translate }}</p>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Password</label>
+                        <label class="form-label">{{ 'auth.changePassword.passwordLabel' | translate }}</label>
                         <div class="pass-group input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-lock"></i>
                             </span>
                             <input [type]="password[3] ? 'text' : 'password'" class="pass-input form-control"
-                                placeholder="Enter Password" />
+                                placeholder="{{ 'auth.changePassword.passwordPlaceholder' | translate }}" />
                             <span class="isax toggle-password" [ngClass]="password[3] ? 'isax-eye' : 'isax-eye-slash'"
                                 (click)="togglePassword(3)" (keydown.enter)="togglePassword(3)" tabindex="0"></span>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Confirm Password</label>
+                        <label class="form-label">{{ 'auth.changePassword.confirmPasswordLabel' | translate }}</label>
                         <div class="pass-group input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-lock"></i>
                             </span>
                             <input [type]="password[4] ? 'text' : 'password'" class="pass-input form-control"
-                                placeholder="Enter Password" />
+                                placeholder="{{ 'auth.changePassword.confirmPasswordPlaceholder' | translate }}" />
                             <span class="isax toggle-password" [ngClass]="password[4] ? 'isax-eye' : 'isax-eye-slash'"
                                 (click)="togglePassword(4)" (keydown.enter)="togglePassword(4)" tabindex="0"></span>
                         </div>
@@ -591,7 +589,7 @@
                     <div class="mb-0">
                         <button type="button"
                             class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
-                            data-bs-toggle="modal" data-bs-target="#login-password">Change Password<i
+                            data-bs-toggle="modal" data-bs-target="#login-password">{{ 'auth.changePassword.button' | translate }}<i
                                 class="isax isax-arrow-right-3 ms-2"></i></button>
                     </div>
                 </form>
@@ -613,28 +611,28 @@
             <div class="modal-body p-4 pt-0">
                 <form action="#">
                     <div class="text-center border-bottom mb-3">
-                        <h5 class="mb-1">Forgot Password</h5>
-                        <p>Reset Your DreamsTour Password</p>
+                        <h5 class="mb-1">{{ 'auth.forgotPassword.title' | translate }}</h5>
+                        <p>{{ 'auth.forgotPassword.subtitle' | translate }}</p>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label">Email</label>
+                        <label class="form-label">{{ 'auth.forgotPassword.emailLabel' | translate }}</label>
                         <div class="input-icon">
                             <span class="input-icon-addon">
                                 <i class="isax isax-message"></i>
                             </span>
-                            <input type="email" class="form-control form-control-lg" placeholder="Enter Email">
+                            <input type="email" class="form-control form-control-lg" placeholder="{{ 'auth.forgotPassword.emailPlaceholder' | translate }}">
                         </div>
                     </div>
                     <div class="mb-3">
                         <button type="button"
                             class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
-                            data-bs-toggle="modal" data-bs-target="#change-password">Reset Password<i
+                            data-bs-toggle="modal" data-bs-target="#change-password">{{ 'auth.forgotPassword.button' | translate }}<i
                                 class="isax isax-arrow-right-3 ms-2"></i></button>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <p class="fs-14">Remember Password ? <a href="javascript:void(0);"
+                        <p class="fs-14">{{ 'auth.forgotPassword.rememberPassword' | translate }} <a href="javascript:void(0);"
                                 class="link-primary fw-medium" data-bs-toggle="modal"
-                                data-bs-target="#login-modal">Iniciar Sesion</a></p>
+                                data-bs-target="#login-modal">{{ 'auth.forgotPassword.loginLink' | translate }}</a></p>
                     </div>
                 </form>
             </div>

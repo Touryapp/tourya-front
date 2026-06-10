@@ -716,5 +716,134 @@
       "item4": "Suporte real 24/7",
       "item5": "Escritório físico local"
     }
+  },
+  "header": {
+    "login": "Entrar",
+    "logout": "Sair",
+    "myProfile": "Meu Perfil",
+    "myBooking": "Minhas Reservas",
+    "dashboard": "Painel",
+    "menu": {
+      "tours": "Tours",
+      "tourList": "Lista de tours",
+      "schedulesTemplates": "Modelos de horários",
+      "myBookings": "Minhas reservas",
+      "myReviews": "Minhas avaliações",
+      "wishlist": "Lista de Desejos",
+      "myPayments": "Meus Pagamentos",
+      "blog": "Blog",
+      "contactUs": "Contate-nos",
+      "legal": "Legal",
+      "termsAndConditions": "Termos e condições",
+      "privacyPolicy": "Política de Privacidade e Tratamento de Dados Pessoais",
+      "providers": "Fornecedores",
+      "becomeExpert": "Tornar-se Especialista"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "subtitle": "Faça login para gerenciar sua conta TourYa",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu E-mail",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite a Senha",
+      "rememberMe": "Lembrar-me",
+      "forgotPassword": "Esqueceu a Senha?",
+      "button": "Entrar",
+      "or": "Ou",
+      "noAccount": "Você não tem uma conta?",
+      "signupLink": "Inscrever-se"
+    },
+    "register": {
+      "title": "Inscrever-se",
+      "subtitle": "Crie sua conta TourYa",
+      "nameLabel": "Nome",
+      "namePlaceholder": "Digite seu Nome Completo",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu E-mail",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite a Senha",
+      "confirmPasswordLabel": "Confirmar Senha",
+      "confirmPasswordPlaceholder": "Digite a Senha",
+      "agreeTerms": "Eu concordo com os ",
+      "termsLink": "Termos de Serviço.",
+      "button": "Registrar",
+      "or": "Ou",
+      "hasAccount": "Já tem uma conta?",
+      "loginLink": "Entrar"
+    },
+    "changePassword": {
+      "title": "Alterar Senha",
+      "subtitle": "Insira os detalhes para alterar a senha",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite a Senha",
+      "confirmPasswordLabel": "Confirmar Senha",
+      "confirmPasswordPlaceholder": "Digite a Senha",
+      "button": "Alterar Senha"
+    },
+    "forgotPassword": {
+      "title": "Esqueceu a Senha",
+      "subtitle": "Redefina sua Senha do TourYa",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu E-mail",
+      "button": "Redefinir Senha",
+      "rememberPassword": "Lembra da Senha?",
+      "loginLink": "Entrar"
+    }
+  },
+  "searchComponent": {
+    "city": "Cidade",
+    "selectCity": "Selecione a cidade",
+    "checkIn": "De",
+    "checkOut": "Para",
+    "travellers": "Viajantes",
+    "person": "Pessoa",
+    "persons": "Pessoas",
+    "selectTravelers": "Selecione os viajantes",
+    "adult": "Adulto",
+    "children": "Criança",
+    "infants": "Bebê",
+    "search": "Pesquisar",
+    "yearsOld": "Anos"
+  },
+  "toursCards": {
+    "aquanauts": "Aquanautas",
+    "whiteNight": "Noite Branca",
+    "cayTour": "Passeio ao ilhéu",
+    "beachCart": "Carro de praia",
+    "parasailing": "Parasail",
+    "scubaDiving": "Mergulho",
+    "paddleBoard": "Paddle Board"
+  },
+  "footer": {
+    "destinations": "Destinos",
+    "company": "Empresa",
+    "aboutUs": "Quem somos",
+    "blog": "Blog",
+    "support": "Suporte",
+    "contactUs": "Fale conosco",
+    "legal": "Legal",
+    "termsAndConditions": "Termos e condições",
+    "privacyPolicy": "Políticas de privacidade e tratamento de dados pessoais",
+    "suppliers": "Fornecedores",
+    "registerAsSupplier": "Registre-se como fornecedor",
+    "availableOn": "Disponível em:",
+    "email": "E-mail:"
+  },
+  "filters": {
+    "timeOfDay": "Período do dia",
+    "morning": "Manhã",
+    "afternoon": "Tarde",
+    "eveningAndNight": "Noite",
+    "duration": "Período do dia",
+    "oneToTwoHours": "1 a 2 horas",
+    "twoToFourHours": "2 a 4 horas",
+    "fourToSixHours": "4 a 6 horas",
+    "upToOneDay": "até 1 dia",
+    "upToThreeDays": "até 3 dias",
+    "upToFiveDays": "até 5 dias",
+    "priceRange": "Preço",
+    "range": "Intervalo:"
   }
 }

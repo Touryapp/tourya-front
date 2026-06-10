@@ -37,7 +37,7 @@ export class MaritimeActivityReportsComponent implements OnInit {
   // Data
   reports: MaritimeActivityReport[] = [];
   dataSource = new MatTableDataSource<MaritimeActivityReport>([]);
-  displayedColumns: string[] = ['id', 'country', 'city', 'activity', 'flag', 'reportDate', 'actions'];
+  displayedColumns: string[] = ['id', 'country', 'city', 'tag', 'flag', 'reportDate', 'actions'];
   
   // Dashboard Stats
   todayReport: MaritimeActivityReport | null = null;
@@ -59,6 +59,8 @@ export class MaritimeActivityReportsComponent implements OnInit {
   cities: any[] = [];
   categories: any[] = [];
   subCategories: any[] = [];
+  tags: any[] = [];
+  minDate: string = '';
 
   // Enums for UI
   maritimeFlags = Object.values(MaritimeFlag);
@@ -85,16 +87,26 @@ export class MaritimeActivityReportsComponent implements OnInit {
       city: ['', Validators.required],
       category: [''],
       subCategory: [''],
-      activity: ['', Validators.required],
+      tag: ['', Validators.required],
       flag: [MaritimeFlag.GREEN, Validators.required],
-      reportDate: ['', Validators.required]
+      reportStartDate: ['', Validators.required],
+      reportEndDate: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
+    this.minDate = new Date().toISOString().split('T')[0];
     this.loadReports();
     this.loadCountries();
     this.loadCategories();
+    this.loadTags();
+  }
+
+  loadTags(): void {
+    this.searchToursService.tagPublic().subscribe({
+      next: (res: any[]) => this.tags = res,
+      error: (err) => console.error('Error loading tags', err)
+    });
   }
 
   loadCountries(): void {
@@ -172,7 +184,7 @@ export class MaritimeActivityReportsComponent implements OnInit {
           
           // Buscar reporte de hoy
           const today = new Date().toISOString().split('T')[0];
-          this.todayReport = this.reports.find(r => r.reportDate === today) || null;
+          this.todayReport = this.reports.find(r => r.reportStartDate <= today && today <= r.reportEndDate) || null;
 
           if (this.sort) this.dataSource.sort = this.sort;
         },
@@ -223,9 +235,10 @@ export class MaritimeActivityReportsComponent implements OnInit {
       city: report.city,
       category: report.category || '',
       subCategory: report.subCategory || '',
-      activity: report.activity,
+      tag: report.tag,
       flag: report.flag,
-      reportDate: report.reportDate
+      reportStartDate: report.reportStartDate,
+      reportEndDate: report.reportEndDate
     });
 
     // Load dependent dropdowns if they have values

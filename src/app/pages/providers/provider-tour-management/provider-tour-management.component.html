@@ -178,6 +178,12 @@
                                             [title]="action.label">
                                             <i [class]="action.icon"></i>
                                         </button>
+                                        <button 
+                                            *ngIf="booking.canRainCancel"
+                                            class="btn btn-sm btn-primary px-3 text-nowrap"
+                                            (click)="onCancelByRain(booking); $event.stopPropagation()">
+                                            Cancelar por lluvia
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

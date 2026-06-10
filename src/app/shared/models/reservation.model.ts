@@ -66,6 +66,7 @@ export interface ClientReservation {
   maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
   canReschedule?: boolean; // New field from API
   canCancel?: boolean; // New field from API
+  canRainCancel?: boolean;
   customerProfileImageUrl?: string;
 }
 
@@ -139,6 +140,7 @@ export interface ReservationDetails {
   cancellationReason?: string | null;
   canReschedule?: boolean;
   canCancel?: boolean;
+  canRainCancel?: boolean;
   credit?: any;
   payer?: {
     name: string;

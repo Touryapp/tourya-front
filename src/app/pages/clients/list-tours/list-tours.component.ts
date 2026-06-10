@@ -208,18 +208,18 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public searchText: string = "";
 
   public durationOptions = [
-    { value: '1_a_2_horas', label: '1 a 2 horas' },
-    { value: '2_a_4_horas', label: 'de 2 a 4' },
-    { value: '4_a_6_horas', label: 'de 4 a 6 horas' },
-    { value: 'hasta_1_dia', label: 'hasta 1 día' },
-    { value: 'hasta_3_dias', label: 'hasta 3 días' },
-    { value: 'hasta_5_dias', label: 'hasta 5 días' }
+    { value: '1_a_2_horas', label: 'filters.oneToTwoHours' },
+    { value: '2_a_4_horas', label: 'filters.twoToFourHours' },
+    { value: '4_a_6_horas', label: 'filters.fourToSixHours' },
+    { value: 'hasta_1_dia', label: 'filters.upToOneDay' },
+    { value: 'hasta_3_dias', label: 'filters.upToThreeDays' },
+    { value: 'hasta_5_dias', label: 'filters.upToFiveDays' }
   ];
 
   public scheduleOptions = [
-    { value: 'manana', label: 'Mañana' },
-    { value: 'tarde', label: 'Tarde' },
-    { value: 'noche', label: 'Noche' }
+    { value: 'manana', label: 'filters.morning' },
+    { value: 'tarde', label: 'filters.afternoon' },
+    { value: 'noche', label: 'filters.eveningAndNight' }
   ];
 
   public ageTypeOptions = [
