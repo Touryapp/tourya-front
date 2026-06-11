@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { I18nFieldService } from '../services/i18n-field.service';
+import { I18nFieldService } from '../../services/i18n-field.service';
 
 @Pipe({
   name: 'localizedName',
