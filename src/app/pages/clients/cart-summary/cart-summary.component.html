@@ -3,12 +3,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Resumen del Carrito</h2>
+                <h2 class="breadcrumb-title mb-2">{{ 'cartSummary.pageTitle' | translate }}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item"><a [routerLink]="routes.tourList">Tours</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Carrito</li>
+                        <li class="breadcrumb-item"><a [routerLink]="routes.tourList">{{ 'cartSummary.breadcrumbTours' | translate }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'cartSummary.breadcrumbCart' | translate }}</li>
                     </ol>
                 </nav>
             </div>
@@ -26,7 +26,7 @@
                 <!-- Secure Checkout - Datos del Usuario -->
                 <div class="card checkout-card">
                     <div class="card-header">
-                        <h5>Checkout Seguro</h5>
+                        <h5>{{ 'cartSummary.secureCheckout' | translate }}</h5>
                     </div>
                     <div class="card-body">
                         <!-- Información de Contacto (Quien realiza el pago) -->
@@ -34,40 +34,40 @@
                             <div class="checkout-title">
                                 <h6 class="mb-2">
                                     <i class="fas fa-user-tie me-2 text-primary"></i>
-                                    Información de Contacto (Quien realiza el pago)
+                                    {{ 'cartSummary.contactInfo' | translate }}
                                 </h6>
                             </div>
                             <div class="checkout-details pb-3 border-bottom mb-4">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Nombre</label>
-                                            <input type="text" class="form-control" [(ngModel)]="contactForm.firstName" placeholder="Juan" required>
+                                            <label class="form-label">{{ 'cartSummary.firstName' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.firstName" [placeholder]="'cartSummary.firstNamePlaceholder' | translate" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Apellido</label>
-                                            <input type="text" class="form-control" [(ngModel)]="contactForm.lastName" placeholder="Pérez" required>
+                                            <label class="form-label">{{ 'cartSummary.lastName' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.lastName" [placeholder]="'cartSummary.lastNamePlaceholder' | translate" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Correo Electrónico</label>
-                                            <input type="email" class="form-control" [(ngModel)]="contactForm.email" placeholder="ejemplo@correo.com" required>
+                                            <label class="form-label">{{ 'cartSummary.email' | translate }}</label>
+                                            <input type="email" class="form-control" [(ngModel)]="contactForm.email" [placeholder]="'cartSummary.emailPlaceholder' | translate" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Teléfono</label>
-                                            <input type="text" class="form-control" [(ngModel)]="contactForm.phone" placeholder="3001234567" required>
+                                            <label class="form-label">{{ 'cartSummary.phone' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.phone" [placeholder]="'cartSummary.phonePlaceholder' | translate" required>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-12">
                                         <div class="mb-0">
-                                            <label class="form-label">Información Adicional</label>
-                                            <textarea class="form-control" rows="3" [(ngModel)]="contactForm.additionalInfo" placeholder="Información adicional, comentarios especiales..."></textarea>
+                                            <label class="form-label">{{ 'cartSummary.additionalInfo' | translate }}</label>
+                                            <textarea class="form-control" rows="3" [(ngModel)]="contactForm.additionalInfo" [placeholder]="'cartSummary.additionalInfoPlaceholder' | translate"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -79,21 +79,21 @@
                             <div class="checkout-title">
                                 <h6 class="mb-2">
                                     <i class="fas fa-hotel me-2 text-primary"></i>
-                                    Hospedaje
+                                    {{ 'cartSummary.accommodation' | translate }}
                                 </h6>
                             </div>
                             <div class="checkout-details pb-3 border-bottom mb-4">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Nombre del hospedaje</label>
-                                            <input type="text" class="form-control" [(ngModel)]="accommodationForm.name" placeholder="Hotel XYZ">
+                                            <label class="form-label">{{ 'cartSummary.accommodationName' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="accommodationForm.name" [placeholder]="'cartSummary.accommodationNamePlaceholder' | translate">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Dirección</label>
-                                            <input #addressInput type="text" class="form-control" [(ngModel)]="accommodationForm.address" placeholder="Ubicación del hospedaje">
+                                            <label class="form-label">{{ 'cartSummary.address' | translate }}</label>
+                                            <input #addressInput type="text" class="form-control" [(ngModel)]="accommodationForm.address" [placeholder]="'cartSummary.accommodationAddressPlaceholder' | translate">
                                         </div>
                                     </div>
                                 </div>
@@ -105,32 +105,32 @@
                             <div class="checkout-title">
                                 <h6 class="mb-2">
                                     <i class="fas fa-plane-arrival me-2 text-primary"></i>
-                                    Lugar de procedencia
+                                    {{ 'cartSummary.placeOfOrigin' | translate }}
                                 </h6>
                             </div>
                             <div class="checkout-details pb-3 border-bottom mb-4">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">País</label>
+                                            <label class="form-label">{{ 'cartSummary.country' | translate }}</label>
                                             <select class="form-control" [(ngModel)]="contactForm.country">
-                                                <option value="">Seleccionar país</option>
-                                                <option value="CO">Colombia</option>
-                                                <option value="US">Estados Unidos</option>
-                                                <option value="ES">España</option>
+                                                <option value="">{{ 'cartSummary.selectCountry' | translate }}</option>
+                                                <option value="CO">{{ 'cartSummary.countryColombia' | translate }}</option>
+                                                <option value="US">{{ 'cartSummary.countryUSA' | translate }}</option>
+                                                <option value="ES">{{ 'cartSummary.countrySpain' | translate }}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Ciudad</label>
-                                            <input type="text" class="form-control" [(ngModel)]="contactForm.city" placeholder="Bogotá">
+                                            <label class="form-label">{{ 'cartSummary.city' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.city" [placeholder]="'cartSummary.cityPlaceholder' | translate">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Dirección</label>
-                                            <input type="text" class="form-control" [(ngModel)]="contactForm.address1" placeholder="Calle 123 # 45-67">
+                                            <label class="form-label">{{ 'cartSummary.stateOrDepartment' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.state" [placeholder]="'cartSummary.cityPlaceholder' | translate">
                                         </div>
                                     </div>
                                 </div>
@@ -143,7 +143,7 @@
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h6 class="mb-0">
                                         <i class="fas fa-users me-2 text-primary"></i>
-                                        Información de Viajeros por Tour
+                                        {{ 'cartSummary.travelersInfo' | translate }}
                                         <span class="badge bg-primary ms-2" *ngIf="travelersInfo.length > 0">
                                             {{ getCompletedTravelersCount() }}/{{ travelersInfo.length }}
                                         </span>
@@ -155,20 +155,20 @@
                                                 class="btn btn-sm btn-success me-2" 
                                                 (click)="copyContactInfoToAllTravelers()"
                                                 *ngIf="travelersInfo.length > 0 && isContactFormComplete()"
-                                                title="Copiar datos de contacto a todos los viajeros">
+                                                [title]="'cartSummary.useMyData' | translate">
                                             <i class="fas fa-copy me-1"></i>
-                                            Usar mis datos
+                                            {{ 'cartSummary.useMyData' | translate }}
                                         </button>
                                         <button type="button" class="btn btn-sm btn-outline-primary me-2" 
                                                 (click)="expandAllTravelers()" 
                                                 *ngIf="travelersInfo.length > 1"
-                                                title="Expandir todos">
+                                                [title]="'cartSummary.expandAll' | translate">
                                             <i class="fas fa-expand-arrows-alt"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" 
                                                 (click)="collapseAllTravelers()"
                                                 *ngIf="travelersInfo.length > 1" 
-                                                title="Contraer todos">
+                                                [title]="'cartSummary.collapseAll' | translate">
                                             <i class="fas fa-compress-arrows-alt"></i>
                                         </button>
                                     </div>
@@ -181,7 +181,7 @@
                                         </div>
                                     </div>
                                     <small class="text-muted mt-1 d-block">
-                                        {{ getCompletedTravelersCount() }} de {{ travelersInfo.length }} viajeros completados
+                                        {{ 'cartSummary.travelersCompleted' | translate:{count: getCompletedTravelersCount(), total: travelersInfo.length} }}
                                     </small>
                                 </div>
                             </div>
@@ -199,12 +199,12 @@
                                                 <div class="traveler-header-content">
                                                     <div class="traveler-title">
                                                         <i class="fas fa-user-circle me-2"></i>
-                                                        <strong>Información del Viajero - {{ traveler.tourName }}</strong>
+                                                        <strong>{{ 'cartSummary.travelerInfoTour' | translate }} - {{ traveler.tourName }}</strong>
                                                     </div>
                                                     <div class="traveler-status">
                                                         <span class="badge" 
                                                               [class]="traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'bg-success' : 'bg-warning'">
-                                                            {{ traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'Completo' : 'Pendiente' }}
+                                                            {{ traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? ('cartSummary.statusComplete' | translate) : ('cartSummary.statusPending' | translate) }}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -219,48 +219,48 @@
                                                      *ngIf="isContactFormComplete()">
                                                     <div>
                                                         <i class="fas fa-info-circle me-2"></i>
-                                                        <small>¿Eres tú quien viajará en este tour?</small>
+                                                        <small>{{ 'cartSummary.isItYou' | translate }}</small>
                                                     </div>
                                                     <button type="button" 
                                                             class="btn btn-sm btn-success" 
                                                             (click)="copyContactInfoToTraveler(i)"
-                                                            title="Copiar mis datos a este viajero">
+                                                            [title]="'cartSummary.useMyData' | translate">
                                                         <i class="fas fa-user-check me-1"></i>
-                                                        Usar mis datos
+                                                        {{ 'cartSummary.useMyData' | translate }}
                                                     </button>
                                                 </div>
                                                 
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Nombre del Viajero</label>
+                                                            <label class="form-label">{{ 'cartSummary.travelerFirstName' | translate }}</label>
                                                             <input type="text" class="form-control" 
                                                                    [(ngModel)]="traveler.firstName" 
-                                                                   placeholder="Juan" required>
+                                                                   [placeholder]="'cartSummary.firstNamePlaceholder' | translate" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Apellido del Viajero</label>
+                                                            <label class="form-label">{{ 'cartSummary.travelerLastName' | translate }}</label>
                                                             <input type="text" class="form-control" 
                                                                    [(ngModel)]="traveler.lastName" 
-                                                                   placeholder="Pérez" required>
+                                                                   [placeholder]="'cartSummary.lastNamePlaceholder' | translate" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
-                                                            <label class="form-label">Correo del Viajero</label>
+                                                            <label class="form-label">{{ 'cartSummary.travelerEmail' | translate }}</label>
                                                             <input type="email" class="form-control" 
                                                                    [(ngModel)]="traveler.email" 
-                                                                   placeholder="viajero@correo.com" required>
+                                                                   [placeholder]="'cartSummary.travelerEmailPlaceholder' | translate" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="mb-0">
-                                                            <label class="form-label">Teléfono del Viajero</label>
+                                                            <label class="form-label">{{ 'cartSummary.travelerPhone' | translate }}</label>
                                                             <input type="text" class="form-control" 
                                                                    [(ngModel)]="traveler.phone" 
-                                                                   placeholder="3001234567" required>
+                                                                   [placeholder]="'cartSummary.phonePlaceholder' | translate" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -277,7 +277,7 @@
                                             class="btn btn-sm btn-outline-info" 
                                             *ngFor="let traveler of travelersInfo; let i = index"
                                             (click)="scrollToTraveler(i)"
-                                            [title]="'Ir a ' + traveler.tourName">
+                                            [title]="('cartSummary.goTo' | translate) + ' ' + traveler.tourName">
                                         <i class="fas fa-map-marker-alt me-1"></i>
                                         Tour {{ i + 1 }}
                                         <span class="ms-1" 
@@ -294,8 +294,8 @@
                         <div class="empty-travelers" *ngIf="travelersInfo.length === 0">
                             <div class="text-center py-4">
                                 <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
-                                <h6 class="text-muted">No hay tours en el carrito</h6>
-                                <p class="text-muted small">Agrega tours al carrito para completar la información de viajeros</p>
+                                <h6 class="text-muted">{{ 'cartSummary.noToursInCart' | translate }}</h6>
+                                <p class="text-muted small">{{ 'cartSummary.addToursToComplete' | translate }}</p>
                             </div>
                         </div>
                     </div>
@@ -305,7 +305,7 @@
                 <!-- Payment Methods - Wompi Integration -->
                 <div class="card checkout-card mt-4">
                     <div class="card-header">
-                        <h5>Método de Pago</h5>
+                        <h5>{{ 'cartSummary.paymentMethod' | translate }}</h5>
                     </div>
                     <div class="card-body">
                         <div class="payment-wompi">
@@ -318,10 +318,10 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-center mb-2">
                                         <i class="fas fa-shield-alt text-success me-2"></i>
-                                        <strong class="text-dark">Pagos seguros procesados por Wompi</strong>
+                                        <strong class="text-dark">{{ 'cartSummary.securePayments' | translate }}</strong>
                                     </div>
                                     <small class="text-muted d-block">
-                                        Acepta <strong>tarjetas de crédito/débito</strong>, <strong>PSE</strong>, <strong>Nequi</strong> y más métodos de pago
+                                        {{ 'cartSummary.accepts' | translate }} <strong>{{ 'cartSummary.creditDebitCards' | translate }}</strong>, <strong>PSE</strong>, <strong>Nequi</strong> {{ 'cartSummary.andMoreMethods' | translate }}
                                     </small>
                                     <div class="mt-3">
                                         <span class="badge bg-primary me-1">Visa</span>
@@ -336,7 +336,7 @@
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-info-circle text-success me-2"></i>
                                     <small class="text-success">
-                                        <strong>¿Cómo funciona?</strong> Al hacer clic en "Proceder al Pago", se abrirá la plataforma segura de Wompi donde podrás elegir tu método de pago preferido.
+                                        <strong>{{ 'cartSummary.howItWorks' | translate }}</strong> {{ 'cartSummary.paymentExplanation' | translate }}
                                     </small>
                                 </div>
                             </div>
@@ -349,7 +349,7 @@
             <div class="col-lg-4">
                 <div class="card checkout-card">
                     <div class="card-header">
-                        <h5>Resumen de tu Orden</h5>
+                        <h5>{{ 'cartSummary.orderSummary' | translate }}</h5>
                     </div>
                     <div class="card-body">
                         <!-- Cart Items Summary -->
@@ -361,7 +361,7 @@
                                     class="btn btn-sm btn-outline-danger position-absolute delete-tour-btn"
                                     (click)="confirmRemoveItem(item.id, i18nService.getValue(item.tour.name))"
                                     [disabled]="processing"
-                                    title="Eliminar tour del carrito">
+                                    [title]="'cartSummary.removeFromCart' | translate">
                                     <i class="fas fa-times" *ngIf="!processing"></i>
                                     <i class="fas fa-spinner fa-spin" *ngIf="processing"></i>
                                 </button>
@@ -386,17 +386,17 @@
                                             </p>
                                             <p class="text-muted small mb-1">
                                                 <i class="fas fa-users me-1"></i>
-                                                {{ item.totalParticipants }} participantes
+                                                {{ item.totalParticipants }} {{ 'cartSummary.participantsLabel' | translate }}
                                             </p>
                                         </div>
                                         
                                         <!-- Participants Breakdown -->
                                         <div class="participants-breakdown">
-                                            <small class="text-muted d-block mb-1">Participantes:</small>
+                                            <small class="text-muted d-block mb-1">{{ 'cartSummary.participantsLabel' | translate }}:</small>
                                             <div class="ms-2">
                                                 <div *ngFor="let participant of item.participants" class="d-flex justify-content-between align-items-center mb-1">
                                                     <small>{{ getParticipantTypeLabel(participant.ageType) }}: {{ participant.quantity }}</small>
-                                                    <small class="text-muted">{{ participant.price | currency:'COP':'symbol':'1.0-0' }} c/u</small>
+                                                    <small class="text-muted">{{ participant.price | currency:'COP':'symbol':'1.0-0' }} {{ 'cartSummary.each' | translate }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -404,7 +404,7 @@
                                         <div class="text-end mt-2">
                                             <div class="tour-price-display">
                                                 <strong class="tour-total-price">{{ formatPrice(item.totalPrice) }}</strong>
-                                                <small class="tour-price-label">Total por tour</small>
+                                                <small class="tour-price-label">{{ 'cartSummary.totalPerTour' | translate }}</small>
                                             </div>
                                         </div>
                                     </div>
@@ -416,22 +416,22 @@
                         <!-- Price Breakdown -->
                         <div class="price-breakdown" *ngIf="cartSummary">
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Subtotal:</span>
+                                <span>{{ 'cartSummary.subtotal' | translate }}:</span>
                                 <span>{{ formatPrice(cartSummary.totalPrice) }}</span>
                             </div>
                             
                             <!-- Créditos Disponibles (Aviso) -->
                             <div class="d-flex justify-content-between align-items-center mb-2" *ngIf="totalCreditsValue > 0 && selectedCredits.length === 0">
-                                <span class="text-success"><i class="fas fa-wallet me-1"></i> Créditos Disponibles:</span>
+                                <span class="text-success"><i class="fas fa-wallet me-1"></i> {{ 'cartSummary.availableCredits' | translate }}</span>
                                 <span class="text-success">{{ formatPrice(totalCreditsValue) }}</span>
                             </div>
                             
                             <!-- Créditos Aplicados -->
                             <div class="d-flex justify-content-between align-items-center mb-2" *ngIf="selectedCredits.length > 0">
-                                <span class="text-primary"><i class="fas fa-check-circle me-1"></i> Créditos Aplicados:</span>
+                                <span class="text-primary"><i class="fas fa-check-circle me-1"></i> {{ 'cartSummary.appliedCredits' | translate }}</span>
                                 <div class="d-flex align-items-center">
                                     <span class="text-primary me-2">-{{ formatPrice(appliedCreditsValue) }}</span>
-                                    <button class="btn btn-sm btn-outline-danger p-0 px-1" (click)="removeAppliedCredits()" title="Remover créditos">
+                                    <button class="btn btn-sm btn-outline-danger p-0 px-1" (click)="removeAppliedCredits()" [title]="'cartSummary.removeCredits' | translate">
                                         <i class="fas fa-times fs-10"></i>
                                     </button>
                                 </div>
@@ -439,16 +439,16 @@
 
                             <div class="alert alert-info py-2 px-3 mt-2 d-flex justify-content-between align-items-center" *ngIf="totalCreditsValue > 0 && selectedCredits.length === 0">
                                 <div>
-                                    <small><i class="fas fa-info-circle me-1"></i> Tienes créditos que puedes usar en tus reservas.</small>
+                                    <small><i class="fas fa-info-circle me-1"></i> {{ 'cartSummary.hasCreditsMsg' | translate }}</small>
                                 </div>
                                 <button class="btn btn-sm btn-primary ms-2 btn-credits-square" data-bs-toggle="modal" data-bs-target="#creditsModal" (click)="isModalOpen = true">
-                                    Usar credito
+                                    {{ 'cartSummary.useCreditBtn' | translate }}
                                 </button>
                             </div>
                             
                             <hr>
                             <div class="d-flex justify-content-between mb-3">
-                                <strong>Total a Pagar:</strong>
+                                <strong>{{ 'cartSummary.totalToPay' | translate }}</strong>
                                 <strong class="text-primary">{{ formatPrice(finalTotalToPay) }}</strong>
                             </div>
                         </div>
@@ -458,7 +458,7 @@
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="creditsModalLabel">Seleccionar Créditos para Usar</h5>
+                                        <h5 class="modal-title" id="creditsModalLabel">{{ 'cartSummary.selectCreditsToUse' | translate }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="isModalOpen = false"></button>
                                     </div>
                                     <div class="modal-body">
@@ -481,10 +481,10 @@
                                     [disabled]="!hasItems || processing"
                                     (click)="proceedToPayment()">
                                 <span *ngIf="processing" class="spinner-border spinner-border-sm me-2"></span>
-                                Proceder al Pago
+                                {{ 'cartSummary.proceedToPayment' | translate }}
                             </button>
                             <button class="btn btn-outline-secondary w-100" (click)="continueShopping()">
-                                Continuar Comprando
+                                {{ 'cartSummary.continueShopping' | translate }}
                             </button>
                         </div>
                     </div>
@@ -499,10 +499,10 @@
                     <div class="empty-cart-icon">
                         <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
                     </div>
-                    <h4 class="mb-3">Tu carrito está vacío</h4>
-                    <p class="text-muted mb-4">¡Explora nuestros tours y encuentra tu próxima aventura!</p>
+                    <h4 class="mb-3">{{ 'cartSummary.cartEmpty' | translate }}</h4>
+                    <p class="text-muted mb-4">{{ 'cartSummary.exploreToursPrompt' | translate }}</p>
                     <button class="btn btn-primary btn-lg" (click)="continueShopping()">
-                        Explorar Tours
+                        {{ 'cartSummary.exploreToursBtn' | translate }}
                     </button>
                 </div>
             </div>
@@ -516,9 +516,9 @@
                 <div class="col-12">
                     <div class="loading-state text-center py-5">
                         <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-                            <span class="visually-hidden">Cargando...</span>
+                            <span class="visually-hidden">{{ 'cartSummary.loading' | translate }}</span>
                         </div>
-                        <h5>Cargando tu carrito...</h5>
+                        <h5>{{ 'cartSummary.loadingCart' | translate }}</h5>
                     </div>
                 </div>
             </div>

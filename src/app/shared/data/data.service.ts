@@ -461,7 +461,7 @@ export class DataService {
   }
   public sideBar: SideBar[] = [
     {
-      tittle: 'Tour',
+      tittle: 'header.menu.tours',
       base: 'tour',
       route: routes.listTours,
       showAsTab: false,
@@ -471,7 +471,7 @@ export class DataService {
       isSubMenu: false,
     },
     {
-      tittle: 'Blog',
+      tittle: 'header.menu.blog',
       base: 'blog',
       route: routes.blogsite,
       showAsTab: false,
@@ -481,7 +481,7 @@ export class DataService {
       isSubMenu: false,
     },
     {
-      tittle: 'Contactenos',
+      tittle: 'header.menu.contactUs',
       base: 'contactenos',
       route: routes.contactanos,
       showAsTab: false,
@@ -491,7 +491,7 @@ export class DataService {
       isSubMenu: false,
     },
     {
-      tittle: 'Legal',
+      tittle: 'header.menu.legal',
       base: 'legal',
       route: routes.legalSite,
       showAsTab: false,
@@ -499,7 +499,7 @@ export class DataService {
       twoTitle: false,
       menu: [
         {
-          menuValue: 'Terminos y Condiciones',
+          menuValue: 'header.menu.termsAndConditions',
           route: routes.legalSite,
           hasSubRoute: false,
           showSubRoute: false,
@@ -510,7 +510,7 @@ export class DataService {
           icon:'isax-legal-55',
         },
         {
-          menuValue: 'Políticas de privacidad y tratamiento de datos personales',
+          menuValue: 'header.menu.privacyPolicy',
           route: routes.legalSitePrivacyPolicy,
           hasSubRoute: false,
           showSubRoute: false,
@@ -525,7 +525,7 @@ export class DataService {
       isSubMenu: true,
     },
     {
-      tittle: 'Proveedores',
+      tittle: 'header.menu.providers',
       base: 'proveedores',
       route: routes.proveedoresPage,
       showAsTab: false,

@@ -11,9 +11,10 @@ export interface MaritimeActivityReport {
     city: string;
     category?: string;
     subCategory?: string;
-    activity: string;
+    tag: string;
     flag: MaritimeFlag;
-    reportDate: string; // YYYY-MM-DD
+    reportStartDate: string; // YYYY-MM-DD
+    reportEndDate: string; // YYYY-MM-DD
     createdDate?: string;
     lastModifiedDate?: string;
 }

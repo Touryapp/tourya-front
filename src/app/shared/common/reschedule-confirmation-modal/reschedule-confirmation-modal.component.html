@@ -47,7 +47,7 @@
     </h6>
     <div class="participants-summary">
       <div class="participant-confirm-item" *ngFor="let p of data.participants">
-        <span class="p-label">{{ p.label }}</span>
+        <span class="p-label">{{ p.label | translate }}</span>
         <span class="p-quantity">x{{ p.quantity }}</span>
       </div>
     </div>

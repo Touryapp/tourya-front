@@ -26,6 +26,7 @@ import { TagDto } from "../../../shared/dto/search-tour-response.dto";
 import { CategoryDto } from "../../../shared/dto/category.dto";
 import { PendingActionService } from "../../../shared/services/pending-action.service";
 import { TouristService } from "../../../shared/services/tourist.service";
+import { TranslateService } from "@ngx-translate/core";
 import Swal from "sweetalert2";
 
 @Component({
@@ -208,18 +209,18 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public searchText: string = "";
 
   public durationOptions = [
-    { value: '1_a_2_horas', label: '1 a 2 horas' },
-    { value: '2_a_4_horas', label: 'de 2 a 4' },
-    { value: '4_a_6_horas', label: 'de 4 a 6 horas' },
-    { value: 'hasta_1_dia', label: 'hasta 1 día' },
-    { value: 'hasta_3_dias', label: 'hasta 3 días' },
-    { value: 'hasta_5_dias', label: 'hasta 5 días' }
+    { value: '1_a_2_horas', label: 'filters.oneToTwoHours' },
+    { value: '2_a_4_horas', label: 'filters.twoToFourHours' },
+    { value: '4_a_6_horas', label: 'filters.fourToSixHours' },
+    { value: 'hasta_1_dia', label: 'filters.upToOneDay' },
+    { value: 'hasta_3_dias', label: 'filters.upToThreeDays' },
+    { value: 'hasta_5_dias', label: 'filters.upToFiveDays' }
   ];
 
   public scheduleOptions = [
-    { value: 'manana', label: 'Mañana' },
-    { value: 'tarde', label: 'Tarde' },
-    { value: 'noche', label: 'Noche' }
+    { value: 'manana', label: 'filters.morning' },
+    { value: 'tarde', label: 'filters.afternoon' },
+    { value: 'noche', label: 'filters.eveningAndNight' }
   ];
 
   public ageTypeOptions = [
@@ -248,7 +249,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private cityService: CityService,
     private pendingActionService: PendingActionService,
-    private touristService: TouristService
+    private touristService: TouristService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -381,7 +383,40 @@ export class ListToursComponent implements OnInit, OnDestroy {
     });
     // Categorías
     this.searchToursService.categoriesPublic().subscribe({
-      next: (data: any[]) => this.categories = data,
+      next: (data: any[]) => {
+        this.categories = data;
+
+        // Inyectar traducciones dinámicamente para que las tarjetas de tours (que reciben el string en español)
+        // puedan traducirlo sin depender de los archivos JSON estáticos
+        const enTranslations: any = {};
+        const ptTranslations: any = {};
+        const esTranslations: any = {};
+
+        data.forEach(c => {
+          if (c.name && c.name.es) {
+            const normalized = c.name.es.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
+            const key = `categories.${normalized}`;
+            if (c.name.en) enTranslations[key] = c.name.en;
+            if (c.name.pt) ptTranslations[key] = c.name.pt;
+            esTranslations[key] = c.name.es;
+          }
+          if (c.subCategories) {
+            c.subCategories.forEach((s: any) => {
+              if (s.name && s.name.es) {
+                const normSub = s.name.es.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
+                const subKey = `subcategories.${normSub}`;
+                if (s.name.en) enTranslations[subKey] = s.name.en;
+                if (s.name.pt) ptTranslations[subKey] = s.name.pt;
+                esTranslations[subKey] = s.name.es;
+              }
+            });
+          }
+        });
+
+        this.translate.setTranslation('en', enTranslations, true);
+        this.translate.setTranslation('pt', ptTranslations, true);
+        this.translate.setTranslation('es', esTranslations, true);
+      },
       error: (err) => console.error('Error cargando categorías', err)
     });
     // Tipos de edad
@@ -415,6 +450,57 @@ export class ListToursComponent implements OnInit, OnDestroy {
       .subscribe((items) => {
         console.log('🛒 ListTours: CartItems actualizado', items.length, 'items');
         this.isCartVisible = items.length > 0;
+      });
+
+    // Force change detection when language changes to ensure categories AND tours update
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((langChange) => {
+        const newLang = langChange.lang;
+        console.log('🌍 ListTours: Language changed to', newLang, '- re-injecting dynamic translations and cloning objects');
+
+        // Re-inject dynamic category translations.
+        // When translate.use(lang) loads a JSON file it REPLACES the entire store for that lang,
+        // wiping any translations we previously added via setTranslation. We must re-merge them.
+        if (this.categories && this.categories.length > 0) {
+          const dynamicTranslations: any = {};
+          this.categories.forEach((c: any) => {
+            if (c.name?.es) {
+              const normalized = c.name.es.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
+              dynamicTranslations[`categories.${normalized}`] = c.name[newLang] || c.name.es;
+            }
+            if (c.subCategories) {
+              c.subCategories.forEach((s: any) => {
+                if (s.name?.es) {
+                  const normSub = s.name.es.toLowerCase()
+                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
+                  dynamicTranslations[`subcategories.${normSub}`] = s.name[newLang] || s.name.es;
+                }
+              });
+            }
+          });
+          this.translate.setTranslation(newLang, dynamicTranslations, true); // merge, don't overwrite
+        }
+
+        // Deep clone categories so localizedName pipe re-runs (new object reference on @Input)
+        if (this.categories && this.categories.length > 0) {
+          this.categories = this.categories.map(c => ({
+            ...c,
+            name: c.name ? (typeof c.name === 'string' ? c.name : { ...c.name }) : c.name,
+            subCategories: c.subCategories ? c.subCategories.map((s: any) => ({
+              ...s,
+              name: s.name ? (typeof s.name === 'string' ? s.name : { ...s.name }) : s.name
+            })) : c.subCategories
+          }));
+        }
+        // Clone tours so Angular re-evaluates i18nService.getValue() and localizedName bindings
+        if (this.tours && this.tours.length > 0) {
+          this.tours = this.tours.map(t => ({
+            ...t,
+            tour: { ...t.tour }
+          }));
+        }
       });
 
     // Forzar carga desde el backend al iniciar la pantalla

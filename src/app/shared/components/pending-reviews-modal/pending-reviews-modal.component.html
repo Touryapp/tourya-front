@@ -1,18 +1,18 @@
 <div class="modal-header">
-  <h4 class="modal-title pull-left">Reseñas Pendientes</h4>
+  <h4 class="modal-title pull-left">{{ 'pendingReviews.title' | translate }}</h4>
   <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true" class="visually-hidden">&times;</span>
   </button>
 </div>
 <div class="modal-body">
-  <p>Tienes las siguientes reseñas pendientes por completar:</p>
+  <p>{{ 'pendingReviews.intro' | translate }}</p>
   <div class="list-group">
     <div *ngFor="let review of pendingReviews" class="list-group-item">
       <div class="d-flex justify-content-between align-items-start">
         <div class="flex-grow-1">
           <!-- Tour Name and Status Badge -->
           <div class="d-flex w-100 justify-content-between align-items-center mb-2">
-            <h5 class="mb-0">{{ review.tourName || 'Tour sin nombre' }}</h5>
+            <h5 class="mb-0">{{ review.tourName || ('pendingReviews.tourNoName' | translate) }}</h5>
             <span class="badge" *ngIf="review.deliveryStatus" [ngClass]="{
               'bg-success': review.deliveryStatus === 'DELIVERED',
               'bg-warning': review.deliveryStatus === 'PENDING',
@@ -22,28 +22,28 @@
           
           <!-- Service Responsible Info -->
           <div class="mb-2" *ngIf="review.serviceResponsible">
-            <p class="mb-1"><strong>Responsable del servicio:</strong> {{ review.serviceResponsible.name }}</p>
-            <p class="mb-1"><small>Email: {{ review.serviceResponsible.email }}</small></p>
-            <p class="mb-1"><small>Teléfono: {{ review.serviceResponsible.phone }}</small></p>
+            <p class="mb-1"><strong>{{ 'pendingReviews.serviceResponsible' | translate }}:</strong> {{ review.serviceResponsible.name }}</p>
+            <p class="mb-1"><small>{{ 'pendingReviews.emailLabel' | translate }}: {{ review.serviceResponsible.email }}</small></p>
+            <p class="mb-1"><small>{{ 'pendingReviews.phoneLabel' | translate }}: {{ review.serviceResponsible.phone }}</small></p>
           </div>
           
           <!-- Reservation Details -->
           <div class="mb-2">
-            <small class="d-block" *ngIf="review.reservationDate"><strong>Fecha de reserva:</strong> {{ review.reservationDate | date:'medium' }}</small>
-            <small class="d-block"><strong>Reservation ID:</strong> {{ review.reservationId }}</small>
-            <small class="d-block" *ngIf="review.tourType"><strong>Tipo de tour:</strong> {{ review.tourType }}</small>
-            <small class="d-block" *ngIf="review.destination"><strong>Destino:</strong> {{ review.destination }}</small>
+            <small class="d-block" *ngIf="review.reservationDate"><strong>{{ 'pendingReviews.reservationDate' | translate }}:</strong> {{ review.reservationDate | date:'medium' }}</small>
+            <small class="d-block"><strong>{{ 'pendingReviews.reservationId' | translate }}:</strong> {{ review.reservationId }}</small>
+            <small class="d-block" *ngIf="review.tourType"><strong>{{ 'pendingReviews.tourType' | translate }}:</strong> {{ review.tourType }}</small>
+            <small class="d-block" *ngIf="review.destination"><strong>{{ 'pendingReviews.destination' | translate }}:</strong> {{ review.destination }}</small>
           </div>
         </div>
         
         <!-- Action Button -->
         <button class="btn btn-sm btn-primary ms-3" (click)="goToReview(review)">
-          Reseñar
+          {{ 'pendingReviews.reviewBtn' | translate }}
         </button>
       </div>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+  <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'pendingReviews.closeBtn' | translate }}</button>
 </div>

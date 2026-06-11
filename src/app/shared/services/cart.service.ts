@@ -457,13 +457,13 @@ export class CartService {
       if (price.ageType === 'ADULT') {
         // Si es el único tipo de precio, usamos "Cualquiera"
         // Si hay más de un tipo de precio, usamos "Adultos"
-        label = (priceCount > 1) ? "Adultos" : "Cualquiera";
+        label = (priceCount > 1) ? "tourSlotModal.adults" : "tourSlotModal.any";
       } else if (price.ageType === 'CHILD') {
-        label = "Niños";
+        label = "tourSlotModal.children";
       } else if (price.ageType === 'INFANT') {
-        label = "Infantes";
+        label = "tourSlotModal.infants";
       } else if (price.ageType === 'SENIOR') {
-        label = "Adultos Mayores";
+        label = "tourSlotModal.seniors";
       } else {
         label = price.ageType;
       }

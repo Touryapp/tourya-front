@@ -37,14 +37,14 @@ export class MaritimeActivityReportService {
   /**
    * Crea un nuevo reporte
    */
-  create(report: MaritimeActivityReport): Observable<MaritimeActivityReport> {
+  create(report: any): Observable<MaritimeActivityReport> {
     return this.http.post<MaritimeActivityReport>(this.apiUrl, report);
   }
 
   /**
    * Actualiza un reporte existente
    */
-  update(id: number, report: MaritimeActivityReport): Observable<MaritimeActivityReport> {
+  update(id: number, report: any): Observable<MaritimeActivityReport> {
     return this.http.put<MaritimeActivityReport>(`${this.apiUrl}/${id}`, report);
   }
 

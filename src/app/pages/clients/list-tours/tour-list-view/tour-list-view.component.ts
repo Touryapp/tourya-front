@@ -22,6 +22,7 @@ export class TourListViewComponent implements OnChanges {
   @Input() size: number = 10;
   @Input() isWishlistPage: boolean = false;
   @Input() initialFavoriteStates: boolean[] = [];
+  @Input() categories: any[] = [];
 
   @Output() toggleFavorite = new EventEmitter<number>();
   @Output() goToPage = new EventEmitter<number>();
@@ -147,5 +148,33 @@ export class TourListViewComponent implements OnChanges {
   // Maneja la selección de un tour para agregarlo al carrito
   onSelectTour(tour: TourScheduleResponseDto): void {
     this.selectTour.emit(tour);
+  }
+
+  getTranslatedCategory(tourDto: any): string {
+    const code = tourDto?.subCategory;
+    const nameFallback = tourDto?.subCategoryName || tourDto?.subCategory || tourDto?.categoryName || 'N/A';
+    
+    if (this.categories && this.categories.length > 0) {
+      if (code) {
+        for (const cat of this.categories) {
+          if (cat.subCategories) {
+            const found = cat.subCategories.find((sub: any) => sub.code === code);
+            if (found && found.name) {
+              return this.i18nService.getValue(found.name) || nameFallback;
+            }
+          }
+        }
+      }
+      
+      const catId = tourDto?.categoryId;
+      if (catId) {
+        const foundCat = this.categories.find(c => c.id === catId);
+        if (foundCat && foundCat.name) {
+          return this.i18nService.getValue(foundCat.name) || nameFallback;
+        }
+      }
+    }
+    
+    return nameFallback;
   }
 }

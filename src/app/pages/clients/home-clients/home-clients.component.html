@@ -1151,7 +1151,7 @@
                                                     </div>
                                                 </div>
                                                 <button type="submit"
-                                                    class="btn btn-primary search-btn rounded">Search</button>
+                                                    class="btn btn-primary search-btn rounded">{{ 'searchComponent.search' | translate }}</button>
                                             </div>
                                         </form>
                                     </div>
@@ -1161,15 +1161,15 @@
                                           <div class="d-flex form-info">
                                             <!-- Select Ciudad -->
                                             <div class="form-item">
-                                              <label class="form-label fs-14 text-default mb-1">Ciudad</label>
+                                              <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.city' | translate }}</label>
                                                 <select class="form-control" [(ngModel)]="selectedCity" name="state">
-                                                <option value="" disabled selected>Selecciona ciudad</option>
+                                                <option value="" disabled selected>{{ 'searchComponent.selectCity' | translate }}</option>
                                                 <option *ngFor="let location of locationsPublic" [value]="location.cityId">{{location.cityName}} - {{ location.stateName }}</option>
                                               </select>
                                             </div>
                                             <!-- Check In -->
                                             <div class="form-item position-relative">
-                                              <label class="form-label fs-14 text-default mb-1">Check In</label>
+                                              <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkIn' | translate }}</label>
                                               <input
                                                 type="text"
                                                 class="form-control datetimepicker"
@@ -1192,7 +1192,7 @@
                                             </div>
                                             <!-- Check Out -->
                                             <div class="form-item" (click)="drp.show()">
-                                              <label class="form-label fs-14 text-default mb-1">Check Out</label>
+                                              <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkOut' | translate }}</label>
                                               <input
                                                 type="text"
                                                 class="form-control datetimepicker"
@@ -1203,17 +1203,17 @@
                                             </div>
                                              <div class="form-item dropdown">
                                                 <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
-                                                    <label class="form-label fs-14 text-default mb-1">Travellers</label>
-                                                    <h5>{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? 'Person' : 'Persons' }}</span></h5>
+                                                    <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.travellers' | translate }}</label>
+                                                    <h5>{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? ('searchComponent.person' | translate) : ('searchComponent.persons' | translate) }}</span></h5>
                                                     <p class="fs-12 mb-0">{{ getTravellersDetails() }}</p>
                                                 </div>
                                                 <div class="dropdown-menu dropdown-menu-end dropdown-xl">
-                                                    <h5 class="mb-3">Select Travelers</h5>
+                                                    <h5 class="mb-3">{{ 'searchComponent.selectTravelers' | translate }}</h5>
                                                     <div class="mb-3 border br-10 info-item pb-1">
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                                    <label class="form-label text-gray-9 mb-2">Adult</label>
+                                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.adult' | translate }}</label>
                                                                     <app-common-counter 
                                                                         [quantity]="travellersData.adults" 
                                                                         [min]="1" 
@@ -1222,7 +1222,7 @@
                                                                     </app-common-counter>
                                                                 </div>
                                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                                    <label class="form-label text-gray-9 mb-2">Children <span class="text-default fw-normal">( 2-11 Yrs )</span></label>
+                                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.children' | translate }} <span class="text-default fw-normal">( 2-11 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
                                                                     <app-common-counter 
                                                                         [quantity]="travellersData.children" 
                                                                         [min]="0" 
@@ -1231,7 +1231,7 @@
                                                                     </app-common-counter>
                                                                 </div>
                                                                 <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                                    <label class="form-label text-gray-9 mb-2">Infants <span class="text-default fw-normal">( 0-2 Yrs )</span></label>
+                                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.infants' | translate }} <span class="text-default fw-normal">( 0-2 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
                                                                     <app-common-counter 
                                                                         [quantity]="travellersData.infants" 
                                                                         [min]="0" 
@@ -1285,7 +1285,7 @@
                     <a href="javascript:void(0);" (click)="onCategoryClick('paseo_al_cayo', $event)"><img src="/assets/img/tours/paseocayo.png" alt="Img"></a>
                     <div class="cat-content d-flex align-items-center justify-content-between">
                         <div>
-                            <h5 class="text-white mb-1">Paseo al cayo</h5>
+                            <h5 class="text-white mb-1">{{ 'toursCards.cayTour' | translate }}</h5>
                             <span class="text-white">38 Tours</span>
                         </div>
                         <a href="javascript:void(0);" (click)="onCategoryClick('paseo_al_cayo', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
@@ -1297,7 +1297,7 @@
                     <a href="javascript:void(0);" (click)="onCategoryClick('carro_playero', $event)"><img src="/assets/img/tours/carroplayero.png" alt="Img"></a>
                     <div class="cat-content d-flex align-items-center justify-content-between">
                         <div>
-                            <h5 class="text-white mb-1">Carro playero</h5>
+                            <h5 class="text-white mb-1">{{ 'toursCards.beachCart' | translate }}</h5>
                             <span class="text-white">54 Tours</span>
                         </div>
                         <a href="javascript:void(0);" (click)="onCategoryClick('carro_playero', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
@@ -1309,7 +1309,7 @@
                     <a href="javascript:void(0);" (click)="onCategoryClick('parasail', $event)"><img src="/assets/img/tours/parasail.png" alt="Img"></a>
                     <div class="cat-content d-flex align-items-center justify-content-between">
                         <div>
-                            <h5 class="text-white mb-1">Parasail</h5>
+                            <h5 class="text-white mb-1">{{ 'toursCards.parasailing' | translate }}</h5>
                             <span class="text-white">22 Tours</span>
                         </div>
                         <a href="javascript:void(0);" (click)="onCategoryClick('parasail', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
@@ -1321,7 +1321,7 @@
                     <a href="javascript:void(0);" (click)="onCategoryClick('buceo', $event)"><img src="/assets/img/tours/buceo.png" alt="Img"></a>
                     <div class="cat-content d-flex align-items-center justify-content-between">
                         <div>
-                            <h5 class="text-white mb-1">Buceo</h5>
+                            <h5 class="text-white mb-1">{{ 'toursCards.scubaDiving' | translate }}</h5>
                             <span class="text-white">12 Tours</span>
                         </div>
                         <a href="javascript:void(0);" (click)="onCategoryClick('buceo', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
@@ -1333,7 +1333,7 @@
                     <a href="javascript:void(0);" (click)="onCategoryClick('paddle_board', $event)"><img src="/assets/img/tours/paddleboard.png" alt="Img"></a>
                     <div class="cat-content d-flex align-items-center justify-content-between">
                         <div>
-                            <h5 class="text-white mb-1">Paddle board</h5>
+                            <h5 class="text-white mb-1">{{ 'toursCards.paddleBoard' | translate }}</h5>
                             <span class="text-white">30 Tours</span>
                         </div>
                         <a href="javascript:void(0);" (click)="onCategoryClick('paddle_board', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
@@ -1345,7 +1345,7 @@
                     <a href="javascript:void(0);" (click)="onCategoryClick('aquanautas', $event)"><img src="/assets/img/tours/Aquanautas.png" alt="Img"></a>
                     <div class="cat-content d-flex align-items-center justify-content-between">
                         <div>
-                            <h5 class="text-white mb-1">Aquanautas</h5>
+                            <h5 class="text-white mb-1">{{ 'toursCards.aquanauts' | translate }}</h5>
                             <span class="text-white">25 Tours</span>
                         </div>
                         <a href="javascript:void(0);" (click)="onCategoryClick('aquanautas', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
@@ -1357,7 +1357,7 @@
                     <a href="javascript:void(0);" (click)="onCategoryClick('fiesta_noche_blanca', $event)"><img src="/assets/img/tours/nocheblanca.png" alt="Img"></a>
                     <div class="cat-content d-flex align-items-center justify-content-between">
                         <div>
-                            <h5 class="text-white mb-1">Noche blanca</h5>
+                            <h5 class="text-white mb-1">{{ 'toursCards.whiteNight' | translate }}</h5>
                             <span class="text-white">47 Tours</span>
                         </div>
                         <a href="javascript:void(0);" (click)="onCategoryClick('fiesta_noche_blanca', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>

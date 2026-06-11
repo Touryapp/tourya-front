@@ -13,6 +13,8 @@ import { CartService } from "../../services/cart.service";
 import { DaySelection, CartSummary, CartItem } from "../../dto/cart.dto";
 import Swal from 'sweetalert2';
 import { I18nFieldService } from "../../services/i18n-field.service";
+import { TranslateService } from "@ngx-translate/core";
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
   selector: "app-floating-cart",
@@ -33,17 +35,31 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   isClearing: boolean = false; // Estado para loading del clear
   private destroy$ = new Subject<void>();
 
+  cartItems$!: Observable<CartItem[]>;
+
   constructor(
     private cartService: CartService,
     private router: Router,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private translate: TranslateService,
+    private cdr: ChangeDetectorRef
   ) {}
 
-  /**
-   * Obtiene los items actuales del carrito ordenados por fecha
-   */
-  getCartItems(): Observable<CartItem[]> {
-    return this.cartService.cartItems$.pipe(
+  get currentLocale(): string {
+    const lang = this.translate.currentLang || 'es';
+    if (lang.startsWith('en')) return 'en-US';
+    if (lang.startsWith('pt')) return 'pt';
+    return 'es';
+  }
+
+  ngOnInit(): void {
+    console.log(
+      "FloatingCart: Inicializando componente. isVisible:",
+      this.isVisible
+    );
+    this.subscribeToCartData();
+    
+    this.cartItems$ = this.cartService.cartItems$.pipe(
       map(items => {
         // Ordenar por fecha (startDate o dayDate)
         return [...items].sort((a, b) => {
@@ -55,14 +71,15 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
         });
       })
     );
-  }
-
-  ngOnInit(): void {
-    console.log(
-      "FloatingCart: Inicializando componente. isVisible:",
-      this.isVisible
-    );
-    this.subscribeToCartData();
+    
+    // Forzar actualización cuando cambia el idioma
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        setTimeout(() => {
+          this.cdr.detectChanges();
+        });
+      });
   }
 
   ngOnDestroy(): void {
@@ -150,7 +167,7 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
       });
       Toast.fire({
         icon: 'success',
-        title: 'Tour eliminado'
+        title: this.translate.instant('cart.tourRemoved')
       });
       
     } catch (error: any) {
@@ -165,8 +182,8 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
       
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'No se pudo eliminar el tour. Intenta de nuevo.',
+        title: this.translate.instant('cart.errorTitle'),
+        text: this.translate.instant('cart.removeTourError'),
         confirmButtonColor: '#0d6efd'
       });
     }
@@ -221,6 +238,10 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
     const startDate = item.startDate || item.dayDate;
     const endDate = item.endDate;
     
+    // Get current language from TranslateService and map it to a valid locale string
+    let currentLang = this.translate.currentLang || 'es';
+    let locale = this.currentLocale;
+    
     const formatDate = (dateStr: string): string => {
       const date = new Date(dateStr + 'T12:00:00');
       const options: Intl.DateTimeFormatOptions = { 
@@ -229,7 +250,7 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
         month: 'long',
         year: 'numeric'
       };
-      return date.toLocaleDateString('es-CO', options);
+      return date.toLocaleDateString(locale, options);
     };
 
     const formatShortDate = (dateStr: string): string => {
@@ -238,14 +259,15 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
         day: '2-digit', 
         month: 'short'
       };
-      return date.toLocaleDateString('es-CO', options);
+      return date.toLocaleDateString(locale, options);
     };
 
     // Si tiene fecha de fin y es diferente a la de inicio
     if (endDate && endDate !== startDate) {
       const start = formatShortDate(startDate);
       const end = formatShortDate(endDate);
-      return `${start} al ${end}`;
+      const toWord = currentLang.startsWith('en') ? 'to' : (currentLang.startsWith('pt') ? 'a' : 'al');
+      return `${start} ${toWord} ${end}`;
     }
     
     // Solo una fecha
@@ -281,14 +303,14 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
   async onClearCart(): Promise<void> {
     // Mostrar confirmación
     const result = await Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'Esta acción eliminará todos los tours de tu carrito',
+      title: this.translate.instant('cart.confirmClearTitle'),
+      text: this.translate.instant('cart.confirmClearText'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#dc3545',
       cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Sí, limpiar carrito',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: this.translate.instant('cart.confirmClearYes'),
+      cancelButtonText: this.translate.instant('cart.confirmClearCancel')
     });
 
     if (!result.isConfirmed) {
@@ -310,8 +332,8 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
 
       Toast.fire({
         icon: 'success',
-        title: '¡Carrito limpiado!',
-        text: 'Todos los tours han sido eliminados'
+        title: this.translate.instant('cart.clearSuccessTitle'),
+        text: this.translate.instant('cart.clearSuccessText')
       });
 
       this.clearCart.emit();
@@ -321,8 +343,8 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
       // Mostrar mensaje de error
       Swal.fire({
         icon: 'error',
-        title: 'Error al limpiar el carrito',
-        text: 'Por favor, intenta de nuevo',
+        title: this.translate.instant('cart.clearErrorTitle'),
+        text: this.translate.instant('cart.clearErrorText'),
         confirmButtonColor: '#0d6efd'
       });
     } finally {
@@ -461,18 +483,18 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
     console.error('Error en carrito:', error);
     
     // Determinar tipo de error y mostrar mensaje apropiado
-    let errorMessage = 'Error cargando el carrito. Por favor, intenta de nuevo.';
+    let errorMessage = this.translate.instant('cart.errorLoading');
     
     if (error.status === 401) {
-      errorMessage = 'Sesión expirada. Por favor, inicia sesión de nuevo.';
+      errorMessage = this.translate.instant('cart.errorSessionExpired');
       // TODO: Redirigir al login
       // this.router.navigate(['/auth/login']);
     } else if (error.status === 0) {
-      errorMessage = 'Error de conexión. Verifica tu conexión a internet.';
+      errorMessage = this.translate.instant('cart.errorConnection');
     } else if (error.status === 400) {
-      errorMessage = 'Error en los datos del carrito. Verifica la información e intenta de nuevo.';
+      errorMessage = this.translate.instant('cart.errorData');
     } else if (error.status === 500) {
-      errorMessage = 'Error del servidor. Por favor, intenta más tarde.';
+      errorMessage = this.translate.instant('cart.errorServer');
     }
     
     // Mostrar mensaje de error al usuario
@@ -482,3 +504,4 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
     console.log('Manteniendo datos locales del carrito tras error de sincronización');
   }
 }
+

@@ -54,6 +54,15 @@ export class ReservationService {
   }
 
   /**
+   * Cancela una reserva por lluvia
+   * @param reservationId ID de la reserva a cancelar
+   * @returns Observable con la reserva cancelada
+   */
+  cancelReservationByRain(reservationId: number | string): Observable<Reservation> {
+    return this.http.put<Reservation>(`${this.apiUrl}/reservations/${reservationId}/cancel/rain`, {});
+  }
+
+  /**
    * Reagenda una reserva
    * @param reservationId ID de la reserva a reagendar (formato "RES-98" o número)
    * @param body Objeto con los datos de reagendamiento (newDate, slotId, startTime, endTime, configQuantity)

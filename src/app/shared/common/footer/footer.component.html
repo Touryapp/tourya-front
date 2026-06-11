@@ -7,7 +7,7 @@
             <div class="row row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1">
                 <div class="col">
                     <div class="footer-widget">
-                        <h5>Destinos</h5>
+                        <h5>{{ 'footer.destinations' | translate }}</h5>
                         <ul class="footer-menu">
                             <li>
                                 <a href="javascript:void(0);">San Andrés</a>
@@ -33,13 +33,13 @@
                 <div class="col">
                     <div class="footer-widget">
                         
-                        <h5>Compañía</h5>
+                        <h5>{{ 'footer.company' | translate }}</h5>
                         <ul class="footer-menu">
                             <li>
-                                <a [routerLink]="routes.conocenos">¿Quienes somos?</a>
+                                <a [routerLink]="routes.conocenos">{{ 'footer.aboutUs' | translate }}</a>
                             </li>
                             <li>
-                                <a [routerLink]="routes.blogsite">Blog</a>
+                                <a [routerLink]="routes.blogsite">{{ 'footer.blog' | translate }}</a>
                             <!-- </li>
                             <li>
                                 <a [routerLink]="routes.gallery">Gallery</a>
@@ -58,10 +58,10 @@
                 </div>
                 <div class="col">
                     <div class="footer-widget">
-                        <h5>Soporte</h5>
+                        <h5>{{ 'footer.support' | translate }}</h5>
                         <ul class="footer-menu">
                             <li>
-                                <a [routerLink]="routes.contactanos">Contáctenos</a>
+                                <a [routerLink]="routes.contactanos">{{ 'footer.contactUs' | translate }}</a>
                             </li>
                             <!-- <li>
                                 <a href="javascript:void(0);">Careers</a>
@@ -84,13 +84,13 @@
                 
                 <div class="col">
                     <div class="footer-widget">
-                        <h5>Legal</h5>
+                        <h5>{{ 'footer.legal' | translate }}</h5>
                         <ul class="footer-menu">
                             <li>
-                                <a [routerLink]="routes.legalSite">Términos y Condiciones</a>
+                                <a [routerLink]="routes.legalSite">{{ 'footer.termsAndConditions' | translate }}</a>
                             </li>
                             <li>
-                                <a [routerLink]="routes.legalSitePrivacyPolicy">Políticas de privacidad y tratamiento de datos personales</a>
+                                <a [routerLink]="routes.legalSitePrivacyPolicy">{{ 'footer.privacyPolicy' | translate }}</a>
                             </li>
                             <!-- <li>
                                 <a [routerLink]="routes.privacyPolicy">Privacy Policy</a>
@@ -109,10 +109,10 @@
                 </div>
                 <div class="col">
                     <div class="footer-widget">
-                        <h5>Proveedores</h5>
+                        <h5>{{ 'footer.suppliers' | translate }}</h5>
                         <ul class="footer-menu">
                             <li>
-                                <a [routerLink]="routes.contactanos">Regístrate como proveedor</a>
+                                <a [routerLink]="routes.contactanos">{{ 'footer.registerAsSupplier' | translate }}</a>
                             </li>
                             <!-- <li>
                                 <a href="javascript:void(0);">Activity Finder</a>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="col-lg-6 col-xl-4 col-xxl-4">
                         <div class="d-flex align-items-center justify-content-center flex-wrap">
-                            <h6 class="fs-14 fw-medium me-2 mb-2">Available on : </h6>
+                            <h6 class="fs-14 fw-medium me-2 mb-2">{{ 'footer.availableOn' | translate }} </h6>
                             <a href="javascript:void(0);" class="d-block mb-3 me-2">
                                 <img src="assets/img/icons/googleplay.svg" alt="logo">
                             </a>
@@ -172,7 +172,7 @@
                                     <i class="fa-regular fa-envelope fs-24 text-gray-9"></i>
                                 </span>
                                 <div class="ms-2">
-                                    <p class="fw-medium text-dark">Correo electrónico: luis.mendoza&#64;tourya.co</p>
+                                    <p class="fw-medium text-dark">{{ 'footer.email' | translate }} luis.mendoza&#64;tourya.co</p>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@
                     </div>
                     <div class="col-lg-6 col-xl-4 col-xxl-4">
                         <div class="d-flex align-items-center justify-content-center flex-wrap">
-                            <h6 class="fs-14 fw-medium ms-2 mb-2">Available on : </h6>
+                            <h6 class="fs-14 fw-medium ms-2 mb-2">{{ 'footer.availableOn' | translate }} </h6>
                             <a href="javascript:void(0);" class="d-block mb-3 ms-2">
                                 <img src="assets/img/icons/googleplay.svg" alt="logo">
                             </a>
@@ -219,7 +219,7 @@
                                     <i class="fa-regular fa-envelope fs-24 text-gray-9"></i>
                                 </span>
                                 <div class="me-2">
-                                    <p class="mb-1">Drop Us an Email</p>
+                                    <p class="mb-1">{{ 'footer.email' | translate }}</p>
                                     <p class="fw-medium text-dark">luis.mendoza&#64;tourya.co</p>
                                 </div>
                             </div>

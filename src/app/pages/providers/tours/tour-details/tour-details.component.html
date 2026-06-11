@@ -67,7 +67,7 @@
                             <div class="mb-2">
                                 <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">{{ tour ? i18nService.getValue(tour.name) : '' }}<span *ngIf="tour?.highlight" class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
                                 <div class="d-flex align-items-center flex-wrap">
-                                    <p *ngIf="tour?.tourCategory" class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-receipt text-primary me-2"></i>{{ tour.tourCategory.name || tour.tourCategory.id }}</p>
+                                    <p *ngIf="tour?.tourCategory" class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-receipt text-primary me-2"></i>{{ (tour.tourCategory.name | localizedName) || tour.tourCategory.id }}</p>
                                     <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ getLocationDisplay() }}
                                         <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2" (click)="scrollToLocation($event)">View Location</a>
                                     </p>

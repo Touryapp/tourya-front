@@ -253,11 +253,11 @@ export class DefaultHeaderComponent {
    * Solo los proveedores (que no sean admin) NO pueden cambiar el idioma
    */
   get canChangeLanguage(): boolean {
-    // Si es proveedor y NO es admin, no puede cambiar idioma
-    if (this.isProvider && !this.isAdmin) {
+    // No mostrar selector de idioma a Proveedores ni a Administradores (backoffice)
+    if (this.isProvider || this.isAdmin) {
       return false;
     }
-    // Todos los demás (no autenticados, clientes, admins) pueden cambiar idioma
+    // Clientes y usuarios no autenticados (invitados) sí pueden cambiar idioma
     return true;
   }
 

@@ -50,6 +50,7 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { MatOptionModule } from "@angular/material/core";
 import { TourSlotSelectionModalComponent } from "./common/tour-slot-selection-modal/tour-slot-selection-modal.component";
 import { PendingReviewsModalComponent } from "./components/pending-reviews-modal/pending-reviews-modal.component";
+import { LocalizedNamePipe } from "./pipe/localized-name/localized-name.pipe";
 @NgModule({
   declarations: [
     FooterComponent,
@@ -98,6 +99,7 @@ import { PendingReviewsModalComponent } from "./components/pending-reviews-modal
     }),
     MatOptionModule,
     RouterModule,
+    LocalizedNamePipe,
   ],
   exports: [
     NgScrollbarModule,
@@ -138,7 +140,8 @@ import { PendingReviewsModalComponent } from "./components/pending-reviews-modal
     CalendarAngularCalendarModule,
     PendingReviewsModalComponent,
     GoogleMapsModule,
-    RouterModule
+    RouterModule,
+    LocalizedNamePipe
   ],
   providers: [
     provideNgxMask(),

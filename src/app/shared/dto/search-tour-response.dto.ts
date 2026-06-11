@@ -73,8 +73,10 @@ export interface GalleryDto {
 
 export interface TagDto {
   id: number;
-  name: string;
-  category: string;
+  name: { [key: string]: string };
+  category?: string;
+  dimension?: string;
+  slug?: string;
 }
 
 export interface PriceDto {

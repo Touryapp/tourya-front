@@ -26,7 +26,7 @@ export class UserDashboardComponent {
     private common: CommonService,
     private data: DataService
   ) {
-    this.data.getSideBarData.subscribe((res: SideBar2[]) => {
+    this.data.getSideBarData2.subscribe((res: SideBar2[]) => {
       this.side_bar_data = res;
     });
     this.common.base.subscribe((base: string) => {

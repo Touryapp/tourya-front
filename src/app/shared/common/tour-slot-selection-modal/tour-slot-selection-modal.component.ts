@@ -39,6 +39,7 @@ import { RescheduleConfirmationModalComponent } from "../reschedule-confirmation
 import { GuestInfoModalComponent } from "../guest-info-modal/guest-info-modal.component";
 import { TouristService } from "../../services/tourist.service";
 import { RequestProvidersService } from "../../../pages/providers/requestproviders/request-providers.service";
+import { TranslateModule } from "@ngx-translate/core";
 
 
 @Component({
@@ -53,7 +54,8 @@ import { RequestProvidersService } from "../../../pages/providers/requestprovide
     SlickCarouselModule,
     MatSlideToggleModule,
     ModalModule,
-    CarouselModule
+    CarouselModule,
+    TranslateModule
   ],
 })
 export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
