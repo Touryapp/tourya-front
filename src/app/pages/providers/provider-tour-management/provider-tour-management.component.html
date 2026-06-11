@@ -5,8 +5,8 @@
     <div class="card booking-header mb-4">
         <div class="card-body header-content d-flex align-items-center justify-content-between flex-wrap">
             <div>
-                <h6>{{ config.title }}</h6>
-                <p class="fs-14 text-gray-6 fw-normal" *ngIf="config.subtitle">{{ config.subtitle }}</p>
+                <h6>{{ config.title | translate }}</h6>
+                <p class="fs-14 text-gray-6 fw-normal" *ngIf="config.subtitle">{{ config.subtitle | translate }}</p>
                 <p class="fs-14 text-gray-6 fw-normal">{{ 'provider-tour-management.header.totalBookings' | translate }}: {{ totalBookings }}</p>
             </div>
 
@@ -74,14 +74,14 @@
                                class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
                                data-bs-toggle="dropdown" 
                                aria-expanded="false">
-                                {{ filter.label }}
+                                {{ filter.label | translate }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end p-3">
                                 <li *ngFor="let option of filter.options">
                                     <a href="javascript:void(0);" 
                                        class="dropdown-item rounded-1"
                                        (click)="filter.field === 'status' ? filterByStatus(option.value) : filterByTourType(option.value)">
-                                        {{ option.label }}
+                                        {{ option.label | translate }}
                                     </a>
                                 </li>
                             </ul>
@@ -92,7 +92,7 @@
                             *ngIf="filter.type === 'text'"
                             type="text" 
                             class="form-control form-control-sm"
-                            [placeholder]="filter.label"
+                            [placeholder]="filter.label | translate"
                             (input)="searchData($any($event.target).value)" />
                     </div>
 
@@ -134,7 +134,7 @@
                             <!-- Columnas dinámicas según configuración -->
                             <th *ngFor="let column of config.columns" 
                                 [attr.mat-sort-header]="column.sortable ? column.field : undefined">
-                                {{ column.header }}
+                                {{ column.header | translate }}
                             </th>
                             <th>{{ 'provider-tour-management.columns.actions' | translate }}</th>
                         </tr>
@@ -175,14 +175,14 @@
                                             class="btn btn-sm"
                                             [ngClass]="'btn-' + action.color"
                                             (click)="onAction(action.id, booking); $event.stopPropagation()"
-                                            [title]="action.label">
+                                            [title]="action.label | translate">
                                             <i [class]="action.icon"></i>
                                         </button>
                                         <button 
                                             *ngIf="booking.canRainCancel"
                                             class="btn btn-sm btn-primary px-3 text-nowrap"
                                             (click)="onCancelByRain(booking); $event.stopPropagation()">
-                                            Cancelar por lluvia
+                                            {{ 'provider-tour-management.modal.cancelByRain' | translate }}
                                         </button>
                                     </div>
                                 </td>
@@ -284,60 +284,60 @@
                             <h6 class="mb-3">{{ 'provider-tour-management.modal.bookingInfo' | translate }}</h6>
                             <div class="row gy-3">
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Fecha de la reserva</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.bookingDate' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.checkInDate }}</p>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Duración</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.duration' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ getDurationLabelFromEnum(selectedBooking.tourDetails?.durationEnum) }}</p>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Viajeros</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.travelers' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ formatTravellers(selectedBooking.travellers) }}</p>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Precio total</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.totalPrice' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium text-success">{{ selectedBooking.price }}</p>
                                 </div>
                                 <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">Fecha de compra</h6>
+                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.purchaseDate' | translate }}</h6>
                                     <p class="text-dark fs-16 fw-medium">{{ selectedBooking.bookingDate }}</p>
                                 </div>
                                 <!-- Fecha max cancelación: siempre si existe -->
                                 @if (selectedBooking.maxCancellationDate) {
                                     <div class="col-lg-4">
-                                        <h6 class="fs-14 text-gray-6">Fecha máxima de cancelación</h6>
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.maxCancellationDate' | translate }}</h6>
                                         <p class="text-dark fs-16 fw-medium text-danger">{{ formatDate(selectedBooking.maxCancellationDate) }}</p>
                                     </div>
                                 }
                                 <!-- Fecha max reagendamiento: solo si la política lo permite -->
                                 @if (selectedBooking.tourDetails?.cancellationPolicies?.[0]?.allowsRescheduling && selectedBooking.maxReschedulingDate) {
                                     <div class="col-lg-4">
-                                        <h6 class="fs-14 text-gray-6">Fecha máxima de reagendamiento</h6>
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.maxReschedulingDate' | translate }}</h6>
                                         <p class="text-dark fs-16 fw-medium text-warning">{{ formatDate(selectedBooking.maxReschedulingDate) }}</p>
                                     </div>
                                 }
                                 <!-- Permite cancelación por lluvia: si la política lo define -->
                                 @if (selectedBooking.tourDetails?.cancellationPolicies?.length) {
                                     <div class="col-lg-4">
-                                        <h6 class="fs-14 text-gray-6">Permite cancelación por lluvia</h6>
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.allowsRainCancellation' | translate }}</h6>
                                         @if (selectedBooking.tourDetails.cancellationPolicies[0].allowsRainRefund) {
-                                            <p class="text-dark fs-16 fw-medium text-success"><i class="isax isax-tick-circle me-1"></i>Sí</p>
+                                            <p class="text-dark fs-16 fw-medium text-success"><i class="isax isax-tick-circle me-1"></i>{{ 'provider-tour-management.modal.yes' | translate }}</p>
                                         } @else {
-                                            <p class="text-dark fs-16 fw-medium text-muted"><i class="isax isax-close-circle me-1"></i>No</p>
+                                            <p class="text-dark fs-16 fw-medium text-muted"><i class="isax isax-close-circle me-1"></i>{{ 'provider-tour-management.modal.no' | translate }}</p>
                                         }
                                     </div>
                                 }
                                 <!-- Fecha de cancelación efectiva -->
                                 @if (selectedBooking.cancellationDate) {
                                     <div class="col-lg-4">
-                                        <h6 class="fs-14 text-gray-6">Fecha de cancelación</h6>
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.cancellationDate' | translate }}</h6>
                                         <p class="text-dark fs-16 fw-medium text-danger"><i class="isax isax-close-circle me-1"></i>{{ selectedBooking.cancellationDate }}</p>
                                     </div>
                                 }
                                 @if (selectedBooking.cancellationReason) {
                                     <div class="col-lg-4">
-                                        <h6 class="fs-14 text-gray-6">Motivo de cancelación</h6>
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.cancellationReasonLabel' | translate }}</h6>
                                         <p class="text-dark fs-16 fw-medium text-danger">{{ formatCancellationReason(selectedBooking.cancellationReason) }}</p>
                                     </div>
                                 }
@@ -351,7 +351,7 @@
                             <!-- Reserva a nombre de -->
                             @if (selectedBooking.serviceResponsible) {
                                 <div class="upcoming-details mb-4">
-                                    <h6 class="mb-3">Reserva a nombre de:</h6>
+                                    <h6 class="mb-3">{{ 'provider-tour-management.modal.bookingOnBehalfOf' | translate }}</h6>
                                     <div class="row gy-3">
                                         <div class="col-lg-4">
                                             <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.name' | translate }}</h6>
@@ -372,7 +372,7 @@
                             <!-- Información del pagador -->
                             @if (selectedBooking.payerName || selectedBooking.payerEmail) {
                                 <div class="upcoming-details mb-4">
-                                    <h6 class="mb-3">Información del pagador</h6>
+                                    <h6 class="mb-3">{{ 'provider-tour-management.modal.payerInfo' | translate }}</h6>
                                     <div class="row gy-3">
                                         @if (selectedBooking.payerName) {
                                             <div class="col-lg-4">
@@ -382,7 +382,7 @@
                                         }
                                         @if (selectedBooking.payerDocumentType && selectedBooking.payerDocumentNumber) {
                                             <div class="col-lg-4">
-                                                <h6 class="fs-14 text-gray-6">Documento</h6>
+                                                <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.documentLabel' | translate }}</h6>
                                                 <p class="text-dark fs-16 fw-medium">{{ selectedBooking.payerDocumentType }} {{ selectedBooking.payerDocumentNumber }}</p>
                                             </div>
                                         }
@@ -430,7 +430,7 @@
                             <!-- Itinerario -->
                             @if (selectedBooking.tourDetails?.itineraries?.length) {
                             <div class="upcoming-details mb-4">
-                                <h6 class="mb-3">Itinerario</h6>
+                                <h6 class="mb-3">{{ 'provider-tour-management.modal.itinerary' | translate }}</h6>
                                 <div class="card shadow-none mb-0">
                                     <div class="card-body p-3">
                                         <div class="stage-flow">
@@ -440,7 +440,7 @@
                                                     <div class="flow-content">
                                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                                             <div>
-                                                                <h6 class="fw-medium mb-1">{{ i18nService.getValue(it.title) || ('Parada ' + (i + 1)) }}</h6>
+                                                                <h6 class="fw-medium mb-1">{{ i18nService.getValue(it.title) || (('provider-tour-management.modal.stopLabel' | translate) + ' ' + (i + 1)) }}</h6>
                                                                 <p class="mb-0 text-muted fs-13">{{ it.time || '' }}</p>
                                                             </div>
                                                         </div>
@@ -457,7 +457,7 @@
                         <!-- Punto de encuentro -->
                         @if (selectedBooking.tourDetails?.locations?.length) {
                             <div class="upcoming-details mb-4">
-                                <h6 class="mb-3">Punto de encuentro</h6>
+                                <h6 class="mb-3">{{ 'provider-tour-management.modal.meetingPoint' | translate }}</h6>
                                 @for (loc of selectedBooking.tourDetails.locations; track loc.id) {
                                     <div class="mb-3">
                                         <p class="fs-14 fw-medium text-dark mb-2">
@@ -478,7 +478,7 @@
                         <!-- Información de contacto (tour) -->
                         @if (selectedBooking.tourDetails?.provider) {
                             <div class="upcoming-details mb-4">
-                                <h6 class="mb-3">Información de contacto (tour)</h6>
+                                <h6 class="mb-3">{{ 'provider-tour-management.modal.tourContactInfo' | translate }}</h6>
                                 <div class="row gy-3">
                                     <div class="col-lg-4">
                                         <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.name' | translate }}</h6>
@@ -547,11 +547,11 @@
                                         <button 
                                             class="btn btn-primary" 
                                             (click)="openReviewModalForBooking(selectedBooking.id)">
-                                            <i class="isax isax-star me-2"></i>Reseñar
+                                            <i class="isax isax-star me-2"></i>{{ 'provider-tour-management.modal.reviewBtn' | translate }}
                                         </button>
                                     } @else if (selectedBooking.status === 'Completed') {
                                         <span class="text-success fw-medium d-flex align-items-center p-2 bg-success-transparent rounded">
-                                            <i class="isax isax-tick-circle me-2 fs-20"></i>Ya hice la reseña
+                                            <i class="isax isax-tick-circle me-2 fs-20"></i>{{ 'provider-tour-management.modal.alreadyReviewed' | translate }}
                                         </span>
                                     }
                                 }
@@ -566,7 +566,7 @@
                                             [ngClass]="'btn-' + action.color"
                                             (click)="onAction(action.id, selectedBooking); $event.stopPropagation()"
                                             data-bs-dismiss="modal">
-                                            <i [class]="action.icon + ' me-2'"></i>{{ action.label }}
+                                            <i [class]="action.icon + ' me-2'"></i>{{ action.label | translate }}
                                         </button>
                                     }
                                 }
@@ -593,7 +593,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center justify-content-between">
-                    <h5>Escribir Reseña</h5>
+                    <h5>{{ 'provider-tour-management.modal.writeReview' | translate }}</h5>
                     <a href="javascript:void(0);" (click)="closeReviewModal()" aria-label="Close">
                         <i class="ti ti-x fs-16"></i>
                     </a>
@@ -603,7 +603,7 @@
                     <div class="mb-3 p-3 bg-light rounded">
                         <h6 class="mb-1">{{ reviewModalBooking.tourName }}</h6>
                         <p class="fs-14 text-muted mb-0">
-                            <i class="isax isax-receipt-text me-1"></i>Booking: {{ reviewModalBooking.id }}
+                            <i class="isax isax-receipt-text me-1"></i>{{ 'provider-tour-management.modal.bookingLabel' | translate }}: {{ reviewModalBooking.id }}
                         </p>
                     </div>
 
@@ -614,7 +614,7 @@
                                 <div class="row align-items-start g-3">
                                     <!-- Columna Izquierda: Rating -->
                                     <div class="col-md-6">
-                                        <label class="form-label">Tu Calificación <span class="text-danger">*</span></label>
+                                        <label class="form-label">{{ 'provider-tour-management.modal.yourRating' | translate }} <span class="text-danger">*</span></label>
                                         <div class="selection-wrap">
                                             <div class="d-inline-block">
                                                 <div class="rating-selction">
@@ -647,14 +647,14 @@
                                     <div class="col-md-6" *ngIf="reviewRating > 0 && activeReviewReasons.length > 0">
                                         <label class="form-label">
                                             <ng-container *ngIf="reviewRating >= 4">
-                                                <i class="fa-solid fa-thumbs-up text-success me-1"></i>¿Qué te gustó?
+                                                <i class="fa-solid fa-thumbs-up text-success me-1"></i>{{ 'provider-tour-management.modal.whatDidYouLike' | translate }}
                                             </ng-container>
                                             <ng-container *ngIf="reviewRating > 0 && reviewRating < 4">
-                                                <i class="fa-solid fa-thumbs-down text-danger me-1"></i>¿Qué mejorarías?
+                                                <i class="fa-solid fa-thumbs-down text-danger me-1"></i>{{ 'provider-tour-management.modal.whatWouldYouImprove' | translate }}
                                             </ng-container>
                                         </label>
                                         <div *ngIf="reviewReasonsLoading" class="text-muted fs-13">
-                                            <span class="spinner-border spinner-border-sm me-1"></span>Cargando motivos...
+                                            <span class="spinner-border spinner-border-sm me-1"></span>{{ 'provider-tour-management.modal.loadingReasons' | translate }}
                                         </div>
                                         <div class="review-reasons-list" *ngIf="!reviewReasonsLoading">
                                             <div class="form-check mb-1" *ngFor="let reason of activeReviewReasons">
@@ -677,23 +677,23 @@
 
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label">Imágenes</label>
+                                <label class="form-label">{{ 'provider-tour-management.modal.imagesLabel' | translate }}</label>
                                 <input type="file" class="form-control" accept=".jpg, .jpeg, .png" multiple
                                        (change)="onReviewImagesSelected($event)">
                                 @if (reviewImages.length > 0) {
-                                    <small class="text-muted">{{ reviewImages.length }} imagen(es) seleccionada(s)</small>
+                                    <small class="text-muted">{{ reviewImages.length }} {{ 'provider-tour-management.modal.imagesSelected' | translate }}</small>
                                 }
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label">Escribe tu Reseña <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ 'provider-tour-management.modal.writeYourReview' | translate }} <span class="text-danger">*</span></label>
                                 <textarea 
                                     class="form-control" 
                                     rows="3"
                                     [value]="reviewComment"
                                     (input)="reviewComment = $any($event.target).value"
-                                    placeholder="Comparte tu experiencia con este tour..."></textarea>
+                                    [placeholder]="'provider-tour-management.modal.reviewPlaceholder' | translate"></textarea>
                             </div>
                         </div>
                     </div>
@@ -701,10 +701,10 @@
                 <div class="modal-footer">
                     <div class="d-flex align-items-center justify-content-end m-0 gap-2">
                         <button type="button" class="btn btn-secondary btn-md" (click)="closeReviewModal()">
-                            Cancelar
+                            {{ 'provider-tour-management.modal.cancelBtn' | translate }}
                         </button>
                         <button type="button" class="btn btn-primary btn-md" (click)="submitReview()">
-                            <i class="isax isax-edit-2 me-1"></i>Enviar Reseña
+                            <i class="isax isax-edit-2 me-1"></i>{{ 'provider-tour-management.modal.submitReview' | translate }}
                         </button>
                     </div>
                 </div>
@@ -724,7 +724,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Cancelar Reserva</h5>
+                    <h5 class="modal-title">{{ 'provider-tour-management.modal.cancelBooking' | translate }}</h5>
                     <button type="button" class="btn-close" (click)="closeCancelModal()" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -732,7 +732,7 @@
                     <div class="mb-3 p-3 bg-light rounded">
                         <h6 class="mb-1">{{ cancelModalBooking.tourName }}</h6>
                         <p class="fs-14 text-muted mb-0">
-                            <i class="isax isax-receipt-text me-1"></i>Reserva: {{ cancelModalBooking.id }}
+                            <i class="isax isax-receipt-text me-1"></i>{{ 'provider-tour-management.modal.reservaLabel' | translate }}: {{ cancelModalBooking.id }}
                         </p>
                     </div>
 
@@ -740,30 +740,31 @@
                     <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
                         <i class="isax isax-warning-2 fs-4 me-2"></i>
                         <div>
-                            <strong>¿Estás seguro de cancelar esta reserva?</strong>
-                            <p class="mb-0 fs-14">Esta acción no se puede deshacer.</p>
+                            <strong>{{ 'provider-tour-management.modal.confirmCancelQuestion' | translate }}</strong>
+                            <p class="mb-0 fs-14">{{ 'provider-tour-management.modal.irreversibleAction' | translate }}</p>
                         </div>
                     </div>
 
                     <!-- Cancellation Reason -->
                     <div class="mb-3">
-                        <label class="form-label">Motivo de cancelación <span class="text-danger">*</span></label>
+                        <label class="form-label">{{ 'provider-tour-management.modal.cancellationReasonSelect' | translate }} <span class="text-danger">*</span></label>
                         <select 
                             class="form-select" 
                             [(ngModel)]="cancellationReason"
                             required>
-                            <option value="" disabled selected>Selecciona un motivo</option>
-                            <option value="Lluvia">Lluvia</option>
-                            <option value="No puedo disfrutarlo">No puedo disfrutarlo</option>
+                            <option value="" disabled selected>{{ 'provider-tour-management.modal.selectReason' | translate }}</option>
+                            <option value="CANNOT_ATTEND">{{ 'provider-tour-management.modal.reasonCannotAttend' | translate }}</option>
+                            <option value="ILLNESS">{{ 'provider-tour-management.modal.reasonIllness' | translate }}</option>
+                            <option value="INABILITY_TO_TRAVEL">{{ 'provider-tour-management.modal.reasonInabilityToTravel' | translate }}</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="closeCancelModal()">
-                        Volver
+                        {{ 'provider-tour-management.modal.goBack' | translate }}
                     </button>
                     <button type="button" class="btn btn-danger" (click)="confirmCancellation()">
-                        <i class="isax isax-close-circle me-1"></i>Confirmar Cancelación
+                        <i class="isax isax-close-circle me-1"></i>{{ 'provider-tour-management.modal.confirmCancellation' | translate }}
                     </button>
                 </div>
             </div>
@@ -782,7 +783,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Reagendar Reserva</h5>
+                    <h5 class="modal-title">{{ 'provider-tour-management.modal.rescheduleBooking' | translate }}</h5>
                     <button type="button" class="btn-close" (click)="closeRescheduleDateModal()" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -790,7 +791,7 @@
                     <div class="mb-3 p-3 bg-light rounded">
                         <h6 class="mb-1">{{ rescheduleDateModalBooking.tourName }}</h6>
                         <p class="fs-14 text-muted mb-0">
-                            <i class="isax isax-receipt-text me-1"></i>Reserva: {{ rescheduleDateModalBooking.id }}
+                            <i class="isax isax-receipt-text me-1"></i>{{ 'provider-tour-management.modal.reservaLabel' | translate }}: {{ rescheduleDateModalBooking.id }}
                         </p>
                     </div>
 
@@ -798,8 +799,8 @@
                     <div class="alert alert-info d-flex align-items-center mb-3" role="alert">
                         <i class="isax isax-calendar fs-4 me-2"></i>
                         <div>
-                            <strong>Selecciona las nuevas fechas</strong>
-                            <p class="mb-0 fs-14">Elige las fechas de Check In y Check Out para tu tour.</p>
+                            <strong>{{ 'provider-tour-management.modal.selectNewDates' | translate }}</strong>
+                            <p class="mb-0 fs-14">{{ 'provider-tour-management.modal.selectCheckInOut' | translate }}</p>
                         </div>
                     </div>
 
@@ -807,7 +808,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Check In <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ 'provider-tour-management.modal.checkIn' | translate }} <span class="text-danger">*</span></label>
                                 <input 
                                     type="date" 
                                     class="form-control" 
@@ -818,7 +819,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Check Out <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ 'provider-tour-management.modal.checkOut' | translate }} <span class="text-danger">*</span></label>
                                 <input 
                                     type="date" 
                                     class="form-control" 
@@ -831,10 +832,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="closeRescheduleDateModal()">
-                        Cancelar
+                        {{ 'provider-tour-management.modal.cancelBtn' | translate }}
                     </button>
                     <button type="button" class="btn btn-warning" (click)="confirmRescheduleDates()">
-                        <i class="isax isax-calendar me-1"></i>Continuar
+                        <i class="isax isax-calendar me-1"></i>{{ 'provider-tour-management.modal.continueBtn' | translate }}
                     </button>
                 </div>
             </div>

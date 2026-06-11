@@ -14,6 +14,8 @@ import { CountryService } from '../../shared/services/country.service';
 import { DepartmentService } from '../../shared/services/department.service';
 import { CityService } from '../../shared/services/city.service';
 import { SearchToursService } from '../clients/list-tours/search-tours.service';
+import { LocalizedNamePipe } from '../../shared/pipe/localized-name/localized-name.pipe';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-maritime-activity-reports',
@@ -26,7 +28,9 @@ import { SearchToursService } from '../clients/list-tours/search-tours.service';
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
-    materialModule
+    materialModule,
+    LocalizedNamePipe,
+    TranslateModule
   ]
 })
 export class MaritimeActivityReportsComponent implements OnInit {
@@ -83,11 +87,10 @@ export class MaritimeActivityReportsComponent implements OnInit {
 
     this.reportForm = this.fb.group({
       country: ['', Validators.required],
-      department: [''],
+      department: ['', Validators.required],
       city: ['', Validators.required],
-      category: [''],
-      subCategory: [''],
-      tag: ['', Validators.required],
+      category: ['', Validators.required],
+      subCategory: ['', Validators.required],
       flag: [MaritimeFlag.GREEN, Validators.required],
       reportStartDate: ['', Validators.required],
       reportEndDate: ['', Validators.required]
@@ -235,7 +238,6 @@ export class MaritimeActivityReportsComponent implements OnInit {
       city: report.city,
       category: report.category || '',
       subCategory: report.subCategory || '',
-      tag: report.tag,
       flag: report.flag,
       reportStartDate: report.reportStartDate,
       reportEndDate: report.reportEndDate
@@ -278,8 +280,25 @@ export class MaritimeActivityReportsComponent implements OnInit {
 
     const reportData = this.reportForm.value;
 
+    const countryObj = this.countries.find(c => c.name === reportData.country);
+    const deptObj = this.departments.find(d => d.name === reportData.department);
+    const cityObj = this.cities.find(c => c.name === reportData.city);
+    const categoryObj = this.categories.find(c => c.name === reportData.category);
+    const subCatObj = this.subCategories.find(s => s.name === reportData.subCategory);
+
+    const payload = {
+      countryId: countryObj ? countryObj.id : null,
+      stateId: deptObj ? deptObj.id : null,
+      cityId: cityObj ? cityObj.id : null,
+      businessCategoryId: categoryObj ? categoryObj.id : null,
+      subcategoryCode: subCatObj ? subCatObj.code : null,
+      flag: reportData.flag,
+      reportStartDate: reportData.reportStartDate,
+      reportEndDate: reportData.reportEndDate
+    };
+
     if (this.isEditMode && this.selectedReportId) {
-      this.reportsService.update(this.selectedReportId, reportData).subscribe({
+      this.reportsService.update(this.selectedReportId, payload).subscribe({
         next: () => {
           this.loadReports();
           this.closeModal();
@@ -287,7 +306,7 @@ export class MaritimeActivityReportsComponent implements OnInit {
         error: (err) => console.error('Error updating report', err)
       });
     } else {
-      this.reportsService.create(reportData).subscribe({
+      this.reportsService.create(payload).subscribe({
         next: () => {
           this.loadReports();
           this.closeModal();

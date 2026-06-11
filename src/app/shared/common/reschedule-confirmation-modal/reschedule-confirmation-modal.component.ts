@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ReservationService } from '../../services/reservation.service';
 import { RescheduleReservationRequest } from '../../models/reservation.model';
@@ -25,7 +26,7 @@ export interface RescheduleConfirmationData {
 @Component({
   selector: 'app-reschedule-confirmation-modal',
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, TranslateModule],
   templateUrl: './reschedule-confirmation-modal.component.html',
   styleUrls: ['./reschedule-confirmation-modal.component.scss']
 })

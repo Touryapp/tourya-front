@@ -79,20 +79,20 @@ export interface ProviderTourBooking {
 export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnChanges {
   public routes = routes;
   
-  // ConfiguraciÃ³n dinÃ¡mica segÃºn rol
+  // Configuración dinámica según rol
   config!: BookingManagementConfig;
   currentRole!: UserRole;
   
-  // Variables de paginaciÃ³n y filtrado
+  // Variables de paginación y filtrado
   public pageSize = 10;
   public currentPage = 1;
   public totalBookings = 0;
-  public totalPages = 0; // Agregado para paginaciÃ³n
+  public totalPages = 0; // Agregado para paginación
   public searchDataValue = '';
   public selectedStatus = '';
   public selectedTourType = '';
   
-  // Datos de la tabla (any[] para permitir acceso dinÃ¡mico)
+  // Datos de la tabla (any[] para permitir acceso dinámico)
   public tableData: any[] = [];
   public tableDataCopy: any[] = [];
 
@@ -102,7 +102,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   // Modales
   public selectedBooking: any | null = null;
 
-  // Flag para evitar que el modal se abra mÃºltiples veces desde el QR
+  // Flag para evitar que el modal se abra múltiples veces desde el QR
   private modalOpenedFromQR: boolean = false;
 
   // Dropdown states
@@ -171,11 +171,11 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   ngOnInit(): void {
     console.log('ðŸš€ ProviderTourManagementComponent - ngOnInit iniciado');
     
-    // Detectar rol y cargar configuraciÃ³n
+    // Detectar rol y cargar configuración
     this.currentRole = this.getUserRole();
     this.config = this.configService.getConfigByRole(this.currentRole);
     
-    // Cargar datos segÃºn el rol
+    // Cargar datos según el rol
     if (this.currentRole === 'CLIENT') {
       this.loadClientReservations();
       this.loadPendingReviews();
@@ -187,7 +187,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
 
     this.subscriptions.add(
       this.reservationService.reservationUpdated$.subscribe(() => {
-        console.log('ðŸ”„ NotificaciÃ³n de actualizaciÃ³n recibida - Refrescando lista');
+        console.log('🔄 Notificación de actualización recibida - Refrescando lista');
         this.ngZone.run(() => {
           if (this.currentRole === 'CLIENT') {
             this.loadClientReservations();
@@ -231,7 +231,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       }
     }, 1000);
     
-    // Verificar si hay parÃ¡metros de query (desde el QR scan)
+    // Verificar si hay parámetros de query (desde el QR scan)
     this.route.queryParams.subscribe((params: any) => {
       console.log('ðŸ“‹ Query params recibidos en provider-tour-management:', params);
       
@@ -242,7 +242,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         // Marcar que el modal ya fue abierto desde QR
         this.modalOpenedFromQR = true;
         
-        // NO limpiar los query params aquÃ­, lo hace el componente padre (provider-panel)
+        // NO limpiar los query params aquí, lo hace el componente padre (provider-panel)
         
         // Llamar al servicio para obtener los datos reales de la reserva
         this.reservationService.getReservationById(params['reservationId']).subscribe({
@@ -300,7 +300,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
               });
             }
 
-            // Abrir el modal con retry para asegurar que el DOM estÃ© listo
+            // Abrir el modal con retry para asegurar que el DOM esté listo
             this.openModalWithRetry();
           },
           error: (error) => {
@@ -318,7 +318,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     });
     
     // Agregar listener para cuando se cierra el modal de detalles de la reserva
-    // Esto limpiarÃ¡ los query params para evitar que se vuelvan a abrir los modales
+    // Esto limpiará los query params para evitar que se vuelvan a abrir los modales
     setTimeout(() => {
       const modalElement = document.getElementById('bookingDetailModal');
       if (modalElement) {
@@ -335,7 +335,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   private parseLocalDate(dateString: string): Date {
     if (!dateString) return new Date();
-    // Si es solo YYYY-MM-DD, aÃ±adir T00:00:00 para forzar el parseo como hora local
+    // Si es solo YYYY-MM-DD, añadir T00:00:00 para forzar el parseo como hora local
     if (dateString.length === 10 && dateString.includes('-') && !dateString.includes('T')) {
       return new Date(dateString + 'T00:00:00');
     }
@@ -395,7 +395,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       customerEmail: reservation.serviceResponsible?.email || 'N/A',
       customerPhone: reservation.serviceResponsible?.phone || 'N/A',
       travellers: reservation.travellers || 'N/A',
-      duration: reservation.duration ? `${reservation.duration} dÃ­as` : 'N/A',
+      duration: reservation.duration ? `${reservation.duration} días` : 'N/A',
       price: reservation.price ? `$${reservation.price.toFixed(2)}` : '$0.00',
       bookingDate: this.formatDate(reservation.createdDate),
       checkInDate: this.formatDateTime(reservation.checkInDate),
@@ -421,7 +421,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       canCancel: reservation.canCancel,
       cancellationDate: this.formatDate(reservation.cancellationDate),
       cancellationReason: reservation.cancellationReason || undefined,
-      canRainCancel: true, // reservation.canRainCancel,
+      canRainCancel: reservation.canRainCancel,
       // Service Responsible
       serviceResponsible: reservation.serviceResponsible || undefined
     };
@@ -429,7 +429,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   
 
   /**
-   * Crea un objeto de reserva desde los parÃ¡metros del QR
+   * Crea un objeto de reserva desde los parámetros del QR
    */
   private createBookingFromParams(params: any): ProviderTourBooking {
     return {
@@ -469,7 +469,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     } else if (this.authService.isUser()) {
       return 'CLIENT';
     }
-    throw new Error('Usuario sin rol vÃ¡lido asignado');
+    throw new Error('Usuario sin rol válido asignado');
   }
 
   /**
@@ -508,7 +508,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       size: this.pageSize
     }).subscribe({
       next: (response) => {
-        console.log('âœ… Reservas del proveedor cargadas:', response);
+        console.log('✅ Reservas del proveedor cargadas:', response);
         
         // Mapear las reservas del API al formato de la tabla
         const mappedReservations = response.content.map((reservation, index) => 
@@ -537,7 +537,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       size: this.pageSize
     }).subscribe({
       next: (response) => {
-        console.log('âœ… Reservas del cliente cargadas:', response);
+        console.log('✅ Reservas del cliente cargadas:', response);
         
         // Mapear las reservas del API al formato de la tabla
         const mappedReservations = response.content.map((reservation, index) => 
@@ -547,7 +547,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.tableData = mappedReservations;
         this.tableDataCopy = [...mappedReservations];
         this.totalBookings = response.totalElements;
-        this.totalPages = response.totalPages; // Guardar total de pÃ¡ginas
+        this.totalPages = response.totalPages; // Guardar total de páginas
       },
       error: (error) => {
         console.error('âŒ Error al cargar reservas del cliente:', error);
@@ -602,7 +602,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       maxReschedulingDate: reservation.maxReschedulingDate,
       canReschedule: reservation.canReschedule,
       canCancel: reservation.canCancel,
-      canRainCancel: true, // reservation.canRainCancel,
+      canRainCancel: reservation.canRainCancel,
       // Payer info from list API
       payerName: reservation.payerName,
       payerEmail: reservation.payerEmail,
@@ -656,7 +656,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       maxReschedulingDate: reservation.maxReschedulingDate,
       canReschedule: reservation.canReschedule,
       canCancel: reservation.canCancel,
-      canRainCancel: true, // reservation.canRainCancel,
+      canRainCancel: reservation.canRainCancel,
       // Payer info from list API
       payerName: reservation.payerName,
       payerEmail: reservation.payerEmail,
@@ -675,7 +675,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       'RESCHEDULED': 'Rescheduled',
       'DELIVERED': 'Completed',
       'CANCELLED': 'Cancelled',
-      'CANCELED': 'Cancelled',  // API usa ortografÃ­a americana
+      'CANCELED': 'Cancelled',  // API usa ortografía americana
       'TEMPORAL': 'Temporal',
       'NO_SHOW': 'No_Show'
     };
@@ -722,7 +722,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         checkInDate: '25 Jun 2024, 09:00 AM',
         returnDate: '02 Jul 2024, 06:00 PM',
         status: 'Confirmed',
-        destination: 'CancÃºn',
+        destination: 'Cancún',
         extraServices: ['Travel Insurance', 'Airport Transfer'],
         activities: ['Snorkeling', 'Beach Activities', 'Water Sports'],
         isSelected: false
@@ -815,20 +815,20 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Carga el catÃ¡logo de motivos de reseÃ±a desde el API
+   * Carga el catálogo de motivos de reseña desde el API
    */
   private loadReviewReasons(): void {
-    console.log('ðŸ”„ Iniciando carga de motivos de reseÃ±a...');
+    console.log('🔄 Iniciando carga de motivos de reseña...');
     this.reviewReasonsLoading = true;
     this.reviewsService.getReviewReasons().subscribe({
       next: (response) => {
-        console.log('âœ… Motivos de reseÃ±a cargados exitosamente:', response);
+        console.log('✅ Motivos de reseña cargados exitosamente:', response);
         this.reviewReasonsPositive = response.positive || [];
         this.reviewReasonsNegative = response.negative || [];
         this.reviewReasonsLoading = false;
       },
       error: (error) => {
-        console.error('âŒ Error al cargar motivos de reseÃ±a:', error);
+        console.error('âŒ Error al cargar motivos de reseña:', error);
         this.reviewReasonsLoading = false;
       }
     });
@@ -919,11 +919,11 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   public viewBookingDetails(booking: ProviderTourBooking): void {
     const numericId = booking.id.includes('-') ? booking.id.split('-')[1] : booking.id;
     
-    console.log('ðŸ”„ Iniciando carga completa de reserva:', numericId);
+    console.log('🔄 Iniciando carga completa de reserva:', numericId);
 
     // Mostrar loading
     Swal.fire({
-      title: 'Cargando detalles...',
+      title: this.translate.instant('provider-tour-management.swal.loadingDetails'),
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
@@ -1003,7 +1003,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         }
       },
       error: (error) => {
-        console.error('â Œ Error al obtener los detalles de la reserva:', error);
+        console.error('❌ Error al obtener los detalles de la reserva:', error);
         Swal.close();
         this.selectedBooking = booking; // Fallback a datos de lista
         this.openDetailModal();
@@ -1025,8 +1025,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Abre el modal con reintentos para asegurar que el DOM estÃ© listo
-   * Ãštil cuando se viene desde el QR scanner y el componente se estÃ¡ cargando
+   * Abre el modal con reintentos para asegurar que el DOM esté listo
+   * Útil cuando se viene desde el QR scanner y el componente se está cargando
    */
   private openModalWithRetry(attempt: number = 0, maxAttempts: number = 20): void {
     const modalElement = document.getElementById('bookingDetailModal');
@@ -1035,16 +1035,16 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       // Modal encontrado, abrirlo
       const modal = new (window as any).bootstrap.Modal(modalElement);
       modal.show();
-      console.log(`âœ… Modal abierto exitosamente (intento ${attempt + 1})`);
+      console.log(`✅ Modal abierto exitosamente (intento ${attempt + 1})`);
     } else if (attempt < maxAttempts) {
-      // Modal no encontrado, reintentar despuÃ©s de un delay
+      // Modal no encontrado, reintentar después de un delay
       console.log(`â³ Modal no encontrado, reintentando... (intento ${attempt + 1}/${maxAttempts})`);
       setTimeout(() => {
         this.openModalWithRetry(attempt + 1, maxAttempts);
       }, 300); // Esperar 300ms entre intentos (total 6 segundos)
     } else {
       // Se agotaron los intentos
-      console.error('âŒ No se pudo abrir el modal despuÃ©s de mÃºltiples intentos');
+      console.error('âŒ No se pudo abrir el modal después de múltiples intentos');
       console.error('El componente puede no haberse renderizado correctamente');
     }
   }
@@ -1083,18 +1083,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const numericId = bookingId.includes('-') ? bookingId.split('-')[1] : bookingId;
     
     Swal.fire({
-      title: '¿Confirmar entrega?',
-      text: "Esta acción marcará la reserva como entregada y procesará el pago.",
+      title: this.translate.instant('provider-tour-management.swal.confirmDeliveryTitle'),
+      text: this.translate.instant('provider-tour-management.swal.confirmDeliveryText'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, confirmar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: this.translate.instant('provider-tour-management.swal.yesConfirm'),
+      cancelButtonText: this.translate.instant('provider-tour-management.swal.cancel')
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: 'Procesando...',
+          title: this.translate.instant('provider-tour-management.swal.processing'),
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
@@ -1104,8 +1104,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.reservationService.confirmReservation(numericId).subscribe({
           next: (response) => {
             Swal.fire(
-              '¡Confirmada!',
-              'La reserva ha sido marcada como entregada exitosamente.',
+              this.translate.instant('provider-tour-management.swal.confirmedTitle'),
+              this.translate.instant('provider-tour-management.swal.confirmedText'),
               'success'
             );
             this.updateLocalBookingStatus(bookingId, response.deliveryStatus);
@@ -1120,8 +1120,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           error: (error) => {
             console.error('❌ Error confirmando reserva:', error);
             Swal.fire(
-              'Error',
-              'No se pudo confirmar la reserva. Por favor intente nuevamente.',
+              this.translate.instant('provider-tour-management.swal.error'),
+              this.translate.instant('provider-tour-management.swal.confirmErrorText'),
               'error'
             );
           }
@@ -1142,8 +1142,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   public cancelBooking(bookingId: string): void {
     Swal.fire({
-      title: 'Reserva cancelada',
-      text: `La reserva ${bookingId} ha sido marcada como cancelada.`,
+      title: this.translate.instant('provider-tour-management.swal.bookingCanceledTitle'),
+      text: this.translate.instant('provider-tour-management.swal.bookingCanceledText', { bookingId }),
       icon: 'info'
     });
     const booking = this.tableData.find(b => b.id === bookingId);
@@ -1157,17 +1157,17 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   public completeBooking(bookingId: string): void {
     Swal.fire({
-      title: '¿Marcar como completada?',
-      text: "Se registrará que el tour ha sido finalizado exitosamente.",
+      title: this.translate.instant('provider-tour-management.swal.markAsCompletedTitle'),
+      text: this.translate.instant('provider-tour-management.swal.markAsCompletedText'),
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Sí, completar',
-      cancelButtonText: 'Volver'
+      confirmButtonText: this.translate.instant('provider-tour-management.swal.yesComplete'),
+      cancelButtonText: this.translate.instant('provider-tour-management.swal.back')
     }).then((result) => {
       if (result.isConfirmed) {
         // En un escenario real, aquí se llamaría a un servicio
         this.updateLocalBookingStatus(bookingId, 'DELIVERED');
-        Swal.fire('¡Completada!', 'La reserva ha sido marcada como completada.', 'success');
+        Swal.fire(this.translate.instant('provider-tour-management.swal.completedTitle'), this.translate.instant('provider-tour-management.swal.completedText'), 'success');
       }
     });
   }
@@ -1177,8 +1177,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   public exportData(format: 'pdf' | 'excel'): void {
     Swal.fire({
-      title: `Exportando ${format.toUpperCase()}`,
-      text: 'Tu archivo se está generando y se descargará en unos segundos.',
+      title: this.translate.instant('provider-tour-management.swal.exportingTitle', { format: format.toUpperCase() }),
+      text: this.translate.instant('provider-tour-management.swal.exportingText'),
       icon: 'success',
       timer: 3000,
       timerProgressBar: true,
@@ -1187,7 +1187,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Maneja las acciones segÃºn el rol y la acciÃ³n especÃ­fica
+   * Maneja las acciones según el rol y la acción específica
    */
   public onAction(actionId: string, row: any): void {
     switch (this.currentRole) {
@@ -1220,7 +1220,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.openCancelModal(booking);
         break;
       default:
-        console.warn('AcciÃ³n no reconocida:', actionId);
+        console.warn('Acción no reconocida:', actionId);
     }
   }
 
@@ -1245,7 +1245,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         this.openCancelModal(booking);
         break;
       default:
-        console.warn('AcciÃ³n no reconocida:', actionId);
+        console.warn('Acción no reconocida:', actionId);
     }
   }
 
@@ -1259,10 +1259,10 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         break;
       case 'approve':
         Swal.fire({
-          title: '¿Aprobar esta reserva?',
+          title: this.translate.instant('provider-tour-management.swal.approveBookingTitle'),
           icon: 'question',
           showCancelButton: true,
-          confirmButtonText: 'Sí, aprobar'
+          confirmButtonText: this.translate.instant('provider-tour-management.swal.yesApprove')
         }).then((result) => {
           if (result.isConfirmed) {
             this.confirmBooking(booking.id);
@@ -1271,25 +1271,25 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         break;
       case 'suspend':
         Swal.fire({
-          title: '¿Suspender esta reserva?',
+          title: this.translate.instant('provider-tour-management.swal.suspendBookingTitle'),
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonText: 'Sí, suspender',
+          confirmButtonText: this.translate.instant('provider-tour-management.swal.yesSuspend'),
           confirmButtonColor: '#d33'
         }).then((result) => {
           if (result.isConfirmed) {
             booking.status = 'Cancelled';
-            Swal.fire('Suspendida', 'La reserva ha sido suspendida.', 'success');
+            Swal.fire(this.translate.instant('provider-tour-management.swal.suspendedTitle'), this.translate.instant('provider-tour-management.swal.suspendedText'), 'success');
           }
         });
         break;
       case 'delete':
         Swal.fire({
-          title: '¿Eliminar permanentemente?',
-          text: "Esta acción no se puede deshacer.",
+          title: this.translate.instant('provider-tour-management.swal.deletePermanentlyTitle'),
+          text: this.translate.instant('provider-tour-management.swal.cannotBeUndone'),
           icon: 'error',
           showCancelButton: true,
-          confirmButtonText: 'Sí, eliminar',
+          confirmButtonText: this.translate.instant('provider-tour-management.swal.yesDelete'),
           confirmButtonColor: '#d33'
         }).then((result) => {
           if (result.isConfirmed) {
@@ -1297,18 +1297,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
             if (index > -1) {
               this.tableData.splice(index, 1);
               this.tableDataCopy = [...this.tableData];
-              Swal.fire('Eliminada', 'La reserva ha sido eliminada.', 'success');
+              Swal.fire(this.translate.instant('provider-tour-management.swal.deletedTitle'), this.translate.instant('provider-tour-management.swal.deletedText'), 'success');
             }
           }
         });
         break;
       default:
-        console.warn('AcciÃ³n no reconocida:', actionId);
+        console.warn('Acción no reconocida:', actionId);
     }
   }
 
   /**
-   * Verifica si una acciÃ³n es visible para una fila especÃ­fica
+   * Verifica si una acción es visible para una fila específica
    */
   public isActionVisible(action: ActionConfig, row: any): boolean {
     if (!action.visible) {
@@ -1330,7 +1330,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Obtiene el valor formateado de una celda segÃºn su tipo
+   * Obtiene el valor formateado de una celda según su tipo
    */
   public getCellValue(row: any, column: ColumnConfig): any {
     const value = row[column.field];
@@ -1380,7 +1380,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Obtiene la clase CSS segÃºn el estado
+   * Obtiene la clase CSS según el estado
    */
   public getStatusClass(status: string): string {
     const statusClasses: { [key: string]: string } = {
@@ -1399,18 +1399,18 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * MÃ©todos de paginaciÃ³n
+   * Métodos de paginación
    */
   
   /**
-   * Navega a una pÃ¡gina especÃ­fica
+   * Navega a una página específica
    */
   public goToPage(page: number): void {
     if (page < 1 || page > this.totalPages || page === this.currentPage) {
       return;
     }
     this.currentPage = page;
-    // Recargar datos segÃºn el rol
+    // Recargar datos según el rol
     if (this.currentRole === 'CLIENT') {
       this.loadClientReservations();
     } else if (this.currentRole === 'PROVIDER') {
@@ -1419,12 +1419,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Navega a la pÃ¡gina anterior
+   * Navega a la página anterior
    */
   public previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      // Recargar datos segÃºn el rol
+      // Recargar datos según el rol
       if (this.currentRole === 'CLIENT') {
         this.loadClientReservations();
       } else if (this.currentRole === 'PROVIDER') {
@@ -1434,12 +1434,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Navega a la pÃ¡gina siguiente
+   * Navega a la página siguiente
    */
   public nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      // Recargar datos segÃºn el rol
+      // Recargar datos según el rol
       if (this.currentRole === 'CLIENT') {
         this.loadClientReservations();
       } else if (this.currentRole === 'PROVIDER') {
@@ -1449,19 +1449,19 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Obtiene el array de nÃºmeros de pÃ¡gina para mostrar
+   * Obtiene el array de números de página para mostrar
    */
   public getPageNumbers(): number[] {
     const pages: number[] = [];
     const maxPagesToShow = 5;
     
     if (this.totalPages <= maxPagesToShow) {
-      // Mostrar todas las pÃ¡ginas si son pocas
+      // Mostrar todas las páginas si son pocas
       for (let i = 1; i <= this.totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Mostrar pÃ¡ginas alrededor de la actual
+      // Mostrar páginas alrededor de la actual
       let startPage = Math.max(1, this.currentPage - 2);
       let endPage = Math.min(this.totalPages, this.currentPage + 2);
       
@@ -1549,7 +1549,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       // Fetch the reservation directly from the API
       this.reservationService.getReservationById(this.highlightedReservationId.toString()).subscribe({
         next: (reservation) => {
-          console.log('âœ… Reserva obtenida para review:', reservation);
+          console.log('✅ Reserva obtenida para review:', reservation);
           
           // Map the reservation to booking format
           const booking = this.mapReservationToBooking(reservation);
@@ -1567,7 +1567,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         },
         error: (error) => {
           console.error('âŒ Error al obtener reserva para review:', error);
-          Swal.fire('Error', 'No se pudieron cargar los detalles de la reserva.', 'error');
+          Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.errorLoadingDetails'), 'error');
         }
       });
       
@@ -1586,22 +1586,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     if (modalElement) {
       const modal = new (window as any).bootstrap.Modal(modalElement);
       modal.show();
-      console.log('âœ… Modal de detalles abierto');
+      console.log('✅ Modal de detalles abierto');
       
       // After modal is shown, open review modal
       modalElement.addEventListener('shown.bs.modal', () => {
         setTimeout(() => {
-          console.log('ðŸŽ¬ Abriendo modal de reseÃ±a...');
+          console.log('🎬 Abriendo modal de reseña...');
           this.openReviewModalForBooking(bookingId);
         }, 500);
       }, { once: true }); // Use 'once' to ensure listener is removed after first execution
     } else {
-      console.error('âŒ No se encontrÃ³ el modal de detalles');
+      console.error('âŒ No se encontró el modal de detalles');
     }
   }
 
   /**
-   * Abre el modal de reseÃ±a para una reserva especÃ­fica
+   * Abre el modal de reseña para una reserva específica
    */
   public openReviewModalForBooking(bookingId: string): void {
     // Try to find booking in tableData first, fallback to selectedBooking
@@ -1610,11 +1610,11 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // If not found in tableData, use selectedBooking (e.g., when coming from pending reviews)
     if (!booking && this.selectedBooking && this.selectedBooking.id === bookingId) {
       booking = this.selectedBooking;
-      console.log('ðŸ“Œ Usando selectedBooking para abrir modal de reseÃ±a');
+      console.log('📌 Usando selectedBooking para abrir modal de reseña');
     }
     
     if (booking) {
-      console.log('âœ… Modal de reseÃ±a abierto para reserva:', bookingId);
+      console.log('✅ Modal de reseña abierto para reserva:', bookingId);
       
       // Cerrar el modal de detalles de Bootstrap primero
       const modalElement = document.getElementById('bookingDetailModal');
@@ -1625,7 +1625,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         }
       }
       
-      // Esperar a que el modal se cierre antes de abrir el de reseÃ±a
+      // Esperar a que el modal se cierre antes de abrir el de reseña
       setTimeout(() => {
         this.reviewModalBooking = booking;
         this.showReviewModal = true;
@@ -1640,12 +1640,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         }
       }, 300);
     } else {
-      console.error('âŒ No se encontrÃ³ la reserva con ID:', bookingId);
+      console.error('âŒ No se encontró la reserva con ID:', bookingId);
     }
   }
 
   /**
-   * Cierra el modal de reseÃ±a
+   * Cierra el modal de reseña
    */
   public closeReviewModal(): void {
     // Guardar referencia a la reserva antes de limpiar el estado
@@ -1661,7 +1661,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Limpiar los query params al cerrar el modal
     this.clearQueryParams();
     
-    // Reabrir el modal de detalles automÃ¡ticamente si habÃ­a una reserva seleccionada
+    // Reabrir el modal de detalles automáticamente si había una reserva seleccionada
     if (booking) {
       setTimeout(() => {
         this.viewBookingDetails(booking);
@@ -1670,43 +1670,43 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Establece el rating de la reseÃ±a y reinicia los motivos seleccionados
+   * Establece el rating de la reseña y reinicia los motivos seleccionados
    */
   public setReviewRating(rating: number): void {
     this.reviewRating = rating;
-    // Al cambiar la calificaciÃ³n se limpian los motivos seleccionados
+    // Al cambiar la calificación se limpian los motivos seleccionados
     // ya que cambia entre positivos y negativos
     this.selectedReasonId = null;
   }
 
   /**
-   * Alterna la selecciÃ³n de un motivo de reseÃ±a
+   * Alterna la selección de un motivo de reseña
    */
   public toggleReviewReason(reasonId: number): void {
     this.selectedReasonId = this.selectedReasonId === reasonId ? null : reasonId;
   }
 
   /**
-   * Verifica si un motivo estÃ¡ seleccionado
+   * Verifica si un motivo está seleccionado
    */
   public isReasonSelected(reasonId: number): boolean {
     return this.selectedReasonId === reasonId;
   }
 
   /**
-   * Maneja la selecciÃ³n de imÃ¡genes
+   * Maneja la selección de imágenes
    */
   public onReviewImagesSelected(event: any): void {
     const files = event.target.files;
     if (files) {
       const fileList = Array.from(files) as File[];
       
-      // 1. Validar cantidad mÃ¡xima (5 archivos)
+      // 1. Validar cantidad máxima (5 archivos)
       if (fileList.length > 5) {
         Swal.fire({
           icon: 'warning',
-          title: 'LÃ­mite excedido',
-          text: 'Solo puedes adjuntar un mÃ¡ximo de 5 imÃ¡genes.',
+          title: this.translate.instant('provider-tour-management.swal.limitExceeded'),
+          text: this.translate.instant('provider-tour-management.swal.limitExceededText'),
           confirmButtonColor: '#3085d6'
         });
         // Limpiar el input
@@ -1718,7 +1718,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       const validFiles: File[] = [];
       const invalidFiles: string[] = [];
 
-      // 2. Validar tipo y tamaÃ±o por archivo
+      // 2. Validar tipo y tamaño por archivo
       fileList.forEach(file => {
         const isValidType = file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg';
         const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
@@ -1735,12 +1735,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       if (invalidFiles.length > 0) {
         Swal.fire({
           icon: 'error',
-          title: 'Archivos no vÃ¡lidos',
-          html: `Algunos archivos no son vÃ¡lidos:<br>${invalidFiles.join('<br>')}<br><br>Solo se permiten imÃ¡genes PNG/JPG de mÃ¡ximo 5MB.`,
+          title: this.translate.instant('provider-tour-management.swal.invalidFiles'),
+          html: `${this.translate.instant('provider-tour-management.swal.invalidFilesText1')}${invalidFiles.join('<br>')}${this.translate.instant('provider-tour-management.swal.invalidFilesText2')}`,
           confirmButtonColor: '#3085d6'
         });
         // Limpiar el input si hay error para obligar a seleccionar de nuevo correctamente
-        // O podrÃ­amos dejar los vÃ¡lidos, pero el input file UI no se sincroniza bien
+        // O podríamos dejar los válidos, pero el input file UI no se sincroniza bien
         event.target.value = '';
         this.reviewImages = [];
       } else {
@@ -1750,14 +1750,14 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * EnvÃ­a la reseÃ±a al backend
+   * Envía la reseña al backend
    */
   public submitReview(): void {
     if (!this.reviewRating || !this.reviewComment.trim()) {
       Swal.fire({
         icon: 'warning',
-        title: 'Campos requeridos',
-        text: 'Por favor completa todos los campos requeridos (rating y comentario)',
+        title: this.translate.instant('provider-tour-management.swal.requiredFieldsTitle'),
+        text: this.translate.instant('provider-tour-management.swal.reviewValidationText'),
         confirmButtonColor: '#3085d6'
       });
       return;
@@ -1766,19 +1766,19 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     if (!this.reviewModalBooking) {
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'No se encontrÃ³ la reserva asociada.',
+        title: this.translate.instant('provider-tour-management.swal.error'),
+        text: this.translate.instant('provider-tour-management.swal.noReservationFound'),
         confirmButtonColor: '#3085d6'
       });
       return;
     }
 
-    // Extraer el ID numÃ©rico de la reserva (formato "RES-29" -> 29)
+    // Extraer el ID numérico de la reserva (formato "RES-29" -> 29)
     const reservationId = this.reviewModalBooking.id.includes('-') 
       ? parseInt(this.reviewModalBooking.id.split('-')[1]) 
       : parseInt(this.reviewModalBooking.id);
 
-    // Preparar el payload - createReview maneja la internacionalizaciÃ³n internamente
+    // Preparar el payload - createReview maneja la internacionalización internamente
     const reviewPayload = {
       reservationId: reservationId,
       rating: this.reviewRating,
@@ -1786,12 +1786,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       ...(this.selectedReasonId !== null ? { reasonId: this.selectedReasonId } : {})
     };
 
-    console.log('ðŸ”„ Enviando reseÃ±a:', reviewPayload);
+    console.log('🔄 Enviando reseña:', reviewPayload);
 
     // Llamar al servicio de reviews
     this.reviewsService.createReview(reviewPayload, this.reviewImages).subscribe({
       next: (response: any) => {
-        console.log('âœ… ReseÃ±a guardada exitosamente:', response);
+        console.log('✅ Reseña guardada exitosamente:', response);
 
         // Remove from pending reviews so "Ya hice la reseña" shows immediately
         if (this.reviewModalBooking && this.reviewModalBooking.id) {
@@ -1800,21 +1800,23 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           this.cdr.detectChanges();
         }
 
+        // Translate parameterized text manually
+        const successMsg = this.translate.instant('provider-tour-management.swal.reviewSentText', { tourName: this.reviewModalBooking!.tourName });
         Swal.fire({
           icon: 'success',
-          title: 'Â¡ReseÃ±a enviada!',
-          text: `Tu reseÃ±a para ${this.reviewModalBooking!.tourName} ha sido guardada exitosamente.`,
+          title: this.translate.instant('provider-tour-management.swal.reviewSent'),
+          text: successMsg,
           confirmButtonColor: '#28a745'
         }).then(() => {
           this.closeReviewModal();
         });
       },
       error: (error: any) => {
-        console.error('âŒ Error al guardar la reseÃ±a:', error);
+        console.error('Error al guardar la reseña:', error);
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'âŒ Error al enviar la reseÃ±a. Por favor intenta nuevamente.',
+          title: this.translate.instant('provider-tour-management.swal.error'),
+          text: this.translate.instant('provider-tour-management.swal.reviewSendError'),
           confirmButtonColor: '#d33'
         });
       }
@@ -1838,7 +1840,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Abre el modal de confirmaciÃ³n de cancelaciÃ³n
+   * Abre el modal de confirmación de cancelación
    */
   public openCancelModal(booking: any): void {
     this.cancelModalBooking = booking;
@@ -1847,7 +1849,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Cierra el modal de confirmaciÃ³n de cancelaciÃ³n
+   * Cierra el modal de confirmación de cancelación
    */
   public closeCancelModal(): void {
     this.showCancelModal = false;
@@ -1856,44 +1858,43 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Confirma la cancelaciÃ³n de la reserva con el motivo seleccionado
+   * Confirma la cancelación de la reserva con el motivo seleccionado
    */
   public confirmCancellation(): void {
     if (!this.cancellationReason) {
-      Swal.fire('Atención', 'Por favor selecciona un motivo de cancelación', 'warning');
+      Swal.fire(this.translate.instant('provider-tour-management.swal.attention'), this.translate.instant('provider-tour-management.swal.selectCancellationReason'), 'warning');
       return;
     }
 
     if (!this.cancelModalBooking) {
-      Swal.fire('Error', 'No se encontró la reserva seleccionada', 'error');
+      Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.reservationNotFound'), 'error');
       return;
     }
 
     // Mapear el motivo del usuario al valor esperado por el API
     const reasonMap: { [key: string]: string } = {
-      'Lluvia': 'RAIN',
-      'No puedo disfrutarlo': 'CANNOT_ATTEND',
-      'no puede disfrutarlo': 'CANNOT_ATTEND',
-      'No puede disfrutarlo': 'CANNOT_ATTEND'
+      'CANNOT_ATTEND': 'CANNOT_ATTEND',
+      'ILLNESS': 'ILLNESS',
+      'INABILITY_TO_TRAVEL': 'INABILITY_TO_TRAVEL'
     };
 
     const apiReason = reasonMap[this.cancellationReason];
     
     if (!apiReason) {
-      Swal.fire('Error', 'Motivo de cancelación no válido', 'error');
+      Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.invalidCancellationReason'), 'error');
       return;
     }
 
-    // Extraer el ID numÃ©rico del formato "RES-10" o "TB-1001"
+    // Extraer el ID numérico del formato "RES-10" o "TB-1001"
     const numericId = this.cancelModalBooking.id.includes('-') 
       ? this.cancelModalBooking.id.split('-')[1] 
       : this.cancelModalBooking.id;
 
-    console.log('ðŸ”„ Cancelando reserva:', this.cancelModalBooking.id);
-    console.log('ðŸ“  Motivo de cancelaciÃ³n (usuario):', this.cancellationReason);
-    console.log('ðŸ“  Motivo de cancelaciÃ³n (API):', apiReason);
+    console.log('🔄 Cancelando reserva:', this.cancelModalBooking.id);
+    console.log('📝 Motivo de cancelación (usuario):', this.cancellationReason);
+    console.log('📝 Motivo de cancelación (API):', apiReason);
 
-    // Llamar al servicio de cancelaciÃ³n con el motivo
+    // Llamar al servicio de cancelación con el motivo
     this.reservationService.cancelReservation(numericId, apiReason).subscribe({
       next: (response) => {
         console.log('✅ Reserva cancelada exitosamente:', response);
@@ -1904,8 +1905,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
 
         Swal.fire({
           icon: 'success',
-          title: 'Reserva Cancelada',
-          text: `La reserva ${bookingId} ha sido cancelada exitosamente.`,
+          title: this.translate.instant('provider-tour-management.swal.bookingCanceledTitle'),
+          text: this.translate.instant('provider-tour-management.swal.bookingCanceledText2', { bookingId }),
           confirmButtonColor: '#3085d6'
         }).then(() => {
           // Refrescar el listado de reservaciones
@@ -1924,8 +1925,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
         
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Hubo un error al cancelar la reserva. Por favor intenta nuevamente.',
+          title: this.translate.instant('provider-tour-management.swal.error'),
+          text: this.translate.instant('provider-tour-management.swal.cancelErrorText'),
           confirmButtonColor: '#d33'
         });
       }
@@ -1937,12 +1938,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    */
   public onCancelByRain(booking: any): void {
     Swal.fire({
-      title: '¿Cancelar por lluvia?',
-      text: '¿Estás seguro que deseas cancelar esta reserva por motivo de lluvia? Esta acción no se puede deshacer.',
+      title: this.translate.instant('provider-tour-management.swal.cancelByRainTitle'),
+      text: this.translate.instant('provider-tour-management.swal.cancelByRainConfirmText'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Sí, cancelar',
-      cancelButtonText: 'Volver',
+      confirmButtonText: this.translate.instant('provider-tour-management.swal.yesCancel'),
+      cancelButtonText: this.translate.instant('provider-tour-management.swal.back'),
       confirmButtonColor: '#d33'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -1951,14 +1952,14 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           ? booking.id.split('-')[1] 
           : booking.id;
 
-        // Llamar a la API de cancelación con el motivo RAIN
-        this.reservationService.cancelReservation(numericId, 'RAIN').subscribe({
+        // Llamar a la API de cancelación por lluvia
+        this.reservationService.cancelReservationByRain(numericId).subscribe({
           next: (response) => {
             console.log('✅ Reserva cancelada por lluvia exitosamente:', response);
             Swal.fire({
               icon: 'success',
-              title: 'Cancelación exitosa',
-              text: `La reserva ${booking.id} ha sido cancelada por lluvia.`,
+              title: this.translate.instant('provider-tour-management.swal.successfulCancelTitle'),
+              text: this.translate.instant('provider-tour-management.swal.rainCanceledText', { bookingId: booking.id }),
               confirmButtonColor: '#3085d6'
             }).then(() => {
               // Refrescar los datos
@@ -1973,8 +1974,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
             console.error('❌ Error al cancelar por lluvia:', error);
             Swal.fire({
               icon: 'error',
-              title: 'Error',
-              text: 'Hubo un problema al cancelar la reserva por lluvia. Intenta de nuevo.',
+              title: this.translate.instant('provider-tour-management.swal.error'),
+              text: this.translate.instant('provider-tour-management.swal.rainCancelErrorText'),
               confirmButtonColor: '#d33'
             });
           }
@@ -1984,7 +1985,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Verifica si la reserva se puede cancelar basado en su estado y fecha mÃ¡xima.
+   * Verifica si la reserva se puede cancelar basado en su estado y fecha máxima.
    */
   public canCancel(booking: any): boolean {
     if (!booking) return false;
@@ -2003,7 +2004,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Verifica si la reserva se puede reagendar basado en su estado y fecha mÃ¡xima.
+   * Verifica si la reserva se puede reagendar basado en su estado y fecha máxima.
    */
   public canReschedule(booking: any): boolean {
     if (!booking) return false;
@@ -2029,15 +2030,15 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Maneja la acciÃ³n de reagendar una reserva
+   * Maneja la acción de reagendar una reserva
    */
   public handleReschedule(booking: any): void {
-    console.log('ðŸ”„ Abriendo modal de selecciÃ³n de fechas para:', booking.id);
+    console.log('🔄 Abriendo modal de selección de fechas para:', booking.id);
     this.openRescheduleDateModal(booking);
   }
 
   /**
-   * Abre el modal de selecciÃ³n de fechas para reagendar
+   * Abre el modal de selección de fechas para reagendar
    */
   public openRescheduleDateModal(booking: any): void {
     console.log('ðŸ“… Modal reagendar: Estableciendo fechas por defecto:', booking.rawCheckInDate, booking.rawReturnDate);
@@ -2051,7 +2052,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Cierra el modal de selecciÃ³n de fechas
+   * Cierra el modal de selección de fechas
    */
   public closeRescheduleDateModal(): void {
     this.showRescheduleDateModal = false;
@@ -2059,22 +2060,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
-   * Confirma las fechas y abre el modal de selecciÃ³n de slots
+   * Confirma las fechas y abre el modal de selección de slots
    */
   public confirmRescheduleDates(): void {
     if (!this.rescheduleDateModalBooking) {
-      Swal.fire('Error', 'No se encontró la reserva', 'error');
+      Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.reservationNotFoundSimple'), 'error');
       return;
     }
 
     if (!this.rescheduleCheckIn || !this.rescheduleCheckOut) {
-      Swal.fire('Atención', 'Por favor selecciona las fechas de Check In y Check Out', 'warning');
+      Swal.fire(this.translate.instant('provider-tour-management.swal.attention'), this.translate.instant('provider-tour-management.swal.selectDatesCheck'), 'warning');
       return;
     }
 
     // Comparar fechas como strings (formato YYYY-MM-DD)
     if (this.rescheduleCheckIn >= this.rescheduleCheckOut) {
-      Swal.fire('Atención', 'La fecha de Check Out debe ser posterior a la fecha de Check In', 'warning');
+      Swal.fire(this.translate.instant('provider-tour-management.swal.attention'), this.translate.instant('provider-tour-management.swal.checkOutAfterCheckIn'), 'warning');
       return;
     }
 
@@ -2084,7 +2085,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const checkInStr = this.rescheduleCheckIn;
     const checkOutStr = this.rescheduleCheckOut;
 
-    console.log('âœ… Fechas seleccionadas:', {
+    console.log('✅ Fechas seleccionadas:', {
       checkIn: checkInStr,
       checkOut: checkOutStr,
       tourId: tourId,
@@ -2094,7 +2095,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Validar que tengamos el tourId
     if (!tourId) {
       console.error('âŒ tourId es undefined. Datos de la reserva:', bookingData);
-      Swal.fire('Error', 'No se pudo obtener el ID del tour. Por favor, intenta nuevamente.', 'error');
+      Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.tourIdError'), 'error');
       return;
     }
 
@@ -2103,10 +2104,10 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
 
     console.log('ðŸ” Cargando datos del tour desde API...', { tourId, checkInStr, checkOutStr });
 
-    // Cargar el tour especÃ­fico por ID
+    // Cargar el tour específico por ID
     this.searchToursService.detailTourPublic(tourId).subscribe({
       next: (tourDetail) => {
-        console.log('âœ… Datos del tour cargados:', tourDetail);
+        console.log('✅ Datos del tour cargados:', tourDetail);
         
         if (tourDetail) {
           // Buscar schedules disponibles para las fechas seleccionadas
@@ -2116,14 +2117,14 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
             endDate: checkOutStr
           }, 1, 10).subscribe({
             next: (response) => {
-              console.log('âœ… Schedules cargados:', response);
+              console.log('✅ Schedules cargados:', response);
               
               if (response && response.content && response.content.length > 0) {
                 const tourData: TourScheduleResponseDto = response.content[0];
                 
                 console.log('ðŸŽ¯ Abriendo modal de slots con datos completos:', tourData);
                 
-                // Abrir el modal de selecciÃ³n de slots con los datos completos
+                // Abrir el modal de selección de slots con los datos completos
                 const dialogRef = this.dialog.open(TourSlotSelectionModalComponent, {
                   width: '600px',
                   data: {
@@ -2135,8 +2136,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
                     originalPrice: parseFloat(bookingData.price.replace('$', '').replace(',', '')), // Precio original
                     originalTravellers: bookingData.totalTourists || 1, // Número de turistas directo desde el API
                     tourAdded: (cartItem: CartItem) => {
-                      console.log('âœ… Nueva fecha/slot seleccionado:', cartItem);
-                      // El callback ya no se usa aquÃ­, la lÃ³gica estÃ¡ en el modal
+                      console.log('✅ Nueva fecha/slot seleccionado:', cartItem);
+                      // El callback ya no se usa aquí, la lógica está en el modal
                     }
                   }
                 });
@@ -2146,22 +2147,22 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
                 });
               } else {
                 console.error('âŒ No se encontraron horarios disponibles para las fechas seleccionadas');
-                Swal.fire('Atención', 'No hay horarios disponibles para las fechas seleccionadas. Por favor, intenta con otras fechas.', 'info');
+                Swal.fire(this.translate.instant('provider-tour-management.swal.attention'), this.translate.instant('provider-tour-management.swal.noSlotsAvailable'), 'info');
               }
             },
             error: (error) => {
               console.error('âŒ Error cargando schedules:', error);
-              Swal.fire('Error', 'Error al cargar los horarios disponibles. Por favor, intenta nuevamente.', 'error');
+              Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.errorLoadingSlots'), 'error');
             }
           });
         } else {
           console.error('âŒ No se encontraron datos del tour');
-          Swal.fire('Error', 'No se pudo cargar la información del tour. Por favor, intenta nuevamente.', 'error');
+          Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.couldNotLoadTourInfo'), 'error');
         }
       },
       error: (error) => {
         console.error('âŒ Error cargando datos del tour:', error);
-        Swal.fire('Error', 'Error al cargar la información del tour. Por favor, intenta nuevamente.', 'error');
+        Swal.fire(this.translate.instant('provider-tour-management.swal.error'), this.translate.instant('provider-tour-management.swal.errorLoadingTourInfo'), 'error');
       }
     });
   }

@@ -5,8 +5,8 @@
     <div class="card booking-header mb-4" *ngIf="mode === 'profile'">
         <div class="card-body header-content d-flex align-items-center justify-content-between flex-wrap">
             <div>
-                <h6>Mis Créditos</h6>
-                <p class="fs-14 text-gray-6 fw-normal">Total de créditos: {{ totalCredits }}</p>
+                <h6>{{ 'clientCredits.myCredits' | translate }}</h6>
+                <p class="fs-14 text-gray-6 fw-normal">{{ 'clientCredits.totalCredits' | translate }}: {{ totalCredits }}</p>
             </div>
         </div>
     </div>
@@ -16,16 +16,16 @@
     <div class="card hotel-list" [ngClass]="{'shadow-none border-0': mode === 'payment'}">
         <div class="card-body p-0">
             <div class="list-header d-flex align-items-center justify-content-between flex-wrap p-3" *ngIf="mode === 'profile'">
-                <h6 class="mb-0">Listado de Créditos</h6>
+                <h6 class="mb-0">{{ 'clientCredits.creditsList' | translate }}</h6>
                 
                 <!-- Status Filter -->
                 <div class="d-flex align-items-center">
-                    <span class="fs-14 text-gray-9 fw-medium me-2">Estado:</span>
+                    <span class="fs-14 text-gray-9 fw-medium me-2">{{ 'clientCredits.statusLabel' | translate }}</span>
                     <select 
                         class="form-select form-select-sm w-auto" 
                         (change)="onStatusChange($event)"
                         [value]="selectedStatus">
-                        <option value="">Todos</option>
+                        <option value="">{{ 'clientCredits.allStatuses' | translate }}</option>
                         <option value="CREATED">{{ 'CREATED' | translate }}</option>
                         <option value="CANCELED">{{ 'CANCELED' | translate }}</option>
                         <option value="DELETED">{{ 'DELETED' | translate }}</option>
@@ -41,15 +41,15 @@
                             <th *ngIf="mode === 'payment'">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" [checked]="allSelected" (change)="toggleSelectAll($event)">
-                                    <label class="form-check-label">Usar</label>
+                                    <label class="form-check-label">{{ 'clientCredits.colUse' | translate }}</label>
                                 </div>
                             </th>
-                            <th>id</th>
-                            <th>Id de la Reserva</th>
-                            <th>Valor</th>
-                            <th>Fecha de creación</th>
-                            <th *ngIf="mode === 'profile'">Fecha de expiración</th>
-                            <th>Estado</th>
+                            <th>{{ 'clientCredits.colId' | translate }}</th>
+                            <th>{{ 'clientCredits.colBookingId' | translate }}</th>
+                            <th>{{ 'clientCredits.colValue' | translate }}</th>
+                            <th>{{ 'clientCredits.colCreationDate' | translate }}</th>
+                            <th *ngIf="mode === 'profile'">{{ 'clientCredits.colExpirationDate' | translate }}</th>
+                            <th>{{ 'clientCredits.colStatus' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +78,7 @@
                                 <td [attr.colspan]="mode === 'payment' ? 6 : 6" class="text-center py-5">
                                     <div class="text-muted">
                                         <i class="isax isax-box fs-1 mb-3 d-block"></i>
-                                        <h5>No se encontraron créditos</h5>
+                                        <h5>{{ 'clientCredits.noCreditsFound' | translate }}</h5>
                                     </div>
                                 </td>
                             </tr>
@@ -87,7 +87,7 @@
                             <tr>
                                 <td [attr.colspan]="mode === 'payment' ? 6 : 6" class="text-center py-5">
                                     <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">Cargando...</span>
+                                        <span class="visually-hidden">{{ 'cartSummary.loading' | translate }}</span>
                                     </div>
                                 </td>
                             </tr>
@@ -101,18 +101,18 @@
             <div class="p-3 bg-light" *ngIf="mode === 'payment' && tableData.length > 0">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
-                        <span class="fw-medium">Seleccionados: {{ selectedCreditsIds.size }}</span>
+                        <span class="fw-medium">{{ 'clientCredits.selectedCount' | translate }}: {{ selectedCreditsIds.size }}</span>
                         <span class="ms-3 text-primary fw-bold" *ngIf="totalSelectedAmount > 0">
-                            Total: {{ totalSelectedAmount | currency:'COP':'symbol':'1.0-0' }}
+                            {{ 'clientCredits.totalSelected' | translate }}: {{ totalSelectedAmount | currency:'COP':'symbol':'1.0-0' }}
                         </span>
                     </div>
                     <div>
                         <button class="btn btn-outline-secondary btn-sm me-2" [disabled]="isProcessing" (click)="cancelSelection()">
-                            Cancelar
+                            {{ 'clientCredits.cancelBtn' | translate }}
                         </button>
                         <button class="btn btn-primary btn-sm" [disabled]="selectedCreditsIds.size === 0 || isExceedingMax || isProcessing" (click)="emitSelectedCredits()">
                             <span *ngIf="isProcessing" class="spinner-border spinner-border-sm me-1"></span>
-                            Usar Créditos
+                            {{ 'clientCredits.useCreditsBtn' | translate }}
                         </button>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                 <!-- Error Message -->
                 <div *ngIf="isExceedingMax" class="text-danger fs-12 mt-2">
                     <i class="fas fa-exclamation-triangle me-1"></i>
-                    El valor total de los creditos seleccionados es mayor al valor de la reserva, debe ser menor o igual a {{ maxValue | currency:'COP':'symbol':'1.0-0' }}
+                    {{ 'clientCredits.exceedingMaxError' | translate }} {{ maxValue | currency:'COP':'symbol':'1.0-0' }}
                 </div>
             </div>
 

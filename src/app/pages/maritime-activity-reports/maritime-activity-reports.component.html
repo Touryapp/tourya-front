@@ -200,7 +200,7 @@
               </div>
               <div class="col-md-4">
                 <div class="mb-3">
-                  <label class="form-label">Departamento</label>
+                  <label class="form-label">Departamento <span class="text-danger">*</span></label>
                   <mat-select class="custom-mat-select select" placeholder="Seleccione Departamento" formControlName="department" (selectionChange)="onDepartmentChange($event.value)">
                     <mat-option *ngFor="let d of departments" [value]="d.name">{{ d.name }}</mat-option>
                   </mat-select>
@@ -216,28 +216,21 @@
               </div>
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="form-label">Categoría</label>
+                  <label class="form-label">Categoría <span class="text-danger">*</span></label>
                   <mat-select class="custom-mat-select select" placeholder="Seleccione Categoría" formControlName="category" (selectionChange)="onCategoryChange($event.value)">
-                    <mat-option *ngFor="let cat of categories" [value]="cat.name">{{ cat.name }}</mat-option>
+                    <mat-option *ngFor="let cat of categories" [value]="cat.name">{{ cat.name | localizedName }}</mat-option>
                   </mat-select>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3">
-                  <label class="form-label">Subcategoría</label>
+                  <label class="form-label">Subcategoría <span class="text-danger">*</span></label>
                   <mat-select class="custom-mat-select select" placeholder="Seleccione Subcategoría" formControlName="subCategory">
-                    <mat-option *ngFor="let sub of subCategories" [value]="sub.name">{{ sub.name }}</mat-option>
+                    <mat-option *ngFor="let sub of subCategories" [value]="sub.name">{{ sub.name | localizedName }}</mat-option>
                   </mat-select>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="mb-3">
-                  <label class="form-label">Tag <span class="text-danger">*</span></label>
-                  <mat-select class="custom-mat-select select" placeholder="Seleccione Tag" formControlName="tag">
-                    <mat-option *ngFor="let t of tags" [value]="t.name">{{ t.name }}</mat-option>
-                  </mat-select>
-                </div>
-              </div>
+
               <div class="col-md-4">
                 <div class="mb-3">
                   <label class="form-label">Estado (Bandera) <span class="text-danger">*</span></label>

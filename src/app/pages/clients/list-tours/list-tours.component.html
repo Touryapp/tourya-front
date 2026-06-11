@@ -173,18 +173,20 @@
             <div class="col-xl-3 col-lg-3 ">
                 <div class="card filter-sidebar mb-4 mb-lg-0 theiaStickySidebar">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5>Filters</h5>
-                        <a href="javascript:void(0);" class="fs-14 link-primary" (click)="resetFilters()">Reset</a>
+                        <h5>{{ 'filters.filtersTitle' | translate }}</h5>
+                        <a href="javascript:void(0);" class="fs-14 link-primary" (click)="resetFilters()">{{ 'filters.resetFilters' | translate }}</a>
                     </div>
                     <div class="card-body p-0">
                         <form>
-                            <div class="p-3 border-bottom">
-                                <label class="form-label fs-16">Búsqueda General</label>
-                                <div class="input-icon">
-                                    <span class="input-icon-addon">
+                            <div class="filter-header border-bottom p-3">
+                                <h6 class="mb-0 fw-medium">{{ 'filters.generalSearch' | translate }}</h6>
+                            </div>
+                            <div class="p-3 border-bottom pb-4">
+                                <div class="search-box">
+                                    <span class="search-icon">
                                         <i class="isax isax-search-normal"></i>
                                     </span>
-                                    <input type="text" class="form-control" placeholder="Buscar tours..."
+                                    <input type="text" class="form-control" [placeholder]="'filters.searchTours' | translate"
                                         [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}">
                                 </div>
                             </div>
@@ -194,7 +196,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-hotel" aria-expanded="true" aria-controls="accordion-hotel" role="button">
-                                            <i class="isax isax-buildings me-2 text-primary"></i>Categorías
+                                            <i class="isax isax-buildings me-2 text-primary"></i>{{ 'filters.categories' | translate }}
                                         </div>
                                     </div>
                                     <div id="accordion-hotel" class="accordion-collapse collapse show">
@@ -205,7 +207,7 @@
                                                         [checked]="selectedCategoryIds.includes(c.id)"
                                                         (change)="toggleSelection(selectedCategoryIds, c.id)">
                                                     <label class="form-check-label ms-2" [for]="'cat_'+i">
-                                                        {{ c.name }}
+                                                        {{ c.name | localizedName }}
                                                     </label>
                                                 </div>
                                             </div>
@@ -217,7 +219,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" [ngClass]="{'collapsed': !isSubCategoriesAccordionOpen}" data-bs-toggle="collapse" data-bs-target="#accordion-subcats" [attr.aria-expanded]="isSubCategoriesAccordionOpen ? 'true' : 'false'" role="button">
-                                            <i class="isax isax-category-2 me-2 text-primary"></i>SubCategorías
+                                            <i class="isax isax-category-2 me-2 text-primary"></i>{{ 'filters.subcategories' | translate }}
                                         </div>
                                     </div>
                                     <div id="accordion-subcats" class="accordion-collapse collapse" [ngClass]="{'show': isSubCategoriesAccordionOpen}">
@@ -228,7 +230,7 @@
                                                         [checked]="selectedSubCategories.includes(s.code || s.name)"
                                                         (change)="toggleSubCategory(s)">
                                                     <label class="form-check-label ms-2" [for]="'subcat_'+i">
-                                                        {{ s.name }}
+                                                        {{ s.name | localizedName }}
                                                     </label>
                                                 </div>
                                                 <div *ngIf="filteredSubCategories.length === 0" class="text-muted fs-14">
@@ -254,7 +256,7 @@
                                                         [checked]="selectedTags.includes(t.id)"
                                                         (change)="toggleSelection(selectedTags, t.id)">
                                                     <label class="form-check-label ms-2" [for]="'tag_'+i">
-                                                        {{ t.name }}
+                                                        {{ t.name | localizedName }}
                                                     </label>
                                                 </div>
                                             </div>
@@ -360,7 +362,7 @@
                             <div class="p-3 border-top">
                                 <button type="button" class="btn btn-primary w-100" (click)="onSearchFromFilters()">
                                     <i class="isax isax-search-normal me-2"></i>
-                                    Search
+                                    {{ 'toursList.search' | translate }}
                                 </button>
                             </div>
                         </form>
@@ -372,7 +374,7 @@
             <div class="col-xl-9 col-lg-8">
                 <div class="theiaStickySidebar">
                     <div class="d-flex align-items-center justify-content-between flex-wrap">
-                        <h6 class="mb-3">{{ tours.length }} Tours Found on Your Search</h6>
+                        <h6 class="mb-3">{{ tours.length }} {{ 'filters.toursFound' | translate }}</h6>
                         <div class="d-flex align-items-center flex-wrap">
                             <div class="list-item d-flex align-items-center mb-3">
                                 <a href="javascript:void(0);" class="list-icon me-2"
@@ -387,46 +389,44 @@
                             <div class="dropdown mb-3">
                                 <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    <span class="fw-medium text-gray-9">Sort By : </span>Recommended
+                                    <span class="fw-medium text-gray-9">{{ 'toursList.sortBy' | translate }}</span>{{ 'toursList.recommended' | translate }}
                                 </a>
                                 <div class="dropdown-menu dropdown-sm">
                                     <form>
-                                        <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
+                                        <h6 class="fw-medium fs-16 mb-3">{{ 'toursList.sortByShort' | translate }}</h6>
                                         <div class="form-check d-flex align-items-center ps-0 mb-2">
                                             <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
                                                 id="recommend1" checked>
-                                            <label class="form-check-label ms-2" for="recommend1">Recommended</label>
+                                            <label class="form-check-label ms-2" for="recommend1">{{ 'toursList.recommended' | translate }}</label>
                                         </div>
                                         <div class="form-check d-flex align-items-center ps-0 mb-2">
                                             <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
                                                 id="recommend2">
-                                            <label class="form-check-label ms-2" for="recommend2">Price: low to
-                                                high</label>
+                                            <label class="form-check-label ms-2" for="recommend2">{{ 'toursList.priceLowToHigh' | translate }}</label>
                                         </div>
                                         <div class="form-check d-flex align-items-center ps-0 mb-2">
                                             <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
                                                 id="recommend3">
-                                            <label class="form-check-label ms-2" for="recommend3">Price: high to
-                                                low</label>
+                                            <label class="form-check-label ms-2" for="recommend3">{{ 'toursList.priceHighToLow' | translate }}</label>
                                         </div>
                                         <div class="form-check d-flex align-items-center ps-0 mb-2">
                                             <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
                                                 id="recommend4">
-                                            <label class="form-check-label ms-2" for="recommend4">Newest</label>
+                                            <label class="form-check-label ms-2" for="recommend4">{{ 'toursList.newest' | translate }}</label>
                                         </div>
                                         <div class="form-check d-flex align-items-center ps-0 mb-2">
                                             <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
                                                 id="recommend5">
-                                            <label class="form-check-label ms-2" for="recommend5">Ratings</label>
+                                            <label class="form-check-label ms-2" for="recommend5">{{ 'toursList.ratings' | translate }}</label>
                                         </div>
                                         <div class="form-check d-flex align-items-center ps-0 mb-0">
                                             <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
                                                 id="recommend6">
-                                            <label class="form-check-label ms-2" for="recommend6">Reviews</label>
+                                            <label class="form-check-label ms-2" for="recommend6">{{ 'toursList.reviews' | translate }}</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
-                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">Reset</a>
-                                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">{{ 'toursList.reset' | translate }}</a>
+                                            <button type="submit" class="btn btn-primary btn-sm">{{ 'toursList.apply' | translate }}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -439,7 +439,7 @@
                     <div *ngIf="viewMode === 'grid'">
                         <app-tour-grid-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
                             [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
-                            [initialFavoriteStates]="favoriteStates"
+                            [initialFavoriteStates]="favoriteStates" [categories]="categories"
                             (toggleFavorite)="onToggleFavoriteFromGrid($event)" (goToPage)="onGoToPageFromGrid($event)"
                             (goToPreviousPage)="onGoToPreviousPageFromGrid()" (goToNextPage)="onGoToNextPageFromGrid()"
                             (selectTour)="selectTour($event)">
@@ -450,7 +450,7 @@
                     <div *ngIf="viewMode === 'list'">
                         <app-tour-list-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
                             [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
-                            [initialFavoriteStates]="favoriteStates"
+                            [initialFavoriteStates]="favoriteStates" [categories]="categories"
                             (toggleFavorite)="onToggleFavorite($event)" (goToPage)="onGoToPageFromList($event)"
                             (goToPreviousPage)="onGoToPreviousPageFromList()" (goToNextPage)="onGoToNextPageFromList()"
                             (selectTour)="selectTour($event)">

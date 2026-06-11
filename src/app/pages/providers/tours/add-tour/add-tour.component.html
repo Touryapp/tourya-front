@@ -109,7 +109,7 @@
                                         <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.category.placeholder' | translate }}"
                                             formControlName="category" (blur)="onCategoryBlur($event)">
                                             <mat-option *ngFor="let cat of backendCategories" [value]="cat.id">
-                                                {{ cat.name }}
+                                                {{ cat.name | localizedName }}
                                             </mat-option>
                                         </mat-select>
 
@@ -128,7 +128,7 @@
                                         <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.subcategory.placeholder' | translate }}"
                                             formControlName="subcategory">
                                             <mat-option *ngFor="let item of subcategories" [value]="item.code">
-                                                {{ item.name }}
+                                                {{ item.name | localizedName }}
                                             </mat-option>
                                         </mat-select>
                                     </div>
@@ -618,7 +618,7 @@
                                         [value]="t.id"
                                         [checked]="isTagSelected(t.id)"
                                         (change)="onTagChange(t.id, $event)">
-                                    <span>{{ t.name }}</span>
+                                    <span>{{ t.name | localizedName }}</span>
                                 </label>
                             </div>
                         </div>

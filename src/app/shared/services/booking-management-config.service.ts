@@ -76,13 +76,13 @@ export class BookingManagementConfigService {
   private getClientConfig(): BookingManagementConfig {
     return {
       role: 'CLIENT',
-      title: 'Mis Reservas',
-      subtitle: 'Gestiona tus reservas de tours y experiencias',
+      title: 'provider-tour-management.config.clientTitle',
+      subtitle: 'provider-tour-management.config.clientSubtitle',
       apiEndpoint: '/api/v1/client/bookings',
       columns: [
         {
           field: 'id',
-          header: 'ID Reserva',
+          header: 'provider-tour-management.config.columns.id',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -90,7 +90,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'tourName',
-          header: 'Nombre del Tour',
+          header: 'provider-tour-management.config.columns.tourName',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -98,7 +98,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'customerName',
-          header: 'Cliente',
+          header: 'provider-tour-management.config.columns.customer',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -106,7 +106,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'checkInDate',
-          header: 'Fecha de Reserva',
+          header: 'provider-tour-management.config.columns.checkInDate',
           type: 'date',
           sortable: true,
           filterable: true,
@@ -114,7 +114,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'price',
-          header: 'Precio',
+          header: 'provider-tour-management.config.columns.price',
           type: 'currency',
           sortable: true,
           filterable: false,
@@ -122,7 +122,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'status',
-          header: 'Estado',
+          header: 'provider-tour-management.config.columns.status',
           type: 'status',
           sortable: true,
           filterable: true,
@@ -132,14 +132,14 @@ export class BookingManagementConfigService {
       actions: [
         {
           id: 'view',
-          label: 'Ver',
+          label: 'provider-tour-management.config.actions.view',
           icon: 'fa fa-eye',
           color: 'info',
           visible: (row) => true // Siempre visible
         },
         {
           id: 'reschedule',
-          label: 'Reagendar',
+          label: 'provider-tour-management.config.actions.reschedule',
           icon: 'fa fa-calendar',
           color: 'warning',
           visible: (row) => {
@@ -165,7 +165,7 @@ export class BookingManagementConfigService {
         },
         {
           id: 'cancel',
-          label: 'Cancelar',
+          label: 'provider-tour-management.config.actions.cancel',
           icon: 'fa fa-times-circle',
           color: 'danger',
           visible: (row) => {
@@ -195,20 +195,20 @@ export class BookingManagementConfigService {
       filters: [
         {
           field: 'status',
-          label: 'Estado',
+          label: 'provider-tour-management.config.filters.status',
           type: 'select',
           options: [
-            { value: '', label: 'Todos' },
-            { value: 'Upcoming', label: 'Próximas' },
-            { value: 'Pending', label: 'Pendientes' },
-            { value: 'Confirmed', label: 'Confirmadas' },
-            { value: 'Cancelled', label: 'Canceladas' },
-            { value: 'Completed', label: 'Completadas' }
+            { value: '', label: 'provider-tour-management.config.filters.statusAll' },
+            { value: 'Upcoming', label: 'provider-tour-management.config.filters.statusUpcoming' },
+            { value: 'Pending', label: 'provider-tour-management.config.filters.statusPending' },
+            { value: 'Confirmed', label: 'provider-tour-management.config.filters.statusConfirmed' },
+            { value: 'Cancelled', label: 'provider-tour-management.config.filters.statusCancelled' },
+            { value: 'Completed', label: 'provider-tour-management.config.filters.statusCompleted' }
           ]
         },
         {
           field: 'dateRange',
-          label: 'Rango de Fechas',
+          label: 'provider-tour-management.config.filters.dateRange',
           type: 'dateRange'
         }
       ],
@@ -227,13 +227,13 @@ export class BookingManagementConfigService {
   private getProviderConfig(): BookingManagementConfig {
     return {
       role: 'PROVIDER',
-      title: 'Gestión de Reservas',
-      subtitle: 'Administra las reservas de tus tours',
+      title: 'provider-tour-management.config.providerTitle',
+      subtitle: 'provider-tour-management.config.providerSubtitle',
       apiEndpoint: '/api/v1/provider/bookings',
       columns: [
         {
           field: 'id',
-          header: 'ID Reserva',
+          header: 'provider-tour-management.config.columns.id',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -241,7 +241,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'tourName',
-          header: 'Nombre del Tour',
+          header: 'provider-tour-management.config.columns.tourName',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -249,7 +249,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'customerName',
-          header: 'Cliente',
+          header: 'provider-tour-management.config.columns.customer',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -257,7 +257,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'checkInDate',
-          header: 'Fecha de Reserva',
+          header: 'provider-tour-management.config.columns.checkInDate',
           type: 'date',
           sortable: true,
           filterable: true,
@@ -265,7 +265,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'price',
-          header: 'Precio',
+          header: 'provider-tour-management.config.columns.price',
           type: 'currency',
           sortable: true,
           filterable: false,
@@ -273,7 +273,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'status',
-          header: 'Estado',
+          header: 'provider-tour-management.config.columns.status',
           type: 'status',
           sortable: true,
           filterable: true,
@@ -283,21 +283,21 @@ export class BookingManagementConfigService {
       actions: [
         {
           id: 'view',
-          label: 'Ver',
+          label: 'provider-tour-management.config.actions.view',
           icon: 'fa fa-eye',
           color: 'info',
           visible: (row) => true
         },
         {
           id: 'confirm',
-          label: 'Confirmar',
+          label: 'provider-tour-management.config.actions.confirm',
           icon: 'fa fa-check-circle',
           color: 'success',
           visible: (row) => row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED' || row.status === 'Rescheduled'
         },
         {
           id: 'reschedule',
-          label: 'Reagendar',
+          label: 'provider-tour-management.config.actions.reschedule',
           icon: 'fa fa-calendar',
           color: 'warning',
           visible: (row) => {
@@ -313,7 +313,7 @@ export class BookingManagementConfigService {
         },
         {
           id: 'cancel',
-          label: 'Cancelar',
+          label: 'provider-tour-management.config.actions.cancel',
           icon: 'fa fa-times-circle',
           color: 'danger',
           visible: (row) => {
@@ -329,7 +329,7 @@ export class BookingManagementConfigService {
         },
         {
           id: 'complete',
-          label: 'Completar',
+          label: 'provider-tour-management.config.actions.complete',
           icon: 'fa fa-flag-checkered',
           color: 'primary',
           visible: (row) => row.status === 'Confirmed' || row.status === 'Upcoming'
@@ -338,33 +338,33 @@ export class BookingManagementConfigService {
       filters: [
         {
           field: 'status',
-          label: 'Estado',
+          label: 'provider-tour-management.config.filters.status',
           type: 'select',
           options: [
-            { value: '', label: 'Todos' },
-            { value: 'Upcoming', label: 'Próximas' },
-            { value: 'Pending', label: 'Pendientes' },
-            { value: 'Confirmed', label: 'Confirmadas' },
-            { value: 'Cancelled', label: 'Canceladas' },
-            { value: 'Completed', label: 'Completadas' }
+            { value: '', label: 'provider-tour-management.config.filters.statusAll' },
+            { value: 'Upcoming', label: 'provider-tour-management.config.filters.statusUpcoming' },
+            { value: 'Pending', label: 'provider-tour-management.config.filters.statusPending' },
+            { value: 'Confirmed', label: 'provider-tour-management.config.filters.statusConfirmed' },
+            { value: 'Cancelled', label: 'provider-tour-management.config.filters.statusCancelled' },
+            { value: 'Completed', label: 'provider-tour-management.config.filters.statusCompleted' }
           ]
         },
         {
           field: 'tourType',
-          label: 'Tipo de Tour',
+          label: 'provider-tour-management.config.filters.tourType',
           type: 'select',
           options: [
-            { value: '', label: 'Todos' },
-            { value: 'Adventure', label: 'Aventura' },
-            { value: 'Cultural', label: 'Cultural' },
-            { value: 'Beach', label: 'Playa' },
-            { value: 'City', label: 'Ciudad' },
-            { value: 'Nature', label: 'Naturaleza' }
+            { value: '', label: 'provider-tour-management.config.filters.typeAll' },
+            { value: 'Adventure', label: 'provider-tour-management.config.filters.typeAdventure' },
+            { value: 'Cultural', label: 'provider-tour-management.config.filters.typeCultural' },
+            { value: 'Beach', label: 'provider-tour-management.config.filters.typeBeach' },
+            { value: 'City', label: 'provider-tour-management.config.filters.typeCity' },
+            { value: 'Nature', label: 'provider-tour-management.config.filters.typeNature' }
           ]
         },
         {
           field: 'customerName',
-          label: 'Buscar Cliente',
+          label: 'provider-tour-management.config.filters.searchCustomer',
           type: 'text'
         }
       ],
@@ -383,13 +383,13 @@ export class BookingManagementConfigService {
   private getAdminConfig(): BookingManagementConfig {
     return {
       role: 'ADMIN',
-      title: 'Administración de Reservas',
-      subtitle: 'Vista completa de todas las reservas de la plataforma',
+      title: 'provider-tour-management.config.adminTitle',
+      subtitle: 'provider-tour-management.config.adminSubtitle',
       apiEndpoint: '/api/v1/admin/bookings',
       columns: [
         {
           field: 'id',
-          header: 'ID',
+          header: 'provider-tour-management.config.columns.idShort',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -397,7 +397,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'img',
-          header: 'Tour',
+          header: 'provider-tour-management.config.columns.tour',
           type: 'image',
           sortable: false,
           filterable: false,
@@ -405,7 +405,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'tourName',
-          header: 'Nombre Tour',
+          header: 'provider-tour-management.config.columns.tourNameShort',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -413,7 +413,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'providerName',
-          header: 'Proveedor',
+          header: 'provider-tour-management.config.columns.provider',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -421,7 +421,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'customerName',
-          header: 'Cliente',
+          header: 'provider-tour-management.config.columns.customer',
           type: 'text',
           sortable: true,
           filterable: true,
@@ -429,7 +429,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'travellers',
-          header: 'Viajeros',
+          header: 'provider-tour-management.config.columns.travellers',
           type: 'text',
           sortable: false,
           filterable: false,
@@ -437,7 +437,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'checkInDate',
-          header: 'Check-in',
+          header: 'provider-tour-management.config.columns.checkIn',
           type: 'date',
           sortable: true,
           filterable: true,
@@ -445,7 +445,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'price',
-          header: 'Monto',
+          header: 'provider-tour-management.config.columns.amount',
           type: 'currency',
           sortable: true,
           filterable: false,
@@ -453,7 +453,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'bookingDate',
-          header: 'Fecha Reserva',
+          header: 'provider-tour-management.config.columns.bookingDate',
           type: 'date',
           sortable: true,
           filterable: false,
@@ -461,7 +461,7 @@ export class BookingManagementConfigService {
         },
         {
           field: 'status',
-          header: 'Estado',
+          header: 'provider-tour-management.config.columns.status',
           type: 'status',
           sortable: true,
           filterable: true,
@@ -471,28 +471,28 @@ export class BookingManagementConfigService {
       actions: [
         {
           id: 'view',
-          label: 'Ver',
+          label: 'provider-tour-management.config.actions.view',
           icon: 'fa fa-eye',
           color: 'info',
           visible: (row) => true
         },
         {
           id: 'approve',
-          label: 'Aprobar',
+          label: 'provider-tour-management.config.actions.approve',
           icon: 'fa fa-check',
           color: 'success',
           visible: (row) => row.status === 'Pending'
         },
         {
           id: 'suspend',
-          label: 'Suspender',
+          label: 'provider-tour-management.config.actions.suspend',
           icon: 'fa fa-pause-circle',
           color: 'warning',
           visible: (row) => row.status === 'Confirmed' || row.status === 'Upcoming'
         },
         {
           id: 'delete',
-          label: 'Eliminar',
+          label: 'provider-tour-management.config.actions.delete',
           icon: 'fa fa-trash',
           color: 'danger',
           visible: (row) => row.status === 'Cancelled'
@@ -501,30 +501,30 @@ export class BookingManagementConfigService {
       filters: [
         {
           field: 'status',
-          label: 'Estado',
+          label: 'provider-tour-management.config.filters.status',
           type: 'select',
           options: [
-            { value: '', label: 'Todos' },
-            { value: 'Upcoming', label: 'Próximas' },
-            { value: 'Pending', label: 'Pendientes' },
-            { value: 'Confirmed', label: 'Confirmadas' },
-            { value: 'Cancelled', label: 'Canceladas' },
-            { value: 'Completed', label: 'Completadas' }
+            { value: '', label: 'provider-tour-management.config.filters.statusAll' },
+            { value: 'Upcoming', label: 'provider-tour-management.config.filters.statusUpcoming' },
+            { value: 'Pending', label: 'provider-tour-management.config.filters.statusPending' },
+            { value: 'Confirmed', label: 'provider-tour-management.config.filters.statusConfirmed' },
+            { value: 'Cancelled', label: 'provider-tour-management.config.filters.statusCancelled' },
+            { value: 'Completed', label: 'provider-tour-management.config.filters.statusCompleted' }
           ]
         },
         {
           field: 'providerName',
-          label: 'Proveedor',
+          label: 'provider-tour-management.config.filters.provider',
           type: 'text'
         },
         {
           field: 'customerName',
-          label: 'Cliente',
+          label: 'provider-tour-management.config.filters.customer',
           type: 'text'
         },
         {
           field: 'dateRange',
-          label: 'Rango de Fechas',
+          label: 'provider-tour-management.config.filters.dateRange',
           type: 'dateRange'
         }
       ],

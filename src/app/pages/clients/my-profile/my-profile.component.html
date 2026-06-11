@@ -4,7 +4,7 @@
         
         <!-- Header -->
         <div class="text-center mb-5">
-            <h2 class="mb-2">Mi Perfil</h2>
+            <h2 class="mb-2">{{ 'myProfile.title' | translate }}</h2>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
                     <li class="breadcrumb-item">
@@ -12,7 +12,7 @@
                             <i class="isax isax-home5"></i>
                         </a>
                     </li>
-                    <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">Mi Perfil</li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">{{ 'myProfile.title' | translate }}</li>
                 </ol>
             </nav>
         </div>
@@ -33,7 +33,7 @@
                 @if (activeSection === 'profile') {
                     <div class="card shadow-none mb-0">
                         <div class="card-header d-flex align-items-center justify-content-between">
-                            <h6>Mi Perfil</h6>
+                            <h6>{{ 'myProfile.title' | translate }}</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <a href="javascript:void(0);" (click)="openEditProfileModal()" class="p-1 rounded-circle btn btn-light d-flex align-items-center justify-content-center">
                                     <i class="isax isax-edit-2 fs-14"></i>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <h6 class="fs-16 mb-3">Información Básica</h6>
+                            <h6 class="fs-16 mb-3">{{ 'myProfile.basicInfo' | translate }}</h6>
                             <div class="d-flex align-items-center mb-3">
                                 <span class="avatar avatar-xl flex-shrink-0 me-3 ">
                                     <img [src]="profileData?.photoUrl || 'assets/img/users/user-01.jpg'" alt="Img" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover;">
@@ -51,58 +51,58 @@
                             <div class="row border-bottom pb-2 mb-3">
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <h6 class="fs-14">Nombre</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.name' | translate }}</h6>
                                         <p>{{ profileData?.firstName || 'N/A' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <h6 class="fs-14">Apellido</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.lastName' | translate }}</h6>
                                         <p>{{ profileData?.lastName || 'N/A' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <h6 class="fs-14">Correo Electrónico</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.email' | translate }}</h6>
                                         <p>{{ profileData?.email || 'N/A' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <h6 class="fs-14">Teléfono</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.phone' | translate }}</h6>
                                         <p>{{ profileData?.phone || 'N/A' }}</p>
                                     </div>
                                 </div>
                             </div>
-                            <h6 class="fs-16 mb-3">Información de Dirección</h6>
+                            <h6 class="fs-16 mb-3">{{ 'myProfile.addressInfo' | translate }}</h6>
                             <div class="row g-2">
                                 <div class="col-md-12">
                                     <div>
-                                        <h6 class="fs-14">Dirección</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.address' | translate }}</h6>
                                         <p>N/A</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <h6 class="fs-14">País</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.country' | translate }}</h6>
                                         <p>{{ profileData?.country || 'N/A' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <h6 class="fs-14">Estado/Provincia</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.state' | translate }}</h6>
                                         <p>{{ profileData?.state || 'N/A' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <h6 class="fs-14">Ciudad</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.city' | translate }}</h6>
                                         <p>{{ profileData?.city || 'N/A' }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <h6 class="fs-14">Código Postal</h6>
+                                        <h6 class="fs-14">{{ 'myProfile.zipCode' | translate }}</h6>
                                         <p>N/A</p>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@
                 @if (activeSection === 'bookings') {
                     <div class="card shadow-none mb-0">
                         <div class="card-header">
-                            <h6>Mis Reservas</h6>
+                            <h6>{{ 'myProfile.myBookings' | translate }}</h6>
                         </div>
                         <div class="card-body">
                             <app-provider-tour-management
@@ -130,7 +130,7 @@
                 @if (activeSection === 'reviews') {
                     <div class="card shadow-none mb-0">
                         <div class="card-header">
-                            <h6>Mis Reseñas</h6>
+                            <h6>{{ 'myProfile.myReviews' | translate }}</h6>
                         </div>
                         <div class="card-body">
                             <app-provider-reviews
@@ -162,7 +162,7 @@
                 @if (activeSection === 'wishlist') {
                     <div class="card shadow-none mb-0">
                         <div class="card-header">
-                            <h6>Lista de Deseos</h6>
+                            <h6>{{ 'myProfile.wishlist' | translate }}</h6>
                         </div>
                         <div class="card-body">
                             <app-tour-grid-view 
