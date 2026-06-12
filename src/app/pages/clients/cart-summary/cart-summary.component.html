@@ -1,25 +1,20 @@
-<!-- Breadcrumb -->
-<div class="breadcrumb-bar breadcrumb-bg-05 text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">{{ 'cartSummary.pageTitle' | translate }}</h2>
+<!-- Page Wrapper -->
+<div class="content content-two pt-4">
+    <div class="container" *ngIf="!loading; else loadingTemplate">
+        <!-- Header Section -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="mb-2 text-dark fw-bold">{{ 'cartSummary.pageTitle' | translate }}</h2>
                 <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item"><a [routerLink]="routes.tourList">{{ 'cartSummary.breadcrumbTours' | translate }}</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ 'cartSummary.breadcrumbCart' | translate }}</li>
+                    <ol class="breadcrumb justify-content-center mb-0 bg-transparent p-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="routes.tourList" class="text-dark">{{ 'cartSummary.breadcrumbTours' | translate }}</a></li>
+                        <li class="breadcrumb-item active text-muted" aria-current="page">{{ 'cartSummary.breadcrumbCart' | translate }}</li>
                     </ol>
                 </nav>
             </div>
         </div>
-    </div>
-</div>
-<!-- /Breadcrumb -->
 
-<!-- Page Wrapper -->
-<div class="content content-two">
-    <div class="container" *ngIf="!loading; else loadingTemplate">
         <!-- Cart -->
         <div class="row">
             <div class="col-lg-8">
@@ -64,12 +59,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-12">
-                                        <div class="mb-0">
-                                            <label class="form-label">{{ 'cartSummary.additionalInfo' | translate }}</label>
-                                            <textarea class="form-control" rows="3" [(ngModel)]="contactForm.additionalInfo" [placeholder]="'cartSummary.additionalInfoPlaceholder' | translate"></textarea>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -113,24 +102,28 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">{{ 'cartSummary.country' | translate }}</label>
-                                            <select class="form-control" [(ngModel)]="contactForm.country">
+                                            <select class="form-control" [(ngModel)]="contactForm.country" (change)="onCountryChange($event)">
                                                 <option value="">{{ 'cartSummary.selectCountry' | translate }}</option>
-                                                <option value="CO">{{ 'cartSummary.countryColombia' | translate }}</option>
-                                                <option value="US">{{ 'cartSummary.countryUSA' | translate }}</option>
-                                                <option value="ES">{{ 'cartSummary.countrySpain' | translate }}</option>
+                                                <option *ngFor="let country of countries" [value]="country.id">{{ i18nService.getValue(country.name) }}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ 'cartSummary.city' | translate }}</label>
-                                            <input type="text" class="form-control" [(ngModel)]="contactForm.city" [placeholder]="'cartSummary.cityPlaceholder' | translate">
+                                            <label class="form-label">{{ 'cartSummary.stateOrDepartment' | translate }}</label>
+                                            <select class="form-control" [(ngModel)]="contactForm.state" (change)="onDepartmentChange($event)" [disabled]="!departments.length">
+                                                <option value="">{{ 'cartSummary.selectDepartment' | translate }}</option>
+                                                <option *ngFor="let dept of departments" [value]="dept.id">{{ i18nService.getValue(dept.name) }}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ 'cartSummary.stateOrDepartment' | translate }}</label>
-                                            <input type="text" class="form-control" [(ngModel)]="contactForm.state" [placeholder]="'cartSummary.cityPlaceholder' | translate">
+                                            <label class="form-label">{{ 'cartSummary.city' | translate }}</label>
+                                            <select class="form-control" [(ngModel)]="contactForm.city" [disabled]="!cities.length">
+                                                <option value="">{{ 'cartSummary.selectCity' | translate }}</option>
+                                                <option *ngFor="let city of cities" [value]="city.id">{{ i18nService.getValue(city.name) }}</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -269,23 +262,20 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
                             <!-- Quick Navigation for Multiple Travelers -->
                             <div class="travelers-navigation" *ngIf="travelersInfo.length > 2">
-                                <div class="d-flex justify-content-center flex-wrap gap-2 mt-3">
-                                    <button type="button" 
-                                            class="btn btn-sm btn-outline-info" 
-                                            *ngFor="let traveler of travelersInfo; let i = index"
-                                            (click)="scrollToTraveler(i)"
-                                            [title]="('cartSummary.goTo' | translate) + ' ' + traveler.tourName">
-                                        <i class="fas fa-map-marker-alt me-1"></i>
-                                        Tour {{ i + 1 }}
-                                        <span class="ms-1" 
-                                              [class]="traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'text-success' : 'text-warning'">
-                                            <i class="fas" 
-                                               [class]="traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
-                                        </span>
-                                    </button>
+                                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                    <span class="small text-muted">{{ travelersInfo.length }} {{ 'cartSummary.travelersTotal' | translate }}</span>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="document.querySelector('.travelers-scroll-container').scrollBy({top: -200, behavior: 'smooth'})">
+                                            <i class="fas fa-chevron-up"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="document.querySelector('.travelers-scroll-container').scrollBy({top: 200, behavior: 'smooth'})">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -298,7 +288,7 @@
                                 <p class="text-muted small">{{ 'cartSummary.addToursToComplete' | translate }}</p>
                             </div>
                         </div>
-                    </div>
+
                     </div>
                 </div>
 
@@ -343,6 +333,50 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Facturación Electrónica -->
+                <div class="card checkout-card mt-4">
+                    <div class="card-header">
+                        <h5>{{ 'cartSummary.electronicBilling.title' | translate }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="electronicBillingCheck" [(ngModel)]="billingForm.required">
+                            <label class="form-check-label fw-bold" for="electronicBillingCheck">
+                                {{ 'cartSummary.electronicBilling.wantBilling' | translate }}
+                            </label>
+                        </div>
+                        
+                        <!-- Campos de Facturación -->
+                        <div class="row" *ngIf="billingForm.required">
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.documentType' | translate }}</label>
+                                <select class="form-control" [(ngModel)]="billingForm.documentType" required>
+                                    <option value="CC">{{ 'cartSummary.electronicBilling.docTypes.CC' | translate }}</option>
+                                    <option value="CE">{{ 'cartSummary.electronicBilling.docTypes.CE' | translate }}</option>
+                                    <option value="NIT">{{ 'cartSummary.electronicBilling.docTypes.NIT' | translate }}</option>
+                                    <option value="PASSPORT">{{ 'cartSummary.electronicBilling.docTypes.PASSPORT' | translate }}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.documentNumber' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="billingForm.documentNumber" [placeholder]="'cartSummary.electronicBilling.placeholders.documentNumber' | translate" required>
+                            </div>
+                            <div class="col-lg-12 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.customerName' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="billingForm.customerName" [placeholder]="'cartSummary.electronicBilling.placeholders.customerName' | translate" required>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.email' | translate }}</label>
+                                <input type="email" class="form-control" [(ngModel)]="billingForm.email" [placeholder]="'cartSummary.electronicBilling.placeholders.email' | translate" required>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.phone' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="billingForm.phone" [placeholder]="'cartSummary.electronicBilling.placeholders.phone' | translate" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Review Order Details - Sidebar -->
@@ -367,14 +401,15 @@
                                 </button>
 
                                 <div class="d-flex align-items-start mb-3">
-                                    <img [src]="(item.gallery.length > 0 ? item.gallery[0].imageUrl : '') || 'assets/img/tours/default-tour.jpg'" 
-                                         [alt]="i18nService.getValue(item.tour.name)" class="tour-thumb me-3">
+                                    <img [src]="getTourImage(item)" 
+                                         [alt]="i18nService.getValue(item.tour.name)" class="tour-thumb me-3"
+                                         (error)="$any($event.target).src !== 'assets/img/tours/tours-01.jpg' ? $any($event.target).src='assets/img/tours/tours-01.jpg' : null">
                                     <div class="flex-grow-1">
                                         <h6 class="mb-1">{{ i18nService.getValue(item.tour.name) }}</h6>
                                         <div class="tour-details mb-2">
                                             <p class="text-muted small mb-1">
                                                 <i class="fas fa-calendar me-1"></i>
-                                                {{ item.dayDate | date:'fullDate':'es' }}
+                                                {{ item.dayDate | date:'fullDate':'':currentLang }}
                                             </p>
                                             <p class="text-muted small mb-1">
                                                 <i class="fas fa-clock me-1"></i>
@@ -395,7 +430,7 @@
                                             <small class="text-muted d-block mb-1">{{ 'cartSummary.participantsLabel' | translate }}:</small>
                                             <div class="ms-2">
                                                 <div *ngFor="let participant of item.participants" class="d-flex justify-content-between align-items-center mb-1">
-                                                    <small>{{ getParticipantTypeLabel(participant.ageType) }}: {{ participant.quantity }}</small>
+                                                    <small>{{ getParticipantTypeLabel(participant.ageType) | translate }}: {{ participant.quantity }}</small>
                                                     <small class="text-muted">{{ participant.price | currency:'COP':'symbol':'1.0-0' }} {{ 'cartSummary.each' | translate }}</small>
                                                 </div>
                                             </div>

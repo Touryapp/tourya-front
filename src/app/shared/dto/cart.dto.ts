@@ -41,6 +41,13 @@ export interface CartItem {
     description: string;
     order: number;
   }[];
+  profilePicture?: {
+    id: number;
+    imageUrl: string;
+    description: any;
+    orderIndex: number;
+  };
+  displayImageUrl?: string;
 }
 
 export interface DaySelection {

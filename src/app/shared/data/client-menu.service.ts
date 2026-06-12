@@ -37,13 +37,13 @@ export class ClientMenuService {
 
   public clientSidebarMenu: ClientMenuSection[] = [
     {
-      tittle: 'Principal',
+      tittle: 'clientSidebar.main',
       base: 'clients',
       showAsTab: false,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Mis Reservas',
+          menuValue: 'clientSidebar.myBookings',
           section: 'bookings',
           hasSubRoute: false,
           showSubRoute: false,
@@ -54,7 +54,7 @@ export class ClientMenuService {
           icon: 'isax-calendar-tick5'
         },
         {
-          menuValue: 'Mis Reseñas',
+          menuValue: 'clientSidebar.myReviews',
           section: 'reviews',
           hasSubRoute: false,
           showSubRoute: false,
@@ -65,7 +65,7 @@ export class ClientMenuService {
           icon: 'isax-magic-star5'
         },
         {
-          menuValue: 'Lista de Deseos',
+          menuValue: 'clientSidebar.wishlist',
           section: 'wishlist',
           hasSubRoute: false,
           showSubRoute: false,
@@ -78,13 +78,13 @@ export class ClientMenuService {
       ]
     },
     {
-      tittle: 'Cuenta',
+      tittle: 'clientSidebar.account',
       base: 'my-profile',
       showAsTab: false,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Mi Perfil',
+          menuValue: 'clientSidebar.myProfile',
           section: 'profile',
           hasSubRoute: false,
           showSubRoute: false,
@@ -95,7 +95,7 @@ export class ClientMenuService {
           icon: 'isax-profile-tick5'
         },
         {
-          menuValue: 'Créditos',
+          menuValue: 'clientSidebar.credits',
           section: 'credits',
           hasSubRoute: false,
           showSubRoute: false,
@@ -106,7 +106,7 @@ export class ClientMenuService {
           icon: 'isax-wallet-25'
         },
         {
-          menuValue: 'Cerrar Sesión',
+          menuValue: 'clientSidebar.logout',
           route: routes.index,
           hasSubRoute: false,
           showSubRoute: false,

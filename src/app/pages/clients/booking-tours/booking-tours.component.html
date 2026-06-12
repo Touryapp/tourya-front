@@ -3,12 +3,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">Booking Tours</h2>
+                    <h2 class="breadcrumb-title mb-2">{{ 'bookingTours.title' | translate }}</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center mb-0">
                             <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item">Tours</li>
-                            <li class="breadcrumb-item active" aria-current="page">Booking</li>
+                            <li class="breadcrumb-item">{{ 'bookingTours.breadcrumbTours' | translate }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ 'bookingTours.breadcrumbBooking' | translate }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -24,7 +24,7 @@
                 <div class="col-xl-8">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mb-4">Tour Information</h5>
+                            <h5 class="card-title mb-4">{{ 'bookingTours.tourInfo' | translate }}</h5>
                             <div class="row">
                                 <div class="col-md-4">
                                     <img [src]="tourData.image" class="img-fluid rounded" alt="Tour Image">
@@ -33,7 +33,7 @@
                                     <h6>{{ tourData.name }}</h6>
                                     <p class="text-muted"><i class="isax isax-location5 me-2"></i>{{ tourData.location }}</p>
                                     <p class="text-muted"><i class="isax isax-clock me-2"></i>{{ tourData.duration }}</p>
-                                    <p class="text-muted"><i class="isax isax-user me-2"></i>Max {{ tourData.guests }} guests</p>
+                                    <p class="text-muted"><i class="isax isax-user me-2"></i>{{ 'bookingTours.maxGuests' | translate:{guests: tourData.guests} }}</p>
                                     <div class="d-flex align-items-center">
                                         <h5 class="text-primary mb-0">${{ tourData.price }}</h5>
                                         <span class="text-decoration-line-through text-muted ms-2">${{ tourData.originalPrice }}</span>
@@ -45,12 +45,12 @@
 
                     <div class="card mt-4">
                         <div class="card-body">
-                            <h5 class="card-title mb-4">Booking Details</h5>
+                            <h5 class="card-title mb-4">{{ 'bookingTours.bookingDetails' | translate }}</h5>
                             <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">From Date <span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ 'bookingTours.fromDate' | translate }} <span class="text-danger">*</span></label>
                                             <input
                                                 type="text"
                                                 class="form-control"
@@ -58,13 +58,13 @@
                                                 bsDatepicker
                                                 [minDate]="minDate"
                                                 [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }"
-                                                placeholder="Select start date"
+                                                [placeholder]="'bookingTours.selectStartDate' | translate"
                                             />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">To Date <span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ 'bookingTours.toDate' | translate }} <span class="text-danger">*</span></label>
                                             <input
                                                 type="text"
                                                 class="form-control"
@@ -72,7 +72,7 @@
                                                 bsDatepicker
                                                 [minDate]="minDate"
                                                 [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }"
-                                                placeholder="Select end date"
+                                                [placeholder]="'bookingTours.selectEndDate' | translate"
                                             />
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">Adults <span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ 'bookingTours.adults' | translate }} <span class="text-danger">*</span></label>
                                             <input
                                                 type="number"
                                                 class="form-control"
@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">Children (2-12 years)</label>
+                                            <label class="form-label">{{ 'bookingTours.children' | translate }}</label>
                                             <input
                                                 type="number"
                                                 class="form-control"
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">Infants (0-2 years)</label>
+                                            <label class="form-label">{{ 'bookingTours.infants' | translate }}</label>
                                             <input
                                                 type="number"
                                                 class="form-control"
@@ -117,50 +117,50 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ 'bookingTours.fullName' | translate }} <span class="text-danger">*</span></label>
                                             <input
                                                 type="text"
                                                 class="form-control"
                                                 formControlName="name"
-                                                placeholder="Enter your full name"
+                                                [placeholder]="'bookingTours.enterFullName' | translate"
                                             />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">Email <span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ 'bookingTours.email' | translate }} <span class="text-danger">*</span></label>
                                             <input
                                                 type="email"
                                                 class="form-control"
                                                 formControlName="email"
-                                                placeholder="Enter your email"
+                                                [placeholder]="'bookingTours.enterEmail' | translate"
                                             />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <label class="form-label">{{ 'bookingTours.phoneNumber' | translate }} <span class="text-danger">*</span></label>
                                     <input
                                         type="tel"
                                         class="form-control"
                                         formControlName="phone"
-                                        placeholder="Enter your phone number"
+                                        [placeholder]="'bookingTours.enterPhone' | translate"
                                     />
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Special Requests</label>
+                                    <label class="form-label">{{ 'bookingTours.specialRequests' | translate }}</label>
                                     <textarea
                                         class="form-control"
                                         formControlName="specialRequests"
                                         rows="3"
-                                        placeholder="Any special requests or requirements..."
+                                        [placeholder]="'bookingTours.enterRequests' | translate"
                                     ></textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary btn-lg" [disabled]="!bookingForm.valid">
-                                    Proceed to Payment
+                                    {{ 'bookingTours.proceedPayment' | translate }}
                                 </button>
                             </form>
                         </div>
@@ -170,23 +170,23 @@
                 <div class="col-xl-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mb-4">Booking Summary</h5>
+                            <h5 class="card-title mb-4">{{ 'bookingTours.bookingSummary' | translate }}</h5>
                             <div class="booking-summary">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Adults ({{ bookingForm.get('adults')?.value || 0 }})</span>
+                                    <span>{{ 'bookingTours.adultsLabel' | translate }} ({{ bookingForm.get('adults')?.value || 0 }})</span>
                                     <span>${{ (bookingForm.get('adults')?.value || 0) * tourData.price }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Children ({{ bookingForm.get('children')?.value || 0 }})</span>
+                                    <span>{{ 'bookingTours.childrenLabel' | translate }} ({{ bookingForm.get('children')?.value || 0 }})</span>
                                     <span>${{ (bookingForm.get('children')?.value || 0) * (tourData.price * 0.7) }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Infants ({{ bookingForm.get('infants')?.value || 0 }})</span>
-                                    <span>Free</span>
+                                    <span>{{ 'bookingTours.infantsLabel' | translate }} ({{ bookingForm.get('infants')?.value || 0 }})</span>
+                                    <span>{{ 'bookingTours.free' | translate }}</span>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-between fw-bold">
-                                    <span>Total</span>
+                                    <span>{{ 'bookingTours.total' | translate }}</span>
                                     <span>${{ calculateTotal() }}</span>
                                 </div>
                             </div>

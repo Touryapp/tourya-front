@@ -3,12 +3,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">Booking Confirmation</h2>
+                    <h2 class="breadcrumb-title mb-2">{{ 'bookingConfirm.title' | translate }}</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center mb-0">
                             <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item">Tours</li>
-                            <li class="breadcrumb-item active" aria-current="page">Confirmation</li>
+                            <li class="breadcrumb-item">{{ 'bookingConfirm.breadcrumbTours' | translate }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ 'bookingConfirm.breadcrumbConfirmation' | translate }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -28,10 +28,10 @@
                             <div class="success-icon mb-4">
                                 <i class="isax isax-tick-circle text-success" style="font-size: 4rem;"></i>
                             </div>
-                            <h3 class="text-success mb-3">Booking Confirmed!</h3>
-                            <p class="text-muted mb-4">Your tour booking has been successfully confirmed. You will receive a confirmation email shortly.</p>
+                            <h3 class="text-success mb-3">{{ 'bookingConfirm.successTitle' | translate }}</h3>
+                            <p class="text-muted mb-4">{{ 'bookingConfirm.successMessage' | translate }}</p>
                             <div class="booking-id">
-                                <strong>Booking ID:</strong> {{ bookingData.bookingId }}
+                                <strong>{{ 'bookingConfirm.bookingId' | translate }}:</strong> {{ bookingData.bookingId }}
                             </div>
                         </div>
                     </div>
@@ -39,43 +39,43 @@
                     <!-- Booking Details -->
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Booking Details</h5>
+                            <h5 class="card-title mb-0">{{ 'bookingConfirm.bookingDetails' | translate }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Tour Name:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.tourName' | translate }}:</label>
                                         <p>{{ bookingData.tourName }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Location:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.location' | translate }}:</label>
                                         <p>{{ bookingData.location }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Duration:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.duration' | translate }}:</label>
                                         <p>{{ bookingData.duration }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Travel Dates:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.travelDates' | translate }}:</label>
                                         <p>{{ bookingData.fromDate }} - {{ bookingData.toDate }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Adults:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.adults' | translate }}:</label>
                                         <p>{{ bookingData.adults }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Children:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.children' | translate }}:</label>
                                         <p>{{ bookingData.children }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Infants:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.infants' | translate }}:</label>
                                         <p>{{ bookingData.infants }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Total Amount:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.totalAmount' | translate }}:</label>
                                         <p class="text-primary fw-bold">${{ bookingData.totalAmount }}</p>
                                     </div>
                                 </div>
@@ -86,27 +86,27 @@
                     <!-- Customer Information -->
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Customer Information</h5>
+                            <h5 class="card-title mb-0">{{ 'bookingConfirm.customerInfo' | translate }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Name:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.name' | translate }}:</label>
                                         <p>{{ bookingData.customerName }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Email:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.email' | translate }}:</label>
                                         <p>{{ bookingData.customerEmail }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Phone:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.phone' | translate }}:</label>
                                         <p>{{ bookingData.customerPhone }}</p>
                                     </div>
                                     <div class="detail-item mb-3">
-                                        <label class="fw-bold">Payment Method:</label>
+                                        <label class="fw-bold">{{ 'bookingConfirm.paymentMethod' | translate }}:</label>
                                         <p>{{ bookingData.paymentMethod }}</p>
                                     </div>
                                 </div>
@@ -120,17 +120,17 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <button class="btn btn-outline-primary w-100" (click)="downloadInvoice()">
-                                        <i class="isax isax-document-download me-2"></i>Download Invoice
+                                        <i class="isax isax-document-download me-2"></i>{{ 'bookingConfirm.downloadInvoice' | translate }}
                                     </button>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <button class="btn btn-outline-secondary w-100" (click)="printBooking()">
-                                        <i class="isax isax-printer me-2"></i>Print Booking
+                                        <i class="isax isax-printer me-2"></i>{{ 'bookingConfirm.printBooking' | translate }}
                                     </button>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <button class="btn btn-primary w-100" (click)="goToHome()">
-                                        <i class="isax isax-home5 me-2"></i>Back to Home
+                                        <i class="isax isax-home5 me-2"></i>{{ 'bookingConfirm.backToHome' | translate }}
                                     </button>
                                 </div>
                             </div>
@@ -141,13 +141,13 @@
                     <div class="card mt-4">
                         <div class="card-body">
                             <h6 class="card-title text-warning">
-                                <i class="isax isax-info-circle me-2"></i>Important Information
+                                <i class="isax isax-info-circle me-2"></i>{{ 'bookingConfirm.importantInfoTitle' | translate }}
                             </h6>
                             <ul class="list-unstyled mb-0">
-                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Please arrive 30 minutes before the tour start time</li>
-                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Bring comfortable walking shoes and weather-appropriate clothing</li>
-                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Don't forget to bring your booking confirmation</li>
-                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>Contact us 24 hours before if you need to make changes</li>
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>{{ 'bookingConfirm.info1' | translate }}</li>
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>{{ 'bookingConfirm.info2' | translate }}</li>
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>{{ 'bookingConfirm.info3' | translate }}</li>
+                                <li class="mb-2"><i class="isax isax-tick-circle text-success me-2"></i>{{ 'bookingConfirm.info4' | translate }}</li>
                             </ul>
                         </div>
                     </div>

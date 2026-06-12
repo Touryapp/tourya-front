@@ -1204,7 +1204,22 @@
     "zipCode": "Zip Code",
     "myBookings": "My Bookings",
     "myReviews": "My Reviews",
-    "wishlist": "Wishlist"
+    "wishlist": "Wishlist",
+    "alerts": {
+      "photo": "Profile Photo",
+      "uploadSuccess": "Uploaded successfully",
+      "uploadError": "Error uploading",
+      "profileData": "Profile Data",
+      "updateSuccess": "Updated successfully",
+      "updateError": "Error updating",
+      "processCompleted": "Process Completed!",
+      "updateResult": "Update Result",
+      "understood": "Understood",
+      "replySuccess": "Reply sent successfully!",
+      "replyError": "Error sending reply. Please try again.",
+      "reviewDeleted": "Review deleted successfully",
+      "reviewDeleteError": "Error deleting review. Please try again."
+    }
   },
   "toursList": {
     "loading": "Loading...",
@@ -1379,7 +1394,46 @@
     "accommodationNamePlaceholder": "Hotel XYZ",
     "accommodationAddressPlaceholder": "Accommodation location",
     "cityPlaceholder": "City",
-    "travelerEmailPlaceholder": "traveler@email.com"
+    "travelerEmailPlaceholder": "traveler@email.com",
+    "selectDepartment": "Select Department",
+    "selectCity": "Select City",
+    "travelersTotal": "Total travelers",
+    "electronicBilling": {
+      "title": "Electronic Billing",
+      "wantBilling": "Do you want electronic billing?",
+      "documentType": "Document type",
+      "documentNumber": "Document number",
+      "customerName": "Customer Name / Company Name",
+      "email": "Email",
+      "phone": "Phone",
+      "docTypes": {
+        "CC": "Citizenship Card",
+        "CE": "Foreigner ID",
+        "NIT": "NIT",
+        "PASSPORT": "Passport"
+      },
+      "placeholders": {
+        "documentNumber": "E.g. 123456789",
+        "customerName": "Full name or company name",
+        "email": "email@example.com",
+        "phone": "E.g. 3001234567"
+      }
+    },
+    "errors": {
+      "noCartItemsForCredits": "No items in cart to apply credits.",
+      "completeField": "Please complete the field: {{field}} in Contact Information",
+      "completeTravelersInfo": "Please complete the information for all travelers",
+      "invalidEmail": "Please enter a valid email address",
+      "completeRequiredFields": "Please complete all required fields correctly",
+      "noCartItems": "No items in cart to process",
+      "creditPaymentError": "An error occurred processing the payment with your credits. Please contact support.",
+      "paymentConfigError": "Payment configuration error: {{errors}}",
+      "paymentSuccessButReservationFailed": "Payment was successful but there was an error creating the reservation. Please contact support.",
+      "paymentDeclined": "The payment was declined. Please try another payment method.",
+      "paymentPending": "The payment is being processed. You will receive a confirmation shortly.",
+      "invalidItemId": "Error: Invalid item ID",
+      "completeContactFirst": "Please first complete your contact information (Name, Last Name, Email and Phone)"
+    }
   },
   "clientCredits": {
     "myCredits": "My Credits",
@@ -1399,7 +1453,183 @@
     "totalSelected": "Total",
     "cancelBtn": "Cancel",
     "useCreditsBtn": "Use Credits",
-    "exceedingMaxError": "The total value of the selected credits exceeds the booking value, it must be less than or equal to"
+    "exceedingMaxError": "The total value of the selected credits is greater than the reservation value, it must be less than or equal to"
+  },
+  "bookingTours": {
+    "title": "Booking Tours",
+    "breadcrumbTours": "Tours",
+    "breadcrumbBooking": "Booking",
+    "tourInfo": "Tour Information",
+    "maxGuests": "Max {{guests}} guests",
+    "bookingDetails": "Booking Details",
+    "fromDate": "From Date",
+    "selectStartDate": "Select start date",
+    "toDate": "To Date",
+    "selectEndDate": "Select end date",
+    "adults": "Adults",
+    "children": "Children (2-12 years)",
+    "infants": "Infants (0-2 years)",
+    "fullName": "Full Name",
+    "enterFullName": "Enter your full name",
+    "email": "Email",
+    "enterEmail": "Enter your email",
+    "phoneNumber": "Phone Number",
+    "enterPhone": "Enter your phone number",
+    "specialRequests": "Special Requests",
+    "enterRequests": "Any special requests or requirements...",
+    "proceedPayment": "Proceed to Payment",
+    "bookingSummary": "Booking Summary",
+    "adultsLabel": "Adults",
+    "childrenLabel": "Children",
+    "infantsLabel": "Infants",
+    "free": "Free",
+    "total": "Total"
+  },
+  "bookingConfirm": {
+    "title": "Booking Confirmation",
+    "breadcrumbTours": "Tours",
+    "breadcrumbConfirmation": "Confirmation",
+    "successTitle": "Booking Confirmed!",
+    "successMessage": "Your tour booking has been successfully confirmed. You will receive a confirmation email shortly.",
+    "bookingId": "Booking ID",
+    "bookingDetails": "Booking Details",
+    "tourName": "Tour Name",
+    "location": "Location",
+    "duration": "Duration",
+    "travelDates": "Travel Dates",
+    "adults": "Adults",
+    "children": "Children",
+    "infants": "Infants",
+    "totalAmount": "Total Amount",
+    "customerInfo": "Customer Information",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "paymentMethod": "Payment Method",
+    "downloadInvoice": "Download Invoice",
+    "printBooking": "Print Booking",
+    "backToHome": "Back to Home",
+    "importantInfoTitle": "Important Information",
+    "info1": "Please arrive 30 minutes before the tour start time",
+    "info2": "Bring comfortable walking shoes and weather-appropriate clothing",
+    "info3": "Don't forget to bring your booking confirmation",
+    "info4": "Contact us 24 hours before if you need to make changes"
+  },
+  "tourBookingSuccess": {
+    "title": "Booking Confirmation",
+    "breadcrumbTours": "Tours",
+    "breadcrumbConfirmation": "Confirmation",
+    "loading": {
+      "visuallyHidden": "Loading...",
+      "processingTitle": "Processing your booking...",
+      "processingDesc": "Please wait while we confirm your payment."
+    },
+    "errorState": {
+      "title": "Error loading confirmation",
+      "backBtn": "Back to Tours"
+    },
+    "success": {
+      "title": "Booking Confirmed!",
+      "message": "Your booking has been successfully processed. You will receive a confirmation email shortly.",
+      "paymentId": "Payment",
+      "reservation": "Booking",
+      "reservations": "Bookings"
+    },
+    "paymentSummary": {
+      "title": "Payment Summary",
+      "downloadAllQRs": "Download All QRs",
+      "transactionId": "Transaction ID",
+      "paymentMethod": "Payment Method",
+      "totalValue": "Total Value",
+      "creditsApplied": "Credits Applied",
+      "totalPaid": "Total Paid"
+    },
+    "carousel": {
+      "reservation": "Booking",
+      "of": "of",
+      "previous": "Previous",
+      "next": "Next",
+      "goTo": "Go to booking"
+    },
+    "details": {
+      "travellers": "Travellers",
+      "tourDate": "Tour Date",
+      "reservationId": "Booking ID",
+      "duration": "Duration",
+      "price": "Price",
+      "deliveryStatus": "Delivery Status",
+      "created": "Created",
+      "lastModified": "Last Modified",
+      "includedActivities": "Included Activities",
+      "extraServices": "Extra Services"
+    },
+    "qr": {
+      "title": "QR Code for this Booking",
+      "loadError": "Could not load QR code",
+      "instruction": "Present this QR code at the time of your tour to confirm your booking #{{id}}.",
+      "download": "Download QR",
+      "share": "Share"
+    },
+    "provider": {
+      "title": "Service Provider",
+      "email": "Contact Email",
+      "phone": "Phone"
+    },
+    "payer": {
+      "title": "Payer Information",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "document": "Document"
+    },
+    "actions": {
+      "print": "Print Confirmation",
+      "viewReservations": "View My Bookings"
+    },
+    "importantInfo": {
+      "title": "Important Information",
+      "point1": "Save the QR codes of your bookings, you will need them to access the tours.",
+      "point2": "You will receive a confirmation email with all details.",
+      "point3": "If you have questions, please contact the service provider directly.",
+      "point4": "You can download each QR individually or all together.",
+      "point5": "The QRs are also available in your user profile."
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "categories": {
+      "aquatic": "Aquatic",
+      "land": "Land",
+      "cultural": "Cultural",
+      "adventure": "Adventure",
+      "night": "Night",
+      "experiences": "Experiences",
+      "transportRental": "Transport Rental"
+    },
+    "alerts": {
+      "downloadSuccess": "✅ {{count}} QR codes downloaded",
+      "downloadError": "Error downloading QR codes",
+      "shareSuccess": "✅ QR link copied to clipboard",
+      "shareError": "Error sharing QR code"
+    },
+    "errors": {
+      "paymentProcessing": "Your payment is being processed. You will be able to see your bookings in \"My Bookings\" shortly.",
+      "recoveryError": "There was an error recovering your booking details. Please contact support."
+    }
+  },
+  "clientSidebar": {
+    "main": "Main",
+    "myBookings": "My Bookings",
+    "myReviews": "My Reviews",
+    "wishlist": "Wishlist",
+    "account": "Account",
+    "myProfile": "My Profile",
+    "credits": "Credits",
+    "logout": "Log Out",
+    "since": "Since"
   },
   "pendingReviews": {
     "title": "Pending Reviews",

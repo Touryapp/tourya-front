@@ -871,6 +871,7 @@ export class CartService {
         dayDate: item.scheduleDate, // ✅ API: item.scheduleDate
         startDate: item.startDate || item.scheduleDate, // Fecha inicio del tour
         endDate: item.endDate || null, // Fecha fin del tour (si es multi-día)
+        profilePicture: item.profilePicture, // ✅ Map profile picture
         tour: {
           id: item.productId, // ✅ API: item.productId
           name: item.tourName || 'Tour sin nombre', // ✅ API: item.tourName

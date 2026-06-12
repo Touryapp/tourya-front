@@ -4,7 +4,7 @@
 
     <!-- Header -->
     <div class="text-center mb-5">
-      <h2 class="mb-2">Confirmación de Reserva</h2>
+      <h2 class="mb-2">{{ 'tourBookingSuccess.title' | translate }}</h2>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
           <li class="breadcrumb-item">
@@ -12,8 +12,8 @@
               <i class="isax isax-home5"></i>
             </a>
           </li>
-          <li class="breadcrumb-item text-dark" style="color: #000 !important;">Tours</li>
-          <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">Confirmación</li>
+          <li class="breadcrumb-item text-dark" style="color: #000 !important;">{{ 'tourBookingSuccess.breadcrumbTours' | translate }}</li>
+          <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">{{ 'tourBookingSuccess.breadcrumbConfirmation' | translate }}</li>
         </ol>
       </nav>
     </div>
@@ -23,10 +23,10 @@
     <div *ngIf="loading" class="row justify-content-center">
       <div class="col-lg-6 text-center py-5">
         <div class="spinner-border text-primary mb-3" role="status">
-          <span class="visually-hidden">Cargando...</span>
+          <span class="visually-hidden">{{ 'tourBookingSuccess.loading.visuallyHidden' | translate }}</span>
         </div>
-        <h5>Procesando su reserva...</h5>
-        <p class="text-muted">Por favor espere mientras confirmamos su pago.</p>
+        <h5>{{ 'tourBookingSuccess.loading.processingTitle' | translate }}</h5>
+        <p class="text-muted">{{ 'tourBookingSuccess.loading.processingDesc' | translate }}</p>
       </div>
     </div>
 
@@ -35,11 +35,11 @@
       <div class="col-lg-6 text-center py-5">
         <div class="alert alert-danger">
           <i class="isax isax-warning-2 fs-2 text-danger mb-2"></i>
-          <h5>Error al cargar la confirmación</h5>
+          <h5>{{ 'tourBookingSuccess.errorState.title' | translate }}</h5>
           <p>{{ error }}</p>
           <button class="btn btn-primary" (click)="router.navigate([routes.clientsListTours])">
             <i class="isax isax-arrow-left me-2"></i>
-            Volver a Tours
+            {{ 'tourBookingSuccess.errorState.backBtn' | translate }}
           </button>
         </div>
       </div>
@@ -53,11 +53,11 @@
       <div class="col-lg-10">
         <div class="alert alert-success text-center">
           <i class="isax isax-tick-circle fs-1 text-success mb-2"></i>
-          <h4 class="mt-2 mb-1">¡Reserva Confirmada!</h4>
-          <p class="mb-2">Tu reserva ha sido procesada exitosamente. Recibirás un email de confirmación pronto.</p>
+          <h4 class="mt-2 mb-1">{{ 'tourBookingSuccess.success.title' | translate }}</h4>
+          <p class="mb-2">{{ 'tourBookingSuccess.success.message' | translate }}</p>
           <h6 class="mb-0">
-            Pago #{{ reservationData.paymentId }} | 
-            <span class="text-muted">{{ totalReservations }} Reserva{{ totalReservations > 1 ? 's' : '' }}</span>
+            {{ 'tourBookingSuccess.success.paymentId' | translate }} #{{ reservationData.paymentId }} | 
+            <span class="text-muted">{{ totalReservations }} {{ totalReservations > 1 ? ('tourBookingSuccess.success.reservations' | translate) : ('tourBookingSuccess.success.reservation' | translate) }}</span>
           </h6>
         </div>
       </div>
@@ -72,13 +72,13 @@
               <div class="col-md-6">
                 <h5 class="card-title mb-0 text-white">
                   <i class="isax isax-wallet-money me-2"></i>
-                  Resumen del Pago
+                  {{ 'tourBookingSuccess.paymentSummary.title' | translate }}
                 </h5>
               </div>
               <div class="col-md-6 text-end">
                 <button class="btn btn-light btn-sm" (click)="downloadAllQRs()">
                   <i class="isax isax-document-download me-1"></i>
-                  Descargar Todos los QRs
+                  {{ 'tourBookingSuccess.paymentSummary.downloadAllQRs' | translate }}
                 </button>
               </div>
             </div>
@@ -86,31 +86,31 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-4 mb-3 mb-md-0">
-                <label class="form-label text-muted mb-1">ID de Transacción</label>
+                <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.paymentSummary.transactionId' | translate }}</label>
                 <p class="fw-bold mb-0">{{ reservationData.transactionId }}</p>
               </div>
               <div class="col-md-4 mb-3 mb-md-0">
-                <label class="form-label text-muted mb-1">Método de Pago</label>
+                <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.paymentSummary.paymentMethod' | translate }}</label>
                 <p class="mb-0">{{ getPaymentMethod() }}</p>
               </div>
               <div class="col-md-4 text-start text-md-end">
                 <div *ngIf="(reservationData.creditsUsed && reservationData.creditsUsed > 0) || (reservationData.appliedCredits && reservationData.appliedCredits > 0); else noCreditsBreakdown" class="d-flex flex-column align-items-start align-items-md-end">
                   <div class="mb-1 w-100 d-flex justify-content-between">
-                    <span class="text-muted small">Valor total:</span>
+                    <span class="text-muted small">{{ 'tourBookingSuccess.paymentSummary.totalValue' | translate }}:</span>
                     <span class="fw-medium">{{ formatPrice(reservationData.totalAmount || 0) }}</span>
                   </div>
                   <div class="mb-2 w-100 d-flex justify-content-between text-success">
-                    <span class="small">Créditos aplicados:</span>
+                    <span class="small">{{ 'tourBookingSuccess.paymentSummary.creditsApplied' | translate }}:</span>
                     <span class="fw-medium">-{{ formatPrice(reservationData.creditsUsed || reservationData.appliedCredits || 0) }}</span>
                   </div>
                   <div class="w-100 d-flex justify-content-between border-top pt-1">
-                    <span class="text-muted fw-bold">Total Pagado:</span>
+                    <span class="text-muted fw-bold">{{ 'tourBookingSuccess.paymentSummary.totalPaid' | translate }}:</span>
                     <span class="fw-bold text-primary">{{ formatPrice(getTotalFromWompi()) }}</span>
                   </div>
                 </div>
                 <!-- Plantilla por defecto cuando no hay créditos aplicados -->
                 <ng-template #noCreditsBreakdown>
-                  <label class="form-label text-muted mb-1">Total Pagado</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.paymentSummary.totalPaid' | translate }}</label>
                   <p class="fw-bold text-primary mb-0 total-amount">{{ formatPrice(getTotalFromWompi()) }}</p>
                 </ng-template>
               </div>
@@ -129,13 +129,13 @@
               <div class="col-md-6">
                 <h5 class="card-title mb-0">
                   <i class="isax isax-ticket me-2"></i>
-                  Reserva {{ currentReservationIndex + 1 }} de {{ totalReservations }}
+                  {{ 'tourBookingSuccess.carousel.reservation' | translate }} {{ currentReservationIndex + 1 }} {{ 'tourBookingSuccess.carousel.of' | translate }} {{ totalReservations }}
                 </h5>
               </div>
               <div class="col-md-6 text-end">
                 <span class="badge" [ngClass]="getDeliveryStatusClass(currentReservation.deliveryStatus)">
                   <i class="fa" [ngClass]="getDeliveryStatusIcon(currentReservation.deliveryStatus)" aria-hidden="true"></i>
-                  {{ getDeliveryStatusLabel(currentReservation.deliveryStatus) }}
+                  {{ getDeliveryStatusLabelTranslated(currentReservation.deliveryStatus) }}
                 </span>
               </div>
             </div>
@@ -149,7 +149,7 @@
                 (click)="previousReservation()"
                 [disabled]="currentReservationIndex === 0">
                 <i class="isax isax-arrow-left me-2"></i>
-                Anterior
+                {{ 'tourBookingSuccess.carousel.previous' | translate }}
               </button>
 
               <!-- Dots Navigation -->
@@ -159,7 +159,7 @@
                   class="dot"
                   [class.active]="i === currentReservationIndex"
                   (click)="goToReservation(i)"
-                  [title]="'Ir a reserva ' + (i + 1)">
+                  [title]="('tourBookingSuccess.carousel.goTo' | translate) + ' ' + (i + 1)">
                 </span>
               </div>
 
@@ -167,7 +167,7 @@
                 class="btn btn-outline-primary"
                 (click)="nextReservation()"
                 [disabled]="currentReservationIndex === totalReservations - 1">
-                Siguiente
+                {{ 'tourBookingSuccess.carousel.next' | translate }}
                 <i class="isax isax-arrow-right ms-2"></i>
               </button>
             </div>
@@ -179,7 +179,7 @@
                   <img [src]="currentReservation.tourImageUrl || 'assets/img/placeholder-tour.jpg'" 
                        class="img-fluid rounded shadow-sm tour-img" 
                        alt="{{ currentReservation.tourName }}">
-                  <span class="tour-type-badge">{{ currentReservation.tourType }}</span>
+                  <span class="tour-type-badge">{{ getTourTypeTranslated(currentReservation.tourType) }}</span>
                 </div>
               </div>
               <div class="col-md-8">
@@ -195,7 +195,7 @@
                         <i class="isax isax-user"></i>
                       </div>
                       <div>
-                        <small class="text-muted d-block">Viajeros</small>
+                        <small class="text-muted d-block">{{ 'tourBookingSuccess.details.travellers' | translate }}</small>
                         <span class="fw-medium">{{ currentReservation.travellers }}</span>
                       </div>
                     </div>
@@ -206,7 +206,7 @@
                         <i class="isax isax-calendar"></i>
                       </div>
                       <div>
-                        <small class="text-muted d-block">Fecha del Tour</small>
+                        <small class="text-muted d-block">{{ 'tourBookingSuccess.details.tourDate' | translate }}</small>
                         <span class="fw-medium">{{ formatDate(currentReservation.checkInDate) }}</span>
                       </div>
                     </div>
@@ -221,34 +221,34 @@
             <div class="row mb-4">
               <div class="col-md-6">
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">ID de Reserva</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.details.reservationId' | translate }}</label>
                   <p class="fw-bold mb-0">#{{ currentReservation.reservationId }}</p>
                 </div>
                 <div class="info-item mb-3" *ngIf="currentReservation.duration">
-                  <label class="form-label text-muted mb-1">Duración</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.details.duration' | translate }}</label>
                   <p class="mb-0">{{ currentReservation.duration }}</p>
                 </div>
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">Precio</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.details.price' | translate }}</label>
                   <p class="mb-0 fw-bold text-dark">{{ formatPrice(currentReservation.price) }}</p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">Estado de Entrega</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.details.deliveryStatus' | translate }}</label>
                   <p class="mb-0">
                     <span class="badge" [ngClass]="getDeliveryStatusClass(currentReservation.deliveryStatus)">
                       <i class="fa" [ngClass]="getDeliveryStatusIcon(currentReservation.deliveryStatus)" aria-hidden="true"></i>
-                      {{ getDeliveryStatusLabel(currentReservation.deliveryStatus) }}
+                      {{ getDeliveryStatusLabelTranslated(currentReservation.deliveryStatus) }}
                     </span>
                   </p>
                 </div>
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">Creado</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.details.created' | translate }}</label>
                   <p class="mb-0 small">{{ formatDate(currentReservation.createdDate) }}</p>
                 </div>
                 <div class="info-item mb-3">
-                  <label class="form-label text-muted mb-1">Última Modificación</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.details.lastModified' | translate }}</label>
                   <p class="mb-0 small">{{ formatDate(currentReservation.lastModifiedDate) }}</p>
                 </div>
               </div>
@@ -257,7 +257,7 @@
             <!-- Activities and Extra Services -->
             <div class="row mb-4" *ngIf="(currentReservation.activities && currentReservation.activities.length > 0) || (currentReservation.extraServices && currentReservation.extraServices.length > 0)">
               <div class="col-md-6" *ngIf="currentReservation.activities && currentReservation.activities.length > 0">
-                <h6 class="mb-2 small text-uppercase fw-bold text-muted">Actividades Incluidas</h6>
+                <h6 class="mb-2 small text-uppercase fw-bold text-muted">{{ 'tourBookingSuccess.details.includedActivities' | translate }}</h6>
                 <ul class="list-unstyled mb-3">
                   <li *ngFor="let activity of currentReservation.activities" class="mb-1">
                     <i class="isax isax-tick-circle text-success me-2"></i>
@@ -266,7 +266,7 @@
                 </ul>
               </div>
               <div class="col-md-6" *ngIf="currentReservation.extraServices && currentReservation.extraServices.length > 0">
-                <h6 class="mb-2 small text-uppercase fw-bold text-muted">Servicios Adicionales</h6>
+                <h6 class="mb-2 small text-uppercase fw-bold text-muted">{{ 'tourBookingSuccess.details.extraServices' | translate }}</h6>
                 <ul class="list-unstyled mb-3">
                   <li *ngFor="let service of currentReservation.extraServices" class="mb-1">
                     <i class="isax isax-info-circle text-primary me-2"></i>
@@ -283,7 +283,7 @@
                   <div class="card-body text-center">
                     <h6 class="card-title mb-3">
                       <i class="isax isax-scan-barcode me-2"></i>
-                      Código QR de esta Reserva
+                      {{ 'tourBookingSuccess.qr.title' | translate }}
                     </h6>
                     <div class="qr-container mb-3">
                       <img 
@@ -294,20 +294,20 @@
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
                       <div class="alert alert-warning mt-3" style="display: none;">
                         <i class="isax isax-warning-2 me-2"></i>
-                        No se pudo cargar el código QR
+                        {{ 'tourBookingSuccess.qr.loadError' | translate }}
                       </div>
                     </div>
                     <p class="text-muted small mb-3">
-                      Presenta este código QR al momento de tu tour para confirmar tu reserva #{{ currentReservation.reservationId }}.
+                      {{ 'tourBookingSuccess.qr.instruction' | translate: { id: currentReservation.reservationId } }}
                     </p>
                     <div class="btn-group gap-2">
                       <button class="btn btn-primary btn-sm" (click)="downloadQR()">
                         <i class="isax isax-document-download me-1"></i>
-                        Descargar QR
+                        {{ 'tourBookingSuccess.qr.download' | translate }}
                       </button>
                       <button class="btn btn-outline-secondary btn-sm" (click)="shareQR()">
                         <i class="isax isax-share me-1"></i>
-                        Compartir
+                        {{ 'tourBookingSuccess.qr.share' | translate }}
                       </button>
                     </div>
                   </div>
@@ -320,7 +320,7 @@
               <div class="col-12">
                 <h6 class="mb-3">
                   <i class="isax isax-building me-2"></i>
-                  Proveedor del Servicio
+                  {{ 'tourBookingSuccess.provider.title' | translate }}
                 </h6>
                 <div class="card bg-light border-start border-primary border-4 mb-0">
                   <div class="card-body">
@@ -329,7 +329,7 @@
                     </h6>
                     <div class="row">
                       <div class="col-md-6 mb-2">
-                        <label class="form-label text-muted mb-1">Email de Contacto</label>
+                        <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.provider.email' | translate }}</label>
                         <p class="mb-0">
                           <a [href]="'mailto:' + currentReservation.serviceResponsible.email" 
                              class="text-decoration-none">
@@ -339,7 +339,7 @@
                         </p>
                       </div>
                       <div class="col-md-6 mb-2">
-                        <label class="form-label text-muted mb-1">Teléfono</label>
+                        <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.provider.phone' | translate }}</label>
                         <p class="mb-0">
                           <a [href]="'tel:' + currentReservation.serviceResponsible.phone" 
                              class="text-decoration-none">
@@ -366,28 +366,28 @@
           <div class="card-header">
             <h6 class="card-title mb-0">
               <i class="isax isax-user me-2"></i>
-              Información del Pagador
+              {{ 'tourBookingSuccess.payer.title' | translate }}
             </h6>
           </div>
           <div class="card-body">
             <div class="row">
               <div class="col-md-6">
                 <div class="info-item mb-2">
-                  <label class="form-label text-muted mb-1">Nombre Completo</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.payer.fullName' | translate }}</label>
                   <p class="mb-0 fw-bold">{{ reservationData.payer.name }}</p>
                 </div>
                 <div class="info-item mb-2">
-                  <label class="form-label text-muted mb-1">Email</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.payer.email' | translate }}</label>
                   <p class="mb-0">{{ reservationData.payer.email }}</p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="info-item mb-2">
-                  <label class="form-label text-muted mb-1">Teléfono</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.payer.phone' | translate }}</label>
                   <p class="mb-0">{{ reservationData.payer.phone }}</p>
                 </div>
                 <div class="info-item mb-2">
-                  <label class="form-label text-muted mb-1">Documento</label>
+                  <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.payer.document' | translate }}</label>
                   <p class="mb-0">{{ reservationData.payer.documentType }} {{ reservationData.payer.documentNumber }}</p>
                 </div>
               </div>
@@ -403,11 +403,11 @@
         <div class="d-flex justify-content-between flex-wrap gap-2">
           <button class="btn btn-outline-secondary" (click)="printConfirmation()">
             <i class="isax isax-printer me-2"></i>
-            Imprimir Confirmación
+            {{ 'tourBookingSuccess.actions.print' | translate }}
           </button>
           <button class="btn btn-primary" (click)="goToMyReservations()">
             <i class="isax isax-ticket me-2"></i>
-            Ver Mis Reservas
+            {{ 'tourBookingSuccess.actions.viewReservations' | translate }}
           </button>
         </div>
       </div>
@@ -419,14 +419,14 @@
         <div class="alert alert-info">
           <h6 class="alert-heading">
             <i class="isax isax-info-circle me-2"></i>
-            Información Importante
+            {{ 'tourBookingSuccess.importantInfo.title' | translate }}
           </h6>
           <ul class="mb-0 ps-3">
-            <li>Guarda los códigos QR de tus reservas, los necesitarás para acceder a los tours.</li>
-            <li>Recibirás un email de confirmación con todos los detalles.</li>
-            <li>Si tienes preguntas, contacta directamente al proveedor del servicio.</li>
-            <li>Puedes descargar cada QR individualmente o todos juntos.</li>
-            <li>Los QRs están también disponibles en tu perfil de usuario.</li>
+            <li>{{ 'tourBookingSuccess.importantInfo.point1' | translate }}</li>
+            <li>{{ 'tourBookingSuccess.importantInfo.point2' | translate }}</li>
+            <li>{{ 'tourBookingSuccess.importantInfo.point3' | translate }}</li>
+            <li>{{ 'tourBookingSuccess.importantInfo.point4' | translate }}</li>
+            <li>{{ 'tourBookingSuccess.importantInfo.point5' | translate }}</li>
           </ul>
         </div>
       </div>

@@ -12,6 +12,7 @@ import { TouristProfileDto } from '../../../shared/dto/tourist-profile.dto';
 import { MatDialog } from '@angular/material/dialog';
 import { GuestInfoModalComponent } from '../../../shared/common/guest-info-modal/guest-info-modal.component';
 import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-my-profile',
@@ -55,7 +56,8 @@ export class MyProfileComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private searchToursService: SearchToursService,
     private touristService: TouristService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -152,19 +154,25 @@ export class MyProfileComponent implements OnInit {
         
         let htmlContent = '<div style="text-align: left; margin-top: 10px; font-size: 1.1rem;">';
         if (photoAttempted) {
-          htmlContent += `<p>${photoSuccess ? '✅' : '❌'} <strong>Foto de perfil:</strong> ${photoSuccess ? 'Cargada correctamente' : 'Error al cargar'}</p>`;
+          const photoTitle = this.translate.instant('myProfile.alerts.photo');
+          const photoMsg = photoSuccess ? this.translate.instant('myProfile.alerts.uploadSuccess') : this.translate.instant('myProfile.alerts.uploadError');
+          htmlContent += `<p>${photoSuccess ? '✅' : '❌'} <strong>${photoTitle}:</strong> ${photoMsg}</p>`;
         }
-        htmlContent += `<p>${profileSuccess ? '✅' : '❌'} <strong>Datos del perfil:</strong> ${profileSuccess ? 'Actualizados correctamente' : 'Error al actualizar'}</p>`;
+        const profileTitle = this.translate.instant('myProfile.alerts.profileData');
+        const profileMsg = profileSuccess ? this.translate.instant('myProfile.alerts.updateSuccess') : this.translate.instant('myProfile.alerts.updateError');
+        htmlContent += `<p>${profileSuccess ? '✅' : '❌'} <strong>${profileTitle}:</strong> ${profileMsg}</p>`;
         htmlContent += '</div>';
 
         const isTotalSuccess = (!photoAttempted || photoSuccess) && profileSuccess;
+        const title = isTotalSuccess ? this.translate.instant('myProfile.alerts.processCompleted') : this.translate.instant('myProfile.alerts.updateResult');
+        const confirmBtn = this.translate.instant('myProfile.alerts.understood');
 
         setTimeout(() => {
           Swal.fire({
-            title: isTotalSuccess ? '¡Proceso Completado!' : 'Resultado de la actualización',
+            title: title,
             html: htmlContent,
             icon: isTotalSuccess ? 'success' : (profileSuccess || photoSuccess ? 'warning' : 'error'),
-            confirmButtonText: 'Entendido',
+            confirmButtonText: confirmBtn,
             confirmButtonColor: '#3085d6',
             allowOutsideClick: false,
             backdrop: true,
@@ -290,13 +298,13 @@ export class MyProfileComponent implements OnInit {
     this.reviewsService.saveReviewReply(event.reviewId, comment).subscribe({
       next: (response) => {
         console.log('Respuesta guardada exitosamente:', response);
-        this.openSnackBar('¡Respuesta enviada exitosamente!');
+        this.openSnackBar(this.translate.instant('myProfile.alerts.replySuccess'));
         // Recargar las reviews para mostrar la nueva respuesta
         this.onLoadReviews();
       },
       error: (error) => {
         console.error('Error al guardar la respuesta:', error);
-        this.openSnackBar('Error al enviar la respuesta. Por favor intenta nuevamente.');
+        this.openSnackBar(this.translate.instant('myProfile.alerts.replyError'));
       }
     });
   }
@@ -308,13 +316,13 @@ export class MyProfileComponent implements OnInit {
     this.reviewsService.rejectReview(event.reviewId, event.reason).subscribe({
       next: (response) => {
         console.log('Review eliminada exitosamente:', response);
-        this.openSnackBar('Review eliminada exitosamente');
+        this.openSnackBar(this.translate.instant('myProfile.alerts.reviewDeleted'));
         // Recargar las reviews
         this.onLoadReviews();
       },
       error: (error) => {
         console.error('Error al eliminar la review:', error);
-        this.openSnackBar('Error al eliminar la review. Por favor intenta nuevamente.');
+        this.openSnackBar(this.translate.instant('myProfile.alerts.reviewDeleteError'));
       }
     });
   }

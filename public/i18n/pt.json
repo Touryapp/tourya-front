@@ -1050,7 +1050,22 @@
     "zipCode": "Código Postal",
     "myBookings": "Minhas Reservas",
     "myReviews": "Minhas Avaliações",
-    "wishlist": "Lista de Desejos"
+    "wishlist": "Lista de Desejos",
+    "alerts": {
+      "photo": "Foto de perfil",
+      "uploadSuccess": "Carregado com sucesso",
+      "uploadError": "Erro ao carregar",
+      "profileData": "Dados do perfil",
+      "updateSuccess": "Atualizados com sucesso",
+      "updateError": "Erro ao atualizar",
+      "processCompleted": "Processo Concluído!",
+      "updateResult": "Resultado da atualização",
+      "understood": "Entendido",
+      "replySuccess": "Resposta enviada com sucesso!",
+      "replyError": "Erro ao enviar a resposta. Por favor, tente novamente.",
+      "reviewDeleted": "Avaliação excluída com sucesso",
+      "reviewDeleteError": "Erro ao excluir a avaliação. Por favor, tente novamente."
+    }
   },
   "toursList": {
     "loading": "Carregando...",
@@ -1380,7 +1395,46 @@
     "accommodationNamePlaceholder": "Hotel XYZ",
     "accommodationAddressPlaceholder": "Localização do alojamento",
     "cityPlaceholder": "Cidade",
-    "travelerEmailPlaceholder": "viajante@email.com"
+    "travelerEmailPlaceholder": "viajante@email.com",
+    "selectDepartment": "Selecione o Departamento",
+    "selectCity": "Selecione a Cidade",
+    "travelersTotal": "Viajantes no total",
+    "electronicBilling": {
+      "title": "Faturamento Eletrônico",
+      "wantBilling": "Deseja faturamento eletrônico?",
+      "documentType": "Tipo de documento",
+      "documentNumber": "Número do documento",
+      "customerName": "Nome do Cliente / Razão Social",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "docTypes": {
+        "CC": "Carteira de Identidade",
+        "CE": "Identidade de Estrangeiro",
+        "NIT": "NIT",
+        "PASSPORT": "Passaporte"
+      },
+      "placeholders": {
+        "documentNumber": "Ex. 123456789",
+        "customerName": "Nome completo ou razão social",
+        "email": "email@exemplo.com",
+        "phone": "Ex. 3001234567"
+      }
+    },
+    "errors": {
+      "noCartItemsForCredits": "Não há itens no carrinho para aplicar créditos.",
+      "completeField": "Por favor preencha o campo: {{field}} em Informações de Contato",
+      "completeTravelersInfo": "Por favor preencha as informações de todos os viajantes",
+      "invalidEmail": "Por favor insira um endereço de e-mail válido",
+      "completeRequiredFields": "Por favor preencha todos os campos obrigatórios corretamente",
+      "noCartItems": "Não há itens no carrinho para processar",
+      "creditPaymentError": "Ocorreu um erro ao processar o pagamento com seus créditos. Por favor entre em contato com o suporte.",
+      "paymentConfigError": "Erro na configuração de pagamento: {{errors}}",
+      "paymentSuccessButReservationFailed": "O pagamento foi bem-sucedido, mas ocorreu um erro ao criar a reserva. Por favor entre em contato com o suporte.",
+      "paymentDeclined": "O pagamento foi recusado. Por favor tente outro método de pagamento.",
+      "paymentPending": "O pagamento está sendo processado. Você receberá uma confirmação em breve.",
+      "invalidItemId": "Erro: ID de item inválido",
+      "completeContactFirst": "Por favor preencha primeiro suas informações de contato (Nome, Sobrenome, E-mail e Telefone)"
+    }
   },
   "clientCredits": {
     "myCredits": "Meus Créditos",
@@ -1401,6 +1455,182 @@
     "cancelBtn": "Cancelar",
     "useCreditsBtn": "Usar Créditos",
     "exceedingMaxError": "O valor total dos créditos selecionados é maior do que o valor da reserva, deve ser menor ou igual a"
+  },
+  "bookingTours": {
+    "title": "Reservar Passeios",
+    "breadcrumbTours": "Passeios",
+    "breadcrumbBooking": "Reserva",
+    "tourInfo": "Informações do Passeio",
+    "maxGuests": "Máximo {{guests}} hóspedes",
+    "bookingDetails": "Detalhes da Reserva",
+    "fromDate": "Data de Início",
+    "selectStartDate": "Selecione a data de início",
+    "toDate": "Data de Término",
+    "selectEndDate": "Selecione a data de término",
+    "adults": "Adultos",
+    "children": "Crianças (2-12 anos)",
+    "infants": "Bebês (0-2 anos)",
+    "fullName": "Nome Completo",
+    "enterFullName": "Digite seu nome completo",
+    "email": "E-mail",
+    "enterEmail": "Digite seu e-mail",
+    "phoneNumber": "Número de Telefone",
+    "enterPhone": "Digite seu número de telefone",
+    "specialRequests": "Pedidos Especiais",
+    "enterRequests": "Qualquer pedido especial ou requisito...",
+    "proceedPayment": "Prosseguir para o Pagamento",
+    "bookingSummary": "Resumo da Reserva",
+    "adultsLabel": "Adultos",
+    "childrenLabel": "Crianças",
+    "infantsLabel": "Bebês",
+    "free": "Grátis",
+    "total": "Total"
+  },
+  "bookingConfirm": {
+    "title": "Confirmação de Reserva",
+    "breadcrumbTours": "Passeios",
+    "breadcrumbConfirmation": "Confirmação",
+    "successTitle": "Reserva Confirmada!",
+    "successMessage": "A sua reserva de passeio foi confirmada com sucesso. Em breve você receberá um e-mail de confirmação.",
+    "bookingId": "ID da Reserva",
+    "bookingDetails": "Detalhes da Reserva",
+    "tourName": "Nome do Passeio",
+    "location": "Localização",
+    "duration": "Duração",
+    "travelDates": "Datas de Viagem",
+    "adults": "Adultos",
+    "children": "Crianças",
+    "infants": "Bebês",
+    "totalAmount": "Valor Total",
+    "customerInfo": "Informações do Cliente",
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "paymentMethod": "Método de Pagamento",
+    "downloadInvoice": "Baixar Fatura",
+    "printBooking": "Imprimir Reserva",
+    "backToHome": "Voltar ao Início",
+    "importantInfoTitle": "Informações Importantes",
+    "info1": "Por favor, chegue 30 minutos antes do horário de início do passeio",
+    "info2": "Traga sapatos confortáveis para caminhar e roupas adequadas para o clima",
+    "info3": "Não se esqueça de trazer a confirmação da sua reserva",
+    "info4": "Entre em contato conosco 24 horas antes se precisar fazer alterações"
+  },
+  "tourBookingSuccess": {
+    "title": "Confirmação de Reserva",
+    "breadcrumbTours": "Passeios",
+    "breadcrumbConfirmation": "Confirmação",
+    "loading": {
+      "visuallyHidden": "Carregando...",
+      "processingTitle": "Processando sua reserva...",
+      "processingDesc": "Por favor, aguarde enquanto confirmamos seu pagamento."
+    },
+    "errorState": {
+      "title": "Erro ao carregar confirmação",
+      "backBtn": "Voltar aos Passeios"
+    },
+    "success": {
+      "title": "Reserva Confirmada!",
+      "message": "Sua reserva foi processada com sucesso. Você receberá um e-mail de confirmação em breve.",
+      "paymentId": "Pagamento",
+      "reservation": "Reserva",
+      "reservations": "Reservas"
+    },
+    "paymentSummary": {
+      "title": "Resumo do Pagamento",
+      "downloadAllQRs": "Baixar Todos os QRs",
+      "transactionId": "ID da Transação",
+      "paymentMethod": "Método de Pagamento",
+      "totalValue": "Valor total",
+      "creditsApplied": "Créditos aplicados",
+      "totalPaid": "Total Pago"
+    },
+    "carousel": {
+      "reservation": "Reserva",
+      "of": "de",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "goTo": "Ir para a reserva"
+    },
+    "details": {
+      "travellers": "Viajantes",
+      "tourDate": "Data do Passeio",
+      "reservationId": "ID da Reserva",
+      "duration": "Duração",
+      "price": "Preço",
+      "deliveryStatus": "Status de Entrega",
+      "created": "Criado",
+      "lastModified": "Última Modificação",
+      "includedActivities": "Atividades Incluídas",
+      "extraServices": "Serviços Adicionais"
+    },
+    "qr": {
+      "title": "Código QR para esta Reserva",
+      "loadError": "Não foi possível carregar o código QR",
+      "instruction": "Apresente este código QR no momento do seu passeio para confirmar sua reserva #{{id}}.",
+      "download": "Baixar QR",
+      "share": "Compartilhar"
+    },
+    "provider": {
+      "title": "Provedor de Serviços",
+      "email": "E-mail de Contato",
+      "phone": "Telefone"
+    },
+    "payer": {
+      "title": "Informações do Pagador",
+      "fullName": "Nome Completo",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "document": "Documento"
+    },
+    "actions": {
+      "print": "Imprimir Confirmação",
+      "viewReservations": "Ver Minhas Reservas"
+    },
+    "importantInfo": {
+      "title": "Informações Importantes",
+      "point1": "Guarde os códigos QR de suas reservas, você precisará deles para acessar os passeios.",
+      "point2": "Você receberá um e-mail de confirmação com todos os detalhes.",
+      "point3": "Se tiver dúvidas, entre em contato com o provedor de serviços diretamente.",
+      "point4": "Você pode baixar cada QR individualmente ou todos juntos.",
+      "point5": "Os QRs também estão disponíveis no seu perfil de usuário."
+    },
+    "status": {
+      "pending": "Pendente",
+      "confirmed": "Confirmado",
+      "delivered": "Entregue",
+      "cancelled": "Cancelado"
+    },
+    "categories": {
+      "aquatic": "Aquático",
+      "land": "Terrestre",
+      "cultural": "Cultural",
+      "adventure": "Aventura",
+      "night": "Noturno",
+      "experiences": "Experiências",
+      "transportRental": "Aluguel de Transporte"
+    },
+    "alerts": {
+      "downloadSuccess": "✅ {{count}} códigos QR baixados",
+      "downloadError": "Erro ao baixar códigos QR",
+      "shareSuccess": "✅ Link do QR copiado para a área de transferência",
+      "shareError": "Erro ao compartilhar código QR"
+    },
+    "errors": {
+      "paymentProcessing": "O seu pagamento está a ser processado. Você poderá ver suas reservas em \"Minhas Reservas\" em breve.",
+      "recoveryError": "Ocorreu um erro ao recuperar os detalhes da sua reserva. Por favor, entre em contato com o suporte."
+    }
+  },
+  "clientSidebar": {
+    "main": "Principal",
+    "myBookings": "Minhas Reservas",
+    "myReviews": "Minhas Avaliações",
+    "wishlist": "Lista de Desejos",
+    "account": "Conta",
+    "myProfile": "Meu Perfil",
+    "credits": "Créditos",
+    "logout": "Sair",
+    "since": "Desde"
   },
   "pendingReviews": {
     "title": "Avaliações Pendentes",

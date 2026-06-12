@@ -1198,9 +1198,8 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Obtiene la ubicación del tour de manera segura
    */
   getTourLocation(): string {
-    const city = this.selectedTour?.tour?.address?.city || "";
-    const state = this.selectedTour?.tour?.address?.state || "";
-    return city && state ? `${city}, ${state}` : city || state || "";
+    const location = this.selectedTour?.tour?.address?.address || "";
+    return location || "";
   }
 
   /**
