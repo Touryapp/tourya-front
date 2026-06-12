@@ -1,0 +1,629 @@
+Spanglish en turista 
+http://34.160.22.16/home
+en ingles (eng). las opciones del menu (Tours, Blog, Contact us, Legal, Providers) salen en español. en el componente de la búsqueda,  cambiar Check in checkout por “From” y “Until” y ciudad colocarle “City”. el boton de
+
+{{imagen}}
+{{imagen}}
+
+en español (ES), en el componente de busqueda los nombres aparecen en ingles. cambiarlos por (Desde(check in), hasta (check out), viajeros (travelers). cambiar Select travelers por “Seleccionar viajeros” y los tipos colocar “Adulto”, “Niño”, “Bebe”
+
+{{imagen}}
+{{imagen}}
+
+
+en portugues el menu deberia estar en el portugues y no en español (passeio (tour), Blog, Contate-nos, informações legais(legal), fornecedores (proveedores)).
+en el componente de busqueda debe estar en portugues: Cidade(ciudad), De (check in), para (check out), viajantes (travellers), 
+Select travelers cambiarlo por “Selecione os viajantes”
+Adult (adulto),
+Children (criança),
+Infants(bebê).
+el boton de buscar colocar “Pesquisar”.
+
+{{imagen}}
+{{imagen}}
+
+Tours en cards
+
+{{imagen}}
+
+ES- Aquanautas / ENG- Aquanauts / PT- Aquanautas
+ES- Noche blanca / ENG- White Night / PT- Noite Branca
+ES- Paseo al cayo / ENG- Cay Tour / PT- Passeio ao ilhéu
+ES- Carro playero / ENG- Beach Cart / PT- Carro de praia
+ES- Parasail / ENG- Parasailing / PT- Parasail
+ES- Buceo / ENG- Scuba Diving / PT- Mergulho
+ES- Paddle Board / ENG- Paddle Board / PT- Paddle Board
+
+Footers
+
+{{imagen}}
+
+ES- Destinos / ENG- Destinations / PT- Destinos
+ES- Compañia / ENG- Company / PT- Empresa
+ES- Quienes somos / ENG- About Us / PT- Quem somos
+ES- Blog / ENG- Blog / PT- Blog
+ES- Soporte / ENG- Support / PT- Suporte
+ES- Contactenos / ENG- Contact Us / PT- Fale conosco
+ES- Legal / ENG- Legal / PT- Legal
+ES- Terminos y conticiones / ENG- Terms and Conditions / PT- Termos e condições
+ES- Politicas de privacidad y tratamiento de datos personales / PT- ENG- Privacy Policy and Personal Data Processing / PT- Políticas de privacidade e tratamento de dados pessoais
+ES- Proveedores / ENG- Suppliers / PT- Fornecedores
+ES- Restrate como proveedores / ENG- Register as a Supplier / PT- Registre-se como fornecedor
+ES- Disponible en: / ENG- Available on : / PT- Disponível em:
+ES- Correo electrónico: / ENG- E-mail: / PT- E-mail:
+
+
+
+Filtros tours
+
+{{imagen}}
+
+ES - Categorias / EN - Categories /PT - Categorias
+
+Español
+Inglés (English)
+Portugués (Português - Brasil)
+🛥️ Acuático
+Water Activities
+Aquático
+🤿 Deportes
+Sports & Diving
+Esportes
+🏝️ Terrestre
+Land Tours
+Terrestre
+🪂 Aventura
+Adventure
+Aventura
+🌙 Nocturno
+Nightlife
+Noturno / Vida Noturna
+🗿 Cultural / Experiencias
+Culture & Experiences
+Cultura e Experiências
+🛵 Alquiler de Transporte
+Transport Rental
+Aluguel de Transporte
+
+
+ES- Subcategorías /EN-Subcategories/ PT-Subcategorias
+
+Español
+Inglés (English)
+Portugués (Português - Brasil)
+Paseo al cayo
+Cay / Islet Tour
+Passeio ao Ilhéu (Cayo)
+Buceo
+Scuba Diving
+Mergulho Cilindro
+Snuba
+Snuba Diving
+Snuba
+Windsurf
+Windsurfing
+Windsurf
+Esquí acuático
+Water Skiing
+Esqui Aquático
+Wakeboard
+Wakeboarding
+Wakeboard
+Fly board
+Flyboarding
+Flyboard
+Fiesta noche blanca
+White Night Party Cruise
+Festa Noite Branca
+Parasail
+Parasailing
+Parasail
+Paddle board
+Paddleboarding (SUP)
+Stand Up Paddle
+Moto
+Motorbike / Scooter Rental
+Aluguel de Moto / Scooter
+Bicicleta
+Bicycle Rental
+Aluguel de Bicicleta
+Carro playero
+Golf Cart / Buggy Rental
+Aluguel de Carrinho de Golfe / Buggy
+Tour bahia diurno
+Daytime Bay Cruise
+Tour Diurno pela Baía
+Vuelta a la isla (city tour)
+Island Tour (City Tour)
+Volta à Ilha (City Tour)
+Snorkeling
+Snorkeling
+Snorkeling / Mergulho de Superfície
+Semi submarino
+Semi-Submarine Tour
+Semi-Submarino
+Ponton
+Pontoon Boat Charter
+Passeio de Ponton
+Bar en el agua
+Floating Bar Experience
+Bar Flutuante
+Yate de lujo
+Luxury Yacht Charter
+Iate de Luxo
+Jet ski
+Jet Ski Rental
+Jet Ski
+Aquanautas / Sea Trek
+Helmet Diving (Aquanauts)
+Caminhada Subaquática (Aquanautas)
+
+
+
+ES- Etiquetas / Eng-Tags / PT- Tags
+
+
+Español
+Inglés (English)
+Portugués (Português - Brasil)
+Familiar
+Family-Friendly
+Familiar / Para Famílias
+Solo Adultos
+Adults Only
+Apenas Adultos
+Romántico / Parejas
+Romantic / Couples
+Romântico / Casais
+Pet Friendly
+Pet Friendly
+Pet Friendly / Aceita Pets
+Ideal Niños / Bebés
+Great for Kids & Babies
+Ideal para Crianças e Bebês
+Adulto Mayor
+Senior-Friendly
+Adequado para Idosos
+Aguas Cristalinas
+Crystal Clear Waters
+Águas Cristalinas
+Instagrammable
+Instagrammable / Scenic
+Instagramável / Fotos Lindas
+Adrenalina
+Adrenaline / Thrill
+Adrenalina / Pura Emoção
+Relax / Chill Out
+Relax / Chill Out
+Relaxar / Calmo
+Vida Marina
+Marine Life / Wildlife
+Vida Marinha
+Naturaleza / Eco
+Nature / Eco-Tour
+Natureza / Eco-Tour
+Cultura Raizal
+Local Culture & Heritage
+Cultura Local / Raizal
+No requiere saber nadar
+No Swimming Skills Required
+Não Precisa Saber Nadar
+Aventura Extrema
+Extreme Adventure
+Aventura Extrema
+Apto para principiantes
+Beginner-Friendly
+Ideal para Iniciantes
+Certificación requerida
+Certification Required
+Certificação Necessária
+Reserva Instantánea
+Instant Booking
+Reserva Instantânea
+Incluye Almuerzo
+Lunch Included
+Almoço Incluso
+Barra Libre / Open Bar
+Open Bar
+Open Bar / Bar Aberto
+Recogida en el Hotel
+Hotel Pickup
+Trânsfer do Hotel / Busco no Hotel
+Guía Bilingüe
+Bilingual Guide
+Guia Bilíngue
+Sombra a Bordo
+Shaded Boat / Shade Available
+Sombra a Bordo
+Equipamiento Incluido
+Gear Included
+Equipamento Incluso
+Sector North End
+North End Area (Downtown)
+Setor North End (Centro)
+Sector San Luis
+San Luis Area
+Setor San Luis
+West View / Piscinita
+West View / La Piscinita
+West View / La Piscinita
+Express (1-2 horas)
+Express Tour (1-2 hours)
+Tour Expresso (1-2 horas)
+Medio Día
+Half-Day Tour
+Meio Dia
+Día Completo
+Full-Day Tour
+Dia Inteiro
+Atardecer / Sunset
+Sunset Tour
+Pôr do Sol / Sunset
+
+
+ES- Horarios/ Eng- Time of Day / PT- Período do dia 
+ES- Mañana /Eng- Morning  / PT- Manhã  
+ES- Tarde / Eng- Afternoon  / PT- Tarde
+ES - Noche/ Eng- Evening and night  / PT- Noite  
+
+ES- Duración / Eng- Duration / PT- Período do dia 
+ES- 1 a 2 horas / Eng- 1 to 2 hours / PT- 1 a 2 horas
+ES- 2 a 4 horas / Eng- 2 to 4 hours / PT- 2 a 4 horas
+ES- 4 a 6 horas / Eng- 4 to 6 hours / PT- 4 a 6 horas
+ES- hasta 1 día / Eng- Up to 1 day / PT- até 1 dia
+ES- Hasta 3 dias / Eng- Up to 3 days / PT- até 3 dias
+ES- Hasta 5 dias / Eng- Up to 5 days / PT- até 5 dias
+
+
+
+ES- Rango de precios /ENG- Price / PT- Preço 
+
+
+Spanglish en Proceso de compra 
+
+{{imagen}}
+
+La Subcategoria colocar las ya definidas anteriormente
+Tipo de precio (ES- por persona/ ENG- Per person / PT- por pessoa)
+Tipo de precio (ES- Grupo de 5 / ENG- Group of 5 / PT- grupo de 5) al grupo sumarle la cantidad del grupo campo que está en el detalle del tour cuando es grupo. Tipo de precio + cantidad máxima.
+botón consultar disponibilidad (ES- Consultar disponibilidad / ENG- Check availability / PT- consultar disponibilidade)
+
+{{imagen}}
+
+Seleccionar Horarios y Participantes:  (ES- Seleccionar Horarios y Participantes:/ ENG- Select schedule and participants: / PT- Selecionar horário e participantes: )
+borrar el nombre del tour q no esta en negrita 
+
+{{imagen}}
+
+
+La direcion y la calificacion (reseñas). esto dejarlo como esta en BD.
+
+{{imagen}}
+{{imagen}}
+
+colocar la descripcion por idiomas y sin el <br> ni <p>. actualmente en en PT y ENG no hay nada pero igual configurarlo para cuando este.
+
+{{imagen}}
+
+Seleccionar Disponible:  (ES- Disponible/ ENG- Available / PT- disponível )
+
+{{imagen}}
+
+Horários Disponibles:  (ES- Horários Disponibles / ENG- Schedules available / PT- Horários disponíveis)
+Selecciona el horario que prefieras:  (ES- Selecciona el horario que prefieras / ENG- Select the time of your preference / PT- Selecione o horário de sua preferência)
+
+{{imagen}}
+
+No hay horarios disponibles:  (ES- No hay horarios disponibles / ENG- No available times / PT- Não há horários disponíveis)
+
+
+Lo sentimos, no hay horarios disponibles para este tour en la fechas seleccionada:  (ES- Lo sentimos, no hay horarios disponibles para este tour en la fechas seleccionada / ENG- Sorry, there are no available times for this tour on the selected dates / PT- Desculpe, não há horários disponíveis para este passeio nas datas selecionadas)
+
+Seleccionar Participantes:  (ES- Seleccionar Participantes / ENG- Select Participants / PT- Selecionar participantes) 
+
+{{imagen}}
+
+Tipo de precio Cualquiera: (ES- Tipo de Precio: Cualquiera / ENG- Price type: Any / PT- Tipo de preço: Qualquer) 
+Tipo de precio Adulto: (ES- Adulto/ ENG- Adult/ PT- Adulto) 
+Tipo de precio Niño: (ES- Niño/ ENG- Child / PT- Criança) 
+Tipo de precio Bebe: (ES- Bebe/ ENG- Baby / PT- Bebê) 
+el precio colocar $70.000 COP (para los 3 idiomas) 
+
+{{imagen}}
+
+Botón Cancelar: (ES- Cancelar/ ENG- Cancel / PT- Cancelar) 
+Botón Agregar al Itinerario: (ES- Agregar al Carrito de Compras / ENG- Add to Shopping Cart / PT- Adicionar ao carrinho de compras) 
+
+{{imagen}}
+
+Mi Itinerario: (ES- Carrito de Compras / ENG- Shopping Cart / PT- Carrinho de compras) 
+
+1 de 4 dias - 2 personas - $ 140.000: (ES- 1 de 4 dias - 2 personas - $ 140.000 COP / ENG- 1 of 4 days - 2 people - $140,000 COP / PT- 1 a 4 dias - 2 pessoas - $ 140.000 COP) 
+
+{{imagen}}  
+
+Mi Itinerario: (ES- Carrito de Compras / ENG- Shopping Cart / PT- Carrinho de compras) 
+2 de 4 dias - 2 personas - $ 140.000: (ES- 2 de 4 dias - 2 personas - $ 140.000 COP / ENG- 2 of 4 days - 2 people - $140,000 COP / PT- 2 a 4 dias - 2 pessoas - $ 140.000 COP) 
+1 Tours Seleccionados: (ES- 2 Tours Seleccionados / ENG- 2 Selected Tours / PT- 2 Passeios Selecionados) 
+Tours Seleccionados: (ES- Tours Seleccionados / ENG- Selected Tours / PT- Passeios Selecionados) 
+
+colocar la foto del profile del tour (quitar lo que dice Wed 10 Junio). ver si se esta guardando en la BD la fecha de reserva en ingles.
+
+hay que revisar como traducir esto o si debe estar en BD en los 3 idiomas (miércoles, 10 de junio de 2026 )
+2 Personas: (ES- 2 Personas / ENG- 2 People / PT- 2 pessoas) 
+en la parte de abajo del carrito sale el precio total a pagar.
+$420.000 colocarlo $420.000 COP. lo que dice 6 personas quitarlo. 
+2 tours: (ES- 2 Tours / ENG- 2 Tours / PT- 2 Passeios ) 
+Boton Limpiar: (ES- 2 Limpiar/ ENG- Clean / PT- Limpar ) 
+Boton Continuar: (ES- 2 Ir al carrito / ENG- Go to cart / PT- Ir para o carrinho) 
+
+{{imagen}}
+
+Checkout seguro: (ES- Finalizar compra / ENG- 2 Checkout / PT- 2 Finalizar compra) 
+Información de contacto (Quién realiza el pago): (ES- Información de contacto (Quién realiza el pago) / ENG- Contact information (Payor) / PT- Informações de contato (Quem efetua o pagamento)) 
+
+ES
+ENG
+PT
+Nombre
+First Name
+Nome
+Apellido
+Last Name
+Sobrenome
+Correo electrónico
+Email Address
+E-mail
+Número de teléfono
+Phone Number
+Telefone
+Información adicional
+Additional Information
+Informações adicionais
+
+
+Hospedaje: (ES- Hospedaje (para servicios de transporte) / ENG- Accommodation (for transportation services) / PT- Hospedagem (para serviços de transporte))
+
+ES
+ENG
+PT
+Nombre del hospedaje
+Place of origin
+Nome do alojamento
+Dirección 
+Address
+Direção
+
+
+Lugar de procedencia: (ES- Lugar de procedencia / ENG- Accommodation (for transportation services) / PT- Local de origem)
+aqui hay un pequeño cambio. quitar dirección y colocar departamento (pedirle ese cambio a donnaly
+ES
+ENG
+PT
+País
+Country
+País
+Estado o Departamento
+State or Department
+Estado ou Departamento
+Ciudad
+City
+Cidade
+
+{{imagen}}
+
+Información de Viajeros por Tour : (ES- Información de la persona de contacto del tour / ENG- Tour contact person information / PT- Informações sobre a pessoa de contato da excursão)
+0 de 2 viajeros completados: (ES- Persona de contacto completados / ENG- Contact person completed / PT- Dados do contato preenchidos)
+boton usar mis datos: (ES- Usar mis datos / ENG- Use my data / PT- Usar meus dados)
+Chip Pendiente: (ES- Pendiente / ENG- pending / PT- Em aberto)
+Chip Completo: (ES- Completo / ENG- Complete / PT- Em Completo )
+
+Información del viajero - Combo jhony cay, acuario, bahia y manglares: ((ES- Persona de contacto del tour / ENG- Tour contact person / PT- Pessoa de contato da passeio)
+
+¿Eres tú quien viajará en este tour? : (ES- Información del responsable del tour / ENG- Tour leader information / PT- Informações sobre o organizador do passeio)
+
+ES
+ENG
+PT
+Nombre
+First Name
+Nome
+Apellido
+Last Name
+Sobrenome
+Correo electrónico
+Email Address
+E-mail
+Número de teléfono
+Phone Number
+Telefone
+
+{{imagen}}
+
+Resumen de tu orden : (ES- Resumen de tu orden / ENG- Your order summary / PT- Resumo do seu pedido)
+colocar la imagen del profile del tour
+la fecha del tour debe estar en los 3 idiomas
+revisar porque dice cartagena bolivar si el tour es de san andres islas.
+2 participantes: (ES- 2 Personas / ENG- 2 People / PT- 2 pessoas) 
+Participantes: (ES- 2 Participantes/ ENG- 2 Participants / PT- 2 Participantes) 
+Tipo de precio Adulto: (ES- Adulto/ ENG- Adult/ PT- Adulto) 
+Tipo de precio Niño: (ES- Niño/ ENG- Child / PT- Criança) 
+Tipo de precio Bebe: (ES- Bebe/ ENG- Baby / PT- Bebê) 
+el precio colocarlo: $70.000 COP C/U
+Total por tour (ES- Total por tour/ ENG- Total per tour / PT- Total por passeio) 
+Subtotal se queda asi para todos los idiomas
+Créditos Disponibles:(ES- Créditos Disponibles: / ENG- Available Credits: / PT- Créditos disponíveis:) 
+ Tienes créditos que puedes usar en tus reservas: (ES- Tienes créditos que puedes usar en tus reservas: / ENG- You have credits that you can use on your bookings. / PT- Você tem créditos que pode usar nas suas reservas.)
+usar credito: (ES- usar credito: / ENG- use credit: / PT- usar crédito:) 
+Total a pagar: (ES- Total a pagar: / ENG- Total to pay: / PT- Total a pagar:) 
+Boton Proceder al pago:(ES- Proceder al pago / ENG- Proceed to payment / PT- Efetuar o pagamento) 
+Boton continuar comprando: (ES- Continuar comprando / ENG- Continue shopping / PT- Continuar comprando) 
+al presionar el boton de usar credito despliega la siguiente modal
+
+{{imagen}}
+
+Seleccionar Créditos para Usar:  (ES- Seleccionar Créditos para Usar / ENG- Select Credits to Use / PT- Selecionar créditos a serem utilizados) 
+
+
+
+ES
+ENG
+PT
+Usar
+Use
+Usar
+ID Crédito
+Credit ID
+ID do crédito
+ID reserva
+Reservation ID
+ID da reserva
+Monto
+Amount
+Valor
+Fecha de creación
+Creation Date
+Data de criação
+Estado
+Status
+Status
+
+
+
+Seleccionado: (ES- Seleccionado / ENG- Selected / PT- selecionado) 
+Boton cancelar:  (ES- Cancelar/ ENG- Cancel / PT- Cancelar) 
+usar crédito: (ES- Usar crédito: / ENG- Use credits: / PT- Usar créditos:) 
+
+Luego se despliega la confirmacion de la reserva
+
+{{imagen}}
+
+Confirmación de reserva:(ES- Confirmación de reserva / ENG-Booking confirmation / PT- Confirmação da reserva) 
+Tu reserva ha sido procesada exitosamente. Recibirás un email de confirmación pronto.: (ES- Tu reserva ha sido procesada con éxito. Recibirás un email de confirmación pronto. / ENG- Your booking has been successfully processed. You will receive a confirmation email soon. / PT- Sua reserva foi processada com sucesso. Você receberá um e-mail de confirmação em breve.)
+Pago #194 | 2 Reservas: (ES- Pago #194 | 2 Reservas: / ENG- Payment #194 | 2 Reservations / PT- Pagamento nº 194 | 2 reservas)
+Resumen del Pago: (ES- Resumen del Pago / ENG- Payment Summary / PT- Resumo do pagamento)
+Descargar todos los QRs: (ES- Descargar todos los QRs / ENG- Download all QR codes / PT- Baixar todos os QRs)
+
+ES
+ENG
+PT
+ID de Transacción
+Transaction ID
+ID da transação
+Método de Pago
+Payment Method
+Forma de pagamento
+Total Pagado
+Total Paid
+Total pago
+
+
+Reserva 2 de 2: (ES- Reserva 2 de 2 / ENG- Book 2 of 2 / PT- Reserva 2 de 2)
+Chip Pendiente: (ES- Pendiente / ENG- pending / PT- Em aberto)
+Chip Anterior: (ES- Pendiente / ENG- Previous / PT- Anterior)
+Chip Siguiente: (ES- Siguiente / ENG- Next/ PT- Próximo)
+
+en la dirección  (dice san andres) colocar la dirección del punto de encuentro.
+Viajeros:  (ES- Viajeros/ ENG- Travelers / PT- Viajantes)
+Adulto: (ES- Adulto/ ENG- Adult/ PT- Adulto) 
+Niño: (ES- Niño/ ENG- Child / PT- Criança) 
+Bebe: (ES- Bebe/ ENG- Baby / PT- Bebê) 
+Fecha del Tour: (ES- Fecha del Tour/ ENG- Tour Date/ PT- Data do passeio) 
+la fecha colocar la fecha en el idioma. revisar.
+
+
+ES
+ENG
+PT
+ID de Reserva 
+Reservation ID
+Número da reserva
+Estado de Entrega
+Delivery Status
+Condição de entrega
+Duración
+Duration
+Duração
+Hora del tour (colocar la hora del slot)
+Tour time
+Horário do passeio
+Precio
+Price
+Preço
+Creado
+Created
+Criado
+Actividades incluidas (pintar lo trae includes. actualmente se esta pintando main attractions)
+Activities included
+Atividades incluídas
+Actividades Excluidas (pintar excludes)
+Excluded activities
+Atividades excluídas
+
+
+Código QR de esta Reserva:  (ES- Código QR de esta Reserva: / ENG- QR code for this Reservation:/ PT- QR Code desta reserva:)
+Presenta este código QR al momento de tu tour para confirmar tu reserva #265.:  (ES- Presenta este código QR al inicio de tu tour para confirmar tu reserva #265. / ENG- Present this QR code at the start of your tour to confirm your booking #265./ PT- Apresente este código QR no início do seu passeio para confirmar sua reserva nº 265)
+Botón Descargar QR: (ES- Descargar QR / ENG- Download QR code/ PT- Baixar QR)
+Botón Compartir: (ES- Compartir / ENG- share / PT- Compartilhar)
+Proveedor del Servicio: (ES- Proveedor del Servicio / ENG- Service Provider / PT- Prestador do serviço:)
+Aqui se debe agregar la información del operador del tour
+ Información del Pagador: (ES-  Información del Pagador / ENG- Payer Information / PT- Informações do pagador)
+
+ES
+ENG
+PT
+Nombre Completo
+Full Name
+Nome completo
+Número de identificación
+Identification number
+Número de identificação
+Teléfono
+Phone
+Telefone
+Correo electrónico
+Email
+e-mail
+
+
+
+Botón Imprimir Confirmación: (ES- Imprimir Reserva/ ENG- Print Reservation/ PT- Imprimir Reserva)
+Botón Ver mis Reservas: (ES- Ver mis Reservas/ ENG- View my bookings/ PT- Ver minhas reservas)
+Información importante: 
+
+ES
+ENG
+PT
+Información Importante
+Guarda los códigos QR de tus reservas, los necesitarás para acceder a los tours.
+Recibirás un email de confirmación con todos los detalles.
+Si tienes preguntas, comunicate por nuestra informacion (Correo Electrónico o Numero Télefonico) de contacto.
+Puedes descargar cada QR individualmente o todos juntos.
+Los QRs están también disponibles en tu perfil de usuario.
+Important Information
+Save the QR codes for your bookings; you'll need them to access the tours.
+You'll receive a confirmation email with all the details.
+If you have any questions, please contact us using our contact information (email or phone number).
+You can download each QR code individually or all at once.
+The QR codes are also available in your user profile.
+Informações importantes
+Guarde os códigos QR das suas reservas, pois você precisará deles para acessar os passeios.
+Você receberá um e-mail de confirmação com todos os detalhes.
+Se tiver alguma dúvida, entre em contato conosco (por e-mail ou telefone).
+Você pode baixar cada código QR individualmente ou todos de uma vez.
+Os códigos QR também estão disponíveis no seu perfil de usuário.
+
+
+
+
+{{imagen}}
+{{imagen}}
+{{imagen}}
+{{imagen}}
+
+
+
+
+
+
+

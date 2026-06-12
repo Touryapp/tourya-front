@@ -21,6 +21,7 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
   
   // Perfil del cliente
   clientFirstName: string = 'Usuario';
+  clientLastName: string = '';
   clientPhotoUrl: string = 'assets/img/users/user-01.jpg';
   clientSinceDate: string = '';
 
@@ -77,7 +78,7 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
     if (activeMenu === null) {
       this.clientSidebarMenu.map((mainMenus: ClientMenuSection) => {
         mainMenus.menu.map((resMenu: ClientMenuItem) => {
-          if (resMenu.menuValue === 'Mis Reservas') {
+          if (resMenu.menuValue === 'clientSidebar.myBookings') {
             resMenu.showSubRoute = true;
           } else {
             resMenu.showSubRoute = false;
@@ -106,6 +107,9 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
       next: (profile) => {
         if (profile.firstName) {
           this.clientFirstName = profile.firstName;
+        }
+        if (profile.lastName) {
+          this.clientLastName = profile.lastName;
         }
         if (profile.photoUrl) {
           this.clientPhotoUrl = profile.photoUrl;

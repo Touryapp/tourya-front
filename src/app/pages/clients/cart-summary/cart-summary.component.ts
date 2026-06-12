@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil, take, firstValueFrom } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import { routes } from '../../../shared/routes/routes';
 import { CartService } from '../../../shared/services/cart.service';
 import { CartItem, CartSummary } from '../../../shared/dto/cart.dto';
@@ -13,6 +14,12 @@ import { CreditService } from '../../../shared/services/credit.service';
 import { ClientCredit } from '../../../shared/models/credit.model';
 import { SearchToursService } from '../list-tours/search-tours.service';
 import { TouristService } from '../../../shared/services/tourist.service';
+import { CountryService } from '../../../shared/services/country.service';
+import { DepartmentService } from '../../../shared/services/department.service';
+import { CityService } from '../../../shared/services/city.service';
+import { Country } from '../../../shared/dto/country.dto';
+import { Department } from '../../../shared/dto/department.dto';
+import { City } from '../../../shared/dto/city.dto';
 
 declare var google: any;
 
@@ -63,8 +70,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     address2: '',
     city: '',
     state: '',
-    zipCode: '',
-    additionalInfo: ''
+    zipCode: ''
   };
 
   // Hospedaje form
@@ -75,8 +81,23 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     longitude: null as number | null
   };
 
+  // Electronic Billing form
+  billingForm = {
+    required: false,
+    documentType: 'CC',
+    documentNumber: '',
+    customerName: '',
+    email: '',
+    phone: ''
+  };
+
   // Traveler information per tour
   travelersInfo: TravelerInfo[] = [];
+
+  // Locations state
+  countries: Country[] = [];
+  departments: Department[] = [];
+  cities: City[] = [];
 
   // Legacy form for compatibility (will be removed)
   userForm = {
@@ -97,6 +118,10 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   // Component lifecycle
   private destroy$ = new Subject<void>();
 
+  get currentLang(): string {
+    return this.translate.currentLang || this.translate.defaultLang || 'es';
+  }
+
   constructor(
     private cartService: CartService,
     private router: Router,
@@ -105,7 +130,11 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     public i18nService: I18nFieldService,
     private creditService: CreditService,
     private searchToursService: SearchToursService,
-    private touristService: TouristService
+    private touristService: TouristService,
+    private countryService: CountryService,
+    private departmentService: DepartmentService,
+    private cityService: CityService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -113,6 +142,75 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadCartData();
     this.loadUserCredits();
     this.loadUserProfile();
+    this.getCountries();
+  }
+
+  getCountries() {
+    this.countryService.getCountries().subscribe({
+      next: (data) => {
+        if (data) {
+          this.countries = data;
+        } else {
+          this.countries = [];
+        }
+      },
+      error: (err) => {
+        console.error("Error getting countries.", err);
+        this.countries = [];
+      },
+    });
+  }
+
+  onCountryChange(event: any) {
+    const value = event.target.value;
+    this.departments = [];
+    this.cities = [];
+    this.contactForm.state = '';
+    this.contactForm.city = '';
+    if (value) {
+      this.getDepartments(+value);
+    }
+  }
+
+  getDepartments(countryId: number) {
+    this.departmentService.getDepartmentsByCountryId(countryId).subscribe({
+      next: (data) => {
+        if (data) {
+          this.departments = data;
+        } else {
+          this.departments = [];
+        }
+      },
+      error: (err) => {
+        console.error("Error getting departments.", err);
+        this.departments = [];
+      },
+    });
+  }
+
+  onDepartmentChange(event: any) {
+    const value = event.target.value;
+    this.cities = [];
+    this.contactForm.city = '';
+    if (value) {
+      this.getCities(+value);
+    }
+  }
+
+  getCities(departmentId: number) {
+    this.cityService.getCitiesByDepartmentId(departmentId).subscribe({
+      next: (data) => {
+        if (data) {
+          this.cities = data;
+        } else {
+          this.cities = [];
+        }
+      },
+      error: (err) => {
+        console.error("Error getting cities.", err);
+        this.cities = [];
+      },
+    });
   }
 
   ngAfterViewInit(): void {
@@ -170,9 +268,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             if ((profile as any).address) {
               this.contactForm.address1 = (profile as any).address || this.contactForm.address1;
             }
-            if ((profile as any).additionalInfo) {
-              this.contactForm.additionalInfo = (profile as any).additionalInfo || this.contactForm.additionalInfo;
-            }
+
 
             this.syncFormsData();
           }
@@ -303,7 +399,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (!this.cartItems || this.cartItems.length === 0) {
-      alert('No hay items en el carrito para aplicar créditos.');
+      alert(this.translate.instant('cartSummary.errors.noCartItemsForCredits'));
       return;
     }
 
@@ -434,14 +530,14 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     
     for (let field of requiredContactFields) {
       if (!this.contactForm[field as keyof typeof this.contactForm]) {
-        alert(`Por favor completa el campo: ${field} en Información de Contacto`);
+        alert(this.translate.instant('cartSummary.errors.completeField', { field }));
         return false;
       }
     }
     
     // Validar información de viajeros
     if (!this.validateTravelersInfo()) {
-      alert('Por favor completa la información de todos los viajeros');
+      alert(this.translate.instant('cartSummary.errors.completeTravelersInfo'));
       return false;
     }
     
@@ -472,7 +568,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     
     if (!emailValid) {
       console.error('❌ Formato de email inválido:', emailValue);
-      alert('Por favor ingrese un email válido');
+      alert(this.translate.instant('cartSummary.errors.invalidEmail'));
       return false;
     }
     
@@ -629,14 +725,14 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     // 1. Validar formulario
     if (!this.validateForm()) {
       console.error('Formulario inválido, no se puede proceder al pago');
-      alert('Por favor complete todos los campos requeridos correctamente');
+      alert(this.translate.instant('cartSummary.errors.completeRequiredFields'));
       return;
     }
     
     // 2. Validar que hay items en el carrito
     if (!this.hasItems) {
       console.error('No hay items en el carrito');
-      alert('No hay items en el carrito para procesar');
+      alert(this.translate.instant('cartSummary.errors.noCartItems'));
       return;
     }
 
@@ -646,12 +742,34 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       console.log('📝 Creando pre-reserva en el backend...');
       const reservationPayload = {
-        shoppingCartItemIds: this.cartItems.map(item => parseInt(item.id, 10)),
-        serviceResponsible: {
-          name: `${this.contactForm.firstName} ${this.contactForm.lastName}`,
-          email: this.contactForm.email,
-          phone: this.contactForm.phone
-        }
+        items: this.cartItems.map(item => {
+          const traveler = this.travelersInfo.find(t => t.tourId === item.id);
+          return {
+            shoppingCartItemId: parseInt(item.id, 10),
+            serviceResponsible: traveler && traveler.firstName ? {
+              name: `${traveler.firstName} ${traveler.lastName}`,
+              email: traveler.email,
+              phone: traveler.phone
+            } : {
+              name: `${this.contactForm.firstName} ${this.contactForm.lastName}`,
+              email: this.contactForm.email,
+              phone: this.contactForm.phone
+            }
+          };
+        }),
+        holdItemsValid: true,
+        originCountryId: this.contactForm.country ? +this.contactForm.country : null,
+        originStateId: this.contactForm.state ? +this.contactForm.state : null,
+        originCityId: this.contactForm.city ? +this.contactForm.city : null,
+        accommodationName: this.accommodationForm.name || null,
+        accommodationLatitude: this.accommodationForm.latitude || null,
+        accommodationLongitude: this.accommodationForm.longitude || null,
+        electronicBilling: this.billingForm.required,
+        billingDocumentType: this.billingForm.required ? this.billingForm.documentType : null,
+        billingDocumentNumber: this.billingForm.required ? this.billingForm.documentNumber : null,
+        billingCustomerName: this.billingForm.required ? this.billingForm.customerName : null,
+        billingEmail: this.billingForm.required ? this.billingForm.email : null,
+        billingPhone: this.billingForm.required ? this.billingForm.phone : null
       };
 
       const response = await this.paymentService.createPreReservation(reservationPayload);
@@ -695,7 +813,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 
       } catch (error) {
         console.error('❌ Error procesando pago 100% crédito:', error);
-        alert('Ocurrió un error al procesar el pago con tus créditos. Por favor contacta a soporte.');
+        alert(this.translate.instant('cartSummary.errors.creditPaymentError'));
       } finally {
         this.processing = false;
       }
@@ -712,7 +830,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
       const validation = this.wompiService.validateConfig(wompiConfig);
       if (!validation.isValid) {
         console.error('Configuración inválida:', validation.errors);
-        alert('Error en la configuración de pago: ' + validation.errors.join(', '));
+        alert(this.translate.instant('cartSummary.errors.paymentConfigError', { errors: validation.errors.join(', ') }));
         this.processing = false;
         return;
       }
@@ -775,7 +893,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         
       } catch (error) {
         console.error('❌ Error creando reserva:', error);
-        alert('El pago fue exitoso pero hubo un error creando la reserva. Por favor contacte soporte.');
+        alert(this.translate.instant('cartSummary.errors.paymentSuccessButReservationFailed'));
         
         // Navegar a página de error o soporte
         this.router.navigate(['/clients/list-tours']);
@@ -783,11 +901,11 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
       
     } else if (transaction.status === 'DECLINED') {
       console.log('❌ Pago declinado:', transaction.id);
-      alert('El pago fue declinado. Por favor intente con otro método de pago.');
+      alert(this.translate.instant('cartSummary.errors.paymentDeclined'));
       
     } else if (transaction.status === 'PENDING') {
       console.log('⏳ Pago pendiente:', transaction.id);
-      alert('El pago está siendo procesado. Recibirá una confirmación pronto.');
+      alert(this.translate.instant('cartSummary.errors.paymentPending'));
       
       // TODO: Crear página para pagos pendientes
       this.router.navigate(['/clients/list-tours']);
@@ -1045,7 +1163,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     if (isNaN(numericItemId)) {
       console.error('ID de item inválido:', itemId);
       this.processing = false;
-      alert('Error: ID de item inválido');
+      alert(this.translate.instant('cartSummary.errors.invalidItemId'));
       return;
     }
     
@@ -1129,13 +1247,13 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
    * Helper para obtener label de tipo de participante
    */
   getParticipantTypeLabel(ageType: string): string {
-    const labels: { [key: string]: string } = {
-      'ADULT': 'Adultos',
-      'CHILD': 'Niños',
-      'INFANT': 'Bebés',
-      'SENIOR': 'Adultos Mayores'
+    const keys: { [key: string]: string } = {
+      'ADULT': 'tourSlotModal.adults',
+      'CHILD': 'tourSlotModal.children',
+      'INFANT': 'tourSlotModal.infants',
+      'SENIOR': 'tourSlotModal.seniors'
     };
-    return labels[ageType] || ageType;
+    return keys[ageType] || ageType;
   }
 
   /**
@@ -1269,7 +1387,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   copyContactInfoToAllTravelers(): void {
     if (!this.isContactFormComplete()) {
-      alert('Por favor completa primero la información de contacto (Nombre, Apellido, Email y Teléfono)');
+      alert(this.translate.instant('cartSummary.errors.completeContactFirst'));
       return;
     }
 
@@ -1305,7 +1423,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   copyContactInfoToTraveler(index: number): void {
     if (!this.isContactFormComplete()) {
-      alert('Por favor completa primero la información de contacto (Nombre, Apellido, Email y Teléfono)');
+      alert(this.translate.instant('cartSummary.errors.completeContactFirst'));
       return;
     }
 
@@ -1388,5 +1506,24 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     // setTimeout(() => {
     //   this.router.navigate(['/clients/list-tours']);
     // }, 2000);
+  }
+
+  getTourImage(item: any): string {
+    if (item.profilePicture?.imageUrl) {
+      return item.profilePicture.imageUrl;
+    }
+    if (item.tourImageUrl) {
+      return item.tourImageUrl;
+    }
+    if (item.displayImageUrl) {
+      return item.displayImageUrl;
+    }
+    if (item.gallery && item.gallery.length > 0) {
+      return item.gallery[0].imageUrl;
+    }
+    if (item.tour?.gallery && item.tour.gallery.length > 0) {
+      return item.tour.gallery[0].imageUrl;
+    }
+    return 'assets/img/tours/tours-01.jpg';
   }
 }

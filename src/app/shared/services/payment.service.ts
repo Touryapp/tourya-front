@@ -24,7 +24,7 @@ export class PaymentService {
   /**
    * Crear pre-reserva antes del pago
    */
-  async createPreReservation(payload: { shoppingCartItemIds: number[], serviceResponsible: any }): Promise<any> {
+  async createPreReservation(payload: any): Promise<any> {
     try {
       const headers = this.getAuthHeaders();
       

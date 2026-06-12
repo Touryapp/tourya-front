@@ -20,8 +20,6 @@ export class LocalizedNamePipe implements PipeTransform, OnDestroy {
   transform(nameObj: any): string {
     if (!nameObj) return '';
     
-    console.log('[LocalizedNamePipe] transform called with:', nameObj, 'Current Lang:', this.i18nService.getCurrentLanguage());
-
     if (typeof nameObj === 'string') {
       try {
         const parsed = JSON.parse(nameObj);

@@ -14,7 +14,7 @@
           <small class="text-muted">
             {{ cartSummary?.totalItems }} {{ 'cart.of' | translate }} {{ daySelections.length }} {{ 'cart.days' | translate }} •
             {{ cartSummary?.totalParticipants }} {{ 'cart.people' | translate }} •
-            {{ formatPrice(cartSummary?.totalPrice || 0) }}
+            {{ formatPrice(cartSummary?.totalPrice || 0) }} COP
           </small>
         </div>
         <div class="progress-info" *ngIf="!hasToursSelected()">
@@ -69,7 +69,7 @@
           <!-- Tour Image con badge del día -->
           <div class="tour-card-image">
             <img 
-              [src]="getTourImage(item)" 
+              [src]="item.displayImageUrl" 
               [alt]="i18nService.getValue(item.tour?.name)"
               (error)="$any($event.target).src !== 'assets/img/tours/tours-01.jpg' ? $any($event.target).src='assets/img/tours/tours-01.jpg' : null"
               loading="lazy">
@@ -130,7 +130,7 @@
     <div class="cart-actions" *ngIf="hasToursSelected()">
       <div class="summary-row">
         <div class="summary-info">
-          <div class="total-price">{{ formatPrice(cartSummary?.totalPrice || 0) }}</div>
+          <div class="total-price">{{ formatPrice(cartSummary?.totalPrice || 0) }} COP</div>
           <div class="total-details">
             {{ cartSummary?.totalParticipants }} {{ 'cart.personSingularPlural' | translate }} • {{ cartSummary?.totalItems }} {{ 'cart.tourSingularPlural' | translate }}
           </div>

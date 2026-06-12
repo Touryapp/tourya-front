@@ -9,9 +9,6 @@
             <i class="isax isax-calendar-add me-2 text-primary"></i>
             {{ 'tourSlotModal.title' | translate }}
           </h4>
-          <p class="modal-subtitle text-muted mb-0" *ngIf="selectedTour">
-            {{ getTourName() }}
-          </p>
         </div>
         <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()">
         </button>
@@ -96,7 +93,7 @@
 
                 <div class="slot-price">
                   <span class="from-text">{{ 'tourSlotModal.from' | translate }}</span>
-                  <span class="price">{{ formatPrice(slot.prices?.at(0)?.price || 0) }}</span>
+                  <span class="price">{{ formatPrice(slot.prices?.[0]?.price || 0) }}</span>
                 </div>
 
                 <!-- Selected indicator -->

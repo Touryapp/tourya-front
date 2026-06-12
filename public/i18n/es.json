@@ -1204,7 +1204,22 @@
     "zipCode": "Código Postal",
     "myBookings": "Mis Reservas",
     "myReviews": "Mis Reseñas",
-    "wishlist": "Lista de Deseos"
+    "wishlist": "Lista de Deseos",
+    "alerts": {
+      "photo": "Foto de perfil",
+      "uploadSuccess": "Cargada correctamente",
+      "uploadError": "Error al cargar",
+      "profileData": "Datos del perfil",
+      "updateSuccess": "Actualizados correctamente",
+      "updateError": "Error al actualizar",
+      "processCompleted": "¡Proceso Completado!",
+      "updateResult": "Resultado de la actualización",
+      "understood": "Entendido",
+      "replySuccess": "¡Respuesta enviada exitosamente!",
+      "replyError": "Error al enviar la respuesta. Por favor intenta nuevamente.",
+      "reviewDeleted": "Reseña eliminada exitosamente",
+      "reviewDeleteError": "Error al eliminar la reseña. Por favor intenta nuevamente."
+    }
   },
   "toursList": {
     "loading": "Cargando...",
@@ -1379,7 +1394,46 @@
     "accommodationNamePlaceholder": "Hotel XYZ",
     "accommodationAddressPlaceholder": "Ubicación del hospedaje",
     "cityPlaceholder": "Bogotá",
-    "travelerEmailPlaceholder": "viajero@correo.com"
+    "travelerEmailPlaceholder": "viajero@correo.com",
+    "selectDepartment": "Seleccione Departamento",
+    "selectCity": "Seleccione Ciudad",
+    "travelersTotal": "Viajeros en total",
+    "electronicBilling": {
+      "title": "Facturación Electrónica",
+      "wantBilling": "¿Desea facturación electrónica?",
+      "documentType": "Tipo de documento",
+      "documentNumber": "Número de documento",
+      "customerName": "Nombre Cliente factura / Razón Social",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "docTypes": {
+        "CC": "Cédula de Ciudadanía",
+        "CE": "Cédula de Extranjería",
+        "NIT": "NIT",
+        "PASSPORT": "Pasaporte"
+      },
+      "placeholders": {
+        "documentNumber": "Ej. 123456789",
+        "customerName": "Nombre completo o razón social",
+        "email": "correo@ejemplo.com",
+        "phone": "Ej. 3001234567"
+      }
+    },
+    "errors": {
+      "noCartItemsForCredits": "No hay items en el carrito para aplicar créditos.",
+      "completeField": "Por favor completa el campo: {{field}} en Información de Contacto",
+      "completeTravelersInfo": "Por favor completa la información de todos los viajeros",
+      "invalidEmail": "Por favor ingrese un email válido",
+      "completeRequiredFields": "Por favor complete todos los campos requeridos correctamente",
+      "noCartItems": "No hay items en el carrito para procesar",
+      "creditPaymentError": "Ocurrió un error al procesar el pago con tus créditos. Por favor contacta a soporte.",
+      "paymentConfigError": "Error en la configuración de pago: {{errors}}",
+      "paymentSuccessButReservationFailed": "El pago fue exitoso pero hubo un error creando la reserva. Por favor contacte soporte.",
+      "paymentDeclined": "El pago fue declinado. Por favor intente con otro método de pago.",
+      "paymentPending": "El pago está siendo procesado. Recibirá una confirmación pronto.",
+      "invalidItemId": "Error: ID de item inválido",
+      "completeContactFirst": "Por favor completa primero la información de contacto (Nombre, Apellido, Email y Teléfono)"
+    }
   },
   "clientCredits": {
     "myCredits": "Mis Créditos",
@@ -1400,6 +1454,182 @@
     "cancelBtn": "Cancelar",
     "useCreditsBtn": "Usar Créditos",
     "exceedingMaxError": "El valor total de los créditos seleccionados es mayor al valor de la reserva, debe ser menor o igual a"
+  },
+  "bookingTours": {
+    "title": "Reservar Tours",
+    "breadcrumbTours": "Tours",
+    "breadcrumbBooking": "Reserva",
+    "tourInfo": "Información del Tour",
+    "maxGuests": "Máximo {{guests}} huéspedes",
+    "bookingDetails": "Detalles de la Reserva",
+    "fromDate": "Fecha de Inicio",
+    "selectStartDate": "Seleccionar fecha de inicio",
+    "toDate": "Fecha de Fin",
+    "selectEndDate": "Seleccionar fecha de fin",
+    "adults": "Adultos",
+    "children": "Niños (2-12 años)",
+    "infants": "Bebés (0-2 años)",
+    "fullName": "Nombre Completo",
+    "enterFullName": "Ingrese su nombre completo",
+    "email": "Correo Electrónico",
+    "enterEmail": "Ingrese su correo",
+    "phoneNumber": "Número de Teléfono",
+    "enterPhone": "Ingrese su número de teléfono",
+    "specialRequests": "Peticiones Especiales",
+    "enterRequests": "Cualquier petición especial o requisito...",
+    "proceedPayment": "Proceder al Pago",
+    "bookingSummary": "Resumen de la Reserva",
+    "adultsLabel": "Adultos",
+    "childrenLabel": "Niños",
+    "infantsLabel": "Bebés",
+    "free": "Gratis",
+    "total": "Total"
+  },
+  "bookingConfirm": {
+    "title": "Confirmación de Reserva",
+    "breadcrumbTours": "Tours",
+    "breadcrumbConfirmation": "Confirmación",
+    "successTitle": "¡Reserva Confirmada!",
+    "successMessage": "Tu reserva del tour ha sido confirmada con éxito. Recibirás un correo electrónico de confirmación en breve.",
+    "bookingId": "ID de Reserva",
+    "bookingDetails": "Detalles de la Reserva",
+    "tourName": "Nombre del Tour",
+    "location": "Ubicación",
+    "duration": "Duración",
+    "travelDates": "Fechas de Viaje",
+    "adults": "Adultos",
+    "children": "Niños",
+    "infants": "Bebés",
+    "totalAmount": "Monto Total",
+    "customerInfo": "Información del Cliente",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "paymentMethod": "Método de Pago",
+    "downloadInvoice": "Descargar Factura",
+    "printBooking": "Imprimir Reserva",
+    "backToHome": "Volver al Inicio",
+    "importantInfoTitle": "Información Importante",
+    "info1": "Por favor llega 30 minutos antes de la hora de inicio del tour",
+    "info2": "Lleva zapatos cómodos para caminar y ropa adecuada para el clima",
+    "info3": "No olvides traer la confirmación de tu reserva",
+    "info4": "Contáctanos 24 horas antes si necesitas hacer cambios"
+  },
+  "tourBookingSuccess": {
+    "title": "Confirmación de Reserva",
+    "breadcrumbTours": "Tours",
+    "breadcrumbConfirmation": "Confirmación",
+    "loading": {
+      "visuallyHidden": "Cargando...",
+      "processingTitle": "Procesando su reserva...",
+      "processingDesc": "Por favor espere mientras confirmamos su pago."
+    },
+    "errorState": {
+      "title": "Error al cargar la confirmación",
+      "backBtn": "Volver a Tours"
+    },
+    "success": {
+      "title": "¡Reserva Confirmada!",
+      "message": "Tu reserva ha sido procesada exitosamente. Recibirás un email de confirmación pronto.",
+      "paymentId": "Pago",
+      "reservation": "Reserva",
+      "reservations": "Reservas"
+    },
+    "paymentSummary": {
+      "title": "Resumen del Pago",
+      "downloadAllQRs": "Descargar Todos los QRs",
+      "transactionId": "ID de Transacción",
+      "paymentMethod": "Método de Pago",
+      "totalValue": "Valor total",
+      "creditsApplied": "Créditos aplicados",
+      "totalPaid": "Total Pagado"
+    },
+    "carousel": {
+      "reservation": "Reserva",
+      "of": "de",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "goTo": "Ir a reserva"
+    },
+    "details": {
+      "travellers": "Viajeros",
+      "tourDate": "Fecha del Tour",
+      "reservationId": "ID de Reserva",
+      "duration": "Duración",
+      "price": "Precio",
+      "deliveryStatus": "Estado de Entrega",
+      "created": "Creado",
+      "lastModified": "Última Modificación",
+      "includedActivities": "Actividades Incluidas",
+      "extraServices": "Servicios Adicionales"
+    },
+    "qr": {
+      "title": "Código QR de esta Reserva",
+      "loadError": "No se pudo cargar el código QR",
+      "instruction": "Presenta este código QR al momento de tu tour para confirmar tu reserva #{{id}}.",
+      "download": "Descargar QR",
+      "share": "Compartir"
+    },
+    "provider": {
+      "title": "Proveedor del Servicio",
+      "email": "Email de Contacto",
+      "phone": "Teléfono"
+    },
+    "payer": {
+      "title": "Información del Pagador",
+      "fullName": "Nombre Completo",
+      "email": "Email",
+      "phone": "Teléfono",
+      "document": "Documento"
+    },
+    "actions": {
+      "print": "Imprimir Confirmación",
+      "viewReservations": "Ver Mis Reservas"
+    },
+    "importantInfo": {
+      "title": "Información Importante",
+      "point1": "Guarda los códigos QR de tus reservas, los necesitarás para acceder a los tours.",
+      "point2": "Recibirás un email de confirmación con todos los detalles.",
+      "point3": "Si tienes preguntas, contacta directamente al proveedor del servicio.",
+      "point4": "Puedes descargar cada QR individualmente o todos juntos.",
+      "point5": "Los QRs están también disponibles en tu perfil de usuario."
+    },
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmado",
+      "delivered": "Entregado",
+      "cancelled": "Cancelado"
+    },
+    "categories": {
+      "aquatic": "Acuático",
+      "land": "Terrestre",
+      "cultural": "Cultura",
+      "adventure": "Aventura",
+      "night": "Nocturno",
+      "experiences": "Experiencias",
+      "transportRental": "Alquiler de Transporte"
+    },
+    "alerts": {
+      "downloadSuccess": "✅ Se descargaron {{count}} códigos QR",
+      "downloadError": "Error al descargar los códigos QR",
+      "shareSuccess": "✅ Link del QR copiado al portapapeles",
+      "shareError": "Error al compartir el código QR"
+    },
+    "errors": {
+      "paymentProcessing": "Tu pago está siendo procesado. Podrás ver tus reservas en \"Mis Reservas\" en unos momentos.",
+      "recoveryError": "Hubo un error al recuperar los detalles de tu reserva. Por favor contacta a soporte."
+    }
+  },
+  "clientSidebar": {
+    "main": "Principal",
+    "myBookings": "Mis Reservas",
+    "myReviews": "Mis Reseñas",
+    "wishlist": "Lista de Deseos",
+    "account": "Cuenta",
+    "myProfile": "Mi Perfil",
+    "credits": "Créditos",
+    "logout": "Cerrar Sesión",
+    "since": "Desde"
   },
   "pendingReviews": {
     "title": "Reseñas Pendientes",

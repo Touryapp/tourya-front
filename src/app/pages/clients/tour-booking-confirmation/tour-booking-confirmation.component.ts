@@ -5,6 +5,7 @@ import { PaymentService } from '../../../shared/services/payment.service';
 import { ReservationService } from '../../../shared/services/reservation.service';
 import { ClientReservation } from '../../../shared/models/reservation.model';
 import { routes } from '../../../shared/routes/routes';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tour-booking-confirmation',
@@ -29,7 +30,8 @@ export class TourBookingConfirmationComponent implements OnInit {
     private route: ActivatedRoute,
     public router: Router,
     private paymentService: PaymentService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private translate: TranslateService
   ) {
     // Obtener datos de la navegación EN EL CONSTRUCTOR
     const navigation = this.router.getCurrentNavigation();
@@ -86,14 +88,13 @@ export class TourBookingConfirmationComponent implements OnInit {
           this.loading = false;
         } else {
           console.warn('⚠️ No se encontraron reservas aún. El webhook podría estar procesándose.');
-          // Podríamos implementar un reintento aquí, pero por ahora mostramos error amigable
-          this.error = 'Tu pago está siendo procesado. Podrás ver tus reservas en "Mis Reservas" en unos momentos.';
+          this.error = this.translate.instant('tourBookingSuccess.errors.paymentProcessing');
           this.loading = false;
         }
       },
       error: (err) => {
         console.error('❌ Error recuperando reservas:', err);
-        this.error = 'Hubo un error al recuperar los detalles de tu reserva. Por favor contacta a soporte.';
+        this.error = this.translate.instant('tourBookingSuccess.errors.recoveryError');
         this.loading = false;
       }
     });
@@ -327,9 +328,9 @@ export class TourBookingConfirmationComponent implements OnInit {
    */
   getStatusText(status: string): string {
     switch (status.toLowerCase()) {
-      case 'pending': return 'Pendiente';
-      case 'delivered': return 'Entregado';
-      case 'cancelled': return 'Cancelado';
+      case 'pending': return this.translate.instant('tourBookingSuccess.status.pending');
+      case 'delivered': return this.translate.instant('tourBookingSuccess.status.delivered');
+      case 'cancelled': return this.translate.instant('tourBookingSuccess.status.cancelled');
       default: return status;
     }
   }
@@ -415,10 +416,11 @@ export class TourBookingConfirmationComponent implements OnInit {
         }
       }
       
-      alert(`✅ Se descargaron ${this.reservationData.reservations.length} códigos QR`);
+      const successMsg = this.translate.instant('tourBookingSuccess.alerts.downloadSuccess', { count: this.reservationData.reservations.length });
+      alert(successMsg);
     } catch (error) {
       console.error('❌ Error descargando QRs:', error);
-      alert('Error al descargar los códigos QR');
+      alert(this.translate.instant('tourBookingSuccess.alerts.downloadError'));
     }
   }
 
@@ -461,12 +463,12 @@ export class TourBookingConfirmationComponent implements OnInit {
       } else {
         // Fallback: copiar al clipboard
         await navigator.clipboard.writeText(this.currentReservation.qrUrl);
-        alert('✅ Link del QR copiado al portapapeles');
+        alert(this.translate.instant('tourBookingSuccess.alerts.shareSuccess'));
         console.log('✅ QR URL copiado al portapapeles');
       }
     } catch (error) {
       console.error('❌ Error compartiendo QR:', error);
-      alert('Error al compartir el código QR');
+      alert(this.translate.instant('tourBookingSuccess.alerts.shareError'));
     }
   }
 
@@ -477,11 +479,30 @@ export class TourBookingConfirmationComponent implements OnInit {
     return this.paymentService.getDeliveryStatusClass(status);
   }
 
-  /**
-   * ✨ Obtener label del estado de entrega
-   */
-  getDeliveryStatusLabel(status: DeliveryStatus | string): string {
-    return this.paymentService.getDeliveryStatusLabel(status);
+  getDeliveryStatusLabelTranslated(status: DeliveryStatus | string): string {
+    const keys: Record<string, string> = {
+      [DeliveryStatus.PENDING]: 'tourBookingSuccess.status.pending',
+      [DeliveryStatus.CONFIRMED]: 'tourBookingSuccess.status.confirmed',
+      [DeliveryStatus.DELIVERED]: 'tourBookingSuccess.status.delivered',
+      [DeliveryStatus.CANCELLED]: 'tourBookingSuccess.status.cancelled'
+    };
+    return this.translate.instant(keys[status as string] || status);
+  }
+
+  getTourTypeTranslated(tourType: string): string {
+    if (!tourType) return '';
+    const normalizedType = tourType.toLowerCase().trim();
+    const typeMap: Record<string, string> = {
+      'acuático': 'tourBookingSuccess.categories.aquatic',
+      'terrestre': 'tourBookingSuccess.categories.land',
+      'cultura': 'tourBookingSuccess.categories.cultural',
+      'aventura': 'tourBookingSuccess.categories.adventure',
+      'nocturno': 'tourBookingSuccess.categories.night',
+      'experiencias': 'tourBookingSuccess.categories.experiences',
+      'alquiler de transporte': 'tourBookingSuccess.categories.transportRental'
+    };
+    const key = typeMap[normalizedType];
+    return key ? this.translate.instant(key) : tourType;
   }
 
   /**

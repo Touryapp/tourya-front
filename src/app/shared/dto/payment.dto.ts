@@ -124,22 +124,43 @@ export interface ShoppingCartResponseDto {
   status: string;
   items: ShoppingCartItemDto[];
   totalAmount: number;
+  providerTotalAmount?: number;
   creationDate: string;
   lastModifiedDate: string | null;
+  accommodationName: string | null;
+  accommodationLatitude: number | null;
+  accommodationLongitude: number | null;
+  originCountryId: number | null;
+  originStateId: number | null;
+  originCityId: number | null;
+  electronicBilling: boolean;
+  billingDocumentType: string | null;
+  billingDocumentNumber: string | null;
+  billingEmail: string | null;
+  billingCustomerName: string | null;
+  billingPhone: string | null;
 }
 
 export interface ShoppingCartItemDto {
   id: number;
   productId: number;
   productType: string;
-  serviceId: number | null;
-  serviceName: string | null;
-  serviceType: string | null;
+  serviceId?: number | null;
+  serviceName?: string | null;
+  serviceType?: string | null;
+  productName?: string;
   scheduleDate: string;
   tourScheduleId: number;
   tourName: string;
   slotId: number | null;
+  profilePicture?: {
+    id: number;
+    imageUrl: string;
+    description: any;
+    orderIndex: number;
+  } | null;
   totalPrice: number;
+  providerTotalPrice?: number;
   status: string;
   details: ShoppingCartItemDetailDto[];
 }

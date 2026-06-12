@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TourBookingConfirmationRoutingModule } from './tour-booking-confirmation-routing.module';
 import { TourBookingConfirmationComponent } from './tour-booking-confirmation.component';
+import { SharedModule } from '../../../shared/shared-module';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { TourBookingConfirmationComponent } from './tour-booking-confirmation.co
   imports: [
     CommonModule,
     FormsModule,
-    TourBookingConfirmationRoutingModule
+    TourBookingConfirmationRoutingModule,
+    SharedModule
   ]
 })
 export class TourBookingConfirmationModule { }

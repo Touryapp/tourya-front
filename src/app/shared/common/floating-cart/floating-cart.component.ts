@@ -61,12 +61,14 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
     
     this.cartItems$ = this.cartService.cartItems$.pipe(
       map(items => {
-        // Ordenar por fecha (startDate o dayDate)
-        return [...items].sort((a, b) => {
-          const itemA = a as any;
-          const itemB = b as any;
-          const dateA = new Date(itemA.startDate || a.dayDate).getTime();
-          const dateB = new Date(itemB.startDate || b.dayDate).getTime();
+        // Ordenar por fecha y precalcular la imagen para evitar problemas de rendimiento (Change Detection loops)
+        return [...items].map(item => {
+          const mappedItem = { ...item } as any;
+          mappedItem.displayImageUrl = this.getTourImage(mappedItem);
+          return mappedItem;
+        }).sort((a, b) => {
+          const dateA = new Date(a.startDate || a.dayDate).getTime();
+          const dateB = new Date(b.startDate || b.dayDate).getTime();
           return dateA - dateB; // Orden ascendente (más antigua primero)
         });
       })
@@ -193,7 +195,10 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
    * Obtiene la imagen del tour
    */
   getTourImage(item: any): string {
-    // Prioridad: gallery > tour.images > tourImageUrl > default
+    // Prioridad: profilePicture > gallery > tour.images > tourImageUrl > default
+    if (item.profilePicture?.imageUrl) {
+      return item.profilePicture.imageUrl;
+    }
     
     // 1. Gallery del item (array de objetos con imageUrl)
     if (item.gallery && item.gallery.length > 0) {
