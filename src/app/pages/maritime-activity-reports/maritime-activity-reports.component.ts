@@ -41,7 +41,7 @@ export class MaritimeActivityReportsComponent implements OnInit {
   // Data
   reports: MaritimeActivityReport[] = [];
   dataSource = new MatTableDataSource<MaritimeActivityReport>([]);
-  displayedColumns: string[] = ['id', 'country', 'city', 'tag', 'flag', 'reportDate', 'actions'];
+  displayedColumns: string[] = ['id', 'country', 'department', 'city', 'tag', 'flag', 'reportDate', 'actions'];
   
   // Dashboard Stats
   todayReport: MaritimeActivityReport | null = null;
@@ -232,25 +232,30 @@ export class MaritimeActivityReportsComponent implements OnInit {
   openEditModal(report: MaritimeActivityReport): void {
     this.isEditMode = true;
     this.selectedReportId = report.id!;
+    
+    // Find category name by ID
+    const category = this.categories.find(c => c.id === report.businessCategoryId);
+    const categoryName = category ? category.name : '';
+
     this.reportForm.patchValue({
-      country: report.country,
-      department: report.department || '',
-      city: report.city,
-      category: report.category || '',
-      subCategory: report.subCategory || '',
+      country: report.countryName,
+      department: report.stateName || '',
+      city: report.cityName,
+      category: categoryName,
+      subCategory: report.subcategoryCode || '',
       flag: report.flag,
       reportStartDate: report.reportStartDate,
       reportEndDate: report.reportEndDate
     });
 
     // Load dependent dropdowns if they have values
-    if (report.country) {
-      const selectedCountry = this.countries.find(c => c.name === report.country);
+    if (report.countryName) {
+      const selectedCountry = this.countries.find(c => c.name === report.countryName);
       if (selectedCountry) {
         this.departmentService.getDepartmentsByCountryId(selectedCountry.id).subscribe(res => {
           this.departments = res;
-          if (report.department) {
-            const selectedDept = this.departments.find(d => d.name === report.department);
+          if (report.stateName) {
+            const selectedDept = this.departments.find(d => d.name === report.stateName);
             if (selectedDept) {
               this.cityService.getCitiesByDepartmentId(selectedDept.id).subscribe(resCity => {
                 this.cities = resCity;
@@ -261,8 +266,8 @@ export class MaritimeActivityReportsComponent implements OnInit {
       }
     }
 
-    if (report.category) {
-      const selectedCategory = this.categories.find(c => c.name === report.category);
+    if (categoryName) {
+      const selectedCategory = this.categories.find(c => c.name === categoryName);
       if (selectedCategory && selectedCategory.subCategories) {
         this.subCategories = selectedCategory.subCategories;
       }

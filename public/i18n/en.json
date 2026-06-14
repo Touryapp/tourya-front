@@ -93,7 +93,10 @@
     }
   },
   "provider-reviews": {
-    "title": "Customer Reviews",
+    "title": "Customer reviews",
+    "titleClient": "My reviews",
+    "date": "Date",
+    "reservation": "Reservation ID",
     "filters": {
       "rating": "Filter by rating",
       "tour": "Filter by tour",
@@ -104,7 +107,7 @@
       "allProviders": "All",
       "allUsers": "All",
       "stars": "stars",
-      "clearFilters": "Clear Filters"
+      "clearFilters": "Clean Filters"
     },
     "stats": {
       "totalReviews": "Total Reviews",
@@ -113,13 +116,17 @@
     "actions": {
       "respond": "Respond",
       "reject": "Reject",
-      "viewDetails": "View tour details",
-      "export": "Export"
+      "export": "Export",
+      "exportPdf": "Export as PDF",
+      "exportExcel": "Export as Excel",
+      "goToReservation": "Go to the reservation"
     },
     "replyForm": {
       "title": "Write your response",
       "placeholder": "Write your response to the customer here...",
       "charactersCount": "characters",
+      "attachImages": "Attach images (Max 5)",
+      "imagesSelected": "{{count}} image(s) selected",
       "cancel": "Cancel",
       "submit": "Send Response"
     },
@@ -450,11 +457,14 @@
       "filters": {
         "status": "Status",
         "statusAll": "All",
-        "statusUpcoming": "Upcoming",
         "statusPending": "Pending",
-        "statusConfirmed": "Confirmed",
-        "statusCancelled": "Cancelled",
-        "statusCompleted": "Completed",
+        "statusReserved": "Reserved",
+        "statusInTransit": "In Transit",
+        "statusDelivered": "Delivered",
+        "statusCanceled": "Canceled",
+        "statusRescheduled": "Rescheduled",
+        "statusTemporal": "Temporal",
+        "statusNoShow": "No Show",
         "dateRange": "Date Range",
         "tourType": "Tour Type",
         "typeAll": "All",
@@ -1065,7 +1075,7 @@
       "schedulesTemplates": "Schedule Templates",
       "myBookings": "My Bookings",
       "myReviews": "My Reviews",
-      "wishlist": "Wishlist",
+      "wishlist": "Wish list",
       "myPayments": "My Payments",
       "blog": "Blog",
       "contactUs": "Contact Us",
@@ -1190,10 +1200,10 @@
     "resetFilters": "Reset"
   },
   "myProfile": {
-    "title": "My Profile",
+    "title": "My profile",
     "basicInfo": "Basic Information",
-    "name": "First Name",
-    "lastName": "Last Name",
+    "name": "Name",
+    "lastName": "Last name",
     "email": "Email",
     "phone": "Phone",
     "addressInfo": "Address Information",
@@ -1201,10 +1211,10 @@
     "country": "Country",
     "state": "State/Province",
     "city": "City",
-    "zipCode": "Zip Code",
+    "zipCode": "Zip code",
     "myBookings": "My Bookings",
     "myReviews": "My Reviews",
-    "wishlist": "Wishlist",
+    "wishlist": "Wish list",
     "alerts": {
       "photo": "Profile Photo",
       "uploadSuccess": "Uploaded successfully",
@@ -1227,6 +1237,10 @@
     "trending": "Trending",
     "available": "Available",
     "priceFrom": "Price from",
+    "priceType": {
+      "person": "Per person",
+      "group": "Group of {{amount}}"
+    },
     "checkAvailability": "Check availability",
     "noToursFound": "No tours were found matching the specified search criteria.",
     "showing": "Showing",
@@ -1438,14 +1452,14 @@
   "clientCredits": {
     "myCredits": "My Credits",
     "totalCredits": "Total credits",
-    "creditsList": "Credits List",
+    "creditsList": "List of Credits",
     "statusLabel": "Status:",
     "allStatuses": "All",
     "colUse": "Use",
-    "colId": "ID",
-    "colBookingId": "Booking ID",
-    "colValue": "Value",
-    "colCreationDate": "Creation date",
+    "colId": "Credit ID",
+    "colBookingId": "Reservation ID",
+    "colValue": "Amount",
+    "colCreationDate": "Date of creation",
     "colExpirationDate": "Expiration date",
     "colStatus": "Status",
     "noCreditsFound": "No credits found",
@@ -1453,7 +1467,13 @@
     "totalSelected": "Total",
     "cancelBtn": "Cancel",
     "useCreditsBtn": "Use Credits",
-    "exceedingMaxError": "The total value of the selected credits is greater than the reservation value, it must be less than or equal to"
+    "exceedingMaxError": "The total value of the selected credits is greater than the reservation value, it must be less than or equal to",
+    "statuses": {
+      "all": "All",
+      "created": "Created",
+      "canceled": "Canceled",
+      "eliminated": "Eliminated"
+    }
   },
   "bookingTours": {
     "title": "Booking Tours",
@@ -1624,7 +1644,7 @@
     "main": "Main",
     "myBookings": "My Bookings",
     "myReviews": "My Reviews",
-    "wishlist": "Wishlist",
+    "wishlist": "Wish list",
     "account": "Account",
     "myProfile": "My Profile",
     "credits": "Credits",
@@ -1632,16 +1652,18 @@
     "since": "Since"
   },
   "pendingReviews": {
-    "title": "Pending Reviews",
-    "intro": "You have the following pending reviews to complete:",
+    "title": "Pending reviews",
+    "intro": "You have the following reviews pending completion:",
     "tourNoName": "Tour with no name",
-    "serviceResponsible": "Service responsible",
-    "emailLabel": "Email",
-    "phoneLabel": "Phone",
-    "reservationDate": "Reservation date",
+    "serviceResponsible": "Person in charge of the service:",
+    "emailLabel": "email",
+    "phoneLabel": "phone",
+    "reservationDate": "Booking date",
     "reservationId": "Reservation ID",
-    "tourType": "Tour type",
+    "tourType": "Category",
+    "city": "City",
     "destination": "Destination",
+    "statusDelivered": "Completed",
     "reviewBtn": "Review",
     "closeBtn": "Close"
   }

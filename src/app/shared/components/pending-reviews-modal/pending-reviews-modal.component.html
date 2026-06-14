@@ -17,7 +17,7 @@
               'bg-success': review.deliveryStatus === 'DELIVERED',
               'bg-warning': review.deliveryStatus === 'PENDING',
               'bg-danger': review.deliveryStatus === 'CANCELLED'
-            }">{{ review.deliveryStatus }}</span>
+            }">{{ review.deliveryStatus === 'DELIVERED' ? ('pendingReviews.statusDelivered' | translate) : review.deliveryStatus }}</span>
           </div>
           
           <!-- Service Responsible Info -->
@@ -32,7 +32,7 @@
             <small class="d-block" *ngIf="review.reservationDate"><strong>{{ 'pendingReviews.reservationDate' | translate }}:</strong> {{ review.reservationDate | date:'medium' }}</small>
             <small class="d-block"><strong>{{ 'pendingReviews.reservationId' | translate }}:</strong> {{ review.reservationId }}</small>
             <small class="d-block" *ngIf="review.tourType"><strong>{{ 'pendingReviews.tourType' | translate }}:</strong> {{ review.tourType }}</small>
-            <small class="d-block" *ngIf="review.destination"><strong>{{ 'pendingReviews.destination' | translate }}:</strong> {{ review.destination }}</small>
+            <small class="d-block" *ngIf="review.destination"><strong>{{ 'pendingReviews.city' | translate }}:</strong> {{ review.destination }}</small>
           </div>
         </div>
         

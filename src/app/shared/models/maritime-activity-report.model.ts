@@ -6,12 +6,14 @@ export enum MaritimeFlag {
 
 export interface MaritimeActivityReport {
     id?: number;
-    country: string;
-    department?: string;
-    city: string;
-    category?: string;
-    subCategory?: string;
-    tag: string;
+    countryId: number;
+    countryName: string;
+    stateId: number;
+    stateName: string;
+    cityId: number;
+    cityName: string;
+    businessCategoryId: number;
+    subcategoryCode: string;
     flag: MaritimeFlag;
     reportStartDate: string; // YYYY-MM-DD
     reportEndDate: string; // YYYY-MM-DD

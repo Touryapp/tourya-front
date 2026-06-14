@@ -57,7 +57,7 @@
                 </p>
                 <div class="mb-2">
                     <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal">
-                        <ng-container *ngIf="getPriceTypeLabel(tour?.tour?.priceType) as pType">
+                        <ng-container *ngIf="getPriceTypeLabel(tour?.tour) as pType">
                             {{ pType }} |&nbsp;
                         </ng-container>
                         {{ 'toursList.priceFrom' | translate }}:

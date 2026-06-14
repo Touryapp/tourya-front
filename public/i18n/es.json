@@ -94,6 +94,9 @@
   },
   "provider-reviews": {
     "title": "Calificaciones de Clientes",
+    "titleClient": "Mis Reseñas",
+    "date": "Fecha",
+    "reservation": "ID de Reserva",
     "filters": {
       "rating": "Filtrar por calificación",
       "tour": "Filtrar por tour",
@@ -114,12 +117,17 @@
       "respond": "Responder",
       "reject": "Rechazar",
       "viewDetails": "Ver detalles del tour",
-      "export": "Exportar"
+      "export": "Exportar",
+      "exportPdf": "Exportar como PDF",
+      "exportExcel": "Exportar como Excel",
+      "goToReservation": "Ir a la reserva"
     },
     "replyForm": {
       "title": "Escribe tu respuesta",
       "placeholder": "Escribe tu respuesta al cliente aquí...",
       "charactersCount": "caracteres",
+      "attachImages": "Adjuntar imágenes (Máx 5)",
+      "imagesSelected": "{{count}} imagen(es) seleccionada(s)",
       "cancel": "Cancelar",
       "submit": "Enviar Respuesta"
     },
@@ -450,11 +458,14 @@
       "filters": {
         "status": "Estado",
         "statusAll": "Todos",
-        "statusUpcoming": "Próximas",
-        "statusPending": "Pendientes",
-        "statusConfirmed": "Confirmadas",
-        "statusCancelled": "Canceladas",
-        "statusCompleted": "Completadas",
+        "statusPending": "Pendiente",
+        "statusReserved": "Reservada",
+        "statusInTransit": "En Tránsito",
+        "statusDelivered": "Entregada",
+        "statusCanceled": "Cancelada",
+        "statusRescheduled": "Reagendada",
+        "statusTemporal": "Temporal",
+        "statusNoShow": "No se presentó",
         "dateRange": "Rango de Fechas",
         "tourType": "Tipo de Tour",
         "typeAll": "Todos",
@@ -1065,7 +1076,7 @@
       "schedulesTemplates": "Templates de horarios",
       "myBookings": "Mis reservas",
       "myReviews": "Mis reseñas",
-      "wishlist": "Lista de Deseos",
+      "wishlist": "Lista de deseos",
       "myPayments": "Mis Pagos",
       "blog": "Blog",
       "contactUs": "Contáctenos",
@@ -1204,7 +1215,7 @@
     "zipCode": "Código Postal",
     "myBookings": "Mis Reservas",
     "myReviews": "Mis Reseñas",
-    "wishlist": "Lista de Deseos",
+    "wishlist": "Lista de deseos",
     "alerts": {
       "photo": "Foto de perfil",
       "uploadSuccess": "Cargada correctamente",
@@ -1227,6 +1238,10 @@
     "trending": "Trending",
     "available": "Disponible",
     "priceFrom": "Precio desde",
+    "priceType": {
+      "person": "por persona",
+      "group": "Grupo de {{amount}}"
+    },
     "checkAvailability": "Consultar disponibilidad",
     "noToursFound": "No se encontraron tours con los criterios de búsqueda especificados.",
     "showing": "Mostrando",
@@ -1442,9 +1457,9 @@
     "statusLabel": "Estado:",
     "allStatuses": "Todos",
     "colUse": "Usar",
-    "colId": "ID",
-    "colBookingId": "Id de la Reserva",
-    "colValue": "Valor",
+    "colId": "ID Crédito",
+    "colBookingId": "ID de Reserva",
+    "colValue": "Monto",
     "colCreationDate": "Fecha de creación",
     "colExpirationDate": "Fecha de expiración",
     "colStatus": "Estado",
@@ -1453,7 +1468,13 @@
     "totalSelected": "Total",
     "cancelBtn": "Cancelar",
     "useCreditsBtn": "Usar Créditos",
-    "exceedingMaxError": "El valor total de los créditos seleccionados es mayor al valor de la reserva, debe ser menor o igual a"
+    "exceedingMaxError": "El valor total de los créditos seleccionados es mayor al valor de la reserva, debe ser menor o igual a",
+    "statuses": {
+      "all": "Todos",
+      "created": "Creada",
+      "canceled": "Cancelada",
+      "eliminated": "Eliminada"
+    }
   },
   "bookingTours": {
     "title": "Reservar Tours",
@@ -1624,7 +1645,7 @@
     "main": "Principal",
     "myBookings": "Mis Reservas",
     "myReviews": "Mis Reseñas",
-    "wishlist": "Lista de Deseos",
+    "wishlist": "Lista de deseos",
     "account": "Cuenta",
     "myProfile": "Mi Perfil",
     "credits": "Créditos",
@@ -1632,16 +1653,18 @@
     "since": "Desde"
   },
   "pendingReviews": {
-    "title": "Reseñas Pendientes",
+    "title": "Reseñas pendientes",
     "intro": "Tienes las siguientes reseñas pendientes por completar:",
     "tourNoName": "Tour sin nombre",
     "serviceResponsible": "Responsable del servicio",
-    "emailLabel": "Email",
+    "emailLabel": "Correo electrónico",
     "phoneLabel": "Teléfono",
     "reservationDate": "Fecha de reserva",
     "reservationId": "ID de Reserva",
-    "tourType": "Tipo de tour",
+    "tourType": "Categoría",
+    "city": "Ciudad",
     "destination": "Destino",
+    "statusDelivered": "Completada",
     "reviewBtn": "Reseñar",
     "closeBtn": "Cerrar"
   }

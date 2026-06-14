@@ -127,6 +127,14 @@ export class MyProfileComponent implements OnInit {
     this.clientMenuService.setActiveSection(section);
   }
 
+  onGoToReservation(reservationId: number | string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { section: 'bookings', reservationId: reservationId },
+      queryParamsHandling: 'merge'
+    });
+  }
+
   loadProfile(): void {
     this.profileLoading = true;
     this.touristService.getProfile().subscribe({

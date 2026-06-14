@@ -860,6 +860,15 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   /**
+   * Returns the i18n label key of the selected option in a filter
+   */
+  public getSelectedOptionLabel(filter: any, selectedValue: string): string {
+    if (!filter.options || !selectedValue) return filter.label;
+    const option = filter.options.find((o: any) => o.value === selectedValue);
+    return option ? option.label : filter.label;
+  }
+
+  /**
    * Filtra por tipo de tour
    */
   public filterByTourType(tourType: string): void {

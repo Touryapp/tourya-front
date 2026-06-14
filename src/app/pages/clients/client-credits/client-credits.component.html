@@ -26,9 +26,9 @@
                         (change)="onStatusChange($event)"
                         [value]="selectedStatus">
                         <option value="">{{ 'clientCredits.allStatuses' | translate }}</option>
-                        <option value="CREATED">{{ 'CREATED' | translate }}</option>
-                        <option value="CANCELED">{{ 'CANCELED' | translate }}</option>
-                        <option value="DELETED">{{ 'DELETED' | translate }}</option>
+                        <option value="CREATED">{{ 'clientCredits.statuses.created' | translate }}</option>
+                        <option value="CANCELED">{{ 'clientCredits.statuses.canceled' | translate }}</option>
+                        <option value="DELETED">{{ 'clientCredits.statuses.eliminated' | translate }}</option>
                     </select>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                                 <td>
                                     <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
                                           [ngClass]="getStatusClass(credit.status)">
-                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ credit.status }}
+                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ 'clientCredits.statuses.' + credit.status.toLowerCase() | translate }}
                                     </span>
                                 </td>
                             </tr>
