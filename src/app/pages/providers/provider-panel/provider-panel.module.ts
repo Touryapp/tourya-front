@@ -10,6 +10,7 @@ import { ProviderTourManagementModule } from "../provider-tour-management/provid
 import { ProviderReviewsComponent } from "../provider-reviews/provider-reviews.component";
 import { ProviderPaymentsModule } from "../provider-payments/provider-payments.module";
 import { RequestprovidersModule } from "../requestproviders/requestproviders.module";
+import { ProviderUsersComponent } from "../provider-users/provider-users.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { RequestprovidersModule } from "../requestproviders/requestproviders.mod
     TemplatesModule,
     ProviderTourManagementModule,
     ProviderPaymentsModule,
-    RequestprovidersModule
+    RequestprovidersModule,
+    ProviderUsersComponent
   ],
   exports: [
     ProviderReviewsComponent

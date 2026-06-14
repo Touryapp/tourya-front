@@ -69,12 +69,22 @@
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 column-gap-4">
                     <div class="dropdown" *ngFor="let filter of config.filters">
                         <!-- Filtro de tipo SELECT -->
-                        <div *ngIf="filter.type === 'select'">
+                     <div *ngIf="filter.type === 'select'">
                             <a href="javascript:void(0);" 
                                class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
                                data-bs-toggle="dropdown" 
                                aria-expanded="false">
-                                {{ filter.label | translate }}
+                                <ng-container *ngIf="filter.field === 'status' && selectedStatus; else defaultStatusLabel">
+                                    {{ getSelectedOptionLabel(filter, selectedStatus) | translate }}
+                                </ng-container>
+                                <ng-template #defaultStatusLabel>
+                                    <ng-container *ngIf="filter.field === 'tourType' && selectedTourType; else defaultFilterLabel">
+                                        {{ getSelectedOptionLabel(filter, selectedTourType) | translate }}
+                                    </ng-container>
+                                    <ng-template #defaultFilterLabel>
+                                        {{ filter.label | translate }}
+                                    </ng-template>
+                                </ng-template>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end p-3">
                                 <li *ngFor="let option of filter.options">

@@ -199,11 +199,14 @@ export class BookingManagementConfigService {
           type: 'select',
           options: [
             { value: '', label: 'provider-tour-management.config.filters.statusAll' },
-            { value: 'Upcoming', label: 'provider-tour-management.config.filters.statusUpcoming' },
-            { value: 'Pending', label: 'provider-tour-management.config.filters.statusPending' },
-            { value: 'Confirmed', label: 'provider-tour-management.config.filters.statusConfirmed' },
-            { value: 'Cancelled', label: 'provider-tour-management.config.filters.statusCancelled' },
-            { value: 'Completed', label: 'provider-tour-management.config.filters.statusCompleted' }
+            { value: 'PENDING', label: 'provider-tour-management.config.filters.statusPending' },
+            { value: 'RESERVED', label: 'provider-tour-management.config.filters.statusReserved' },
+            { value: 'IN_TRANSIT', label: 'provider-tour-management.config.filters.statusInTransit' },
+            { value: 'DELIVERED', label: 'provider-tour-management.config.filters.statusDelivered' },
+            { value: 'CANCELED', label: 'provider-tour-management.config.filters.statusCanceled' },
+            { value: 'RESCHEDULED', label: 'provider-tour-management.config.filters.statusRescheduled' },
+            { value: 'TEMPORAL', label: 'provider-tour-management.config.filters.statusTemporal' },
+            { value: 'NO_SHOW', label: 'provider-tour-management.config.filters.statusNoShow' }
           ]
         },
         {
@@ -342,11 +345,14 @@ export class BookingManagementConfigService {
           type: 'select',
           options: [
             { value: '', label: 'provider-tour-management.config.filters.statusAll' },
-            { value: 'Upcoming', label: 'provider-tour-management.config.filters.statusUpcoming' },
-            { value: 'Pending', label: 'provider-tour-management.config.filters.statusPending' },
-            { value: 'Confirmed', label: 'provider-tour-management.config.filters.statusConfirmed' },
-            { value: 'Cancelled', label: 'provider-tour-management.config.filters.statusCancelled' },
-            { value: 'Completed', label: 'provider-tour-management.config.filters.statusCompleted' }
+            { value: 'PENDING', label: 'provider-tour-management.config.filters.statusPending' },
+            { value: 'RESERVED', label: 'provider-tour-management.config.filters.statusReserved' },
+            { value: 'IN_TRANSIT', label: 'provider-tour-management.config.filters.statusInTransit' },
+            { value: 'DELIVERED', label: 'provider-tour-management.config.filters.statusDelivered' },
+            { value: 'CANCELED', label: 'provider-tour-management.config.filters.statusCanceled' },
+            { value: 'RESCHEDULED', label: 'provider-tour-management.config.filters.statusRescheduled' },
+            { value: 'TEMPORAL', label: 'provider-tour-management.config.filters.statusTemporal' },
+            { value: 'NO_SHOW', label: 'provider-tour-management.config.filters.statusNoShow' }
           ]
         },
         {
@@ -505,11 +511,14 @@ export class BookingManagementConfigService {
           type: 'select',
           options: [
             { value: '', label: 'provider-tour-management.config.filters.statusAll' },
-            { value: 'Upcoming', label: 'provider-tour-management.config.filters.statusUpcoming' },
-            { value: 'Pending', label: 'provider-tour-management.config.filters.statusPending' },
-            { value: 'Confirmed', label: 'provider-tour-management.config.filters.statusConfirmed' },
-            { value: 'Cancelled', label: 'provider-tour-management.config.filters.statusCancelled' },
-            { value: 'Completed', label: 'provider-tour-management.config.filters.statusCompleted' }
+            { value: 'PENDING', label: 'provider-tour-management.config.filters.statusPending' },
+            { value: 'RESERVED', label: 'provider-tour-management.config.filters.statusReserved' },
+            { value: 'IN_TRANSIT', label: 'provider-tour-management.config.filters.statusInTransit' },
+            { value: 'DELIVERED', label: 'provider-tour-management.config.filters.statusDelivered' },
+            { value: 'CANCELED', label: 'provider-tour-management.config.filters.statusCanceled' },
+            { value: 'RESCHEDULED', label: 'provider-tour-management.config.filters.statusRescheduled' },
+            { value: 'TEMPORAL', label: 'provider-tour-management.config.filters.statusTemporal' },
+            { value: 'NO_SHOW', label: 'provider-tour-management.config.filters.statusNoShow' }
           ]
         },
         {

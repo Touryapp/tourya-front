@@ -1,0 +1,174 @@
+// ── Tabla ─────────────────────────────────────────────────────────────────
+
+.custom-table {
+  th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  td {
+    vertical-align: middle;
+    padding: 0.85rem 0.75rem;
+  }
+}
+
+// ── Avatar de inicial ────────────────────────────────────────────────────────
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xb-primary, #0d6efd), #6610f2);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// ── Badges de tours ──────────────────────────────────────────────────────────
+
+.badge-tour {
+  background-color: rgba(13, 110, 253, 0.08);
+  color: #0d6efd;
+  border: 1px solid rgba(13, 110, 253, 0.2);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.badge-tour-principal {
+  background-color: rgba(255, 193, 7, 0.12);
+  color: #856404;
+  border-color: rgba(255, 193, 7, 0.4);
+}
+
+.badge-principal {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: #664d03;
+  border: 1px solid rgba(255, 193, 7, 0.5);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+}
+
+// ── Badges de estado ─────────────────────────────────────────────────────────
+
+.badge-active {
+  background-color: rgba(25, 135, 84, 0.12);
+  color: #146c43;
+  border: 1px solid rgba(25, 135, 84, 0.3);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+}
+
+.badge-inactive {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #842029;
+  border: 1px solid rgba(220, 53, 69, 0.25);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+}
+
+// ── Botones de acción ────────────────────────────────────────────────────────
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  i { font-size: 15px; }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// ── Empty state ──────────────────────────────────────────────────────────────
+
+.empty-state {
+  color: #adb5bd;
+  padding: 40px;
+
+  .isax { display: block; }
+}
+
+// ── Modales ──────────────────────────────────────────────────────────────────
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #fafafa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.25rem 1.5rem;
+}
+
+.modal-footer {
+  background: #fafafa;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+// ── Confirmación banner ───────────────────────────────────────────────────────
+
+.confirm-banner {
+  display: flex;
+  align-items: flex-start;
+  background: #fffbf0;
+  border: 1px solid #ffe69c;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+
+  &:has(.isax-info-circle) {
+    background: #f0f8ff;
+    border-color: #b6d4fe;
+  }
+}
+
+// ── Inputs ────────────────────────────────────────────────────────────────────
+
+.form-control {
+  height: 40px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  font-size: 14px;
+
+  &:focus {
+    border-color: var(--xb-primary, #0d6efd);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+  }
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 13px;
+  color: #344054;
+  margin-bottom: 6px;
+}

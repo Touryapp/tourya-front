@@ -93,9 +93,12 @@
     }
   },
   "provider-reviews": {
-    "title": "Avaliações de Clientes",
+    "title": "Avaliações dos clientes",
+    "titleClient": "Minhas resenhas",
+    "date": "Data",
+    "reservation": "Número da reserva",
     "filters": {
-      "rating": "Filtrar por classificação",
+      "rating": "Filtrar por Avaliações",
       "tour": "Filtrar por passeio",
       "provider": "Filtrar por fornecedor",
       "user": "Filtrar por usuário",
@@ -104,22 +107,26 @@
       "allProviders": "Todos",
       "allUsers": "Todos",
       "stars": "estrelas",
-      "clearFilters": "Limpar Filtros"
+      "clearFilters": "Limpar filtros"
     },
     "stats": {
-      "totalReviews": "Total de Avaliações",
+      "totalReviews": "Total de avaliações",
       "averageRating": "Classificação Média"
     },
     "actions": {
       "respond": "Responder",
       "reject": "Rejeitar",
-      "viewDetails": "Ver detalhes do passeio",
-      "export": "Exportar"
+      "export": "Exportar",
+      "exportPdf": "Exportar como PDF",
+      "exportExcel": "Exportar como Excel",
+      "goToReservation": "Acessar a reserva"
     },
     "replyForm": {
       "title": "Escreva sua resposta",
       "placeholder": "Escreva sua resposta ao cliente aqui...",
       "charactersCount": "caracteres",
+      "attachImages": "Anexar imagens (Máx. 5)",
+      "imagesSelected": "{{count}} imagem(ns) selecionada(s)",
       "cancel": "Cancelar",
       "submit": "Enviar Resposta"
     },
@@ -450,11 +457,14 @@
       "filters": {
         "status": "Status",
         "statusAll": "Todos",
-        "statusUpcoming": "Próximas",
-        "statusPending": "Pendentes",
-        "statusConfirmed": "Confirmadas",
-        "statusCancelled": "Canceladas",
-        "statusCompleted": "Concluídas",
+        "statusPending": "Pendente",
+        "statusReserved": "Reservada",
+        "statusInTransit": "Em Trânsito",
+        "statusDelivered": "Entregada",
+        "statusCanceled": "Cancelada",
+        "statusRescheduled": "Reagendada",
+        "statusTemporal": "Temporal",
+        "statusNoShow": "Não Compareceu",
         "dateRange": "Intervalo de Datas",
         "tourType": "Tipo de Passeio",
         "typeAll": "Todos",
@@ -911,7 +921,7 @@
       "schedulesTemplates": "Modelos de horários",
       "myBookings": "Minhas reservas",
       "myReviews": "Minhas avaliações",
-      "wishlist": "Lista de Desejos",
+      "wishlist": "Lista de desejos",
       "myPayments": "Meus Pagamentos",
       "blog": "Blog",
       "contactUs": "Contate-nos",
@@ -1036,21 +1046,21 @@
     "resetFilters": "Limpar"
   },
   "myProfile": {
-    "title": "Meu Perfil",
-    "basicInfo": "Informação Básica",
+    "title": "Meu perfil",
+    "basicInfo": "Informações básicas",
     "name": "Nome",
     "lastName": "Sobrenome",
     "email": "E-mail",
     "phone": "Telefone",
-    "addressInfo": "Informações de Endereço",
+    "addressInfo": "Informações de endereço",
     "address": "Endereço",
     "country": "País",
     "state": "Estado/Província",
     "city": "Cidade",
-    "zipCode": "Código Postal",
+    "zipCode": "Código postal",
     "myBookings": "Minhas Reservas",
     "myReviews": "Minhas Avaliações",
-    "wishlist": "Lista de Desejos",
+    "wishlist": "Lista de desejos",
     "alerts": {
       "photo": "Foto de perfil",
       "uploadSuccess": "Carregado com sucesso",
@@ -1072,8 +1082,12 @@
     "searchingTours": "Procurando passeios...",
     "trending": "Em alta",
     "available": "Disponível",
-    "priceFrom": "Preço a partir de",
-    "checkAvailability": "Verificar disponibilidade",
+    "priceFrom": "Preço desde",
+    "priceType": {
+      "person": "por pessoa",
+      "group": "grupo de {{amount}}"
+    },
+    "checkAvailability": "consultar disponibilidade",
     "noToursFound": "Nenhum passeio encontrado com os critérios de busca.",
     "showing": "Exibindo",
     "of": "de",
@@ -1439,22 +1453,28 @@
   "clientCredits": {
     "myCredits": "Meus Créditos",
     "totalCredits": "Total de créditos",
-    "creditsList": "Lista de Créditos",
+    "creditsList": "Lista de créditos",
     "statusLabel": "Status:",
     "allStatuses": "Todos",
     "colUse": "Usar",
-    "colId": "ID",
-    "colBookingId": "ID da Reserva",
+    "colId": "ID do crédito",
+    "colBookingId": "Número da reserva",
     "colValue": "Valor",
     "colCreationDate": "Data de criação",
-    "colExpirationDate": "Data de expiração",
+    "colExpirationDate": "Data de validade",
     "colStatus": "Status",
     "noCreditsFound": "Nenhum crédito encontrado",
     "selectedCount": "Selecionados",
     "totalSelected": "Total",
     "cancelBtn": "Cancelar",
     "useCreditsBtn": "Usar Créditos",
-    "exceedingMaxError": "O valor total dos créditos selecionados é maior do que o valor da reserva, deve ser menor ou igual a"
+    "exceedingMaxError": "O valor total dos créditos selecionados é maior que o valor da reserva, deve ser menor ou igual a",
+    "statuses": {
+      "all": "Todos",
+      "created": "Criada",
+      "canceled": "Cancelada",
+      "eliminated": "Eliminada"
+    }
   },
   "bookingTours": {
     "title": "Reservar Passeios",
@@ -1625,7 +1645,7 @@
     "main": "Principal",
     "myBookings": "Minhas Reservas",
     "myReviews": "Minhas Avaliações",
-    "wishlist": "Lista de Desejos",
+    "wishlist": "Lista de desejos",
     "account": "Conta",
     "myProfile": "Meu Perfil",
     "credits": "Créditos",
@@ -1633,17 +1653,19 @@
     "since": "Desde"
   },
   "pendingReviews": {
-    "title": "Avaliações Pendentes",
-    "intro": "Você tem as seguintes avaliações pendentes para concluir:",
+    "title": "Resenhas pendentes",
+    "intro": "Você tem as seguintes resenhas pendentes para concluir",
     "tourNoName": "Passeio sem nome",
-    "serviceResponsible": "Responsável pelo serviço",
+    "serviceResponsible": "Responsável pelo serviço:",
     "emailLabel": "E-mail",
     "phoneLabel": "Telefone",
-    "reservationDate": "Data de reserva",
-    "reservationId": "ID da Reserva",
-    "tourType": "Tipo de passeio",
+    "reservationDate": "Data da reserva",
+    "reservationId": "Número da reserva",
+    "tourType": "Categoria",
+    "city": "Cidade",
     "destination": "Destino",
-    "reviewBtn": "Avaliar",
+    "statusDelivered": "Concluídas",
+    "reviewBtn": "Resumir",
     "closeBtn": "Fechar"
   }
 }

@@ -3,6 +3,7 @@ import { routes } from "../../../../shared/routes/routes";
 import { OwlOptions } from "ngx-owl-carousel-o";
 import { TourScheduleResponseDto } from "../../../../shared/dto/search-tour-response.dto";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-tour-grid-view",
@@ -30,7 +31,10 @@ export class TourGridViewComponent implements OnChanges {
   @Output() goToNextPage = new EventEmitter<void>();
   @Output() selectTour = new EventEmitter<TourScheduleResponseDto>();
 
-  constructor(public i18nService: I18nFieldService) {}
+  constructor(
+    public i18nService: I18nFieldService,
+    private translate: TranslateService
+  ) {}
 
   // Favorites functionality
   isClassAdded: boolean[] = [];
@@ -88,11 +92,17 @@ export class TourGridViewComponent implements OnChanges {
     }
   }
 
-  getPriceTypeLabel(priceType: string | undefined | null): string {
+  getPriceTypeLabel(tour: any): string {
+    const priceType = tour?.priceType;
     if (!priceType) return '';
     const upper = priceType.toUpperCase();
-    if (upper === 'PRIVATE' || upper === 'PER_PERSON') return 'Individual';
-    if (upper === 'GROUP' || upper === 'PER_GROUP') return 'Grupo';
+    if (upper === 'PRIVATE' || upper === 'PER_PERSON') {
+      return this.translate.instant('toursList.priceType.person');
+    }
+    if (upper === 'GROUP' || upper === 'PER_GROUP') {
+      const amount = tour?.maxCapacity || 0;
+      return this.translate.instant('toursList.priceType.group', { amount: amount });
+    }
     return priceType;
   }
 
@@ -169,6 +179,13 @@ export class TourGridViewComponent implements OnChanges {
   getTranslatedCategory(tourDto: any): string {
     const code = tourDto?.subCategory;
     const nameFallback = tourDto?.subCategoryName || tourDto?.subCategory || tourDto?.categoryName || 'N/A';
+    
+    if (code) {
+      const translatedCode = this.translate.instant('tourBookingSuccess.categories.' + code);
+      if (translatedCode !== 'tourBookingSuccess.categories.' + code) {
+        return translatedCode;
+      }
+    }
     
     if (this.categories && this.categories.length > 0) {
       if (code) {

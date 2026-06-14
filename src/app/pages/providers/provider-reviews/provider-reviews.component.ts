@@ -5,6 +5,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-provider-reviews',
@@ -31,6 +32,7 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
   @Output() applyFiltersEvent = new EventEmitter<any>();
   @Output() submitReplyEvent = new EventEmitter<{reviewId: string, answerData: any}>();
   @Output() submitRejectEvent = new EventEmitter<{reviewId: string, reason: string}>();
+  @Output() goToReservationEvent = new EventEmitter<string | number>();
   
   // Variables de filtrado local
   public filteredReviews: ProviderReview[] = [];
@@ -91,24 +93,31 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
     private authService: AuthService,
     public i18nService: I18nFieldService,
     private panelStateService: ProviderPanelStateService,
-    private reviewsService: ReviewsService
+    private reviewsService: ReviewsService,
+    private translate: TranslateService
   ) {}
+
+  get currentLang(): string {
+    return this.translate.currentLang || this.translate.defaultLang || 'es';
+  }
 
   public goToReservation(reservationId: string | number | undefined): void {
     if (!reservationId) return;
     
-    // Si se pasa un bookingId como string (ej. "TB-243"), lo mantenemos como string
-    // Si es un id de BD numerico, lo mantenemos como number
-    const finalId = reservationId;
-    
-    // 2. Establecer el flag de retorno a reseñas
-    this.panelStateService.setReturnToReviews(true);
-    
-    // 3. Decirle al panel que debe abrir la reserva con este ID
-    this.panelStateService.setReservationToOpen(finalId);
-    
-    // 4. Cambiar la vista a reservas
-    this.panelStateService.setView('reservas');
+    if (this.isCliente) {
+      this.goToReservationEvent.emit(reservationId);
+    } else {
+      const finalId = reservationId;
+      
+      // 2. Establecer el flag de retorno a reseñas
+      this.panelStateService.setReturnToReviews(true);
+      
+      // 3. Decirle al panel que debe abrir la reserva con este ID
+      this.panelStateService.setReservationToOpen(finalId);
+      
+      // 4. Cambiar la vista a reservas
+      this.panelStateService.setView('reservas');
+    }
   }
 
   ngOnInit(): void {

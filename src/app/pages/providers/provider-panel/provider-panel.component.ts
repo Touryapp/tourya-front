@@ -40,6 +40,7 @@ export class ProviderPanelComponent implements OnInit {
   mostrarReviews = false;
   mostrarPagos = false;
   mostrarPerfil = false;
+  mostrarUsuarios = false;
   declinedReason: string = "";
 
   tours: Tour[] = [];
@@ -261,13 +262,14 @@ export class ProviderPanelComponent implements OnInit {
   /**
    * Cambia la vista activa del panel
    */
-  setView(view: 'dashboard' | 'tours' | 'templates' | 'reservas' | 'reviews' | 'pagos' | 'perfil'): void {
+  setView(view: 'dashboard' | 'tours' | 'templates' | 'reservas' | 'reviews' | 'pagos' | 'perfil' | 'usuarios'): void {
     this.mostrarTours = view === 'tours';
     this.mostrarTemplates = view === 'templates';
     this.mostrarTourManagement = view === 'reservas';
     this.mostrarReviews = view === 'reviews';
     this.mostrarPagos = view === 'pagos';
     this.mostrarPerfil = view === 'perfil';
+    this.mostrarUsuarios = view === 'usuarios';
 
     if (this.mostrarTours) {
       this.getToursProvider();
