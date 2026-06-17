@@ -1,25 +1,20 @@
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-bar breadcrumb-bg-01 text-center">
+  <!-- About Section -->
+  <section class="section about pt-5">
       <div class="container">
-          <div class="row">
+          
+          <div class="row mb-5 text-center">
               <div class="col-md-12 col-12">
-                  <h2 class="breadcrumb-title mb-2">About Us</h2>
+                  <h2 class="mb-2 text-dark">About Us</h2>
                   <nav aria-label="breadcrumb">
                       <ol class="breadcrumb justify-content-center mb-0">
-                          <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-                          <li class="breadcrumb-item">Pages</li>
-                          <li class="breadcrumb-item active" aria-current="page">About Us</li>
+                          <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark"><i class="isax isax-home5"></i></a></li>
+                          <li class="breadcrumb-item text-dark">Pages</li>
+                          <li class="breadcrumb-item active text-muted" aria-current="page">About Us</li>
                       </ol>
                   </nav>
               </div>
           </div>
-      </div>
-  </div>
-  <!-- /Breadcrumb -->
 
-  <!-- About Section -->
-  <section class="section about">
-      <div class="container">
           <div class="row align-items-center">
               <div class="col-lg-6">
                   <div class="about-image mb-4 mb-lg-0">
@@ -145,243 +140,6 @@
   </section>
   <!-- /Why Choose Us -->
 
-  <!-- Our Team -->
-  <section class="section team-section">
-      <div class="container">
-          <div>
-              <div class="row justify-content-center">
-                  <div class="col-md-7 d-flex justify-content-center">
-                      <div class="header-section text-center">
-                          <h2 class="mb-2">Our <span class="text-primary">Team</span></h2>
-                          <p class="fs-16 text-gray-6">We’re a team of explorers, innovators, and customer-focused professionals who are passionate about making travel easy and accessible for everyone.</p>
-                      </div>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-xl-3 col-md-6">
-                      <!-- Team Item-->
-                      <div class="team-item wow fadeInUp" data-wow-delay="0.2s">
-                          <div class="card">
-                              <div class="card-body">
-                                  <img src="assets/img/users/user-17.jpg" alt="Img" class="img-fluid">
-                              </div>
-                              <div class="team-overlay ">
-                                  <div class="bg-white py-2 px-3  rounded-pill  text-center">
-                                      <h5>James Parker</h5>
-                                      <p class="fs-16 text-gray-6">Chief Executive Officer</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <!-- /Team Item-->
-                  </div>
-                  <div class="col-xl-3 col-md-6">
-                      <!-- Team Item-->
-                      <div class="team-item wow fadeInUp" data-wow-delay="0.2s">
-                          <div class="card">
-                              <div class="card-body">
-                                  <img src="assets/img/users/user-18.jpg" alt="Img" class="img-fluid">
-                              </div>
-                              <div class="team-overlay">
-                                  <div class="bg-white py-2 px-3 rounded-pill  text-center">
-                                      <h5>Morgan Owen</h5>
-                                      <p class="fs-16 text-gray-6">Chief Operations Officer</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <!-- /Team Item-->
-                  </div>
-                  <div class="col-xl-3 col-md-6">
-                      <!-- Team Item-->
-                      <div class="team-item wow fadeInUp" data-wow-delay="0.2s">
-                          <div class="card">
-                              <div class="card-body">
-                                  <img src="assets/img/users/user-19.jpg" alt="Img" class="img-fluid">
-                              </div>
-                              <div class="team-overlay">
-                                  <div class="bg-white py-2 px-3 rounded-pill  text-center">
-                                      <h5>Richard Dolen</h5>
-                                      <p class="fs-16 text-gray-6">Chief Marketing Officer</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <!-- /Team Item-->
-                  </div>
-                  <div class="col-xl-3 col-md-6">
-                      <!-- Team Item-->
-                      <div class="team-item wow fadeInUp" data-wow-delay="0.2s">
-                          <div class="card">
-                              <div class="card-body">
-                                  <img src="assets/img/users/user-20.jpg" alt="Img" class="img-fluid">
-                              </div>
-                              <div class="team-overlay">
-                                  <div class="bg-white py-2 px-3 rounded-pill  text-center">
-                                      <h5>Linday Brookins</h5>
-                                      <p class="fs-16 text-gray-6">Technology Officer</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <!-- /Team Item-->
-                  </div>
-              </div>
-              <div class="text-center view-all wow fadeInUp">
-                  <a [routerLink]="routes.team" class="btn btn-dark">View All Experts<i class="isax isax-arrow-right-3 ms-2"></i></a>
-              </div>
-              <div class="col-md-12">
-                  <div class="counter-wrap">
-                      <div class="row">
-                          <div class="col-lg-3 col-md-6">
-                              <div class="counter-item mb-4">
-                                  <h6 class="mb-1 d-flex align-items-center justify-content-center text-teal"><i class="isax isax-global5 me-2"></i>Destinations Worldwide</h6>
-                                  <h3 class="display-6"><span class="counter" [countUp]="50" [options]="{ enableScrollSpy: true }">50</span>+</h3>
-                              </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6">
-                              <div class="counter-item mb-4">
-                                  <h6 class="mb-1 d-flex align-items-center justify-content-center text-purple"><i class="isax isax-calendar-2 me-2"></i>Booking Completed</h6>
-                                  <h3 class="display-6"><span class="counter" [countUp]="7000" [options]="{ enableScrollSpy: true }">7000</span>+</h3>
-                              </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6">
-                              <div class="counter-item mb-4">
-                                  <h6 class="mb-1 d-flex align-items-center justify-content-center text-pink"><i class="isax isax-tag-user5 me-2"></i>Client Globally</h6>
-                                  <h3 class="display-6"><span class="counter" [countUp]="100" [options]="{ enableScrollSpy: true }">100</span>+</h3>
-                              </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6">
-                              <div class="counter-item mb-4">
-                                  <h6 class="mb-1 d-flex align-items-center justify-content-center text-info"><i class="isax isax-status-up5 me-2"></i>Providers Registered</h6>
-                                  <h3 class="display-6"><span class="counter" [countUp]="89" [options]="{ enableScrollSpy: true }">89</span>+</h3>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="about-bg">
-              <img src="assets/img/bg/about-bg-01.svg" alt="img" class="about-bg-02">
-          </div>
-      </div>
-  </section>
-  <!-- /Our Team -->
 
-  <!-- user Section -->
-  <section class="section user-section pt-0">
-      <div class="container">
-          <div class="row justify-content-center">
-              <div class="col-xl-6 col-lg-10 text-center wow fadeInUp" data-wow-delay="0.2s">
-                  <div class="section-header text-center">
-                      <h2 class="mb-2">What’s Our <span class="text-primary  text-decoration-underline">User</span> Says</h2>
-                      <p class="sub-title">DreamsTour, a tour operator specializing in dream destinations, offers a variety of benefits for travelers.</p>
-                  </div>
-              </div>
-          </div>
-          <owl-carousel-o class=" testimonial-slider" [options]="testimonial">
-              <ng-template carouselSlide>
-                                  <!-- Testimonial Item-->
-              <div class="card border-white wow fadeInUp" data-wow-delay="0.2s">
-                  <div class="card-body">
-                      <h6 class="mb-4">Great Hospitalization</h6>
-                      <p class="mb-4">Dream Tours is the only way to go. We had the time of our life on our trip to the Ark. The customer service was wonderful & the staff was very helpful.</p>
-                      <div class="border-top pt-4 d-flex align-items-center justify-content-between">
-                          <div class="d-flex align-items-center">
-                              <a href="javascript:void(0);" class="avatar avatar-md  flex-shrink-0">
-                                  <img src="assets/img/users/user-01.jpg" class="rounded-circle" alt="img">
-                              </a>
-                              <div class="ms-2">
-                                  <h6 class="fs-16 fw-medium"><a href="javascript:void(0);">Andrew Fetcher</a></h6>
-                                  <p>Newyork, United States</p>
-                              </div>
-                          </div>
-                          <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
-                      </div>
-                  </div>
-              </div>
-              <!-- /Testimonial Item-->
-              </ng-template>
-              <ng-template carouselSlide>
-              <!-- Testimonial Item-->
-              <div class="card border-white wow fadeInUp" data-wow-delay="0.2s">
-                  <div class="card-body">
-                      <h6 class="mb-4">Hidden Treasure</h6>
-                      <p class="mb-4">I went on the Gone with the Wind tour, and it was my first multi-day bus tour. The experience was terrific, thanks to the friendly tour guides.</p>
-                      <div class="border-top pt-4 d-flex align-items-center justify-content-between">
-                          <div class="d-flex align-items-center">
-                              <a href="javascript:void(0);" class="avatar avatar-md  flex-shrink-0">
-                                  <img src="assets/img/users/user-02.jpg" class="rounded-circle" alt="img">
-                              </a>
-                              <div class="ms-2">
-                                  <h6 class="fs-16 fw-medium"><a href="javascript:void(0);">Bryan Bradfield</a></h6>
-                                  <p>Cape Town, South Africa</p>
-                              </div>
-                          </div>
-                          <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
-                      </div>
-                  </div>
-              </div>
-              <!-- /Testimonial Item-->
-              </ng-template>
-              <ng-template carouselSlide>
-              <!-- Testimonial Item-->
-              <div class="card border-white wow fadeInUp" data-wow-delay="0.2s">
-                  <div class="card-body">
-                      <h6 class="mb-4">Easy to Find your Leisuere Place</h6>
-                      <p class="mb-4">Thanks for arranging a smooth travel experience for us. Our cab driver was polite, timely, and helpful. The team ensured making it a stress-free trip.</p>
-                      <div class="border-top pt-4 d-flex align-items-center justify-content-between">
-                          <div class="d-flex align-items-center">
-                              <a href="javascript:void(0);" class="avatar avatar-md  flex-shrink-0">
-                                  <img src="assets/img/users/user-03.jpg" class="rounded-circle" alt="img">
-                              </a>
-                              <div class="ms-2">
-                                  <h6 class="fs-16 fw-medium"><a href="javascript:void(0);">Prajakta Sasane</a></h6>
-                                  <p>Paris, France</p>
-                              </div>
-                          </div>
-                          <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
-                      </div>
-                  </div>
-              </div>
-              <!-- /Testimonial Item-->
-              </ng-template>
-              <ng-template carouselSlide>
-              <!-- Testimonial Item-->
-              <div class="card border-white wow fadeInUp" data-wow-delay="0.2s">
-                  <div class="card-body">
-                      <h6 class="mb-4">Great Hospitalization</h6>
-                      <p class="mb-4">Dream Tours is the only way to go. We had the time of our life on our trip to the Ark. The customer service was wonderful & the staff was very helpful.</p>
-                      <div class="border-top pt-4 d-flex align-items-center justify-content-between">
-                          <div class="d-flex align-items-center">
-                              <span class="avatar avatar-md  flex-shrink-0">
-                <img src="assets/img/users/user-01.jpg" class="rounded-circle" alt="img">
-              </span>
-                              <div class="ms-2">
-                                  <h6 class="fs-16 fw-medium">Andrew Fetcher</h6>
-                                  <p>Newyork, United States</p>
-                              </div>
-                          </div>
-                          <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
-                      </div>
-                  </div>
-              </div>
-              <!-- /Testimonial Item-->
-              </ng-template>
-
-
-
-
-
-
-
-
-          </owl-carousel-o>
-      </div>
-      <div class="testimonial-bg">
-          <img src="assets/img/bg/testimonial-bg-01.svg" alt="img">
-      </div>
-  </section>
-  <!-- /user Section -->
 
 

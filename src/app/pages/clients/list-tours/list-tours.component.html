@@ -335,14 +335,14 @@
                                             </div>
                                             <div class="filter-range mt-3">
                                                 <div class="d-flex align-items-center">
-                                                    <input type="range" class="form-range" min="0" max="100000000"
+                                                    <input type="range" class="form-range" min="0" max="5000000"
                                                         step="10000" [(ngModel)]="minPrice"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (input)="onMinPriceChange($event)"
                                                         (change)="onMinPriceChange($event)">
                                                 </div>
                                                 <div class="d-flex align-items-center mt-2">
-                                                    <input type="range" class="form-range" min="0" max="100000000"
+                                                    <input type="range" class="form-range" min="0" max="5000000"
                                                         step="10000" [(ngModel)]="maxPrice"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (input)="onMaxPriceChange($event)"

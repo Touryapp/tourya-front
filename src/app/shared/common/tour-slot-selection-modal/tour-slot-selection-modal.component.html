@@ -19,10 +19,10 @@
         <div class="tour-info-section" *ngIf="selectedTour">
           <div class="tour-header">
             <div class="tour-image" *ngIf="hasImages()">
-              <img [src]="getTourImage()" [alt]="getTourName()" class="img-fluid rounded">
+              <img [src]="getTourImage()" [alt]="getTourName() | localizedName" class="img-fluid rounded">
             </div>
             <div class="tour-details">
-              <h5 class="tour-name">{{ getTourName() }}</h5>
+              <h5 class="tour-name">{{ getTourName() | localizedName }}</h5>
               <div class="tour-meta">
                 <span class="location">
                   <i class="isax isax-location me-1"></i>
@@ -37,7 +37,7 @@
                   {{ getTourRating() }}
                 </span>
               </div>
-              <p class="tour-description">{{ getTourDescription() }}</p>
+              <p class="tour-description">{{ getTourDescription() | localizedName }}</p>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@
 
                 <div class="slot-price">
                   <span class="from-text">{{ 'tourSlotModal.from' | translate }}</span>
-                  <span class="price">{{ formatPrice(slot.prices?.[0]?.price || 0) }}</span>
+                  <span class="price">{{ formatPrice(slot.prices[0]?.price || 0) }}</span>
                 </div>
 
                 <!-- Selected indicator -->

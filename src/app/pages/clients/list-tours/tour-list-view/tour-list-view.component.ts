@@ -150,7 +150,7 @@ export class TourListViewComponent implements OnChanges {
     this.selectTour.emit(tour);
   }
 
-  getTranslatedCategory(tourDto: any): string {
+  getCategoryNameObj(tourDto: any): any {
     const code = tourDto?.subCategory;
     const nameFallback = tourDto?.subCategoryName || tourDto?.subCategory || tourDto?.categoryName || 'N/A';
     
@@ -160,7 +160,7 @@ export class TourListViewComponent implements OnChanges {
           if (cat.subCategories) {
             const found = cat.subCategories.find((sub: any) => sub.code === code);
             if (found && found.name) {
-              return this.i18nService.getValue(found.name) || nameFallback;
+              return found.name;
             }
           }
         }
@@ -170,7 +170,7 @@ export class TourListViewComponent implements OnChanges {
       if (catId) {
         const foundCat = this.categories.find(c => c.id === catId);
         if (foundCat && foundCat.name) {
-          return this.i18nService.getValue(foundCat.name) || nameFallback;
+          return foundCat.name;
         }
       }
     }

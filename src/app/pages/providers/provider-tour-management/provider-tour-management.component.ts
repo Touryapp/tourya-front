@@ -556,7 +556,6 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       }
     });
   }
-
   /**
    * Mapea una ClientReservation del API a ProviderTourBooking para la tabla (proveedores)
    * Nota: El API devuelve la misma estructura ClientReservation para proveedores y clientes
@@ -566,7 +565,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     return {
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
-      tourName: (this.i18nService.getValue(reservation.tourName) || '').length > 20 ? (this.i18nService.getValue(reservation.tourName) || '').substring(0, 20) + '...' : (this.i18nService.getValue(reservation.tourName) || ''),
+      tourName: reservation.tourName || '',
       tourType: 'Tour',
       img: 'tours-21.jpg',
       customerName: reservation.serviceResponsibleName || reservation.payerName,
@@ -620,7 +619,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       sNo: index + 1,
       id: `RES-${reservation.reservationId}`,
       tourId: reservation.tourId, // Agregar tourId para reagendamiento
-      tourName: (this.i18nService.getValue(reservation.tourName) || '').length > 20 ? (this.i18nService.getValue(reservation.tourName) || '').substring(0, 20) + '...' : (this.i18nService.getValue(reservation.tourName) || ''),
+      tourName: reservation.tourName,
       tourType: 'Tour', // El API no devuelve tipo de tour
       img: 'tours-21.jpg', // Imagen por defecto
       customerName: reservation.serviceResponsibleName || reservation.payerName,

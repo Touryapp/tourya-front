@@ -79,7 +79,7 @@
           </div>
           <div class="d-flex align-items-center justify-content-between mb-2">
             <div class="mb-2">
-              <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">{{ i18nService.getValue(tour.name) }}<span *ngIf="tour?.highlight" class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
+              <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">{{ (tour.name | localizedName) }}<span *ngIf="tour?.highlight" class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
               <div class="d-flex align-items-center flex-wrap">
                 <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-receipt text-primary me-2"></i>{{ getCategoryName(tour.tourCategoryId) }}</p>
                 <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ getLocationDisplay() }}</p>
@@ -101,7 +101,7 @@
         <div class="bg-light-200 card-bg-light mb-4">
           <h5 class="fs-18 mb-3">Description</h5>
           <div class="mb-2">
-            <p [innerHtml]="i18nService.getValue(tour.description)"></p>
+            <p [innerHtml]="(tour.description | localizedName)"></p>
           </div>
         </div>
         <!-- /Description -->
@@ -114,7 +114,7 @@
               <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
                 <i class="isax isax-send-sqaure-2 fs-16"></i>
               </span>
-              <p>{{ i18nService.getValue(att.description) }}</p>
+              <p>{{ (att.description | localizedName) }}</p>
             </div>
           </div>
         </div>
@@ -131,12 +131,12 @@
                   <div class="flow-content">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                       <div>
-                        <h6 class="fw-medium mb-1">{{ i18nService.getValue(it.title) || ('Day ' + (it.day || (i+1))) }}</h6>
+                        <h6 class="fw-medium mb-1">{{ (it.title | localizedName) || ('Day ' + (it.day || (i+1))) }}</h6>
                         <p>{{ it.time || '' }}</p>
                       </div>
                       <span *ngIf="getImage(i)" class="avatar avatar-lg avatar-rounded flex-shrink-0"><img [src]="getImage(i)" alt="Img"></span>
                     </div>
-                    <p>{{ i18nService.getValue(it.description) || '' }}</p>
+                    <p>{{ (it.description | localizedName) || '' }}</p>
                   </div>
                 </div>
               </div>
@@ -152,14 +152,14 @@
             <div class="col-md-6">
               <ng-container *ngIf="tour?.includes?.length">
                 <p class="d-flex align-items-center mb-2" *ngFor="let inc of tour.includes">
-                  <i class="isax isax-tick-square5 text-success me-2"></i> {{ i18nService.getValue(inc.description) }}
+                  <i class="isax isax-tick-square5 text-success me-2"></i> {{ (inc.description | localizedName) }}
                 </p>
               </ng-container>
             </div>
             <div class="col-md-6">
               <ng-container *ngIf="tour?.excludes?.length">
                 <p class="d-flex align-items-center mb-2" *ngFor="let exc of tour.excludes">
-                  <i class="isax isax-close-square5 text-danger me-2"></i> {{ i18nService.getValue(exc.description) }}
+                  <i class="isax isax-close-square5 text-danger me-2"></i> {{ (exc.description | localizedName) }}
                 </p>
               </ng-container>
             </div>
@@ -196,12 +196,12 @@
             <div class="accordion-item mb-2" *ngFor="let f of tour.faq; let idx = index">
               <div class="accordion-header">
                 <button class="accordion-button fw-medium" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#faq-collapse-' + idx" aria-expanded="false" [attr.aria-controls]="'faq-collapse-' + idx">
-                  {{ i18nService.getValue(f.question) }}
+                  {{ (f.question | localizedName) }}
                 </button>
               </div>
               <div [id]="'faq-collapse-' + idx" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
                 <div class="accordion-body">
-                  <p class="mb-0">{{ i18nService.getValue(f.answer) }}</p>
+                  <p class="mb-0">{{ (f.answer | localizedName) }}</p>
                 </div>
               </div>
             </div>
@@ -214,7 +214,7 @@
           <h5 class="fs-18 mb-3">Cancellation Policies</h5>
           <div *ngFor="let p of tour.cancellationPolicies" class="mb-3">
             <p class="mb-1"><strong>Type:</strong> {{ p.cancellationPolicyType }}</p>
-            <p class="mb-0">{{ i18nService.getValue(p.observations) }}</p>
+            <p class="mb-0">{{ (p.observations | localizedName) }}</p>
           </div>
         </div>
         <!-- /Cancellation Policies -->

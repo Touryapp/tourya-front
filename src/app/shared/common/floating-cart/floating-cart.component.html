@@ -70,7 +70,7 @@
           <div class="tour-card-image">
             <img 
               [src]="item.displayImageUrl" 
-              [alt]="i18nService.getValue(item.tour?.name)"
+              [alt]="(item.tour?.name | localizedName)"
               (error)="$any($event.target).src !== 'assets/img/tours/tours-01.jpg' ? $any($event.target).src='assets/img/tours/tours-01.jpg' : null"
               loading="lazy">
             <div class="day-badge">
@@ -82,8 +82,8 @@
           <!-- Tour Content -->
           <div class="tour-card-content">
             <div class="tour-card-header">
-              <h6 class="tour-card-name" [title]="i18nService.getValue(item.tour?.name)">
-                {{ i18nService.getValue(item.tour?.name) }}
+              <h6 class="tour-card-name" [title]="(item.tour?.name | localizedName)">
+                {{ (item.tour?.name | localizedName) }}
               </h6>
               <button 
                 class="btn-remove-tour" 

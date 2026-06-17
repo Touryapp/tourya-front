@@ -171,8 +171,11 @@
                                     </span>
 
                                     <!-- Columnas normales -->
-                                    <span *ngIf="column.type !== 'image' && column.type !== 'status'">
-                                        {{ getCellValue(booking, column) }}
+                                    <span *ngIf="column.type !== 'image' && column.type !== 'status' && column.field === 'tourName'" class="d-inline-block text-truncate" style="max-width: 250px; vertical-align: bottom;">
+                                        {{ getCellValue(booking, column) | localizedName }}
+                                    </span>
+                                    <span *ngIf="column.type !== 'image' && column.type !== 'status' && column.field !== 'tourName'">
+                                        {{ getCellValue(booking, column) | localizedName }}
                                     </span>
                                 </td>
 
@@ -450,11 +453,11 @@
                                                     <div class="flow-content">
                                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                                             <div>
-                                                                <h6 class="fw-medium mb-1">{{ i18nService.getValue(it.title) || (('provider-tour-management.modal.stopLabel' | translate) + ' ' + (i + 1)) }}</h6>
+                                                                <h6 class="fw-medium mb-1">{{ (it.title | localizedName) || (('provider-tour-management.modal.stopLabel' | translate) + ' ' + (i + 1)) }}</h6>
                                                                 <p class="mb-0 text-muted fs-13">{{ it.time || '' }}</p>
                                                             </div>
                                                         </div>
-                                                        <p class="mb-0">{{ i18nService.getValue(it.description) || '' }}</p>
+                                                        <p class="mb-0">{{ (it.description | localizedName) || '' }}</p>
                                                     </div>
                                                 </div>
                                             }
@@ -676,7 +679,7 @@
                                                     [checked]="isReasonSelected(reason.id)"
                                                     (change)="toggleReviewReason(reason.id)">
                                                 <label class="form-check-label fs-14" [for]="'reason_' + reason.id">
-                                                    {{ reason.label }}
+                                                    {{ (reason.label | localizedName) }}
                                                 </label>
                                             </div>
                                         </div>
@@ -688,11 +691,15 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">{{ 'provider-tour-management.modal.imagesLabel' | translate }}</label>
-                                <input type="file" class="form-control" accept=".jpg, .jpeg, .png" multiple
-                                       (change)="onReviewImagesSelected($event)">
-                                @if (reviewImages.length > 0) {
-                                    <small class="text-muted">{{ reviewImages.length }} {{ 'provider-tour-management.modal.imagesSelected' | translate }}</small>
-                                }
+                                <div class="input-group">
+                                    <label class="input-group-text bg-primary text-white border-primary" for="reviewImagesInput" style="cursor: pointer;">
+                                        <i class="isax isax-folder-open me-2"></i> {{ 'provider-tour-management.modal.chooseFiles' | translate }}
+                                    </label>
+                                    <input type="file" id="reviewImagesInput" class="d-none" accept=".jpg, .jpeg, .png" multiple (change)="onReviewImagesSelected($event)">
+                                    <span class="form-control bg-white text-muted">
+                                        {{ reviewImages.length > 0 ? (reviewImages.length + ' ' + ('provider-tour-management.modal.imagesSelected' | translate)) : ('provider-tour-management.modal.noFilesSelected' | translate) }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -799,7 +806,7 @@
                 <div class="modal-body">
                     <!-- Booking Info -->
                     <div class="mb-3 p-3 bg-light rounded">
-                        <h6 class="mb-1">{{ rescheduleDateModalBooking.tourName }}</h6>
+                        <h6 class="mb-1">{{ rescheduleDateModalBooking.tourName | localizedName }}</h6>
                         <p class="fs-14 text-muted mb-0">
                             <i class="isax isax-receipt-text me-1"></i>{{ 'provider-tour-management.modal.reservaLabel' | translate }}: {{ rescheduleDateModalBooking.id }}
                         </p>

@@ -46,32 +46,44 @@ export interface PaymentResponseDto {
   paymentId: number;
   transactionId: string;
   transactionData: string;
-  reservations: ReservationDto[]; // ✨ Ahora es un array de reservas
+  amountCredit: number | null;
+  creditsUsed: Array<{ creditId: number; amountUsed: number }> | null;
+  reservations: ReservationDto[];
   payer: PayerDto;
   createdDate: string;
   lastModifiedDate: string;
   createdBy: number;
   lastModifiedBy: number;
-  totalAmount?: number; // ✨ Total original antes de créditos
-  appliedCredits?: number; // ✨ Valor de créditos aplicados
-  amountCredit: number | null; // ✨ Nuevo campo del servicio
-  creditsUsed: number | null; // ✨ Nuevo campo del servicio
+  totalAmount?: number;
+  appliedCredits?: number;
 }
 
 export interface ReservationDto {
   reservationId: number;
+  bookingId: string;
   paymentId: number;
-  itemId: number; // ✨ ID del item del carrito
-  qrUrl: string; // ✨ QR code único por reserva
+  itemId: number;
+  qrUrl: string;
   reservationDate: string;
-  deliveryStatus: DeliveryStatus; // ✨ Enum tipado
-  serviceResponsible: ServiceResponsibleDto; // ✨ Responsable del servicio
+  deliveryStatus: DeliveryStatus;
+  serviceResponsible: ServiceResponsibleDto;
+  tourOperator: {
+    providerUserId: number;
+    name: string;
+    email: string;
+    phone: string | number;
+  };
   createdDate: string;
   lastModifiedDate: string;
   createdBy: number;
   lastModifiedBy: number;
   
-  // ✨ Nuevos campos informativos del tour
+  payerName: string;
+  payerEmail: string;
+  payerPhone: string;
+  payerDocumentType: string;
+  payerDocumentNumber: string;
+  
   tourId: number;
   tourName: string;
   tourImageUrl: string;
@@ -81,6 +93,15 @@ export interface ReservationDto {
   returnDate: string | null;
   destination: string;
   price: number;
+  providerTotalAmount: number;
+  priceBreakdown: Array<{
+    ageType: string;
+    quantity: number;
+    unitPrice: number;
+    providerUnitPrice: number;
+    subtotal: number;
+    providerSubtotal: number;
+  }>;
   travellers: string;
   activities: string[];
   extraServices: string[];

@@ -62,7 +62,7 @@
                                         class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
                                         <div>
                                             <h5 class="mb-1 text-truncate"><a [routerLink]="[routes.editTour, tour.id]">
-                                                    {{displayTourName(tour) }}
+                                                    {{displayTourName(tour) | localizedName }}
                                                 </a>
                                             </h5>
                                             <p class="fs-14 d-flex align-items-center">
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                     <p class="fs-14 border-bottom pb-3 mb-3"
-                                        [innerHTML]="displayTourDescription(tour) | slice:0:100 | safeHtml ">
+                                        [innerHTML]="(displayTourDescription(tour) | localizedName) | slice:0:100 | safeHtml ">
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
                                         <div class="d-flex align-items-center">

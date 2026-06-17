@@ -104,7 +104,7 @@
                                             <label class="form-label">{{ 'cartSummary.country' | translate }}</label>
                                             <select class="form-control" [(ngModel)]="contactForm.country" (change)="onCountryChange($event)">
                                                 <option value="">{{ 'cartSummary.selectCountry' | translate }}</option>
-                                                <option *ngFor="let country of countries" [value]="country.id">{{ i18nService.getValue(country.name) }}</option>
+                                                <option *ngFor="let country of countries" [value]="country.id">{{ (country.name | localizedName) }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -113,7 +113,7 @@
                                             <label class="form-label">{{ 'cartSummary.stateOrDepartment' | translate }}</label>
                                             <select class="form-control" [(ngModel)]="contactForm.state" (change)="onDepartmentChange($event)" [disabled]="!departments.length">
                                                 <option value="">{{ 'cartSummary.selectDepartment' | translate }}</option>
-                                                <option *ngFor="let dept of departments" [value]="dept.id">{{ i18nService.getValue(dept.name) }}</option>
+                                                <option *ngFor="let dept of departments" [value]="dept.id">{{ (dept.name | localizedName) }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -122,7 +122,7 @@
                                             <label class="form-label">{{ 'cartSummary.city' | translate }}</label>
                                             <select class="form-control" [(ngModel)]="contactForm.city" [disabled]="!cities.length">
                                                 <option value="">{{ 'cartSummary.selectCity' | translate }}</option>
-                                                <option *ngFor="let city of cities" [value]="city.id">{{ i18nService.getValue(city.name) }}</option>
+                                                <option *ngFor="let city of cities" [value]="city.id">{{ (city.name | localizedName) }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -393,7 +393,7 @@
                                 <button 
                                     type="button" 
                                     class="btn btn-sm btn-outline-danger position-absolute delete-tour-btn"
-                                    (click)="confirmRemoveItem(item.id, i18nService.getValue(item.tour.name))"
+                                    (click)="confirmRemoveItem(item.id, item.tour.name)"
                                     [disabled]="processing"
                                     [title]="'cartSummary.removeFromCart' | translate">
                                     <i class="fas fa-times" *ngIf="!processing"></i>
@@ -402,10 +402,10 @@
 
                                 <div class="d-flex align-items-start mb-3">
                                     <img [src]="getTourImage(item)" 
-                                         [alt]="i18nService.getValue(item.tour.name)" class="tour-thumb me-3"
+                                         [alt]="(item.tour.name | localizedName)" class="tour-thumb me-3"
                                          (error)="$any($event.target).src !== 'assets/img/tours/tours-01.jpg' ? $any($event.target).src='assets/img/tours/tours-01.jpg' : null">
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1">{{ i18nService.getValue(item.tour.name) }}</h6>
+                                        <h6 class="mb-1">{{ (item.tour.name | localizedName) }}</h6>
                                         <div class="tour-details mb-2">
                                             <p class="text-muted small mb-1">
                                                 <i class="fas fa-calendar me-1"></i>

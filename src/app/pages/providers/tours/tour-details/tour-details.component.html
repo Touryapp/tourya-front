@@ -3,12 +3,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">{{ tour ? i18nService.getValue(tour.name) : 'Tour Details' }}</h2>
+                    <h2 class="breadcrumb-title mb-2">{{ tour ? (tour.name | localizedName) : 'Tour Details' }}</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center mb-0">
                             <li class="breadcrumb-item"><a [routerLink]="routes.tourPanelProvider"><i class="isax isax-home5"></i></a></li>
                             <li class="breadcrumb-item">Tours</li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ tour ? i18nService.getValue(tour.name) : 'Tour Details' }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ tour ? (tour.name | localizedName) : 'Tour Details' }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -65,16 +65,18 @@
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <div class="mb-2">
-                                <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">{{ tour ? i18nService.getValue(tour.name) : '' }}<span *ngIf="tour?.highlight" class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
+                                <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">{{ tour ? (tour.name | localizedName) : '' }}<span *ngIf="tour?.highlight" class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
                                 <div class="d-flex align-items-center flex-wrap">
                                     <p *ngIf="tour?.tourCategory" class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-receipt text-primary me-2"></i>{{ (tour.tourCategory.name | localizedName) || tour.tourCategory.id }}</p>
-                                    <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ getLocationDisplay() }}
+                                    <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>
+                                        <ng-container *ngFor="let p of getLocationDisplayParts(); let last = last">
+                                            <ng-container *ngIf="p.isI18n">{{ p.text | localizedName }}</ng-container>
+                                            <ng-container *ngIf="!p.isI18n">{{ p.text }}</ng-container>
+                                            <ng-container *ngIf="!last">, </ng-container>
+                                        </ng-container>
                                         <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2" (click)="scrollToLocation($event)">View Location</a>
                                     </p>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ tour.rating || '—' }}</span>
-                                        <p class="fs-14"><a href="#reviews">({{ tour && tour.rating ? '' : '—' }} Reviews)</a></p>
-                                    </div>
+                                        <!-- Ratings and Reviews removed -->
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mb-3">
@@ -89,7 +91,7 @@
                     <div class="bg-light-200 card-bg-light mb-4">
                         <h5 class="fs-18 mb-3">Description</h5>
                         <div class="mb-2">
-                            <p [innerHtml]="i18nService.getValue(tour.description)"></p>
+                            <p [innerHtml]="(tour.description | localizedName)"></p>
                         </div>
                         <!-- <div class="read-more">
                             <div class="more-text" [ngStyle]="{'display':isMore[0]?'block':'none'}">
@@ -109,7 +111,7 @@
                                     <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
                                         <i class="isax isax-send-sqaure-2 fs-16"></i>
                                     </span>
-                                    <p>{{ i18nService.getValue(att.description) }}</p>
+                                    <p>{{ (att.description | localizedName) }}</p>
                                 </div>
                             </div>
                     </div>
@@ -127,13 +129,11 @@
                                                 <div class="flow-content">
                                                   <div class="d-flex align-items-center justify-content-between mb-2">
                                                     <div>
-                                                      <h6 class="fw-medium mb-1">{{ i18nService.getValue(it.title) || ('Day ' + (it.day || (i+1))) }}</h6>
+                                                      <h6 class="fw-medium mb-1">{{ (it.title | localizedName) || ('Day ' + (it.day || (i+1))) }}</h6>
                                                       <p>{{ it.time || '' }}</p>
                                                     </div>
-                                                    <!-- optional image if gallery exists -->
-                                                    <span *ngIf="getImage(i)" class="avatar avatar-lg avatar-rounded flex-shrink-0"><img [src]="getImage(i)" alt="Img"></span>
                                                   </div>
-                                                  <p>{{ i18nService.getValue(it.description) || '' }}</p>
+                                                  <p>{{ (it.description | localizedName) || '' }}</p>
                                                 </div>
                                               </div>
                                             </ng-container>
@@ -153,14 +153,14 @@
                             <div class="col-md-6">
                                 <ng-container *ngIf="tour?.includes?.length">
                                   <p class="d-flex align-items-center mb-2" *ngFor="let inc of tour.includes">
-                                    <i class="isax isax-tick-square5 text-success me-2"></i> {{ i18nService.getValue(inc.description) }}
+                                    <i class="isax isax-tick-square5 text-success me-2"></i> {{ (inc.description | localizedName) }}
                                   </p>
                                 </ng-container>
                             </div>
                             <div class="col-md-6">
                                                                 <ng-container *ngIf="tour?.excludes?.length">
                                                                     <p class="d-flex align-items-center mb-2" *ngFor="let exc of tour.excludes">
-                                    <i class="isax isax-close-square5 text-danger me-2"></i> {{ i18nService.getValue(exc.description) }}
+                                    <i class="isax isax-close-square5 text-danger me-2"></i> {{ (exc.description | localizedName) }}
                                   </p>
                                 </ng-container>
                             </div>
@@ -199,12 +199,12 @@
                                                             <div class="accordion-item mb-2" *ngFor="let f of tour.faq; let idx = index">
                                 <div class="accordion-header">
                                   <button class="accordion-button fw-medium" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#faq-collapse-' + idx" aria-expanded="false" [attr.aria-controls]="'faq-collapse-' + idx">
-                                    {{ i18nService.getValue(f.question) }}
+                                    {{ (f.question | localizedName) }}
                                   </button>
                                 </div>
                                 <div [id]="'faq-collapse-' + idx" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
                                   <div class="accordion-body">
-                                    <p class="mb-0">{{ i18nService.getValue(f.answer) }}</p>
+                                    <p class="mb-0">{{ (f.answer | localizedName) }}</p>
                                   </div>
                                 </div>
                               </div>
@@ -215,189 +215,6 @@
                         </div>
                     </div>
                     <!-- /FAQ -->
-
-                    <!-- Reviews -->
-                    <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
-                        <h6 class="mb-3">Reviews ({{ totalReviews }})</h6>
-                        <!-- In the provider side, usually they don't review their own tour, but leaving the button as is for now or they can see reviews -->
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 d-flex">
-                            <div class="rating-item bg-light-200 text-center flex-fill mb-3">
-                                <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
-                                <h5 class="display-6">{{ tour.rating || 0 }} / 5.0</h5>
-                                <div class="d-inline-flex align-items-center justify-content-center mb-3">
-                                    <i class="ti ti-star-filled text-warning me-1" *ngFor="let s of [1,2,3,4,5]; let i=index" [ngClass]="{'ti-star-filled text-warning': i < (tour.rating || 0), 'ti-star-off text-muted': i >= (tour.rating || 0)}"></i>
-                                </div>
-                                <p>Based On {{ totalReviews }} Reviews</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 d-flex">
-                            <div class="card rating-progress shadow-none flex-fill mb-3">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">5 Star Ratings</p>
-                                        <div class="progress w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">4 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">3 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">2 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <p class="me-2 text-nowrap mb-0">1 Star Ratings</p>
-                                        <div class="progress mb-0 w-100" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar bg-primary" style="width: 0"></div>
-                                        </div>
-                                        <p class="progress-count ms-2">0</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Reviews List -->
-                    <div *ngIf="reviewsLoading" class="text-center py-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-
-                    <ng-container *ngFor="let review of reviews">
-                        <div class="card review-item shadow-none mb-3">
-                            <div class="card-body p-3">
-                                <div class="review-info">
-                                    <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <span class="avatar avatar-lg me-2 flex-shrink-0">
-                                                <img [src]="review.customerImage || 'assets/img/users/user-01.jpg'" class="rounded-circle" alt="img">
-                                            </span>
-                                            <div>
-                                                <h6 class="fs-16 fw-medium mb-1">{{ review.customerName }}</h6>
-                                                <div class="d-flex align-items-center flex-wrap date-info">
-                                                    <p class="fs-14 mb-0">{{ review.date | date:'mediumDate' }}</p>
-                                                    <p class="fs-14 d-inline-flex align-items-center mb-0 ms-2">
-                                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ review.rating }}</span>
-                                                        <span *ngIf="review.reasonId && getReasonLabel(review.reasonType, review.reasonId)" 
-                                                              class="badge bg-light text-dark border ms-1" 
-                                                              style="font-size: 0.70rem; padding: 0.35em 0.5em;">
-                                                            <i class="fa-solid fa-check text-success me-1" *ngIf="review.reasonType === 'POSITIVE'"></i>
-                                                            <i class="fa-solid fa-xmark text-danger me-1" *ngIf="review.reasonType === 'NEGATIVE'"></i>
-                                                            {{ getReasonLabel(review.reasonType, review.reasonId) }}
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mb-2">{{ i18nService.getValue(review.comment) }}</p>
-                                    
-                                    <!-- Review Images -->
-                                    <div class="mb-2" *ngIf="review.attachmentUrls && review.attachmentUrls.length > 0">
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <a *ngFor="let imageUrl of review.attachmentUrls" 
-                                               [href]="imageUrl" 
-                                               target="_blank" 
-                                               class="review-image-thumbnail">
-                                                <img [src]="imageUrl" 
-                                                     alt="Review attachment" 
-                                                     class="rounded"
-                                                     style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>{{ review.likes || 0 }}</a>
-                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>{{ review.dislikes || 0 }}</a>
-                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>{{ review.hearts || 0 }}</a>
-                                    </div>
-
-                                    <!-- Provider Answer -->
-                                    <div *ngIf="review.answer" class="bg-light-500 rounded p-3 mt-3 ms-4 border-start border-primary border-3">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <span class="avatar avatar-sm me-2">
-                                                <img [src]="review.answer.providerImage || 'assets/img/profiles/avatar-02.jpg'" class="rounded-circle" alt="provider">
-                                            </span>
-                                            <div>
-                                                <h6 class="fs-14 fw-medium mb-0">{{ review.answer.providerName || 'Provider Response' }}</h6>
-                                                <small class="text-muted">{{ review.answer.date | date:'mediumDate' }}</small>
-                                            </div>
-                                        </div>
-                                        <p class="fs-14 mb-0">{{ i18nService.getValue(review.answer.comment) }}</p>
-                                        
-                                        <!-- Answer Images -->
-                                        <div class="mb-2" *ngIf="review.answer.attachmentUrls && review.answer.attachmentUrls.length > 0">
-                                            <div class="d-flex flex-wrap gap-2">
-                                                <a *ngFor="let imageUrl of review.answer.attachmentUrls" 
-                                                   [href]="imageUrl" 
-                                                   target="_blank" 
-                                                   class="review-image-thumbnail">
-                                                    <img [src]="imageUrl" 
-                                                         alt="Answer attachment" 
-                                                         class="rounded"
-                                                         style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-
-                    <div *ngIf="reviewsTotalPages > 1" class="mt-4 mb-4">
-                        <nav class="pagination-nav">
-                            <ul class="pagination justify-content-center">
-                                <!-- Botón Anterior -->
-                                <li class="page-item" [ngClass]="{ disabled: isFirstReviewPage() }">
-                                    <a class="page-link" href="javascript:void(0);" (click)="onGoToPreviousReviewPage()" aria-label="Previous">
-                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
-                                    </a>
-                                </li>
-
-                                <!-- Números de página -->
-                                <li class="page-item" *ngFor="let pageNum of getReviewPageNumbers()" [ngClass]="{ active: pageNum === (reviewsPageNumber + 1) }">
-                                    <a class="page-link" href="javascript:void(0);" (click)="onGoToReviewPage(pageNum)">{{ pageNum }}</a>
-                                </li>
-
-                                <!-- Botón Siguiente -->
-                                <li class="page-item" [ngClass]="{ disabled: isLastReviewPage() }">
-                                    <a class="page-link" href="javascript:void(0);" (click)="onGoToNextReviewPage()" aria-label="Next">
-                                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <!-- Información de paginación -->
-                            <div class="text-center mt-2">
-                                <small class="text-muted">
-                                    Mostrando {{ reviewsPageNumber * reviewsPageSize + 1 }} - {{ Math.min((reviewsPageNumber + 1) * reviewsPageSize, totalReviews) }} de {{ totalReviews }} reseñas
-                                </small>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-                <!-- /Reviews -->
 
                 <!-- Tour Sidebar -->
                 <div class="col-xl-4 ">
@@ -485,61 +302,4 @@
             </div>
         </div>
     </div>
-        <!-- Review Modal -->
-        <div class="modal fade" id="add_review">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header d-flex align-items-center justify-content-between">
-                        <h5>Write a Review</h5>
-                        <a href="javascript:void(0);" data-bs-dismiss="modal" aria-label="Close">
-                            <i class="ti ti-x fs-16"></i>
-                        </a>
-                    </div>
-                    <form>
-                        <div class="modal-body pb-0">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Your Rating <span class="text-danger">*</span></label>
-                                        <div class="selection-wrap">
-                                            <div class="d-inline-block">
-                                                <div class="rating-selction">
-                                                    <input type="radio" name="rating" value="5" id="rating5">
-                                                    <label for="rating5"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="4" id="rating4">
-                                                    <label for="rating4"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="3" id="rating3">
-                                                    <label for="rating3"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="2" id="rating2">
-                                                    <label for="rating2"><i class="fa-solid fa-star"></i></label>
-                                                    <input type="radio" name="rating" value="1" id="rating1">
-                                                    <label for="rating1"><i class="fa-solid fa-star"></i></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Pictures</label>
-                                        <input type="file" class="form-control" accept=".jpg, .png" multiple>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Write Your Review <span class="text-danger">*</span></label>
-                                        <textarea class="form-control" rows="3"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="d-flex align-items-center justify-content-end m-0">
-                                <button type="submit" data-bs-dismiss="modal" class="btn btn-primary btn-md"><i class="isax isax-edit-2 me-1"></i>Submit Review</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <!-- /Review Modal -->    

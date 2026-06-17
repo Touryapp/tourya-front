@@ -43,6 +43,7 @@ export interface TourDetail {
   highlight: number;
   price: number;
   minAge: number;
+  meetingPoint?: string | any;
   rating: 0;
   status: string;
   locations: Location[];

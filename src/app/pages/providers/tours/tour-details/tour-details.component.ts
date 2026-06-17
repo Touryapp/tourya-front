@@ -320,24 +320,24 @@ export class TourDetailsProviderComponent implements OnInit, OnDestroy, AfterVie
   /**
    * Build a human readable location string using tour.locations[0] and the public locations catalog.
    */
-  getLocationDisplay(): string {
+  getLocationDisplayParts(): { isI18n: boolean, text: any }[] {
     const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
-    if (!loc) return '';
+    if (!loc) return [];
 
     // try to find city/state names from locationsPublic
     const found = this.locationsPublic.find(lp => lp.cityId === loc.cityId && lp.stateId === loc.stateId);
     const cityName = found ? found.cityName : undefined;
     const stateName = found ? found.stateName : undefined;
 
-    const parts: string[] = [];
-    if (loc.location) parts.push(this.i18nService.getValue(loc.location)); // friendly name of the location
-    if (loc.address) parts.push(loc.address);
-    if (cityName) parts.push(cityName);
-    else if (loc.cityId) parts.push(String(loc.cityId));
-    if (stateName) parts.push(stateName);
-    else if (loc.stateId) parts.push(String(loc.stateId));
+    const parts: { isI18n: boolean, text: any }[] = [];
+    if (loc.location) parts.push({ isI18n: true, text: loc.location }); // friendly name of the location
+    if (loc.address) parts.push({ isI18n: false, text: loc.address });
+    if (cityName) parts.push({ isI18n: false, text: cityName });
+    else if (loc.cityId) parts.push({ isI18n: false, text: String(loc.cityId) });
+    if (stateName) parts.push({ isI18n: false, text: stateName });
+    else if (loc.stateId) parts.push({ isI18n: false, text: String(loc.stateId) });
 
-    return parts.filter(p => !!p).join(', ');
+    return parts;
   }
 
   getImage(i: number): string {

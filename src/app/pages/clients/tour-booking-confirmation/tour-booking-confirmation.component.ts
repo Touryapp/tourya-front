@@ -118,10 +118,11 @@ export class TourBookingConfirmationComponent implements OnInit {
         created_at: first.reservationCreatedDate
       }),
       reservations: clientReservations.map(res => ({
+        bookingId: res.paymentTransactionId || '',
         reservationId: res.reservationId,
         paymentId: res.paymentId,
         itemId: res.shoppingItemId,
-        qrUrl: '', // El backend de lista de reservas usualmente no trae el QR directamente si no es el detalle
+        qrUrl: '',
         reservationDate: res.reservationDate,
         deliveryStatus: res.reservationDeliveryStatus as any,
         serviceResponsible: {
@@ -129,19 +130,32 @@ export class TourBookingConfirmationComponent implements OnInit {
           email: res.serviceResponsibleEmail,
           phone: res.serviceResponsiblePhone as any
         },
+        tourOperator: {
+          providerUserId: 0,
+          name: res.serviceResponsibleName || '',
+          email: res.serviceResponsibleEmail || '',
+          phone: res.serviceResponsiblePhone || ''
+        },
         createdDate: res.reservationCreatedDate,
         lastModifiedDate: res.reservationCreatedDate,
         createdBy: 0,
         lastModifiedBy: 0,
+        payerName: res.payerName || '',
+        payerEmail: res.payerEmail || '',
+        payerPhone: res.payerPhone || '',
+        payerDocumentType: res.payerDocumentType || '',
+        payerDocumentNumber: res.payerDocumentNumber || '',
         tourId: res.tourId,
         tourName: res.tourName,
-        tourImageUrl: '', // No disponible en lista básica
+        tourImageUrl: '',
         tourType: res.productType,
         duration: null,
         checkInDate: res.scheduleDate,
         returnDate: null,
-        destination: '', // No disponible en lista básica
+        destination: '',
         price: res.shoppingTotalPrice,
+        providerTotalAmount: 0,
+        priceBreakdown: [],
         travellers: `${res.totalTourists} personas`,
         activities: [],
         extraServices: [],
@@ -551,8 +565,8 @@ export class TourBookingConfirmationComponent implements OnInit {
     
     // Opción 2: Desde campos directos del DTO (amountCredit/creditsUsed)
     if (this.reservationData?.totalAmount !== undefined) {
-      const total = (this.reservationData.totalAmount || 0) - (this.reservationData.creditsUsed || 0);
-      console.log('✅ Total calculado desde DTO (totalAmount - creditsUsed):', total);
+      const total = (this.reservationData.totalAmount || 0) - (this.reservationData.amountCredit || 0);
+      console.log('✅ Total calculado desde DTO (totalAmount - amountCredit):', total);
       return total;
     }
     
@@ -656,6 +670,7 @@ export class TourBookingConfirmationComponent implements OnInit {
       reservations: [ // ✨ Ahora es un array con múltiples reservas
         {
           reservationId: 1001,
+          bookingId: 'BK-1001',
           paymentId: 12345,
           itemId: 789,
           reservationDate: '2024-12-15T10:30:00Z',
@@ -666,10 +681,21 @@ export class TourBookingConfirmationComponent implements OnInit {
             email: 'cartagena@ecotours.com.co',
             phone: '+57 300 123 4567'
           },
+          tourOperator: {
+            providerUserId: 1,
+            name: 'EcoTours Colombia S.A.S.',
+            email: 'operaciones@ecotours.com.co',
+            phone: '+57 300 000 0001'
+          },
           createdDate: '2024-12-15T10:30:00Z',
           lastModifiedDate: '2024-12-15T10:30:00Z',
           createdBy: 1,
           lastModifiedBy: 1,
+          payerName: 'María José González',
+          payerEmail: 'maria.gonzalez@email.com',
+          payerPhone: '+57 301 987 6543',
+          payerDocumentType: 'CC',
+          payerDocumentNumber: '1234567890',
           tourId: 36,
           tourName: 'Eco-Aventura en el Archipiélago',
           tourImageUrl: 'https://storage.googleapis.com/tourya-dev-storage/tours/36/1760456194034_cayos1.png',
@@ -679,6 +705,8 @@ export class TourBookingConfirmationComponent implements OnInit {
           returnDate: '2025-10-20T14:00:00',
           destination: 'Cartagena de Indias',
           price: 185000,
+          providerTotalAmount: 160000,
+          priceBreakdown: [],
           travellers: '2 Adultos',
           activities: ['Snorkeling', 'Almuerzo típico', 'Transporte en lancha'],
           extraServices: ['Seguro médico', 'Guía bilingüe'],
@@ -690,6 +718,7 @@ export class TourBookingConfirmationComponent implements OnInit {
         },
         {
           reservationId: 1002,
+          bookingId: 'BK-1002',
           paymentId: 12345,
           itemId: 790,
           reservationDate: '2024-12-15T10:30:00Z',
@@ -700,10 +729,21 @@ export class TourBookingConfirmationComponent implements OnInit {
             email: 'rafting@aventuratours.com',
             phone: '+57 310 987 6543'
           },
+          tourOperator: {
+            providerUserId: 2,
+            name: 'Aventura Tours Ltda.',
+            email: 'ops@aventuratours.com',
+            phone: '+57 310 000 0002'
+          },
           createdDate: '2024-12-15T10:30:00Z',
           lastModifiedDate: '2024-12-15T10:30:00Z',
           createdBy: 1,
           lastModifiedBy: 1,
+          payerName: 'María José González',
+          payerEmail: 'maria.gonzalez@email.com',
+          payerPhone: '+57 301 987 6543',
+          payerDocumentType: 'CC',
+          payerDocumentNumber: '1234567890',
           tourId: 40,
           tourName: 'Safari Nocturno en la Selva',
           tourImageUrl: 'https://storage.googleapis.com/tourya-dev-storage/tours/36/1760456194034_cayos1.png',
@@ -713,6 +753,8 @@ export class TourBookingConfirmationComponent implements OnInit {
           returnDate: '2025-10-21T22:00:00',
           destination: 'Amazonas',
           price: 120000,
+          providerTotalAmount: 100000,
+          priceBreakdown: [],
           travellers: '2 Adultos',
           activities: ['Caminata nocturna', 'Avistamiento de caimanes'],
           extraServices: ['Linternas', 'Repelente biodegradable'],
@@ -724,6 +766,7 @@ export class TourBookingConfirmationComponent implements OnInit {
         },
         {
           reservationId: 1003,
+          bookingId: 'BK-1003',
           paymentId: 12345,
           itemId: 791,
           reservationDate: '2024-12-15T10:30:00Z',
@@ -734,10 +777,21 @@ export class TourBookingConfirmationComponent implements OnInit {
             email: 'info@coffeetours.co',
             phone: '+57 320 456 7890'
           },
+          tourOperator: {
+            providerUserId: 3,
+            name: 'Coffee Tours del Eje',
+            email: 'ops@coffeetours.co',
+            phone: '+57 320 000 0003'
+          },
           createdDate: '2024-12-15T10:30:00Z',
           lastModifiedDate: '2024-12-15T10:30:00Z',
           createdBy: 1,
           lastModifiedBy: 1,
+          payerName: 'María José González',
+          payerEmail: 'maria.gonzalez@email.com',
+          payerPhone: '+57 301 987 6543',
+          payerDocumentType: 'CC',
+          payerDocumentNumber: '1234567890',
           tourId: 45,
           tourName: 'Ruta del Café Premium',
           tourImageUrl: 'https://storage.googleapis.com/tourya-dev-storage/tours/36/1760456194034_cayos1.png',
@@ -747,6 +801,8 @@ export class TourBookingConfirmationComponent implements OnInit {
           returnDate: '2025-10-22T14:00:00',
           destination: 'Quindío',
           price: 150000,
+          providerTotalAmount: 130000,
+          priceBreakdown: [],
           travellers: '2 Adultos',
           activities: ['Cata de café', 'Recorrido por cafetales'],
           extraServices: ['Transporte desde hotel', 'Kit de degustación'],
@@ -792,8 +848,7 @@ export class TourBookingConfirmationComponent implements OnInit {
     // Inject mock credits to see UI changes
     if (this.reservationData) {
       this.reservationData.totalAmount = 525000;
-      this.reservationData.creditsUsed = 70000;
-      this.reservationData.amountCredit = 0;
+      this.reservationData.amountCredit = 70000;
     }
 
     console.log('✅ Mock data loaded successfully for maquetación:', this.reservationData);

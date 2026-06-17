@@ -196,8 +196,8 @@
                             </a>
                             <div class="flex-fill">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <h6 class="fs-16 mb-0 text-dark" title="{{ i18nService.getValue(res.tourName) }}">
-                                      {{ (i18nService.getValue(res.tourName) | slice:0:15) + ((i18nService.getValue(res.tourName) || '').length > 15 ? '...' : '') || 'Tour' }}
+                                    <h6 class="fs-16 mb-0 text-dark" title="{{ (res.tourName | localizedName) }}">
+                                      {{ ((res.tourName | localizedName) | slice:0:15) + (((res.tourName | localizedName) || '').length > 15 ? '...' : '') || 'Tour' }}
                                     </h6>
                                     <span class="badge rounded-pill text-uppercase" style="font-size: 10px; padding: 3px 8px; font-weight: 500;"
                                       [ngClass]="res.reservationDeliveryStatus === 'DELIVERED' ? 'badge-success' : (res.reservationDeliveryStatus === 'PENDING' ? 'badge-purple' : 'badge-danger')">
@@ -240,11 +240,11 @@
                         <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
                           <span class="text-muted fs-13 flex-shrink-0">{{ review.date | date:'mediumDate' }} &bull;</span>
                           <span class="badge bg-warning text-dark rounded flex-shrink-0" style="font-size: 11px; padding: 2px 6px;">{{ review.rating || 5 }}</span>
-                          <span class="badge bg-light text-dark border rounded text-wrap text-start" style="font-size: 10px; padding: 2px 6px; font-weight: 500; line-height: 1.2;" *ngIf="getReasonLabel(review.reasonType, review.reasonId)" title="{{ getReasonLabel(review.reasonType, review.reasonId) }}">
-                            <i class="isax isax-tick-circle text-success"></i> {{ getReasonLabel(review.reasonType, review.reasonId) }}
+                          <span class="badge bg-light text-dark border rounded text-wrap text-start" style="font-size: 10px; padding: 2px 6px; font-weight: 500; line-height: 1.2;" *ngIf="getReasonLabel(review.reasonType, review.reasonId)" title="{{ getReasonLabel(review.reasonType, review.reasonId) | localizedName }}">
+                            <i class="isax isax-tick-circle text-success"></i> {{ getReasonLabel(review.reasonType, review.reasonId) | localizedName }}
                           </span>
                         </div>
-                        <p class="mb-0 text-dark fs-14" style="line-height: 1.4; white-space: normal;" title="{{ i18nService.getValue(review.comment) }}">{{ i18nService.getValue(review.comment) || 'Sin comentario' }}</p>
+                        <p class="mb-0 text-dark fs-14" style="line-height: 1.4; white-space: normal;" title="{{ (review.comment | localizedName) }}">{{ (review.comment | localizedName) || 'Sin comentario' }}</p>
                       </div>
                     </div>
                   </li>

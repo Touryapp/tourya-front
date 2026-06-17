@@ -1,4 +1,6 @@
-import { Component, HostListener, inject } from "@angular/core";
+import { Component, HostListener, inject, OnInit, OnDestroy } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil, debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { MainMenu, Menu, SideBar } from "../../../shared/models/models";
 
 
@@ -21,7 +23,9 @@ import { ProviderPanelStateService, ProviderPanelView } from "../../../shared/se
   styleUrl: "./default-header.component.scss",
   standalone: false,
 })
-export class DefaultHeaderComponent {
+export class DefaultHeaderComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private langChange$ = new Subject<string>();
   authService = inject(AuthService);
   header: Array<SideBar> = [];
   base = "dashboard";
@@ -108,7 +112,7 @@ export class DefaultHeaderComponent {
 
     // Obtener el idioma actual (ya fue detectado en app.component.ts)
     // No forzar "en" como default para respetar la detección automática
-    const currentLang = this.translate.currentLang || this.translate.getDefaultLang();
+    const currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'es';
     this.selectedLanguage = currentLang;
     this.languages = this.translate.getLangs();
   }
@@ -169,6 +173,34 @@ export class DefaultHeaderComponent {
       });
     const themeColor = localStorage.getItem("themeColor") || "2";
     this.settings.changeThemeColor(themeColor);
+
+    // FIX: Sincronizar selectedLanguage con cambios de idioma
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ lang }) => {
+        this.selectedLanguage = lang;
+      });
+
+    // Debounce para evitar cambios de idioma concurrentes
+    this.langChange$
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(lang => {
+        this.selectedLanguage = lang;
+        this.translate.use(lang);
+        localStorage.setItem("lang", lang);
+      });
+      
+    // Sincronizar al inicializar
+    this.selectedLanguage = this.translate.currentLang || this.translate.getDefaultLang() || 'es';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   closeMenu(): void {
     this.isMobileMenu = false; // Removes the `mean-container` class
@@ -208,9 +240,7 @@ export class DefaultHeaderComponent {
 
     const langs = this.translate.getLangs();
     if (langs.includes(language)) {
-      this.selectedLanguage = language;
-      this.translate.use(language);
-      localStorage.setItem("lang", language);
+      this.langChange$.next(language);
     }
   }
 
