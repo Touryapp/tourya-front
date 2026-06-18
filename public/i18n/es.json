@@ -1699,5 +1699,19 @@
     "phone": "Teléfono",
     "message": "Mensaje",
     "sendButton": "Enviar Mensaje"
+  },
+  "contactUsPage": {
+    "breadcrumb": {
+      "title": "Contáctanos",
+      "pages": "Páginas"
+    },
+    "info": {
+      "heading": "Contacte con nuestro dedicado equipo de soporte",
+      "subheading": "Nuestro equipo está listo para ayudarle. Su satisfacción es nuestra prioridad.",
+      "paragraph": "¿Tiene alguna pregunta, necesita asesoramiento o necesita ayuda? Nuestro equipo de expertos está aquí para ayudarle en cada paso del proceso. Estamos a solo un mensaje o una llamada de distancia, listos para brindarle la orientación que necesita.",
+      "emailLabel": "Correo electrónico:",
+      "phoneLabel": "Teléfono de contacto:",
+      "addressLabel": "Nuestra dirección:"
+    }
   }
 }

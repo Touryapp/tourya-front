@@ -86,3 +86,7 @@
     }
 }
 
+// Adjust padding for the 5th menu item so it's not too close to the right side elements
+#mobile-menu > ul > li:nth-child(5) > a {
+    padding-right: 30px !important;
+}

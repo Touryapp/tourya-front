@@ -1698,5 +1698,19 @@
     "phone": "Phone",
     "message": "Message",
     "sendButton": "Send Message"
+  },
+  "contactUsPage": {
+    "breadcrumb": {
+      "title": "Contact Us",
+      "pages": "Pages"
+    },
+    "info": {
+      "heading": "Contact our dedicated support team",
+      "subheading": "Our team is ready to help you. Your satisfaction is our priority.",
+      "paragraph": "Do you have any questions, need advice, or need help? Our team of experts is here to help you every step of the way. We are just a message or a call away, ready to provide the guidance you need.",
+      "emailLabel": "Email:",
+      "phoneLabel": "Contact phone:",
+      "addressLabel": "Our address:"
+    }
   }
 }
