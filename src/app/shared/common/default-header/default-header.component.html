@@ -38,18 +38,7 @@
                     </div>
 
 
-                    <div class="me-3 mb-2">
-                        <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                            [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                            (click)="settings.changeThemeColor('1')">
-                            <i class="isax isax-moon"></i>
-                        </a>
-                        <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                            [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                            (click)="settings.changeThemeColor('2')">
-                            <i class="isax isax-sun-1"></i>
-                        </a>
-                    </div>
+
                     <div class="fav-dropdown mb-2 me-3">
                         <a [routerLink]="['/clients/my-profile']" [queryParams]="{ section: 'wishlist' }" class="position-relative">
                             <i class="isax isax-heart"></i>
@@ -194,18 +183,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="mb-2 d-flex align-items-center justify-content-center border rounded p-2 bg-white">
-                                            <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle me-3"
-                                                [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                                (click)="settings.changeThemeColor('1')">
-                                                <i class="isax isax-moon"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                                [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                                (click)="settings.changeThemeColor('2')">
-                                                <i class="isax isax-sun-1"></i>
-                                            </a>
-                                        </div>
+
                                     </div>
                                 </div>
                                 <div *ngIf="!isAuthenticated">
@@ -272,18 +250,7 @@
                     <span
                         *ngIf="['index', 'index-2', 'index-3', 'index-4', 'index-5', 'index-6','pages'].includes(base) ; else defaultheader">
                         <div *ngIf="base === 'index'" class="header-btn d-flex align-items-center">
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
+
                             <div><a href="javascript:void(0);" class="btn btn-white me-3" data-bs-toggle="modal"
                                     data-bs-target="#login-modal">{{ 'header.login' | translate }}</a></div>
                             <a [routerLink]="routes.becomeAnExpert" class="btn btn-primary me-0">{{ 'header.menu.becomeExpert' | translate }}</a>
@@ -308,18 +275,7 @@
                     </span>
                     <ng-template #defaultheader>
                         <div class="header-btn d-flex align-items-center">
-                            <div class="me-3">
-                                <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : isdark}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('1')">
-                                    <i class="isax isax-moon"></i>
-                                </a>
-                                <a href="javascript:void(0);" id="light-mode-toggle" class="theme-toggle"
-                                    [ngClass]="{'activate' : islight}" (click)="darkMode()"
-                                    (click)="settings.changeThemeColor('2')">
-                                    <i class="isax isax-sun-1"></i>
-                                </a>
-                            </div>
+
                             <div class="dropdown profile-dropdown">
                                 <a href="javascript:void(0);" class="d-flex align-items-center"
                                     data-bs-toggle="dropdown">
