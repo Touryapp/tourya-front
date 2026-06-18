@@ -6,7 +6,7 @@
                 <ol class="breadcrumb justify-content-center mb-0" style="--bs-breadcrumb-item-active-color: #000; --bs-breadcrumb-divider-color: #000;">
                     <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark" style="color: #000 !important;"><i class="isax isax-home5"></i></a></li>
                     <li class="breadcrumb-item text-dark" style="color: #000 !important;">{{ 'tours-detail.breadcrumb.tours' | translate }}</li>
-                    <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">{{ tour ? i18nService.getValue(tour.name) : ('tours-detail.breadcrumb.details' | translate) }}</li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page" style="color: #000 !important; font-weight: 500;">{{ tour ? (tour.name | localizedName) : ('tours-detail.breadcrumb.details' | translate) }}</li>
                 </ol>
             </nav>
 
@@ -44,10 +44,15 @@
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <div class="mb-2">
-                                <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">{{ tour ? i18nService.getValue(tour.name) : '' }}<span *ngIf="tour?.highlight" class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
+                                <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">{{ tour ? (tour.name | localizedName) : '' }}<span *ngIf="tour?.highlight" class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Verified</span></h4>
                                 <div class="d-flex align-items-center flex-wrap">
                                     <p *ngIf="tour?.tourCategory" class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-receipt text-primary me-2"></i>{{ tour.tourCategory.name || tour.tourCategory.id }}</p>
-                                    <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ getLocationDisplay() }}
+                                    <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>
+                                        <ng-container *ngFor="let p of getLocationDisplayParts(); let last = last">
+                                            <ng-container *ngIf="p.isI18n">{{ p.text | localizedName }}</ng-container>
+                                            <ng-container *ngIf="!p.isI18n">{{ p.text }}</ng-container>
+                                            <ng-container *ngIf="!last">, </ng-container>
+                                        </ng-container>
                                         <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2" (click)="scrollToLocation($event)">{{ 'tours-detail.header.viewLocation' | translate }}</a>
                                     </p>
                                     <div class="d-flex align-items-center mb-2">
@@ -74,7 +79,7 @@
                     <div class="bg-light-200 card-bg-light mb-4">
                         <h5 class="fs-18 mb-3">{{ 'tours-detail.sections.description' | translate }}</h5>
                         <div class="mb-2">
-                            <p [innerHtml]="i18nService.getValue(tour.description)"></p>
+                            <p [innerHtml]="(tour.description | localizedName)"></p>
                         </div>
                         <!-- <div class="read-more">
                             <div class="more-text" [ngStyle]="{'display':isMore[0]?'block':'none'}">
@@ -94,7 +99,7 @@
                                     <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
                                         <i class="isax isax-send-sqaure-2 fs-16"></i>
                                     </span>
-                                    <p>{{ i18nService.getValue(att.description) }}</p>
+                                    <p>{{ (att.description | localizedName) }}</p>
                                 </div>
                             </div>
                     </div>
@@ -112,13 +117,11 @@
                                                 <div class="flow-content">
                                                   <div class="d-flex align-items-center justify-content-between mb-2">
                                                     <div>
-                                                      <h6 class="fw-medium mb-1">{{ i18nService.getValue(it.title) || ('Day ' + (it.day || (i+1))) }}</h6>
+                                                      <h6 class="fw-medium mb-1">{{ (it.title | localizedName) || ('Day ' + (it.day || (i+1))) }}</h6>
                                                       <p>{{ it.time || '' }}</p>
                                                     </div>
-                                                    <!-- optional image if gallery exists -->
-                                                    <span *ngIf="getImage(i)" class="avatar avatar-lg avatar-rounded flex-shrink-0"><img [src]="getImage(i)" alt="Img"></span>
                                                   </div>
-                                                  <p>{{ i18nService.getValue(it.description) || '' }}</p>
+                                                  <p>{{ (it.description | localizedName) || '' }}</p>
                                                 </div>
                                               </div>
                                             </ng-container>
@@ -138,14 +141,14 @@
                             <div class="col-md-6">
                                 <ng-container *ngIf="tour?.includes?.length">
                                   <p class="d-flex align-items-center mb-2" *ngFor="let inc of tour.includes">
-                                    <i class="isax isax-tick-square5 text-success me-2"></i> {{ i18nService.getValue(inc.description) }}
+                                    <i class="isax isax-tick-square5 text-success me-2"></i> {{ (inc.description | localizedName) }}
                                   </p>
                                 </ng-container>
                             </div>
                             <div class="col-md-6">
                                                                 <ng-container *ngIf="tour?.excludes?.length">
                                                                     <p class="d-flex align-items-center mb-2" *ngFor="let exc of tour.excludes">
-                                    <i class="isax isax-close-square5 text-danger me-2"></i> {{ i18nService.getValue(exc.description) }}
+                                    <i class="isax isax-close-square5 text-danger me-2"></i> {{ (exc.description | localizedName) }}
                                   </p>
                                 </ng-container>
                             </div>
@@ -174,6 +177,10 @@
                             
                         </div>
                         <!-- /Map -->
+                        <div class="mt-3" *ngIf="$any(tour)?.meetingPoint">
+                            <h6 class="fs-16 mb-2"><i class="isax isax-location me-1"></i>{{ 'tours-detail.booking.meetingPoint' | translate }}</h6>
+                            <p class="mb-0">{{ $any(tour).meetingPoint | localizedName }}</p>
+                        </div>
                     </div>
 
                     <!-- Cancellation Policies -->
@@ -188,7 +195,7 @@
                                                 {{ 'tour-form.fields.cancellationPolicyType.options.' + policy.cancellationPolicyType.toLowerCase() | translate }}
                                             </span>
                                         </div>
-                                        <p class="fs-14 mb-3 text-gray-9">{{ i18nService.getValue(policy.observations) }}</p>
+                                        <p class="fs-14 mb-3 text-gray-9">{{ (policy.observations | localizedName) }}</p>
                                         
                                         <div class="row g-3">
                                             <div class="col-sm-6">
@@ -228,12 +235,12 @@
                                                             <div class="accordion-item mb-2" *ngFor="let f of tour.faq; let idx = index">
                                 <div class="accordion-header">
                                   <button class="accordion-button fw-medium" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#faq-collapse-' + idx" aria-expanded="false" [attr.aria-controls]="'faq-collapse-' + idx">
-                                    {{ i18nService.getValue(f.question) }}
+                                    {{ (f.question | localizedName) }}
                                   </button>
                                 </div>
                                 <div [id]="'faq-collapse-' + idx" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
                                   <div class="accordion-body">
-                                    <p class="mb-0">{{ i18nService.getValue(f.answer) }}</p>
+                                    <p class="mb-0">{{ (f.answer | localizedName) }}</p>
                                   </div>
                                 </div>
                               </div>
@@ -255,28 +262,28 @@
                     <div class="row" *ngIf="reviewSummary">
                         <div class="col-md-6 d-flex">
                             <div class="rating-item bg-light-200 text-center flex-fill mb-3">
-                                <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
+                                <h6 class="fw-medium mb-3">{{ 'tours-detail.reviews.customerReviewsAndRatings' | translate }}</h6>
                                 <h5 class="display-6">{{ reviewSummary.averageRating || 0 | number:'1.1-1' }} / 5.0</h5>
                                 <div class="d-inline-flex align-items-center justify-content-center mb-3">
-                                    <i class="ti fs-20 me-1" *ngFor="let s of [1,2,3,4,5]; let i=index" 
+                                    <i class="ti fs-20 me-1" *ngFor="let s of starsAsc; let i=index" 
                                        [ngClass]="{
                                            'ti-star-filled text-warning': i < Math.floor(reviewSummary.averageRating || 0), 
                                            'ti-star-half-filled text-warning': i === Math.floor(reviewSummary.averageRating || 0) && (reviewSummary.averageRating % 1) >= 0.5, 
                                            'ti-star text-muted': i >= Math.ceil(reviewSummary.averageRating || 0)
                                        }"></i>
                                 </div>
-                                <p>Based On {{ totalReviews }} Reviews</p>
+                                <p>{{ 'tours-detail.reviews.basedOnReviews' | translate: { count: totalReviews } }}</p>
                             </div>
                         </div>
                         <div class="col-md-6 d-flex">
                             <div class="card rating-progress shadow-none flex-fill mb-3">
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center mb-2" *ngFor="let star of [5,4,3,2,1]">
+                                    <div class="d-flex align-items-center mb-2" *ngFor="let star of starsDesc">
                                         <p class="me-2 text-nowrap mb-0"
                                            style="cursor: pointer; transition: all 0.2s ease-in-out;"
                                            [ngStyle]="{'font-weight': selectedRating === star ? 'bold' : 'normal', 'font-size': selectedRating === star ? '1.1em' : '1em'}"
                                            (click)="filterByRating(star)">
-                                            {{ star }} Star Ratings
+                                            {{ 'tours-detail.reviews.starRatings' | translate: { star: star } }}
                                         </p>
                                         <div class="progress w-100" role="progressbar" 
                                              [attr.aria-valuenow]="reviewSummary.totalReviews > 0 ? (reviewSummary.countByStars[star] / reviewSummary.totalReviews * 100) : 0" 
@@ -310,7 +317,7 @@
                                         <div>
                                             <h6 class="fs-16 fw-medium mb-1">{{ review.customerName }}</h6>
                                             <div class="d-flex align-items-center flex-wrap date-info">
-                                                <p class="fs-14 mb-0">{{ review.date | date:'mediumDate' }}</p>
+                                                <p class="fs-14 mb-0">{{ review.date | date:'dd/MM/yyyy' }}</p>
                                                 <p class="fs-14 d-inline-flex align-items-center mb-0 ms-2">
                                                     <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ review.rating }}</span>
                                                     <span *ngIf="review.reasonId && getReasonLabel(review.reasonType, review.reasonId)" 
@@ -318,7 +325,7 @@
                                                           style="font-size: 0.70rem; padding: 0.35em 0.5em;">
                                                         <i class="fa-solid fa-check text-success me-1" *ngIf="review.reasonType === 'POSITIVE'"></i>
                                                         <i class="fa-solid fa-xmark text-danger me-1" *ngIf="review.reasonType === 'NEGATIVE'"></i>
-                                                        {{ getReasonLabel(review.reasonType, review.reasonId) }}
+                                                        {{ getReasonLabel(review.reasonType, review.reasonId) | localizedName }}
                                                     </span>
                                                 </p>
                                             </div>
@@ -326,7 +333,7 @@
                                     </div>
                                     <!-- Reply button could go here -->
                                 </div>
-                                <p class="mb-2">{{ i18nService.getValue(review.comment) }}</p>
+                                <p class="mb-2">{{ (review.comment | localizedName) }}</p>
                                 
                                 <!-- Review Images -->
                                 <div class="mb-2" *ngIf="review.attachmentUrls && review.attachmentUrls.length > 0">
@@ -343,11 +350,7 @@
                                     </div>
                                 </div>
 
-                                <div class="d-inline-flex align-items-center">
-                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3"><i class="isax isax-like-1 me-2"></i>{{ review.likes || 0 }}</a>
-                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-dislike me-2"></i>{{ review.dislikes || 0 }}</a>
-                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3"><i class="isax isax-heart5 text-danger me-2"></i>{{ review.hearts || 0 }}</a>
-                                </div>
+                                <!-- likes and dislikes removed -->
                                 <div class="mt-2" *ngIf="isBackoffice">
                                     <button class="btn btn-sm btn-outline-danger" *ngIf="review.status !== 'CANCELED'" (click)="toggleRejectForm(review.id!)">
                                         {{ 'provider-reviews.actions.reject' | translate }}
@@ -380,10 +383,10 @@
                                         </span>
                                         <div>
                                             <h6 class="fs-14 fw-medium mb-0">{{ review.answer.providerName || 'Provider Response' }}</h6>
-                                            <small class="text-muted">{{ review.answer.date | date:'mediumDate' }}</small>
+                                            <small class="text-muted">{{ review.answer.date | date:'dd/MM/yyyy' }}</small>
                                         </div>
                                     </div>
-                                    <p class="fs-14 mb-0">{{ i18nService.getValue(review.answer.comment) }}</p>
+                                    <p class="fs-14 mb-0">{{ (review.answer.comment | localizedName) }}</p>
                                     
                                     <!-- Answer Images -->
                                     <div class="mb-2" *ngIf="review.answer.attachmentUrls && review.answer.attachmentUrls.length > 0">
@@ -453,8 +456,8 @@
                                 </h5>
                                 <div>
                                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                                    <h6 class="fw-medium">{{ 'tour-form.sections.tourDetails' | translate }}</h6>
-                                                    <p class="flex-fill text-end text-sm-start text-md-end">{{ tour ? i18nService.getValue(tour.name) : '' }}</p>
+                                                    <h6 class="fw-medium">{{ 'tours-detail.booking.tourName' | translate }}</h6>
+                                                    <p class="flex-fill text-end text-sm-start text-md-end">{{ tour ? (tour.name | localizedName) : '' }}</p>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between details-info">
                                                     <h6 class="fw-medium">{{ 'tours-detail.booking.duration' | translate }}</h6>
@@ -516,7 +519,7 @@
                                                     />
                                                 </div>
 
-                                                <h6 class="fs-16 fw-medium mt-3 mb-2">Details</h6>
+                                                <h6 class="fs-16 fw-medium mt-3 mb-2">{{ 'tours-detail.booking.details' | translate }}</h6>
                                                 <div class="form-item dropdown border rounded p-3 mb-3 w-100">
                                                     <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu" style="cursor: pointer;">
                                                         <label class="form-label fs-14 text-default mb-1">{{ 'tours-detail.booking.guests' | translate }}</label>
@@ -524,7 +527,7 @@
                                                         <p class="fs-12 mb-0">{{ getTravellersDetails() }}</p>
                                                     </div>
                                                     <div class="dropdown-menu dropdown-menu-end dropdown-xl p-3">
-                                                        <h5 class="mb-3">Select Travelers</h5>
+                                                        <h5 class="mb-3">{{ 'tours-detail.booking.selectTravelers' | translate }}</h5>
                                                         <div class="mb-3 border br-10 info-item p-2">
                                                             <div class="row">
                                                                 <div class="col-md-12">
@@ -664,7 +667,7 @@
                         <div class="modal-body pb-0">
                             <!-- Tour Info -->
                             <div class="mb-3 p-3 bg-light rounded" *ngIf="tour">
-                                <h6 class="mb-0">{{ i18nService.getValue(tour.name) }}</h6>
+                                <h6 class="mb-0">{{ (tour.name | localizedName) }}</h6>
                             </div>
 
                             <div class="row">
@@ -725,8 +728,8 @@
                                                             [id]="'td_reason_' + reason.id"
                                                             [checked]="isReasonSelected(reason.id)"
                                                             (change)="toggleReviewReason(reason.id)">
-                                                        <label class="form-check-label fs-14" [for]="'td_reason_' + reason.id">
-                                                            {{ reason.label }}
+                                                        <label class="form-check-label fs-14" [for]="'reason-' + reason.id">
+                                                            {{ (reason.label | localizedName) || reason.label }}
                                                         </label>
                                                     </div>
                                                 </div>

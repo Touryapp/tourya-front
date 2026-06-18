@@ -1,22 +1,19 @@
-<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+<div class="content">
   <div class="container">
-    <div class="row">
+
+    <div class="row mb-5 text-center">
       <div class="col-md-12 col-12">
-        <h2 class="breadcrumb-title mb-2">Contact Us</h2>
+        <h2 class="mb-2 text-dark">Contact Us</h2>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a [routerLink]="routes.index"><i class="isax isax-home5"></i></a></li>
-            <li class="breadcrumb-item">Pages</li>
-            <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+            <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark"><i class="isax isax-home5"></i></a></li>
+            <li class="breadcrumb-item text-dark">Pages</li>
+            <li class="breadcrumb-item active text-muted" aria-current="page">Contact Us</li>
           </ol>
         </nav>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="content">
-  <div class="container">
     <div class="row align-items-center row-gap-4">
       <div class="col-xl-7 col-lg-7">
         <div class="mb-4 mb-lg-0">
@@ -62,43 +59,43 @@
         <div class="card bg-light-200 shadow-none mb-0">
           <div class="card-body">
             <div class="mb-3">
-              <h2 class="mb-1">Get in Touch</h2>
-              <p class="text-gray-6 mb-1">How we can help you? Please write down your query</p>
+              <h2 class="mb-1">{{ 'contactUsForm.title' | translate }}</h2>
+              <p class="text-gray-6 mb-1">{{ 'contactUsForm.subtitle' | translate }}</p>
             </div>
             <form>
               <div class="row">
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">First Name <span class="text-danger">*</span></label>
+                    <label class="form-label">{{ 'contactUsForm.firstName' | translate }} <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" />
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                    <label class="form-label">{{ 'contactUsForm.lastName' | translate }} <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" />
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="mb-3">
-                    <label class="form-label">Email <span class="text-danger">*</span></label>
+                    <label class="form-label">{{ 'contactUsForm.email' | translate }} <span class="text-danger">*</span></label>
                     <input type="email" class="form-control" />
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="mb-3">
-                    <label class="form-label">Phone <span class="text-danger">*</span></label>
+                    <label class="form-label">{{ 'contactUsForm.phone' | translate }} <span class="text-danger">*</span></label>
                     <input type="email" class="form-control" />
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="mb-3">
-                    <label class="form-label">Message <span class="text-danger">*</span></label>
+                    <label class="form-label">{{ 'contactUsForm.message' | translate }} <span class="text-danger">*</span></label>
                     <textarea class="form-control" rows="3"></textarea>
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-primary">Send Message</button>
+              <button type="button" class="btn btn-primary">{{ 'contactUsForm.sendButton' | translate }}</button>
             </form>
           </div>
         </div>

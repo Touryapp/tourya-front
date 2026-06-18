@@ -185,10 +185,10 @@ export class ProviderPanelComponent implements OnInit {
     if (!reasonType || !reasonId) return '';
     if (reasonType === 'POSITIVE') {
       const reason = this.reviewReasonsPositive.find(r => r.id === reasonId);
-      return reason ? this.i18nService.getValue(reason.label) : '';
+      return reason ? reason.label : '';
     } else if (reasonType === 'NEGATIVE') {
       const reason = this.reviewReasonsNegative.find(r => r.id === reasonId);
-      return reason ? this.i18nService.getValue(reason.label) : '';
+      return reason ? reason.label : '';
     }
     return '';
   }

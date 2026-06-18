@@ -79,7 +79,7 @@
                                 (ngModelChange)="onFilterChange()">
                                 <option value="all">{{'provider-reviews.filters.allTours' | translate}}</option>
                                 @for (tour of availableTours; track tour.id) {
-                                    <option [value]="tour.id">{{ i18nService.getValue(tour.name) }}</option>
+                                    <option [value]="tour.id">{{ (tour.name | localizedName) }}</option>
                                 }
                             </select>
                         }
@@ -102,7 +102,7 @@
                                         </div>
                                         @for (tour of filteredTours; track tour.id) {
                                             <div class="autocomplete-item" (click)="selectTour(tour)">
-                                                {{ i18nService.getValue(tour.name) }}
+                                                {{ (tour.name | localizedName) }}
                                             </div>
                                         }
                                     </div>
@@ -190,7 +190,7 @@
                                                   style="font-size: 0.75rem; padding: 0.4em 0.6em;">
                                                 <i class="fa-solid fa-check text-success me-1" *ngIf="review.reasonType === 'POSITIVE'"></i>
                                                 <i class="fa-solid fa-xmark text-danger me-1" *ngIf="review.reasonType === 'NEGATIVE'"></i>
-                                                {{ getReasonLabel(review.reasonType, review.reasonId) }}
+                                                {{ getReasonLabel(review.reasonType, review.reasonId) | localizedName }}
                                             </span>
                                         </div>
                                     </div>
@@ -206,7 +206,7 @@
                                              class="img-fluid rounded tour-image-aligned">
                                     </span>
                                     <div>
-                                        <p class="fs-14 fw-medium text-dark mb-0">{{ review.tourName }}</p>
+                                        <p class="fs-14 fw-medium text-dark mb-0">{{ review.tourName | localizedName }}</p>
                                         <p class="fs-12 text-gray-6 mb-0">
                                             <i class="isax isax-receipt-text me-1"></i>{{'provider-reviews.reservation' | translate}}: {{ review.bookingId || review.reservationId || 'N/A' }}
                                         </p>
@@ -225,7 +225,7 @@
 
                     <!-- Review Content -->
                     <div class="mb-3">
-                        <p class="fs-15 text-gray-7 mb-0">{{ i18nService.getValue(review.comment) }}</p>
+                        <p class="fs-15 text-gray-7 mb-0">{{ (review.comment | localizedName) }}</p>
                     </div>
 
                     <!-- Review Images -->
@@ -376,7 +376,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="mb-2">{{ i18nService.getValue(review.answer.comment) }}</p>
+                            <p class="mb-2">{{ (review.answer.comment | localizedName) }}</p>
                             
                             <!-- Answer Images -->
                             @if (review.answer.attachmentUrls && review.answer.attachmentUrls.length > 0) {

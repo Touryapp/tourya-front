@@ -17,7 +17,7 @@ import {
 } from "../../../shared/dto/cart.dto";
 import { TourSlotSelectionModalComponent } from "../../../shared/common/tour-slot-selection-modal/tour-slot-selection-modal.component";
 import { FloatingCartComponent } from "../../../shared/common/floating-cart/floating-cart.component";
-import { Subject, takeUntil, filter } from "rxjs";
+import { Subject, takeUntil, filter, switchMap, of } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { PaymentService } from "../../../shared/services/payment.service";
 import { CityService } from "../../../shared/services/city.service";
@@ -179,7 +179,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
   }
 
   public minPrice: number = 0;
-  public maxPrice: number = 100000000;
+  public maxPrice: number = 5000000;
   public language: string = 'es';
 
   get minPriceFormatted(): string {
@@ -386,36 +386,27 @@ export class ListToursComponent implements OnInit, OnDestroy {
       next: (data: any[]) => {
         this.categories = data;
 
-        // Inyectar traducciones dinámicamente para que las tarjetas de tours (que reciben el string en español)
-        // puedan traducirlo sin depender de los archivos JSON estáticos
-        const enTranslations: any = {};
-        const ptTranslations: any = {};
-        const esTranslations: any = {};
+        const currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'es';
+        const currentTranslations: any = {};
 
         data.forEach(c => {
           if (c.name && c.name.es) {
             const normalized = c.name.es.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
             const key = `categories.${normalized}`;
-            if (c.name.en) enTranslations[key] = c.name.en;
-            if (c.name.pt) ptTranslations[key] = c.name.pt;
-            esTranslations[key] = c.name.es;
+            currentTranslations[key] = c.name[currentLang] || c.name.es;
           }
           if (c.subCategories) {
             c.subCategories.forEach((s: any) => {
               if (s.name && s.name.es) {
                 const normSub = s.name.es.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
                 const subKey = `subcategories.${normSub}`;
-                if (s.name.en) enTranslations[subKey] = s.name.en;
-                if (s.name.pt) ptTranslations[subKey] = s.name.pt;
-                esTranslations[subKey] = s.name.es;
+                currentTranslations[subKey] = s.name[currentLang] || s.name.es;
               }
             });
           }
         });
 
-        this.translate.setTranslation('en', enTranslations, true);
-        this.translate.setTranslation('pt', ptTranslations, true);
-        this.translate.setTranslation('es', esTranslations, true);
+        this.translate.setTranslation(currentLang, currentTranslations, true);
       },
       error: (err) => console.error('Error cargando categorías', err)
     });
@@ -454,54 +445,41 @@ export class ListToursComponent implements OnInit, OnDestroy {
 
     // Force change detection when language changes to ensure categories AND tours update
     this.translate.onLangChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((langChange) => {
-        const newLang = langChange.lang;
-        console.log('🌍 ListTours: Language changed to', newLang, '- re-injecting dynamic translations and cloning objects');
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(({ lang }) => {
+          console.log('🌍 ListTours: Translation store changed for lang', lang, '- re-injecting dynamic translations and cloning objects');
 
-        // Re-inject dynamic category translations.
-        // When translate.use(lang) loads a JSON file it REPLACES the entire store for that lang,
-        // wiping any translations we previously added via setTranslation. We must re-merge them.
-        if (this.categories && this.categories.length > 0) {
-          const dynamicTranslations: any = {};
-          this.categories.forEach((c: any) => {
-            if (c.name?.es) {
-              const normalized = c.name.es.toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
-              dynamicTranslations[`categories.${normalized}`] = c.name[newLang] || c.name.es;
-            }
-            if (c.subCategories) {
-              c.subCategories.forEach((s: any) => {
-                if (s.name?.es) {
-                  const normSub = s.name.es.toLowerCase()
-                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
-                  dynamicTranslations[`subcategories.${normSub}`] = s.name[newLang] || s.name.es;
-                }
-              });
-            }
-          });
-          this.translate.setTranslation(newLang, dynamicTranslations, true); // merge, don't overwrite
-        }
+          // Re-inject dynamic category translations.
+          // When translate.use(lang) loads a JSON file it REPLACES the entire store for that lang,
+          // wiping any translations we previously added via setTranslation. We must re-merge them.
+          if (this.categories && this.categories.length > 0) {
+            const dynamicTranslations: any = {};
+            this.categories.forEach((c: any) => {
+              if (c.name?.es) {
+                const normalized = c.name.es.toLowerCase()
+                  .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
+                dynamicTranslations[`categories.${normalized}`] = c.name[lang] || c.name.es;
+              }
+              if (c.subCategories) {
+                c.subCategories.forEach((s: any) => {
+                  if (s.name?.es) {
+                    const normSub = s.name.es.toLowerCase()
+                      .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
+                    dynamicTranslations[`subcategories.${normSub}`] = s.name[lang] || s.name.es;
+                  }
+                });
+              }
+            });
+            this.translate.setTranslation(lang, dynamicTranslations, true); // merge, don't overwrite
+          }
 
-        // Deep clone categories so localizedName pipe re-runs (new object reference on @Input)
-        if (this.categories && this.categories.length > 0) {
-          this.categories = this.categories.map(c => ({
-            ...c,
-            name: c.name ? (typeof c.name === 'string' ? c.name : { ...c.name }) : c.name,
-            subCategories: c.subCategories ? c.subCategories.map((s: any) => ({
-              ...s,
-              name: s.name ? (typeof s.name === 'string' ? s.name : { ...s.name }) : s.name
-            })) : c.subCategories
-          }));
-        }
-        // Clone tours so Angular re-evaluates i18nService.getValue() and localizedName bindings
-        if (this.tours && this.tours.length > 0) {
-          this.tours = this.tours.map(t => ({
-            ...t,
-            tour: { ...t.tour }
-          }));
-        }
-      });
+
+          
+          return of(lang);
+        })
+      )
+      .subscribe();
 
     // Forzar carga desde el backend al iniciar la pantalla
     this.cartService.loadCartFromBackend(true).catch(err => {
@@ -625,7 +603,7 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.checkIn = "";
     this.checkOut = "";
     this.minPrice = 0;
-    this.maxPrice = 100000000;
+    this.maxPrice = 5000000;
     this.searchText = "";
     this.currentPage = 1;
     this.page = 1;

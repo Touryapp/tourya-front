@@ -40,7 +40,7 @@ import { GuestInfoModalComponent } from "../guest-info-modal/guest-info-modal.co
 import { TouristService } from "../../services/tourist.service";
 import { RequestProvidersService } from "../../../pages/providers/requestproviders/request-providers.service";
 import { TranslateModule } from "@ngx-translate/core";
-
+import { LocalizedNamePipe } from "../../../shared/pipe/localized-name/localized-name.pipe";
 
 @Component({
   selector: "app-tour-slot-selection-modal",
@@ -55,7 +55,8 @@ import { TranslateModule } from "@ngx-translate/core";
     MatSlideToggleModule,
     ModalModule,
     CarouselModule,
-    TranslateModule
+    TranslateModule,
+    LocalizedNamePipe
   ],
 })
 export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
@@ -1168,7 +1169,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Obtiene el nombre del tour de manera segura
    */
   getTourName(): string {
-    return this.i18nService.getValue(this.selectedTour?.tour?.name) || "";
+    return this.selectedTour?.tour?.name || "";
   }
 
   /**
@@ -1227,7 +1228,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Obtiene la descripción del tour de manera segura
    */
   getTourDescription(): string {
-    return this.i18nService.getValue(this.selectedTour?.tour?.description) || "";
+    return this.selectedTour?.tour?.description || "";
   }
 
   generateDateRange(startDate: Date, endDate: Date) {

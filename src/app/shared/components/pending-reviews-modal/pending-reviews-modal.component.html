@@ -12,7 +12,7 @@
         <div class="flex-grow-1">
           <!-- Tour Name and Status Badge -->
           <div class="d-flex w-100 justify-content-between align-items-center mb-2">
-            <h5 class="mb-0">{{ review.tourName || ('pendingReviews.tourNoName' | translate) }}</h5>
+            <h5 class="mb-0">{{ (review.tourName | localizedName) || ('pendingReviews.tourNoName' | translate) }}</h5>
             <span class="badge" *ngIf="review.deliveryStatus" [ngClass]="{
               'bg-success': review.deliveryStatus === 'DELIVERED',
               'bg-warning': review.deliveryStatus === 'PENDING',

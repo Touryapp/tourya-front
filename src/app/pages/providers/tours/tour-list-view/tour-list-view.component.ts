@@ -219,12 +219,12 @@ export class TourListViewComponent implements OnInit {
     return this.currentPage === this.totalPages;
   }
 
-  displayTourDescription(tour: Tour): string {
-    return this.i18nService.getValue(tour?.description);
+  displayTourDescription(tour: Tour): any {
+    return tour?.description || '';
   }
 
-  displayTourName(tour: Tour): string {
-    return this.i18nService.getValue(tour?.name);
+  displayTourName(tour: Tour): any {
+    return tour?.name || '';
   }
 
   profilePicture(tour: Tour) {

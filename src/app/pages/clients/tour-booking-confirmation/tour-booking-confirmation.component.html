@@ -94,14 +94,14 @@
                 <p class="mb-0">{{ getPaymentMethod() }}</p>
               </div>
               <div class="col-md-4 text-start text-md-end">
-                <div *ngIf="(reservationData.creditsUsed && reservationData.creditsUsed > 0) || (reservationData.appliedCredits && reservationData.appliedCredits > 0); else noCreditsBreakdown" class="d-flex flex-column align-items-start align-items-md-end">
+                <div *ngIf="(reservationData.creditsUsed && reservationData.creditsUsed.length > 0) || (reservationData.amountCredit && reservationData.amountCredit > 0) || (reservationData.appliedCredits && reservationData.appliedCredits > 0); else noCreditsBreakdown" class="d-flex flex-column align-items-start align-items-md-end">
                   <div class="mb-1 w-100 d-flex justify-content-between">
                     <span class="text-muted small">{{ 'tourBookingSuccess.paymentSummary.totalValue' | translate }}:</span>
                     <span class="fw-medium">{{ formatPrice(reservationData.totalAmount || 0) }}</span>
                   </div>
                   <div class="mb-2 w-100 d-flex justify-content-between text-success">
                     <span class="small">{{ 'tourBookingSuccess.paymentSummary.creditsApplied' | translate }}:</span>
-                    <span class="fw-medium">-{{ formatPrice(reservationData.creditsUsed || reservationData.appliedCredits || 0) }}</span>
+                    <span class="fw-medium">-{{ formatPrice(reservationData.amountCredit || reservationData.appliedCredits || 0) }}</span>
                   </div>
                   <div class="w-100 d-flex justify-content-between border-top pt-1">
                     <span class="text-muted fw-bold">{{ 'tourBookingSuccess.paymentSummary.totalPaid' | translate }}:</span>
@@ -345,6 +345,45 @@
                              class="text-decoration-none">
                             <i class="isax isax-call me-1"></i>
                             {{ currentReservation.serviceResponsible.phone }}
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tour Operator Info -->
+            <div class="row mb-0 mt-4" *ngIf="currentReservation.tourOperator">
+              <div class="col-12">
+                <h6 class="mb-3">
+                  <i class="isax isax-building-4 me-2"></i>
+                  {{ 'tourBookingSuccess.tourOperator.title' | translate }}
+                </h6>
+                <div class="card bg-light border-start border-info border-4 mb-0">
+                  <div class="card-body">
+                    <h6 class="card-title text-info mb-3">
+                      {{ currentReservation.tourOperator.name }}
+                    </h6>
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.tourOperator.email' | translate }}</label>
+                        <p class="mb-0">
+                          <a [href]="'mailto:' + currentReservation.tourOperator.email" 
+                             class="text-decoration-none">
+                            <i class="isax isax-sms me-1"></i>
+                            {{ currentReservation.tourOperator.email }}
+                          </a>
+                        </p>
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.tourOperator.phone' | translate }}</label>
+                        <p class="mb-0">
+                          <a [href]="'tel:' + currentReservation.tourOperator.phone" 
+                             class="text-decoration-none">
+                            <i class="isax isax-call me-1"></i>
+                            {{ currentReservation.tourOperator.phone }}
                           </a>
                         </p>
                       </div>

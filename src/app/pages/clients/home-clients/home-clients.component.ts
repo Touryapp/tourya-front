@@ -17,6 +17,7 @@ import { LocationsPublicDto } from '../../../shared/dto/locations-public.dto';
 import { CartService } from '../../../shared/services/cart.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CartSummary, DaySelection } from '../../../shared/dto/cart.dto';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-home-clients',
   standalone: false,
@@ -95,7 +96,8 @@ public categories: TourCategory[] = [
     private countryService: CountryService,
     private departmentService: DepartmentService,
     private cityService: CityService,
-    private cartService: CartService
+    private cartService: CartService,
+    private translate: TranslateService
   ) {
   }
   bsValue=new Date();
@@ -500,15 +502,20 @@ getTravellersDisplay(): string {
 getTravellersDetails(): string {
   const details = [];
   if (this.travellersData.adults > 0) {
-    details.push(`${this.travellersData.adults} Adult${this.travellersData.adults > 1 ? 's' : ''}`);
+    const adultKey = this.travellersData.adults > 1 ? 'searchComponent.adults' : 'searchComponent.adult';
+    details.push(`${this.travellersData.adults} ${this.translate.instant(adultKey)}`);
   }
   if (this.travellersData.children > 0) {
-    details.push(`${this.travellersData.children} Child${this.travellersData.children > 1 ? 'ren' : ''}`);
+    const childKey = this.travellersData.children > 1 ? 'searchComponent.children' : 'searchComponent.child';
+    details.push(`${this.travellersData.children} ${this.translate.instant(childKey)}`);
   }
   if (this.travellersData.infants > 0) {
-    details.push(`${this.travellersData.infants} Infant${this.travellersData.infants > 1 ? 's' : ''}`);
+    const infantKey = this.travellersData.infants > 1 ? 'searchComponent.infants' : 'searchComponent.infant';
+    details.push(`${this.travellersData.infants} ${this.translate.instant(infantKey)}`);
   }
-  return `${details.join(', ')}, ${this.travellersData.cabinClass}`;
+  const cabinKey = 'searchComponent.' + (this.travellersData.cabinClass.toLowerCase());
+  const translatedCabin = this.translate.instant(cabinKey) !== cabinKey ? this.translate.instant(cabinKey) : this.travellersData.cabinClass;
+  return `${details.join(', ')}, ${translatedCabin}`;
 }
 
   // Habilitar búsqueda si al menos un dato está seleccionado

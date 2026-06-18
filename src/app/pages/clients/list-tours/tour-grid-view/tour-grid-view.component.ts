@@ -96,7 +96,7 @@ export class TourGridViewComponent implements OnChanges {
     const priceType = tour?.priceType;
     if (!priceType) return '';
     const upper = priceType.toUpperCase();
-    if (upper === 'PRIVATE' || upper === 'PER_PERSON') {
+    if (upper === 'PRIVATE' || upper === 'PER_PERSON' || upper === 'INDIVIDUAL') {
       return this.translate.instant('toursList.priceType.person');
     }
     if (upper === 'GROUP' || upper === 'PER_GROUP') {
@@ -176,16 +176,9 @@ export class TourGridViewComponent implements OnChanges {
     this.selectTour.emit(tour);
   }
 
-  getTranslatedCategory(tourDto: any): string {
+  getCategoryNameObj(tourDto: any): any {
     const code = tourDto?.subCategory;
     const nameFallback = tourDto?.subCategoryName || tourDto?.subCategory || tourDto?.categoryName || 'N/A';
-    
-    if (code) {
-      const translatedCode = this.translate.instant('tourBookingSuccess.categories.' + code);
-      if (translatedCode !== 'tourBookingSuccess.categories.' + code) {
-        return translatedCode;
-      }
-    }
     
     if (this.categories && this.categories.length > 0) {
       if (code) {
@@ -193,7 +186,7 @@ export class TourGridViewComponent implements OnChanges {
           if (cat.subCategories) {
             const found = cat.subCategories.find((sub: any) => sub.code === code);
             if (found && found.name) {
-              return this.i18nService.getValue(found.name) || nameFallback;
+              return found.name;
             }
           }
         }
@@ -203,7 +196,7 @@ export class TourGridViewComponent implements OnChanges {
       if (catId) {
         const foundCat = this.categories.find(c => c.id === catId);
         if (foundCat && foundCat.name) {
-          return this.i18nService.getValue(foundCat.name) || nameFallback;
+          return foundCat.name;
         }
       }
     }

@@ -1229,8 +1229,9 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Confirma la eliminación de un tour con dialog de confirmación
    */
-  confirmRemoveItem(itemId: string, tourName: string): void {
-    const confirmed = confirm(`¿Estás seguro de eliminar "${tourName}" del carrito?`);
+  confirmRemoveItem(itemId: string, tourName: string | any): void {
+    const translatedName = this.i18nService.getValue(tourName);
+    const confirmed = confirm(`¿Estás seguro de eliminar "${translatedName}" del carrito?`);
     if (confirmed) {
       this.removeCartItem(itemId);
     }

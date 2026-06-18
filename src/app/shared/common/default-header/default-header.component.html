@@ -135,24 +135,24 @@
 
                                         <!-- Navigation Options -->
                                         <li>
-                                            <a [routerLink]="routes.listTours" (click)="closeMenu()">Tour</a>
+                                            <a [routerLink]="routes.listTours" (click)="closeMenu()">{{ 'header.menu.tours' | translate }}</a>
                                         </li>
                                         <li>
-                                            <a [routerLink]="routes.blogGrid" (click)="closeMenu()">Blog</a>
+                                            <a [routerLink]="routes.blogGrid" (click)="closeMenu()">{{ 'header.menu.blog' | translate }}</a>
                                         </li>
                                         <li>
-                                            <a [routerLink]="routes.contactanos" (click)="closeMenu()">Contactenos</a>
+                                            <a [routerLink]="routes.contactanos" (click)="closeMenu()">{{ 'header.menu.contactUs' | translate }}</a>
                                         </li>
                                         <li class="has-submenu" [class.active]="isLegalOpen">
-                                            <a href="javascript:void(0);" (click)="toggleLegal()">Legal <i class="fa-solid fa-angle-down"></i></a>
+                                            <a href="javascript:void(0);" (click)="toggleLegal()">{{ 'header.menu.legal' | translate }} <i class="fa-solid fa-angle-down"></i></a>
                                             <ul class="submenu" [style.display]="isLegalOpen ? 'block' : 'none'">
-                                                <li><a [routerLink]="routes.termsConditions" (click)="closeMenu()">Terminos y condiciones</a></li>
-                                                <li><a [routerLink]="routes.privacyPolicy" (click)="closeMenu()">Politicas de privacidad y tratamientos de datos personales</a></li>
+                                                <li><a [routerLink]="routes.termsConditions" (click)="closeMenu()">{{ 'header.menu.termsAndConditions' | translate }}</a></li>
+                                                <li><a [routerLink]="routes.privacyPolicy" (click)="closeMenu()">{{ 'header.menu.privacyPolicy' | translate }}</a></li>
                                             </ul>
                                             <a class="mean-expand" href="javascript:void(0);" (click)="toggleLegal()" style="font-size: 18px"><i class="ti ti-plus"></i></a>
                                         </li>
                                         <li *ngIf="isProvider || isAdmin">
-                                            <a [routerLink]="routes.proveedoresPage" (click)="closeMenu()">Proveedores</a>
+                                            <a [routerLink]="routes.proveedoresPage" (click)="closeMenu()">{{ 'header.menu.providers' | translate }}</a>
                                         </li>
                                     </ul>
                                 </nav>
