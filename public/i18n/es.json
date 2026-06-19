@@ -1330,7 +1330,7 @@
     "clearing": "Limpiando...",
     "clear": "Limpiar",
     "loading": "Cargando...",
-    "continue": "Continuar",
+    "continue": "Ir al carrito",
     "confirmClearTitle": "¿Estás seguro?",
     "confirmClearText": "Esta acción eliminará todos los tours de tu carrito",
     "confirmClearYes": "Sí, limpiar carrito",
@@ -1372,7 +1372,7 @@
     "isItYou": "Información del responsable del tour",
     "orderSummary": "Resumen de tu orden",
     "participantsCount": "{{count}} Personas",
-    "participantsLabel": "Participantes",
+    "participantsLabel": "Personas",
     "priceTypeAdult": "Adulto",
     "priceTypeChild": "Niño",
     "priceTypeBaby": "Bebe",
@@ -1460,8 +1460,11 @@
       "noCartItems": "No hay items en el carrito para procesar",
       "creditPaymentError": "Ocurrió un error al procesar el pago con tus créditos. Por favor contacta a soporte.",
       "paymentConfigError": "Error en la configuración de pago: {{errors}}",
+      "paymentSuccessButReservationFailedTitle": "Error en la Reserva",
       "paymentSuccessButReservationFailed": "El pago fue exitoso pero hubo un error creando la reserva. Por favor contacte soporte.",
+      "paymentDeclinedTitle": "Pago Declinado",
       "paymentDeclined": "El pago fue declinado. Por favor intente con otro método de pago.",
+      "paymentPendingTitle": "Pago Pendiente",
       "paymentPending": "El pago está siendo procesado. Recibirá una confirmación pronto.",
       "invalidItemId": "Error: ID de item inválido",
       "completeContactFirst": "Por favor completa primero la información de contacto (Nombre, Apellido, Email y Teléfono)"
@@ -1490,7 +1493,12 @@
       "all": "Todos",
       "created": "Creada",
       "canceled": "Cancelada",
-      "eliminated": "Eliminada"
+      "eliminated": "Eliminada",
+      "reserved": "Reservado",
+      "used": "Usado",
+      "applied": "Aplicado",
+      "consumed": "Consumido",
+      "expired": "Expirado"
     }
   },
   "bookingTours": {
@@ -1616,12 +1624,12 @@
     "payer": {
       "title": "Información del Pagador",
       "fullName": "Nombre Completo",
-      "email": "Email",
+      "email": "Correo electrónico",
       "phone": "Teléfono",
-      "document": "Documento"
+      "document": "Número de identificación"
     },
     "actions": {
-      "print": "Imprimir Confirmación",
+      "print": "Imprimir Reserva",
       "viewReservations": "Ver Mis Reservas"
     },
     "importantInfo": {

@@ -431,14 +431,14 @@
                                             <div class="ms-2">
                                                 <div *ngFor="let participant of item.participants" class="d-flex justify-content-between align-items-center mb-1">
                                                     <small>{{ getParticipantTypeLabel(participant.ageType) | translate }}: {{ participant.quantity }}</small>
-                                                    <small class="text-muted">{{ participant.price | currency:'COP':'symbol':'1.0-0' }} {{ 'cartSummary.each' | translate }}</small>
+                                                    <small class="text-muted">{{ formatPrice(participant.price) }} COP {{ 'cartSummary.each' | translate }}</small>
                                                 </div>
                                             </div>
                                         </div>
                                         
                                         <div class="text-end mt-2">
                                             <div class="tour-price-display">
-                                                <strong class="tour-total-price">{{ formatPrice(item.totalPrice) }}</strong>
+                                                <strong class="tour-total-price">{{ formatPrice(item.totalPrice) }} COP</strong>
                                                 <small class="tour-price-label">{{ 'cartSummary.totalPerTour' | translate }}</small>
                                             </div>
                                         </div>
@@ -539,6 +539,33 @@
                     <button class="btn btn-primary btn-lg" (click)="continueShopping()">
                         {{ 'cartSummary.exploreToursBtn' | translate }}
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Success / Error Modal -->
+    <div class="modal fade" id="payment-result-modal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content booking-success-modal">
+                <div class="modal-body">
+                    <div>
+                        <div class="booking-icon text-center mb-3">
+                            <i *ngIf="paymentResultType === 'success'" class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                            <i *ngIf="paymentResultType === 'warning'" class="fas fa-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+                            <i *ngIf="paymentResultType === 'error'" class="fas fa-times-circle text-danger" style="font-size: 4rem;"></i>
+                            <i *ngIf="paymentResultType === 'pending'" class="fas fa-clock text-info" style="font-size: 4rem;"></i>
+                        </div>
+                        <h5 class="text-center mb-3">{{ paymentResultTitle | translate }}</h5>
+                        <div class="text-center mb-4">
+                            <p>{{ paymentResultMessage | translate }}</p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <button type="button" class="btn btn-primary d-flex flex-shrink-0" (click)="closePaymentModal()">
+                                {{ 'cartSummary.close' | translate }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
