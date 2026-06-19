@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } fr
 import { Router } from '@angular/router';
 import { Subject, takeUntil, take, firstValueFrom } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
 import { routes } from '../../../shared/routes/routes';
 import { CartService } from '../../../shared/services/cart.service';
 import { CartItem, CartSummary } from '../../../shared/dto/cart.dto';
@@ -57,6 +58,11 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Reservation state
   private reservationIds: number[] = []; // ✨ Almacena los IDs devueltos por la pre-reserva
+
+  // Payment result modal state
+  paymentResultType: 'success' | 'warning' | 'error' | 'pending' = 'success';
+  paymentResultTitle: string = '';
+  paymentResultMessage: string = '';
 
   // Contact information (quien realiza el pago)
   contactForm = {
@@ -399,7 +405,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (!this.cartItems || this.cartItems.length === 0) {
-      alert(this.translate.instant('cartSummary.errors.noCartItemsForCredits'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.noCartItemsForCredits'), icon: 'warning' });
       return;
     }
 
@@ -414,34 +420,12 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
       creditIds
     };
 
-    console.log('Reservando créditos:', payload);
-
-    this.creditService.reserveCredits(payload).subscribe({
-      next: (response) => {
-        console.log('✅ Créditos reservados exitosamente en el backend:', response);
-        this.selectedCredits = selected;
-        this.appliedCreditsValue = amountToReserve;
-        this.isModalOpen = false;
-        this.closeCreditsModal();
-        this.processing = false;
-      },
-      error: (error) => {
-        console.error('❌ Error reservando créditos:', error);
-        
-        // Manejar mensaje de error del backend si existe
-        let errorMessage = 'Error al aplicar los créditos. Por favor intente nuevamente.';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        } else if (error.error && error.error.error) {
-          errorMessage = error.error.error;
-        } else if (typeof error.error === 'string') {
-          errorMessage = error.error;
-        }
-
-        alert(errorMessage);
-        this.processing = false;
-      }
-    });
+    console.log('✅ Créditos guardados en memoria para uso en checkout:', payload);
+    this.selectedCredits = selected;
+    this.appliedCreditsValue = amountToReserve;
+    this.isModalOpen = false;
+    this.closeCreditsModal();
+    this.processing = false;
   }
 
   onCreditsCanceled(): void {
@@ -530,14 +514,14 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     
     for (let field of requiredContactFields) {
       if (!this.contactForm[field as keyof typeof this.contactForm]) {
-        alert(this.translate.instant('cartSummary.errors.completeField', { field }));
+        Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.completeField', { field }), icon: 'warning' });
         return false;
       }
     }
     
     // Validar información de viajeros
     if (!this.validateTravelersInfo()) {
-      alert(this.translate.instant('cartSummary.errors.completeTravelersInfo'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.completeTravelersInfo'), icon: 'warning' });
       return false;
     }
     
@@ -553,7 +537,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         console.error(`❌ Campo requerido faltante: ${field}`);
         console.error(`❌ Valor actual: "${value}"`);
         console.error('❌ userForm completo:', this.userForm);
-        alert(`Campo requerido: ${field}`);
+        Swal.fire({ title: 'Atención', text: `Campo requerido: ${field}`, icon: 'warning' });
         return false;
       }
     }
@@ -568,7 +552,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     
     if (!emailValid) {
       console.error('❌ Formato de email inválido:', emailValue);
-      alert(this.translate.instant('cartSummary.errors.invalidEmail'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.invalidEmail'), icon: 'warning' });
       return false;
     }
     
@@ -725,20 +709,52 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     // 1. Validar formulario
     if (!this.validateForm()) {
       console.error('Formulario inválido, no se puede proceder al pago');
-      alert(this.translate.instant('cartSummary.errors.completeRequiredFields'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.completeRequiredFields'), icon: 'warning' });
       return;
     }
     
     // 2. Validar que hay items en el carrito
     if (!this.hasItems) {
       console.error('No hay items en el carrito');
-      alert(this.translate.instant('cartSummary.errors.noCartItems'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.noCartItems'), icon: 'warning' });
       return;
     }
 
     this.processing = true;
 
-    // 🚀 NUEVO PASO: Crear pre-reserva antes de Wompi
+    // 🚀 NUEVO PASO A: Reservar créditos si se seleccionaron
+    if (this.selectedCredits && this.selectedCredits.length > 0) {
+      try {
+        console.log('📝 Reservando créditos en el backend antes del pago...');
+        const amountToReserve = this.appliedCreditsValue;
+        const creditIds = this.selectedCredits.map(c => c.id);
+        const shoppingCartItemId = parseInt(this.cartItems[0].id, 10);
+        
+        const payload = {
+          shoppingCartItemId,
+          amountToReserve,
+          creditIds
+        };
+        
+        await firstValueFrom(this.creditService.reserveCredits(payload));
+        console.log('✅ Créditos reservados exitosamente en el backend.');
+      } catch (error: any) {
+        console.error('❌ Error reservando créditos:', error);
+        let errorMsg = 'Error al aplicar los créditos. Por favor intente nuevamente.';
+        if (error.error && error.error.message) {
+          errorMsg = error.error.message;
+        } else if (error.error && error.error.error) {
+          errorMsg = error.error.error;
+        } else if (typeof error.error === 'string') {
+          errorMsg = error.error;
+        }
+        Swal.fire({ title: 'Atención', text: errorMsg, icon: 'warning' });
+        this.processing = false;
+        return;
+      }
+    }
+
+    // 🚀 NUEVO PASO B: Crear pre-reserva antes de Wompi
     try {
       console.log('📝 Creando pre-reserva en el backend...');
       const reservationPayload = {
@@ -785,7 +801,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
       } else if (error.error && error.error.error) {
         errorMsg = error.error.error;
       }
-      alert(errorMsg);
+      Swal.fire({ title: 'Atención', text: errorMsg, icon: 'warning' });
       this.processing = false;
       return;
     }
@@ -813,7 +829,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 
       } catch (error) {
         console.error('❌ Error procesando pago 100% crédito:', error);
-        alert(this.translate.instant('cartSummary.errors.creditPaymentError'));
+        Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.creditPaymentError'), icon: 'warning' });
       } finally {
         this.processing = false;
       }
@@ -830,7 +846,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
       const validation = this.wompiService.validateConfig(wompiConfig);
       if (!validation.isValid) {
         console.error('Configuración inválida:', validation.errors);
-        alert(this.translate.instant('cartSummary.errors.paymentConfigError', { errors: validation.errors.join(', ') }));
+        Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.paymentConfigError', { errors: validation.errors.join(', ') }), icon: 'warning' });
         this.processing = false;
         return;
       }
@@ -856,7 +872,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
       
-      alert(errorMessage);
+      Swal.fire({ title: 'Atención', text: errorMessage, icon: 'warning' });
       this.processing = false;
     }
   }
@@ -893,25 +909,44 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         
       } catch (error) {
         console.error('❌ Error creando reserva:', error);
-        alert(this.translate.instant('cartSummary.errors.paymentSuccessButReservationFailed'));
-        
-        // Navegar a página de error o soporte
-        this.router.navigate(['/clients/list-tours']);
+        this.showPaymentModal('error', 'cartSummary.errors.paymentSuccessButReservationFailedTitle', 'cartSummary.errors.paymentSuccessButReservationFailed');
       }
       
     } else if (transaction.status === 'DECLINED') {
       console.log('❌ Pago declinado:', transaction.id);
-      alert(this.translate.instant('cartSummary.errors.paymentDeclined'));
+      this.showPaymentModal('error', 'cartSummary.errors.paymentDeclinedTitle', 'cartSummary.errors.paymentDeclined');
       
     } else if (transaction.status === 'PENDING') {
       console.log('⏳ Pago pendiente:', transaction.id);
-      alert(this.translate.instant('cartSummary.errors.paymentPending'));
-      
-      // TODO: Crear página para pagos pendientes
-      this.router.navigate(['/clients/list-tours']);
+      this.showPaymentModal('pending', 'cartSummary.errors.paymentPendingTitle', 'cartSummary.errors.paymentPending');
     }
     
     this.processing = false;
+  }
+
+  showPaymentModal(type: 'success' | 'warning' | 'error' | 'pending', titleKey: string, messageKey: string) {
+    this.paymentResultType = type;
+    this.paymentResultTitle = titleKey;
+    this.paymentResultMessage = messageKey;
+    const modalElement = document.getElementById('payment-result-modal');
+    if (modalElement) {
+        let modalInstance = (window as any).bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new (window as any).bootstrap.Modal(modalElement);
+        }
+        modalInstance.show();
+    }
+  }
+
+  closePaymentModal() {
+    const modalElement = document.getElementById('payment-result-modal');
+    if (modalElement) {
+        const modalInstance = (window as any).bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    }
+    this.router.navigate(['/clients/list-tours']);
   }
 
   /**
@@ -1088,25 +1123,25 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // 1. Validar grupos disponibles
         if (groupsRequested > availability) {
-          alert(`Lo sentimos, solo quedan ${availability} grupos disponibles para este horario.`);
+          Swal.fire({ title: 'Atención', text: `Lo sentimos, solo quedan ${availability} grupos disponibles para este horario.`, icon: 'warning' });
           return false;
         }
         
         // 2. Validar participantes totales (capacidad escalada)
         if (cartItem.totalParticipants > totalCapacity) {
-          alert(`Lo sentimos, el número de participantes (${cartItem.totalParticipants}) excede la capacidad total para ${groupsRequested} grupos (${totalCapacity} personas).`);
+          Swal.fire({ title: 'Atención', text: `Lo sentimos, el número de participantes (${cartItem.totalParticipants}) excede la capacidad total para ${groupsRequested} grupos (${totalCapacity} personas).`, icon: 'warning' });
           return false;
         }
 
         // 3. Validar sillas vacías (al menos 1 persona por grupo)
         if (cartItem.totalParticipants < groupsRequested) {
-          alert(`Estás seleccionando menos participantes (${cartItem.totalParticipants}) que la cantidad de grupos reservados (${groupsRequested}). Vas a tener sillas vacías.`);
+          Swal.fire({ title: 'Atención', text: `Estás seleccionando menos participantes (${cartItem.totalParticipants}) que la cantidad de grupos reservados (${groupsRequested}). Vas a tener sillas vacías.`, icon: 'warning' });
           return false;
         }
       } else if (priceType === 'individual') {
         // 1. Validar participantes totales (individual)
         if (cartItem.totalParticipants > availability) {
-          alert(`Lo sentimos, no hay suficiente cupo para la cantidad de participantes seleccionada. Disponibles: ${availability}`);
+          Swal.fire({ title: 'Atención', text: `Lo sentimos, no hay suficiente cupo para la cantidad de participantes seleccionada. Disponibles: ${availability}`, icon: 'warning' });
           return false;
         }
       }
@@ -1163,7 +1198,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     if (isNaN(numericItemId)) {
       console.error('ID de item inválido:', itemId);
       this.processing = false;
-      alert(this.translate.instant('cartSummary.errors.invalidItemId'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.invalidItemId'), icon: 'warning' });
       return;
     }
     
@@ -1218,7 +1253,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
         
-        alert(errorMessage); // TODO: Replace with proper toast/snackbar
+        Swal.fire({ title: 'Atención', text: errorMessage, icon: 'warning' }); 
       })
       .finally(() => {
         // Resetear loading
@@ -1388,7 +1423,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   copyContactInfoToAllTravelers(): void {
     if (!this.isContactFormComplete()) {
-      alert(this.translate.instant('cartSummary.errors.completeContactFirst'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.completeContactFirst'), icon: 'warning' });
       return;
     }
 
@@ -1416,7 +1451,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     
     // Mostrar notificación de éxito
     // TODO: Reemplazar con toast/snackbar
-    alert(`✅ Tus datos fueron copiados exitosamente a los ${this.travelersInfo.length} viajeros`);
+    Swal.fire({ title: 'Éxito', text: `✅ Tus datos fueron copiados exitosamente a los ${this.travelersInfo.length} viajeros`, icon: 'success' });
   }
 
   /**
@@ -1424,7 +1459,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   copyContactInfoToTraveler(index: number): void {
     if (!this.isContactFormComplete()) {
-      alert(this.translate.instant('cartSummary.errors.completeContactFirst'));
+      Swal.fire({ title: 'Atención', text: this.translate.instant('cartSummary.errors.completeContactFirst'), icon: 'warning' });
       return;
     }
 
@@ -1445,7 +1480,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     
     // Mostrar notificación de éxito
     // TODO: Reemplazar con toast/snackbar
-    alert(`✅ Tus datos fueron copiados exitosamente al viajero de "${traveler.tourName}"`);
+    Swal.fire({ title: 'Éxito', text: `✅ Tus datos fueron copiados exitosamente al viajero de "${traveler.tourName}"`, icon: 'success' });
   }
 
   /**

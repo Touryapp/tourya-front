@@ -80,6 +80,7 @@ export class ClientCreditsComponent implements OnInit {
         return 'bg-success-subtle text-success';
       case 'USED':
       case 'APPLIED':
+      case 'CONSUMED':
         return 'bg-secondary-subtle text-secondary';
       case 'EXPIRED':
         return 'bg-danger-subtle text-danger';

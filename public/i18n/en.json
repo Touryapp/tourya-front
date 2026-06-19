@@ -1302,7 +1302,7 @@
     "cancel": "Cancel",
     "logout": "Log out",
     "reschedule": "Reschedule",
-    "addToItinerary": "Add to Itinerary",
+    "addToItinerary": "Add to Shopping Cart",
     "verifyingProfile": "Verifying profile...",
     "rescheduling": "Rescheduling...",
     "adding": "Adding...",
@@ -1329,7 +1329,7 @@
     "clearing": "Clearing...",
     "clear": "Clear",
     "loading": "Loading...",
-    "continue": "Continue",
+    "continue": "Go to cart",
     "confirmClearTitle": "Are you sure?",
     "confirmClearText": "This action will remove all tours from your itinerary.",
     "confirmClearYes": "Yes, clear itinerary",
@@ -1371,7 +1371,7 @@
     "isItYou": "Tour leader information",
     "orderSummary": "Your order summary",
     "participantsCount": "{{count}} People",
-    "participantsLabel": "Participants",
+    "participantsLabel": "People",
     "priceTypeAdult": "Adult",
     "priceTypeChild": "Child",
     "priceTypeBaby": "Baby",
@@ -1459,9 +1459,12 @@
       "noCartItems": "No items in cart to process",
       "creditPaymentError": "An error occurred processing the payment with your credits. Please contact support.",
       "paymentConfigError": "Payment configuration error: {{errors}}",
+      "paymentSuccessButReservationFailedTitle": "Reservation Error",
       "paymentSuccessButReservationFailed": "Payment was successful but there was an error creating the reservation. Please contact support.",
+      "paymentDeclinedTitle": "Payment Declined",
       "paymentDeclined": "The payment was declined. Please try another payment method.",
-      "paymentPending": "The payment is being processed. You will receive a confirmation shortly.",
+      "paymentPendingTitle": "Payment Pending",
+      "paymentPending": "Your payment is pending confirmation. We will notify you once it's processed.",
       "invalidItemId": "Error: Invalid item ID",
       "completeContactFirst": "Please first complete your contact information (Name, Last Name, Email and Phone)"
     }
@@ -1476,7 +1479,7 @@
     "colId": "Credit ID",
     "colBookingId": "Reservation ID",
     "colValue": "Amount",
-    "colCreationDate": "Date of creation",
+    "colCreationDate": "Creation Date",
     "colExpirationDate": "Expiration date",
     "colStatus": "Status",
     "noCreditsFound": "No credits found",
@@ -1489,7 +1492,12 @@
       "all": "All",
       "created": "Created",
       "canceled": "Canceled",
-      "eliminated": "Eliminated"
+      "eliminated": "Eliminated",
+      "reserved": "Reserved",
+      "used": "Used",
+      "applied": "Applied",
+      "consumed": "Consumed",
+      "expired": "Expired"
     }
   },
   "bookingTours": {
@@ -1617,10 +1625,10 @@
       "fullName": "Full Name",
       "email": "Email",
       "phone": "Phone",
-      "document": "Document"
+      "document": "Identification number"
     },
     "actions": {
-      "print": "Print Confirmation",
+      "print": "Print Reservation",
       "viewReservations": "View My Bookings"
     },
     "importantInfo": {
