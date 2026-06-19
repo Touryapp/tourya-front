@@ -25,7 +25,7 @@ export class AppComponent {
     private geoService: GeolocationService,
     private authService: AuthService
   ) {
-    console.log('version 1.0.14');
+    console.log('version 1.0.15');
     setTheme("bs5");
     this.common.base.subscribe((res: string) => {
       this.base = res;
