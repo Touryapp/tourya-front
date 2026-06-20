@@ -27,6 +27,7 @@ import { CategoryDto } from "../../../shared/dto/category.dto";
 import { PendingActionService } from "../../../shared/services/pending-action.service";
 import { TouristService } from "../../../shared/services/tourist.service";
 import { TranslateService } from "@ngx-translate/core";
+import { I18nFieldService } from "../../../shared/services/i18n-field.service";
 import Swal from "sweetalert2";
 
 @Component({
@@ -250,7 +251,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
     private cityService: CityService,
     private pendingActionService: PendingActionService,
     private touristService: TouristService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private i18nService: I18nFieldService
   ) {}
 
   ngOnInit(): void {
@@ -1248,11 +1250,11 @@ export class ListToursComponent implements OnInit, OnDestroy {
         // Mostrar mensaje de bienvenida
         Swal.fire({
           icon: 'success',
-          title: '¡Bienvenido de nuevo!',
-          text: tour ? `Hemos agregado el tour "${tour.tour.name}" a tu carrito.` : 'Tu tour ha sido agregado al carrito exitosamente.',
-          confirmButtonText: 'Ver carrito',
+          title: this.translate.instant('listTours.welcomeBack'),
+          text: tour ? this.translate.instant('listTours.tourAdded', { tourName: this.i18nService.getValue(tour.tour.name) }) : this.translate.instant('listTours.tourAddedGeneric'),
+          confirmButtonText: this.translate.instant('listTours.viewCart'),
           showCancelButton: true,
-          cancelButtonText: 'Continuar buscando'
+          cancelButtonText: this.translate.instant('listTours.continueShopping')
         }).then((result) => {
           if (result.isConfirmed) {
             // Aquí podrías navegar a la página del carrito si existe
@@ -1266,9 +1268,9 @@ export class ListToursComponent implements OnInit, OnDestroy {
         
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Hubo un problema al agregar el tour. Por favor, intenta nuevamente.',
-          confirmButtonText: 'Entendido'
+          title: this.translate.instant('listTours.errorTitle'),
+          text: this.translate.instant('listTours.errorAddTour'),
+          confirmButtonText: this.translate.instant('listTours.understood')
         });
       }
     }, 500); // Pequeño delay para asegurar que la UI esté lista

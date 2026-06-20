@@ -279,14 +279,6 @@
                                                         [value]="TypeOfAddress.MEETING_POINT">
                                                         {{ 'tour-form.fields.typeOfAddress.options.meetingPoint' | translate }}
                                                     </mat-option>
-                                                    <mat-option
-                                                        [disabled]="typeOfAddressIsSelected(TypeOfAddress.END_POINT, i)"
-                                                        [value]="TypeOfAddress.END_POINT">{{ 'tour-form.fields.typeOfAddress.options.endPoint' | translate }}</mat-option>
-                                                    <mat-option
-                                                        [disabled]="typeOfAddressIsSelected(TypeOfAddress.PICK_UP_POINT, i)"
-                                                        [value]="TypeOfAddress.PICK_UP_POINT">
-                                                        {{ 'tour-form.fields.typeOfAddress.options.pickUpPoint' | translate }}
-                                                    </mat-option>
                                                 </mat-select>
 
                                                 <div *ngIf="location.get('typeOfAddress')?.invalid && (location.get('typeOfAddress')?.dirty || location.get('typeOfAddress')?.touched)"

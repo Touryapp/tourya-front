@@ -177,9 +177,11 @@
                             
                         </div>
                         <!-- /Map -->
-                        <div class="mt-3" *ngIf="$any(tour)?.meetingPoint">
+                        <div class="mt-3" *ngIf="tour?.locations?.length">
                             <h6 class="fs-16 mb-2"><i class="isax isax-location me-1"></i>{{ 'tours-detail.booking.meetingPoint' | translate }}</h6>
-                            <p class="mb-0">{{ $any(tour).meetingPoint | localizedName }}</p>
+                            <p class="mb-2" *ngFor="let loc of tour.locations">
+                                <i class="isax isax-location5 text-primary me-2"></i>{{ loc.address }}
+                            </p>
                         </div>
                     </div>
 

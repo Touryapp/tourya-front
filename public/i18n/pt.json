@@ -1124,7 +1124,7 @@
   },
   "tourSlotModal": {
     "title": "Selecionar Horário e Participantes",
-    "available": "Disponíveis:",
+    "available": "Disponível:",
     "availableSchedules": "Horários Disponíveis",
     "selectSchedule": "Selecione o horário da sua preferência",
     "groupsAvailable": "grupos disponíveis",
@@ -1400,7 +1400,7 @@
     "travelerPhone": "Telefone do Viajante",
     "noToursInCart": "Não há passeios no carrinho",
     "addToursToComplete": "Adicione passeios ao carrinho para preencher as informações dos viajantes",
-    "paymentMethod": "Método de Pagamento",
+    "paymentMethod": "Forma de pagamento",
     "securePayments": "Pagamentos seguros processados pelo Wompi",
     "accepts": "Aceita",
     "creditDebitCards": "cartões de crédito/débito",
@@ -1470,6 +1470,16 @@
       "completeContactFirst": "Por favor preencha primeiro suas informações de contato (Nome, Sobrenome, E-mail e Telefone)"
     }
   },
+  "listTours": {
+    "welcomeBack": "Bem-vindo de volta!",
+    "tourAdded": "Adicionamos o tour \"{{tourName}}\" ao seu carrinho.",
+    "tourAddedGeneric": "O seu tour foi adicionado ao carrinho com sucesso.",
+    "viewCart": "Ver carrinho",
+    "continueShopping": "Continuar procurando",
+    "errorTitle": "Erro",
+    "errorAddTour": "Houve um problema ao adicionar o tour. Por favor, tente novamente.",
+    "understood": "Entendido"
+  },
   "clientCredits": {
     "myCredits": "Meus Créditos",
     "totalCredits": "Total de créditos",
@@ -1532,7 +1542,7 @@
     "total": "Total"
   },
   "bookingConfirm": {
-    "title": "Confirmação de Reserva",
+    "title": "Confirmação da reserva",
     "breadcrumbTours": "Passeios",
     "breadcrumbConfirmation": "Confirmação",
     "successTitle": "Reserva Confirmada!",
@@ -1551,7 +1561,7 @@
     "name": "Nome",
     "email": "E-mail",
     "phone": "Telefone",
-    "paymentMethod": "Método de Pagamento",
+    "paymentMethod": "Forma de pagamento",
     "downloadInvoice": "Baixar Fatura",
     "printBooking": "Imprimir Reserva",
     "backToHome": "Voltar ao Início",
@@ -1562,7 +1572,7 @@
     "info4": "Entre em contato conosco 24 horas antes se precisar fazer alterações"
   },
   "tourBookingSuccess": {
-    "title": "Confirmação de Reserva",
+    "title": "Confirmação da reserva",
     "breadcrumbTours": "Passeios",
     "breadcrumbConfirmation": "Confirmação",
     "loading": {
@@ -1585,7 +1595,7 @@
       "title": "Resumo do Pagamento",
       "downloadAllQRs": "Baixar Todos os QRs",
       "transactionId": "ID da Transação",
-      "paymentMethod": "Método de Pagamento",
+      "paymentMethod": "Forma de pagamento",
       "totalValue": "Valor total",
       "creditsApplied": "Créditos aplicados",
       "totalPaid": "Total Pago"
@@ -1603,21 +1613,21 @@
       "reservationId": "ID da Reserva",
       "duration": "Duração",
       "price": "Preço",
-      "deliveryStatus": "Status de Entrega",
+      "deliveryStatus": "Status da entrega",
       "created": "Criado",
       "lastModified": "Última Modificação",
       "includedActivities": "Atividades Incluídas",
       "extraServices": "Serviços Adicionais"
     },
     "qr": {
-      "title": "Código QR para esta Reserva",
+      "title": "QR Code desta reserva",
       "loadError": "Não foi possível carregar o código QR",
       "instruction": "Apresente este código QR no momento do seu passeio para confirmar sua reserva #{{id}}.",
       "download": "Baixar QR",
       "share": "Compartilhar"
     },
     "provider": {
-      "title": "Provedor de Serviços",
+      "title": "Contato de atendimento",
       "email": "E-mail de Contato",
       "phone": "Telefone"
     },
@@ -1666,7 +1676,7 @@
       "recoveryError": "Ocorreu um erro ao recuperar os detalhes da sua reserva. Por favor, entre em contato com o suporte."
     },
     "tourOperator": {
-      "title": "Operador Turístico",
+      "title": "Operadora de Turismo",
       "email": "E-mail",
       "phone": "Telefone"
     }

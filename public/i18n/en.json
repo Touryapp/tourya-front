@@ -431,7 +431,7 @@
       "adminTitle": "Booking Administration",
       "adminSubtitle": "Full view of all platform bookings",
       "columns": {
-        "id": "Booking ID",
+        "id": "Reservation ID",
         "idShort": "ID",
         "tourName": "Tour Name",
         "tourNameShort": "Tour Name",
@@ -1469,6 +1469,16 @@
       "completeContactFirst": "Please first complete your contact information (Name, Last Name, Email and Phone)"
     }
   },
+  "listTours": {
+    "welcomeBack": "Welcome back!",
+    "tourAdded": "We have added the tour \"{{tourName}}\" to your cart.",
+    "tourAddedGeneric": "Your tour has been successfully added to the cart.",
+    "viewCart": "View cart",
+    "continueShopping": "Continue shopping",
+    "errorTitle": "Error",
+    "errorAddTour": "There was a problem adding the tour. Please try again.",
+    "understood": "Understood"
+  },
   "clientCredits": {
     "myCredits": "My Credits",
     "totalCredits": "Total credits",
@@ -1536,7 +1546,7 @@
     "breadcrumbConfirmation": "Confirmation",
     "successTitle": "Booking Confirmed!",
     "successMessage": "Your tour booking has been successfully confirmed. You will receive a confirmation email shortly.",
-    "bookingId": "Booking ID",
+    "bookingId": "Reservation ID",
     "bookingDetails": "Booking Details",
     "tourName": "Tour Name",
     "location": "Location",
@@ -1578,11 +1588,11 @@
       "message": "Your booking has been successfully processed. You will receive a confirmation email shortly.",
       "paymentId": "Payment",
       "reservation": "Booking",
-      "reservations": "Bookings"
+      "reservations": "Reservations"
     },
     "paymentSummary": {
       "title": "Payment Summary",
-      "downloadAllQRs": "Download All QRs",
+      "downloadAllQRs": "Download all QR codes",
       "transactionId": "Transaction ID",
       "paymentMethod": "Payment Method",
       "totalValue": "Total Value",
@@ -1599,7 +1609,7 @@
     "details": {
       "travellers": "Travellers",
       "tourDate": "Tour Date",
-      "reservationId": "Booking ID",
+      "reservationId": "Reservation ID",
       "duration": "Duration",
       "price": "Price",
       "deliveryStatus": "Delivery Status",
@@ -1609,14 +1619,14 @@
       "extraServices": "Extra Services"
     },
     "qr": {
-      "title": "QR Code for this Booking",
+      "title": "QR code for this Reservation",
       "loadError": "Could not load QR code",
-      "instruction": "Present this QR code at the time of your tour to confirm your booking #{{id}}.",
-      "download": "Download QR",
+      "instruction": "Present this QR code at the start of your tour to confirm your booking #{{id}}.",
+      "download": "Download QR code",
       "share": "Share"
     },
     "provider": {
-      "title": "Service Provider",
+      "title": "Service contact",
       "email": "Contact Email",
       "phone": "Phone"
     },

@@ -1470,6 +1470,16 @@
       "completeContactFirst": "Por favor completa primero la información de contacto (Nombre, Apellido, Email y Teléfono)"
     }
   },
+  "listTours": {
+    "welcomeBack": "¡Bienvenido de nuevo!",
+    "tourAdded": "Hemos agregado el tour \"{{tourName}}\" a tu carrito.",
+    "tourAddedGeneric": "Tu tour ha sido agregado al carrito exitosamente.",
+    "viewCart": "Ver carrito",
+    "continueShopping": "Continuar buscando",
+    "errorTitle": "Error",
+    "errorAddTour": "Hubo un problema al agregar el tour. Por favor, intenta nuevamente.",
+    "understood": "Entendido"
+  },
   "clientCredits": {
     "myCredits": "Mis Créditos",
     "totalCredits": "Total de créditos",
@@ -1617,7 +1627,7 @@
       "share": "Compartir"
     },
     "provider": {
-      "title": "Proveedor del Servicio",
+      "title": "Contacto del servicio",
       "email": "Email de Contacto",
       "phone": "Teléfono"
     },
