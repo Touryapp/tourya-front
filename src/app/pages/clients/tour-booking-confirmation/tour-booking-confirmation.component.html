@@ -97,7 +97,7 @@
                 <div *ngIf="(reservationData.creditsUsed && reservationData.creditsUsed.length > 0) || (reservationData.amountCredit && reservationData.amountCredit > 0) || (reservationData.appliedCredits && reservationData.appliedCredits > 0); else noCreditsBreakdown" class="d-flex flex-column align-items-start align-items-md-end">
                   <div class="mb-1 w-100 d-flex justify-content-between">
                     <span class="text-muted small">{{ 'tourBookingSuccess.paymentSummary.totalValue' | translate }}:</span>
-                    <span class="fw-medium">{{ formatPrice(reservationData.totalAmount || 0) }}</span>
+                    <span class="fw-medium">{{ formatPrice(reservationData.totalAmount || 0) }} COP</span>
                   </div>
                   <div class="mb-2 w-100 d-flex justify-content-between text-success">
                     <span class="small">{{ 'tourBookingSuccess.paymentSummary.creditsApplied' | translate }}:</span>

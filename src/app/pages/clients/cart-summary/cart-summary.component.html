@@ -452,7 +452,7 @@
                         <div class="price-breakdown" *ngIf="cartSummary">
                             <div class="d-flex justify-content-between mb-2">
                                 <span>{{ 'cartSummary.subtotal' | translate }}:</span>
-                                <span>{{ formatPrice(cartSummary.totalPrice) }}</span>
+                                <span>{{ formatPrice(cartSummary.totalPrice) }} COP</span>
                             </div>
                             
                             <!-- Créditos Disponibles (Aviso) -->
@@ -484,7 +484,7 @@
                             <hr>
                             <div class="d-flex justify-content-between mb-3">
                                 <strong>{{ 'cartSummary.totalToPay' | translate }}</strong>
-                                <strong class="text-primary">{{ formatPrice(finalTotalToPay) }}</strong>
+                                <strong class="text-primary">{{ formatPrice(finalTotalToPay) }} COP</strong>
                             </div>
                         </div>
 
