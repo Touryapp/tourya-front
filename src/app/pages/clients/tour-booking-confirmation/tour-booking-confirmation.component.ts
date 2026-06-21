@@ -6,7 +6,7 @@ import { ReservationService } from '../../../shared/services/reservation.service
 import { ClientReservation } from '../../../shared/models/reservation.model';
 import { routes } from '../../../shared/routes/routes';
 import { TranslateService } from '@ngx-translate/core';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-tour-booking-confirmation',
   standalone: false,
@@ -431,10 +431,22 @@ export class TourBookingConfirmationComponent implements OnInit {
       }
       
       const successMsg = this.translate.instant('tourBookingSuccess.alerts.downloadSuccess', { count: this.reservationData.reservations.length });
-      alert(successMsg);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: successMsg,
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
     } catch (error) {
       console.error('❌ Error descargando QRs:', error);
-      alert(this.translate.instant('tourBookingSuccess.alerts.downloadError'));
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.translate.instant('tourBookingSuccess.alerts.downloadError'),
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
     }
   }
 
@@ -477,12 +489,25 @@ export class TourBookingConfirmationComponent implements OnInit {
       } else {
         // Fallback: copiar al clipboard
         await navigator.clipboard.writeText(this.currentReservation.qrUrl);
-        alert(this.translate.instant('tourBookingSuccess.alerts.shareSuccess'));
+        Swal.fire({
+          icon: 'success',
+          title: '¡Copiado!',
+          text: this.translate.instant('tourBookingSuccess.alerts.shareSuccess'),
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+          timer: 2000
+        });
         console.log('✅ QR URL copiado al portapapeles');
       }
     } catch (error) {
       console.error('❌ Error compartiendo QR:', error);
-      alert(this.translate.instant('tourBookingSuccess.alerts.shareError'));
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.translate.instant('tourBookingSuccess.alerts.shareError'),
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
     }
   }
 

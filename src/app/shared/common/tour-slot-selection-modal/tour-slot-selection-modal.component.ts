@@ -109,6 +109,8 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     );
     if (!schedule) return 99;
 
+    console.log(`[DEBUG] currentAvailability for date ${dateStr}: schedule.capacity = ${schedule.capacity}, reservedCapacity = ${schedule.reservedCapacity}, slots =`, JSON.stringify(schedule.config?.slots));
+
     // Priorizar availability del slot seleccionado
     // Campo: slot.availability
     const slotAvailability = this.selectedSlot?.availability;
@@ -117,14 +119,25 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       return slotAvailability;
     }
 
-    // Fallback al primer slot si no hay seleccionado
-    const firstSlotAvailability = schedule?.config?.slots?.[0]?.availability;
-    if (firstSlotAvailability !== null && firstSlotAvailability !== undefined) {
-      return firstSlotAvailability;
+    // Fallback: Si no hay slot seleccionado, usamos la disponibilidad total del día
+    if (schedule?.config?.slots && schedule.config.slots.length > 0) {
+      let totalSlotAvail = 0;
+      for (const slot of schedule.config.slots) {
+        let avail = slot.availability;
+        if (avail === null || avail === undefined) {
+          avail = slot.capacity && slot.capacity > 0 ? slot.capacity : 99;
+        }
+        totalSlotAvail += avail;
+      }
+      return totalSlotAvail;
     }
 
+    // Si el schedule no tiene capacidad definida (o es 0), asumimos que es ilimitado (99)
+    const baseCapacity = schedule.capacity && schedule.capacity > 0 ? schedule.capacity : 99;
+    if (baseCapacity === 99) return 99;
+
     // Último recurso: capacidad calculada
-    return Math.max(0, (schedule.capacity || 0) - (schedule.reservedCapacity || 0));
+    return Math.max(0, baseCapacity - (schedule.reservedCapacity || 0));
   }
 
   /**
@@ -1287,6 +1300,8 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
         selectedDateDayjs.format("YYYY-MM-DD")
       );
 
+      console.log(`[DEBUG] updateAvailableSlots for ${selectedDateDayjs.format("YYYY-MM-DD")}: availableSlots.length = ${this.availableSlots.length}`);
+
       // Inicializar participantes con el primer slot si no hay selección
       if (this.availableSlots.length > 0 && !this.selectedSlot) {
         this.initOrUpdateParticipants(this.availableSlots[0].prices ?? []);
@@ -1295,6 +1310,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       }
     } else {
       this.availableSlots = [];
+      console.log(`[DEBUG] updateAvailableSlots: no selectedTour or selectedDate. availableSlots set to []`);
       // No limpiar participantes para que la UI se renderice independientemente de la fecha
     }
   }
@@ -1328,7 +1344,9 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
 
     // Asegurar que las cantidades previas no excedan el nuevo límite
     this.participants.forEach(p => {
+      console.log(`[DEBUG] Participant ${p.ageType}: old quantity = ${p.quantity}, max = ${p.maxQuantity}, currentAvailability = ${this.currentAvailability}`);
       p.quantity = Math.min(p.quantity, p.maxQuantity);
+      console.log(`[DEBUG] Participant ${p.ageType}: new quantity = ${p.quantity}`);
     });
 
     // 5. Aplicar lógica de predeterminados

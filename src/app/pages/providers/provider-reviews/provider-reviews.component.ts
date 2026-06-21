@@ -6,6 +6,7 @@ import { ReviewsService } from '../../../core/services/reviews.service';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
 import { TranslateService } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-provider-reviews',
@@ -516,7 +517,13 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
    * Exporta datos (mock)
    */
   public exportData(format: 'pdf' | 'excel'): void {
-    alert(`Exportando calificaciones como ${format.toUpperCase()}...`);
+    Swal.fire({
+      icon: 'info',
+      title: 'Exportando',
+      text: `Exportando calificaciones como ${format.toUpperCase()}...`,
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#3085d6'
+    });
   }
 
   /**
@@ -592,7 +599,13 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
       
       // 1. Validar cantidad máxima (5 archivos)
       if (fileList.length > 5) {
-        alert('Solo puedes adjuntar un máximo de 5 imágenes.');
+        Swal.fire({
+          icon: 'warning',
+          title: 'Atención',
+          text: 'Solo puedes adjuntar un máximo de 5 imágenes.',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6'
+        });
         // Limpiar el input
         event.target.value = '';
         this.replyImages = [];
@@ -617,7 +630,13 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
       });
 
       if (invalidFiles.length > 0) {
-        alert(`Algunos archivos no son válidos:\n${invalidFiles.join('\n')}\n\nSolo se permiten imágenes PNG/JPG de máximo 5MB.`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Archivos no válidos',
+          text: `Algunos archivos no son válidos:\n${invalidFiles.join('\n')}\n\nSolo se permiten imágenes PNG/JPG de máximo 5MB.`,
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6'
+        });
         event.target.value = '';
         this.replyImages = [];
       } else {
@@ -631,7 +650,13 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
    */
   public submitReply(reviewId: string): void {
     if (!this.replyText.trim()) {
-      alert('Por favor escribe una respuesta antes de enviar');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atención',
+        text: 'Por favor escribe una respuesta antes de enviar',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
@@ -702,7 +727,13 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
    */
   public submitReject(reviewId: string): void {
     if (!this.selectedRejectionReason) {
-      alert('Por favor selecciona un motivo de rechazo');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atención',
+        text: 'Por favor selecciona un motivo de rechazo',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 

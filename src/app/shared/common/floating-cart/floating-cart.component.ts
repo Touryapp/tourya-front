@@ -503,7 +503,13 @@ export class FloatingCartComponent implements OnInit, OnDestroy {
     }
     
     // Mostrar mensaje de error al usuario
-    alert(errorMessage); // TODO: Replace with proper toast/snackbar
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: errorMessage,
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#3085d6'
+    });
     
     // En caso de error de sincronización, mantener los datos locales
     console.log('Manteniendo datos locales del carrito tras error de sincronización');

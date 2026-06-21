@@ -6,6 +6,7 @@ import { PayoutOrdersService } from '../../../shared/services/payout-orders.serv
 import { PayoutOrder, PayoutOrdersResponse } from '../../../shared/dto/payout-order.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-provider-payments',
@@ -171,7 +172,13 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
    * Exporta los datos (mock)
    */
   public exportData(format: 'pdf' | 'excel'): void {
-    alert(`Exportando pagos como ${format.toUpperCase()}...`);
+    Swal.fire({
+      icon: 'info',
+      title: 'Exportando',
+      text: `Exportando pagos como ${format.toUpperCase()}...`,
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#3085d6'
+    });
   }
 
   /**
@@ -233,7 +240,13 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
    * Descargar factura
    */
   public downloadInvoice(paymentId: number): void {
-    alert(`Descargando factura para ${paymentId} - Próximamente`);
+    Swal.fire({
+      icon: 'info',
+      title: 'Descargando factura',
+      text: `Descargando factura para ${paymentId} - Próximamente`,
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#3085d6'
+    });
   }
 
   /**
