@@ -92,6 +92,10 @@ export class ProviderPanelComponent implements OnInit {
     private reservationService: ReservationService
   ) {}
 
+  get isOperator(): boolean {
+    return this.authService.isProviderOperator();
+  }
+
   ngOnInit(): void {
     const requestProviderStatus = this.authService.getRequestProviderStatus();
     if (requestProviderStatus && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
@@ -111,7 +115,6 @@ export class ProviderPanelComponent implements OnInit {
       this.openSnackBar("Tour successfully edited");
     }
     
-    // Si viene desde el QR scanner, mostrar la vista de "Mis reservas" INMEDIATAMENTE
     if (openModal === 'true' && reservationId) {
       console.log('🔓 QR DETECTADO - Activando vista de Mis reservas');
       console.log('📋 Reservation ID:', reservationId);
@@ -139,7 +142,7 @@ export class ProviderPanelComponent implements OnInit {
       // Si el sessionStorage no tiene el providerPanelView, significa que es un login nuevo o se cerró sesión
       const savedView = sessionStorage.getItem('providerPanelView');
       if (!savedView) {
-        console.log('🏠 Vista limpia detectada (nuevo inicio de sesión), forzando: dashboard');
+        console.log('🏠 Vista limpia detectada (nuevo inicio de sesión), forzando vista inicial');
         this.panelStateService.setView('dashboard');
       } else {
         const currentView = this.panelStateService.getCurrentView();
@@ -147,7 +150,7 @@ export class ProviderPanelComponent implements OnInit {
           console.log('📱 Vista inicial desde servicio:', currentView);
           this.setView(currentView);
         } else {
-          console.log('🏠 Estableciendo vista por defecto: dashboard');
+          console.log('🏠 Estableciendo vista por defecto');
           this.panelStateService.setView('dashboard');
         }
       }

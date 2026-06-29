@@ -1609,6 +1609,7 @@
     "details": {
       "travellers": "Travellers",
       "tourDate": "Tour Date",
+      "tourTime": "Tour time",
       "reservationId": "Reservation ID",
       "duration": "Duration",
       "price": "Price",
@@ -1616,7 +1617,11 @@
       "created": "Created",
       "lastModified": "Last Modified",
       "includedActivities": "Included Activities",
-      "extraServices": "Extra Services"
+      "extraServices": "Extra Services",
+      "locations": "Locations",
+      "locationName": "Location Name",
+      "address": "Address",
+      "region": "Region"
     },
     "qr": {
       "title": "QR code for this Reservation",

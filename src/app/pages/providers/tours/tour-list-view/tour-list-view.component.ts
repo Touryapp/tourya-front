@@ -31,7 +31,7 @@ export class TourListViewComponent implements OnInit {
   @Output() goToPreviousPage = new EventEmitter<void>();
   @Output() goToNextPage = new EventEmitter<void>();
 
-  private subcategoriesMap = new Map<string, string>();
+  private subcategoriesMap = new Map<string, any>();
 
   private tourService = inject(TourService);
   private authService = inject(AuthService);
@@ -58,7 +58,7 @@ export class TourListViewComponent implements OnInit {
     });
   }
 
-  getSubCategoryName(code: string | undefined): string {
+  getSubCategoryName(code: string | undefined): any {
     if (!code) return '';
     return this.subcategoriesMap.get(code) || code;
   }

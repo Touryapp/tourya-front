@@ -101,17 +101,17 @@
                   </div>
                   <div class="mb-2 w-100 d-flex justify-content-between text-success">
                     <span class="small">{{ 'tourBookingSuccess.paymentSummary.creditsApplied' | translate }}:</span>
-                    <span class="fw-medium">-{{ formatPrice(reservationData.amountCredit || reservationData.appliedCredits || 0) }}</span>
+                    <span class="fw-medium">-{{ formatPrice(reservationData.amountCredit || reservationData.appliedCredits || 0) }} COP</span>
                   </div>
                   <div class="w-100 d-flex justify-content-between border-top pt-1">
                     <span class="text-muted fw-bold">{{ 'tourBookingSuccess.paymentSummary.totalPaid' | translate }}:</span>
-                    <span class="fw-bold text-primary">{{ formatPrice(getTotalFromWompi()) }}</span>
+                    <span class="fw-bold text-primary">{{ formatPrice(getTotalFromWompi()) }} COP</span>
                   </div>
                 </div>
                 <!-- Plantilla por defecto cuando no hay créditos aplicados -->
                 <ng-template #noCreditsBreakdown>
                   <label class="form-label text-muted mb-1">{{ 'tourBookingSuccess.paymentSummary.totalPaid' | translate }}</label>
-                  <p class="fw-bold text-primary mb-0 total-amount">{{ formatPrice(getTotalFromWompi()) }}</p>
+                  <p class="fw-bold text-primary mb-0 total-amount">{{ formatPrice(getTotalFromWompi()) }} COP</p>
                 </ng-template>
               </div>
             </div>
@@ -189,7 +189,7 @@
                   {{ currentReservation.destination }}
                 </p>
                 <div class="row g-3">
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                     <div class="d-flex align-items-center mb-2">
                       <div class="icon-circle-small bg-light-primary text-primary me-2">
                         <i class="isax isax-user"></i>
@@ -200,7 +200,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                     <div class="d-flex align-items-center mb-2">
                       <div class="icon-circle-small bg-light-success text-success me-2">
                         <i class="isax isax-calendar"></i>
@@ -208,6 +208,17 @@
                       <div>
                         <small class="text-muted d-block">{{ 'tourBookingSuccess.details.tourDate' | translate }}</small>
                         <span class="fw-medium">{{ formatDate(currentReservation.checkInDate) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="icon-circle-small bg-light-info text-info me-2">
+                        <i class="isax isax-clock"></i>
+                      </div>
+                      <div>
+                        <small class="text-muted d-block">{{ 'tourBookingSuccess.details.tourTime' | translate }}</small>
+                        <span class="fw-medium">{{ currentReservation.slotStartTime | slice:0:5 }} - {{ currentReservation.slotEndTime | slice:0:5 }}</span>
                       </div>
                     </div>
                   </div>
@@ -273,6 +284,68 @@
                     {{ service }}
                   </li>
                 </ul>
+              </div>
+            </div>
+
+            <!-- Includes & Excludes -->
+            <div class="row mb-4" *ngIf="(currentReservation.includes && currentReservation.includes.length > 0) || (currentReservation.excludes && currentReservation.excludes.length > 0)">
+              <div class="col-12">
+                <h6 class="mb-2 small text-uppercase fw-bold text-muted">{{ 'tours-detail.sections.includesExcludes' | translate }}</h6>
+                <div class="card bg-light border-0">
+                  <div class="card-body p-3">
+                    <div class="row gy-2">
+                        <div class="col-md-6">
+                            <ng-container *ngIf="currentReservation.includes?.length">
+                              <p class="d-flex align-items-center mb-2" *ngFor="let inc of currentReservation.includes">
+                                <i class="isax isax-tick-square5 text-success me-2"></i> {{ (inc.description | localizedName) }}
+                              </p>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6">
+                            <ng-container *ngIf="currentReservation.excludes?.length">
+                              <p class="d-flex align-items-center mb-2" *ngFor="let exc of currentReservation.excludes">
+                                <i class="isax isax-close-square5 text-danger me-2"></i> {{ (exc.description | localizedName) }}
+                              </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Locations -->
+            <div class="row mb-4" *ngIf="currentReservation.locations && currentReservation.locations.length > 0">
+              <div class="col-12">
+                <h6 class="mb-2 small text-uppercase fw-bold text-muted">{{ 'tourBookingSuccess.details.locations' | translate }}</h6>
+                <div class="card bg-light border-0">
+                  <div class="card-body p-3">
+                    <ul class="list-unstyled mb-0" style="list-style: none; padding-left: 0;">
+                      <li *ngFor="let location of currentReservation.locations; let last = last" [ngClass]="{'mb-3 pb-3 border-bottom': !last}">
+                        <div class="w-100">
+                          <div class="mb-2">
+                            <span class="badge bg-secondary">{{ location.addressType }}</span>
+                          </div>
+                          
+                          <div class="row g-2 mb-1">
+                            <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.locationName' | translate }}:</div>
+                            <div class="col-sm-8 fw-medium">{{ (location.location | localizedName) || location.address }}</div>
+                          </div>
+                  
+                          <div class="row g-2 mb-1">
+                            <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.address' | translate }}:</div>
+                            <div class="col-sm-8 small">{{ location.address }}</div>
+                          </div>
+                  
+                          <div class="row g-2">
+                            <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.region' | translate }}:</div>
+                            <div class="col-sm-8 small">{{ getResolvedLocationString(location.countryId, location.stateId, location.cityId) }}</div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 

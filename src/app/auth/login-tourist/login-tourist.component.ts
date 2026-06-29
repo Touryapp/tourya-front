@@ -205,7 +205,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
   redirectByRole(role: RoleDto[]) {
     if (role.some(r => r.id === Roles.ADMIN)) {
       this.router.navigate(["admin"]);
-    } else if (role.some(r => r.id === Roles.PROVIDER)) {
+    } else if (role.some(r => r.id === Roles.PROVIDER || r.id === Roles.PROVIDER_OPERATOR)) {
       this.router.navigate(["providers/provider-panel"]);
     } else if (role.some(r => r.id === Roles.USER)) {
       this.router.navigate(["home"]);
@@ -216,9 +216,11 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     console.log("Consultando datos de proveedor post-login");
     const isUser = roleList.some(r => r.id === Roles.USER);
     const isProvider = roleList.some(r => r.id === Roles.PROVIDER);
+    const isOperator = roleList.some(r => r.id === Roles.PROVIDER_OPERATOR);
+    const isProviderOrOperator = isProvider || isOperator;
     const isAdmin = roleList.some(r => r.id === Roles.ADMIN);
 
-    if (isUser && !isProvider && !isAdmin) {
+    if (isUser && !isProviderOrOperator && !isAdmin) {
       this.getPendingReviews();
     }
 
@@ -237,22 +239,24 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
         }
 
         // Ejecutar navegación después de establecer el estado
-        this.performNavigation(isProvider, isAdmin, roleList, hasPendingAction, status);
+        this.performNavigation(isProviderOrOperator, isAdmin, roleList, hasPendingAction, status);
       },
       error: (error) => {
         console.error('Error al obtener los datos del usuario:', error);
         this.authService.setRequestProviderStatus(RequestsProvidersStatus.CREATED);
         
         // Ejecutar navegación con estado por defecto
-        this.performNavigation(isProvider, isAdmin, roleList, hasPendingAction, RequestsProvidersStatus.CREATED);
+        this.performNavigation(isProviderOrOperator, isAdmin, roleList, hasPendingAction, RequestsProvidersStatus.CREATED);
       }
     });
   }
 
-  private performNavigation(isProvider: boolean, isAdmin: boolean, roleList: RoleDto[], hasPendingAction: boolean, status: RequestsProvidersStatus) {
-    if (isProvider && !isAdmin) {
-      if (status === RequestsProvidersStatus.APPROVED) {
-        console.log('👤 Redirigiendo proveedor aprobado a su panel');
+  private performNavigation(isProviderOrOperator: boolean, isAdmin: boolean, roleList: RoleDto[], hasPendingAction: boolean, status: RequestsProvidersStatus) {
+    const isOperator = roleList.some(r => r.id === Roles.PROVIDER_OPERATOR);
+    
+    if (isProviderOrOperator && !isAdmin) {
+      if (status === RequestsProvidersStatus.APPROVED || isOperator) {
+        console.log('👤 Redirigiendo proveedor a su panel');
         this.router.navigate(["providers/provider-panel"]);
       } else {
         console.log('👤 Redirigiendo proveedor no aprobado a su solicitud');

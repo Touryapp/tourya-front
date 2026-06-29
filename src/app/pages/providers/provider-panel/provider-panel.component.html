@@ -30,13 +30,13 @@
             <span class="fs-14 text-gray-3 fw-medium mb-2">Principal</span>
           </li>
           <li>
-            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('dashboard')" [class.active]="!mostrarTours && !mostrarTemplates && !mostrarTourManagement && !mostrarReviews && !mostrarPagos && !mostrarPerfil">
+            <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('dashboard')" [class.active]="!mostrarTours && !mostrarTemplates && !mostrarTourManagement && !mostrarReviews && !mostrarPagos && !mostrarPerfil && !mostrarUsuarios">
               <i class="isax isax-grid-55"></i> Dashboard
             </a>
           </li>
           
           <!-- Menú expandible "Mis Tours" -->
-          <li>
+          <li *ngIf="!isOperator">
             <a class="d-flex align-items-center justify-content-between" 
                data-bs-toggle="collapse" 
                href="#misToursSub" 
@@ -57,7 +57,7 @@
                   <i class="isax isax-user"></i> Lista de Tour
                 </a>
               </li>
-              <li>
+              <li *ngIf="!isOperator">
                 <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('templates')" [class.active]="mostrarTemplates">
                   <i class="isax isax-document-text"></i> Templates de Horarios
                 </a>
@@ -70,7 +70,7 @@
               <i class="isax isax-route-square"></i> Mis reservas
             </a>
           </li>
-          <li>
+          <li *ngIf="!isOperator">
             <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('reviews')" [class.active]="mostrarReviews">
               <i class="isax isax-star"></i> Mis reseñas
             </a>
@@ -84,12 +84,12 @@
               <i class="isax isax-profile-circle"></i> Mi Perfil
             </a>
           </li>
-          <li>
+          <li *ngIf="!isOperator">
             <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('pagos')" [class.active]="mostrarPagos">
               <i class="isax isax-wallet-2"></i> Mis Pagos
             </a>
           </li>
-          <li>
+          <li *ngIf="!isOperator">
             <a href="javascript:void(0);" class="d-flex align-items-center" (click)="setView('usuarios')" [class.active]="mostrarUsuarios">
               <i class="isax isax-people"></i> Mis Operarios
             </a>
