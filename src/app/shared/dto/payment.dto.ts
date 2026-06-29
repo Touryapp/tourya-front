@@ -91,11 +91,14 @@ export interface ReservationDto {
   duration: string | null;
   checkInDate: string;
   returnDate: string | null;
+  slotStartTime: string;
+  slotEndTime: string;
   destination: string;
+  locations: any[];
   price: number;
   providerTotalAmount: number;
   priceBreakdown: Array<{
-    ageType: string;
+    ageType: { name: string } | any;
     quantity: number;
     unitPrice: number;
     providerUnitPrice: number;
@@ -105,6 +108,8 @@ export interface ReservationDto {
   travellers: string;
   activities: string[];
   extraServices: string[];
+  includes: any[];
+  excludes: any[];
   maxCancellationDate: string;
   maxReschedulingDate: string;
   cancellationReason: string | null;

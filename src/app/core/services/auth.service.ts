@@ -197,6 +197,14 @@ export class AuthService {
     return roleList.some((r: RoleDto) => r.id === Roles.PROVIDER);
   }
 
+  isProviderOperator(): boolean {
+    const user = this.getUser();
+    if (!user) return false;
+    
+    const roleList: RoleDto[] = user.roleList || user.roles || [];
+    return roleList.some((r: RoleDto) => r.id === Roles.PROVIDER_OPERATOR);
+  }
+
   isUser(): boolean {
     const user = this.getUser();
     if (!user) return false;

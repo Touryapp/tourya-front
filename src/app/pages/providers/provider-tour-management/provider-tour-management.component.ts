@@ -54,6 +54,7 @@ export interface ProviderTourBooking {
   maxReschedulingDate?: string; // ISO date string - maximum date for rescheduling
   canReschedule?: boolean; // New field from API
   canCancel?: boolean; // New field from API
+  canConfirmReservation?: boolean;
   canRainCancel?: boolean;
   qrUrl?: string;
   totalTourists?: number;
@@ -419,6 +420,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       maxReschedulingDate: reservation.maxReschedulingDate,
       canReschedule: reservation.canReschedule,
       canCancel: reservation.canCancel,
+      canConfirmReservation: reservation.canConfirmReservation,
       cancellationDate: this.formatDate(reservation.cancellationDate),
       cancellationReason: reservation.cancellationReason || undefined,
       canRainCancel: reservation.canRainCancel,
@@ -464,7 +466,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   private getUserRole(): UserRole {
     if (this.authService.isAdmin()) {
       return 'ADMIN';
-    } else if (this.authService.isProvider()) {
+    } else if (this.authService.isProvider() || this.authService.isProviderOperator()) {
       return 'PROVIDER';
     } else if (this.authService.isUser()) {
       return 'CLIENT';

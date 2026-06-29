@@ -1610,14 +1610,19 @@
     "details": {
       "travellers": "Viajantes",
       "tourDate": "Data do Passeio",
+      "tourTime": "Horário do passeio",
       "reservationId": "ID da Reserva",
       "duration": "Duração",
       "price": "Preço",
       "deliveryStatus": "Status da entrega",
       "created": "Criado",
-      "lastModified": "Última Modificação",
+      "lastModified": "Última modificação",
       "includedActivities": "Atividades Incluídas",
-      "extraServices": "Serviços Adicionais"
+      "extraServices": "Serviços Adicionais",
+      "locations": "Localizações",
+      "locationName": "Nome do local",
+      "address": "Endereço",
+      "region": "Região"
     },
     "qr": {
       "title": "QR Code desta reserva",

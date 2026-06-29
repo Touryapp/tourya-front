@@ -882,13 +882,13 @@ export class CartService {
         schedule: {
           id: item.tourScheduleId, // ✅ API: item.tourScheduleId
           scheduleDate: item.scheduleDate, // ✅ API: item.scheduleDate
-          startTime: item.startTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
-          endTime: item.endTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00'
+          startTime: item.startTime || item.slotStartTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
+          endTime: item.endTime || item.slotEndTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00'
         },
         selectedSlot: {
           slotId: slotId, // ✅ API: item.slotId o item.slot.id
-          startTime: item.startTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
-          endTime: item.endTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00',
+          startTime: item.startTime || item.slotStartTime || (item.slot ? item.slot.startTime : null) || cachedTimes?.startTime || '09:00',
+          endTime: item.endTime || item.slotEndTime || (item.slot ? item.slot.endTime : null) || cachedTimes?.endTime || '17:00',
           capacity: item.capacity || (item.slot ? item.slot.capacity : 15)
         },
         participants: item.details.map((detail: any) => ({
@@ -900,7 +900,7 @@ export class CartService {
         totalParticipants: item.details.reduce((sum: number, detail: any) => sum + detail.quantity, 0), // ✅ Calculado
         address: {
           city: item.city || 'Cartagena',
-          state: item.state || 'Bolívar',
+          state: item.department || item.state || 'Bolívar',
           country: item.country || 'Colombia',
           address: item.meetingPoint || 'Plaza de la Aduana, Centro Histórico'
         },

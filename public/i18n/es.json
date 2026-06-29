@@ -1610,6 +1610,7 @@
     "details": {
       "travellers": "Viajeros",
       "tourDate": "Fecha del Tour",
+      "tourTime": "Hora del tour",
       "reservationId": "ID de Reserva",
       "duration": "Duración",
       "price": "Precio",
@@ -1617,7 +1618,11 @@
       "created": "Creado",
       "lastModified": "Última Modificación",
       "includedActivities": "Actividades Incluidas",
-      "extraServices": "Servicios Adicionales"
+      "extraServices": "Servicios Adicionales",
+      "locations": "Ubicaciones",
+      "locationName": "Nombre del lugar",
+      "address": "Dirección",
+      "region": "Región"
     },
     "qr": {
       "title": "Código QR de esta Reserva",

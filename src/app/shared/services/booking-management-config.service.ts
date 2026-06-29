@@ -296,7 +296,10 @@ export class BookingManagementConfigService {
           label: 'provider-tour-management.config.actions.confirm',
           icon: 'fa fa-check-circle',
           color: 'success',
-          visible: (row) => row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED' || row.status === 'Rescheduled'
+          visible: (row) => {
+            if (row.canConfirmReservation !== undefined) return row.canConfirmReservation;
+            return row.status === 'Pending' || row.status === 'PENDING' || row.status === 'RESCHEDULED' || row.status === 'Rescheduled';
+          }
         },
         {
           id: 'reschedule',

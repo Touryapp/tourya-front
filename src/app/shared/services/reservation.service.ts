@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Reservation, ClientReservation, PaginatedResponse, ConsumeReservationResponse, ReservationDetails, RescheduleReservationRequest } from '../models/reservation.model';
 
@@ -25,7 +26,17 @@ export class ReservationService {
    * @returns Observable con los datos de la reserva
    */
   getReservationById(reservationId: number | string): Observable<ReservationDetails> {
-    return this.http.get<ReservationDetails>(`${this.apiUrl}/reservations/${reservationId}`);
+    return this.http.get<any>(`${this.apiUrl}/reservations`, { 
+      params: { reservationId: reservationId.toString() } 
+    }).pipe(
+      map(response => {
+        // If the backend returns a paginated list due to using a filter, extract the first item
+        if (response && response.content && Array.isArray(response.content)) {
+          return response.content[0] as ReservationDetails;
+        }
+        return response as ReservationDetails;
+      })
+    );
   }
 
   /**

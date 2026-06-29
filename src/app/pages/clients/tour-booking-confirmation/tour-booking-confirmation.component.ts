@@ -6,6 +6,9 @@ import { ReservationService } from '../../../shared/services/reservation.service
 import { ClientReservation } from '../../../shared/models/reservation.model';
 import { routes } from '../../../shared/routes/routes';
 import { TranslateService } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
+import { CityService } from '../../../shared/services/city.service';
+import { LocationsPublicDto } from '../../../shared/dto/locations-public.dto';
 
 @Component({
   selector: 'app-tour-booking-confirmation',
@@ -25,13 +28,15 @@ export class TourBookingConfirmationComponent implements OnInit {
   currentReservationIndex: number = 0;
   currentReservation: ReservationDto | null = null;
   totalReservations: number = 0;
+  locationsCache: LocationsPublicDto[] = [];
 
   constructor(
     private route: ActivatedRoute,
     public router: Router,
     private paymentService: PaymentService,
     private reservationService: ReservationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cityService: CityService
   ) {
     // Obtener datos de la navegación EN EL CONSTRUCTOR
     const navigation = this.router.getCurrentNavigation();
@@ -68,6 +73,10 @@ export class TourBookingConfirmationComponent implements OnInit {
         }
       });
     }
+
+    this.cityService.getLocationsPublic().subscribe(res => {
+      this.locationsCache = res;
+    });
   }
 
   /**
@@ -163,7 +172,12 @@ export class TourBookingConfirmationComponent implements OnInit {
         maxReschedulingDate: res.maxReschedulingDate || '',
         cancellationReason: null,
         cancellationDate: null,
-        credit: null
+        credit: null,
+        slotStartTime: (res as any).slotTimeStart || '00:00',
+        slotEndTime: (res as any).slotTimeEnd || '00:00',
+        locations: [],
+        includes: [],
+        excludes: []
       })),
       payer: {
         id: 0,
@@ -318,6 +332,14 @@ export class TourBookingConfirmationComponent implements OnInit {
     }
   }
 
+  getResolvedLocationString(countryId: number, stateId: number, cityId: number): string {
+    const loc = this.locationsCache.find(l => l.countryId === countryId && l.stateId === stateId && l.cityId === cityId);
+    if (loc) {
+      return `${loc.cityName}, ${loc.stateName}, ${loc.countryName}`;
+    }
+    return '';
+  }
+
   /**
    * Formatear precio
    */
@@ -431,10 +453,22 @@ export class TourBookingConfirmationComponent implements OnInit {
       }
       
       const successMsg = this.translate.instant('tourBookingSuccess.alerts.downloadSuccess', { count: this.reservationData.reservations.length });
-      alert(successMsg);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: successMsg,
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
     } catch (error) {
       console.error('❌ Error descargando QRs:', error);
-      alert(this.translate.instant('tourBookingSuccess.alerts.downloadError'));
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.translate.instant('tourBookingSuccess.alerts.downloadError'),
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
     }
   }
 
@@ -477,12 +511,25 @@ export class TourBookingConfirmationComponent implements OnInit {
       } else {
         // Fallback: copiar al clipboard
         await navigator.clipboard.writeText(this.currentReservation.qrUrl);
-        alert(this.translate.instant('tourBookingSuccess.alerts.shareSuccess'));
+        Swal.fire({
+          icon: 'success',
+          title: '¡Copiado!',
+          text: this.translate.instant('tourBookingSuccess.alerts.shareSuccess'),
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+          timer: 2000
+        });
         console.log('✅ QR URL copiado al portapapeles');
       }
     } catch (error) {
       console.error('❌ Error compartiendo QR:', error);
-      alert(this.translate.instant('tourBookingSuccess.alerts.shareError'));
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.translate.instant('tourBookingSuccess.alerts.shareError'),
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      });
     }
   }
 
@@ -714,7 +761,12 @@ export class TourBookingConfirmationComponent implements OnInit {
           maxReschedulingDate: '2025-10-19',
           cancellationReason: null,
           cancellationDate: null,
-          credit: null
+          credit: null,
+          slotStartTime: '08:00',
+          slotEndTime: '14:00',
+          locations: [],
+          includes: [],
+          excludes: []
         },
         {
           reservationId: 1002,
@@ -762,7 +814,12 @@ export class TourBookingConfirmationComponent implements OnInit {
           maxReschedulingDate: '2025-10-21',
           cancellationReason: null,
           cancellationDate: null,
-          credit: null
+          credit: null,
+          slotStartTime: '18:00',
+          slotEndTime: '22:00',
+          locations: [],
+          includes: [],
+          excludes: []
         },
         {
           reservationId: 1003,
@@ -810,7 +867,12 @@ export class TourBookingConfirmationComponent implements OnInit {
           maxReschedulingDate: '2025-10-22',
           cancellationReason: null,
           cancellationDate: null,
-          credit: null
+          credit: null,
+          slotStartTime: '09:00',
+          slotEndTime: '14:00',
+          locations: [],
+          includes: [],
+          excludes: []
         }
       ],
       payer: {
