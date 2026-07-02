@@ -102,7 +102,13 @@ export class TemplateFormComponent implements OnInit {
         // Limpiar y reconstruir slots completamente
         this.slots.clear();
         
-          template.slots?.forEach((slot, slotIndex) => {
+        const sortedSlots = template.slots ? [...template.slots].sort((a: any, b: any) => {
+          const timeA = a.startTime || "";
+          const timeB = b.startTime || "";
+          return timeA.localeCompare(timeB);
+        }) : [];
+
+        sortedSlots.forEach((slot: any, slotIndex: number) => {
             // Crear nuevo slot
             const newSlot = this.fb.group({
               id: [slot.id || ""],
@@ -115,8 +121,21 @@ export class TemplateFormComponent implements OnInit {
           // Agregar el slot al FormArray
           this.slots.push(newSlot);
 
+          const ageTypeOrder: { [key: string]: number } = {
+            'ADULT': 1,
+            'CHILD': 2,
+            'INFANT': 3,
+            'ANY': 4
+          };
+          
+          const sortedPrices = slot.prices ? [...slot.prices].sort((a: any, b: any) => {
+            const typeA = typeof a.ageType === 'object' ? a.ageType.name : a.ageType;
+            const typeB = typeof b.ageType === 'object' ? b.ageType.name : b.ageType;
+            return (ageTypeOrder[typeA] || 99) - (ageTypeOrder[typeB] || 99);
+          }) : [];
+
           // Procesar precios del slot
-          slot.prices?.forEach((price, priceIndex) => {
+          sortedPrices.forEach((price: any, priceIndex: number) => {
             // Manejar ageType que puede venir como objeto o string
             const ageTypeValue = typeof price.ageType === 'object' 
               ? price.ageType.name 
