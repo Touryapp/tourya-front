@@ -1498,9 +1498,11 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const mapping: { [key: string]: string } = {
       'CANNOT_ATTEND': 'No puede asistir',
       'ILLNESS': 'Enfermedad',
+      'INABILITY_TO_TRAVEL': 'Incapacidad para viajar',
+      'LEGAL_OBLIGATIONS': 'Obligaciones legales',
+      'CHANGE_OF_PLANS': 'Cambio de planes',
       'WEATHER': 'Condiciones climáticas',
       'EMERGENCY': 'Emergencia',
-      'CHANGE_OF_PLANS': 'Cambio de planes',
       'DISSATISFIED': 'Insatisfacción con el servicio',
       'DUPLICATE': 'Reserva duplicada',
       'OTHER': 'Otro motivo',
@@ -1885,7 +1887,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     const reasonMap: { [key: string]: string } = {
       'CANNOT_ATTEND': 'CANNOT_ATTEND',
       'ILLNESS': 'ILLNESS',
-      'INABILITY_TO_TRAVEL': 'INABILITY_TO_TRAVEL'
+      'INABILITY_TO_TRAVEL': 'INABILITY_TO_TRAVEL',
+      'LEGAL_OBLIGATIONS': 'LEGAL_OBLIGATIONS',
+      'CHANGE_OF_PLANS': 'CHANGE_OF_PLANS'
     };
 
     const apiReason = reasonMap[this.cancellationReason];

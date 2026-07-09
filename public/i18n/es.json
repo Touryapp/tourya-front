@@ -340,6 +340,8 @@
       "reasonCannotAttend": "No puedo asistir",
       "reasonIllness": "Enfermedad",
       "reasonInabilityToTravel": "Incapacidad para viajar",
+      "reasonLegalObligations": "Obligaciones legales",
+      "reasonChangeOfPlans": "Cambio de planes",
       "goBack": "Volver",
       "confirmCancellation": "Confirmar Cancelación",
       "rescheduleBooking": "Reagendar Reserva",
