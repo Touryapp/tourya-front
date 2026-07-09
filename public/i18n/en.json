@@ -339,6 +339,8 @@
       "reasonCannotAttend": "Cannot attend",
       "reasonIllness": "Illness",
       "reasonInabilityToTravel": "Inability to travel",
+      "reasonLegalObligations": "Legal obligations",
+      "reasonChangeOfPlans": "Change of plans",
       "goBack": "Go back",
       "confirmCancellation": "Confirm Cancellation",
       "rescheduleBooking": "Reschedule Booking",
