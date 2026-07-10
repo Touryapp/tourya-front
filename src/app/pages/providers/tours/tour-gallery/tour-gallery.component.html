@@ -41,9 +41,14 @@
               <div
                 class="file-upload drag-file w-100 d-flex align-items-center justify-content-center flex-column mb-2">
                 <span class="upload-img d-block mb-2"><i class="isax isax-document-upload fs-24"></i></span>
-                <h6 class="mb-1">Upload Gallery Images</h6>
-                <p class="mb-0">Image size should below 5MB</p>
-                <input type="file" accept="image/*" maxFileSize="50000" (change)="onFileSelected($event)" multiple>
+                <h6 class="mb-1">{{ 'tour-gallery.uploadTitle' | translate }}</h6>
+                <p class="mb-0 text-muted small">
+                  {{ 'tour-gallery.limitsHint' | translate: { maxSize: limits.maxSizeMb, minWidth: limits.minWidthPx, maxImages: limits.maxImagesPerTour } }}
+                </p>
+                <p class="mb-0 text-muted small">
+                  {{ 'tour-gallery.currentCount' | translate: { current: galleries.length, max: limits.maxImagesPerTour } }}
+                </p>
+                <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onFileSelected($event)" multiple>
               </div>
               <div *ngIf="this.galleries.length > 0">
 
