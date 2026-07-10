@@ -84,7 +84,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
           this.loading = false;
 
           if (response && response.token) {
-            this.authService.setToken(response.token);
+            this.authService.setTokensFromResponse(response);
             this.authService.setUser({
               fullName: response.fullName,
               email: response.email,
@@ -137,7 +137,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
       await this.authService.authenticateSocial(userData).subscribe({
         next: (response) => {
           console.log('Respuesta de Google:', response)
-          this.authService.setToken(response.token);
+          this.authService.setTokensFromResponse(response);
           this.authService.setUser({
             fullName: response.fullName,
             email: response.email,
@@ -181,7 +181,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
         next: (response) => {
           // Navegar a la página principal
           console.log('Respuesta de Facebook:', response)
-          this.authService.setToken(response.token);
+          this.authService.setTokensFromResponse(response);
           this.authService.setUser({
             fullName: response.fullName,
             email: response.email,

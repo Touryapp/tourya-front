@@ -7,8 +7,10 @@ export class SocialResponseDto extends LoginResponseDto {
     firstName: string,
     email: string,
     roles: RoleDto[],
-    token: string
+    token: string,
+    accessToken?: string,
+    refreshToken?: string
   ) {
-    super(firstName, email, roles, token);
+    super(firstName, email, roles, token, accessToken, refreshToken);
   }
 }

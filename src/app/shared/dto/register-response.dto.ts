@@ -5,16 +5,22 @@ export class RegisterResponseDto {
   email: string;
   roles: RoleDto[];
   token: string;
+  accessToken?: string;
+  refreshToken?: string;
 
   constructor(
     firstName: string,
     email: string,
     roles: RoleDto[],
-    token: string
+    token: string,
+    accessToken?: string,
+    refreshToken?: string
   ) {
     this.fullName = firstName;
     this.email = email;
     this.roles = roles;
     this.token = token;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
   }
 }
