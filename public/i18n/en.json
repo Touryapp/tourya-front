@@ -1737,5 +1737,83 @@
       "phoneLabel": "Contact phone:",
       "addressLabel": "Our address:"
     }
+  },
+  "app-config-admin": {
+    "sidebarLink": "Settings",
+    "title": "System settings",
+    "description": "Adjust operational values without redeploying. Changes apply on the next request.",
+    "groups": {
+      "booking": "Bookings and cart",
+      "payoutsAndCredits": "Provider payouts and credits",
+      "gallery": "Tour gallery",
+      "kybDocs": "KYB (provider documents)",
+      "authProtection": "Authentication protection"
+    },
+    "table": {
+      "setting": "Setting",
+      "value": "Current value",
+      "actions": "Actions",
+      "loading": "Loading…",
+      "errorLoading": "Failed to load",
+      "save": "Save",
+      "saving": "Saving…",
+      "reset": "Revert",
+      "on": "On",
+      "off": "Off"
+    },
+    "swal": {
+      "savedTitle": "Setting saved",
+      "savedText": "Will apply on the next request ({{ key }}).",
+      "errorTitle": "Could not save",
+      "errorText": "Error saving {{ key }}: {{ message }}"
+    },
+    "holdMinutes": {
+      "label": "Cart hold minutes",
+      "description": "Time the tourist has to complete payment before the TEMPORAL reservation expires."
+    },
+    "payoutBufferDays": {
+      "label": "Payout buffer days",
+      "description": "Days between the reservation date and when the payout to the provider becomes available."
+    },
+    "creditExpirationMonths": {
+      "label": "Credit validity months",
+      "description": "Duration of a credit issued after a cancellation before it expires."
+    },
+    "galleryMaxSizeMb": {
+      "label": "Max image size (MB)",
+      "description": "Images larger than this size are rejected when syncing the gallery."
+    },
+    "galleryMinWidthPx": {
+      "label": "Min image width (px)",
+      "description": "Minimum accepted width to ensure visual quality."
+    },
+    "galleryMaxImagesPerTour": {
+      "label": "Max images per tour",
+      "description": "Total number of images a tour can have in its gallery."
+    },
+    "kybRequireMandatoryDocs": {
+      "label": "Require mandatory KYB documents",
+      "description": "When on, the provider submit is rejected if mandatory documents are missing."
+    },
+    "authRateLimitEnabled": {
+      "label": "Rate limit on /auth",
+      "description": "Enables the temporary block of an IP that makes too many requests to auth endpoints."
+    },
+    "authRateLimitPerMinute": {
+      "label": "Requests per IP per minute",
+      "description": "Rate limiter threshold. When exceeded, HTTP 429 is returned."
+    },
+    "authLockoutEnabled": {
+      "label": "Account lockout on failed logins",
+      "description": "Enables temporary account lockout after N consecutive failed login attempts."
+    },
+    "authLockoutMaxAttempts": {
+      "label": "Allowed failed attempts",
+      "description": "Number of failed attempts before applying lockout."
+    },
+    "authLockoutBaseBackoffSeconds": {
+      "label": "Base backoff seconds",
+      "description": "Lockout seconds after reaching the max. Each new failure doubles this value (24h cap)."
+    }
   }
 }

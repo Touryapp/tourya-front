@@ -1738,5 +1738,83 @@
       "phoneLabel": "Teléfono de contacto:",
       "addressLabel": "Nuestra dirección:"
     }
+  },
+  "app-config-admin": {
+    "sidebarLink": "Configuraciones",
+    "title": "Configuraciones del sistema",
+    "description": "Ajusta valores operativos sin necesidad de redesplegar. Los cambios se aplican al próximo request.",
+    "groups": {
+      "booking": "Reservas y carrito",
+      "payoutsAndCredits": "Pagos a proveedores y créditos",
+      "gallery": "Galería de tours",
+      "kybDocs": "KYB (documentos de proveedores)",
+      "authProtection": "Protección de autenticación"
+    },
+    "table": {
+      "setting": "Configuración",
+      "value": "Valor actual",
+      "actions": "Acciones",
+      "loading": "Cargando…",
+      "errorLoading": "No se pudo cargar",
+      "save": "Guardar",
+      "saving": "Guardando…",
+      "reset": "Revertir",
+      "on": "Activo",
+      "off": "Inactivo"
+    },
+    "swal": {
+      "savedTitle": "Configuración guardada",
+      "savedText": "Se aplicará al próximo request ({{ key }}).",
+      "errorTitle": "No se pudo guardar",
+      "errorText": "Error guardando {{ key }}: {{ message }}"
+    },
+    "holdMinutes": {
+      "label": "Minutos del hold del carrito",
+      "description": "Tiempo que el turista tiene para completar el pago antes de que la reserva TEMPORAL expire."
+    },
+    "payoutBufferDays": {
+      "label": "Días de buffer para payout",
+      "description": "Días desde la fecha de la reserva hasta que el pago al proveedor queda disponible."
+    },
+    "creditExpirationMonths": {
+      "label": "Meses de vigencia de crédito",
+      "description": "Duración del crédito emitido tras una cancelación antes de que expire."
+    },
+    "galleryMaxSizeMb": {
+      "label": "Tamaño máximo por imagen (MB)",
+      "description": "Imágenes que superan este tamaño son rechazadas al sincronizar la galería."
+    },
+    "galleryMinWidthPx": {
+      "label": "Ancho mínimo de imagen (px)",
+      "description": "Ancho mínimo aceptado para asegurar calidad visual."
+    },
+    "galleryMaxImagesPerTour": {
+      "label": "Máximo de imágenes por tour",
+      "description": "Cantidad total de imágenes que un tour puede tener en su galería."
+    },
+    "kybRequireMandatoryDocs": {
+      "label": "Exigir documentos KYB obligatorios",
+      "description": "Cuando está activo, la solicitud del proveedor se rechaza si faltan documentos marcados como obligatorios."
+    },
+    "authRateLimitEnabled": {
+      "label": "Rate limit en /auth",
+      "description": "Activa el bloqueo temporal de una IP que hace demasiados requests a los endpoints de autenticación."
+    },
+    "authRateLimitPerMinute": {
+      "label": "Requests permitidos por IP por minuto",
+      "description": "Umbral del rate limiter. Al excederlo se devuelve HTTP 429."
+    },
+    "authLockoutEnabled": {
+      "label": "Bloqueo de cuenta tras intentos fallidos",
+      "description": "Activa el bloqueo temporal de la cuenta tras N intentos de login fallidos consecutivos."
+    },
+    "authLockoutMaxAttempts": {
+      "label": "Intentos fallidos permitidos",
+      "description": "Cantidad de intentos fallidos antes de aplicar el lockout."
+    },
+    "authLockoutBaseBackoffSeconds": {
+      "label": "Backoff base en segundos",
+      "description": "Segundos de bloqueo tras alcanzar el máximo. Cada nuevo fallo duplica este valor (cap 24h)."
+    }
   }
 }
