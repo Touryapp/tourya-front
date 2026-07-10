@@ -3,6 +3,7 @@ name: Build & Deploy Tourya Front to Cloud Run (Dev)
 on:
   push:
     branches: [develop, feature/gcp-migration]
+  workflow_dispatch:
 
 env:
   PROJECT_ID: tourya-project-dev
