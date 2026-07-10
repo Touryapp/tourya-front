@@ -1816,5 +1816,22 @@
       "label": "Backoff base en segundos",
       "description": "Segundos de bloqueo tras alcanzar el máximo. Cada nuevo fallo duplica este valor (cap 24h)."
     }
+  },
+  "tour-gallery": {
+    "uploadTitle": "Subir imágenes de la galería",
+    "limitsHint": "JPEG, PNG o WebP · Máx {{maxSize}} MB por imagen · Orientación horizontal · Ancho mínimo {{minWidth}} px · Hasta {{maxImages}} imágenes en total",
+    "currentCount": "{{current}} de {{max}} imágenes en la galería",
+    "issueCodes": {
+      "TOO_LARGE": "Excede el tamaño máximo permitido",
+      "INVALID_FORMAT": "Formato no soportado (usa JPEG, PNG o WebP)",
+      "NOT_LANDSCAPE": "Debe ser horizontal (ancho ≥ alto)",
+      "WIDTH_TOO_SMALL": "Ancho por debajo del mínimo permitido",
+      "TOO_MANY_IMAGES": "Excede el número máximo de imágenes por tour"
+    },
+    "errors": {
+      "validationTitle": "Algunas imágenes no cumplen las reglas",
+      "generic": "Ha ocurrido un error, por favor intente de nuevo",
+      "genericTitle": "No se pudo guardar la galería"
+    }
   }
 }

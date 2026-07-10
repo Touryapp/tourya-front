@@ -1815,5 +1815,22 @@
       "label": "Base backoff seconds",
       "description": "Lockout seconds after reaching the max. Each new failure doubles this value (24h cap)."
     }
+  },
+  "tour-gallery": {
+    "uploadTitle": "Upload gallery images",
+    "limitsHint": "JPEG, PNG or WebP · Max {{maxSize}} MB per image · Landscape orientation · Minimum width {{minWidth}} px · Up to {{maxImages}} images total",
+    "currentCount": "{{current}} of {{max}} images in the gallery",
+    "issueCodes": {
+      "TOO_LARGE": "Exceeds the maximum allowed size",
+      "INVALID_FORMAT": "Unsupported format (use JPEG, PNG or WebP)",
+      "NOT_LANDSCAPE": "Must be landscape (width ≥ height)",
+      "WIDTH_TOO_SMALL": "Width below the minimum allowed",
+      "TOO_MANY_IMAGES": "Exceeds the maximum number of images per tour"
+    },
+    "errors": {
+      "validationTitle": "Some images do not meet the rules",
+      "generic": "An error occurred, please try again",
+      "genericTitle": "Could not save the gallery"
+    }
   }
 }
