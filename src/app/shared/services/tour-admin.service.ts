@@ -76,4 +76,16 @@ export class TourAdminService {
   returnedTour(tourId: number): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/admin/returnedTourById/${tourId}`, {});
   }
+
+  /**
+   * Actualiza el porcentaje Tourya del tour. Solo ADMIN/BACKOFFICE.
+   * El valor debe ser un decimal entre 0.0 y 1.0 (ej. 0.15 = 15%).
+   * Retorna el TourFullDataResponse del backend con el tour actualizado.
+   */
+  updatePorcentajeTourya(tourId: number, porcentajeTourya: number): Observable<unknown> {
+    return this.http.patch<unknown>(
+      `${this.baseUrl}/admin/${tourId}/porcentajeTourya`,
+      { porcentajeTourya }
+    );
+  }
 }

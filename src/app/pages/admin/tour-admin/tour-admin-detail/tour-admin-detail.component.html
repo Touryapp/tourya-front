@@ -330,7 +330,7 @@
 
 <!-- Modal de Confirmación para Aceptar -->
 <div class="modal fade" [class.show]="showAcceptModal" [style.display]="showAcceptModal ? 'block' : 'none'" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-sm" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Confirmar Aceptación</h5>
@@ -338,14 +338,52 @@
       </div>
       <div class="modal-body">
         <p>¿Estás seguro de que deseas aceptar este tour?</p>
+
+        <div class="mb-3">
+          <label for="porcentajeTouryaInput" class="form-label fw-semibold">
+            Porcentaje Tourya (%)
+          </label>
+          <div class="input-group">
+            <input
+              id="porcentajeTouryaInput"
+              type="number"
+              class="form-control"
+              min="0"
+              max="100"
+              step="0.01"
+              [(ngModel)]="porcentajeTouryaInput"
+              [disabled]="savingPorcentajeTourya"
+              aria-describedby="porcentajeTouryaHelp"
+            />
+            <span class="input-group-text">%</span>
+          </div>
+          <div id="porcentajeTouryaHelp" class="form-text small">
+            Comisión que se descuenta al proveedor por cada reserva. Se hereda a los slots nuevos.
+            Rango permitido: 0–100.
+          </div>
+        </div>
+
         <div class="alert alert-success mb-0">
           <i class="isax isax-info-circle me-2"></i>
           <small>El tour pasará a estado "Aceptado" y estará disponible para los usuarios.</small>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success me-2" (click)="acceptTour()">Sí, Aceptar</button>
-        <button type="button" class="btn btn-secondary" (click)="closeAcceptModal()">Cancelar</button>
+        <button
+          type="button"
+          class="btn btn-success me-2"
+          (click)="acceptTour()"
+          [disabled]="savingPorcentajeTourya || !isPorcentajeTouryaValid()"
+        >
+          <span *ngIf="!savingPorcentajeTourya">Sí, Aceptar</span>
+          <span *ngIf="savingPorcentajeTourya">Guardando…</span>
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeAcceptModal()"
+          [disabled]="savingPorcentajeTourya"
+        >Cancelar</button>
       </div>
     </div>
   </div>
