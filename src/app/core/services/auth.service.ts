@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { 
-  GoogleAuthProvider, 
+import {
+  GoogleAuthProvider,
   FacebookAuthProvider,
   UserCredential,
-  signOut, 
+  signOut,
   User,
   onAuthStateChanged,
   signInWithPopup
 } from 'firebase/auth';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of } from 'rxjs';
 import { auth } from '../../app.module';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -22,6 +22,15 @@ import { RoleDto } from '../../shared/dto/role.dto';
 import { Roles } from '../../shared/enums/roles.enum';
 import { RequestsProvidersStatus } from '../../shared/enums/requests-providers-status.enum';
 
+export interface RefreshResponseDto {
+  accessToken: string;
+  refreshToken: string;
+}
+
+const ACCESS_TOKEN_KEY = 'accessToken';
+const REFRESH_TOKEN_KEY = 'refreshToken';
+const LEGACY_TOKEN_KEY = 'token';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,31 +40,67 @@ export class AuthService {
   private baseUrl = environment.apiUrl + "/auth";
 
   constructor(private http: HttpClient) {
-    // Monitorear los cambios en el estado de autenticación
     onAuthStateChanged(auth, (user) => {
       this.currentUserSubject.next(user);
     });
   }
 
-  // Check if the user is authenticated
   isAuthenticated(): boolean {
-    return !!localStorage.getItem("token");
+    return !!this.getAccessToken();
   }
 
-  // Get the authentication token
   getToken(): string | null {
-    return localStorage.getItem("token");
+    return this.getAccessToken();
   }
 
-  // Set the authentication token
+  getAccessToken(): string | null {
+    return (
+      localStorage.getItem(ACCESS_TOKEN_KEY) ||
+      localStorage.getItem(LEGACY_TOKEN_KEY)
+    );
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
+  }
+
   setToken(token: string): void {
-    localStorage.setItem("token", token);
+    this.setTokens(token, null);
+  }
+
+  setTokens(accessToken: string, refreshToken: string | null): void {
+    if (accessToken) {
+      localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+      localStorage.setItem(LEGACY_TOKEN_KEY, accessToken);
+    }
+    if (refreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    } else {
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
+    }
     sessionStorage.removeItem("providerPanelView");
   }
 
-  // Remove the authentication token
+  setTokensFromResponse(response: {
+    token?: string;
+    accessToken?: string;
+    refreshToken?: string;
+  }): void {
+    const accessToken = response.accessToken || response.token || '';
+    const refreshToken = response.refreshToken || null;
+    if (accessToken) {
+      this.setTokens(accessToken, refreshToken);
+    }
+  }
+
   removeToken(): void {
-    localStorage.removeItem("token");
+    this.removeTokens();
+  }
+
+  removeTokens(): void {
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
   }
 
   setUser(user: any): void {
@@ -100,10 +145,15 @@ export class AuthService {
     );
   }
 
-  // Iniciar sesión con Google
+  refresh(): Observable<RefreshResponseDto> {
+    const refreshToken = this.getRefreshToken();
+    return this.http.post<RefreshResponseDto>(`${this.baseUrl}/refresh`, {
+      refreshToken,
+    });
+  }
+
   async loginWithGoogle(): Promise<UserCredential> {
     const provider = new GoogleAuthProvider();
-    // Añadir scopes para acceder a más información del usuario
     provider.addScope('profile');
     provider.addScope('email');
     return signInWithPopup(auth, provider);
@@ -118,10 +168,8 @@ export class AuthService {
       data
     );
   }
-  // Iniciar sesión con Facebook
   async loginWithFacebook(): Promise<UserCredential> {
     const provider = new FacebookAuthProvider();
-    // Añadir permisos para acceder a más información del usuario
     provider.addScope('email');
     provider.addScope('public_profile');
     return signInWithPopup(auth, provider);
@@ -137,12 +185,10 @@ export class AuthService {
     );
   }
 
-  // Obtener datos del usuario actual
   getCurrentUser(): User | null {
     return auth.currentUser;
   }
 
-  // Obtener token del usuario
   async getUserToken(): Promise<string | null> {
     const user = auth.currentUser;
     if (user) {
@@ -151,12 +197,10 @@ export class AuthService {
     return null;
   }
 
-  // Cerrar sesión
   async logoutSocial(): Promise<void> {
     return signOut(auth);
   }
 
-  // Verificar si el usuario está autenticado
   isAuthenticatedSocial(): boolean {
     return !!auth.currentUser;
   }
@@ -170,13 +214,20 @@ export class AuthService {
   }
 
   logout(): void {
-    // 1. Limpiar variables de usuario y seguridad
-    localStorage.removeItem("token");
+    const refreshToken = this.getRefreshToken();
+
+    if (refreshToken) {
+      this.http
+        .post(`${this.baseUrl}/logout`, { refreshToken })
+        .pipe(catchError(() => of(null)))
+        .subscribe();
+    }
+
+    this.removeTokens();
     localStorage.removeItem("user");
     localStorage.removeItem("requestProviderStatus");
     localStorage.removeItem("idProvider");
-    
-    // 2. Limpiar estados de navegación de la sesión
+
     sessionStorage.removeItem("providerPanelView");
     sessionStorage.removeItem("menuValue");
   }
@@ -184,7 +235,7 @@ export class AuthService {
   isAdmin(): boolean {
     const user = this.getUser();
     if (!user) return false;
-    
+
     const roleList: RoleDto[] = user.roleList || user.roles || [];
     return roleList.some((r: RoleDto) => r.id === Roles.ADMIN);
   }
@@ -192,7 +243,7 @@ export class AuthService {
   isProvider(): boolean {
     const user = this.getUser();
     if (!user) return false;
-    
+
     const roleList: RoleDto[] = user.roleList || user.roles || [];
     return roleList.some((r: RoleDto) => r.id === Roles.PROVIDER);
   }
@@ -200,7 +251,7 @@ export class AuthService {
   isProviderOperator(): boolean {
     const user = this.getUser();
     if (!user) return false;
-    
+
     const roleList: RoleDto[] = user.roleList || user.roles || [];
     return roleList.some((r: RoleDto) => r.id === Roles.PROVIDER_OPERATOR);
   }
@@ -208,10 +259,10 @@ export class AuthService {
   isUser(): boolean {
     const user = this.getUser();
     if (!user) return false;
-    
+
     const roleList: RoleDto[] = user.roleList || user.roles || [];
     return roleList.some((r: RoleDto) => r.id === Roles.USER);
-  } 
+  }
 
   setRequestProviderStatus(status: RequestsProvidersStatus): void {
     localStorage.setItem("requestProviderStatus", status);
@@ -221,16 +272,14 @@ export class AuthService {
     const status = localStorage.getItem("requestProviderStatus");
     return status as RequestsProvidersStatus || null;
   }
-  // set id provider
   setIdProvider(id: number): void {
     localStorage.setItem("idProvider", id.toString());
   }
-  // get id provider
   getIdProvider(): number | null {
     const id = localStorage.getItem("idProvider");
     return id ? parseInt(id) : null;
   }
-  
+
   /**
    * Get user's display name (first name + first surname)
    * Examples:
@@ -245,28 +294,23 @@ export class AuthService {
     }
 
     const nameParts = user.fullName.trim().split(/\s+/);
-    
+
     if (nameParts.length === 0) {
       return 'Usuario';
     }
-    
+
     if (nameParts.length === 1) {
-      // Solo un nombre
       return nameParts[0];
     }
-    
+
     if (nameParts.length === 2) {
-      // Un nombre y un apellido
       return `${nameParts[0]} ${nameParts[1]}`;
     }
-    
-    // Dos o más nombres y apellidos
-    // Tomar el primer nombre (índice 0) y el primer apellido
-    // Asumiendo que los apellidos empiezan después de la mitad
+
     const firstName = nameParts[0];
     const middleIndex = Math.floor(nameParts.length / 2);
     const firstSurname = nameParts[middleIndex];
-    
+
     return `${firstName} ${firstSurname}`;
   }
-} 
+}
