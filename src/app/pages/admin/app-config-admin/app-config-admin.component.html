@@ -1,0 +1,95 @@
+<div class="app-config-admin">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h3>{{ 'app-config-admin.title' | translate }}</h3>
+      <p class="text-muted">{{ 'app-config-admin.description' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="row" *ngFor="let group of groups">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">{{ group.labelKey | translate }}</h5>
+        </div>
+        <div class="card-body p-0">
+          <table class="table mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 40%;">{{ 'app-config-admin.table.setting' | translate }}</th>
+                <th style="width: 30%;">{{ 'app-config-admin.table.value' | translate }}</th>
+                <th style="width: 30%;">{{ 'app-config-admin.table.actions' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of group.items">
+                <td>
+                  <div class="fw-medium">{{ item.labelKey | translate }}</div>
+                  <div class="text-muted small">{{ item.descriptionKey | translate }}</div>
+                  <code class="small">{{ item.key }}</code>
+                </td>
+                <td>
+                  <ng-container *ngIf="item.loading">
+                    <span class="text-muted">{{ 'app-config-admin.table.loading' | translate }}</span>
+                  </ng-container>
+
+                  <ng-container *ngIf="!item.loading && item.errorLoading">
+                    <span class="text-danger small">{{ 'app-config-admin.table.errorLoading' | translate }}</span>
+                  </ng-container>
+
+                  <ng-container *ngIf="!item.loading && !item.errorLoading">
+                    <input
+                      *ngIf="item.type === 'number'"
+                      type="number"
+                      min="0"
+                      class="form-control"
+                      [(ngModel)]="item.currentValue"
+                      [name]="item.key"
+                    />
+
+                    <div *ngIf="item.type === 'boolean'" class="form-check form-switch">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        [checked]="item.currentValue === 1"
+                        (change)="toggleBoolean(item)"
+                        [id]="'toggle-' + item.key"
+                      />
+                      <label class="form-check-label" [for]="'toggle-' + item.key">
+                        <span *ngIf="item.currentValue === 1" class="text-success fw-medium">
+                          {{ 'app-config-admin.table.on' | translate }}
+                        </span>
+                        <span *ngIf="item.currentValue !== 1" class="text-muted">
+                          {{ 'app-config-admin.table.off' | translate }}
+                        </span>
+                      </label>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary me-2"
+                    [disabled]="!isDirty(item) || item.saving || item.loading || item.errorLoading"
+                    (click)="save(item)"
+                  >
+                    <span *ngIf="!item.saving">{{ 'app-config-admin.table.save' | translate }}</span>
+                    <span *ngIf="item.saving">{{ 'app-config-admin.table.saving' | translate }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    [disabled]="!isDirty(item) || item.saving"
+                    (click)="resetItem(item)"
+                  >
+                    {{ 'app-config-admin.table.reset' | translate }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

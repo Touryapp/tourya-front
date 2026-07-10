@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
   mostrarTourList: boolean = false;
   mostrarMaritimeReports: boolean = false;
   mostrarProviderPayments: boolean = false;
+  mostrarAppConfig: boolean = false;
 
   // Referencia al enum para usar en el template
   readonly StatusEnum = RequestsProvidersStatus;
@@ -51,6 +52,7 @@ export class DashboardComponent implements OnInit {
     this.mostrarSolicitudes = false;
     this.mostrarMaritimeReports = false;
     this.mostrarProviderPayments = false;
+    this.mostrarAppConfig = false;
     this.mostrarTourList = !this.mostrarTourList;
   }
 
@@ -59,6 +61,7 @@ export class DashboardComponent implements OnInit {
     this.mostrarTourList = false;
     this.mostrarMaritimeReports = false;
     this.mostrarProviderPayments = false;
+    this.mostrarAppConfig = false;
     this.mostrarSolicitudes = !this.mostrarSolicitudes;
 
     if (this.mostrarSolicitudes) {
@@ -70,6 +73,7 @@ export class DashboardComponent implements OnInit {
     this.mostrarTourList = false;
     this.mostrarSolicitudes = false;
     this.mostrarProviderPayments = false;
+    this.mostrarAppConfig = false;
     this.mostrarMaritimeReports = !this.mostrarMaritimeReports;
   }
 
@@ -77,7 +81,16 @@ export class DashboardComponent implements OnInit {
     this.mostrarTourList = false;
     this.mostrarSolicitudes = false;
     this.mostrarMaritimeReports = false;
+    this.mostrarAppConfig = false;
     this.mostrarProviderPayments = !this.mostrarProviderPayments;
+  }
+
+  toggleAppConfig(): void {
+    this.mostrarTourList = false;
+    this.mostrarSolicitudes = false;
+    this.mostrarMaritimeReports = false;
+    this.mostrarProviderPayments = false;
+    this.mostrarAppConfig = !this.mostrarAppConfig;
   }
 
   toggleDashboard(): void {
@@ -85,6 +98,7 @@ export class DashboardComponent implements OnInit {
     this.mostrarSolicitudes = false;
     this.mostrarMaritimeReports = false;
     this.mostrarProviderPayments = false;
+    this.mostrarAppConfig = false;
   }
 
   cargarSolicitudes(): void {

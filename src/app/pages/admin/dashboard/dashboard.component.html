@@ -51,6 +51,10 @@
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleProviderPayments()"><i
                 class="isax isax-wallet-2"></i> Ordenes de pago</a>
           </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleAppConfig()"><i
+                class="isax isax-setting-2"></i> {{ 'app-config-admin.sidebarLink' | translate }}</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -60,7 +64,7 @@
   <!-- Contenido principal -->
   <div class="col-xl-9 col-lg-8">
     <div class="dashboard-container">
-      <div *ngIf="!mostrarSolicitudes && !mostrarTourList && !mostrarMaritimeReports && !mostrarProviderPayments">
+      <div *ngIf="!mostrarSolicitudes && !mostrarTourList && !mostrarMaritimeReports && !mostrarProviderPayments && !mostrarAppConfig">
         <div class="row">
           <div class="col-12">
             <h3>Dashboard de Administración</h3>
@@ -182,6 +186,13 @@
       <div *ngIf="mostrarProviderPayments" class="row mt-3">
         <div class="col-12">
           <app-provider-payments></app-provider-payments>
+        </div>
+      </div>
+
+      <!-- Configuraciones del sistema (FE-04) -->
+      <div *ngIf="mostrarAppConfig" class="row mt-3">
+        <div class="col-12">
+          <app-app-config-admin></app-app-config-admin>
         </div>
       </div>
     </div>
