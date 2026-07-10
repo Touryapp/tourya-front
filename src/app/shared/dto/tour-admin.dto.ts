@@ -8,6 +8,7 @@ export interface TourAdminDto {
   maxPeople: number;
   highlight: number;
   price: number | null;
+  porcentajeTourya?: number | null;
   minAge: number;
   rating: number | null;
   status: TourStatus;

@@ -22,6 +22,10 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
   showAcceptModal: boolean = false;
   showCancelModal: boolean = false;
   showReturnModal: boolean = false;
+
+  porcentajeTouryaInput: number = 15;
+  savingPorcentajeTourya: boolean = false;
+  private readonly DEFAULT_PORCENTAJE_TOURYA_PERCENT = 15;
   categories: TourCategoryDto[] = [];
   providerDetail: ProviderDto | null = null;
   locationsPublic: LocationsPublicDto[] = [];
@@ -217,11 +221,29 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
   }
 
   openAcceptModal(): void {
+    const current = this.tour?.porcentajeTourya;
+    if (typeof current === 'number' && Number.isFinite(current)) {
+      this.porcentajeTouryaInput = this.round2(current * 100);
+    } else {
+      this.porcentajeTouryaInput = this.DEFAULT_PORCENTAJE_TOURYA_PERCENT;
+    }
     this.showAcceptModal = true;
   }
 
   closeAcceptModal(): void {
+    if (this.savingPorcentajeTourya) {
+      return;
+    }
     this.showAcceptModal = false;
+  }
+
+  isPorcentajeTouryaValid(): boolean {
+    const v = this.porcentajeTouryaInput;
+    return typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100;
+  }
+
+  private round2(value: number): number {
+    return Math.round(value * 100) / 100;
   }
 
   openCancelModal(): void {
@@ -241,18 +263,50 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
   }
 
   acceptTour(): void {
-    if (this.tour) {
-      this.tourAdminService.acceptTour(this.tour.id).subscribe({
+    if (!this.tour || !this.isPorcentajeTouryaValid()) {
+      return;
+    }
+    const tourId = this.tour.id;
+    const newDecimal = this.round2(this.porcentajeTouryaInput) / 100;
+    const currentDecimal =
+      typeof this.tour.porcentajeTourya === 'number' && Number.isFinite(this.tour.porcentajeTourya)
+        ? this.round2(this.tour.porcentajeTourya * 100) / 100
+        : null;
+
+    const doAccept = () => {
+      this.tourAdminService.acceptTour(tourId).subscribe({
         next: () => {
+          this.savingPorcentajeTourya = false;
           this.openSnackBar('Tour aceptado exitosamente');
-          this.closeAcceptModal();
+          this.showAcceptModal = false;
           this.router.navigate(['/admin/dashboard']);
         },
         error: (error) => {
+          this.savingPorcentajeTourya = false;
           console.error('Error al aceptar el tour:', error);
           this.openSnackBar('Error al aceptar el tour');
         }
       });
+    };
+
+    if (currentDecimal === null || Math.abs(currentDecimal - newDecimal) > 0.00001) {
+      this.savingPorcentajeTourya = true;
+      this.tourAdminService.updatePorcentajeTourya(tourId, newDecimal).subscribe({
+        next: () => {
+          if (this.tour) {
+            this.tour.porcentajeTourya = newDecimal;
+          }
+          doAccept();
+        },
+        error: (error) => {
+          this.savingPorcentajeTourya = false;
+          console.error('Error al actualizar el porcentaje Tourya:', error);
+          this.openSnackBar('Error al actualizar el porcentaje Tourya');
+        }
+      });
+    } else {
+      this.savingPorcentajeTourya = true;
+      doAccept();
     }
   }
 
