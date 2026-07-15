@@ -1833,5 +1833,102 @@
       "generic": "Ocorreu um erro, tente novamente",
       "genericTitle": "Não foi possível salvar a galeria"
     }
+  },
+  "request-provider": {
+    "breadcrumb": "Solicitação de fornecedor",
+    "sidebar": {
+      "title": "Solicitação de fornecedor",
+      "basicInfo": "Informações básicas"
+    },
+    "loading": {
+      "data": "Carregando dados...",
+      "info": "Carregando informações do fornecedor..."
+    },
+    "sections": {
+      "providerDetails": "Dados do fornecedor",
+      "documents": "Documentos"
+    },
+    "fields": {
+      "name": "Nome",
+      "namePlaceholder": "Insira seu nome completo",
+      "documentNumber": "Número do documento",
+      "documentNumberPlaceholder": "Insira o número do seu documento",
+      "documentType": "Tipo de documento",
+      "selectDocumentType": "Selecione o tipo de documento",
+      "serviceType": "Tipo de serviço",
+      "selectServiceType": "Selecione o tipo de serviço",
+      "rnt": "Registro Nacional de Turismo (RNT)",
+      "rntPlaceholder": "Insira seu RNT",
+      "country": "País",
+      "department": "Estado/Departamento",
+      "city": "Cidade",
+      "selectPlaceholder": "Selecionar",
+      "phone": "Telefone",
+      "phonePlaceholder": "Insira seu número de telefone",
+      "address": "Endereço",
+      "addressPlaceholder": "Insira seu endereço completo"
+    },
+    "validation": {
+      "nameRequired": "O nome é obrigatório",
+      "nameMinLength": "O nome deve ter pelo menos 3 caracteres",
+      "documentNumberRequired": "O número do documento é obrigatório",
+      "documentNumberMinLength": "O número do documento deve ter pelo menos 6 caracteres",
+      "documentTypeRequired": "O tipo de documento é obrigatório",
+      "serviceTypeRequired": "O tipo de serviço é obrigatório",
+      "rntRequired": "O RNT é obrigatório",
+      "countryRequired": "O país é obrigatório",
+      "phoneRequired": "O telefone é obrigatório",
+      "phoneMinLength": "O telefone deve ter pelo menos 10 dígitos",
+      "addressRequired": "O endereço é obrigatório",
+      "addressMinLength": "O endereço deve ter pelo menos 10 caracteres"
+    },
+    "buttons": {
+      "submit": "Enviar solicitação",
+      "resubmit": "Reenviar solicitação",
+      "sendToServer": "Enviar documentos ao servidor",
+      "viewFile": "Ver arquivo",
+      "changeDocument": "Alterar {{name}}",
+      "uploadDocument": "Carregar {{name}}",
+      "remove": "Remover"
+    },
+    "status": {
+      "declinedReason": "Motivo da rejeição:",
+      "incompleteReason": "Motivo da solicitação de informação:",
+      "submittedBadge": "Status: Enviada",
+      "submittedMessage": "Sua solicitação foi enviada com sucesso."
+    },
+    "documents": {
+      "requiredTitle": "Documentos obrigatórios",
+      "workflow": {
+        "title": "Fluxo de trabalho:",
+        "step1": "Carregue os documentos usando os botões abaixo",
+        "step2": "Os documentos são salvos temporariamente no navegador",
+        "step3": "Pressione \"Enviar documentos ao servidor\" para enviá-los"
+      },
+      "badges": {
+        "mandatory": "Obrigatório",
+        "optional": "Opcional",
+        "new": "Novo",
+        "existing": "Existente"
+      },
+      "acceptedFormats": "PDF, JPG, PNG, DOC (Máx 10MB)",
+      "existingFile": "Arquivo existente",
+      "summary": {
+        "totalAvailable": "Total disponíveis",
+        "withFiles": "Com arquivos",
+        "mandatoryPending": "Obrigatórios pendentes",
+        "readyToSend": "Novos para enviar",
+        "markedForDelete": "{{count}} arquivo(s) marcado(s) para exclusão",
+        "pressToSend": ". Pressione este botão para enviá-los ao servidor"
+      }
+    },
+    "cancelled": {
+      "title": "Sua Solicitação Foi Cancelada",
+      "description": "Infelizmente sua solicitação de fornecedor foi cancelada.",
+      "reason": "Motivo:",
+      "reasonUnspecified": "Não especificado",
+      "logoutInstruction": "Por favor, encerre a sessão.",
+      "logoutButton": "Encerrar sessão"
+    }
   }
 }
