@@ -1833,5 +1833,102 @@
       "generic": "Ha ocurrido un error, por favor intente de nuevo",
       "genericTitle": "No se pudo guardar la galería"
     }
+  },
+  "request-provider": {
+    "breadcrumb": "Solicitud de proveedor",
+    "sidebar": {
+      "title": "Solicitud de proveedor",
+      "basicInfo": "Información básica"
+    },
+    "loading": {
+      "data": "Cargando datos...",
+      "info": "Cargando información del proveedor..."
+    },
+    "sections": {
+      "providerDetails": "Datos del proveedor",
+      "documents": "Documentos"
+    },
+    "fields": {
+      "name": "Nombre",
+      "namePlaceholder": "Ingresa tu nombre completo",
+      "documentNumber": "Número de documento",
+      "documentNumberPlaceholder": "Ingresa tu número de documento",
+      "documentType": "Tipo de documento",
+      "selectDocumentType": "Selecciona el tipo de documento",
+      "serviceType": "Tipo de servicio",
+      "selectServiceType": "Selecciona el tipo de servicio",
+      "rnt": "Registro Nacional de Turismo (RNT)",
+      "rntPlaceholder": "Ingresa tu RNT",
+      "country": "País",
+      "department": "Departamento",
+      "city": "Ciudad",
+      "selectPlaceholder": "Seleccionar",
+      "phone": "Teléfono",
+      "phonePlaceholder": "Ingresa tu número de teléfono",
+      "address": "Dirección",
+      "addressPlaceholder": "Ingresa tu dirección completa"
+    },
+    "validation": {
+      "nameRequired": "El nombre es obligatorio",
+      "nameMinLength": "El nombre debe tener al menos 3 caracteres",
+      "documentNumberRequired": "El número de documento es obligatorio",
+      "documentNumberMinLength": "El número de documento debe tener al menos 6 caracteres",
+      "documentTypeRequired": "El tipo de documento es obligatorio",
+      "serviceTypeRequired": "El tipo de servicio es obligatorio",
+      "rntRequired": "El RNT es obligatorio",
+      "countryRequired": "El país es obligatorio",
+      "phoneRequired": "El teléfono es obligatorio",
+      "phoneMinLength": "El teléfono debe tener al menos 10 dígitos",
+      "addressRequired": "La dirección es obligatoria",
+      "addressMinLength": "La dirección debe tener al menos 10 caracteres"
+    },
+    "buttons": {
+      "submit": "Enviar solicitud",
+      "resubmit": "Reenviar solicitud",
+      "sendToServer": "Enviar documentos al servidor",
+      "viewFile": "Ver archivo",
+      "changeDocument": "Cambiar {{name}}",
+      "uploadDocument": "Cargar {{name}}",
+      "remove": "Eliminar"
+    },
+    "status": {
+      "declinedReason": "Motivo del rechazo:",
+      "incompleteReason": "Motivo de solicitud de información:",
+      "submittedBadge": "Estado: Enviada",
+      "submittedMessage": "Tu solicitud ha sido enviada correctamente."
+    },
+    "documents": {
+      "requiredTitle": "Documentos requeridos",
+      "workflow": {
+        "title": "Flujo de trabajo:",
+        "step1": "Carga los documentos usando los botones de abajo",
+        "step2": "Los documentos se guardan temporalmente en tu navegador",
+        "step3": "Presiona \"Enviar documentos al servidor\" para enviarlos"
+      },
+      "badges": {
+        "mandatory": "Obligatorio",
+        "optional": "Opcional",
+        "new": "Nuevo",
+        "existing": "Existente"
+      },
+      "acceptedFormats": "PDF, JPG, PNG, DOC (Máx 10MB)",
+      "existingFile": "Archivo existente",
+      "summary": {
+        "totalAvailable": "Total disponibles",
+        "withFiles": "Con archivos",
+        "mandatoryPending": "Obligatorios pendientes",
+        "readyToSend": "Nuevos para enviar",
+        "markedForDelete": "{{count}} archivo(s) marcado(s) para eliminar",
+        "pressToSend": ". Presiona este botón para enviarlos al servidor"
+      }
+    },
+    "cancelled": {
+      "title": "Tu Solicitud ha sido Cancelada",
+      "description": "Lamentablemente tu solicitud de proveedor ha sido cancelada.",
+      "reason": "Motivo:",
+      "reasonUnspecified": "No especificado",
+      "logoutInstruction": "Por favor, cierra sesión.",
+      "logoutButton": "Cerrar sesión"
+    }
   }
 }

@@ -1832,5 +1832,102 @@
       "generic": "An error occurred, please try again",
       "genericTitle": "Could not save the gallery"
     }
+  },
+  "request-provider": {
+    "breadcrumb": "Provider Request",
+    "sidebar": {
+      "title": "Provider Request",
+      "basicInfo": "Basic information"
+    },
+    "loading": {
+      "data": "Loading data...",
+      "info": "Loading provider information..."
+    },
+    "sections": {
+      "providerDetails": "Provider details",
+      "documents": "Documents"
+    },
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Enter your full name",
+      "documentNumber": "Document number",
+      "documentNumberPlaceholder": "Enter your document number",
+      "documentType": "Document type",
+      "selectDocumentType": "Select document type",
+      "serviceType": "Service type",
+      "selectServiceType": "Select service type",
+      "rnt": "National Tourism Registry (RNT)",
+      "rntPlaceholder": "Enter your RNT",
+      "country": "Country",
+      "department": "State/Province",
+      "city": "City",
+      "selectPlaceholder": "Select",
+      "phone": "Phone",
+      "phonePlaceholder": "Enter your phone number",
+      "address": "Address",
+      "addressPlaceholder": "Enter your full address"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 3 characters long",
+      "documentNumberRequired": "Document number is required",
+      "documentNumberMinLength": "Document number must be at least 6 characters long",
+      "documentTypeRequired": "Document type is required",
+      "serviceTypeRequired": "Service type is required",
+      "rntRequired": "RNT is required",
+      "countryRequired": "Country is required",
+      "phoneRequired": "Phone is required",
+      "phoneMinLength": "Phone must be at least 10 digits long",
+      "addressRequired": "Address is required",
+      "addressMinLength": "Address must be at least 10 characters long"
+    },
+    "buttons": {
+      "submit": "Submit request",
+      "resubmit": "Resubmit request",
+      "sendToServer": "Send documents to server",
+      "viewFile": "View file",
+      "changeDocument": "Change {{name}}",
+      "uploadDocument": "Upload {{name}}",
+      "remove": "Remove"
+    },
+    "status": {
+      "declinedReason": "Reason for rejection:",
+      "incompleteReason": "Reason for information request:",
+      "submittedBadge": "Status: Submitted",
+      "submittedMessage": "Your request has been submitted successfully."
+    },
+    "documents": {
+      "requiredTitle": "Required documents",
+      "workflow": {
+        "title": "Workflow:",
+        "step1": "Upload documents using the buttons below",
+        "step2": "Documents are temporarily saved in your browser",
+        "step3": "Press \"Send documents to server\" to upload them"
+      },
+      "badges": {
+        "mandatory": "Mandatory",
+        "optional": "Optional",
+        "new": "New",
+        "existing": "Existing"
+      },
+      "acceptedFormats": "PDF, JPG, PNG, DOC (Max 10MB)",
+      "existingFile": "Existing file",
+      "summary": {
+        "totalAvailable": "Total available",
+        "withFiles": "With files",
+        "mandatoryPending": "Mandatory pending",
+        "readyToSend": "New to send",
+        "markedForDelete": "{{count}} file(s) marked for deletion",
+        "pressToSend": ". Press this button to send them to the server"
+      }
+    },
+    "cancelled": {
+      "title": "Your Request Has Been Cancelled",
+      "description": "Unfortunately your provider request has been cancelled.",
+      "reason": "Reason:",
+      "reasonUnspecified": "Not specified",
+      "logoutInstruction": "Please log out.",
+      "logoutButton": "Log out"
+    }
   }
 }

@@ -51,9 +51,11 @@ export class RequestproviderComponent implements OnInit {
   requestProviderDocumentTypes: RequestProviderDocumentType[] = [];
   public routes = routes;
 
+  // FE-11: los labels son claves i18n que se resuelven con el pipe translate
+  // en el HTML del sidebar (ngx-translate).
   tabs = [
-    { id: "basic_info", label: "Basic Info" },
-    { id: "gallery", label: "Documents" },
+    { id: "basic_info", label: "request-provider.sidebar.basicInfo" },
+    { id: "gallery", label: "request-provider.sections.documents" },
   ];
 
   activeTab: string = this.tabs[0].id;
