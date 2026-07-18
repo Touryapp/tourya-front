@@ -3,15 +3,15 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 col-12">
-        <h2 class="breadcrumb-title mb-2">Tour Gallery</h2>
+        <h2 class="breadcrumb-title mb-2">{{ 'tour-gallery.breadcrumb' | translate }}</h2>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-center mb-0">
             <li class="breadcrumb-item"><a [routerLink]="'/'"><i class="isax isax-home5"></i></a>
             </li>
-            <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'">Providers Panel</a>
+            <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'">{{ 'tour-gallery.providersPanel' | translate }}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-              Tour Gallery
+              {{ 'tour-gallery.breadcrumb' | translate }}
             </li>
           </ol>
         </nav>
@@ -35,7 +35,7 @@
         <form [formGroup]="tourGalleryForm" (ngSubmit)="onSubmit()">
           <div class="card shadow-none" id="galleries">
             <div class="card-header">
-              <h5 class="fs-18">Gallery {{tour?.name}}</h5>
+              <h5 class="fs-18">{{ 'tour-gallery.title' | translate }} {{ i18nService.getValue(tour?.name) }}</h5>
             </div>
             <div class="card-body">
               <div
@@ -74,7 +74,7 @@
             <div class="d-flex align-items-center justify-content-end">
               <button type="submit" class="btn btn-primary"
                 [disabled]="loading || (submitted && tourGalleryForm.touched && tourGalleryForm.invalid)">
-                <span>Upload images</span>
+                <span>{{ 'tour-gallery.uploadButton' | translate }}</span>
                 <div *ngIf="loading" class="spinner-border spinner-border-sm">
                 </div>
               </button>
