@@ -386,24 +386,52 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   }
 
   private mapReservationToBooking(reservation: any): ProviderTourBooking {
+    // TC-003 fix: el modal se alimenta de GET /reservations?reservationId=X
+    // que devuelve el DTO `ReservationDetailsResponse` (SP `sp_get_provider_reservations`),
+    // no `ReservationResponse`. Los nombres de campos son distintos — hay que leer
+    // los del SP y componer los derivados (checkIn desde scheduleDate+slotTimeStart,
+    // localizar tourName por ser TranslatedField, construir serviceResponsible plano→sub-objeto).
+
+    const tourNameText = this.i18nService.getValue(reservation.tourName) || 'N/A';
+
+    const checkInIso =
+      reservation.scheduleDate && reservation.slotTimeStart
+        ? `${reservation.scheduleDate}T${reservation.slotTimeStart}`
+        : undefined;
+
+    const rawCheckInDate = reservation.scheduleDate || '';
+
+    const serviceResponsible = reservation.serviceResponsibleName
+      ? {
+          name: reservation.serviceResponsibleName,
+          email: reservation.serviceResponsibleEmail,
+          phone: reservation.serviceResponsiblePhone,
+        }
+      : undefined;
+
     return {
       id: `RES-${reservation.reservationId}`,
-      tourId: reservation.tourId, // Mapear el ID del tour
-      tourName: reservation.tourName || 'N/A',
-      tourType: reservation.tourType || 'N/A',
+      tourId: reservation.tourId,
+      tourName: tourNameText,
+      tourType: reservation.tourSubCategory || reservation.tourType || 'N/A',
       img: 'tours-21.jpg',
-      customerName: reservation.serviceResponsible?.name || 'N/A',
-      customerEmail: reservation.serviceResponsible?.email || 'N/A',
-      customerPhone: reservation.serviceResponsible?.phone || 'N/A',
-      travellers: reservation.travellers || 'N/A',
+      customerName: reservation.serviceResponsibleName || 'N/A',
+      customerEmail: reservation.serviceResponsibleEmail || 'N/A',
+      customerPhone: reservation.serviceResponsiblePhone || 'N/A',
+      travellers: reservation.totalTourists != null ? `${reservation.totalTourists}` : 'N/A',
       duration: reservation.duration ? `${reservation.duration} días` : 'N/A',
-      price: reservation.price ? `$${reservation.price.toFixed(2)}` : '$0.00',
-      bookingDate: this.formatDate(reservation.createdDate),
-      checkInDate: this.formatDateTime(reservation.checkInDate),
-      returnDate: this.formatDateTime(reservation.returnDate),
-      rawCheckInDate: reservation.checkInDate ? reservation.checkInDate.split('T')[0] : '',
-      rawReturnDate: reservation.returnDate ? reservation.returnDate.split('T')[0] : '',
-      status: this.mapReservationStatus(reservation.deliveryStatus),
+      price:
+        reservation.shoppingTotalPrice != null
+          ? `$${Number(reservation.shoppingTotalPrice).toFixed(2)}`
+          : reservation.price
+          ? `$${Number(reservation.price).toFixed(2)}`
+          : '$0.00',
+      bookingDate: this.formatDate(reservation.reservationCreatedDate || reservation.createdDate),
+      checkInDate: this.formatDateTime(checkInIso),
+      returnDate: '—',
+      rawCheckInDate,
+      rawReturnDate: rawCheckInDate,
+      status: this.mapReservationStatus(reservation.reservationDeliveryStatus || reservation.deliveryStatus),
       destination: reservation.destination || 'N/A',
       extraServices: reservation.extraServices || [],
       activities: reservation.activities || [],
@@ -424,8 +452,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       cancellationDate: this.formatDate(reservation.cancellationDate),
       cancellationReason: reservation.cancellationReason || undefined,
       canRainCancel: reservation.canRainCancel,
-      // Service Responsible
-      serviceResponsible: reservation.serviceResponsible || undefined
+      // Service Responsible (backend planos → sub-objeto que espera el template)
+      serviceResponsible,
     };
   }
   

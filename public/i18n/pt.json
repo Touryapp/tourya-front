@@ -1818,6 +1818,10 @@
     }
   },
   "tour-gallery": {
+    "title": "Galeria de imagens do tour",
+    "breadcrumb": "Galeria do tour",
+    "providersPanel": "Painel de provedores",
+    "uploadButton": "Enviar imagens",
     "uploadTitle": "Enviar imagens da galeria",
     "limitsHint": "JPEG, PNG ou WebP · Máx {{maxSize}} MB por imagem · Orientação horizontal · Largura mínima {{minWidth}} px · Até {{maxImages}} imagens no total",
     "currentCount": "{{current}} de {{max}} imagens na galeria",

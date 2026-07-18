@@ -7,3 +7,4 @@ dist
 .angular
 
 "ANALISIS_FLUJO_PAGO.md" 
+proxy.conf.json

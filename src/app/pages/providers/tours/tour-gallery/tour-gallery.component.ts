@@ -60,7 +60,7 @@ export class TourGalleryComponent implements OnInit {
     private route: ActivatedRoute,
     private tourService: TourService,
     private _snackBar: MatSnackBar,
-    private i18nService: I18nFieldService,
+    public i18nService: I18nFieldService,
     private appConfigService: AppConfigService,
     private translate: TranslateService
   ) {
