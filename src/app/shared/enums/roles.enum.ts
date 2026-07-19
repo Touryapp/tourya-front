@@ -3,4 +3,5 @@ export enum Roles {
   PROVIDER = 2,
   ADMIN = 3,
   PROVIDER_OPERATOR = 34,
+  BACKOFFICE_OPERATION = 35,
 }
