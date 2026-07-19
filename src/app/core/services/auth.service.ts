@@ -256,6 +256,28 @@ export class AuthService {
     return roleList.some((r: RoleDto) => r.id === Roles.PROVIDER_OPERATOR);
   }
 
+  /**
+   * FE-15: usuario con rol BACKOFFICE_OPERATION (staff Tourya que da soporte).
+   * Distinto de ADMIN — ADMIN también aprueba tours y setea comisión.
+   * Alcance exacto de permisos por pantalla queda pendiente hasta confirmación de Luis (P2).
+   */
+  isBackofficeOperation(): boolean {
+    const user = this.getUser();
+    if (!user) return false;
+
+    const roleList: RoleDto[] = user.roleList || user.roles || [];
+    return roleList.some((r: RoleDto) => r.id === Roles.BACKOFFICE_OPERATION);
+  }
+
+  /**
+   * FE-15: paridad con backend `Utils.isTouryaBackoffice()` — ADMIN o BACKOFFICE_OPERATION.
+   * Uso: gate de vistas cross-provider (ver reservas de todos los proveedores, moderar reviews, etc.).
+   * NO reemplaza a `isAdmin()` en operaciones exclusivas del ADMIN (aprobar tour, setear comisión).
+   */
+  isTouryaBackoffice(): boolean {
+    return this.isAdmin() || this.isBackofficeOperation();
+  }
+
   isUser(): boolean {
     const user = this.getUser();
     if (!user) return false;
