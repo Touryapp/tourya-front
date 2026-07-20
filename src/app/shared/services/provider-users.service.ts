@@ -52,4 +52,12 @@ export class ProviderUsersService {
     const params = new HttpParams().set('tourId', tourId.toString());
     return this.http.put<ProviderUser>(`${this.apiUrl}/${providerUserId}/principal-tour`, null, { params });
   }
+
+  /**
+   * BE-22c: GET /provider/users/tour/{tourId} — Lista operadores asignados a un tour
+   * (con flag isPrincipal por operador). Usado por el modal "Contacto principal" del card del tour.
+   */
+  listByTour(tourId: number): Observable<ProviderUser[]> {
+    return this.http.get<ProviderUser[]>(`${this.apiUrl}/tour/${tourId}`);
+  }
 }

@@ -3,13 +3,13 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Tours</h2>
+                <h2 class="breadcrumb-title mb-2">{{ 'tour-list.breadcrumbTitle' | translate }}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a [routerLink]="'/'"><i class="isax isax-home5"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a [routerLink]="'/providers/tours'">Tours</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Tour List</li>
+                        <li class="breadcrumb-item"><a [routerLink]="'/providers/tours'">{{ 'tour-list.breadcrumbTours' | translate }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'tour-list.breadcrumbActive' | translate }}</li>
                     </ol>
                 </nav>
             </div>
@@ -28,7 +28,7 @@
 
             <div class="col-xl-9 col-lg-9">
                 <div class="d-flex align-items-center justify-content-between flex-wrap">
-                    <h6 class="mb-3">{{totalElements}} Tours Found on Your Search</h6>
+                    <h6 class="mb-3">{{ 'tour-list.resultsFound' | translate: { total: totalElements } }}</h6>
                 </div>
 
                 <div class="hotel-list">
@@ -96,21 +96,25 @@
                                         <div class="d-flex align-items-center">
                                             <h6
                                                 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
-                                                Price
+                                                {{ 'tour-list.price' | translate }}
                                                 <span class="ms-1 fs-18 fw-semibold text-primary">
                                                     {{tour?.price}}</span>
 
                                             </h6>
 
-                                            <a class="me-2" [routerLink]="[routes.editTour, tour.id]">Edit tour</a>
+                                            <a class="me-2" [routerLink]="[routes.editTour, tour.id]">{{ 'tour-list.actions.editTour' | translate }}</a>
 
                                             <a class="me-2" [routerLink]="['/providers/tours/galleries', tour.id]">
-                                                Edit Gallery
+                                                {{ 'tour-list.actions.editGallery' | translate }}
                                             </a>
 
                                             <a class="me-2"
                                                 [routerLink]="['/providers/tours/' + tour.id + '/tour-schedule-list']">
-                                                List Schedule
+                                                {{ 'tour-list.actions.listSchedule' | translate }}
+                                            </a>
+
+                                            <a class="me-2" href="javascript:void(0)" (click)="openPrincipalModal(tour)">
+                                                {{ 'tour-list.actions.principalContact' | translate }}
                                             </a>
 
                                         </div>
@@ -157,3 +161,11 @@
     </div>
 </div>
 <!-- /Page Wrapper -->
+
+<!-- BE-22b: modal contacto principal del tour -->
+<app-tour-principal-operator-modal
+  [tourId]="selectedTourIdForPrincipal"
+  [tourName]="selectedTourNameForPrincipal"
+  [showModal]="principalModalOpen"
+  (closeModal)="closePrincipalModal()">
+</app-tour-principal-operator-modal>

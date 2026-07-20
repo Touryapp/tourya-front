@@ -84,6 +84,8 @@ export class ProviderUsersComponent implements OnInit, OnDestroy {
       firstname: ['', [Validators.required, Validators.minLength(2)]],
       lastname: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
+      // BE-22d: telefono opcional.
+      phone: ['', [Validators.maxLength(20)]],
       temporaryPassword: ['', [Validators.required, Validators.minLength(8)]],
       tourIds: [[], Validators.required],
       principalTourId: [null, Validators.required]
@@ -92,6 +94,8 @@ export class ProviderUsersComponent implements OnInit, OnDestroy {
     this.editForm = this.fb.group({
       firstname: ['', [Validators.required, Validators.minLength(2)]],
       lastname: ['', [Validators.required, Validators.minLength(2)]],
+      // BE-22d: telefono opcional.
+      phone: ['', [Validators.maxLength(20)]],
       tourIds: [[], Validators.required],
       principalTourId: [null, Validators.required]
     });
@@ -194,7 +198,7 @@ export class ProviderUsersComponent implements OnInit, OnDestroy {
   // ── Apertura de modales ───────────────────────────────────────────────────
 
   openCreateModal(): void {
-    this.createForm.reset({ tourIds: [], principalTourId: null });
+    this.createForm.reset({ tourIds: [], principalTourId: null, phone: '' });
     this.errorMessage = '';
     this.activeModal = 'create';
   }
@@ -209,6 +213,7 @@ export class ProviderUsersComponent implements OnInit, OnDestroy {
     this.editForm.patchValue({
       firstname,
       lastname,
+      phone: user.phone ?? '',
       tourIds,
       principalTourId: principal?.tourId ?? null
     });
