@@ -6,6 +6,7 @@ import { TourService } from "../tour.service";
 import { Tour } from "../../../../shared/dto/tour-response.dto";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-tour-list",
@@ -24,12 +25,18 @@ export class TourListComponent implements OnInit {
   totalElements: number = 0;
   totalPages: number = 0;
 
+  // BE-22b: estado del modal "Contacto principal"
+  principalModalOpen: boolean = false;
+  selectedTourIdForPrincipal: number | null = null;
+  selectedTourNameForPrincipal: string = '';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private tourService: TourService,
     private _snackBar: MatSnackBar,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -38,9 +45,9 @@ export class TourListComponent implements OnInit {
     const edited = !!this.route.snapshot.queryParamMap.get("edited");
 
     if (added) {
-      this.openSnackBar("Tour added successfully");
+      this.openSnackBar(this.translate.instant('tour-list.snack.tourAdded'));
     } else if (edited) {
-      this.openSnackBar("Tour successfully edited");
+      this.openSnackBar(this.translate.instant('tour-list.snack.tourEdited'));
     }
 
     this.router.navigate([], { queryParams: null });
@@ -100,6 +107,21 @@ export class TourListComponent implements OnInit {
 
   toggleClass(index: number) {
     this.isClassAdded[index] = !this.isClassAdded[index];
+  }
+
+  /**
+   * BE-22b: abre el modal para asignar el operador principal del tour.
+   */
+  openPrincipalModal(tour: Tour): void {
+    this.selectedTourIdForPrincipal = tour.id;
+    this.selectedTourNameForPrincipal = this.i18nService.getValue(tour?.name) || '';
+    this.principalModalOpen = true;
+  }
+
+  closePrincipalModal(): void {
+    this.principalModalOpen = false;
+    this.selectedTourIdForPrincipal = null;
+    this.selectedTourNameForPrincipal = '';
   }
 
   selectClass(index: number): void {

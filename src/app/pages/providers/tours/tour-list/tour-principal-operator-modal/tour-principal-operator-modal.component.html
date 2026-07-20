@@ -1,0 +1,70 @@
+<div class="modal fade show d-block" tabindex="-1" *ngIf="showModal" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ 'tour-list.principalModal.title' | translate }}
+          <span *ngIf="tourName" class="text-muted fs-14 fw-normal">— {{ tourName }}</span>
+        </h5>
+        <button type="button" class="btn-close" (click)="close()" [disabled]="saving"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted fs-14">
+          {{ 'tour-list.principalModal.help' | translate }}
+        </p>
+
+        <div *ngIf="loading" class="text-center py-3">
+          <div class="spinner-border spinner-border-sm text-primary"></div>
+          <span class="ms-2">{{ 'tour-list.principalModal.loading' | translate }}</span>
+        </div>
+
+        <div *ngIf="!loading && operators.length === 0" class="alert alert-info">
+          {{ 'tour-list.principalModal.noOperators' | translate }}
+          <a routerLink="/providers/users">{{ 'tour-list.principalModal.goToOperators' | translate }}</a>
+        </div>
+
+        <div *ngIf="!loading && operators.length > 0" class="list-group">
+          <label
+            *ngFor="let op of operators"
+            class="list-group-item d-flex align-items-center gap-3"
+            [class.active]="selectedPrincipalId === op.providerUserId"
+            style="cursor: pointer;">
+            <input
+              type="radio"
+              name="principalOperator"
+              class="form-check-input mt-0"
+              [checked]="selectedPrincipalId === op.providerUserId"
+              (change)="select(op.providerUserId)" />
+            <div class="flex-grow-1">
+              <div class="fw-medium">{{ op.fullName }}</div>
+              <div class="text-muted fs-13">
+                {{ op.email }}
+                <span *ngIf="op.phone"> · {{ op.phone }}</span>
+              </div>
+            </div>
+            <span *ngIf="op.providerUserId === originalPrincipalId" class="badge bg-primary">
+              {{ 'tour-list.principalModal.currentBadge' | translate }}
+            </span>
+          </label>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3 mb-0 fs-14">
+          {{ errorMessage }}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()" [disabled]="saving">
+          {{ 'shared.cancel' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="save()"
+          [disabled]="saving || !isDirty() || selectedPrincipalId == null">
+          <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+          {{ 'shared.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

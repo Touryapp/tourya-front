@@ -240,6 +240,20 @@
               </div>
 
               <div class="col-md-6">
+                <label class="form-label">Teléfono <small class="text-muted">(opcional)</small></label>
+                <input
+                  type="tel"
+                  formControlName="phone"
+                  class="form-control"
+                  placeholder="+57 300 123 4567"
+                  maxlength="20"
+                >
+                <small class="text-muted d-block mt-1">
+                  <i class="isax isax-info-circle me-1"></i>Se usa como contacto principal del tour cuando este operador esté marcado como tal.
+                </small>
+              </div>
+
+              <div class="col-md-6">
                 <label class="form-label">
                   Contraseña temporal <span class="text-danger">*</span>
                   <small class="text-muted ms-1">(mín. 8 caracteres)</small>
@@ -365,6 +379,20 @@
                   [class.is-invalid]="editForm.get('lastname')?.invalid && editForm.get('lastname')?.touched"
                 >
                 <div class="invalid-feedback">El apellido es obligatorio (mínimo 2 caracteres).</div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Teléfono <small class="text-muted">(opcional)</small></label>
+                <input
+                  type="tel"
+                  formControlName="phone"
+                  class="form-control"
+                  placeholder="+57 300 123 4567"
+                  maxlength="20"
+                >
+                <small class="text-muted d-block mt-1">
+                  <i class="isax isax-info-circle me-1"></i>Contacto principal del tour cuando este operador esté marcado como tal.
+                </small>
               </div>
 
               <div class="col-md-12">

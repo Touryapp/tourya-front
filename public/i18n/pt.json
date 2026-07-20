@@ -1838,6 +1838,31 @@
       "genericTitle": "Não foi possível salvar a galeria"
     }
   },
+  "tour-list": {
+    "breadcrumbTitle": "Tours",
+    "breadcrumbTours": "Tours",
+    "breadcrumbActive": "Lista de tours",
+    "resultsFound": "{{total}} tours encontrados",
+    "price": "Preço",
+    "actions": {
+      "editTour": "Editar tour",
+      "editGallery": "Editar galeria",
+      "listSchedule": "Agenda",
+      "principalContact": "Contato principal"
+    },
+    "snack": {
+      "tourAdded": "Tour adicionado com sucesso",
+      "tourEdited": "Tour editado com sucesso"
+    },
+    "principalModal": {
+      "title": "Contato principal do tour",
+      "help": "Marque o operador que será o contato principal deste tour. Por padrão, o provedor é o contato principal.",
+      "loading": "Carregando operadores…",
+      "noOperators": "Este tour ainda não tem operadores atribuídos. ",
+      "goToOperators": "Ir para Meus operadores",
+      "currentBadge": "Atual"
+    }
+  },
   "request-provider": {
     "breadcrumb": "Solicitação de fornecedor",
     "sidebar": {
