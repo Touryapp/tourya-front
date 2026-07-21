@@ -123,13 +123,14 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     // Detectar roles del usuario con lógica de exclusividad
-    // Prioridad: Admin > Provider > User
+    // Prioridad: Backoffice (ADMIN o BACKOFFICE_OPERATION) > Provider > User
+    // FE-15b: BACKOFFICE_OPERATION también puede consultar reviews (subset P2).
     const isUser = this.authService.isUser();
     const isProvider = this.authService.isProvider();
-    const isAdmin = this.authService.isAdmin();
-    
+    const isBackoffice = this.authService.isTouryaBackoffice();
+
     // Asignar rol exclusivo según prioridad
-    if (isAdmin) {
+    if (isBackoffice) {
       this.isBackoffice = true;
       this.isProveedor = false;
       this.isCliente = false;

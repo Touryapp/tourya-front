@@ -210,7 +210,8 @@ export class ProviderPanelComponent implements OnInit {
       }
     };
 
-    if (this.authService.isAdmin()) {
+    // FE-15b: BACKOFFICE_OPERATION también puede subir pagos (P2 opción C).
+    if (this.authService.isTouryaBackoffice()) {
       this.payoutOrdersService.getAdminPayoutOrders(undefined, this.fromDate, this.toDate).subscribe(observer);
     } else {
       this.payoutOrdersService.getPayoutOrders(undefined, this.fromDate, this.toDate).subscribe(observer);
@@ -250,7 +251,9 @@ export class ProviderPanelComponent implements OnInit {
 
   goToReservation(reservationId: number): void {
     this.panelStateService.setReservationToOpen(reservationId);
-    if (this.authService.isAdmin()) {
+    // FE-15b: backoffice (ADMIN + BACKOFFICE_OPERATION) va al panel unificado
+    // /admin/bookings-management (P2 — "ver reservas de todos los providers").
+    if (this.authService.isTouryaBackoffice()) {
       this.router.navigate(['/admin/bookings-management']);
     } else {
       this.panelStateService.setView('reservas');
