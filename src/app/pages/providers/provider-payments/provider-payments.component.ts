@@ -88,7 +88,8 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
       }
     };
 
-    if (this.authService.isAdmin()) {
+    // FE-15b: backoffice unificado (ADMIN + BACKOFFICE_OPERATION) usa la vista admin.
+    if (this.authService.isTouryaBackoffice()) {
       this.payoutOrdersService.getAdminPayoutOrders(this.selectedStatus, this.fromDate, this.toDate).subscribe(observer);
     } else {
       this.payoutOrdersService.getPayoutOrders(this.selectedStatus, this.fromDate, this.toDate).subscribe(observer);

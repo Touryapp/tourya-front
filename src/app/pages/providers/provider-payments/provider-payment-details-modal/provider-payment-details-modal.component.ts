@@ -54,7 +54,8 @@ export class ProviderPaymentDetailsModalComponent implements OnChanges {
     this.close();
     this.panelStateService.setReservationToOpen(reservationId);
     
-    if (this.authService.isAdmin()) {
+    // FE-15b: backoffice unificado (ADMIN + BACKOFFICE_OPERATION).
+    if (this.authService.isTouryaBackoffice()) {
       this.router.navigate(['/admin/bookings-management']);
     } else {
       this.panelStateService.setView('reservas');
@@ -74,7 +75,8 @@ export class ProviderPaymentDetailsModalComponent implements OnChanges {
       }
     };
 
-    if (this.authService.isAdmin()) {
+    // FE-15b: backoffice unificado (ADMIN + BACKOFFICE_OPERATION).
+    if (this.authService.isTouryaBackoffice()) {
       this.payoutOrdersService.getAdminPayoutOrderDetails(paymentId).subscribe(observer);
     } else {
       this.payoutOrdersService.getPayoutOrderDetails(paymentId).subscribe(observer);

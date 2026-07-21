@@ -109,7 +109,7 @@
                                 <th mat-sort-header="amountTotal">Monto Total</th>
                                 <th mat-sort-header="status">Estado</th>
                                 <th>Comprobante</th>
-                                @if (authService.isAdmin()) {
+                                @if (authService.isTouryaBackoffice()) {
                                     <th>Acción</th>
                                 }
                             </tr>
@@ -136,7 +136,7 @@
                                             <span class="text-muted fs-12 italic">No disponible</span>
                                         }
                                     </td>
-                                    @if (authService.isAdmin()) {
+                                    @if (authService.isTouryaBackoffice()) {
                                         <td>
                                             @if (payment.status === 'PENDING') {
                                                 <div class="d-flex align-items-center gap-2">

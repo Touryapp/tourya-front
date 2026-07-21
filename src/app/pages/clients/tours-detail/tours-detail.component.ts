@@ -224,7 +224,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     // Check if user is admin
   ngOnInit(): void {
     // Check if user is admin
-    this.isBackoffice = this.authService.isAdmin();
+    // FE-15b: ADMIN + BACKOFFICE_OPERATION (subset P2 — moderar reviews cae en "gestionar reportes").
+    this.isBackoffice = this.authService.isTouryaBackoffice();
 
     // Initialize component
     const idParam = this.route.snapshot.paramMap.get('id');
