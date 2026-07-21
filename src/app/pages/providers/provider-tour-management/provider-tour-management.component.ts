@@ -83,6 +83,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   // Configuración dinámica según rol
   config!: BookingManagementConfig;
   currentRole!: UserRole;
+  // FE-15c: mostrar acceso a reportes DIMAR cuando el backoffice está viendo /admin/bookings-management.
+  showMaritimeReportsLink = false;
+
+  goToMaritimeReports(): void {
+    this.router.navigate(['/admin/maritime-reports']);
+  }
   
   // Variables de paginación y filtrado
   public pageSize = 10;
@@ -175,6 +181,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     // Detectar rol y cargar configuración
     this.currentRole = this.getUserRole();
     this.config = this.configService.getConfigByRole(this.currentRole);
+    this.showMaritimeReportsLink = this.authService.isTouryaBackoffice()
+      && this.router.url.includes('bookings-management');
     
     // Cargar datos según el rol
     if (this.currentRole === 'CLIENT') {

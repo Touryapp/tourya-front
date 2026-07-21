@@ -1959,5 +1959,15 @@
       "logoutInstruction": "Por favor, encerre a sessão.",
       "logoutButton": "Encerrar sessão"
     }
+  },
+  "maritime-reports": {
+    "link": "Relatórios DIMAR",
+    "confirm_red": {
+      "title": "Publicar bandeira vermelha?",
+      "body": "As reservas ativas de passeios na zona e datas selecionadas serão canceladas automaticamente. Os clientes receberão crédito compensatório.",
+      "irreversible": "Esta ação não pode ser desfeita.",
+      "cancel_btn": "Cancelar",
+      "confirm_btn": "Sim, publicar bandeira vermelha"
+    }
   }
 }

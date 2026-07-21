@@ -30,6 +30,12 @@ const routes: Routes = [
         path: 'bookings-management',
         canActivate: [BackofficeGuard],
         loadChildren: () => import('../providers/provider-tour-management/provider-tour-management.module').then(m => m.ProviderTourManagementModule)
+      },
+      // FE-15c: reportes DIMAR expuestos al rol BACKOFFICE_OPERATION.
+      {
+        path: 'maritime-reports',
+        canActivate: [BackofficeGuard],
+        loadComponent: () => import('../maritime-activity-reports/maritime-activity-reports.component').then(m => m.MaritimeActivityReportsComponent)
       }
     ]
   }

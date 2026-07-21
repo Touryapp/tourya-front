@@ -68,6 +68,10 @@ export class MaritimeActivityReportsComponent implements OnInit {
 
   // Enums for UI
   maritimeFlags = Object.values(MaritimeFlag);
+  MaritimeFlag = MaritimeFlag;
+
+  // FE-15c: confirmación explícita antes de disparar BE-23 (cancelación retroactiva).
+  showRedConfirmModal = false;
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -280,9 +284,25 @@ export class MaritimeActivityReportsComponent implements OnInit {
     this.showFormModal = false;
   }
 
-  saveReport(): void {
+  attemptSave(): void {
     if (this.reportForm.invalid) return;
+    if (this.reportForm.value.flag === MaritimeFlag.RED) {
+      this.showRedConfirmModal = true;
+      return;
+    }
+    this.persistReport();
+  }
 
+  confirmRedAndSave(): void {
+    this.showRedConfirmModal = false;
+    this.persistReport();
+  }
+
+  cancelRedConfirm(): void {
+    this.showRedConfirmModal = false;
+  }
+
+  private persistReport(): void {
     const reportData = this.reportForm.value;
 
     const countryObj = this.countries.find(c => c.name === reportData.country);
