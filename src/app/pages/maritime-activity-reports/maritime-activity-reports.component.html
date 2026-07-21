@@ -198,7 +198,7 @@
           <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
         </div>
         <div class="modal-body p-4">
-          <form [formGroup]="reportForm" (ngSubmit)="saveReport()" id="reportForm">
+          <form [formGroup]="reportForm" (ngSubmit)="attemptSave()" id="reportForm">
             <div class="row g-3">
               <div class="col-md-4">
                 <div class="mb-3">
@@ -270,6 +270,40 @@
           </button>
           <button type="submit" form="reportForm" class="btn btn-primary px-4" [disabled]="reportForm.invalid">
             {{ isEditMode ? 'Actualizar' : 'Guardar' }} Reporte
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FE-15c: Confirmación explícita para bandera roja (dispara BE-23: cancela reservas activas). -->
+<div *ngIf="showRedConfirmModal">
+  <div class="modal-backdrop fade show" style="z-index: 1060;"></div>
+  <div class="modal fade show d-block" tabindex="-1" style="z-index: 1065;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-danger-light border-0">
+          <h5 class="modal-title text-danger">
+            <i class="isax isax-warning-2 me-2"></i>{{ 'maritime-reports.confirm_red.title' | translate }}
+          </h5>
+          <button type="button" class="btn-close" (click)="cancelRedConfirm()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger d-flex align-items-start mb-0" role="alert">
+            <i class="isax isax-info-circle fs-4 me-2 mt-1"></i>
+            <div>
+              <p class="mb-1 fw-medium">{{ 'maritime-reports.confirm_red.body' | translate }}</p>
+              <p class="mb-0 fs-14">{{ 'maritime-reports.confirm_red.irreversible' | translate }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" (click)="cancelRedConfirm()">
+            {{ 'maritime-reports.confirm_red.cancel_btn' | translate }}
+          </button>
+          <button type="button" class="btn btn-danger" (click)="confirmRedAndSave()">
+            <i class="isax isax-flag me-1"></i>{{ 'maritime-reports.confirm_red.confirm_btn' | translate }}
           </button>
         </div>
       </div>

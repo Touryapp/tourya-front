@@ -1958,5 +1958,15 @@
       "logoutInstruction": "Please log out.",
       "logoutButton": "Log out"
     }
+  },
+  "maritime-reports": {
+    "link": "DIMAR Reports",
+    "confirm_red": {
+      "title": "Publish red flag?",
+      "body": "Active bookings for tours in the selected area and dates will be cancelled automatically. Customers will receive compensatory credit.",
+      "irreversible": "This action cannot be undone.",
+      "cancel_btn": "Cancel",
+      "confirm_btn": "Yes, publish red flag"
+    }
   }
 }

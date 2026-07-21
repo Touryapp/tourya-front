@@ -1959,5 +1959,15 @@
       "logoutInstruction": "Por favor, cierra sesión.",
       "logoutButton": "Cerrar sesión"
     }
+  },
+  "maritime-reports": {
+    "link": "Reportes DIMAR",
+    "confirm_red": {
+      "title": "¿Publicar bandera roja?",
+      "body": "Se cancelarán automáticamente las reservas activas de tours en la zona y fechas seleccionadas. Los clientes recibirán crédito compensatorio.",
+      "irreversible": "Esta acción no se puede deshacer.",
+      "cancel_btn": "Cancelar",
+      "confirm_btn": "Sí, publicar bandera roja"
+    }
   }
 }

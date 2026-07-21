@@ -11,6 +11,9 @@
             </div>
 
             <div class="d-flex align-items-center flex-wrap gap-2">
+                <button *ngIf="showMaritimeReportsLink" class="btn btn-sm btn-outline-primary" (click)="goToMaritimeReports()" [title]="'maritime-reports.link' | translate">
+                    <i class="isax isax-flag me-1"></i>{{ 'maritime-reports.link' | translate }}
+                </button>
                 <button *ngIf="currentRole === 'PROVIDER'" class="btn btn-sm btn-success" (click)="navigateToQrScanner('')">
                     <i class="isax isax-scan me-1"></i>{{ 'provider-tour-management.header.confirmBooking' | translate }}
                 </button>
