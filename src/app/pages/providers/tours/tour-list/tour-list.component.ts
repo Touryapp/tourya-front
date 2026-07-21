@@ -113,6 +113,8 @@ export class TourListComponent implements OnInit {
    * BE-22b: abre el modal para asignar el operador principal del tour.
    */
   openPrincipalModal(tour: Tour): void {
+    // tour.id es `number | undefined` en el DTO; guard para no abrir el modal sin id.
+    if (tour?.id == null) return;
     this.selectedTourIdForPrincipal = tour.id;
     this.selectedTourNameForPrincipal = this.i18nService.getValue(tour?.name) || '';
     this.principalModalOpen = true;
