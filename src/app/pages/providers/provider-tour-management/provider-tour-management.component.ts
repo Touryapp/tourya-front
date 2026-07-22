@@ -428,12 +428,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       customerPhone: reservation.serviceResponsiblePhone || 'N/A',
       travellers: reservation.totalTourists != null ? `${reservation.totalTourists}` : 'N/A',
       duration: reservation.duration ? `${reservation.duration} días` : 'N/A',
-      price:
-        reservation.shoppingTotalPrice != null
-          ? `$${Number(reservation.shoppingTotalPrice).toFixed(2)}`
-          : reservation.price
-          ? `$${Number(reservation.price).toFixed(2)}`
-          : '$0.00',
+      // TC-005: PROVIDER puro ve el neto que recibe (providerPrice del SP); ADMIN/BACKOFFICE/CLIENT ven el precio que paga el cliente.
+      price: this.pickBookingPriceForRole(reservation),
       bookingDate: this.formatDate(reservation.reservationCreatedDate || reservation.createdDate),
       checkInDate: this.formatDateTime(checkInIso),
       returnDate: '—',
@@ -706,6 +702,29 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   /**
    * Mapea el estado de la reserva del API al formato de la tabla
    */
+  /**
+   * TC-005: selecciona qué precio mostrar en la vista de reserva según el rol del usuario.
+   *
+   * PROVIDER puro (no ADMIN ni BACKOFFICE) ve el neto que recibe (`providerPrice` del SP,
+   * ya corregido por el fix TC-005 backend para tours grupo). ADMIN, BACKOFFICE_OPERATION,
+   * TURISTA y cualquier otro rol ven el monto que paga el cliente (`shoppingTotalPrice`).
+   */
+  private pickBookingPriceForRole(reservation: any): string {
+    const isProviderOnly = this.authService.isProvider() && !this.authService.isTouryaBackoffice();
+    const preferred = isProviderOnly ? reservation.providerPrice : reservation.shoppingTotalPrice;
+    if (preferred != null) {
+      return `$${Number(preferred).toFixed(2)}`;
+    }
+    // Fallbacks conservan el comportamiento previo cuando el campo preferido no llegó.
+    if (reservation.shoppingTotalPrice != null) {
+      return `$${Number(reservation.shoppingTotalPrice).toFixed(2)}`;
+    }
+    if (reservation.price != null) {
+      return `$${Number(reservation.price).toFixed(2)}`;
+    }
+    return '$0.00';
+  }
+
   private mapReservationStatus(apiStatus: 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'CANCELED' | 'RESCHEDULED' | 'TEMPORAL' | 'NO_SHOW' | string): 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal' | 'No_Show' | 'Rescheduled' {
     const statusMap: Record<string, 'Upcoming' | 'Pending' | 'Confirmed' | 'Cancelled' | 'Completed' | 'Temporal' | 'No_Show' | 'Rescheduled'> = {
       'PENDING': 'Pending',
