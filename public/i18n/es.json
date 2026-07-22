@@ -1375,6 +1375,7 @@
     "orderSummary": "Resumen de tu orden",
     "participantsCount": "{{count}} Personas",
     "participantsLabel": "Personas",
+    "groupsLabel": "Grupo(s)",
     "priceTypeAdult": "Adulto",
     "priceTypeChild": "Niño",
     "priceTypeBaby": "Bebe",

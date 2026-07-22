@@ -10,6 +10,9 @@ export interface CartItem {
     description: string;
     duration: string;
     rating: number;
+    // TC-006: exponer priceType para distinguir grupo/individual en el resumen del carrito.
+    priceType?: string;
+    maxPeople?: number;
   };
   schedule: {
     id: number;

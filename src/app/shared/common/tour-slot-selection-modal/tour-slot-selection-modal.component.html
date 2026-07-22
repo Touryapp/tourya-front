@@ -170,7 +170,8 @@
             </div>
           </div>
 
-          <div class="participants-list">
+          <!-- TC-006: en tours GRUPO el input de "participantes" no aplica — la cantidad se maneja por groupCount arriba. -->
+          <div class="participants-list" *ngIf="selectedTour?.tour?.priceType !== 'group'">
             <div class="participant-item" *ngFor="let participant of participants">
               <div class="participant-info">
                 <div class="participant-type">{{ participant.label | translate }}</div>
@@ -203,10 +204,15 @@
           </div>
 
           <!-- Summary -->
-          <div class="selection-summary" *ngIf="totalParticipants > 0">
+          <div class="selection-summary" *ngIf="totalParticipants > 0 || selectedTour?.tour?.priceType === 'group'">
             <div class="summary-card">
-              <div class="summary-item">
-                <span class="label">{{ 'tourSlotModal.totalParticipants' | translate }}{{ selectedTour?.tour?.priceType === 'group' ? ' (Total)' : '' }}:</span>
+              <!-- TC-006: para grupo mostramos "Cantidad de grupos" (default 1); para individual "Total participantes". -->
+              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType === 'group'">
+                <span class="label">{{ 'tourSlotModal.selectGroups' | translate }}:</span>
+                <span class="value">{{ groupCount }}</span>
+              </div>
+              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType !== 'group'">
+                <span class="label">{{ 'tourSlotModal.totalParticipants' | translate }}:</span>
                 <span class="value">{{ totalParticipants }}</span>
               </div>
               <div class="summary-item">
