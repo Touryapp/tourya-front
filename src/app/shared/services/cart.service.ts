@@ -877,7 +877,10 @@ export class CartService {
           name: item.tourName || 'Tour sin nombre', // ✅ API: item.tourName
           description: item.tourDescription || 'Descubre los lugares más emblemáticos de la ciudad en este increíble recorrido',
           duration: item.duration || '8 horas',
-          rating: item.rating || 4.5
+          rating: item.rating || 4.5,
+          // TC-006: expone priceType/maxPeople para el resumen del carrito.
+          priceType: item.priceType,
+          maxPeople: item.maxPeople
         },
         schedule: {
           id: item.tourScheduleId, // ✅ API: item.tourScheduleId
