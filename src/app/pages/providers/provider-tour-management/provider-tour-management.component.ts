@@ -639,6 +639,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       canReschedule: reservation.canReschedule,
       canCancel: reservation.canCancel,
       canRainCancel: reservation.canRainCancel,
+      // TC-007 (RN-056): backend calcula canConfirmReservation=true solo el dia del tour.
+      canConfirmReservation: reservation.canConfirmReservation,
       // Payer info from list API
       payerName: reservation.payerName,
       payerEmail: reservation.payerEmail,
@@ -693,6 +695,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       canReschedule: reservation.canReschedule,
       canCancel: reservation.canCancel,
       canRainCancel: reservation.canRainCancel,
+      // TC-007 (RN-056): backend calcula canConfirmReservation=true solo el dia del tour.
+      canConfirmReservation: reservation.canConfirmReservation,
       // Payer info from list API
       payerName: reservation.payerName,
       payerEmail: reservation.payerEmail,
@@ -1187,9 +1191,15 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           },
           error: (error) => {
             console.error('❌ Error confirmando reserva:', error);
+            // TC-007 (RN-056): backend responde 400 con "Only can confirm reservation on the tour day"
+            // cuando today != reservationDate en zona Bogota. Mostramos mensaje especifico.
+            const backendMsg = error?.error?.message || error?.message || '';
+            const isWrongDay = error?.status === 400 && backendMsg.includes('Only can confirm reservation on the tour day');
             Swal.fire(
               this.translate.instant('provider-tour-management.swal.error'),
-              this.translate.instant('provider-tour-management.swal.confirmErrorText'),
+              isWrongDay
+                ? this.translate.instant('provider-tour-management.swal.confirmWrongDayText')
+                : this.translate.instant('provider-tour-management.swal.confirmErrorText'),
               'error'
             );
           }

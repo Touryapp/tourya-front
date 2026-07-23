@@ -393,6 +393,7 @@
       "confirmedTitle": "Confirmed!",
       "confirmedText": "The booking has been successfully marked as delivered.",
       "confirmErrorText": "Could not confirm the booking. Please try again.",
+      "confirmWrongDayText": "You can only confirm the reservation on the day of the tour. Early confirmation is not allowed.",
       "bookingCanceledTitle": "Booking Canceled",
       "bookingCanceledText": "The booking {{bookingId}} has been marked as canceled.",
       "markAsCompletedTitle": "Mark as completed?",
