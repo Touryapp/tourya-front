@@ -74,6 +74,18 @@ export class ReservationService {
   }
 
   /**
+   * FE-24 (BE-24 Fase 1 / RN-055): el provider declina una reserva porque no puede atenderla.
+   * Backend cancela automaticamente + crea credito al turista + envia email con tours alternativos +
+   * anula AccountPayable. Idempotente: si ya fue declinada responde 400.
+   *
+   * @param reservationId ID de la reserva a declinar
+   * @returns Observable con la reserva actualizada
+   */
+  declineReservation(reservationId: number | string): Observable<Reservation> {
+    return this.http.put<Reservation>(`${this.apiUrl}/reservations/${reservationId}/decline`, {});
+  }
+
+  /**
    * Reagenda una reserva
    * @param reservationId ID de la reserva a reagendar (formato "RES-98" o número)
    * @param body Objeto con los datos de reagendamiento (newDate, slotId, startTime, endTime, configQuantity)
