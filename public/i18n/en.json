@@ -1008,6 +1008,8 @@
         "required": "Price is required",
         "min": "Price must be greater than zero"
       },
+      "clientBadge": "Client",
+      "providerBadge": "Provider",
       "addNew": "Add New Price"
     },
     "actions": {

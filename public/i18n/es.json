@@ -1009,6 +1009,8 @@
         "required": "El precio es requerido",
         "min": "El precio debe ser mayor a cero"
       },
+      "clientBadge": "Cliente",
+      "providerBadge": "Proveedor",
       "addNew": "Agregar Nuevo Precio"
     },
     "actions": {

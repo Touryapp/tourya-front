@@ -578,13 +578,18 @@
                                 </strong>
                             </div>
                         </td>
-                        <!-- Precios -->
+                        <!-- Precios — TC-008: PROVIDER solo ve providerPrice; ADMIN/BACKOFFICE ven Cliente + Provider. -->
                         <td>
-                            <div *ngFor="let price of slot.prices" class="d-flex justify-content-between align-items-center mb-1">
+                            <div *ngFor="let price of slot.prices" class="d-flex justify-content-between align-items-center mb-1 flex-wrap">
                                 <span class="text-muted small me-2">{{ getAgeTypeDisplay(price.ageType) }}:</span>
-                                <span class="badge bg-info text-dark fw-semibold">
-                                    {{ (price.price || price.providerPrice) | currency:'COP':'symbol':'1.0-0' }}
-                                </span>
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <span *ngIf="isBackoffice && price.price != null" class="badge bg-info text-dark fw-semibold">
+                                        {{ 'tour-schedule.prices.clientBadge' | translate }}: {{ price.price | currency:'COP':'symbol':'1.0-0' }}
+                                    </span>
+                                    <span class="badge bg-secondary fw-semibold">
+                                        {{ 'tour-schedule.prices.providerBadge' | translate }}: {{ price.providerPrice | currency:'COP':'symbol':'1.0-0' }}
+                                    </span>
+                                </div>
                             </div>
                         </td>
                         <!-- Porcentaje Tourya -->
