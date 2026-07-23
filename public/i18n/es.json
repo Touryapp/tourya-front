@@ -394,6 +394,7 @@
       "confirmedTitle": "¡Confirmada!",
       "confirmedText": "La reserva ha sido marcada como entregada exitosamente.",
       "confirmErrorText": "No se pudo confirmar la reserva. Por favor intente nuevamente.",
+      "confirmWrongDayText": "Solo puede confirmar la reserva el mismo día del tour. La confirmación anticipada no está permitida.",
       "bookingCanceledTitle": "Reserva cancelada",
       "bookingCanceledText": "La reserva {{bookingId}} ha sido marcada como cancelada.",
       "markAsCompletedTitle": "¿Marcar como completada?",
