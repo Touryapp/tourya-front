@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
 import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
@@ -34,8 +35,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private requestProvidersService: RequestProvidersService,
-    private panelStateService: ProviderPanelStateService
+    private panelStateService: ProviderPanelStateService,
+    private router: Router
   ) { }
+
+  /** FE-15b post-fix: navega a la vista de reservas (BookingsManagement) del backoffice. */
+  goToBookingsManagement(): void {
+    this.router.navigate(['/admin/bookings-management']);
+  }
 
   ngOnInit(): void {
     this.cargarSolicitudes();

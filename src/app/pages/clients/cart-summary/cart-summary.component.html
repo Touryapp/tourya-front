@@ -420,19 +420,19 @@
                                                 {{ item.address.city.length > 15 ? (item.address.city | slice:0:15) + '...' : item.address.city }}, {{ item.address.state.length > 15 ? (item.address.state | slice:0:15) + '...' : item.address.state }}
                                             </p>
                                             <!-- TC-006: para tours grupo mostramos la cantidad de grupos; para individual la cantidad de pax. -->
-                                            <p class="text-muted small mb-1" *ngIf="item.tour?.priceType === 'group'">
+                                            <p class="text-muted small mb-1" *ngIf="item.tour?.priceType === 'grupo'">
                                                 <i class="fas fa-users me-1"></i>
                                                 {{ (item.groupCount || 1) }} {{ 'cartSummary.groupsLabel' | translate }}
                                                 <span class="text-secondary">({{ item.totalParticipants }} {{ 'cartSummary.participantsLabel' | translate }})</span>
                                             </p>
-                                            <p class="text-muted small mb-1" *ngIf="item.tour?.priceType !== 'group'">
+                                            <p class="text-muted small mb-1" *ngIf="item.tour?.priceType !== 'grupo'">
                                                 <i class="fas fa-users me-1"></i>
                                                 {{ item.totalParticipants }} {{ 'cartSummary.participantsLabel' | translate }}
                                             </p>
                                         </div>
 
                                         <!-- Participants Breakdown — TC-006: solo tiene sentido para individual (precio por edad). -->
-                                        <div class="participants-breakdown" *ngIf="item.tour?.priceType !== 'group'">
+                                        <div class="participants-breakdown" *ngIf="item.tour?.priceType !== 'grupo'">
                                             <small class="text-muted d-block mb-1">{{ 'cartSummary.participantsLabel' | translate }}:</small>
                                             <div class="ms-2">
                                                 <div *ngFor="let participant of item.participants" class="d-flex justify-content-between align-items-center mb-1">

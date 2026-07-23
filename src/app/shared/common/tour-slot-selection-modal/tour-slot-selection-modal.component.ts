@@ -86,7 +86,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   // Rescheduling mode
   isRescheduling: boolean = false;
 
-  // Group selection (for priceType === 'group')
+  // Group selection (for priceType === 'grupo')
   groupCount: number = 1;
   showGroupError: boolean = false;
   showParticipantError: boolean = false;
@@ -509,7 +509,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
    * Verifica si se puede agregar un participante más
    */
   private canAddParticipant(): boolean {
-    const isGroup = this.selectedTour?.tour?.priceType === 'group';
+    const isGroup = this.selectedTour?.tour?.priceType === 'grupo';
 
     if (isGroup) {
       // 1. Para tours grupo: el límite de personas total es (maxPeople * groupCount)
@@ -529,7 +529,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   private updateParticipantLimits(): void {
     if (!this.selectedTour) return;
 
-    const isGroup = this.selectedTour?.tour?.priceType === 'group';
+    const isGroup = this.selectedTour?.tour?.priceType === 'grupo';
     let maxCap = 99;
 
     if (isGroup) {
@@ -555,7 +555,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
       0
     );
     
-    if (this.selectedTour?.tour?.priceType === 'group') {
+    if (this.selectedTour?.tour?.priceType === 'grupo') {
       const baseGroupPrice = this.participants.length > 0 ? Math.max(...this.participants.map(p => p.price)) : 0;
       this.totalPrice = baseGroupPrice * this.groupCount;
     } else {
@@ -584,7 +584,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     // minCapacity verification removed
 
     const availability = this.currentAvailability;
-    const isGroup = this.selectedTour?.tour?.priceType === 'group';
+    const isGroup = this.selectedTour?.tour?.priceType === 'grupo';
 
     if (isGroup) {
       // 1. Validar grupos disponibles (Campo: slot.availability)
@@ -933,7 +933,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
 
     const cartItem: CartItem = {
       id: this.cartService.generateCartItemId(),
-      groupCount: this.selectedTour?.tour?.priceType === 'group' ? this.groupCount : undefined,
+      groupCount: this.selectedTour?.tour?.priceType === 'grupo' ? this.groupCount : undefined,
       dayDate,
       tour: {
         ...this.selectedTour.tour,
@@ -1261,7 +1261,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
   dateErrors: Set<string> = new Set<string>();
 
   canSelectDate(date: Date): boolean {
-    const isGroup = this.selectedTour?.tour?.priceType === 'group';
+    const isGroup = this.selectedTour?.tour?.priceType === 'grupo';
     const availability = this.getDayAvailability(date);
     if (availability === '∞') return true;
     
@@ -1365,7 +1365,7 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
 
     if (this.isRescheduling && this.data.originalTravellers) {
       const originalCount = this.data.originalTravellers;
-      const isGroup = this.selectedTour?.tour?.priceType === 'group';
+      const isGroup = this.selectedTour?.tour?.priceType === 'grupo';
 
       if (isGroup) {
         this.updateGroupCount(Math.ceil(originalCount / (this.selectedTour?.tour?.maxPeople || 1)));

@@ -1117,7 +1117,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 
       console.log(`🔍 Validando ${priceType}: disponiblidad=${availability}, maxPeople=${maxPeople}`);
 
-      if (priceType === 'group') {
+      if (priceType === 'grupo') {
         const groupsRequested = cartItem.groupCount || 1;
         const totalCapacity = maxPeople * groupsRequested;
 

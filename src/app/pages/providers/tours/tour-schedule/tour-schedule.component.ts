@@ -138,7 +138,7 @@ export class TourScheduleComponent {
   }
 
   get isGroupTour(): boolean {
-    return this.tour?.priceType === 'group';
+    return this.tour?.priceType === 'grupo';
   }
 
   get isUnlimitedCapacity(): boolean {
