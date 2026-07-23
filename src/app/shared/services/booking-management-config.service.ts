@@ -339,6 +339,20 @@ export class BookingManagementConfigService {
           icon: 'fa fa-flag-checkered',
           color: 'primary',
           visible: (row) => row.status === 'Confirmed' || row.status === 'Upcoming'
+        },
+        {
+          // FE-24 (BE-24 Fase 1 / RN-055): provider avisa que no puede atender la reserva.
+          // Backend cancela + crea credito + envia email alternativas. Solo aplica sobre
+          // reservas activas — mismos estados que 'cancel'.
+          id: 'decline',
+          label: 'provider-tour-management.config.actions.decline',
+          icon: 'fa fa-user-times',
+          color: 'warning',
+          visible: (row) => {
+            const isActionable = row.status === 'Pending' || row.status === 'PENDING'
+              || row.status === 'RESCHEDULED' || row.status === 'Rescheduled';
+            return isActionable;
+          }
         }
       ],
       filters: [

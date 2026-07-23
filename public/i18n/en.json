@@ -394,6 +394,12 @@
       "confirmedText": "The booking has been successfully marked as delivered.",
       "confirmErrorText": "Could not confirm the booking. Please try again.",
       "confirmWrongDayText": "You can only confirm the reservation on the day of the tour. Early confirmation is not allowed.",
+      "declineTitle": "Can't fulfill this reservation?",
+      "declineText": "When you confirm, the reservation will be automatically cancelled. The traveler will receive a credit for the amount paid and an email with alternative tours. This action cannot be undone.",
+      "yesDecline": "Yes, I can't fulfill it",
+      "declinedTitle": "Reservation declined",
+      "declinedText": "The traveler was notified and received a credit for the amount paid.",
+      "declineErrorText": "Could not decline the reservation. Please try again.",
       "bookingCanceledTitle": "Booking Canceled",
       "bookingCanceledText": "The booking {{bookingId}} has been marked as canceled.",
       "markAsCompletedTitle": "Mark as completed?",
@@ -457,7 +463,8 @@
         "complete": "Complete",
         "approve": "Approve",
         "suspend": "Suspend",
-        "delete": "Delete"
+        "delete": "Delete",
+        "decline": "Can't fulfill"
       },
       "filters": {
         "status": "Status",

@@ -395,6 +395,12 @@
       "confirmedText": "La reserva ha sido marcada como entregada exitosamente.",
       "confirmErrorText": "No se pudo confirmar la reserva. Por favor intente nuevamente.",
       "confirmWrongDayText": "Solo puede confirmar la reserva el mismo día del tour. La confirmación anticipada no está permitida.",
+      "declineTitle": "¿No puedes atender esta reserva?",
+      "declineText": "Al confirmar, la reserva se cancelará automáticamente. Al turista se le generará un crédito por el monto pagado y recibirá un email con tours alternativos. Esta acción no se puede deshacer.",
+      "yesDecline": "Sí, no puedo atender",
+      "declinedTitle": "Reserva declinada",
+      "declinedText": "El turista fue notificado y recibió un crédito por el monto pagado.",
+      "declineErrorText": "No se pudo declinar la reserva. Por favor intente nuevamente.",
       "bookingCanceledTitle": "Reserva cancelada",
       "bookingCanceledText": "La reserva {{bookingId}} ha sido marcada como cancelada.",
       "markAsCompletedTitle": "¿Marcar como completada?",
@@ -458,7 +464,8 @@
         "complete": "Completar",
         "approve": "Aprobar",
         "suspend": "Suspender",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "decline": "No puedo atender"
       },
       "filters": {
         "status": "Estado",

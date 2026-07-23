@@ -1322,9 +1322,68 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       case 'cancel':
         this.openCancelModal(booking);
         break;
+      case 'decline':
+        // FE-24 (BE-24 Fase 1 / RN-055): provider avisa que no puede atender esta reserva.
+        this.openDeclineConfirmModal(booking);
+        break;
       default:
         console.warn('Acción no reconocida:', actionId);
     }
+  }
+
+  /**
+   * FE-24: modal de confirmacion explicita antes de declinar. Es una accion irreversible
+   * que dispara cancel + credito al turista + email de tours alternativos + anula
+   * AccountPayable del provider.
+   */
+  private openDeclineConfirmModal(booking: any): void {
+    Swal.fire({
+      title: this.translate.instant('provider-tour-management.swal.declineTitle'),
+      text: this.translate.instant('provider-tour-management.swal.declineText'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('provider-tour-management.swal.yesDecline'),
+      cancelButtonText: this.translate.instant('provider-tour-management.swal.cancel'),
+      confirmButtonColor: '#f0a020'
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      const numericId = typeof booking.id === 'string'
+        ? Number(String(booking.id).replace('RES-', ''))
+        : booking.id;
+
+      Swal.fire({
+        title: this.translate.instant('provider-tour-management.swal.processing'),
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      this.reservationService.declineReservation(numericId).subscribe({
+        next: () => {
+          Swal.fire(
+            this.translate.instant('provider-tour-management.swal.declinedTitle'),
+            this.translate.instant('provider-tour-management.swal.declinedText'),
+            'success'
+          );
+          // Cerrar modal de detalles si esta abierto
+          const modalElement = document.getElementById('bookingDetailModal');
+          if (modalElement) {
+            const modal = (window as any).bootstrap?.Modal.getInstance(modalElement);
+            if (modal) modal.hide();
+          }
+          // Refrescar la lista para que refleje el nuevo estado.
+          this.reservationService.notifyReservationUpdated();
+        },
+        error: (error) => {
+          console.error('❌ Error declinando reserva:', error);
+          Swal.fire(
+            this.translate.instant('provider-tour-management.swal.error'),
+            this.translate.instant('provider-tour-management.swal.declineErrorText'),
+            'error'
+          );
+        }
+      });
+    });
   }
 
   /**
