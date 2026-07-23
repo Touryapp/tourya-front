@@ -176,7 +176,9 @@ export class TourScheduleComponent {
   }
 
   ngOnInit(): void {
-    this.isBackoffice = this.authService.isAdmin();
+    // TC-008 (FE-15b): usar isTouryaBackoffice para que BACKOFFICE_OPERATION
+    // tambien vea la columna % Tourya y el precio cliente.
+    this.isBackoffice = this.authService.isTouryaBackoffice();
     // Los campos de fecha del formulario (Start Date / End Date) ya NO sincronizan
     // con el calendario grande. Cada lógica es independiente.
     this.tourScheduleForm
@@ -1318,11 +1320,11 @@ export class TourScheduleComponent {
   }
 
   getAgeTypeDisplay(ageType: any): string {
-    if (typeof ageType === 'object' && ageType.name) {
-      return ageType.name;
-    }
+    // TC-008: cuando ageType viene como objeto ({name: 'ADULT'}) tambien hay que
+    // traducir. Antes se retornaba el name crudo y quedaba en ingles en la UI.
     if (!ageType) return '';
-    return this.translate.instant('tour-schedule.prices.ageType.' + ageType);
+    const key = typeof ageType === 'object' && ageType.name ? ageType.name : ageType;
+    return this.translate.instant('tour-schedule.prices.ageType.' + key);
   }
 
   getSlotsByDate(event: any, date: Date): any[] {
