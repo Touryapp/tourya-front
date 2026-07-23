@@ -80,7 +80,7 @@
                   <div class="available-capacity">
                     <i class="isax isax-profile-2user me-1"></i>
                     <span *ngIf="!isSlotFull(slot)">
-                      {{ slot.availability || slot.capacity }} {{ selectedTour?.tour?.priceType === 'group' ? ('tourSlotModal.groupsAvailable' | translate) : ('tourSlotModal.slotsAvailable' | translate) }}
+                      {{ slot.availability || slot.capacity }} {{ selectedTour?.tour?.priceType === 'grupo' ? ('tourSlotModal.groupsAvailable' | translate) : ('tourSlotModal.slotsAvailable' | translate) }}
                     </span>
                     <span *ngIf="isSlotFull(slot)" class="text-danger">
                       {{ 'tourSlotModal.full' | translate }}
@@ -125,12 +125,12 @@
           <div class="section-header">
             <h6 class="section-title">
               <i class="isax isax-people me-2"></i>
-              {{ selectedTour?.tour?.priceType === 'group' ? ('tourSlotModal.participantsByGroup' | translate) : ('tourSlotModal.selectParticipants' | translate) }}
+              {{ selectedTour?.tour?.priceType === 'grupo' ? ('tourSlotModal.participantsByGroup' | translate) : ('tourSlotModal.selectParticipants' | translate) }}
             </h6>
-            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType !== 'group'">
+            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType !== 'grupo'">
               {{ 'tourSlotModal.availablePersons' | translate: { count: selectedSlot.availability } }}
             </span>
-            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType === 'group'">
+            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType === 'grupo'">
               {{ 'tourSlotModal.maxPersonsPerGroup' | translate: { count: selectedTour?.tour?.maxPeople || 99 } }}
             </span>
             <span class="section-subtitle" *ngIf="!selectedSlot">
@@ -139,7 +139,7 @@
           </div>
 
           <!-- Group Selection (Only for Price Type "group") -->
-          <div class="participants-list group-selection-list mb-3" *ngIf="selectedTour?.tour?.priceType === 'group'">
+          <div class="participants-list group-selection-list mb-3" *ngIf="selectedTour?.tour?.priceType === 'grupo'">
             <div class="participant-item">
               <div class="participant-info">
                 <div class="participant-type">{{ 'tourSlotModal.selectGroups' | translate }}</div>
@@ -171,13 +171,13 @@
           </div>
 
           <!-- TC-006: en tours GRUPO el input de "participantes" no aplica — la cantidad se maneja por groupCount arriba. -->
-          <div class="participants-list" *ngIf="selectedTour?.tour?.priceType !== 'group'">
+          <div class="participants-list" *ngIf="selectedTour?.tour?.priceType !== 'grupo'">
             <div class="participant-item" *ngFor="let participant of participants">
               <div class="participant-info">
                 <div class="participant-type">{{ participant.label | translate }}</div>
                 <div class="participant-details">
 
-                  <span class="price" *ngIf="selectedTour?.tour?.priceType !== 'group'">{{ formatPrice(participant.price) }} COP {{ 'tourSlotModal.each' | translate }} </span>
+                  <span class="price" *ngIf="selectedTour?.tour?.priceType !== 'grupo'">{{ formatPrice(participant.price) }} COP {{ 'tourSlotModal.each' | translate }} </span>
                 </div>
               </div>
 
@@ -204,14 +204,14 @@
           </div>
 
           <!-- Summary -->
-          <div class="selection-summary" *ngIf="totalParticipants > 0 || selectedTour?.tour?.priceType === 'group'">
+          <div class="selection-summary" *ngIf="totalParticipants > 0 || selectedTour?.tour?.priceType === 'grupo'">
             <div class="summary-card">
               <!-- TC-006: para grupo mostramos "Cantidad de grupos" (default 1); para individual "Total participantes". -->
-              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType === 'group'">
+              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType === 'grupo'">
                 <span class="label">{{ 'tourSlotModal.selectGroups' | translate }}:</span>
                 <span class="value">{{ groupCount }}</span>
               </div>
-              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType !== 'group'">
+              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType !== 'grupo'">
                 <span class="label">{{ 'tourSlotModal.totalParticipants' | translate }}:</span>
                 <span class="value">{{ totalParticipants }}</span>
               </div>
