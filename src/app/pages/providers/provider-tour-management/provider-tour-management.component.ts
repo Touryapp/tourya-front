@@ -185,10 +185,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       && this.router.url.includes('bookings-management');
     
     // Cargar datos según el rol
+    // TC-005 post-fix: ADMIN/BACKOFFICE_OPERATION también consume el endpoint provider
+    // (el backend devuelve todas las reservas cross-provider cuando no hay providerId).
     if (this.currentRole === 'CLIENT') {
       this.loadClientReservations();
       this.loadPendingReviews();
-    } else if (this.currentRole === 'PROVIDER') {
+    } else if (this.currentRole === 'PROVIDER' || this.currentRole === 'ADMIN') {
       this.loadProviderReservations();
     } else {
       this.loadMockData();
@@ -201,7 +203,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           if (this.currentRole === 'CLIENT') {
             this.loadClientReservations();
             this.loadPendingReviews();
-          } else if (this.currentRole === 'PROVIDER') {
+          } else if (this.currentRole === 'PROVIDER' || this.currentRole === 'ADMIN') {
             this.loadProviderReservations();
           }
           this.cdr.detectChanges();
@@ -496,7 +498,8 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
    * Obtiene el rol del usuario actual
    */
   private getUserRole(): UserRole {
-    if (this.authService.isAdmin()) {
+    // TC-005 post-fix: BACKOFFICE_OPERATION comparte la vista con ADMIN (cross-provider).
+    if (this.authService.isAdmin() || this.authService.isBackofficeOperation()) {
       return 'ADMIN';
     } else if (this.authService.isProvider() || this.authService.isProviderOperator()) {
       return 'PROVIDER';
