@@ -36,6 +36,12 @@ const routes: Routes = [
         path: 'maritime-reports',
         canActivate: [BackofficeGuard],
         loadComponent: () => import('../maritime-activity-reports/maritime-activity-reports.component').then(m => m.MaritimeActivityReportsComponent)
+      },
+      // FE-15d: CRUD de usuarios BACKOFFICE_OPERATION. Solo ADMIN puede gestionar.
+      {
+        path: 'backoffice-users',
+        canActivate: [AdminGuard],
+        loadComponent: () => import('./backoffice-users/backoffice-users.component').then(m => m.BackofficeUsersComponent)
       }
     ]
   }

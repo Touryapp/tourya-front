@@ -1751,6 +1751,72 @@
       "addressLabel": "Nuestra dirección:"
     }
   },
+  "backofficeUsers": {
+    "sidebarLink": "Usuarios Backoffice",
+    "title": "Usuarios Backoffice",
+    "subtitle": "Gestión de usuarios con rol BACKOFFICE_OPERATION (staff Tourya).",
+    "loading": "Cargando usuarios...",
+    "empty": "Aún no hay usuarios BACKOFFICE_OPERATION.",
+    "mustChangePassword": "Debe cambiar la contraseña temporal",
+    "columns": {
+      "fullName": "Nombre completo",
+      "email": "Email",
+      "phone": "Teléfono",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "status": {
+      "enabled": "Activo",
+      "disabled": "Inactivo"
+    },
+    "actions": {
+      "create": "Crear usuario",
+      "edit": "Editar",
+      "resetPassword": "Resetear contraseña",
+      "disable": "Deshabilitar",
+      "enable": "Reactivar",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    },
+    "create": { "title": "Crear usuario Backoffice" },
+    "edit": { "title": "Editar usuario Backoffice" },
+    "resetPassword": {
+      "title": "Resetear contraseña temporal",
+      "for": "Para:"
+    },
+    "form": {
+      "firstname": "Nombre",
+      "lastname": "Apellido",
+      "email": "Email",
+      "phone": "Teléfono",
+      "temporaryPassword": "Contraseña temporal",
+      "temporaryPasswordHint": "Mínimo 8 caracteres. El usuario deberá cambiarla en el primer login."
+    },
+    "swal": {
+      "errorTitle": "Error",
+      "yesConfirm": "Sí, confirmar",
+      "cancel": "Cancelar",
+      "createdTitle": "Usuario creado",
+      "createdText": "El usuario fue creado. Comunícale la contraseña temporal.",
+      "updatedTitle": "Actualizado",
+      "updatedText": "Los datos del usuario fueron actualizados.",
+      "passwordResetTitle": "Contraseña restablecida",
+      "passwordResetText": "El usuario deberá cambiarla en el próximo login.",
+      "confirmToggleTitle": "¿Confirmar?",
+      "confirmDisableText": "Vas a deshabilitar a {{name}}. No podrá acceder a la plataforma.",
+      "confirmEnableText": "Vas a reactivar a {{name}}. Volverá a poder acceder.",
+      "disabledTitle": "Usuario deshabilitado",
+      "enabledTitle": "Usuario reactivado"
+    },
+    "errors": {
+      "loadFailed": "No se pudo cargar la lista de usuarios.",
+      "createFailed": "No se pudo crear el usuario.",
+      "updateFailed": "No se pudo actualizar el usuario.",
+      "resetFailed": "No se pudo restablecer la contraseña.",
+      "disableFailed": "No se pudo deshabilitar al usuario.",
+      "enableFailed": "No se pudo reactivar al usuario."
+    }
+  },
   "app-config-admin": {
     "sidebarLink": "Configuraciones",
     "title": "Configuraciones del sistema",

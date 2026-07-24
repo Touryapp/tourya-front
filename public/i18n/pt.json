@@ -1751,6 +1751,72 @@
       "addressLabel": "Nosso endereço:"
     }
   },
+  "backofficeUsers": {
+    "sidebarLink": "Usuários Backoffice",
+    "title": "Usuários Backoffice",
+    "subtitle": "Gestão de usuários com papel BACKOFFICE_OPERATION (equipe Tourya).",
+    "loading": "Carregando usuários...",
+    "empty": "Ainda não há usuários BACKOFFICE_OPERATION.",
+    "mustChangePassword": "Deve alterar a senha temporária",
+    "columns": {
+      "fullName": "Nome completo",
+      "email": "Email",
+      "phone": "Telefone",
+      "status": "Status",
+      "actions": "Ações"
+    },
+    "status": {
+      "enabled": "Ativo",
+      "disabled": "Inativo"
+    },
+    "actions": {
+      "create": "Criar usuário",
+      "edit": "Editar",
+      "resetPassword": "Redefinir senha",
+      "disable": "Desativar",
+      "enable": "Reativar",
+      "cancel": "Cancelar",
+      "save": "Salvar"
+    },
+    "create": { "title": "Criar usuário Backoffice" },
+    "edit": { "title": "Editar usuário Backoffice" },
+    "resetPassword": {
+      "title": "Redefinir senha temporária",
+      "for": "Para:"
+    },
+    "form": {
+      "firstname": "Nome",
+      "lastname": "Sobrenome",
+      "email": "Email",
+      "phone": "Telefone",
+      "temporaryPassword": "Senha temporária",
+      "temporaryPasswordHint": "Mínimo 8 caracteres. O usuário deverá alterá-la no primeiro login."
+    },
+    "swal": {
+      "errorTitle": "Erro",
+      "yesConfirm": "Sim, confirmar",
+      "cancel": "Cancelar",
+      "createdTitle": "Usuário criado",
+      "createdText": "O usuário foi criado. Comunique a senha temporária.",
+      "updatedTitle": "Atualizado",
+      "updatedText": "Os dados do usuário foram atualizados.",
+      "passwordResetTitle": "Senha redefinida",
+      "passwordResetText": "O usuário deverá alterá-la no próximo login.",
+      "confirmToggleTitle": "Confirmar?",
+      "confirmDisableText": "Você vai desativar {{name}}. Não poderá acessar a plataforma.",
+      "confirmEnableText": "Você vai reativar {{name}}. Voltará a poder acessar.",
+      "disabledTitle": "Usuário desativado",
+      "enabledTitle": "Usuário reativado"
+    },
+    "errors": {
+      "loadFailed": "Não foi possível carregar a lista de usuários.",
+      "createFailed": "Não foi possível criar o usuário.",
+      "updateFailed": "Não foi possível atualizar o usuário.",
+      "resetFailed": "Não foi possível redefinir a senha.",
+      "disableFailed": "Não foi possível desativar o usuário.",
+      "enableFailed": "Não foi possível reativar o usuário."
+    }
+  },
   "app-config-admin": {
     "sidebarLink": "Configurações",
     "title": "Configurações do sistema",

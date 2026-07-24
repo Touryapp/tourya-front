@@ -1,0 +1,11 @@
+// FE-15d: estilos minimos del CRUD backoffice users.
+
+.modal.d-block {
+  z-index: 1055;
+}
+
+table.mat-mdc-table {
+  th, td {
+    padding: 12px 16px;
+  }
+}
