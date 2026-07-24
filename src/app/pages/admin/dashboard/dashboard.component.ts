@@ -44,6 +44,11 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/admin/bookings-management']);
   }
 
+  /** FE-15d: navega al CRUD de usuarios BACKOFFICE_OPERATION (solo ADMIN). */
+  goToBackofficeUsers(): void {
+    this.router.navigate(['/admin/backoffice-users']);
+  }
+
   ngOnInit(): void {
     this.cargarSolicitudes();
     this.showGalleryFiles();

@@ -1,0 +1,204 @@
+<!-- FE-15d: gestion de usuarios BACKOFFICE_OPERATION (solo ADMIN). -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div>
+        <h5 class="mb-1">
+          <i class="isax isax-people me-2 text-primary"></i>{{ 'backofficeUsers.title' | translate }}
+        </h5>
+        <p class="text-muted mb-0 small">{{ 'backofficeUsers.subtitle' | translate }}</p>
+      </div>
+      <button class="btn btn-primary d-flex align-items-center gap-2" (click)="openCreateModal()">
+        <i class="isax isax-add-circle fs-18"></i> {{ 'backofficeUsers.actions.create' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm overflow-hidden">
+  <div class="card-body p-0">
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">{{ 'backofficeUsers.loading' | translate }}</span>
+      </div>
+      <p class="mt-2 text-muted small">{{ 'backofficeUsers.loading' | translate }}</p>
+    </div>
+
+    <div *ngIf="errorMessage && !isLoading" class="alert alert-danger m-3">
+      {{ errorMessage }}
+    </div>
+
+    <div class="table-responsive" *ngIf="!isLoading">
+      <table mat-table [dataSource]="dataSource" matSort class="table table-hover mb-0 w-100">
+
+        <ng-container matColumnDef="userId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+          <td mat-cell *matCellDef="let user">{{ user.userId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'backofficeUsers.columns.fullName' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.fullName || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'backofficeUsers.columns.email' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>{{ 'backofficeUsers.columns.phone' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.phone || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="accountEnabled">
+          <th mat-header-cell *matHeaderCellDef>{{ 'backofficeUsers.columns.status' | translate }}</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="badge" [ngClass]="user.accountEnabled ? 'bg-success' : 'bg-secondary'">
+              {{ (user.accountEnabled ? 'backofficeUsers.status.enabled' : 'backofficeUsers.status.disabled') | translate }}
+            </span>
+            <span *ngIf="user.mustChangePassword" class="badge bg-warning text-dark ms-1"
+                  [title]="'backofficeUsers.mustChangePassword' | translate">
+              <i class="isax isax-info-circle"></i>
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="text-end">{{ 'backofficeUsers.columns.actions' | translate }}</th>
+          <td mat-cell *matCellDef="let user" class="text-end">
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditModal(user)"
+                    [title]="'backofficeUsers.actions.edit' | translate">
+              <i class="isax isax-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-warning me-1" (click)="openResetPasswordModal(user)"
+                    [title]="'backofficeUsers.actions.resetPassword' | translate">
+              <i class="isax isax-key"></i>
+            </button>
+            <button class="btn btn-sm" [ngClass]="user.accountEnabled ? 'btn-outline-danger' : 'btn-outline-success'"
+                    (click)="toggleEnabled(user)"
+                    [title]="(user.accountEnabled ? 'backofficeUsers.actions.disable' : 'backofficeUsers.actions.enable') | translate">
+              <i class="isax" [ngClass]="user.accountEnabled ? 'isax-lock' : 'isax-unlock'"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div *ngIf="!isLoading && users.length === 0" class="text-center py-5 text-muted">
+        {{ 'backofficeUsers.empty' | translate }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Create Modal ─────────────────────────────────────────────────────── -->
+<div class="modal fade show d-block" *ngIf="activeModal === 'create'" tabindex="-1"
+     style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'backofficeUsers.create.title' | translate }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.firstname' | translate }} *</label>
+            <input type="text" class="form-control" formControlName="firstname" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.lastname' | translate }}</label>
+            <input type="text" class="form-control" formControlName="lastname">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.email' | translate }} *</label>
+            <input type="email" class="form-control" formControlName="email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.phone' | translate }}</label>
+            <input type="text" class="form-control" formControlName="phone">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.temporaryPassword' | translate }} *</label>
+            <input type="text" class="form-control" formControlName="temporaryPassword" required minlength="8">
+            <small class="text-muted">{{ 'backofficeUsers.form.temporaryPasswordHint' | translate }}</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'backofficeUsers.actions.cancel' | translate }}</button>
+          <button type="submit" class="btn btn-primary" [disabled]="createForm.invalid">
+            {{ 'backofficeUsers.actions.create' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Edit Modal ─────────────────────────────────────────────────────── -->
+<div class="modal fade show d-block" *ngIf="activeModal === 'edit'" tabindex="-1"
+     style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'backofficeUsers.edit.title' | translate }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.firstname' | translate }}</label>
+            <input type="text" class="form-control" formControlName="firstname">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.lastname' | translate }}</label>
+            <input type="text" class="form-control" formControlName="lastname">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.phone' | translate }}</label>
+            <input type="text" class="form-control" formControlName="phone">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'backofficeUsers.actions.cancel' | translate }}</button>
+          <button type="submit" class="btn btn-primary">{{ 'backofficeUsers.actions.save' | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Reset Password Modal ─────────────────────────────────────────────── -->
+<div class="modal fade show d-block" *ngIf="activeModal === 'resetPassword'" tabindex="-1"
+     style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="resetPasswordForm" (ngSubmit)="submitResetPassword()">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'backofficeUsers.resetPassword.title' | translate }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small">
+            {{ 'backofficeUsers.resetPassword.for' | translate }}
+            <strong>{{ selectedUser?.email }}</strong>
+          </p>
+          <div class="mb-3">
+            <label class="form-label">{{ 'backofficeUsers.form.temporaryPassword' | translate }} *</label>
+            <input type="text" class="form-control" formControlName="temporaryPassword" required minlength="8">
+            <small class="text-muted">{{ 'backofficeUsers.form.temporaryPasswordHint' | translate }}</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'backofficeUsers.actions.cancel' | translate }}</button>
+          <button type="submit" class="btn btn-warning" [disabled]="resetPasswordForm.invalid">
+            {{ 'backofficeUsers.actions.resetPassword' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1750,6 +1750,72 @@
       "addressLabel": "Our address:"
     }
   },
+  "backofficeUsers": {
+    "sidebarLink": "Backoffice Users",
+    "title": "Backoffice Users",
+    "subtitle": "Manage users with BACKOFFICE_OPERATION role (Tourya staff).",
+    "loading": "Loading users...",
+    "empty": "No BACKOFFICE_OPERATION users yet.",
+    "mustChangePassword": "Must change temporary password",
+    "columns": {
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "enabled": "Active",
+      "disabled": "Inactive"
+    },
+    "actions": {
+      "create": "Create user",
+      "edit": "Edit",
+      "resetPassword": "Reset password",
+      "disable": "Disable",
+      "enable": "Re-enable",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "create": { "title": "Create backoffice user" },
+    "edit": { "title": "Edit backoffice user" },
+    "resetPassword": {
+      "title": "Reset temporary password",
+      "for": "For:"
+    },
+    "form": {
+      "firstname": "First name",
+      "lastname": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "temporaryPassword": "Temporary password",
+      "temporaryPasswordHint": "Minimum 8 characters. User must change it on first login."
+    },
+    "swal": {
+      "errorTitle": "Error",
+      "yesConfirm": "Yes, confirm",
+      "cancel": "Cancel",
+      "createdTitle": "User created",
+      "createdText": "The user was created. Share the temporary password with them.",
+      "updatedTitle": "Updated",
+      "updatedText": "User details were updated.",
+      "passwordResetTitle": "Password reset",
+      "passwordResetText": "User must change it on next login.",
+      "confirmToggleTitle": "Confirm?",
+      "confirmDisableText": "You are about to disable {{name}}. They will lose access.",
+      "confirmEnableText": "You are about to re-enable {{name}}. They will regain access.",
+      "disabledTitle": "User disabled",
+      "enabledTitle": "User re-enabled"
+    },
+    "errors": {
+      "loadFailed": "Could not load the user list.",
+      "createFailed": "Could not create the user.",
+      "updateFailed": "Could not update the user.",
+      "resetFailed": "Could not reset the password.",
+      "disableFailed": "Could not disable the user.",
+      "enableFailed": "Could not re-enable the user."
+    }
+  },
   "app-config-admin": {
     "sidebarLink": "Settings",
     "title": "System settings",
