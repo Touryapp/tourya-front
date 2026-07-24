@@ -1330,6 +1330,7 @@
     "days": "days",
     "people": "people",
     "personSingularPlural": "person(s)",
+    "groupsLabel": "Group(s)",
     "selectToursFor": "Select tours for",
     "daysOfTravel": "days of travel",
     "selectedTours": "selected tours",

@@ -105,8 +105,13 @@
               {{ item.selectedSlot.startTime }} - {{ item.selectedSlot.endTime }}
             </p>
 
-            <!-- Participantes -->
-            <p class="tour-card-participants">
+            <!-- Participantes — TC-006: para tours grupo mostramos cantidad de grupos + total pax. -->
+            <p class="tour-card-participants" *ngIf="item.tour?.priceType === 'grupo'">
+              <i class="isax isax-profile-2user"></i>
+              {{ (item.groupCount || 1) }} {{ 'cart.groupsLabel' | translate }}
+              <span class="text-secondary">({{ item.totalParticipants }} {{ 'cart.personSingularPlural' | translate }})</span>
+            </p>
+            <p class="tour-card-participants" *ngIf="item.tour?.priceType !== 'grupo'">
               <i class="isax isax-profile-2user"></i>
               {{ item.totalParticipants }} {{ 'cart.personSingularPlural' | translate }}
             </p>
