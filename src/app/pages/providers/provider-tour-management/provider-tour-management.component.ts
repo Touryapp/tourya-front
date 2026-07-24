@@ -1939,8 +1939,12 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
           this.cdr.detectChanges();
         }
 
-        // Translate parameterized text manually
-        const successMsg = this.translate.instant('provider-tour-management.swal.reviewSentText', { tourName: this.reviewModalBooking!.tourName });
+        // Translate parameterized text manually.
+        // TC-010 (#203): tourName es TranslatedField (jsonb {es,en,pt}), no string —
+        // pasarlo directo al translate.instant hacia String(obj) = "[object Object]".
+        // Mismo patron que list-tours.component.ts:1254 y mapReservationToBooking:405.
+        const tourNameText = this.i18nService.getValue(this.reviewModalBooking!.tourName) || 'N/A';
+        const successMsg = this.translate.instant('provider-tour-management.swal.reviewSentText', { tourName: tourNameText });
         Swal.fire({
           icon: 'success',
           title: this.translate.instant('provider-tour-management.swal.reviewSent'),
