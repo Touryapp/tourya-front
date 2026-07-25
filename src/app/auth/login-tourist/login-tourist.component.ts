@@ -205,6 +205,10 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
   redirectByRole(role: RoleDto[]) {
     if (role.some(r => r.id === Roles.ADMIN)) {
       this.router.navigate(["admin"]);
+    } else if (role.some(r => r.id === Roles.BACKOFFICE_OPERATION)) {
+      // FE-15d fix (#195): sin este branch el user quedaba clavado en login post-auth.
+      // Mismo destino que HomeRedirectGuard para este rol.
+      this.router.navigate(["admin/bookings-management"]);
     } else if (role.some(r => r.id === Roles.PROVIDER || r.id === Roles.PROVIDER_OPERATOR)) {
       this.router.navigate(["providers/provider-panel"]);
     } else if (role.some(r => r.id === Roles.USER)) {
