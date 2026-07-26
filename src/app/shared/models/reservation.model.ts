@@ -69,6 +69,10 @@ export interface ClientReservation {
   canConfirmReservation?: boolean;
   canRainCancel?: boolean;
   customerProfileImageUrl?: string;
+  /** TC-005 refinamientos (#188): nombre del proveedor (provider.name). Solo se usa en admin ADMIN. */
+  providerName?: string;
+  /** TC-005 refinamientos (#188): imagen principal del tour desde tour_gallery (primera por order_index). */
+  tourImageUrl?: string;
 }
 
 /**

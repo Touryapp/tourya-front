@@ -40,6 +40,12 @@ export interface ProviderTourBooking {
   travellers: string;
   duration: string;
   price: string;
+  /** TC-005 refinamientos (#188): nombre del proveedor. Solo se muestra en config ADMIN. */
+  providerName?: string;
+  /** TC-005 refinamientos (#188): precio-cliente formateado. Se renderiza en el dual badge de ADMIN. */
+  priceClient?: string;
+  /** TC-005 refinamientos (#188): providerPrice formateado. Se renderiza en el dual badge de ADMIN. */
+  priceProvider?: string;
   bookingDate: string;
   checkInDate: string;
   returnDate: string;
@@ -424,7 +430,14 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       tourId: reservation.tourId,
       tourName: tourNameText,
       tourType: reservation.tourSubCategory || reservation.tourType || 'N/A',
-      img: 'tours-21.jpg',
+      // TC-005 refinamientos (#188): usar imagen real del tour desde tour_gallery si existe.
+      img: reservation.tourImageUrl || 'tours-21.jpg',
+      // TC-005 refinamientos (#188): nombre del proveedor para la columna "Proveedor" en config ADMIN.
+      providerName: reservation.providerName || '',
+      // TC-005 refinamientos (#188): precio cliente (shoppingTotalPrice) + providerPrice para el
+      // dual badge de la vista ADMIN. Ambos vienen del backend post-migracion 082.
+      priceClient: reservation.shoppingTotalPrice != null ? `$${reservation.shoppingTotalPrice.toFixed(2)}` : '',
+      priceProvider: reservation.providerPrice != null ? `$${reservation.providerPrice.toFixed(2)}` : '',
       customerName: reservation.serviceResponsibleName || 'N/A',
       customerEmail: reservation.serviceResponsibleEmail || 'N/A',
       customerPhone: reservation.serviceResponsiblePhone || 'N/A',
@@ -604,13 +617,20 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       id: `RES-${reservation.reservationId}`,
       tourName: reservation.tourName || '',
       tourType: 'Tour',
-      img: 'tours-21.jpg',
+      // TC-005 refinamientos (#188): usar imagen real del tour desde tour_gallery si existe.
+      img: reservation.tourImageUrl || 'tours-21.jpg',
+      // TC-005 refinamientos (#188): nombre del proveedor para la columna "Proveedor" en config ADMIN.
+      providerName: reservation.providerName || '',
+      // TC-005 refinamientos (#188): precio cliente + providerPrice para el dual badge de la vista ADMIN.
+      priceClient: reservation.shoppingTotalPrice != null ? `$${reservation.shoppingTotalPrice.toFixed(2)}` : '',
+      priceProvider: reservation.providerPrice != null ? `$${reservation.providerPrice.toFixed(2)}` : '',
       customerName: reservation.serviceResponsibleName || reservation.payerName,
       customerEmail: reservation.payerEmail,
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
+      // PROVIDER: sigue viendo el providerPrice como precio principal (TC-005 previo, PR #71).
       price: reservation.providerPrice != null ? `$${reservation.providerPrice.toFixed(2)}` : '',
       bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
@@ -660,13 +680,21 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       tourId: reservation.tourId, // Agregar tourId para reagendamiento
       tourName: reservation.tourName,
       tourType: 'Tour', // El API no devuelve tipo de tour
-      img: 'tours-21.jpg', // Imagen por defecto
+      // TC-005 refinamientos (#188): usar imagen real del tour desde tour_gallery si existe.
+      img: reservation.tourImageUrl || 'tours-21.jpg',
+      // TC-005 refinamientos (#188): nombre del proveedor para la columna "Proveedor" en config ADMIN.
+      providerName: reservation.providerName || '',
+      // TC-005 refinamientos (#188): precio cliente (shoppingTotalPrice) + providerPrice para el
+      // dual badge de la vista ADMIN. Ambos vienen del backend post-migracion 082.
+      priceClient: reservation.shoppingTotalPrice != null ? `$${reservation.shoppingTotalPrice.toFixed(2)}` : '',
+      priceProvider: reservation.providerPrice != null ? `$${reservation.providerPrice.toFixed(2)}` : '', // Imagen por defecto
       customerName: reservation.serviceResponsibleName || reservation.payerName,
       customerEmail: reservation.payerEmail,
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
+      // ADMIN/CLIENT: sigue viendo shoppingTotalPrice como precio principal.
       price: `$${(reservation.shoppingTotalPrice || 0).toFixed(2)}`,
       bookingDate: this.parseLocalDate(reservation.reservationCreatedDate).toLocaleDateString('es-ES', {
         day: '2-digit',
@@ -1469,6 +1497,15 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   /**
    * Obtiene el valor formateado de una celda según su tipo
    */
+  /**
+   * TC-005 refinamientos (#188): detecta si la URL de imagen es absoluta (S3/GCS) o
+   * es un filename local (assets/img/tours/...). Nuevo tour_gallery.image_url del SP
+   * viene como URL absoluta https://storage.googleapis.com/...
+   */
+  public isAbsoluteUrl(value: any): boolean {
+    return typeof value === 'string' && /^https?:\/\//i.test(value);
+  }
+
   public getCellValue(row: any, column: ColumnConfig): any {
     const value = row[column.field];
     

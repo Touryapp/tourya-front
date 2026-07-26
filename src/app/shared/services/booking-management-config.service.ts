@@ -467,21 +467,16 @@ export class BookingManagementConfigService {
           width: '110px'
         },
         {
-          field: 'price',
+          // TC-005 refinamientos (#188): renderizado especial en template — dual badge Cliente + Provider.
+          field: 'priceDual',
           header: 'provider-tour-management.config.columns.amount',
-          type: 'currency',
-          sortable: true,
+          type: 'text',
+          sortable: false,
           filterable: false,
-          width: '100px'
+          width: '180px'
         },
-        {
-          field: 'bookingDate',
-          header: 'provider-tour-management.config.columns.bookingDate',
-          type: 'date',
-          sortable: true,
-          filterable: false,
-          width: '110px'
-        },
+        // TC-005 refinamientos (#188): columna "Fecha de Reserva" eliminada — Luis clarifico
+        // que en realidad mostraba la fecha de compra y no aporta valor en la lista.
         {
           field: 'status',
           header: 'provider-tour-management.config.columns.status',
@@ -492,33 +487,14 @@ export class BookingManagementConfigService {
         }
       ],
       actions: [
+        // TC-005 refinamientos (#188): Luis pidio "ADMIN solo visualiza". Quitados los botones
+        // Confirmar/Aprobar/Suspender/Eliminar. Solo queda "Ver" (modal de detalle).
         {
           id: 'view',
           label: 'provider-tour-management.config.actions.view',
           icon: 'fa fa-eye',
           color: 'info',
           visible: (row) => true
-        },
-        {
-          id: 'approve',
-          label: 'provider-tour-management.config.actions.approve',
-          icon: 'fa fa-check',
-          color: 'success',
-          visible: (row) => row.status === 'Pending'
-        },
-        {
-          id: 'suspend',
-          label: 'provider-tour-management.config.actions.suspend',
-          icon: 'fa fa-pause-circle',
-          color: 'warning',
-          visible: (row) => row.status === 'Confirmed' || row.status === 'Upcoming'
-        },
-        {
-          id: 'delete',
-          label: 'provider-tour-management.config.actions.delete',
-          icon: 'fa fa-trash',
-          color: 'danger',
-          visible: (row) => row.status === 'Cancelled'
         }
       ],
       filters: [
