@@ -157,27 +157,37 @@
                             <tr (click)="viewBookingDetails(booking)" style="cursor: pointer;">
                                 <!-- Celdas dinámicas -->
                                 <td *ngFor="let column of config.columns">
-                                    <!-- Columna de imagen -->
+                                    <!-- Columna de imagen — TC-005 refinamientos (#188): soporta URL absoluta (S3/GCS) o filename relativo. -->
                                     <div *ngIf="column.type === 'image'" class="d-flex align-items-center">
                                         <a href="javascript:void(0);" class="avatar avatar-lg">
-                                            <img [src]="'assets/img/tours/' + getCellValue(booking, column)" 
-                                                 class="img-fluid rounded-circle" 
+                                            <img [src]="isAbsoluteUrl(getCellValue(booking, column)) ? getCellValue(booking, column) : 'assets/img/tours/' + getCellValue(booking, column)"
+                                                 class="img-fluid rounded-circle"
                                                  alt="tour">
                                         </a>
                                     </div>
 
                                     <!-- Columna de estado -->
                                     <span *ngIf="column.type === 'status'"
-                                          class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                          class="badge rounded-pill d-inline-flex align-items-center fs-10"
                                           [ngClass]="getStatusClass(getCellValue(booking, column))">
                                         <i class="fa-solid fa-circle fs-5 me-1"></i>{{ getStatusLabel(getCellValue(booking, column)) }}
                                     </span>
 
+                                    <!-- TC-005 refinamientos (#188): dual badge Cliente + Provider (config ADMIN campo priceDual). -->
+                                    <div *ngIf="column.field === 'priceDual'" class="d-flex flex-column gap-1">
+                                        <span class="badge bg-info-transparent text-info">
+                                            {{ 'provider-tour-management.config.columns.priceCustomer' | translate }}: {{ booking.priceClient }}
+                                        </span>
+                                        <span class="badge bg-success-transparent text-success">
+                                            {{ 'provider-tour-management.config.columns.priceProvider' | translate }}: {{ booking.priceProvider }}
+                                        </span>
+                                    </div>
+
                                     <!-- Columnas normales -->
-                                    <span *ngIf="column.type !== 'image' && column.type !== 'status' && column.field === 'tourName'" class="d-inline-block text-truncate" style="max-width: 250px; vertical-align: bottom;">
+                                    <span *ngIf="column.type !== 'image' && column.type !== 'status' && column.field !== 'priceDual' && column.field === 'tourName'" class="d-inline-block text-truncate" style="max-width: 250px; vertical-align: bottom;">
                                         {{ getCellValue(booking, column) | localizedName }}
                                     </span>
-                                    <span *ngIf="column.type !== 'image' && column.type !== 'status' && column.field !== 'tourName'">
+                                    <span *ngIf="column.type !== 'image' && column.type !== 'status' && column.field !== 'priceDual' && column.field !== 'tourName'">
                                         {{ getCellValue(booking, column) | localizedName }}
                                     </span>
                                 </td>
@@ -574,9 +584,10 @@
                             </div>
                             
                             <div class="d-flex gap-2 flex-wrap">
-                                <!-- Botones dinámicos según configuración del rol (Reagendar, Cancelar, Confirmar, etc.) -->
+                                <!-- Botones dinámicos según configuración del rol (Reagendar, Cancelar, Confirmar, etc.)
+                                     TC-005 refinamientos (#188): ADMIN solo visualiza, sin botones de accion en el modal. -->
                                 @for (action of config.actions; track action.id) {
-                                    @if (action.id !== 'view' && shouldShowModalAction(action.id)) {
+                                    @if (action.id !== 'view' && currentRole !== 'ADMIN' && shouldShowModalAction(action.id)) {
                                         <button 
                                             class="btn btn-sm"
                                             [ngClass]="'btn-' + action.color"
