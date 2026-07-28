@@ -143,11 +143,13 @@
                                     </h6>
                                     <!-- Quick Actions -->
                                     <div class="travelers-actions">
-                                        <!-- Botón para copiar datos de contacto a todos los viajeros -->
-                                        <button type="button" 
-                                                class="btn btn-sm btn-success me-2" 
+                                        <!-- TC-012 (#211): boton visible siempre que hay viajeros. La validacion
+                                             de "contactForm completo" queda dentro del handler (copyContactInfoToAllTravelers),
+                                             que muestra un Swal amigable si faltan datos en vez de esconder el boton. -->
+                                        <button type="button"
+                                                class="btn btn-sm btn-success me-2"
                                                 (click)="copyContactInfoToAllTravelers()"
-                                                *ngIf="travelersInfo.length > 0 && isContactFormComplete()"
+                                                *ngIf="travelersInfo.length > 0"
                                                 [title]="'cartSummary.useMyData' | translate">
                                             <i class="fas fa-copy me-1"></i>
                                             {{ 'cartSummary.useMyData' | translate }}
@@ -207,15 +209,15 @@
                                              [attr.aria-labelledby]="'heading' + i" 
                                              data-bs-parent="#travelersAccordion">
                                             <div class="accordion-body">
-                                                <!-- Botón para copiar datos de contacto a este viajero -->
-                                                <div class="alert alert-info d-flex align-items-center justify-content-between mb-3" 
-                                                     *ngIf="isContactFormComplete()">
+                                                <!-- TC-012 (#211): alerta + boton por viajero visibles siempre.
+                                                     La validacion "contactForm completo" queda dentro del handler. -->
+                                                <div class="alert alert-info d-flex align-items-center justify-content-between mb-3">
                                                     <div>
                                                         <i class="fas fa-info-circle me-2"></i>
                                                         <small>{{ 'cartSummary.isItYou' | translate }}</small>
                                                     </div>
-                                                    <button type="button" 
-                                                            class="btn btn-sm btn-success" 
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-success"
                                                             (click)="copyContactInfoToTraveler(i)"
                                                             [title]="'cartSummary.useMyData' | translate">
                                                         <i class="fas fa-user-check me-1"></i>
