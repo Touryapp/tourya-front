@@ -13,6 +13,7 @@ import { CityService } from '../../services/city.service';
 import { GuestInfoService } from '../../services/guest-info.service';
 import { TouristService } from "../../services/tourist.service";
 import { TouristProfileDto } from "../../dto/tourist-profile.dto";
+import { AuthService } from "../../../core/services/auth.service";
 
 
 
@@ -48,7 +49,8 @@ export class GuestInfoModalComponent implements OnInit {
     private departmentService: DepartmentService,
     private cityService: CityService,
     private guestInfoService: GuestInfoService,
-    private touristService: TouristService
+    private touristService: TouristService,
+    private authService: AuthService
   ) {
 
     this.guestInfoForm = new FormGroup({
@@ -62,8 +64,10 @@ export class GuestInfoModalComponent implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(50),
       ]),
+      // TC-009 (#196): tipo de documento persistido en tourist_profile (CC/CE/PP/NIT/TI).
+      documentType: new FormControl("CC", [Validators.required]),
       documentNumber: new FormControl("", [
-        Validators.required, 
+        Validators.required,
         Validators.minLength(6)
       ]),
       phone: new FormControl("", [
@@ -77,7 +81,8 @@ export class GuestInfoModalComponent implements OnInit {
       country: new FormControl("", [Validators.required]),
       department: new FormControl("", [Validators.required]),
       city: new FormControl("", [Validators.required]),
-      photo: new FormControl(null, [Validators.required])
+      // TC-009 (#196): foto opcional (Luis 2026-07-23).
+      photo: new FormControl(null)
     });
   }
 
@@ -91,11 +96,13 @@ export class GuestInfoModalComponent implements OnInit {
       next: (profile: TouristProfileDto) => {
         this.profileData = profile;
         if (!profile) {
+          this.applySocialFallback();
           this.getCountries(true);
           return;
         }
 
-        const simpleFields: (keyof TouristProfileDto)[] = ['firstName', 'lastName', 'documentNumber', 'phone', 'email'];
+        // TC-009 (#196): documentType tambien viaja en el perfil (nuevo campo).
+        const simpleFields: (keyof TouristProfileDto)[] = ['firstName', 'lastName', 'documentType', 'documentNumber', 'phone', 'email'];
         simpleFields.forEach(field => {
           if (profile[field]) {
             this.guestInfoForm.get(field as string)?.patchValue(profile[field]);
@@ -107,13 +114,55 @@ export class GuestInfoModalComponent implements OnInit {
           this.guestInfoForm.get('photo')?.patchValue(profile.photoUrl);
         }
 
+        // Si el perfil vino pero incompleto (typicamente user recien registrado
+        // con Google/Facebook), completar los huecos con la sesion social.
+        this.applySocialFallback();
+
         this.getCountries(true);
       },
       error: (err) => {
         console.error('Error loading profile', err);
+        this.applySocialFallback();
         this.getCountries(true);
       }
     });
+  }
+
+  /**
+   * TC-009 (#196): rellena firstName / lastName / email / filePreview desde la
+   * sesion social (Firebase user) SOLO si el campo del form aun esta vacio.
+   * Evita pisar datos que ya vinieron del `tourist_profile`.
+   *
+   * Opcion B decidida (usar Firebase actual). Cuando SEC-06 Fase B mergee, este
+   * bloque se refactoriza para consumir firstname/lastname directamente del
+   * backend Token Exchange (mas confiable que split del displayName).
+   */
+  private applySocialFallback(): void {
+    const socialUser = this.authService.getCurrentUser();
+    if (!socialUser) return;
+
+    const setIfEmpty = (fieldName: string, value: string | null | undefined) => {
+      if (!value) return;
+      const ctrl = this.guestInfoForm.get(fieldName);
+      if (ctrl && !ctrl.value) {
+        ctrl.patchValue(value);
+      }
+    };
+
+    const displayName = (socialUser as any).displayName as string | null | undefined;
+    if (displayName) {
+      const parts = displayName.trim().split(/\s+/);
+      const first = parts.shift() ?? '';
+      const last = parts.join(' ');
+      setIfEmpty('firstName', first);
+      if (last) setIfEmpty('lastName', last);
+    }
+    setIfEmpty('email', (socialUser as any).email);
+
+    const photoURL = (socialUser as any).photoURL as string | null | undefined;
+    if (photoURL && !this.filePreview) {
+      this.filePreview = photoURL;
+    }
   }
 
 
