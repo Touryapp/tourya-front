@@ -1,0 +1,10 @@
+node_modules
+/node_modules
+build
+/build
+/dist
+dist
+.angular
+
+"ANALISIS_FLUJO_PAGO.md" 
+proxy.conf.json

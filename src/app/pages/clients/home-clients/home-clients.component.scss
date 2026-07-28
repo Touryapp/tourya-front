@@ -1,0 +1,190 @@
+.hero-sec-six {
+  position: relative;
+  padding: 100px 0;
+  min-height: 600px;
+  overflow: hidden;
+  
+  &::after {
+    content: "";
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  
+  .banner-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%; // Changed from height to min-height to grow with content
+    z-index: -1;
+    
+    // Force owl-carousel-o component divs to fill height
+    ::ng-deep owl-carousel-o .owl-stage {
+      height: 100% !important;
+      
+      div {
+        height: 100% !important;
+      }
+    }
+    
+    // Ensure owl-carousel fills the container
+    ::ng-deep .owl-carousel,
+    ::ng-deep .owl-stage-outer,
+    ::ng-deep .owl-stage,
+    ::ng-deep .owl-item {
+      height: 100% !important;
+      min-height: 100% !important; // Ensure containers grow with content
+    }
+    
+    ::ng-deep .owl-stage-outer {
+      display: flex !important;
+      align-items: stretch !important;
+    }
+    
+    ::ng-deep .owl-stage {
+      display: flex !important;
+      align-items: stretch !important;
+      
+      // Force ALL direct child divs to fill height - using attribute selector for Angular classes
+      > div,
+      > [class*='ng-'] {
+        height: 100% !important;
+        min-height: 100% !important; // Ensure divs grow with stage
+        flex: 1 !important;
+      }
+    }
+    
+    ::ng-deep .owl-item {
+      display: flex !important;
+      align-items: stretch !important;
+      
+      > div {
+        height: 100% !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+    }
+    
+    .slider-img {
+      height: 100% !important;
+      width: 100% !important;
+      min-height: 600px; // Match hero-sec-six min-height
+      
+      img {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 600px; // Match parent min-height
+        object-fit: cover !important;
+        object-position: center !important;
+      }
+    }
+    
+    // Vertical dots on the right - centered in hero section
+    ::ng-deep .owl-dots {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(-50%);
+      
+      .owl-dot {
+        span {
+          display: none;
+        }
+        color: #fff;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(228, 235, 241, 0.2);
+        margin: 3px 0;
+        cursor: pointer;
+        
+        &.active {
+          background: #fff;
+          outline: 1px solid #fff;
+          outline-offset: 3px;
+          margin: 5px 0;
+        }
+        
+        &:hover {
+          color: #E04F16;
+        }
+      }
+    }
+  }
+  
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+  
+  // Tablet and Mobile adjustments
+  @media (max-width: 992px) {
+    .banner-slider {
+      ::ng-deep .owl-dots {
+        right: 15px;
+      }
+    }
+  }
+}
+
+.work-section-six-client {
+  background-color: #e6f1f4;
+}
+.categories-card {
+  position: relative;
+  border-radius: 10px;
+  transition: 0.5s all;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+.categories-card::after {
+  content: "";
+  background: linear-gradient(360deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+}
+.categories-card img {
+  border-radius: 10px;
+  width: 100%;
+  transition: 0.5s all;
+}
+.categories-card:hover img {
+  transform: scale(1.14);
+  transition: 0.5s all;
+}
+.categories-card .cat-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  z-index: 1;
+}
+
+::ng-deep .categories-slider-six .owl-dots {
+  text-align: center;
+}
+::ng-deep .categories-slider-six .owl-dots .owl-dot {
+  width: 8px;
+  height: 8px;
+  background: #E4EBF1;
+  margin-right: 8px;
+  border-radius: 30px;
+}
+::ng-deep .categories-slider-six .owl-dots .owl-dot.active {
+  width: 22px;
+  background: #CF3425;
+}

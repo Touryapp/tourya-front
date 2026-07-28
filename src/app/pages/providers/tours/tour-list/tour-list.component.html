@@ -1,0 +1,171 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{{ 'tour-list.breadcrumbTitle' | translate }}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="'/'"><i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item"><a [routerLink]="'/providers/tours'">{{ 'tour-list.breadcrumbTours' | translate }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'tour-list.breadcrumbActive' | translate }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xl-2 col-lg-2">
+            </div>
+
+            <div class="col-xl-9 col-lg-9">
+                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <h6 class="mb-3">{{ 'tour-list.resultsFound' | translate: { total: totalElements } }}</h6>
+                </div>
+
+                <div class="hotel-list">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <!-- Tours List -->
+                            <div class="place-item mb-4" *ngFor="let tour of tours; let i = index">
+                                <div class="place-img custom-item">
+                                    <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                                        <ng-template carouselSlide>
+                                            <div class="slide-images">
+                                                <a [routerLink]="[routes.editTour, tour.id]">
+                                                    <img [src]="profilePicture(tour)" class="img-fluid" alt="img">
+                                                </a>
+                                            </div>
+                                        </ng-template>
+                                        
+                                    </owl-carousel-o>
+
+                                    <div class="fav-item">
+                                        <a href="javascript:void(0);" class="fav-icon"
+                                            [ngClass]="isSelected[1]? '':'selected'" (click)="selectClass(1)">
+                                            <i class="isax isax-heart5"></i>
+                                        </a>
+                                        <span class="badge bg-info d-inline-flex align-items-center"><i
+                                                class="isax isax-ranking me-1"></i>Trending</span>
+                                    </div>
+                                </div>
+                                <div class="place-content">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
+                                        <div>
+                                            <h5 class="mb-1 text-truncate"><a [routerLink]="[routes.editTour, tour.id]">
+                                                    {{displayTourName(tour) | localizedName }}
+                                                </a>
+                                            </h5>
+                                            <p class="fs-14 d-flex align-items-center">
+                                                <!-- <i class="isax isax-location5 me-2"></i> -->
+
+                                            </p>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <p class="fs-14 text-gray-9  border-end pe-2 me-2 mb-0">
+                                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span>
+                                                {{tour?.tourCategory?.name}}
+                                            </p>
+                                            <span
+                                                class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{tour?.rating}}</span>
+                                            <!-- <p class="fs-14">(105 Reviews)</p> -->
+                                        </div>
+                                    </div>
+                                    <p class="fs-14 border-bottom pb-3 mb-3"
+                                        [innerHTML]="(displayTourDescription(tour) | localizedName) | slice:0:100 | safeHtml ">
+                                    </p>
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
+                                        <div class="d-flex align-items-center">
+                                            <span class="me-2"><i
+                                                    class="isax isax-calendar-tick text-gray-6"></i></span>
+                                            <p class="fs-14 text-gray-9  border-end pe-2 me-2 mb-0">{{tour?.duration}}
+                                            </p>
+                                            <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
+                                                <i class="isax isax-profile-2user me-1"></i>{{tour?.maxPeople}}
+                                            </p>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <h6
+                                                class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
+                                                {{ 'tour-list.price' | translate }}
+                                                <span class="ms-1 fs-18 fw-semibold text-primary">
+                                                    {{tour?.price}}</span>
+
+                                            </h6>
+
+                                            <a class="me-2" [routerLink]="[routes.editTour, tour.id]">{{ 'tour-list.actions.editTour' | translate }}</a>
+
+                                            <a class="me-2" [routerLink]="['/providers/tours/galleries', tour.id]">
+                                                {{ 'tour-list.actions.editGallery' | translate }}
+                                            </a>
+
+                                            <a class="me-2"
+                                                [routerLink]="['/providers/tours/' + tour.id + '/tour-schedule-list']">
+                                                {{ 'tour-list.actions.listSchedule' | translate }}
+                                            </a>
+
+                                            <a class="me-2" href="javascript:void(0)" (click)="openPrincipalModal(tour)">
+                                                {{ 'tour-list.actions.principalContact' | translate }}
+                                            </a>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Tours List -->
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Pagination -->
+                <nav class="pagination-nav" *ngIf="totalPages > 0">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" [ngClass]="{disabled: page === 0}">
+                            <a class="page-link" aria-label="Previous" (click)="prevPage()">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                            </a>
+                        </li>
+
+                        <li class="page-item" *ngFor="let p of pages ; let i = index" [ngClass]="{active: page === i}">
+                            <a class="page-link" (click)="setPage(i)">
+                                {{i + 1}}
+                            </a>
+
+                        </li>
+
+                        <li class="page-item" [ngClass]="{disabled: page === totalPages - 1}">
+                            <a class="page-link" aria-label="Next" (click)="nextPage()">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /Pagination -->
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+<!-- BE-22b: modal contacto principal del tour -->
+<app-tour-principal-operator-modal
+  [tourId]="selectedTourIdForPrincipal"
+  [tourName]="selectedTourNameForPrincipal"
+  [showModal]="principalModalOpen"
+  (closeModal)="closePrincipalModal()">
+</app-tour-principal-operator-modal>

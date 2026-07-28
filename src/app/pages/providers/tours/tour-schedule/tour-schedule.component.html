@@ -1,0 +1,642 @@
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <!-- Breadcrumb Moved -->
+        <div class="text-center mb-4">
+            <h2 class="mb-2" style="color: black;">{{ 'tour-schedule.breadcrumb.title' | translate }}</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-0">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5" style="color: black;"></i></a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'" style="color: black;">{{ 'tour-schedule.breadcrumb.providersPanel' | translate }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color: black;">
+                        {{ 'tour-schedule.breadcrumb.title' | translate }}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+
+            <!-- Calendar -->
+            <div class="col-lg-8" #calendarContainer>
+                <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" mwlCalendarPreviousView [view]="view"
+                                        [disabled]="!monthIsAfterToday()" [(viewDate)]="viewDate"
+                                        (viewDateChange)="closeOpenMonthViewDay()">
+                                        {{ 'tour-schedule.calendar.previous' | translate }}
+                                    </button>
+                                    <button class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate"
+                                        [disabled]="monthIsTodayMonth()" (viewDateChange)="closeOpenMonthViewDay()">
+                                        {{ 'tour-schedule.calendar.today' | translate }}
+                                    </button>
+                                    <button class="btn btn-primary" mwlCalendarNextView [view]="view"
+                                        [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
+                                        {{ 'tour-schedule.calendar.next' | translate }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):i18nService.getCurrentLanguage() }}</h3>
+                            </div>
+
+
+                        </div>
+
+                        <div class="mt-3">
+                            <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                                [locale]="i18nService.getCurrentLanguage()"
+                                [activeDayIsOpen]="false" (dayClicked)="dayClicked($event.day)"
+                                (eventClicked)="handleEvent('Clicked', $event.event)"
+                                (eventTimesChanged)="eventTimesChanged($event)" [cellTemplate]="monthCellTemplate">
+                            </mwl-calendar-month-view>
+
+
+                            <!-- Caja de previsualización del día seleccionado -->
+                            <div *ngIf="activeDayIsOpen && eventsOnSelectedDay.length > 0"
+                                 class="card border-0 mt-3 cal-open-day-events-custom">
+                                <div class="card-body">
+                                    <h6 class="mb-3 text-primary">
+                                        <i class="isax isax-calendar-tick me-2"></i>
+                                        {{ 'tour-schedule.calendar.scheduleFor' | translate }} {{ calendarSelectedDate | date:'dd/MM/yyyy' }}
+                                    </h6>
+                                    <div *ngFor="let event of eventsOnSelectedDay">
+                                        <ng-container *ngTemplateOutlet="monthEventTitleTemplate; context: {event: event}">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /Calendar -->
+
+            <!-- Add Tour Schedule -->
+            <div class="col-lg-4">
+                <!-- Template Selection -->
+                <div class="card shadow-none mb-4" id="template_selection" *ngIf="!isBackoffice">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 class="fs-18">{{ 'tour-schedule.template.selectionTitle' | translate }}</h5>
+                        </div>
+                    </div>
+                    <div class="card-body pb-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ 'tour-schedule.template.label' | translate }}</label>
+                                    <mat-select class="custom-mat-select select" 
+                                        [placeholder]="'tour-schedule.template.placeholder' | translate" 
+                                        [(ngModel)]="selectedTemplateId"
+                                        (selectionChange)="onTemplateSelectionChange($event)"
+                                        [disabled]="templatesLoading">
+                                        <mat-option *ngIf="templatesLoading" disabled>
+                                            {{ 'tour-schedule.template.loading' | translate }}
+                                        </mat-option>
+                                        <mat-option *ngFor="let template of templates" [value]="template.id">
+                                            {{ template.label }}
+                                        </mat-option>
+                                        <mat-option *ngIf="!templatesLoading && templates.length === 0" disabled>
+                                            {{ 'tour-schedule.template.noTemplates' | translate }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="selectedTemplateId">
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-success btn-sm" 
+                                        (click)="applyTemplate()">
+                                        <i class="isax isax-check me-1"></i>
+                                        {{ 'tour-schedule.template.apply' | translate }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form [formGroup]="tourScheduleForm" (ngSubmit)="onSubmit()">
+                    <div class="card shadow-none" id="basic_info">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">{{ isBackoffice ? 'Configuración de porcentaje Tourya' : ('tour-schedule.config.title' | translate) }}</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+
+                                <div class="col-md-12 d-flex justify-content-end" *ngIf="!isBackoffice">
+                                    <div class="mt-3 mb-3">
+                                        <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                            (click)="resetForm()"><i class=""></i>
+                                            {{ 'tour-schedule.config.reset' | translate }}
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" *ngIf="!isBackoffice">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-schedule.config.label.label' | translate }}</label>
+                                        <input type="text" class="form-control" formControlName="label"
+                                            (blur)="onLabelBlur($event)">
+                                        <div *ngIf="tourScheduleForm.controls['label'].invalid && (tourScheduleForm.controls['label'].dirty || tourScheduleForm.controls['label'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourScheduleForm.controls['label'].errors?.['required']">
+                                                {{ 'tour-schedule.config.label.required' | translate }}
+                                            </div>
+                                            <div *ngIf="tourScheduleForm.controls['label'].errors?.['minlength']">
+                                                {{ 'tour-schedule.config.label.minlength' | translate }}
+                                            </div>
+                                            <div *ngIf="tourScheduleForm.controls['label'].errors?.['maxlength']">
+                                                {{ 'tour-schedule.config.label.maxlength' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="birthdate">{{ 'tour-schedule.config.startDate.label' | translate }}</label>
+                                        <div class=" input-icon">
+
+                                            <div class="input-icon-end position-relative">
+                                                <span class=" input-icon-addon">
+                                                    <i class="fa-regular fa-calendar-days"></i>
+                                                </span>
+
+                                                <input type="text" class="form-control form-control-lg"
+                                                    placeholder="dd-mm-yyyy"
+                                                    [value]="tourScheduleForm.get('startDate')?.value | date: 'dd-MM-yyyy'" readonly 
+                                                    style="cursor: pointer;"
+                                                    (click)="drp.toggle()" />
+                                                
+                                                <input type="text"
+                                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;"
+                                                    bsDaterangepicker #drp="bsDaterangepicker"
+                                                    [bsConfig]="{ displayMonths: 2, showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true, containerClass: 'theme-green' }"
+                                                    container="body"
+                                                    [bsValue]="bsRangeValue"
+                                                    [minDate]="minDateStartDate"
+                                                    (bsValueChange)="onFormDateRangeChange($event)" />
+
+                                                <div *ngIf="tourScheduleForm.controls['startDate'].invalid && (tourScheduleForm.controls['startDate'].dirty || tourScheduleForm.controls['startDate'].touched)"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['startDate'].errors?.['required']">
+                                                        {{ 'tour-schedule.config.startDate.required' | translate }}
+                                                    </div>
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['startDate'].errors?.['invalidDayjsDate']">
+                                                        {{ 'tour-schedule.config.startDate.invalid' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="birthdate">{{ 'tour-schedule.config.endDate.label' | translate }}</label>
+                                        <div class=" input-icon">
+
+                                            <div class="input-icon-end position-relative">
+                                                <span class=" input-icon-addon">
+                                                    <i class="fa-regular fa-calendar-days"></i>
+                                                </span>
+
+                                                <input type="text" class="form-control form-control-lg"
+                                                    placeholder="dd-mm-yyyy"
+                                                    [value]="tourScheduleForm.get('endDate')?.value | date: 'dd-MM-yyyy'" readonly 
+                                                    style="cursor: pointer;"
+                                                    (click)="drp.toggle()" />
+
+                                                <div *ngIf="tourScheduleForm.controls['endDate'].invalid && (tourScheduleForm.controls['endDate'].dirty || tourScheduleForm.controls['endDate'].touched)"
+                                                    class="text-danger">
+
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['required']">
+                                                        {{ 'tour-schedule.config.endDate.required' | translate }}
+                                                    </div>
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidDayjsDate']">
+                                                        {{ 'tour-schedule.config.endDate.invalid' | translate }}
+                                                    </div>
+
+                                                    <div
+                                                        *ngIf="tourScheduleForm.controls['endDate'].errors?.['invalidRangeDate']">
+                                                        {{ 'tour-schedule.config.endDate.invalidRange' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-md-12" *ngIf="isBackoffice">
+                                    <div class="mb-3">
+                                        <label class="form-label">Porcentaje Tourya (%)</label>
+                                        <input type="number" class="form-control" formControlName="touryaPercentage" min="0" max="100" placeholder="Ej. 15">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" *ngIf="!isBackoffice">
+                                    <div class="mb-3 checkbox-group">
+                                        <label class="form-label">{{ 'tour-schedule.config.daysOfWeek.label' | translate }}</label>
+
+                                        <ul>
+                                            <li *ngFor="let day of DAYS_OF_WEEK">
+                                                <mat-checkbox 
+                                                    [checked]="isDaySelected(day.value)"
+                                                    (change)="onDayChange(day.value, $event)">
+                                                    {{ day.label | translate }}
+                                                </mat-checkbox>
+                                            </li>
+                                        </ul>
+
+                                        <div *ngIf="tourScheduleForm.controls['daysOfWeek'].invalid && (tourScheduleForm.controls['daysOfWeek'].dirty || tourScheduleForm.controls['daysOfWeek'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourScheduleForm.controls['daysOfWeek'].errors?.['required']">
+                                                {{ 'tour-schedule.config.daysOfWeek.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="card shadow-none" id="slots" *ngIf="!isBackoffice">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">{{ 'tour-schedule.slots.title' | translate }}</h5>
+                            </div>
+                        </div>
+
+                        <div class="card-body pb-1">
+                            <div formArrayName="slots">
+                                <ng-container *ngFor="let slot of slots.controls; let i=index" [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="mb-3">
+                                                <h6>{{ 'tour-schedule.slots.slotNumber' | translate }}{{i + 1}}</h6>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <a *ngIf="slots.length > 1"
+                                                class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                (click)="removeSlot(i)">
+                                                <i class="isax isax-trash"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">                                                 <label class="form-label">{{ 'tour-schedule.slots.startTime.label' | translate }}</label>
+                                                <input type="text" type="time" class="form-control"
+                                                    formControlName="startTime" (blur)="onStartTimeBlur(i)">
+
+                                                <div *ngIf=" slot.get('startTime')?.invalid &&
+                                                    (slot.get('startTime')?.touched || slot.get('startTime')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="slot.get('startTime')?.errors?.['required']">
+                                                        {{ 'tour-schedule.slots.startTime.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-schedule.slots.endTime.label' | translate }}</label>
+                                                <input type="text" type="time" class="form-control"
+                                                    formControlName="endTime" (blur)="onEndTimeBlur(i)">
+
+                                                <div *ngIf="slot.get('endTime')?.invalid && (slot.get('endTime')?.touched || slot.get('endTime')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="slot.get('endTime')?.errors?.['required']">
+                                                        {{ 'tour-schedule.slots.endTime.required' | translate }}
+                                                    </div>
+
+                                                    <div *ngIf="slot.get('endTime')?.errors?.['invalidRangeTime']">
+                                                        {{ 'tour-schedule.slots.endTime.invalidRange' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-schedule.slots.capacity.label' | translate }}</label>
+                                                <input type="number" class="form-control"
+                                                    [readonly]="isUnlimitedCapacity"
+                                                    [placeholder]="isUnlimitedCapacity ? ('tour-schedule.slots.capacity.unlimited' | translate) : ''"
+                                                    formControlName="capacity" min="1">
+
+                                                <div *ngIf="slot.get('capacity')?.invalid && (slot.get('capacity')?.touched || slot.get('capacity')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="slot.get('capacity')?.errors?.['required']">
+                                                        {{ 'tour-schedule.slots.capacity.required' | translate }}
+                                                    </div>
+                                                    <div *ngIf="slot.get('capacity')?.errors?.['min']">
+                                                        {{ 'tour-schedule.slots.capacity.min' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                        <div class="card shadow-none" id="prices">
+                                            <div class="card-header">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h5 class="fs-18">{{ 'tour-schedule.prices.title' | translate }}</h5>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="card-body pb-1">
+
+                                                <div formArrayName="prices">
+                                                    <ng-container *ngFor="let price of prices(i).controls; let j=index"
+                                                        [formGroupName]="j">
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <div class="mb-3">
+                                                                    <h6>{{ 'tour-schedule.prices.priceNumber' | translate }}{{j + 1}}</h6>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-2">
+                                                                <a *ngIf="prices(i).length > 1"
+                                                                    class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                    (click)="removePrice(i, j)">
+                                                                    <i class="isax isax-trash"></i>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">{{ 'tour-schedule.prices.ageType.label' | translate }}</label>
+
+                                                                    <mat-select class="custom-mat-select select"
+                                                                        [placeholder]="'tour-form.fields.category.placeholder' | translate" formControlName="ageType"
+                                                                        (selectionChange)="onAgeTypeChange(i, j)">
+                                                                        <ng-container *ngIf="isGroupTour">
+                                                                            <mat-option [value]="TypeOfPersonLabel.ANY">
+                                                                                {{ 'tour-schedule.prices.ageType.ANY' | translate }}
+                                                                            </mat-option>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="!isGroupTour">
+                                                                            <mat-option
+                                                                                *ngIf="isAnyOptionAvailable(i, j)"
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ANY, i, j)"
+                                                                                [value]="TypeOfPersonLabel.ANY">
+                                                                                {{ 'tour-schedule.prices.ageType.ANY' | translate }}
+                                                                            </mat-option>
+                                                                            <mat-option
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ADULT, i, j)"
+                                                                                [value]="TypeOfPersonLabel.ADULT">
+                                                                                {{ 'tour-schedule.prices.ageType.ADULT' | translate }}
+                                                                            </mat-option>
+                                                                            <mat-option
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.CHILD, i, j)"
+                                                                                [value]="TypeOfPersonLabel.CHILD">
+                                                                                {{ 'tour-schedule.prices.ageType.CHILD' | translate }}
+                                                                            </mat-option>
+                                                                            <mat-option
+                                                                                [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.INFANT, i, j)"
+                                                                                [value]="TypeOfPersonLabel.INFANT">
+                                                                                {{ 'tour-schedule.prices.ageType.INFANT' | translate }}
+                                                                            </mat-option>
+                                                                        </ng-container>
+                                                                    </mat-select>
+
+                                                                    <div *ngIf=" price.get('ageType')?.invalid && (price.get('ageType')?.touched || price.get('ageType')?.dirty)"
+                                                                        class="text-danger">
+                                                                        <div
+                                                                            *ngIf="price.get('ageType')?.errors?.['required']">
+                                                                            {{ 'tour-schedule.prices.ageType.required' | translate }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+
+
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">{{ 'tour-schedule.prices.price.label' | translate }}</label>
+                                                                    <input type="text" type="number"
+                                                                        class="form-control" formControlName="providerPrice"
+                                                                        (blur)="onPriceBlur(i, j)" [min]="0"
+                                                                        [readonly]="price.get('ageType')?.value === TypeOfPersonLabel.INFANT">
+
+                                                                    <div *ngIf="price.get('providerPrice')?.invalid && (price.get('providerPrice')?.touched || price.get('providerPrice')?.dirty)"
+                                                                        class="text-danger">
+                                                                             {{ 'tour-schedule.prices.price.required' | translate }}
+
+                                                                             {{ 'tour-schedule.prices.price.min' | translate }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <div class="mt-3 mb-3" *ngIf="!isGroupTour">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-primary btn-sm add-highlight"
+                                                            (click)="addPrice(i)"><i
+                                                                class="isax isax-add-circle me-1"></i>
+                                                            {{ 'tour-schedule.prices.addNew' | translate }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <div class="mt-3 mb-3">
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                        (click)="addSlot()"><i class="isax isax-add-circle me-1"></i>
+                                        {{ 'tour-schedule.actions.addNewSlot' | translate }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="save">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-primary" *ngIf="!isBackoffice"
+                                [disabled]="loading || (submitted && tourScheduleForm.touched && tourScheduleForm.invalid)">
+                                <span *ngIf="!allDaysHaveSlots">{{ 'tour-schedule.actions.addSchedule' | translate }}</span>
+                                <span *ngIf="allDaysHaveSlots">{{ 'tour-schedule.actions.editSchedule' | translate }}</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm">
+                                </div>
+                            </button>
+                            <button type="button" class="btn btn-primary" *ngIf="isBackoffice" [disabled]="loading" (click)="saveTouryaPercentageRange()">
+                                <span>Guardar porcentaje</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="errorMessage" class="mt-3">
+                        <p class="text-danger text-center">
+                            {{ errorMessage }}
+                        </p>
+                    </div>
+
+                </form>
+            </div>
+            <!-- /Add Tour Schedule -->
+
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+
+<!-- MontCellTemplate -->
+<ng-template #monthCellTemplate let-day="day">
+    <div class="cal-cell" [class.cal-today]="day.isToday" [class.cal-weekend]="day.isWeekend"
+        [class.cal-in-month]="day.inMonth" [class.cal-out-month]="!day.inMonth"
+        [class.cal-selected-range]="isDateInSelectedRange(day.date)">
+        <div class="cal-cell-top" [style.opacity]="(day.inMonth && isPast(day.date)) ? '0.3' : '1'">
+
+            <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber' }}</span>
+        </div>
+        <div class="cal-events">
+            <div class="cal-event" *ngFor="let event of day.events" [style.backgroundColor]="event.color?.primary">
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- /MontCellTemplate -->
+
+<!-- monthEventTitleTemplate -->
+<ng-template #monthEventTitleTemplate let-event="event" class="cal-event">
+    <div *ngIf="event.meta?.slots">
+
+        <!-- Cabecera: Configuración + Días (igual que app-tour-schedule-test) -->
+        <div class="mb-2">
+            <strong>{{ 'tour-schedule.messages.config' | translate }}</strong> {{ event.meta.label }}
+        </div>
+        <div class="mb-2">
+            <strong>{{ 'tour-schedule.messages.days' | translate }}</strong>
+            <span *ngFor="let day of event.meta.daysOfWeek; let i = index">
+                {{ getDayAbbreviation(day) }}<span *ngIf="i < event.meta.daysOfWeek.length - 1">, </span>
+            </span>
+        </div>
+
+
+        <!-- Tabla de slots -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-sm align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center" style="width:30%">{{ 'tour-schedule.messages.schedule' | translate }}</th>
+                        <th class="text-center" style="width:20%">{{ 'tour-schedule.messages.availability' | translate }}</th>
+                        <th>{{ 'tour-schedule.prices.title' | translate }}</th>
+                        <th *ngIf="isBackoffice" class="text-center" style="width:20%">Porcentaje Tourya</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let slot of getSlotsByDate(event, calendarSelectedDate!)">
+                        <!-- Horario -->
+                        <td class="text-center">
+                            <span class="badge bg-primary px-3 py-2">
+                                {{ slot.startTime }} - {{ slot.endTime }}
+                            </span>
+                        </td>
+                        <!-- Disponibilidad -->
+                        <td class="text-center">
+                            <div class="small text-muted">{{ 'tour-schedule.messages.capacity' | translate }} <strong>{{ slot.capacity }}</strong></div>
+                            <div class="small">
+                                {{ 'tour-schedule.messages.availability' | translate }}:
+                                <strong [class.text-success]="(slot.availability ?? slot.capacity) > 0"
+                                        [class.text-danger]="(slot.availability ?? slot.capacity) <= 0">
+                                    {{ slot.availability ?? slot.capacity }}
+                                </strong>
+                            </div>
+                        </td>
+                        <!-- Precios — TC-008: PROVIDER solo ve providerPrice; ADMIN/BACKOFFICE ven Cliente + Provider. -->
+                        <td>
+                            <div *ngFor="let price of slot.prices" class="d-flex justify-content-between align-items-center mb-1 flex-wrap">
+                                <span class="text-muted small me-2">{{ getAgeTypeDisplay(price.ageType) }}:</span>
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <span *ngIf="isBackoffice && price.price != null" class="badge bg-info text-dark fw-semibold">
+                                        {{ 'tour-schedule.prices.clientBadge' | translate }}: {{ price.price | currency:'COP':'symbol':'1.0-0' }}
+                                    </span>
+                                    <span class="badge bg-secondary fw-semibold">
+                                        {{ 'tour-schedule.prices.providerBadge' | translate }}: {{ price.providerPrice | currency:'COP':'symbol':'1.0-0' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <!-- Porcentaje Tourya -->
+                        <td *ngIf="isBackoffice" class="text-center align-middle">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <input type="number" class="form-control form-control-sm me-2" style="width: 70px;" min="0" max="100" [(ngModel)]="slot.slotPorcentajeTourya">
+                                <button class="btn btn-sm btn-primary" (click)="saveTouryaPercentage(slot, getScheduleIdByDate(event, calendarSelectedDate!))" title="Guardar porcentaje">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Sin slots para este día -->
+                    <tr *ngIf="getSlotsByDate(event, calendarSelectedDate!).length === 0">
+                        <td [attr.colspan]="isBackoffice ? 4 : 3" class="text-center text-muted py-3">
+                            <i class="isax isax-info-circle me-1"></i>
+                            {{ 'tour-schedule.messages.noSlots' | translate }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</ng-template>
+<!-- /monthEventTitleTemplate -->
+
+
+<!-- Modal for ANY to ADULT conversion -->
+<div class="modal fade show" *ngIf="showAnyModal" style="display: block; background-color: rgba(0,0,0,0.5);" 
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'tour-schedule.anyModal.title' | translate }}</h5>
+                <button type="button" class="btn-close" (click)="closeAnyModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'tour-schedule.anyModal.p1' | translate }}</p>
+                <p>{{ 'tour-schedule.anyModal.p2' | translate }}</p>
+                <p>{{ 'tour-schedule.anyModal.p3' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeAnyModal()">{{ 'tour-schedule.anyModal.cancel' | translate }}</button>
+                <button type="button" class="btn btn-primary" (click)="confirmAnyToAdultConversion()">{{ 'tour-schedule.anyModal.confirm' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Modal for ANY to ADULT conversion -->

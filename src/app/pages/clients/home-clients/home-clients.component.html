@@ -1,0 +1,1623 @@
+<!-- Hero Section -->
+<section class="hero-sec-six">
+    <div class="banner-slider banner-sec">
+        <owl-carousel-o #bannerCarousel [options]="bannerSlider" (changed)="onCarouselChanged($event)">
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya1.png" alt="TourYa 1">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya2.png" alt="TourYa 2">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya3.png" alt="TourYa 3">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya4.png" alt="TourYa 4">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya5.png" alt="TourYa 5">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya6.png" alt="TourYa 6">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya7.png" alt="TourYa 7">
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="slider-img">
+                    <img src="/assets/img/carrousel/tourya8.png" alt="TourYa 8">
+                </div>
+            </ng-template>
+
+        </owl-carousel-o>
+    </div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="banner-content aos mb-4" data-aos="fade-up" data-aos-duration="2000">
+                        <h1 class="text-white display-5 mb-2">{{'home.title' | translate}}</h1>
+                        <P class="text-white">{{'home.subtitle' | translate}}</P>
+                    </div>
+                    <div class="banner-form-tab-six">
+                        <ul class="nav">
+                            <li>
+                                <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab"
+                                    data-bs-target="#Tour">
+                                    <i class="fa-solid fa-camera me-2"></i>Tour
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="banner-form card mb-0">
+                        <div class="card-body">
+                            <div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade" id="flight" style="display: none;">
+                                        <form (ngSubmit)="onSubmit2()">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                        <input class="form-check-input mt-0" type="radio" name="Radio"
+                                                            id="oneway" value="oneway" checked (click)="onCheck()">
+                                                        <label class="form-check-label fs-14 ms-2" for="oneway">
+                                                            Oneway
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                        <input class="form-check-input mt-0" type="radio" name="Radio"
+                                                            id="roundtrip" value="roundtrip" (click)="onCheck2()">
+                                                        <label class="form-check-label fs-14 ms-2" for="roundtrip">
+                                                            Round Trip
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                        <input class="form-check-input mt-0" type="radio" name="Radio"
+                                                            id="multiway" value="multiway" (click)="onCheck3()">
+                                                        <label class="form-check-label fs-14 ms-2" for="multiway">
+                                                            Multi Trip
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <h6 class="fw-medium fs-16 mb-2">Millions of cheap flights. One simple
+                                                    search</h6>
+                                            </div>
+                                            <div class="normal-trip" [ngStyle]="{'display':isChecked3?'none':'block'}">
+                                                <div class="d-lg-flex">
+                                                    <div class="d-flex  form-info">
+                                                        <div class="form-item dropdown">
+                                                            <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                                aria-expanded="false" role="menu">
+                                                                <label
+                                                                    class="form-label fs-14 text-default mb-1">From</label>
+                                                                <input type="text" class="form-control" value="Newyork">
+                                                                <p class="fs-12 mb-0">Ken International Airport</p>
+                                                            </div>
+                                                            <div class="dropdown-menu dropdown-md p-0">
+                                                                <div class="input-search p-3 border-bottom">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="Search Location">
+                                                                        <span
+                                                                            class="input-group-text px-2 border-start-0"><i
+                                                                                class="isax isax-search-normal"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <ul>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Newyork</h6>
+                                                                            <p>Ken International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Boston</h6>
+                                                                            <p>Boston Logan International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Northern
+                                                                                Virginia</h6>
+                                                                            <p>Dulles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Los Angeles</h6>
+                                                                            <p>Los Angeles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Orlando</h6>
+                                                                            <p>Orlando International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-item dropdown ps-2 ps-sm-3">
+                                                            <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                                aria-expanded="false" role="menu">
+                                                                <label
+                                                                    class="form-label fs-14 text-default mb-1">To</label>
+                                                                <h5>Las Vegas</h5>
+                                                                <p class="fs-12 mb-0">Martini International Airport</p>
+                                                                <span
+                                                                    class="way-icon badge badge-primary rounded-pill translate-middle">
+                                                                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="dropdown-menu dropdown-md p-0">
+                                                                <div class="input-search p-3 border-bottom">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="Search Location">
+                                                                        <span
+                                                                            class="input-group-text px-2 border-start-0"><i
+                                                                                class="isax isax-search-normal"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <ul>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Newyork</h6>
+                                                                            <p>Ken International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Boston</h6>
+                                                                            <p>Boston Logan International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Northern
+                                                                                Virginia</h6>
+                                                                            <p>Dulles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Los Angeles</h6>
+                                                                            <p>Los Angeles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Orlando</h6>
+                                                                            <p>Orlando International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-item">
+                                                            <label
+                                                                class="form-label fs-14 text-default mb-1">Departure</label>
+                                                            <input type="text" class="form-control datetimepicker"
+                                                                bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                                placeholder="21-10-2024" [bsValue]="bsValue"
+                                                                [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                            <p class="fs-12 mb-0">Monday</p>
+                                                        </div>
+                                                        <div class="form-item round-drip"
+                                                            [ngStyle]="{'display':isChecked2?'block':'none'}">
+                                                            <label
+                                                                class="form-label fs-14 text-default mb-1">Return</label>
+                                                            <input type="text" class="form-control datetimepicker"
+                                                                bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                                placeholder="21-10-2024" [bsValue]="bsValue"
+                                                                [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                            <p class="fs-12 mb-0">Wednesday</p>
+                                                        </div>
+                                                        <div class="form-item dropdown">
+                                                            <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                                aria-expanded="false" role="menu">
+                                                                <label
+                                                                    class="form-label fs-14 text-default mb-1">Travellers
+                                                                    and cabin class</label>
+                                                                <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
+                                                                <p class="fs-12 mb-0">1 Adult, Economy</p>
+                                                            </div>
+                                                            <div class="dropdown-menu dropdown-menu-end dropdown-xl">
+                                                                <h5 class="mb-3">Select Travelers & Class</h5>
+                                                                <div class="mb-3 border br-10 info-item pb-1">
+                                                                    <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
+                                                                    <div class="row">
+                                                                        <div class="col-md-4">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label text-gray-9 mb-2">Adults
+                                                                                    <span
+                                                                                        class="text-default fw-normal">(
+                                                                                        12+ Yrs )</span></label>
+                                                                                <app-common-counter />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label text-gray-9 mb-2">Childrens
+                                                                                    <span
+                                                                                        class="text-default fw-normal">(
+                                                                                        2-12 Yrs )</span></label>
+                                                                                <app-common-counter />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label text-gray-9 mb-2">Infants<span
+                                                                                        class="text-default fw-normal">(
+                                                                                        0-12 Yrs )</span></label>
+                                                                                <app-common-counter />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3 border br-10 info-item pb-1">
+                                                                    <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
+                                                                    <div class="d-flex align-items-center flex-wrap">
+                                                                        <div class="form-check me-3 mb-3">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                value="Economy" name="cabin-class"
+                                                                                id="economy" checked>
+                                                                            <label class="form-check-label"
+                                                                                for="economy">
+                                                                                Economy
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-check me-3 mb-3">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                value="Economy" name="cabin-class"
+                                                                                id="premium-economy">
+                                                                            <label class="form-check-label"
+                                                                                for="premium-economy">
+                                                                                Premium Economy
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-check me-3 mb-3">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                value="Business" name="cabin-class"
+                                                                                id="business">
+                                                                            <label class="form-check-label"
+                                                                                for="business">
+                                                                                Business
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-check mb-3">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                value="First Class" name="cabin-class"
+                                                                                id="first-class">
+                                                                            <label class="form-check-label"
+                                                                                for="first-class">
+                                                                                First Class
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex justify-content-end">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-light btn-sm me-2">Cancel</a>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary btn-sm">Apply</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit"
+                                                        class="btn btn-primary search-btn rounded">Search</button>
+                                                </div>
+                                            </div>
+                                            <div class="multi-trip" [ngStyle]="{'display':isChecked3?'block':'none'}">
+                                                <div class="d-lg-flex">
+                                                    <div class="d-flex  form-info">
+                                                        <div class="form-item dropdown">
+                                                            <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                                aria-expanded="false" role="menu">
+                                                                <label
+                                                                    class="form-label fs-14 text-default mb-1">From</label>
+                                                                <input type="text" class="form-control" value="Newyork">
+                                                                <p class="fs-12 mb-0">Ken International Airport</p>
+                                                            </div>
+                                                            <div class="dropdown-menu dropdown-md p-0">
+                                                                <div class="input-search p-3 border-bottom">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="Search Location">
+                                                                        <span
+                                                                            class="input-group-text px-2 border-start-0"><i
+                                                                                class="isax isax-search-normal"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <ul>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Newyork</h6>
+                                                                            <p>Ken International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Boston</h6>
+                                                                            <p>Boston Logan International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Northern
+                                                                                Virginia</h6>
+                                                                            <p>Dulles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Los Angeles</h6>
+                                                                            <p>Los Angeles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Orlando</h6>
+                                                                            <p>Orlando International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-item dropdown ps-2 ps-sm-3">
+                                                            <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                                aria-expanded="false" role="menu">
+                                                                <label
+                                                                    class="form-label fs-14 text-default mb-1">To</label>
+                                                                <h5>Las Vegas</h5>
+                                                                <p class="fs-12 mb-0">Martini International Airport</p>
+                                                                <span
+                                                                    class="way-icon badge badge-primary rounded-pill translate-middle">
+                                                                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="dropdown-menu dropdown-md p-0">
+                                                                <div class="input-search p-3 border-bottom">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="Search Location">
+                                                                        <span
+                                                                            class="input-group-text px-2 border-start-0"><i
+                                                                                class="isax isax-search-normal"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <ul>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Newyork</h6>
+                                                                            <p>Ken International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Boston</h6>
+                                                                            <p>Boston Logan International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Northern
+                                                                                Virginia</h6>
+                                                                            <p>Dulles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="border-bottom">
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Los Angeles</h6>
+                                                                            <p>Los Angeles International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item"
+                                                                            href="javascript:void(0);">
+                                                                            <h6 class="fs-16 fw-medium">Orlando</h6>
+                                                                            <p>Orlando International Airport</p>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-item">
+                                                            <label
+                                                                class="form-label fs-14 text-default mb-1">Departure</label>
+                                                            <input type="text" class="form-control datetimepicker"
+                                                                bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                                placeholder="21-10-2024" [bsValue]="bsValue"
+                                                                [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                            <p class="fs-12 mb-0">Monday</p>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit"
+                                                        class="btn btn-primary search-btn rounded">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="Hotels" style="display: none;">
+                                        <form (ngSubmit)="onSubmit()">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                                <h6 class="fw-medium fs-16 mb-2">Book Hotel - Villas, Apartments & more.
+                                                </h6>
+                                            </div>
+                                            <div class="d-lg-flex">
+                                                <div class="d-flex  form-info">
+                                                    <div class="form-item dropdown">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label class="form-label fs-14 text-default mb-1">City,
+                                                                Property name or Location</label>
+                                                            <input type="text" class="form-control" value="Newyork">
+                                                            <p class="fs-12 mb-0">USA</p>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-md p-0">
+                                                            <div class="input-search p-3 border-bottom">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control"
+                                                                        placeholder="Search for City, Property name or Location">
+                                                                    <span
+                                                                        class="input-group-text px-2 border-start-0"><i
+                                                                            class="isax isax-search-normal"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <ul>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">USA</h6>
+                                                                        <p>2000 Properties</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Japan</h6>
+                                                                        <p>3000 Properties</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Singapore</h6>
+                                                                        <p>8000 Properties</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Russia</h6>
+                                                                        <p>8000 Properties</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Germany</h6>
+                                                                        <p>2000 Properties</p>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1">Check
+                                                            In</label>
+                                                        <input type="text" class="form-control datetimepicker"
+                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                            placeholder="21-10-2024" [bsValue]="bsValue"
+                                                            [minDate]="minDate"
+                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                        <p class="fs-12 mb-0">Monday</p>
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1">Check
+                                                            Out</label>
+                                                        <input type="text" class="form-control datetimepicker"
+                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                            placeholder="21-10-2024" [bsValue]="bsValue"
+                                                            [minDate]="minDate"
+                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                        <p class="fs-12 mb-0">Monday</p>
+                                                    </div>
+                                                    <div class="form-item dropdown">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label
+                                                                class="form-label fs-14 text-default mb-1">Guests</label>
+                                                            <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
+                                                            <p class="fs-12 mb-0">4 Adult, 2 Rooms</p>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-menu-end dropdown-xl">
+                                                            <h5 class="mb-3">Select Travelers & Class</h5>
+                                                            <div class="mb-3 border br-10 info-item pb-1">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div
+                                                                            class="mb-3 d-flex align-items-center justify-content-between">
+                                                                            <label
+                                                                                class="form-label text-gray-9 mb-2">Rooms</label>
+                                                                            <app-common-counter />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div
+                                                                            class="mb-3 d-flex align-items-center justify-content-between">
+                                                                            <label
+                                                                                class="form-label text-gray-9 mb-2">Adults</label>
+                                                                            <app-common-counter />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div
+                                                                            class="mb-3 d-flex align-items-center justify-content-between">
+                                                                            <label
+                                                                                class="form-label text-gray-9 mb-2">Children
+                                                                                <span class="text-default fw-normal">(
+                                                                                    2-12 Yrs )</span></label>
+                                                                            <app-common-counter />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div
+                                                                            class="mb-3 d-flex align-items-center justify-content-between">
+                                                                            <label
+                                                                                class="form-label text-gray-9 mb-2">Infants
+                                                                                <span class="text-default fw-normal">(
+                                                                                    0-12 Yrs )</span></label>
+                                                                            <app-common-counter />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3 border br-10 info-item pb-1">
+                                                                <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
+                                                                <div class="d-flex align-items-center flex-wrap">
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="room" id="room1" checked>
+                                                                        <label class="form-check-label" for="room1">
+                                                                            Single
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="room" id="room2">
+                                                                        <label class="form-check-label" for="room2">
+                                                                            Double
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="room" id="room3">
+                                                                        <label class="form-check-label" for="room3">
+                                                                            Delux
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="room" id="room4">
+                                                                        <label class="form-check-label" for="room4">
+                                                                            Suite
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3 border br-10 info-item pb-1">
+                                                                <h6 class="fs-16 fw-medium mb-2">Property Type</h6>
+                                                                <div class="d-flex align-items-center flex-wrap">
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="property" id="property1" checked>
+                                                                        <label class="form-check-label" for="property1">
+                                                                            Villa
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="property" id="property2">
+                                                                        <label class="form-check-label" for="property2">
+                                                                            Condo
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="property" id="property3">
+                                                                        <label class="form-check-label" for="property3">
+                                                                            Cabin
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="property" id="property4">
+                                                                        <label class="form-check-label" for="property4">
+                                                                            Apartments
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-end">
+                                                                <a href="javascript:void(0);"
+                                                                    class="btn btn-light btn-sm me-2">Cancel</a>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary btn-sm">Apply</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item dropdown">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label class="form-label fs-14 text-default mb-1">Price per
+                                                                Night</label>
+                                                            <input type="text" class="form-control"
+                                                                value="$1000 - $15000">
+                                                            <p class="fs-12 mb-0">20 Offers Available</p>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-md p-0">
+                                                            <ul>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">$500 - $2000</h6>
+                                                                        <p>Upto 65% offers</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Upto 65% offers</h6>
+                                                                        <p>Upto 40% offers</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">$5000 - $8000</h6>
+                                                                        <p>Upto 35% offers</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">$9000 - $11000</h6>
+                                                                        <p>Upto 20% offers</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">$11000 - $15000</h6>
+                                                                        <p>Upto 10% offers</p>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit"
+                                                    class="btn btn-primary search-btn rounded">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="Cars" style="display: none;">
+                                        <form (ngSubmit)="onSubmit3()">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center flex-wrap">
+                                                    <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                        <input class="form-check-input mt-0" type="radio" name="drop"
+                                                            id="same-drop" value="same-drop" checked (click)="reset()">
+                                                        <label class="form-check-label fs-14 ms-2" for="same-drop">
+                                                            Same drop-off
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                        <input class="form-check-input mt-0" type="radio" name="drop"
+                                                            id="different-drop" value="different-drop"
+                                                            (click)="onCheck4()">
+                                                        <label class="form-check-label fs-14 ms-2" for="different-drop">
+                                                            Different Drop off
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                        <input class="form-check-input mt-0" type="radio" name="drop"
+                                                            id="airport" value="airport" (click)="onCheck5()">
+                                                        <label class="form-check-label fs-14 ms-2" for="airport">
+                                                            Airport
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check d-flex align-items-center me-3 mb-2">
+                                                        <input class="form-check-input mt-0" type="radio" name="drop"
+                                                            id="hourly-drop" value="hourly-drop" (click)="onCheck6()">
+                                                        <label class="form-check-label fs-14 ms-2" for="hourly-drop">
+                                                            Hourly Package
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <h6 class="fw-medium fs-16 mb-2">Book Car for rental</h6>
+                                            </div>
+                                            <div class="d-lg-flex">
+                                                <div class="d-flex  form-info">
+                                                    <div class="form-item dropdown from-location"
+                                                        [ngStyle]="{ display: isChecked5 ? 'none' : 'block' }">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label
+                                                                class="form-label fs-14 text-default mb-1">From</label>
+                                                            <input type="text" class="form-control" value="Newyork">
+                                                            <p class="fs-12 mb-0">USA</p>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-md p-0">
+                                                            <div class="input-search p-3 border-bottom">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control"
+                                                                        placeholder="Search for Cars">
+                                                                    <span
+                                                                        class="input-group-text px-2 border-start-0"><i
+                                                                            class="isax isax-search-normal"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <ul>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">USA</h6>
+                                                                        <p>2000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Japan</h6>
+                                                                        <p>3000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Singapore</h6>
+                                                                        <p>8000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Russia</h6>
+                                                                        <p>8000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Germany</h6>
+                                                                        <p>6000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item dropdown pickup-airport"
+                                                        [ngStyle]="{display: (toreset || isChecked4 || isChecked6)? 'none' :'block'}">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label
+                                                                class="form-label fs-14 text-default mb-1">From</label>
+                                                            <input type="text" class="form-control" value="Newyork">
+                                                            <p class="fs-12 mb-0">Ken International Airport</p>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-md p-0">
+                                                            <div class="input-search p-3 border-bottom">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control"
+                                                                        placeholder="Search for Airport">
+                                                                    <span
+                                                                        class="input-group-text px-2 border-start-0"><i
+                                                                            class="isax isax-search-normal"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <ul>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Hartsfield-Jackson
+                                                                            Atlanta International</h6>
+                                                                        <p>USA</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Dallas/Fort Worth
+                                                                            International</h6>
+                                                                        <p>USA</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">London Heathrow</h6>
+                                                                        <p>UK</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Seoul Incheon</h6>
+                                                                        <p>South Korea</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Singapore Changi
+                                                                            International</h6>
+                                                                        <p>Singapore</p>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item dropdown to-location ps-2 ps-sm-3"
+                                                        [ngStyle]="{ display: isChecked6 ? 'none' : 'block' }">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label class="form-label fs-14 text-default mb-1">To</label>
+                                                            <input type="text" class="form-control" value="Newyork">
+                                                            <p class="fs-12 mb-0">USA</p>
+                                                            <span
+                                                                class="way-icon badge badge-primary rounded-pill translate-middle">
+                                                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                                            </span>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-md p-0">
+                                                            <div class="input-search p-3 border-bottom">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control"
+                                                                        placeholder="Search for Cars">
+                                                                    <span
+                                                                        class="input-group-text px-2 border-start-0"><i
+                                                                            class="isax isax-search-normal"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <ul>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">USA</h6>
+                                                                        <p>2000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Japan</h6>
+                                                                        <p>3000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Singapore</h6>
+                                                                        <p>8000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Russia</h6>
+                                                                        <p>8000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Germany</h6>
+                                                                        <p>6000 Cars</p>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label
+                                                            class="form-label fs-14 text-default mb-1">Departure</label>
+                                                        <input type="text" class="form-control datetimepicker"
+                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                            placeholder="21-10-2024" [bsValue]="bsValue"
+                                                            [minDate]="minDate"
+                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                        <p class="fs-12 mb-0">Monday</p>
+                                                    </div>
+                                                    <div class="form-item return-drop"
+                                                        [ngStyle]="{display: isChecked4? 'block' :'none'}">
+                                                        <label class="form-label fs-14 text-default mb-1">Return</label>
+                                                        <input type="text" class="form-control datetimepicker"
+                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                            placeholder="21-10-2024" [bsValue]="bsValue"
+                                                            [minDate]="minDate"
+                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                        <p class="fs-12 mb-0">Wednesday</p>
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1">Pickup
+                                                            Time</label>
+                                                        <!-- <p-datepicker inputId="calendar-timeonly" [(ngModel)]="time" defaultTime [timeOnly]="true"/> -->
+                                                        <p-calendar inputId="calendar-timeonly" [(ngModel)]="time"
+                                                            name="time" [timeOnly]="true" [hourFormat]="'12'"
+                                                            placeholder="11:45 PM">
+                                                        </p-calendar>
+                                                    </div>
+                                                    <div class="form-item dropoff-time"
+                                                        [ngStyle]="{display: isChecked4? 'block' :'none'}">
+                                                        <label class="form-label fs-14 text-default mb-1">Dropoff
+                                                            Time</label>
+                                                        <p-calendar inputId="calendar-timeonly" [(ngModel)]="time"
+                                                            name="time" [timeOnly]="true" [hourFormat]="'12'"
+                                                            placeholder="11:45 PM">
+                                                        </p-calendar>
+                                                    </div>
+                                                    <div class="form-item hourly-time"
+                                                        [ngStyle]="{display: (toreset || isChecked4 || isChecked5) ? 'none' :'block'}">
+                                                        <label class="form-label fs-14 text-default mb-1">Hours</label>
+                                                        <h5>02 Hrs 10 Kms</h5>
+                                                    </div>
+                                                </div>
+                                                <button type="submit"
+                                                    class="btn btn-primary search-btn rounded">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="Cruise" style="display: none;">
+                                        <form (ngSubmit)="onSubmit4()">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                                <h6 class="fw-medium fs-16 mb-2">Search For Cruise</h6>
+                                            </div>
+                                            <div class="d-lg-flex">
+                                                <div class="d-flex  form-info">
+                                                    <div class="form-item dropdown">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label
+                                                                class="form-label fs-14 text-default mb-1">Destination</label>
+                                                            <input type="text" class="form-control" value="Newyork">
+                                                            <p class="fs-12 mb-0">USA</p>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-md p-0">
+                                                            <div class="input-search p-3 border-bottom">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control"
+                                                                        placeholder="Search Location">
+                                                                    <span
+                                                                        class="input-group-text px-2 border-start-0"><i
+                                                                            class="isax isax-search-normal"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <ul>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Newyork</h6>
+                                                                        <p>Ken International Airport</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Boston</h6>
+                                                                        <p>Boston Logan International Airport</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Northern Virginia
+                                                                        </h6>
+                                                                        <p>Dulles International Airport</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Los Angeles</h6>
+                                                                        <p>Los Angeles International Airport</p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="border-bottom">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <h6 class="fs-16 fw-medium">Orlando</h6>
+                                                                        <p>Orlando International Airport</p>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1">Start
+                                                            Date</label>
+                                                        <input type="text" class="form-control datetimepicker"
+                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                            placeholder="21-10-2024" [bsValue]="bsValue"
+                                                            [minDate]="minDate"
+                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                        <p class="fs-12 mb-0">Monday</p>
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1">End
+                                                            Date</label>
+                                                        <input type="text" class="form-control datetimepicker"
+                                                            bsDatepicker [bsConfig]="{ adaptivePosition: true }"
+                                                            placeholder="21-10-2024" [bsValue]="bsValue"
+                                                            [minDate]="minDate"
+                                                            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" />
+                                                        <p class="fs-12 mb-0">Monday</p>
+                                                    </div>
+                                                    <div class="form-item dropdown">
+                                                        <div data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" role="menu">
+                                                            <label class="form-label fs-14 text-default mb-1">Travellers
+                                                                & Cabin </label>
+                                                            <h5>4 <span class="fw-normal fs-14">Persons</span></h5>
+                                                            <p class="fs-12 mb-0">4 Adult, 2 Rooms</p>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-menu-end dropdown-xl">
+                                                            <h5 class="mb-3">Select Travelers & Class</h5>
+                                                            <div class="mb-3 border br-10 info-item pb-1">
+                                                                <h6 class="fs-16 fw-medium mb-2">Travellers</h6>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <div class="mb-3">
+                                                                            <label
+                                                                                class="form-label text-gray-9 mb-2">Adults
+                                                                                <span class="text-default fw-normal">(
+                                                                                    12+ Yrs )</span></label>
+                                                                            <app-common-counter />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="mb-3">
+                                                                            <label
+                                                                                class="form-label text-gray-9 mb-2">Childrens
+                                                                                <span class="text-default fw-normal">(
+                                                                                    2-12 Yrs )</span></label>
+                                                                            <app-common-counter />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="mb-3">
+                                                                            <label
+                                                                                class="form-label text-gray-9 mb-2">Infants
+                                                                                <span class="text-default fw-normal">(
+                                                                                    0-12 Yrs )</span></label>
+                                                                            <app-common-counter />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3 border br-10 info-item pb-1">
+                                                                <h6 class="fs-16 fw-medium mb-2">Select Cabin</h6>
+                                                                <div class="d-flex align-items-center flex-wrap">
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="cabin" id="cabin1" checked>
+                                                                        <label class="form-check-label" for="cabin1">
+                                                                            Solo cabins
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="cabin" id="cabin2">
+                                                                        <label class="form-check-label" for="cabin2">
+                                                                            Balcony
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check me-3 mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            value="Business" name="cabin" id="cabin3">
+                                                                        <label class="form-check-label" for="cabin3">
+                                                                            Oceanview
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-3">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="cabin" id="cabin4">
+                                                                        <label class="form-check-label" for="cabin4">
+                                                                            Balcony rooms
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-end">
+                                                                <a href="javascript:void(0);"
+                                                                    class="btn btn-light btn-sm me-2">Cancel</a>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary btn-sm">Apply</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit"
+                                                    class="btn btn-primary search-btn rounded">{{ 'searchComponent.search' | translate }}</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade active show" id="Tour">
+                                        <!-- Tour Search Form -->
+                                        <form class="d-lg-flex" (ngSubmit)="onSearch()">
+                                          <div class="d-flex form-info">
+                                            <!-- Select Ciudad -->
+                                            <div class="form-item">
+                                              <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.city' | translate }}</label>
+                                                <select class="form-control" [(ngModel)]="selectedCity" name="state">
+                                                <option value="" disabled selected>{{ 'searchComponent.selectCity' | translate }}</option>
+                                                <option *ngFor="let location of locationsPublic" [value]="location.cityId">{{location.cityName}} - {{ location.stateName }}</option>
+                                              </select>
+                                            </div>
+                                            <!-- Check In -->
+                                            <div class="form-item position-relative">
+                                              <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkIn' | translate }}</label>
+                                              <input
+                                                type="text"
+                                                class="form-control datetimepicker"
+                                                placeholder="DD-MM-YYYY"
+                                                [value]="bsRangeValue[0] | date: 'dd-MM-yyyy'"
+                                                readonly
+                                              />
+                                              <!-- Transparent Picker Trigger -->
+                                              <input
+                                                type="text"
+                                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 1;"
+                                                bsDaterangepicker
+                                                #drp="bsDaterangepicker"
+                                                [bsConfig]="{ displayMonths: 2, showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true, containerClass: 'theme-green' }"
+                                                container="body"
+                                                [minDate]="minDate"
+                                                [bsValue]="bsRangeValue"
+                                                (bsValueChange)="onDateRangeChange($event)"
+                                              />
+                                            </div>
+                                            <!-- Check Out -->
+                                            <div class="form-item" (click)="drp.show()">
+                                              <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkOut' | translate }}</label>
+                                              <input
+                                                type="text"
+                                                class="form-control datetimepicker"
+                                                placeholder="DD-MM-YYYY"
+                                                [value]="bsRangeValue[1] | date: 'dd-MM-yyyy'"
+                                                readonly
+                                              />
+                                            </div>
+                                             <div class="form-item dropdown">
+                                                <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                                    <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.travellers' | translate }}</label>
+                                                    <h5>{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? ('searchComponent.person' | translate) : ('searchComponent.persons' | translate) }}</span></h5>
+                                                </div>
+                                                <div class="dropdown-menu dropdown-menu-end dropdown-xl">
+                                                    <h5 class="mb-3">{{ 'searchComponent.selectTravelers' | translate }}</h5>
+                                                    <div class="mb-3 border br-10 info-item pb-1">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.adult' | translate }}</label>
+                                                                    <app-common-counter 
+                                                                        [quantity]="travellersData.adults" 
+                                                                        [min]="1" 
+                                                                        [max]="999"
+                                                                        (quantityChange)="updateTravellersCount('adults', $event)">
+                                                                    </app-common-counter>
+                                                                </div>
+                                                                <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.children' | translate }} <span class="text-default fw-normal">( 2-11 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
+                                                                    <app-common-counter 
+                                                                        [quantity]="travellersData.children" 
+                                                                        [min]="0" 
+                                                                        [max]="999"
+                                                                        (quantityChange)="updateTravellersCount('children', $event)">
+                                                                    </app-common-counter>
+                                                                </div>
+                                                                <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.infants' | translate }} <span class="text-default fw-normal">( 0-2 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
+                                                                    <app-common-counter 
+                                                                        [quantity]="travellersData.infants" 
+                                                                        [min]="0" 
+                                                                        [max]="999"
+                                                                        (quantityChange)="updateTravellersCount('infants', $event)">
+                                                                    </app-common-counter>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <a href="javascript:void(0);" class="btn btn-light btn-sm me-2" data-bs-toggle="dropdown">Close</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>
+                                            <button type="submit" class="btn btn-primary search-btn rounded ms-2" [disabled]="!isSearchEnabled" title="Selecciona al menos un dato para buscar">{{ 'searchComponent.search' | translate }}</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Hero Section -->
+
+<!-- Place Section -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 aos" data-aos="fade-up" data-aos-duration="2000">
+                <div class="section-header-six">
+                    <span class="badge badge-soft-primary rounded-pill mb-1">
+                        {{'home.top-tours.title' | translate}}
+                    </span>
+                    <h2>{{'home.top-tours.subtitle' | translate}}</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-end">
+                </div>
+            </div>
+        </div>
+        <owl-carousel-o class="categories-slider-six owl-theme aos" data-aos="fade-up" data-aos-duration="2000" [options]="categoriesSlider6">
+            <ng-template carouselSlide>
+                <div class="categories-card">
+                    <a href="javascript:void(0);" (click)="onCategoryClick('paseo_al_cayo', $event)"><img src="/assets/img/tours/paseocayo.png" alt="Img"></a>
+                    <div class="cat-content d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-white mb-1">{{ 'toursCards.cayTour' | translate }}</h5>
+                            <span class="text-white">38 {{ 'toursCards.tours' | translate }}</span>
+                        </div>
+                        <a href="javascript:void(0);" (click)="onCategoryClick('paseo_al_cayo', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="categories-card">
+                    <a href="javascript:void(0);" (click)="onCategoryClick('carro_playero', $event)"><img src="/assets/img/tours/carroplayero.png" alt="Img"></a>
+                    <div class="cat-content d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-white mb-1">{{ 'toursCards.beachCart' | translate }}</h5>
+                            <span class="text-white">54 {{ 'toursCards.tours' | translate }}</span>
+                        </div>
+                        <a href="javascript:void(0);" (click)="onCategoryClick('carro_playero', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="categories-card">
+                    <a href="javascript:void(0);" (click)="onCategoryClick('parasail', $event)"><img src="/assets/img/tours/parasail.png" alt="Img"></a>
+                    <div class="cat-content d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-white mb-1">{{ 'toursCards.parasailing' | translate }}</h5>
+                            <span class="text-white">22 {{ 'toursCards.tours' | translate }}</span>
+                        </div>
+                        <a href="javascript:void(0);" (click)="onCategoryClick('parasail', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="categories-card">
+                    <a href="javascript:void(0);" (click)="onCategoryClick('buceo', $event)"><img src="/assets/img/tours/buceo.png" alt="Img"></a>
+                    <div class="cat-content d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-white mb-1">{{ 'toursCards.scubaDiving' | translate }}</h5>
+                            <span class="text-white">12 {{ 'toursCards.tours' | translate }}</span>
+                        </div>
+                        <a href="javascript:void(0);" (click)="onCategoryClick('buceo', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="categories-card">
+                    <a href="javascript:void(0);" (click)="onCategoryClick('paddle_board', $event)"><img src="/assets/img/tours/paddleboard.png" alt="Img"></a>
+                    <div class="cat-content d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-white mb-1">{{ 'toursCards.paddleBoard' | translate }}</h5>
+                            <span class="text-white">30 {{ 'toursCards.tours' | translate }}</span>
+                        </div>
+                        <a href="javascript:void(0);" (click)="onCategoryClick('paddle_board', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="categories-card">
+                    <a href="javascript:void(0);" (click)="onCategoryClick('aquanautas', $event)"><img src="/assets/img/tours/Aquanautas.png" alt="Img"></a>
+                    <div class="cat-content d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-white mb-1">{{ 'toursCards.aquanauts' | translate }}</h5>
+                            <span class="text-white">25 {{ 'toursCards.tours' | translate }}</span>
+                        </div>
+                        <a href="javascript:void(0);" (click)="onCategoryClick('aquanautas', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template carouselSlide>
+                <div class="categories-card">
+                    <a href="javascript:void(0);" (click)="onCategoryClick('fiesta_noche_blanca', $event)"><img src="/assets/img/tours/nocheblanca.png" alt="Img"></a>
+                    <div class="cat-content d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-white mb-1">{{ 'toursCards.whiteNight' | translate }}</h5>
+                            <span class="text-white">47 {{ 'toursCards.tours' | translate }}</span>
+                        </div>
+                        <a href="javascript:void(0);" (click)="onCategoryClick('fiesta_noche_blanca', $event)" class="loc-view-bottom"><i class="isax isax-arrow-right-1"></i></a>
+                    </div>
+                </div>
+            </ng-template>
+        </owl-carousel-o>
+    </div>
+</section>
+<!-- /Place Section -->
+
+
+<!-- Benefit Section -->
+<section class="section work-section-six-client">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-xxl-3 col-lg-4">
+                <div class="section-header-six mb-0 aos" data-aos="fade-up" data-aos-duration="2000">
+                    <span class="badge badge-soft-primary rounded-pill mb-1">
+                        {{'home.how-it-works.title' | translate}}
+                    </span>
+                    <h2>{{'home.how-it-works.title' | translate}}</h2>
+                </div>
+            </div>
+            <div class="col-xxl-9 col-lg-8">
+                <div class="row align-items-center">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="bg-teal-trans mb-4 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <div class="card border-0 mb-0">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="work-icon text-teal d-flex"><i
+                                                class="isax isax-buildings-25"></i></span>
+                                        <span class="work-avatar">
+                                            01
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-2 text-truncate">{{'home.how-it-works.step1.title' | translate}}
+                                        </h5>
+                                        <p class="text-truncate line-clamb-3">
+                                            {{'home.how-it-works.step1.description' |translate}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="bg-prime-trans mb-4 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <div class="card border-0 mb-0">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="work-icon text-primary d-flex"><i
+                                                class="isax isax-calendar-edit5"></i></span>
+                                        <span class="work-avatar">
+                                            02
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-2 text-truncate">{{'home.how-it-works.step2.title' | translate}}
+                                        </h5>
+                                        <p class="text-truncate line-clamb-3">
+                                            {{'home.how-it-works.step2.description' |translate}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="bg-purple-trans mb-4 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <div class="card border-0 mb-0">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="work-icon text-purple d-flex"><i
+                                                class="isax isax-direct-send5"></i></span>
+                                        <span class="work-avatar">
+                                            03
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-2">{{'home.how-it-works.step3.title' | translate}}</h5>
+                                        <p class="text-truncate line-clamb-3">
+                                            {{'home.how-it-works.step3.description' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Benefit Section -->
+
+<!-- Support Section -->
+<section class="support-section section-skew support-sec-two bg-primary">
+    <div class="horizontal-slide d-flex" data-direction="left" data-speed="slow">
+        <div class="slide-list d-flex">
+            <div class="support-item">
+            </div>
+            <div class="support-item">
+                <h5>{{'home.carousel.title' | translate }}</h5>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Support Section -->
+
+<!-- FAQ Section -->
+<section class="faq-section section">
+    <div class="container">
+        <div class="faq-sec">
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-10 text-center aos" data-aos="fade-up" data-aos-duration="2000">
+                    <div class="section-header text-center">
+                        <h2 class="mb-2">{{'home.faq.title' | translate}}</h2>
+                        <p class="sub-title"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="accordion accordion-flush" id="accordionFaq">
+                        <div class="accordion-item show mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapseOne" aria-expanded="false"
+                                    aria-controls="faq-collapseOne">
+                                    {{'home.faq.one.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapseOne" class="accordion-collapse collapse show"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p class="mb-0">{{'home.faq.one.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapseTwo" aria-expanded="false"
+                                    aria-controls="faq-collapseTwo">
+                                    {{'home.faq.two.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapseTwo" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p>{{'home.faq.two.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapsThree" aria-expanded="false"
+                                    aria-controls="faq-collapsThree">
+                                    {{'home.faq.three.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapsThree" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p>{{'home.faq.three.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapseFour" aria-expanded="false"
+                                    aria-controls="faq-collapseFour">
+                                    {{'home.faq.four.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapseFour" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p>{{'home.faq.four.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapseFive" aria-expanded="false"
+                                    aria-controls="faq-collapseFive">
+                                    {{'home.faq.five.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapseFive" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p>{{'home.faq.five.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapseSix" aria-expanded="false"
+                                    aria-controls="faq-collapseSix">
+                                    {{'home.faq.six.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapseSix" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p>{{'home.faq.six.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapsesSeven" aria-expanded="false"
+                                    aria-controls="faq-collapsesSeven">
+                                    {{'home.faq.seven.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapsesSeven" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p>{{'home.faq.seven.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 pb-3 aos" data-aos="fade-up" data-aos-duration="2000">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapseEight" aria-expanded="false"
+                                    aria-controls="faq-collapseEight">
+                                    {{'home.faq.eight.question' | translate}}
+                                </button>
+                            </h2>
+                            <div id="faq-collapseEight" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    <p>{{'home.faq.eight.answer' | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /FAQ Section -->
+
+<!-- Floating Cart -->
+<app-floating-cart 
+    [isVisible]="isCartVisible" 
+    (daySelected)="onDaySelected($event)"
+    (cartToggled)="onFloatingCartClick()"
+    (clearCart)="onCartCleared()">
+</app-floating-cart>

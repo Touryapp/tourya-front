@@ -1,0 +1,167 @@
+<!-- Floating Cart Container -->
+<div class="floating-cart" *ngIf="isVisible" [ngClass]="{ 'expanded': isExpanded }">
+
+  <!-- Cart Header - Siempre visible -->
+  <div class="cart-header" (click)="toggleExpansion()">
+    <div class="header-content">
+      <div class="cart-info">
+        <div class="cart-title">
+          <i class="isax isax-calendar-1 me-2"></i>
+          <span>{{ 'cart.myItinerary' | translate }}</span>
+          <span class="badge bg-primary ms-2" *ngIf="hasToursSelected()">{{ cartSummary?.totalItems }}</span>
+        </div>
+        <div class="cart-summary" *ngIf="hasToursSelected()">
+          <small class="text-muted">
+            {{ cartSummary?.totalItems }} {{ 'cart.of' | translate }} {{ daySelections.length }} {{ 'cart.days' | translate }} •
+            {{ cartSummary?.totalParticipants }} {{ 'cart.people' | translate }} •
+            {{ formatPrice(cartSummary?.totalPrice || 0) }} COP
+          </small>
+        </div>
+        <div class="progress-info" *ngIf="!hasToursSelected()">
+          <small class="text-muted">
+            {{ 'cart.selectToursFor' | translate }} {{ daySelections.length }} {{ 'cart.daysOfTravel' | translate }}
+          </small>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Progreso visual -->
+        <div class="progress-circle" *ngIf="daySelections.length > 0">
+          <div class="circle">
+            <div class="progress-text">{{ getCompletionPercentage() }}%</div>
+          </div>
+        </div>
+
+        <!-- Botón expandir/colapsar -->
+        <button class="btn btn-link p-0 ms-2" (click)="toggleExpansion()">
+          <i class="isax" [ngClass]="isExpanded ? 'isax-arrow-down-1' : 'isax-arrow-up-1'"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Body - Solo visible cuando está expandido -->
+  <div class="cart-body" *ngIf="isExpanded">
+
+    <!-- Progress Bar -->
+    <div class="progress-section" *ngIf="daySelections.length > 0">
+      <div class="progress mb-2" style="height: 4px;">
+        <div class="progress-bar bg-primary" role="progressbar" [style.width.%]="getCompletionPercentage()">
+        </div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <small class="text-muted">{{ cartSummary?.totalItems || 0 }} {{ 'cart.selectedTours' | translate }}</small>
+        <small class="text-muted">{{ daySelections.length }} {{ 'cart.totalDays' | translate }}</small>
+      </div>
+    </div>
+
+    <!-- Tours List - Mostrar tours seleccionados como tarjetas -->
+    <div class="tours-container">
+      <h6 class="section-title">
+        <i class="isax isax-routing-2 me-2"></i>
+        {{ 'cart.selectedToursTitle' | translate }}
+      </h6>
+
+      <div class="tours-scroll">
+        <!-- Iterar directamente sobre los cartItems del servicio -->
+        <div class="tour-card" *ngFor="let item of cartItems$ | async; let i = index">
+          
+          <!-- Tour Image con badge del día -->
+          <div class="tour-card-image">
+            <img 
+              [src]="item.displayImageUrl" 
+              [alt]="(item.tour?.name | localizedName)"
+              (error)="$any($event.target).src !== 'assets/img/tours/tours-01.jpg' ? $any($event.target).src='assets/img/tours/tours-01.jpg' : null"
+              loading="lazy">
+            <div class="day-badge">
+              <i class="isax isax-calendar-1"></i>
+              {{ item.dayDate | date: 'EEE dd MMM' : '' : currentLocale }}
+            </div>
+          </div>
+
+          <!-- Tour Content -->
+          <div class="tour-card-content">
+            <div class="tour-card-header">
+              <h6 class="tour-card-name" [title]="(item.tour?.name | localizedName)">
+                {{ (item.tour?.name | localizedName) }}
+              </h6>
+              <button 
+                class="btn-remove-tour" 
+                (click)="removeCartItem(item, $event)"
+                [title]="'cart.removeTour' | translate">
+                <i class="isax isax-trash"></i>
+              </button>
+            </div>
+
+            <!-- Fecha del itinerario (rango si es multi-día) -->
+            <p class="tour-card-date">
+              <i class="isax isax-calendar-1"></i>
+              <strong>{{ getDateRange(item) }}</strong>
+            </p>
+
+            <!-- Horario -->
+            <p class="tour-card-schedule" *ngIf="item.selectedSlot">
+              <i class="isax isax-clock"></i>
+              {{ item.selectedSlot.startTime }} - {{ item.selectedSlot.endTime }}
+            </p>
+
+            <!-- Participantes — TC-006: para tours grupo mostramos cantidad de grupos + total pax. -->
+            <p class="tour-card-participants" *ngIf="item.tour?.priceType === 'grupo'">
+              <i class="isax isax-profile-2user"></i>
+              {{ (item.groupCount || 1) }} {{ 'cart.groupsLabel' | translate }}
+              <span class="text-secondary">({{ item.totalParticipants }} {{ 'cart.personSingularPlural' | translate }})</span>
+            </p>
+            <p class="tour-card-participants" *ngIf="item.tour?.priceType !== 'grupo'">
+              <i class="isax isax-profile-2user"></i>
+              {{ item.totalParticipants }} {{ 'cart.personSingularPlural' | translate }}
+            </p>
+
+            <!-- Precio -->
+            <div class="tour-card-price">
+              {{ formatPrice(item.totalPrice) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado vacío si no hay tours -->
+        <div class="no-tours-message" *ngIf="!hasToursSelected()">
+          <i class="isax isax-calendar-search"></i>
+          <p>{{ 'cart.noToursSelected' | translate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Actions -->
+    <div class="cart-actions" *ngIf="hasToursSelected()">
+      <div class="summary-row">
+        <div class="summary-info">
+          <div class="total-price">{{ formatPrice(cartSummary?.totalPrice || 0) }} COP</div>
+          <div class="total-details">
+            {{ cartSummary?.totalParticipants }} {{ 'cart.personSingularPlural' | translate }} • {{ cartSummary?.totalItems }} {{ 'cart.tourSingularPlural' | translate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-outline-secondary btn-sm me-2" 
+                (click)="onClearCart()"
+                [disabled]="isClearing">
+          <span *ngIf="isClearing" class="spinner-border spinner-border-sm me-1" role="status"></span>
+          <i *ngIf="!isClearing" class="isax isax-trash me-1"></i>
+          {{ isClearing ? ('cart.clearing' | translate) : ('cart.clear' | translate) }}
+        </button>
+        <button class="btn btn-primary btn-sm flex-grow-1" 
+                (click)="onContinue()" 
+                [disabled]="processing">
+          <span *ngIf="processing" class="spinner-border spinner-border-sm me-2" role="status"></span>
+          <i *ngIf="!processing" class="isax isax-shopping-cart me-1"></i>
+          {{ processing ? ('cart.loading' | translate) : ('cart.continue' | translate) }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div class="cart-backdrop" *ngIf="isVisible && isExpanded" (click)="closeCart()">
+</div>

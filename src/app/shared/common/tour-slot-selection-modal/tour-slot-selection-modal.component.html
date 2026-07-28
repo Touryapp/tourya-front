@@ -1,0 +1,269 @@
+<!-- Modal -->
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1"
+  role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <div class="modal-title-section">
+          <h4 class="modal-title" id="slotModalLabel">
+            <i class="isax isax-calendar-add me-2 text-primary"></i>
+            {{ 'tourSlotModal.title' | translate }}
+          </h4>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()">
+        </button>
+      </div>
+
+      <div class="modal-body p-0">
+        <!-- Tour Info Section -->
+        <div class="tour-info-section" *ngIf="selectedTour">
+          <div class="tour-header">
+            <div class="tour-image" *ngIf="hasImages()">
+              <img [src]="getTourImage()" [alt]="getTourName() | localizedName" class="img-fluid rounded">
+            </div>
+            <div class="tour-details">
+              <h5 class="tour-name">{{ getTourName() | localizedName }}</h5>
+              <div class="tour-meta">
+                <span class="location">
+                  <i class="isax isax-location me-1"></i>
+                  {{ getTourLocation() }}
+                </span>
+                <span class="duration ms-3">
+                  <i class="isax isax-clock me-1"></i>
+                  {{ getTourDuration() }}
+                </span>
+                <span class="rating ms-3" *ngIf="hasRating()">
+                  <i class="fas fa-star text-warning me-1"></i>
+                  {{ getTourRating() }}
+                </span>
+              </div>
+              <p class="tour-description">{{ getTourDescription() | localizedName }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Carousel -->
+        <div class="date-carousel">
+          <owl-carousel-o [options]="customOptions">
+            <ng-template *ngFor="let date of dates" carouselSlide>
+              <div class="date-item d-flex flex-column align-items-center justify-content-center" [ngClass]="{'selected': selectedDate === date}" (click)="selectDate(date)">
+                <span class="text text-center mb-1 m-0" style="line-height: 1;">{{date | date: 'dd/MM/yyyy'}}</span>
+                <span class="text-center w-100 m-0" 
+                      [ngClass]="{'text-danger font-weight-bold': hasCapacityError(date)}" 
+                      style="font-size: 0.75rem; opacity: 0.85; line-height: 1; transition: color 0.3s;">{{ 'tourSlotModal.available' | translate }} {{ getDayAvailability(date) }}</span>
+              </div>
+            </ng-template>
+          </owl-carousel-o>
+        </div>
+
+        <!-- Slots Selection Section -->
+        <div class="slots-section" *ngIf="availableSlots.length > 0">
+          <div class="section-header">
+            <h6 class="section-title">
+              <i class="isax isax-timer-1 me-2"></i>
+              {{ 'tourSlotModal.availableSchedules' | translate }}
+            </h6>
+            <span class="section-subtitle">{{ 'tourSlotModal.selectSchedule' | translate }}</span>
+          </div>
+
+          <div class="slots-container">
+            <div class="slot-item-wrapper" *ngFor="let slot of availableSlots" [ngClass]="getSlotClass(slot)"
+              (click)="!isSlotFull(slot) && selectSlot(slot)">
+
+              <div class="slot-card">
+                <div class="slot-time">
+                  <span class="start-time">{{ formatTime(slot.startTime) }}</span>
+                </div>
+
+                <div class="slot-capacity">
+                  <div class="separator"></div>
+                  <div class="available-capacity">
+                    <i class="isax isax-profile-2user me-1"></i>
+                    <span *ngIf="!isSlotFull(slot)">
+                      {{ slot.availability || slot.capacity }} {{ selectedTour?.tour?.priceType === 'grupo' ? ('tourSlotModal.groupsAvailable' | translate) : ('tourSlotModal.slotsAvailable' | translate) }}
+                    </span>
+                    <span *ngIf="isSlotFull(slot)" class="text-danger">
+                      {{ 'tourSlotModal.full' | translate }}
+                    </span>
+                  </div>
+                </div>
+                <div class="slot-time">
+                  <span class="end-time">{{ formatTime(slot.endTime) }}</span>
+                </div>
+
+                <div class="slot-price">
+                  <span class="from-text">{{ 'tourSlotModal.from' | translate }}</span>
+                  <span class="price">{{ formatPrice(slot.prices[0]?.price || 0) }}</span>
+                </div>
+
+                <!-- Selected indicator -->
+                <div class="selected-indicator" *ngIf="selectedSlot?.slotId === slot.slotId">
+                  <i class="isax isax-tick-circle"></i>
+                </div>
+
+                <!-- Full overlay -->
+                <div class="full-overlay" *ngIf="isSlotFull(slot)">
+                  <i class="isax isax-close-circle"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No slots available -->
+          <div class="no-slots" *ngIf="availableSlots.length === 0">
+            <div class="text-center py-4">
+              <i class="isax isax-timer-pause display-4 text-muted mb-3"></i>
+              <h6>{{ 'tourSlotModal.noSchedulesTitle' | translate }}</h6>
+              <p class="text-muted">{{ 'tourSlotModal.noSchedulesDesc' | translate }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Participants Selection Section -->
+        <div class="participants-section" *ngIf="participants.length > 0">
+          <div class="section-header">
+            <h6 class="section-title">
+              <i class="isax isax-people me-2"></i>
+              {{ selectedTour?.tour?.priceType === 'grupo' ? ('tourSlotModal.participantsByGroup' | translate) : ('tourSlotModal.selectParticipants' | translate) }}
+            </h6>
+            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType !== 'grupo'">
+              {{ 'tourSlotModal.availablePersons' | translate: { count: selectedSlot.availability } }}
+            </span>
+            <span class="section-subtitle" *ngIf="selectedSlot && selectedTour?.tour?.priceType === 'grupo'">
+              {{ 'tourSlotModal.maxPersonsPerGroup' | translate: { count: selectedTour?.tour?.maxPeople || 99 } }}
+            </span>
+            <span class="section-subtitle" *ngIf="!selectedSlot">
+              {{ availableSlots.length > 0 ? ('tourSlotModal.selectScheduleForCapacity' | translate) : '' }}
+            </span>
+          </div>
+
+          <!-- Group Selection (Only for Price Type "group") -->
+          <div class="participants-list group-selection-list mb-3" *ngIf="selectedTour?.tour?.priceType === 'grupo'">
+            <div class="participant-item">
+              <div class="participant-info">
+                <div class="participant-type">{{ 'tourSlotModal.selectGroups' | translate }}</div>
+                <div class="participant-details">
+                  <span class="age-range">{{ 'tourSlotModal.quantityGroups' | translate }}</span>
+                  <span class="price d-block fw-bold text-primary mt-1" *ngIf="participants.length > 0">{{ formatPrice(participants[0].price) }} {{ 'tourSlotModal.perGroup' | translate }}</span>
+                </div>
+              </div>
+
+              <div class="quantity-controls">
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  [disabled]="groupCount <= 1" (click)="decrementGroup()">
+                  <i class="isax isax-minus"></i>
+                </button>
+
+                <input type="number" class="form-control quantity-input" [value]="groupCount" min="1"
+                  (input)="updateGroupCount($any($event.target).value)" readonly>
+
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  (click)="incrementGroup()">
+                  <i class="isax isax-add"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Error message for groups -->
+            <div class="availability-error text-danger small mt-1 text-end" *ngIf="showGroupError">
+              {{ 'tourSlotModal.maxAvailabilityLimit' | translate }}
+            </div>
+          </div>
+
+          <!-- TC-006: en tours GRUPO el input de "participantes" no aplica — la cantidad se maneja por groupCount arriba. -->
+          <div class="participants-list" *ngIf="selectedTour?.tour?.priceType !== 'grupo'">
+            <div class="participant-item" *ngFor="let participant of participants">
+              <div class="participant-info">
+                <div class="participant-type">{{ participant.label | translate }}</div>
+                <div class="participant-details">
+
+                  <span class="price" *ngIf="selectedTour?.tour?.priceType !== 'grupo'">{{ formatPrice(participant.price) }} COP {{ 'tourSlotModal.each' | translate }} </span>
+                </div>
+              </div>
+
+              <div class="quantity-controls">
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  [disabled]="!canDecrement(participant)" (click)="decrementParticipant(participant)">
+                  <i class="isax isax-minus"></i>
+                </button>
+
+                <input type="number" class="form-control quantity-input" [value]="participant.quantity" min="0"
+                  [max]="participant.maxQuantity"
+                  (input)="updateParticipantQuantity(participant, $any($event.target).value)" readonly>
+
+                <button type="button" class="btn btn-outline-secondary btn-sm quantity-btn"
+                  (click)="incrementParticipant(participant)">
+                  <i class="isax isax-add"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Error message for groups -->
+            <div class="availability-error text-danger small mt-1 text-end" *ngIf="showParticipantError">
+              {{ 'tourSlotModal.maxAvailabilityLimit' | translate }}
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="selection-summary" *ngIf="totalParticipants > 0 || selectedTour?.tour?.priceType === 'grupo'">
+            <div class="summary-card">
+              <!-- TC-006: para grupo mostramos "Cantidad de grupos" (default 1); para individual "Total participantes". -->
+              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType === 'grupo'">
+                <span class="label">{{ 'tourSlotModal.selectGroups' | translate }}:</span>
+                <span class="value">{{ groupCount }}</span>
+              </div>
+              <div class="summary-item" *ngIf="selectedTour?.tour?.priceType !== 'grupo'">
+                <span class="label">{{ 'tourSlotModal.totalParticipants' | translate }}:</span>
+                <span class="value">{{ totalParticipants }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">{{ 'tourSlotModal.totalPrice' | translate }}</span>
+                <span class="value price">{{ formatPrice(totalPrice) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation Errors -->
+        <div class="validation-errors" *ngIf="validationErrors.length > 0">
+          <div class="alert alert-warning" role="alert">
+            <i class="isax isax-warning-2 me-2"></i>
+            <ul class="mb-0">
+              <li *ngFor="let error of validationErrors">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-0 pt-0">
+        <div class="footer-actions">
+          <button type="button" class="btn btn-outline-secondary me-2" (click)="closeModal()" [disabled]="isProcessing">
+            <i class="isax isax-close-square me-1"></i>
+            {{ 'tourSlotModal.cancel' | translate }}
+          </button>
+
+          <!-- Botón de Cerrar Sesión para proveedores Cancelados -->
+          <button *ngIf="isProviderCancelled" type="button" class="btn btn-primary" (click)="logout()">
+            <i class="isax isax-logout me-1"></i>
+            {{ 'tourSlotModal.logout' | translate }}
+          </button>
+
+          <!-- Botón normal para agregar/reagendar -->
+          <button *ngIf="!isProviderCancelled" type="button" class="btn btn-primary" [disabled]="isProcessing || isAddressCheckLoading || (!isValid && !isCurrentScheduleUnlimited)" (click)="confirmSelection()">
+            <span *ngIf="!isProcessing && !isAddressCheckLoading">
+              <i class="isax isax-add-circle me-1" *ngIf="!isRescheduling"></i>
+              <i class="isax isax-calendar me-1" *ngIf="isRescheduling"></i>
+              {{ isRescheduling ? ('tourSlotModal.reschedule' | translate) : ('tourSlotModal.addToItinerary' | translate) }}
+              <span *ngIf="totalPrice > 0" class="ms-2">
+                ({{ formatPrice(totalPrice) }})
+              </span>
+            </span>
+            <span *ngIf="isProcessing || isAddressCheckLoading">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ isAddressCheckLoading ? ('tourSlotModal.verifyingProfile' | translate) : (isRescheduling ? ('tourSlotModal.rescheduling' | translate) : ('tourSlotModal.adding' | translate)) }}
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

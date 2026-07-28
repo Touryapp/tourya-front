@@ -1,0 +1,92 @@
+@media (max-width: 1199px) {
+    .main-menu-wrapper {
+        position: relative;
+        justify-content: flex-start !important; /* Force items start (Left) */
+        flex-direction: row !important; /* Ensure LTR row */
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        padding-left: 15px; /* Add some padding so it's not glued to edge */
+    }
+
+    .header__hamburger {
+        position: relative;
+        z-index: 20;
+        order: -1 !important; /* Force visual first position */
+        margin-right: auto !important; /* Push everything else right, stick to left */
+        margin-left: 0 !important; /* Ensure no left margin pushing it right */
+        // Removed display: block !important to respect Bootstrap's d-xl-none class
+    }
+}
+
+// Offcanvas header styling
+.offcanvas-head {
+    background-color: #1b6475;
+    padding: 20px;
+    margin: -20px -20px 20px -20px; // Negative margins to extend to edges
+    
+    // Ensure the inner flex container centers items vertically
+    .d-flex {
+        align-items: center !important;
+        margin-bottom: 0 !important; // Override .mb-3 to prevent vertical misalignment
+        
+        a {
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            
+            img {
+                background: transparent !important;
+                border: none !important;
+            }
+        }
+    }
+    
+    .offcanvas-close {
+        color: white !important;
+        
+        i {
+            color: white !important;
+        }
+        
+        &:hover {
+            color: #f0f0f0 !important;
+        }
+    }
+}
+
+// User profile section in mobile menu
+.user-profile-section {
+    .avatar {
+        img {
+            width: 40px;
+            height: 35px;
+            object-fit: cover;
+        }
+    }
+    
+    h6 {
+        color: #333;
+        font-weight: 600;
+    }
+    
+    ul {
+        li {
+            a {
+                color: #555;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                
+                &:hover {
+                    color: #1b6475;
+                    padding-left: 10px;
+                }
+            }
+        }
+    }
+}
+
+// Adjust padding for the 5th menu item so it's not too close to the right side elements
+#mobile-menu > ul > li:nth-child(5) > a {
+    padding-right: 30px !important;
+}

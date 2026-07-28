@@ -1,0 +1,80 @@
+.save {
+  position: sticky;
+  width: 100%;
+  bottom: 10vh;
+}
+
+.spinner-border {
+  margin-left: 5px;
+}
+
+.mat-slide-toogle {
+  margin-left: 8px
+}
+
+/* Ensure these styles are global or use ViewEncapsulation.None */
+.cal-cell.cal-selected-range {
+  background-color: #e0f2f7 !important;
+  /* Light blue background for selected range */
+}
+
+/* Style for the start and end of the range */
+.cal-cell.cal-selected-range:first-child {
+  border-left: 2px solid #2196f3;
+  /* Example border */
+}
+
+.cal-cell.cal-selected-range:last-child {
+  border-right: 2px solid #2196f3;
+  /* Example border */
+}
+
+
+.cal-open-day-events-custom {
+  background: #fff;
+  border: 1px solid #e0f0ea !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(30, 111, 92, 0.08);
+  animation: slideDown 0.2s ease-out;
+
+  .card-body {
+    padding: 20px 24px;
+  }
+
+  h6 {
+    font-size: 1rem;
+    font-weight: 700;
+    border-bottom: 1px solid #e0f0ea;
+    padding-bottom: 10px;
+  }
+
+  .badge.bg-primary {
+    background-color: #1e6f5c !important;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+
+  .badge.bg-info {
+    font-size: 0.82rem;
+    padding: 5px 10px;
+  }
+
+  .badge.bg-light {
+    font-size: 0.75rem;
+  }
+
+  hr {
+    border-color: #e0f0ea;
+    margin: 12px 0;
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+::ng-deep .cal-month-view .cal-day-cell.cal-out-month {
+  pointer-events: auto !important;
+  cursor: pointer;
+}

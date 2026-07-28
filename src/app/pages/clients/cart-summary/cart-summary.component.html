@@ -1,0 +1,596 @@
+<!-- Page Wrapper -->
+<div class="content content-two pt-4">
+    <div class="container" *ngIf="!loading; else loadingTemplate">
+        <!-- Header Section -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="mb-2 text-dark fw-bold">{{ 'cartSummary.pageTitle' | translate }}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0 bg-transparent p-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="routes.tourList" class="text-dark">{{ 'cartSummary.breadcrumbTours' | translate }}</a></li>
+                        <li class="breadcrumb-item active text-muted" aria-current="page">{{ 'cartSummary.breadcrumbCart' | translate }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Cart -->
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Secure Checkout - Datos del Usuario -->
+                <div class="card checkout-card">
+                    <div class="card-header">
+                        <h5>{{ 'cartSummary.secureCheckout' | translate }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Información de Contacto (Quien realiza el pago) -->
+                        <div class="contact-info-section">
+                            <div class="checkout-title">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-user-tie me-2 text-primary"></i>
+                                    {{ 'cartSummary.contactInfo' | translate }}
+                                </h6>
+                            </div>
+                            <div class="checkout-details pb-3 border-bottom mb-4">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.firstName' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.firstName" [placeholder]="'cartSummary.firstNamePlaceholder' | translate" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.lastName' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.lastName" [placeholder]="'cartSummary.lastNamePlaceholder' | translate" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.email' | translate }}</label>
+                                            <input type="email" class="form-control" [(ngModel)]="contactForm.email" [placeholder]="'cartSummary.emailPlaceholder' | translate" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.phone' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="contactForm.phone" [placeholder]="'cartSummary.phonePlaceholder' | translate" required>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hospedaje -->
+                        <div class="contact-info-section mt-4">
+                            <div class="checkout-title">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-hotel me-2 text-primary"></i>
+                                    {{ 'cartSummary.accommodation' | translate }}
+                                </h6>
+                            </div>
+                            <div class="checkout-details pb-3 border-bottom mb-4">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.accommodationName' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="accommodationForm.name" [placeholder]="'cartSummary.accommodationNamePlaceholder' | translate">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.address' | translate }}</label>
+                                            <input #addressInput type="text" class="form-control" [(ngModel)]="accommodationForm.address" [placeholder]="'cartSummary.accommodationAddressPlaceholder' | translate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lugar de procedencia -->
+                        <div class="contact-info-section mt-4">
+                            <div class="checkout-title">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-plane-arrival me-2 text-primary"></i>
+                                    {{ 'cartSummary.placeOfOrigin' | translate }}
+                                </h6>
+                            </div>
+                            <div class="checkout-details pb-3 border-bottom mb-4">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.country' | translate }}</label>
+                                            <select class="form-control" [(ngModel)]="contactForm.country" (change)="onCountryChange($event)">
+                                                <option value="">{{ 'cartSummary.selectCountry' | translate }}</option>
+                                                <option *ngFor="let country of countries" [value]="country.id">{{ (country.name | localizedName) }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.stateOrDepartment' | translate }}</label>
+                                            <select class="form-control" [(ngModel)]="contactForm.state" (change)="onDepartmentChange($event)" [disabled]="!departments.length">
+                                                <option value="">{{ 'cartSummary.selectDepartment' | translate }}</option>
+                                                <option *ngFor="let dept of departments" [value]="dept.id">{{ (dept.name | localizedName) }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'cartSummary.city' | translate }}</label>
+                                            <select class="form-control" [(ngModel)]="contactForm.city" [disabled]="!cities.length">
+                                                <option value="">{{ 'cartSummary.selectCity' | translate }}</option>
+                                                <option *ngFor="let city of cities" [value]="city.id">{{ (city.name | localizedName) }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información de Viajeros por Tour -->
+                        <div class="travelers-info-section">
+                            <div class="checkout-title">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-users me-2 text-primary"></i>
+                                        {{ 'cartSummary.travelersInfo' | translate }}
+                                        <span class="badge bg-primary ms-2" *ngIf="travelersInfo.length > 0">
+                                            {{ getCompletedTravelersCount() }}/{{ travelersInfo.length }}
+                                        </span>
+                                    </h6>
+                                    <!-- Quick Actions -->
+                                    <div class="travelers-actions">
+                                        <!-- Botón para copiar datos de contacto a todos los viajeros -->
+                                        <button type="button" 
+                                                class="btn btn-sm btn-success me-2" 
+                                                (click)="copyContactInfoToAllTravelers()"
+                                                *ngIf="travelersInfo.length > 0 && isContactFormComplete()"
+                                                [title]="'cartSummary.useMyData' | translate">
+                                            <i class="fas fa-copy me-1"></i>
+                                            {{ 'cartSummary.useMyData' | translate }}
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
+                                                (click)="expandAllTravelers()" 
+                                                *ngIf="travelersInfo.length > 1"
+                                                [title]="'cartSummary.expandAll' | translate">
+                                            <i class="fas fa-expand-arrows-alt"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                                (click)="collapseAllTravelers()"
+                                                *ngIf="travelersInfo.length > 1" 
+                                                [title]="'cartSummary.collapseAll' | translate">
+                                            <i class="fas fa-compress-arrows-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Progress Bar -->
+                                <div class="travelers-progress" *ngIf="travelersInfo.length > 0">
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar bg-success" 
+                                             [style.width.%]="getTravelersCompletionPercentage()">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">
+                                        {{ 'cartSummary.travelersCompleted' | translate:{count: getCompletedTravelersCount(), total: travelersInfo.length} }}
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Travelers Accordion with Scroll -->
+                            <div class="travelers-scroll-container" *ngIf="travelersInfo.length > 0">
+                                <div class="travelers-accordion">
+                                <div class="accordion" id="travelersAccordion">
+                                    <div class="accordion-item traveler-item" *ngFor="let traveler of travelersInfo; let i = index">
+                                        <h2 class="accordion-header" [id]="'heading' + i">
+                                            <button class="accordion-button collapsed" type="button" 
+                                                    data-bs-toggle="collapse" 
+                                                    [attr.data-bs-target]="'#collapse' + i" 
+                                                    [attr.aria-controls]="'collapse' + i">
+                                                <div class="traveler-header-content">
+                                                    <div class="traveler-title">
+                                                        <i class="fas fa-user-circle me-2"></i>
+                                                        <strong>{{ 'cartSummary.travelerInfoTour' | translate }} - {{ traveler.tourName }}</strong>
+                                                    </div>
+                                                    <div class="traveler-status">
+                                                        <span class="badge" 
+                                                              [class]="traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? 'bg-success' : 'bg-warning'">
+                                                            {{ traveler.firstName && traveler.lastName && traveler.email && traveler.phone ? ('cartSummary.statusComplete' | translate) : ('cartSummary.statusPending' | translate) }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </h2>
+                                        <div [id]="'collapse' + i" class="accordion-collapse collapse" 
+                                             [attr.aria-labelledby]="'heading' + i" 
+                                             data-bs-parent="#travelersAccordion">
+                                            <div class="accordion-body">
+                                                <!-- Botón para copiar datos de contacto a este viajero -->
+                                                <div class="alert alert-info d-flex align-items-center justify-content-between mb-3" 
+                                                     *ngIf="isContactFormComplete()">
+                                                    <div>
+                                                        <i class="fas fa-info-circle me-2"></i>
+                                                        <small>{{ 'cartSummary.isItYou' | translate }}</small>
+                                                    </div>
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-success" 
+                                                            (click)="copyContactInfoToTraveler(i)"
+                                                            [title]="'cartSummary.useMyData' | translate">
+                                                        <i class="fas fa-user-check me-1"></i>
+                                                        {{ 'cartSummary.useMyData' | translate }}
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ 'cartSummary.travelerFirstName' | translate }}</label>
+                                                            <input type="text" class="form-control" 
+                                                                   [(ngModel)]="traveler.firstName" 
+                                                                   [placeholder]="'cartSummary.firstNamePlaceholder' | translate" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ 'cartSummary.travelerLastName' | translate }}</label>
+                                                            <input type="text" class="form-control" 
+                                                                   [(ngModel)]="traveler.lastName" 
+                                                                   [placeholder]="'cartSummary.lastNamePlaceholder' | translate" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ 'cartSummary.travelerEmail' | translate }}</label>
+                                                            <input type="email" class="form-control" 
+                                                                   [(ngModel)]="traveler.email" 
+                                                                   [placeholder]="'cartSummary.travelerEmailPlaceholder' | translate" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-0">
+                                                            <label class="form-label">{{ 'cartSummary.travelerPhone' | translate }}</label>
+                                                            <input type="text" class="form-control" 
+                                                                   [(ngModel)]="traveler.phone" 
+                                                                   [placeholder]="'cartSummary.phonePlaceholder' | translate" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <!-- Quick Navigation for Multiple Travelers -->
+                            <div class="travelers-navigation" *ngIf="travelersInfo.length > 2">
+                                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                    <span class="small text-muted">{{ travelersInfo.length }} {{ 'cartSummary.travelersTotal' | translate }}</span>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="document.querySelector('.travelers-scroll-container').scrollBy({top: -200, behavior: 'smooth'})">
+                                            <i class="fas fa-chevron-up"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="document.querySelector('.travelers-scroll-container').scrollBy({top: 200, behavior: 'smooth'})">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div class="empty-travelers" *ngIf="travelersInfo.length === 0">
+                            <div class="text-center py-4">
+                                <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
+                                <h6 class="text-muted">{{ 'cartSummary.noToursInCart' | translate }}</h6>
+                                <p class="text-muted small">{{ 'cartSummary.addToursToComplete' | translate }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Payment Methods - Wompi Integration -->
+                <div class="card checkout-card mt-4">
+                    <div class="card-header">
+                        <h5>{{ 'cartSummary.paymentMethod' | translate }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="payment-wompi">
+                            <div class="d-flex align-items-center justify-content-center p-4 border rounded bg-light">
+                                <div class="text-center">
+                                    <div class="wompi-logo mb-3">
+                                        <i class="fas fa-credit-card fa-2x text-primary me-2"></i>
+                                        <i class="fas fa-university fa-2x text-info me-2"></i>
+                                        <i class="fas fa-mobile-alt fa-2x text-success"></i>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center mb-2">
+                                        <i class="fas fa-shield-alt text-success me-2"></i>
+                                        <strong class="text-dark">{{ 'cartSummary.securePayments' | translate }}</strong>
+                                    </div>
+                                    <small class="text-muted d-block">
+                                        {{ 'cartSummary.accepts' | translate }} <strong>{{ 'cartSummary.creditDebitCards' | translate }}</strong>, <strong>PSE</strong>, <strong>Nequi</strong> {{ 'cartSummary.andMoreMethods' | translate }}
+                                    </small>
+                                    <div class="mt-3">
+                                        <span class="badge bg-primary me-1">Visa</span>
+                                        <span class="badge bg-primary me-1">Mastercard</span>
+                                        <span class="badge bg-info me-1">PSE</span>
+                                        <span class="badge bg-success me-1">Nequi</span>
+                                        <span class="badge bg-warning">Bancolombia</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 p-3 bg-success bg-opacity-10 rounded">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-info-circle text-success me-2"></i>
+                                    <small class="text-success">
+                                        <strong>{{ 'cartSummary.howItWorks' | translate }}</strong> {{ 'cartSummary.paymentExplanation' | translate }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Facturación Electrónica -->
+                <div class="card checkout-card mt-4">
+                    <div class="card-header">
+                        <h5>{{ 'cartSummary.electronicBilling.title' | translate }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="electronicBillingCheck" [(ngModel)]="billingForm.required">
+                            <label class="form-check-label fw-bold" for="electronicBillingCheck">
+                                {{ 'cartSummary.electronicBilling.wantBilling' | translate }}
+                            </label>
+                        </div>
+                        
+                        <!-- Campos de Facturación -->
+                        <div class="row" *ngIf="billingForm.required">
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.documentType' | translate }}</label>
+                                <select class="form-control" [(ngModel)]="billingForm.documentType" required>
+                                    <option value="CC">{{ 'cartSummary.electronicBilling.docTypes.CC' | translate }}</option>
+                                    <option value="CE">{{ 'cartSummary.electronicBilling.docTypes.CE' | translate }}</option>
+                                    <option value="NIT">{{ 'cartSummary.electronicBilling.docTypes.NIT' | translate }}</option>
+                                    <option value="PASSPORT">{{ 'cartSummary.electronicBilling.docTypes.PASSPORT' | translate }}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.documentNumber' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="billingForm.documentNumber" [placeholder]="'cartSummary.electronicBilling.placeholders.documentNumber' | translate" required>
+                            </div>
+                            <div class="col-lg-12 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.customerName' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="billingForm.customerName" [placeholder]="'cartSummary.electronicBilling.placeholders.customerName' | translate" required>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.email' | translate }}</label>
+                                <input type="email" class="form-control" [(ngModel)]="billingForm.email" [placeholder]="'cartSummary.electronicBilling.placeholders.email' | translate" required>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">{{ 'cartSummary.electronicBilling.phone' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="billingForm.phone" [placeholder]="'cartSummary.electronicBilling.placeholders.phone' | translate" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Order Details - Sidebar -->
+            <div class="col-lg-4">
+                <div class="card checkout-card">
+                    <div class="card-header">
+                        <h5>{{ 'cartSummary.orderSummary' | translate }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Cart Items Summary -->
+                        <div class="order-summary" *ngIf="hasItems">
+                            <div class="order-item position-relative" *ngFor="let item of cartItems; trackBy: trackByItemId; let i = index">
+                                <!-- Delete Button - Top Right -->
+                                <button 
+                                    type="button" 
+                                    class="btn btn-sm btn-outline-danger position-absolute delete-tour-btn"
+                                    (click)="confirmRemoveItem(item.id, item.tour.name)"
+                                    [disabled]="processing"
+                                    [title]="'cartSummary.removeFromCart' | translate">
+                                    <i class="fas fa-times" *ngIf="!processing"></i>
+                                    <i class="fas fa-spinner fa-spin" *ngIf="processing"></i>
+                                </button>
+
+                                <div class="d-flex align-items-start mb-3">
+                                    <img [src]="getTourImage(item)" 
+                                         [alt]="(item.tour.name | localizedName)" class="tour-thumb me-3"
+                                         (error)="$any($event.target).src !== 'assets/img/tours/tours-01.jpg' ? $any($event.target).src='assets/img/tours/tours-01.jpg' : null">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ (item.tour.name | localizedName) }}</h6>
+                                        <div class="tour-details mb-2">
+                                            <p class="text-muted small mb-1">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                {{ item.dayDate | date:'fullDate':'':currentLang }}
+                                            </p>
+                                            <p class="text-muted small mb-1">
+                                                <i class="fas fa-clock me-1"></i>
+                                                {{ item.schedule.startTime }} - {{ item.schedule.endTime }}
+                                            </p>
+                                            <p class="text-muted small mb-1" [title]="item.address.city + ', ' + item.address.state">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                {{ item.address.city.length > 15 ? (item.address.city | slice:0:15) + '...' : item.address.city }}, {{ item.address.state.length > 15 ? (item.address.state | slice:0:15) + '...' : item.address.state }}
+                                            </p>
+                                            <!-- TC-006: para tours grupo mostramos la cantidad de grupos; para individual la cantidad de pax. -->
+                                            <p class="text-muted small mb-1" *ngIf="item.tour?.priceType === 'grupo'">
+                                                <i class="fas fa-users me-1"></i>
+                                                {{ (item.groupCount || 1) }} {{ 'cartSummary.groupsLabel' | translate }}
+                                                <span class="text-secondary">({{ item.totalParticipants }} {{ 'cartSummary.participantsLabel' | translate }})</span>
+                                            </p>
+                                            <p class="text-muted small mb-1" *ngIf="item.tour?.priceType !== 'grupo'">
+                                                <i class="fas fa-users me-1"></i>
+                                                {{ item.totalParticipants }} {{ 'cartSummary.participantsLabel' | translate }}
+                                            </p>
+                                        </div>
+
+                                        <!-- Participants Breakdown — TC-006: solo tiene sentido para individual (precio por edad). -->
+                                        <div class="participants-breakdown" *ngIf="item.tour?.priceType !== 'grupo'">
+                                            <small class="text-muted d-block mb-1">{{ 'cartSummary.participantsLabel' | translate }}:</small>
+                                            <div class="ms-2">
+                                                <div *ngFor="let participant of item.participants" class="d-flex justify-content-between align-items-center mb-1">
+                                                    <small>{{ getParticipantTypeLabel(participant.ageType) | translate }}: {{ participant.quantity }}</small>
+                                                    <small class="text-muted">{{ formatPrice(participant.price) }} COP {{ 'cartSummary.each' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="text-end mt-2">
+                                            <div class="tour-price-display">
+                                                <strong class="tour-total-price">{{ formatPrice(item.totalPrice) }} COP</strong>
+                                                <small class="tour-price-label">{{ 'cartSummary.totalPerTour' | translate }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr *ngIf="i < cartItems.length - 1">
+                            </div>
+                        </div>
+
+                        <!-- Price Breakdown -->
+                        <div class="price-breakdown" *ngIf="cartSummary">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>{{ 'cartSummary.subtotal' | translate }}:</span>
+                                <span>{{ formatPrice(cartSummary.totalPrice) }} COP</span>
+                            </div>
+                            
+                            <!-- Créditos Disponibles (Aviso) -->
+                            <div class="d-flex justify-content-between align-items-center mb-2" *ngIf="totalCreditsValue > 0 && selectedCredits.length === 0">
+                                <span class="text-success"><i class="fas fa-wallet me-1"></i> {{ 'cartSummary.availableCredits' | translate }}</span>
+                                <span class="text-success">{{ formatPrice(totalCreditsValue) }}</span>
+                            </div>
+                            
+                            <!-- Créditos Aplicados -->
+                            <div class="d-flex justify-content-between align-items-center mb-2" *ngIf="selectedCredits.length > 0">
+                                <span class="text-primary"><i class="fas fa-check-circle me-1"></i> {{ 'cartSummary.appliedCredits' | translate }}</span>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-primary me-2">-{{ formatPrice(appliedCreditsValue) }}</span>
+                                    <button class="btn btn-sm btn-outline-danger p-0 px-1" (click)="removeAppliedCredits()" [title]="'cartSummary.removeCredits' | translate">
+                                        <i class="fas fa-times fs-10"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info py-2 px-3 mt-2 d-flex justify-content-between align-items-center" *ngIf="totalCreditsValue > 0 && selectedCredits.length === 0">
+                                <div>
+                                    <small><i class="fas fa-info-circle me-1"></i> {{ 'cartSummary.hasCreditsMsg' | translate }}</small>
+                                </div>
+                                <button class="btn btn-sm btn-primary ms-2 btn-credits-square" data-bs-toggle="modal" data-bs-target="#creditsModal" (click)="isModalOpen = true">
+                                    {{ 'cartSummary.useCreditBtn' | translate }}
+                                </button>
+                            </div>
+                            
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>{{ 'cartSummary.totalToPay' | translate }}</strong>
+                                <strong class="text-primary">{{ formatPrice(finalTotalToPay) }} COP</strong>
+                            </div>
+                        </div>
+
+                        <!-- Modal de Créditos -->
+                        <div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="creditsModalLabel">{{ 'cartSummary.selectCreditsToUse' | translate }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="isModalOpen = false"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <app-client-credits *ngIf="isModalOpen"
+                                            [mode]="'payment'" 
+                                            [creditsAvailable]="userCredits"
+                                            [maxValue]="totalAmount"
+                                            [isProcessing]="processing"
+                                            (useCredits)="onCreditsSelected($any($event))"
+                                            (cancel)="onCreditsCanceled()">
+                                        </app-client-credits>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="checkout-actions">
+                            <button class="btn btn-primary w-100 mb-2" 
+                                    [disabled]="!hasItems || processing"
+                                    (click)="proceedToPayment()">
+                                <span *ngIf="processing" class="spinner-border spinner-border-sm me-2"></span>
+                                {{ 'cartSummary.proceedToPayment' | translate }}
+                            </button>
+                            <button class="btn btn-outline-secondary w-100" (click)="continueShopping()">
+                                {{ 'cartSummary.continueShopping' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty Cart State -->
+        <div class="row" *ngIf="!hasItems">
+            <div class="col-12">
+                <div class="empty-cart text-center py-5">
+                    <div class="empty-cart-icon">
+                        <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+                    </div>
+                    <h4 class="mb-3">{{ 'cartSummary.cartEmpty' | translate }}</h4>
+                    <p class="text-muted mb-4">{{ 'cartSummary.exploreToursPrompt' | translate }}</p>
+                    <button class="btn btn-primary btn-lg" (click)="continueShopping()">
+                        {{ 'cartSummary.exploreToursBtn' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Success / Error Modal -->
+    <div class="modal fade" id="payment-result-modal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content booking-success-modal">
+                <div class="modal-body">
+                    <div>
+                        <div class="booking-icon text-center mb-3">
+                            <i *ngIf="paymentResultType === 'success'" class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                            <i *ngIf="paymentResultType === 'warning'" class="fas fa-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+                            <i *ngIf="paymentResultType === 'error'" class="fas fa-times-circle text-danger" style="font-size: 4rem;"></i>
+                            <i *ngIf="paymentResultType === 'pending'" class="fas fa-clock text-info" style="font-size: 4rem;"></i>
+                        </div>
+                        <h5 class="text-center mb-3">{{ paymentResultTitle | translate }}</h5>
+                        <div class="text-center mb-4">
+                            <p>{{ paymentResultMessage | translate }}</p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <button type="button" class="btn btn-primary d-flex flex-shrink-0" (click)="closePaymentModal()">
+                                {{ 'cartSummary.close' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Template -->
+    <ng-template #loadingTemplate>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="loading-state text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">{{ 'cartSummary.loading' | translate }}</span>
+                        </div>
+                        <h5>{{ 'cartSummary.loadingCart' | translate }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>
+<!-- /Page Wrapper -->

@@ -1,0 +1,116 @@
+<div class="content">
+  <div class="container">
+
+    <div class="row mb-5 text-center">
+      <div class="col-md-12 col-12">
+        <h2 class="mb-2 text-dark">{{ 'contactUsPage.breadcrumb.title' | translate }}</h2>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark"><i class="isax isax-home5"></i></a></li>
+            <li class="breadcrumb-item text-dark">{{ 'contactUsPage.breadcrumb.pages' | translate }}</li>
+            <li class="breadcrumb-item active text-muted" aria-current="page">{{ 'contactUsPage.breadcrumb.title' | translate }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row align-items-center row-gap-4">
+      <div class="col-xl-7 col-lg-7">
+        <div class="mb-4 mb-lg-0">
+          <div class="row">
+            <div class="col-md-8">
+              <h2 class="mb-3">{{ 'contactUsPage.info.heading' | translate }}</h2>
+            </div>
+          </div>
+          <div class="mb-4">
+            <h6 class="mb-2">{{ 'contactUsPage.info.subheading' | translate }}</h6>
+            <p>{{ 'contactUsPage.info.paragraph' | translate }}</p>
+          </div>
+          <div class="border-bottom mb-4">
+            <div class="d-flex align-items-center mb-4">
+              <span class="avatar avatar-lg rounded-circle bg-light  text-gray-6 me-2"><i class="isax isax-sms5 fs-24"></i></span>
+              <div>
+                <p class="fs-14 mb-0">{{ 'contactUsPage.info.emailLabel' | translate }}</p>
+                <h6 class="text-gray-6"> operaciones&#64;tourya.co</h6>
+              </div>
+            </div>
+          </div>
+          <div class="border-bottom mb-4">
+            <div class="d-flex align-items-center mb-4">
+              <span class="avatar avatar-lg rounded-circle bg-light  text-gray-6 me-2"><i class="isax isax-call-calling5 fs-24"></i></span>
+              <div>
+                <p class="fs-14 mb-0">{{ 'contactUsPage.info.phoneLabel' | translate }}</p>
+                <h6 class="text-gray-6">+57 310 6295076</h6>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="d-flex align-items-center">
+              <span class="avatar avatar-lg rounded-circle bg-light  text-gray-6 me-2"><i class="isax isax-map-15 fs-24"></i></span>
+              <div>
+                <p class="fs-14 mb-0">{{ 'contactUsPage.info.addressLabel' | translate }}</p>
+                <h6 class="text-gray-6">Centro comercial New Point local 227, San andres islas</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-5 col-lg-5">
+        <div class="card bg-light-200 shadow-none mb-0">
+          <div class="card-body">
+            <div class="mb-3">
+              <h2 class="mb-1">{{ 'contactUsForm.title' | translate }}</h2>
+              <p class="text-gray-6 mb-1">{{ 'contactUsForm.subtitle' | translate }}</p>
+            </div>
+            <form>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">{{ 'contactUsForm.firstName' | translate }} <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">{{ 'contactUsForm.lastName' | translate }} <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label class="form-label">{{ 'contactUsForm.email' | translate }} <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label class="form-label">{{ 'contactUsForm.phone' | translate }} <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label class="form-label">{{ 'contactUsForm.message' | translate }} <span class="text-danger">*</span></label>
+                    <textarea class="form-control" rows="3"></textarea>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary">{{ 'contactUsForm.sendButton' | translate }}</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="map-grid">
+      <iframe
+        class="w-100"
+        height="300"
+        src="https://maps.google.com/maps?hl=es&q=Centro%20comercial%20New%20Point%20local%20227%2C%20San%20Andr%C3%A9s%20Islas&z=14&output=embed"
+        allowfullscreen=""
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,307 @@
+<!-- Page Header -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <button class="btn btn-secondary" (click)="goBack()">
+                    <i class="isax isax-arrow-left me-1"></i>
+                    {{ 'templates.form.back' | translate }}
+                </button>
+            </div>
+            <h4 class="page-title">{{ isEditMode ? ('templates.form.editTemplate' | translate) : ('templates.form.createTemplate' | translate) }}</h4>
+        </div>
+    </div>
+</div>
+
+<!-- Template Form -->
+<div class="row">
+    <div class="col-12">
+        <form [formGroup]="templateForm" >
+            <div class="card shadow-none" id="basic_info">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="fs-18">{{ 'templates.form.templateInfo' | translate }}</h5>
+                    </div>
+                </div>
+                <div class="card-body pb-1">
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <div class="mt-3 mb-3">
+                                <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                    (click)="resetForm()">
+                                    <i class="isax isax-refresh"></i>
+                                    {{ 'templates.form.resetForm' | translate }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">{{ 'templates.form.label' | translate }}</label>
+                                <input type="text" class="form-control" formControlName="label"
+                                    (blur)="onLabelBlur($event)">
+                                <div *ngIf="templateForm.controls['label'].invalid && (templateForm.controls['label'].dirty || templateForm.controls['label'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="templateForm.controls['label'].errors?.['required']">
+                                        {{ 'templates.form.errors.labelRequired' | translate }}
+                                    </div>
+                                    <div *ngIf="templateForm.controls['label'].errors?.['minlength']">
+                                        {{ 'templates.form.errors.labelMinLength' | translate }}
+                                    </div>
+                                    <div *ngIf="templateForm.controls['label'].errors?.['maxlength']">
+                                        {{ 'templates.form.errors.labelMaxLength' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3 checkbox-group">
+                                <label class="form-label">{{ 'templates.form.daysOfWeek' | translate }}</label>
+
+                                <ul>
+                                    <li *ngFor="let day of DAYS_OF_WEEK">
+                                        <mat-checkbox [checked]="isDaySelected(day.value)"
+                                            (change)="onDayChange(day.value, $event)">
+                                            {{ day.label | translate }}
+                                        </mat-checkbox>
+                                    </li>
+                                </ul>
+
+                                <div *ngIf="templateForm.controls['daysOfWeek'].invalid && (templateForm.controls['daysOfWeek'].dirty || templateForm.controls['daysOfWeek'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="templateForm.controls['daysOfWeek'].errors?.['required']">
+                                        {{ 'templates.form.errors.daysOfWeekRequired' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-none" id="slots">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="fs-18">{{ 'templates.form.slots' | translate }}</h5>
+                    </div>
+                </div>
+
+                <div class="card-body pb-1">
+                    <div formArrayName="slots">
+                        <ng-container *ngFor="let slot of slots.controls; let i=index" [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="mb-3">
+                                        <h6>{{ 'templates.form.slot' | translate }} #{{i + 1}}</h6>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <a *ngIf="slots.length > 1"
+                                        class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                        (click)="removeSlot(i)">
+                                        <i class="isax isax-trash"></i>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'templates.form.startTime' | translate }}</label>
+                                        <input type="time" class="form-control"
+                                            formControlName="startTime" (blur)="onStartTimeBlur(i)">
+
+                                        <div *ngIf="slot.get('startTime')?.invalid &&
+                                            (slot.get('startTime')?.touched || slot.get('startTime')?.dirty)"
+                                            class="text-danger">
+                                            <div *ngIf="slot.get('startTime')?.errors?.['required']">
+                                                {{ 'templates.form.errors.startTimeRequired' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'templates.form.endTime' | translate }}</label>
+                                        <input type="time" class="form-control"
+                                            formControlName="endTime" (blur)="onEndTimeBlur(i)">
+
+                                        <div *ngIf="slot.get('endTime')?.invalid && (slot.get('endTime')?.touched || slot.get('endTime')?.dirty)"
+                                            class="text-danger">
+                                            <div *ngIf="slot.get('endTime')?.errors?.['required']">
+                                                {{ 'templates.form.errors.endTimeRequired' | translate }}
+                                            </div>
+
+                                            <div *ngIf="slot.get('endTime')?.errors?.['invalidRangeTime']">
+                                                {{ 'templates.form.errors.invalidRangeTime' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'templates.form.capacity' | translate }}</label>
+                                        <input type="number" class="form-control"
+                                            formControlName="capacity"
+                                            (keypress)="onKeypressCapacity($event)" [min]="1">
+
+                                        <div *ngIf="slot.get('capacity')?.invalid && (slot.get('capacity')?.touched || slot.get('capacity')?.dirty)"
+                                            class="text-danger">
+                                            <div *ngIf="slot.get('capacity')?.errors?.['required']">
+                                                {{ 'templates.form.errors.capacityRequired' | translate }}
+                                            </div>
+
+                                            <div *ngIf="slot.get('capacity')?.errors?.['onlyNumber']">
+                                                {{ 'templates.form.errors.capacityNumber' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card shadow-none" id="prices">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="fs-18">{{ 'templates.form.prices' | translate }}</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body pb-1">
+                                        <div formArrayName="prices">
+                                            <ng-container *ngFor="let price of prices(i).controls; let j=index"
+                                                [formGroupName]="j">
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <div class="mb-3">
+                                                            <h6>{{ 'templates.form.price' | translate }} #{{j + 1}}</h6>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <a *ngIf="prices(i).length > 1"
+                                                            class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                            (click)="removePrice(i, j)">
+                                                            <i class="isax isax-trash"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ 'templates.form.ageType' | translate }}</label>
+
+                                                            <mat-select class="custom-mat-select select"
+                                                                 [placeholder]="'tour-form.fields.category.placeholder' | translate" formControlName="ageType"
+                                                                 (selectionChange)="onAgeTypeChange(i, j)">
+                                                                 <mat-option
+                                                                     *ngIf="isAnyOptionAvailable(i, j)"
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ANY, i, j)"
+                                                                     [value]="TypeOfPersonLabel.ANY">
+                                                                     {{ 'tour-schedule.prices.ageType.ANY' | translate }}
+                                                                 </mat-option>
+                                                                 <mat-option
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.ADULT, i, j)"
+                                                                     [value]="TypeOfPersonLabel.ADULT">
+                                                                     {{ 'tour-schedule.prices.ageType.ADULT' | translate }}
+                                                                 </mat-option>
+                                                                 <mat-option
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.CHILD, i, j)"
+                                                                     [value]="TypeOfPersonLabel.CHILD">
+                                                                     {{ 'tour-schedule.prices.ageType.CHILD' | translate }}
+                                                                 </mat-option>
+                                                                 <mat-option
+                                                                     [disabled]="typeOfPersonIsSelected(TypeOfPersonLabel.INFANT, i, j)"
+                                                                     [value]="TypeOfPersonLabel.INFANT">
+                                                                     {{ 'tour-schedule.prices.ageType.INFANT' | translate }}
+                                                                 </mat-option>
+                                                             </mat-select>
+
+                                                            <div *ngIf="price.get('ageType')?.invalid && (price.get('ageType')?.touched || price.get('ageType')?.dirty)"
+                                                                class="text-danger">
+                                                                <div *ngIf="price.get('ageType')?.errors?.['required']">
+                                                                    {{ 'templates.form.errors.ageTypeRequired' | translate }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ 'templates.form.priceLabel' | translate }}</label>
+                                                            <input type="number" class="form-control" formControlName="providerPrice" (blur)="onPriceBlur(i, j)" [min]="0" [readonly]="price.get('ageType')?.value === TypeOfPersonLabel.INFANT">
+
+                                                            <div *ngIf="price.get('providerPrice')?.invalid && (price.get('providerPrice')?.touched || price.get('providerPrice')?.dirty)"
+                                                                class="text-danger">
+                                                                <div *ngIf="price.get('providerPrice')?.errors?.['required']">
+                                                                    {{ 'templates.form.errors.priceRequired' | translate }}
+                                                                </div>
+                                                                <div *ngIf="price.get('providerPrice')?.errors?.['min']">
+                                                                    {{ 'templates.form.errors.priceMin' | translate }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+
+                                            <div class="mt-3 mb-3">
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-primary btn-sm add-highlight"
+                                                    (click)="addPrice(i)">
+                                                    <i class="isax isax-add-circle me-1"></i>
+                                                    {{ 'templates.form.addNewPrice' | translate }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div class="mt-3 mb-3">
+                            <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                (click)="addSlot()">
+                                <i class="isax isax-add-circle me-1"></i>
+                                {{ 'templates.form.addNewSlot' | translate }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="save">
+                <div class="d-flex align-items-center justify-content-end">
+                    <button type="button" class="btn btn-primary" (click)="onSubmit()"
+                        [disabled]="loading || (submitted && templateForm.invalid)">
+                        <span>{{ isEditMode ? ('templates.form.updateTemplate' | translate) : ('templates.form.createTemplateBtn' | translate) }}</span>
+                        <div *ngIf="loading" class="spinner-border spinner-border-sm">
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for ANY to ADULT conversion -->
+<div class="modal fade show" *ngIf="showAnyModal" style="display: block; background-color: rgba(0,0,0,0.5);" 
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'tour-schedule.anyModal.title' | translate }}</h5>
+                <button type="button" class="btn-close" (click)="closeAnyModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'tour-schedule.anyModal.p1' | translate }}</p>
+                <p>{{ 'tour-schedule.anyModal.p2' | translate }}</p>
+                <p>{{ 'tour-schedule.anyModal.p3' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeAnyModal()">{{ 'tour-schedule.anyModal.cancel' | translate }}</button>
+                <button type="button" class="btn btn-primary" (click)="confirmAnyToAdultConversion()">{{ 'tour-schedule.anyModal.confirm' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

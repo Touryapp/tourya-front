@@ -1,10 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+﻿/* You can add global styles to this file, and also import other style files */
 @import './assets/tabler-icons/tabler-icons.min.css';
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lightgallery.css");
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css");
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-video.css");
 // @import '@fontsource/inter/variable.css';
 
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
   .offcanvas-body{
     height: 100vh !important;;
@@ -24,7 +25,7 @@
   height:100vh !important;
 }
 .theme-green .bs-datepicker-head {
-  background-color: #D4483B;
+  background-color: #1b6475;
 }
 .ng-scrollbar-thumb[_ngcontent-ng-c2467238161]{
   background: none !important;
@@ -185,7 +186,7 @@ cdk-virtual-scroll-viewport {
 .theme-green .bs-datepicker-body table td.selected span,
 .theme-green .bs-datepicker-body table td span[class*=select-]:after,
 .theme-green .bs-datepicker-body table td[class*=select-] span:after {
-    background-color: #D4483B;
+    background-color: #1b6475;
 }
 .mat-mdc-option {
   .mdc-list-item__primary-text{
@@ -1206,3 +1207,59 @@ mat-slider {
       left: -10px !important;
   }
 }
+
+// Global fix for owl-carousel stage children height
+.owl-stage > div {
+  height: 100% !important;
+  min-height: 100% !important;
+}
+
+
+// Force owl-stage children to fill height - more specific selector
+.owl-stage-outer .owl-stage > div,
+.owl-stage > div[class*='ng-tns'] {
+  height: 100% !important;
+  min-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+
+// Ultra-specific selector for owl-stage children - force height
+.hero-sec-six .banner-slider .owl-carousel .owl-stage-outer .owl-stage > div,
+.banner-slider .owl-stage > div,
+div.owl-stage > div {
+  height: 100% !important;
+  min-height: 100% !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+// CRITICAL FIX: Force owl-stage children to 100% height using universal selector
+.owl-stage > * {
+  height: 100% !important;
+  min-height: 100% !important;
+}
+
+.owl-stage > div[class] {
+  height: 100% !important;
+  min-height: 100% !important;
+  flex: 1 !important;
+}
+
+// â”€â”€â”€ Schedule Calendar overrides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// The colored circle for selected/start/end dates is drawn by the span::after
+// pseudo-element. To change the circle color, edit $circle-color below.
+// The in-range strip color is rgba of the same value.
+//
+// Rules here override both:
+//   - ngx-bootstrap bs-datepicker.css (which uses #5cb85c for theme-green)
+//   - The earlier override at line 185 (which used #1b6475 without !important)
+
+// (Los overrides del calendario inline estÃ¡n en tour-schedule-test.component.scss
+// bajo .tour-schedule-test-page para no afectar otros calendarios)
+
+
+
+.swal2-container { z-index: 100000 !important; }
+.cdk-overlay-container { z-index: 9999 !important; }

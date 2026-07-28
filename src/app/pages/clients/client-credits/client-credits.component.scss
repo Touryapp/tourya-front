@@ -1,0 +1,19 @@
+.provider-tour-management {
+    .selected-row {
+        background-color: rgba(0, 102, 255, 0.05) !important;
+        transition: background-color 0.2s ease;
+        
+        td {
+            border-bottom-color: rgba(0, 102, 255, 0.1);
+        }
+    }
+    
+    .table-responsive {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+}
+
+.fs-10 {
+    font-size: 10px !important;
+}

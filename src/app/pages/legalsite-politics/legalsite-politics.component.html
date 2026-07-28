@@ -1,0 +1,21 @@
+    <!-- Page Wrapper -->
+    <div class="content">
+        <div class="container">
+            
+            <div class="row mb-5 text-center">
+                <div class="col-md-12 col-12">
+                    <h2 class="mb-2 text-dark">{{ 'legal.titlePrivacy' | translate }}</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center mb-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index" class="text-dark"><i class="isax isax-home5"></i></a></li>
+                            <li class="breadcrumb-item text-dark">{{ 'legal.pages' | translate }}</li>
+                            <li class="breadcrumb-item active text-muted" aria-current="page">{{ 'legal.titlePrivacy' | translate }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div [innerHTML]="'legal.privacy' | translate | safeHtml"></div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->

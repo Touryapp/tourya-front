@@ -1,0 +1,254 @@
+:host {
+  display: block;
+  max-height: 95vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-header {
+  padding: 24px 24px 16px;
+
+  .modal-title-section {
+    flex: 1;
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+      color: #6c757d;
+    }
+  }
+}
+
+
+.confirmation-section {
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.tour-name-badge {
+  background: rgba(var(--bs-primary-rgb), 0.05);
+  border-left: 4px solid var(--bs-primary);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  
+  h5 {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+}
+
+.reschedule-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  .detail-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+
+    .detail-icon {
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--bs-primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      
+      i {
+        font-size: 20px;
+      }
+    }
+
+    .detail-info {
+      display: flex;
+      flex-direction: column;
+
+      .detail-label {
+        font-size: 11px;
+        color: #6c757d;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .detail-value {
+        font-size: 14px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.participants-summary {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+
+  .participant-confirm-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f1f3f5;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .p-label {
+      color: #495057;
+      font-size: 14px;
+    }
+
+    .p-quantity {
+      font-weight: 700;
+      color: var(--bs-primary);
+      background: rgba(var(--bs-primary-rgb), 0.1);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+  }
+}
+
+.price-comparison-card {
+  background: #2c3e50;
+  color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(44, 62, 80, 0.2);
+
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    &.final {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      
+      .price-label {
+        color: #fff;
+        font-weight: 600;
+      }
+    }
+
+    .price-label {
+      font-size: 14px;
+      color: #adb5bd;
+    }
+
+    .price-value {
+      font-size: 16px;
+      font-weight: 500;
+
+      &.highlight {
+        font-size: 22px;
+        font-weight: 700;
+        color: #fff;
+      }
+    }
+  }
+  
+  .price-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 6px;
+    border-radius: 8px;
+  }
+
+  .price-note-higher {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    
+    .warning-title {
+      font-size: 1.1rem;
+    }
+    
+    .warning-text {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.modal-footer {
+  padding: 0 24px 32px !important;
+}
+
+.footer-actions {
+  .btn {
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-header {
+    padding: 16px 16px 8px;
+  }
+  
+  .modal-body {
+    padding: 16px !important;
+  }
+
+  .modal-footer {
+    padding: 0 16px 20px !important;
+  }
+
+  .reschedule-details-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .footer-actions {
+    flex-direction: column;
+    gap: 10px !important;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .price-comparison-card {
+    padding: 15px;
+    
+    .price-value.highlight {
+      font-size: 1.15rem;
+    }
+  }
+}

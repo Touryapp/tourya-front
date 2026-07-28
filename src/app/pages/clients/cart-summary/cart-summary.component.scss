@@ -1,0 +1,912 @@
+// Cart Summary Component Styles
+.checkout-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e6e6e6;
+    font-weight: 600;
+    
+    h5 {
+      margin-bottom: 0;
+      color: #333;
+    }
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+// Checkout form sections
+.checkout-title {
+  h6 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+}
+
+.checkout-details {
+  .form-label {
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-control {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    
+    &:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+  }
+}
+
+// Payment Wompi section
+.payment-wompi {
+  .wompi-logo {
+    i {
+      font-size: 2rem;
+      
+      &.text-primary {
+        color: #007bff !important;
+      }
+      
+      &.text-info {
+        color: #17a2b8 !important;
+      }
+      
+      &.text-success {
+        color: #28a745 !important;
+      }
+    }
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    
+    &.bg-primary {
+      background-color: #007bff !important;
+    }
+    
+    &.bg-info {
+      background-color: #17a2b8 !important;
+    }
+    
+    &.bg-success {
+      background-color: #28a745 !important;
+    }
+    
+    &.bg-warning {
+      background-color: #ffc107 !important;
+      color: #212529 !important;
+    }
+  }
+  
+  .bg-success.bg-opacity-10 {
+    background-color: rgba(40, 167, 69, 0.1) !important;
+  }
+}
+
+.payment-security {
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border-left: 4px solid #28a745;
+  
+  .text-success {
+    color: #28a745 !important;
+  }
+  
+  small {
+    font-size: 0.85rem;
+  }
+}
+
+// Order summary sidebar
+.order-summary {
+  .order-item {
+    .tour-thumb {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #e6e6e6;
+    }
+    
+    h6 {
+      color: #333;
+      font-weight: 600;
+      font-size: 0.9rem;
+      line-height: 1.3;
+    }
+    
+    .text-muted {
+      font-size: 0.8rem;
+      color: #666 !important;
+      
+      i {
+        width: 12px;
+        text-align: center;
+      }
+    }
+    
+    .text-primary {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.price-breakdown {
+  .d-flex {
+    font-size: 0.9rem;
+    
+    &:last-child {
+      font-size: 1rem;
+      
+      strong {
+        font-weight: 700;
+      }
+      
+      .text-primary {
+        font-size: 1.1rem;
+      }
+    }
+  }
+  
+  hr {
+    margin: 1rem 0;
+    border-color: #e6e6e6;
+  }
+}
+
+// Action buttons
+.checkout-actions {
+  .btn {
+    border-radius: 6px;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    
+    &.btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      
+      &:hover:not(:disabled) {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+      
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+    
+    &.btn-outline-secondary {
+      color: #6c757d;
+      border-color: #6c757d;
+      
+      &:hover {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+      }
+    }
+  }
+  
+  .spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+// Empty cart state
+.empty-cart {
+  .empty-cart-icon {
+    i {
+      opacity: 0.5;
+    }
+  }
+  
+  h4 {
+    color: #666;
+    font-weight: 600;
+  }
+  
+  p {
+    color: #888;
+    font-size: 1rem;
+  }
+  
+  .btn-lg {
+    padding: 0.875rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+  }
+}
+
+// Loading state
+.loading-state {
+  .spinner-border {
+    border-width: 3px;
+  }
+  
+  h5 {
+    color: #666;
+    font-weight: 500;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .checkout-card {
+    margin-bottom: 1.5rem;
+    
+    .card-body {
+      padding: 1rem;
+    }
+  }
+  
+  .checkout-details {
+    .row {
+      .col-lg-6,
+      .col-lg-4,
+      .col-lg-12 {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  
+  .order-summary {
+    .order-item {
+      .tour-thumb {
+        width: 50px;
+        height: 50px;
+      }
+      
+      h6 {
+        font-size: 0.85rem;
+      }
+      
+      .text-muted {
+        font-size: 0.75rem;
+      }
+    }
+  }
+  
+  .checkout-actions {
+    .btn {
+      padding: 0.875rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Breadcrumb customization
+.breadcrumb-bar.breadcrumb-bg-05 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  .breadcrumb-title {
+    color: white;
+    font-weight: 700;
+  }
+  
+  .breadcrumb {
+    .breadcrumb-item {
+      a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        
+        &:hover {
+          color: white;
+        }
+        
+        i {
+          font-size: 0.9rem;
+        }
+      }
+      
+      &.active {
+        color: white;
+      }
+      
+      &::before {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+}
+
+// Delete Tour Button Styles
+.order-item {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #f0f0f0;
+  
+  &:hover {
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+  
+  .delete-tour-btn {
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    border: 1px solid #dc3545;
+    
+    &:hover {
+      background-color: #dc3545;
+      border-color: #dc3545;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    i {
+      font-size: 12px;
+    }
+  }
+}
+
+// Tour Details Improvements
+.tour-details {
+  .text-muted {
+    font-size: 0.85rem;
+    
+    i {
+      color: #007bff;
+      width: 16px;
+    }
+  }
+}
+
+// Participants Breakdown Styles
+.participants-breakdown {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border-left: 3px solid #007bff;
+  
+  .d-flex {
+    font-size: 0.8rem;
+    margin-bottom: 2px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  small {
+    &.text-muted {
+      font-weight: 500;
+      color: #666 !important;
+    }
+  }
+}
+
+// Tour Price Display - Enhanced
+.tour-price-display {
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+  border: 2px solid #28a745;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  
+  .tour-total-price {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #28a745;
+    text-shadow: 0 1px 3px rgba(40, 167, 69, 0.2);
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.5px;
+  }
+  
+  .tour-price-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #6c757d;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Tour Thumbnail Improvements
+.tour-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: #007bff;
+    transform: scale(1.05);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .order-item {
+    .delete-tour-btn {
+      top: 5px;
+      right: 5px;
+      width: 28px;
+      height: 28px;
+      
+      i {
+        font-size: 10px;
+      }
+    }
+  }
+  
+  .tour-thumb {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .participants-breakdown {
+    padding: 0.5rem;
+    
+    .d-flex {
+      font-size: 0.75rem;
+    }
+  }
+  
+  .tour-price-display {
+    padding: 0.5rem;
+    
+    .tour-total-price {
+      font-size: 1.25rem;
+    }
+    
+    .tour-price-label {
+      font-size: 0.7rem;
+    }
+  }
+}
+
+// Contact Info Section Styles
+.contact-info-section {
+  .checkout-title {
+    h6 {
+      color: #333;
+      font-weight: 600;
+      
+      i {
+        color: #007bff;
+      }
+    }
+  }
+}
+
+// Travelers Info Section Styles
+.travelers-info-section {
+  .checkout-title {
+    h6 {
+      color: #333;
+      font-weight: 600;
+      
+      i {
+        color: #007bff;
+      }
+    }
+  }
+}
+
+// Travelers Accordion Styles
+.travelers-accordion {
+  .traveler-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .accordion-header {
+      .accordion-button {
+        background-color: #f8f9fa;
+        border: none;
+        border-radius: 8px 8px 0 0;
+        padding: 1rem 1.25rem;
+        font-weight: 500;
+        
+        &:not(.collapsed) {
+          background-color: #e7f3ff;
+          border-bottom: 1px solid #b3d9ff;
+          box-shadow: none;
+        }
+        
+        &:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .traveler-header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          
+          .traveler-title {
+            display: flex;
+            align-items: center;
+            
+            i {
+              color: #007bff;
+            }
+          }
+          
+          .traveler-status {
+            .badge {
+              font-size: 0.75rem;
+              padding: 0.35em 0.65em;
+              
+              &.bg-success {
+                background-color: #28a745 !important;
+              }
+              
+              &.bg-warning {
+                background-color: #ffc107 !important;
+                color: #212529;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .accordion-body {
+      padding: 1.5rem 1.25rem;
+      background-color: white;
+      border-radius: 0 0 8px 8px;
+      
+      .form-label {
+        color: #555;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      
+      .form-control {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        
+        &:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        &:valid {
+          border-color: #28a745;
+        }
+      }
+    }
+  }
+}
+
+// Empty Travelers State
+.empty-travelers {
+  background-color: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  margin-top: 1rem;
+  
+  i {
+    opacity: 0.5;
+  }
+}
+
+// Responsive adjustments for travelers section
+@media (max-width: 768px) {
+  .travelers-accordion {
+    .traveler-item {
+      .accordion-header {
+        .accordion-button {
+          padding: 0.75rem 1rem;
+          
+          .traveler-header-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            
+            .traveler-title {
+              font-size: 0.9rem;
+            }
+            
+            .traveler-status {
+              align-self: flex-end;
+            }
+          }
+        }
+      }
+      
+      .accordion-body {
+        padding: 1rem;
+      }
+    }
+  }
+  
+  .contact-info-section,
+  .travelers-info-section {
+    .checkout-title h6 {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Travelers Scroll Container
+.travelers-scroll-container {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+    
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
+  
+  // Smooth scroll behavior
+  scroll-behavior: smooth;
+  
+  // Shadow at top/bottom when scrolling
+  background: 
+    linear-gradient(white 30%, rgba(255,255,255,0)) center top,
+    linear-gradient(rgba(255,255,255,0), white 70%) center bottom,
+    radial-gradient(farthest-side at 50% 0, rgba(0,0,0,.2), rgba(0,0,0,0)) center top,
+    radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,.2), rgba(0,0,0,0)) center bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  background-attachment: local, local, scroll, scroll;
+}
+
+// Travelers Progress Bar
+.travelers-progress {
+  .progress {
+    background-color: #e9ecef;
+    border-radius: 2px;
+    
+    .progress-bar {
+      transition: width 0.6s ease;
+    }
+  }
+}
+
+// Travelers Actions (Expand/Collapse buttons)
+.travelers-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  .btn {
+    border-radius: 20px;
+    padding: 0.25rem 0.5rem;
+    white-space: nowrap;
+    
+    i {
+      font-size: 0.8rem;
+    }
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+    
+    &.btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+      
+      &:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        transform: translateY(-1px);
+      }
+      
+      i {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Copy Contact Info Alert in Accordion
+.accordion-body {
+  .alert-info {
+    background-color: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    
+    small {
+      color: #004085;
+      font-weight: 500;
+    }
+    
+    .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+      border-radius: 20px;
+      box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+      }
+      
+      i {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+// Quick Navigation Buttons
+.travelers-navigation {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  
+  .btn {
+    border-radius: 20px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .text-success {
+      color: #28a745 !important;
+    }
+    
+    .text-warning {
+      color: #ffc107 !important;
+    }
+    
+    i {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// Enhanced accordion for scroll container
+.travelers-scroll-container .travelers-accordion {
+  padding: 1rem;
+  
+  .traveler-item {
+    background-color: white;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// Badge improvements
+.badge {
+  font-size: 0.7rem;
+  padding: 0.3em 0.6em;
+  font-weight: 600;
+  
+  &.bg-primary {
+    background-color: #007bff !important;
+  }
+}
+
+// Responsive adjustments for Phase 3
+@media (max-width: 768px) {
+  .travelers-scroll-container {
+    max-height: 400px;
+  }
+  
+  .travelers-navigation {
+    .btn {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  .travelers-actions {
+    flex-wrap: wrap;
+    
+    .btn {
+      padding: 0.2rem 0.4rem;
+      font-size: 0.75rem;
+      
+      i {
+        font-size: 0.7rem;
+      }
+      
+      &.btn-success {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.75rem;
+        
+        i {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+  
+  .accordion-body {
+    .alert-info {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 0.5rem;
+      
+      .btn-success {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}

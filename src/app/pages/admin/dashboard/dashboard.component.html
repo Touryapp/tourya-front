@@ -1,0 +1,574 @@
+<div class="row">
+  <!-- Sidebar de administración -->
+  <div class="col-xl-3 col-lg-4 admin-sidebar">
+    <div class="card user-sidebar mb-4 mb-lg-0 theiaStickySidebar">
+      <!-- Card de perfil -->
+      <div class="card mb-4 p-3 d-flex flex-row align-items-center justify-content-between"
+        style="border-radius: 2rem; border: 1px solid #e3e6ef;">
+        <div class="d-flex align-items-center">
+          <img src="assets/img/user-01.webp" alt="Administrador" class="rounded-circle me-3"
+            style="width:48px;height:48px;object-fit:cover;">
+          <div>
+            <div class="fw-bold">Jeffrey Wilson</div>
+            <div class="text-muted small">Since 10 May 2025</div>
+          </div>
+        </div>
+        <button class="btn btn-light rounded-circle p-2" style="box-shadow:none;">
+          <i class="fa fa-pen"></i>
+        </button>
+      </div>
+      <!-- Fin Card de perfil -->
+      <div class="card-header user-sidebar-header text-center bg-gray-transparent d-none">
+        <div class="agent-profile d-inline-flex">
+          <img src="assets/img/iconAct.jpg" alt="image" class="img-fluid rounded-circle">
+          <a href="#"
+            class="avatar avatar-sm rounded-circle btn btn-primary d-flex align-items-center justify-content-center p-0"><i
+              class="isax isax-edit-2 fs-14"></i></a>
+        </div>
+        <h6 class="fs-16">Administrador</h6>
+        <p class="fs-14 mb-2">Desde 10 May 2025</p>
+      </div>
+      <div class="card-body user-sidebar-body">
+        <ul>
+          <li><span class="fs-14 text-gray-3 fw-medium mb-2">Main</span></li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleDashboard()"><i
+                class="isax isax-grid-55"></i> Dashboard</a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleSolicitudes()"><i
+                class="isax isax-user"></i> Lista de Solicitudes</a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleTourList()"><i
+                class="isax isax-map"></i> Gestión de Tours</a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleMaritimeReports()"><i
+                class="isax isax-flag"></i> Reporte Actividades Marítimas</a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleProviderPayments()"><i
+                class="isax isax-wallet-2"></i> Ordenes de pago</a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBookingsManagement()"><i
+                class="isax isax-calendar-tick"></i> Reservas</a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBackofficeUsers()"><i
+                class="isax isax-people"></i> {{ 'backofficeUsers.sidebarLink' | translate }}</a>
+          </li>
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="toggleAppConfig()"><i
+                class="isax isax-setting-2"></i> {{ 'app-config-admin.sidebarLink' | translate }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Fin Sidebar -->
+
+  <!-- Contenido principal -->
+  <div class="col-xl-9 col-lg-8">
+    <div class="dashboard-container">
+      <div *ngIf="!mostrarSolicitudes && !mostrarTourList && !mostrarMaritimeReports && !mostrarProviderPayments && !mostrarAppConfig">
+        <div class="row">
+          <div class="col-12">
+            <h3>Dashboard de Administración</h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Usuarios Totales</h5>
+                <p class="card-text">
+                  <span class="display-4">0</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Proveedores Activos</h5>
+                <p class="card-text">
+                  <span class="display-4">0</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Reservas del Mes</h5>
+                <p class="card-text">
+                  <span class="display-4">0</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Ingresos</h5>
+                <p class="card-text">
+                  <span class="display-4">$0</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4" *ngIf="mostrarSolicitudes">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between flex-wrap">
+              <h5 class="mb-0">Lista de Solicitudes de Proveedores</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive custom-datatable-filter">
+                <table class="table datatable align-middle mb-0">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Tipo de Servicio</th>
+                      <th>Teléfono</th>
+                      <th>Estado</th>
+                      <th class="text-end"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let req of requestProviders.content">
+                      <td class="fw-medium text-primary">#{{ req.id }}</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <span class="avatar avatar-sm bg-light rounded-circle me-2">
+                            <i class="isax isax-user"></i>
+                          </span>
+                          <span>{{ req.provider.name }}</span>
+                        </div>
+                      </td>
+                      <td>{{ req.provider.serviceType }}</td>
+                      <td>{{ req.provider.phone }}</td>
+                      <td>
+                        <span class="badge rounded-pill" [ngClass]="getStatusBadgeClass(req.status)">
+                          {{ req.status }}
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <button class="btn btn-warning text-white btn-sm" (click)="openProviderModal(req)">
+                          <i class="isax isax-eye me-1"></i> Ver
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sección de lista de tours (mantenemos la fila de solicitudes intacta) -->
+      </div>
+      <!-- insertar lista de tours justo debajo de la fila de solicitudes -->
+      <div *ngIf="mostrarTourList" class="row mt-3">
+        <div class="col-12">
+          <app-tour-admin-list [embedMode]="true"></app-tour-admin-list>
+        </div>
+      </div>
+
+      <!-- Reporte de Actividades Marítimas -->
+      <div *ngIf="mostrarMaritimeReports" class="row mt-3">
+        <div class="col-12">
+          <app-maritime-activity-reports [embedMode]="true"></app-maritime-activity-reports>
+        </div>
+      </div>
+
+      <!-- Ordenes de pago -->
+      <div *ngIf="mostrarProviderPayments" class="row mt-3">
+        <div class="col-12">
+          <app-provider-payments></app-provider-payments>
+        </div>
+      </div>
+
+      <!-- Configuraciones del sistema (FE-04) -->
+      <div *ngIf="mostrarAppConfig" class="row mt-3">
+        <div class="col-12">
+          <app-app-config-admin></app-app-config-admin>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Detalles del Proveedor -->
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1"
+  role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalles del Proveedor</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedProvider">
+        <!-- Información del flujo de estados -->
+        <div class="alert alert-info mb-3">
+          <i class="isax isax-info-circle me-2"></i>
+          <strong>Flujo de Estados:</strong>
+          <ul class="mb-0 mt-2">
+            <li><strong>Created:</strong> Solicitud creada, pendiente de envío</li>
+            <li><strong>Submitted:</strong> Solicitud enviada, pendiente de pre-aprobación</li>
+            <li><strong>Pre-Approved:</strong> Solicitud pre-aprobada, el proveedor puede cargar documentos</li>
+            <li><strong>Document-Sent:</strong> Documentos cargados, pendiente de revisión final</li>
+            <li><strong>Approved:</strong> Solicitud completamente aprobada</li>
+            <li><strong>Incomplete Information:</strong> Se requiere información adicional</li>
+            <li><strong>Cancelled:</strong> Solicitud rechazada</li>
+          </ul>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Nombre:</label>
+              <p>{{ selectedProvider.provider.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Número de Documento:</label>
+              <p>{{ selectedProvider.provider.documentNumber }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tipo de Documento:</label>
+              <p>{{ selectedProvider.provider.documentType }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tipo de Servicio:</label>
+              <p>{{ selectedProvider.provider.serviceType }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">País:</label>
+              <p>{{ selectedProvider.provider.country.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Ciudad:</label>
+              <p>{{ selectedProvider.provider.city.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Estado/Provincia:</label>
+              <p>{{ selectedProvider.provider.state.name }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Departamento:</label>
+              <p>{{ selectedProvider.provider.department }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Teléfono:</label>
+              <p>{{ selectedProvider.provider.phone }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Estado:</label>
+              <p>
+                <span [ngClass]="getStatusBadgeClass(selectedProvider.status)">
+                  {{ selectedProvider.status }}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Dirección:</label>
+              <p>{{ selectedProvider.provider.address }}</p>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="selectedProvider.status === 'Cancelled' && selectedProvider.declinedReason">
+            <div class="mb-3">
+              <label class="form-label fw-bold text-danger">Motivo del rechazo:</label>
+              <p class="text-danger">{{ selectedProvider.declinedReason }}</p>
+            </div>
+          </div>
+          <div class="col-12"
+            *ngIf="selectedProvider.status === 'Incomplete Information' && selectedProvider.incompleteReason">
+            <div class="mb-3">
+              <label class="form-label fw-bold text-warning">Motivo de solicitud de información:</label>
+              <p class="text-warning">{{ selectedProvider.incompleteReason }}</p>
+            </div>
+          </div>
+          <div class="col-12"
+            *ngIf="selectedProvider.requestProviderGalleryList && selectedProvider.requestProviderGalleryList.length > 0">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Documentos Subidos:</label>
+              <div class="row g-3">
+                <!-- Primer recuadro: Documentos principales -->
+                <div class="col-md-6">
+                  <div class="card h-100 border-primary">
+                    <div class="card-header bg-primary text-white">
+                      <h6 class="mb-0"><i class="isax isax-document me-2"></i>Documentos Principales</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-2">
+                        <div class="col-12" *ngFor="let doc of getFirstHalfDocuments()">
+                          <div class="document-item p-2 border rounded" *ngIf="doc.imageUrl">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <div class="d-flex align-items-center">
+                                <div class="document-icon me-2">
+                                  <i [class]="getFileIcon(doc.imageUrl)"
+                                    [ngClass]="{'text-primary': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
+                                </div>
+                                <div>
+                                  <div class="fw-medium small">{{ doc.documentTypeName }}</div>
+                                  <div class="text-muted small">{{ doc.description }}</div>
+                                  <div class="text-muted small">
+                                    <i class="isax isax-info-circle me-1"></i>
+                                    {{ getFileType(doc.imageUrl).toUpperCase() }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="d-flex gap-1">
+                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
+                                  <i class="isax isax-gallery"></i>
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
+                                  <i class="isax isax-eye"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Segundo recuadro: Documentos adicionales -->
+                <div class="col-md-6">
+                  <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                      <h6 class="mb-0"><i class="isax isax-gallery me-2"></i>Documentos Adicionales</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="row g-2">
+                        <div class="col-12" *ngFor="let doc of getSecondHalfDocuments()">
+                          <div class="document-item p-2 border rounded" *ngIf="doc.imageUrl">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <div class="d-flex align-items-center">
+                                <div class="document-icon me-2">
+                                  <i [class]="getFileIcon(doc.imageUrl)"
+                                    [ngClass]="{'text-success': isImage(doc.imageUrl), 'text-warning': !isImage(doc.imageUrl)}"></i>
+                                </div>
+                                <div>
+                                  <div class="fw-medium small">{{ doc.documentTypeName }}</div>
+                                  <div class="text-muted small">{{ doc.description }}</div>
+                                  <div class="text-muted small">
+                                    <i class="isax isax-info-circle me-1"></i>
+                                    {{ getFileType(doc.imageUrl).toUpperCase() }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="d-flex gap-1">
+                                <button *ngIf="isImage(doc.imageUrl)" class="btn btn-outline-info btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Previsualizar imagen">
+                                  <i class="isax isax-gallery"></i>
+                                </button>
+                                <button class="btn btn-outline-success btn-sm"
+                                  (click)="openFile(doc.imageUrl, '_blank')" title="Ver documento">
+                                  <i class="isax isax-eye"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Información adicional -->
+              <div class="mt-3">
+                <div class="alert alert-info">
+                  <i class="isax isax-info-circle me-2"></i>
+                  <strong>Total de documentos:</strong> {{ selectedProvider.requestProviderGalleryList.length }}
+                  | <strong>Documentos con archivo:</strong> {{ getGalleryWithImageCount() }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mensaje cuando no hay documentos -->
+          <div class="col-12"
+            *ngIf="!selectedProvider.requestProviderGalleryList || selectedProvider.requestProviderGalleryList.length === 0">
+            <div class="alert alert-warning">
+              <i class="isax isax-warning-2 me-2"></i>
+              <strong>No hay documentos subidos</strong> - El proveedor aún no ha cargado ningún documento.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <!-- Botón Pre-Approved: solo visible cuando el estado es Created -->
+        <button type="button" class="btn btn-info me-2" (click)="openPreApproveConfirmModal()"
+          [disabled]="!canPreApprove()">
+          <i class="isax isax-tick-circle me-1"></i> Pre-Aprobar
+        </button>
+
+        <!-- Botones de acción principal: solo visibles cuando el estado es Document-Sent -->
+        <button type="button" class="btn btn-success me-2" (click)="openConfirmModal()" [disabled]="!canApprove()">
+          <i class="isax isax-tick-circle me-1"></i> Aprobar
+        </button>
+        <button type="button" class="btn btn-danger me-2" (click)="openDeclineConfirmModal()"
+          [disabled]="!canDecline()">
+          <i class="isax isax-close-circle me-1"></i> Rechazar
+        </button>
+        <button type="button" class="btn btn-warning" (click)="openRequestInfoModal()" [disabled]="!canRequestInfo()">
+          <i class="isax isax-info-circle me-1"></i> Solicitar más información
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Solicitud de Información -->
+<div class="modal fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'"
+  tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Respuesta a la solicitud</h5>
+        <button type="button" class="btn-close" (click)="closeRequestInfoModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="requestInfo" class="form-label">Mensaje para el proveedor</label>
+          <textarea class="form-control" id="requestInfo" rows="4" [(ngModel)]="requestInfoMessage"
+            placeholder="Escriba aquí el mensaje para solicitar más información al proveedor...">
+          </textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeRequestInfoModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="sendRequestInfo()">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Request Info -->
+<div class="modal-backdrop fade" [class.show]="showRequestInfoModal"
+  [style.display]="showRequestInfoModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'"
+  tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Aprobación</h5>
+        <button type="button" class="btn-close" (click)="closeConfirmModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Realmente quieres aprobar esta solicitud?</p>
+        <div class="alert alert-success">
+          <i class="isax isax-tick-circle me-2"></i>
+          <strong>Nota:</strong> Al aprobar, el proveedor será completamente habilitado en la plataforma.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success me-2" (click)="aprobarSolicitud()">Sí</button>
+        <button type="button" class="btn btn-secondary" (click)="closeConfirmModal()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación -->
+<div class="modal-backdrop fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'">
+</div>
+
+<!-- Modal de Confirmación para Rechazar -->
+<div class="modal fade" [class.show]="showDeclineConfirmModal"
+  [style.display]="showDeclineConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Rechazo</h5>
+        <button type="button" class="btn-close" (click)="closeDeclineConfirmModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Realmente quieres rechazar esta solicitud?</p>
+        <div class="alert alert-danger">
+          <i class="isax isax-close-circle me-2"></i>
+          <strong>Nota:</strong> Al rechazar, la solicitud será cancelada permanentemente.
+        </div>
+        <div class="mb-3">
+          <label for="declineReason" class="form-label">Motivo del rechazo</label>
+          <textarea id="declineReason" class="form-control" rows="3" [(ngModel)]="declinedReason"
+            placeholder="Explica el motivo del rechazo..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger me-2" (click)="rechazarSolicitud()">Sí</button>
+        <button type="button" class="btn btn-secondary" (click)="closeDeclineConfirmModal()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación de Rechazo -->
+<div class="modal-backdrop fade" [class.show]="showDeclineConfirmModal"
+  [style.display]="showDeclineConfirmModal ? 'block' : 'none'"></div>
+
+<!-- Modal de Confirmación para Pre-Aprobar -->
+<div class="modal fade" [class.show]="showPreApproveConfirmModal"
+  [style.display]="showPreApproveConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Pre-Aprobación</h5>
+        <button type="button" class="btn-close" (click)="closePreApproveConfirmModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Realmente quieres pre-aprobar esta solicitud?</p>
+        <div class="alert alert-info">
+          <i class="isax isax-info-circle me-2"></i>
+          <strong>Nota:</strong> Al pre-aprobar, el proveedor podrá cargar documentos para completar su solicitud.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info me-2" (click)="preAprobarSolicitud()">Sí, Pre-Aprobar</button>
+        <button type="button" class="btn btn-secondary" (click)="closePreApproveConfirmModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación de Pre-Aprobación -->
+<div class="modal-backdrop fade" [class.show]="showPreApproveConfirmModal"
+  [style.display]="showPreApproveConfirmModal ? 'block' : 'none'"></div>

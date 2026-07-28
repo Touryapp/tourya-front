@@ -1,0 +1,473 @@
+// Tour Booking Confirmation Styles
+.content {
+  min-height: 80vh;
+}
+
+// Success message styling
+.alert-success {
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+  
+  .isax {
+    font-size: 3rem !important;
+  }
+}
+
+// Card styling
+.card {
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  
+  .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+    
+    .card-title {
+      color: white;
+    }
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+}
+
+// Info items styling
+.info-item {
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #333;
+  }
+}
+
+// Estilo para el monto total pagado
+.total-amount {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #28a745 !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 1.2 !important;
+}
+
+// Info items styling
+.info-item {
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  // Estilos especiales para el total pagado
+  p.display-6 {
+    font-size: 3.5rem !important;
+    font-weight: 800 !important;
+    color: #28a745 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    margin-top: 0.5rem;
+    
+    // Efecto de resaltado sutil
+    background: linear-gradient(135deg, #28a745, #20c997);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    
+    // Fallback para navegadores que no soporten background-clip
+    @supports not (-webkit-background-clip: text) {
+      color: #28a745 !important;
+      background: none;
+    }
+  }
+}
+
+// QR Code container
+.qr-container {
+  .img-fluid {
+    border: 3px solid #e9ecef;
+    border-radius: 10px;
+    padding: 10px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Badge styling
+.badge {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  
+  &.badge-warning {
+    background-color: #ffc107;
+    color: #000;
+  }
+  
+  &.badge-success {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  &.badge-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  &.badge-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  &.badge-info {
+    background-color: #17a2b8;
+    color: white;
+  }
+}
+
+// Service providers cards styling
+.card.border-start {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  &.border-primary {
+    border-left-width: 4px !important;
+  }
+  
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    
+    .isax {
+      font-size: 1rem;
+    }
+  }
+  
+  .info-item {
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    a {
+      color: #495057;
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: #007bff;
+      }
+      
+      .isax {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+// Button group styling
+.btn-group {
+  .btn {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    
+    &:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// Action buttons
+.d-flex.justify-content-center {
+  .btn {
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    min-width: 140px;
+    
+    .isax {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// Loading and error states
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+// Light card background
+.bg-light {
+  background-color: #f8f9fa !important;
+  border-radius: 10px;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .info-item {
+    margin-bottom: 1rem;
+  }
+  
+  .qr-container img {
+    max-width: 150px !important;
+    max-height: 150px !important;
+  }
+  
+  .d-flex.justify-content-center {
+    flex-direction: column;
+    align-items: center;
+    
+    .btn {
+      margin-bottom: 0.5rem;
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+}
+
+// Font styles
+.font-monospace {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  background-color: #f1f3f4;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+// Print styles
+@media print {
+  .breadcrumb-bar,
+  .btn,
+  .btn-group,
+  .d-flex.justify-content-center {
+    display: none !important;
+  }
+  
+  .card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+  
+  .card-header {
+    background: #f8f9fa !important;
+    color: #333 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .alert-success {
+    background: #d4edda !important;
+    color: #155724 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .qr-container img {
+    max-width: 120px !important;
+    max-height: 120px !important;
+  }
+  
+  .badge {
+    border: 1px solid #333;
+    background: white !important;
+    color: #333 !important;
+  }
+}
+
+// Estilos del Carousel de Reservas
+.carousel-dots {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #dee2e6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #adb5bd;
+      transform: scale(1.2);
+    }
+
+    &.active {
+      background-color: #0d6efd;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+// Badge Styles para estados de entrega
+.badge {
+  &.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+  }
+
+  &.bg-success {
+    background-color: #198754 !important;
+    color: #fff !important;
+  }
+
+  &.bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000 !important;
+  }
+
+  &.bg-danger {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+  }
+}
+
+// Animación para transición de reservas
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+// Responsive para móviles
+@media (max-width: 768px) {
+  .carousel-dots .dot {
+    width: 10px;
+    height: 10px;
+
+    &.active {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
+
+// ✨ New Tour Details Styling
+.tour-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+  .tour-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  .tour-type-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(13, 110, 253, 0.9);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.tour-title {
+  font-weight: 800;
+  color: #1a202c;
+  line-height: 1.3;
+}
+
+.icon-circle-small {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.bg-light-primary {
+  background-color: rgba(13, 110, 253, 0.08);
+}
+
+.bg-light-success {
+  background-color: rgba(25, 135, 84, 0.08);
+}
+
+.list-unstyled li {
+  font-size: 0.925rem;
+  color: #4a5568;
+  padding: 4px 0;
+  
+  i {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+}
+
+hr.my-4 {
+  border-color: rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .tour-image-container .tour-img {
+    height: 220px;
+  }
+  
+  .tour-title {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,2053 @@
+{
+  "shared": {
+    "available": "Disponível",
+    "notAvailable": "Não disponível",
+    "allowed": "Permitido",
+    "notAllowed": "Não permitido",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "save": "Salvar",
+    "submit": "Enviar",
+    "year": "ano",
+    "years": "anos",
+    "night": "Noite",
+    "message": "Mensagem",
+    "adult": "Adulto",
+    "adults": "Adultos",
+    "child": "Criança",
+    "children": "Crianças",
+    "infant": "Bebê",
+    "infants": "Bebês",
+    "messages": {
+      "error": "Ocorreu um erro, por favor tente novamente",
+      "success": "Ação concluída com sucesso",
+      "errorGettingTour": "Erro ao obter o passeio",
+      "tourSubmitted": "Passeio enviado para revisão com sucesso"
+    }
+  },
+  "rejectionReasons": {
+    "inappropriate": "Conteúdo inapropriado",
+    "fake": "Informação falsa ou enganosa",
+    "spam": "Spam ou conteúdo irrelevante"
+  },
+  "home": {
+    "title": "Reserve os melhores passeios em San Andrés com o melhor preço.",
+    "subtitle": "Aproveite a ilha con atención 24 horas por día, 7 dias por semana, compras seguras e cancelamentos flexíveis.",
+    "top-tours": {
+      "title": "Principais passeios em San Andrés",
+      "subtitle": "Tourya é um Marketplace criado para conectar os turistas com as melhores experiências na ilha de San Andrés."
+    },
+    "how-it-works": {
+      "title": "¿ Como reservar sua excursão na Tourya?",
+      "step1": {
+        "title": "Verifique a disponibilidade",
+        "description": "Filtre por tipo de excursão, verifique as avaliações e certifique-se de que a excursão está disponível nas datas de sua viagem."
+      },
+      "step2": {
+        "title": "Escolha e pague",
+        "description": "Selecione as excursões que melhor se adaptam a seus gostos, interesses e ritmo de viagem. Pague de forma fácil e segura com seu método de pagamento favorito."
+      },
+      "step3": {
+        "title": "Receba seu QR e aproveite",
+        "description": "Receba um código QR em seu celular. Mostre-o ao fornecedor e aproveite a experiência sem complicações!"
+      }
+    },
+    "carousel": {
+      "title": "¿ Por que reservar conosco? Chat e chamadas 24 horas por dia, 7 dias por semana, escritório em San Andrés, compra 100% segura, cancelamentos flexíveis."
+    },
+    "faq": {
+      "title": "Perguntas frequentes",
+      "one": {
+        "question": "¿ Qual é o passeio mais popular em San Andres?",
+        "answer": "O passeio mais solicitado pelos turistas é o Johnny Cay + Aquarium Tour, que inclui transporte de barco, taxas de entrada e guia local. É ideal para conhecer dois dos lugares mais icônicos da ilha em um dia. Há outros passeios que são muito procurados, como Parasailing, mergulho com snorkel e White Night"
+      },
+      "two": {
+        "question": "¿ O que acontece se chover no dia do passeio?",
+        "answer": "Há passeios que oferecem cancelamento devido ao mau tempo. Nesses casos, se o passeio for cancelado devido ao mau tempo, ofereceremos reagendamento gratuito ou reembolso total. Nossa prioridade é sua segurança e experiência."
+      },
+      "three": {
+        "question": "¿ Como posso pagar pelos passeios?",
+        "answer": "Você pode pagar com cartão de crédito, cartão de débito, PSE, Nequi, Daviplata ou dinheiro em nosso escritório na ilha. Todas as transações são protegidas por certificados de segurança."
+      },
+      "four": {
+        "question": "¿ Os passeios incluem transporte?",
+        "answer": "Temos alguns passeios em que o transporte está incluído no custo. Caso o passeio não inclua transporte e você precise desse serviço, um de nossos parceiros poderá buscá-lo em sua acomodação e levá-lo ao ponto de encontro do passeio."
+      },
+      "five": {
+        "question": "¿ Posso cancelar ou remarcar um passeio?",
+        "answer": "Sim, a maioria dos nossos passeios pode ser cancelada até 24 horas antes do início do passeio sem penalidade. Você também pode alterar a data entrando em contato com nossa equipe de suporte 24 horas por dia, 7 dias por semana. Recomendamos que você verifique a política de cancelamento antes de reservar o passeio."
+      },
+      "six": {
+        "question": "¿ O que devo levar em um passeio em San Andres?",
+        "answer": "Recomendamos que você traga um traje de banho, protetor solar, chapéu, toalha e uma garrafa de água. Alguns passeios também exigem calçados aquáticos ou identificação."
+      },
+      "seven": {
+        "question": "¿ Os passeios são adequados para crianças ou idosos?",
+        "answer": "Muitos passeios são adequados para famílias e seguros para todas as idades. Verifique as recomendações específicas na página de cada atividade."
+      },
+      "eight": {
+        "question": "¿ Onde fica o escritório da Tourya em San Andrés?",
+        "answer": "Nosso escritório principal fica no centro de San Andrés (Centro comercial Newpoint Local 227), a poucos metros do píer turístico, e está aberto todos os dias. Também atendemos por WhatsApp e ligações 24 horas por dia, 7 dias por semana."
+      }
+    }
+  },
+  "provider-reviews": {
+    "title": "Avaliações dos clientes",
+    "titleClient": "Minhas resenhas",
+    "date": "Data",
+    "reservation": "Número da reserva",
+    "filters": {
+      "rating": "Filtrar por Avaliações",
+      "tour": "Filtrar por passeio",
+      "provider": "Filtrar por fornecedor",
+      "user": "Filtrar por usuário",
+      "all": "Todas",
+      "allTours": "Todos",
+      "allProviders": "Todos",
+      "allUsers": "Todos",
+      "stars": "estrelas",
+      "clearFilters": "Limpar filtros"
+    },
+    "stats": {
+      "totalReviews": "Total de avaliações",
+      "averageRating": "Classificação Média"
+    },
+    "actions": {
+      "respond": "Responder",
+      "reject": "Rejeitar",
+      "export": "Exportar",
+      "exportPdf": "Exportar como PDF",
+      "exportExcel": "Exportar como Excel",
+      "goToReservation": "Acessar a reserva"
+    },
+    "replyForm": {
+      "title": "Escreva sua resposta",
+      "placeholder": "Escreva sua resposta ao cliente aqui...",
+      "charactersCount": "caracteres",
+      "attachImages": "Anexar imagens (Máx. 5)",
+      "imagesSelected": "{{count}} imagem(ns) selecionada(s)",
+      "cancel": "Cancelar",
+      "submit": "Enviar Resposta"
+    },
+    "rejectForm": {
+      "title": "Selecione o motivo da rejeição",
+      "label": "Motivo da rejeição:",
+      "placeholder": "Selecione um motivo",
+      "reasons": {
+        "inappropriate": "Conteúdo inadequado",
+        "false": "Informação falsa ou enganosa",
+        "spam": "Spam ou conteúdo irrelevante"
+      },
+      "cancel": "Cancelar",
+      "submit": "Rejeitar Avaliação"
+    },
+    "empty": {
+      "noResults": "Nenhuma avaliação encontrada",
+      "adjustFilters": "Tente ajustar seus filtros de pesquisa",
+      "noReviews": "Você ainda não tem avaliações",
+      "noReviewsMessage": "As avaliações de seus clientes aparecerão aqui"
+    }
+  },
+  "provider-home": {
+    "hero": {
+      "title": "Venda mais passeios em San Andrés com o 1º marketplace da ilha",
+      "subtitle": "Nós cuidamos do marketing, atendemos os turistas 24/7 e garantimos pagamentos seguros. Você só precisa se concentrar em oferecer experiências inesquecíveis.",
+      "cta-heading": "Comece a vender seus passeios hoje",
+      "cta-button": "Cadastre-se como fornecedor"
+    },
+    "benefits": {
+      "title": "Por que se juntar ao nosso Marketplace?",
+      "subtitle": "Tourya é um Marketplace que conecta seus serviços de passeio com turistas que buscam viver as melhores experiências na ilha de San Andrés.",
+      "cards": {
+        "marketing": {
+          "title": "Marketing incluído",
+          "description": "Nós cuidamos da publicidade no Google, redes sociais e mecanismos de busca."
+        },
+        "payments": {
+          "title": "Pagamentos seguros e pontuais",
+          "description": "Receba seu dinheiro de forma confiável nos prazos estabelecidos."
+        },
+        "support": {
+          "title": "Atendimento ao turista 24/7",
+          "description": "Atendemos consultas e reservas por diferentes canais (telefone, e-mail e WhatsApp) e em 3 idiomas (espanhol, inglês e português)."
+        },
+        "office": {
+          "title": "Escritório físico na ilha",
+          "description": "Atendimento direto de reclamações e queixas, o que gera confiança no turista."
+        }
+      }
+    },
+    "how-it-works": {
+      "badge": "Como Funciona?",
+      "title": "Venda seus passeios em 3 passos simples",
+      "steps": {
+        "step1": {
+          "title": "Crie sua conta",
+          "description": "Registre-se gratuitamente em nosso marketplace como operador turístico."
+        },
+        "step2": {
+          "title": "Configure seus passeios",
+          "description": "Carregue fotos, detalhes de suas atividades, preços, horários e disponibilidade."
+        },
+        "step3": {
+          "title": "Publique e comece a vender",
+          "description": "Ative seus passeios e comece a receber reservas de turistas de todo o mundo."
+        }
+      }
+    },
+    "faq": {
+      "title": "Perguntas Frequentes de Operadores",
+      "subtitle": "Perguntas frequentes sobre nosso marketplace",
+      "items": {
+        "q1": {
+          "question": "Quanto custa publicar meus passeios?",
+          "answer": "Publicar é totalmente gratuito. Você só paga uma comissão quando uma venda é concretizada."
+        },
+        "q2": {
+          "question": "Quando recebo meus pagamentos?",
+          "answer": "Os pagamentos são feitos nos prazos estabelecidos, de forma segura e transparente."
+        },
+        "q3": {
+          "question": "Quem atende os turistas?",
+          "answer": "Nossa equipe cuida de todo o atendimento ao cliente 24/7 em espanhol, inglês e português."
+        },
+        "q4": {
+          "question": "Preciso ter um escritório físico?",
+          "answer": "Não é necessário. Temos nosso próprio escritório na ilha para dar suporte aos turistas."
+        },
+        "q5": {
+          "question": "Posso publicar mais de um passeio?",
+          "answer": "Sim, você pode publicar todos os passeios que oferece e aumentar sua renda."
+        }
+      }
+    }
+  },
+  "provider-tour-management": {
+    "header": {
+      "totalBookings": "Total de Reservas",
+      "confirmBooking": "Confirmar Reserva",
+      "clearFilters": "Limpar Filtros",
+      "export": "Exportar",
+      "exportPdf": "Exportar como PDF",
+      "exportExcel": "Exportar como Excel"
+    },
+    "list": {
+      "title": "Lista de Reservas",
+      "search": "Buscar...",
+      "sortBy": "Ordenar:",
+      "recent": "Recentes",
+      "mostRecent": "Mais Recentes",
+      "oldest": "Mais Antigos",
+      "priceAsc": "Preço Crescente",
+      "priceDesc": "Preço Decrescente"
+    },
+    "columns": {
+      "image": "Imagem",
+      "id": "ID",
+      "tourName": "Nome do Passeio",
+      "tourType": "Tipo de Passeio",
+      "customer": "Cliente",
+      "travellers": "Viajantes",
+      "duration": "Duração",
+      "price": "Preço",
+      "bookingDate": "Data da Reserva",
+      "checkIn": "Data de Início",
+      "returnDate": "Data de Retorno",
+      "status": "Status",
+      "destination": "Destino",
+      "actions": "Ações"
+    },
+    "status": {
+      "upcoming": "Próxima",
+      "pending": "Pendente",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada",
+      "completed": "Concluída",
+      "rescheduled": "Reagendada"
+    },
+    "empty": {
+      "noBookings": "Nenhuma reserva encontrada",
+      "adjustFilters": "Tente ajustar seus filtros de pesquisa"
+    },
+    "modal": {
+      "title": "Detalhes da Reserva",
+      "close": "Fechar",
+      "tourInfo": "Informações do Passeio",
+      "bookingInfo": "Informações da Reserva",
+      "customerInfo": "Informações do Cliente",
+      "extraServices": "Servicios Adicionales",
+      "activities": "Atividades Incluídas",
+      "fields": {
+        "destination": "Destino",
+        "duration": "Duração",
+        "bookingDate": "Data da Reserva",
+        "totalPrice": "Preço Total",
+        "checkInDate": "Data de Início",
+        "returnDate": "Data de Retorno",
+        "travellers": "Viajantes",
+        "name": "Nome",
+        "email": "Email",
+        "phone": "Telefone"
+      },
+      "actions": {
+        "complete": "Marcar como Concluída",
+        "confirm": "Confirmar Reserva",
+        "cancel": "Cancelar Reserva"
+      },
+      "qrCode": "Código QR de la Reserva",
+      "cancelByRain": "Cancelar por chuva",
+      "bookingDate": "Data da reserva",
+      "duration": "Duração",
+      "travelers": "Viajantes",
+      "totalPrice": "Preço total",
+      "purchaseDate": "Data de compra",
+      "maxCancellationDate": "Data máxima de cancelamento",
+      "maxReschedulingDate": "Data máxima de reagendamento",
+      "allowsRainCancellation": "Permite cancelamento por chuva",
+      "yes": "Sim",
+      "no": "Não",
+      "cancellationDate": "Data de cancelamento",
+      "cancellationReasonLabel": "Motivo do cancelamento",
+      "bookingOnBehalfOf": "Reserva em nome de:",
+      "payerInfo": "Informações do pagador",
+      "documentLabel": "Documento",
+      "itinerary": "Itinerário",
+      "stopLabel": "Parada",
+      "meetingPoint": "Ponto de encontro",
+      "tourContactInfo": "Informações de contato (passeio)",
+      "reviewBtn": "Avaliar",
+      "alreadyReviewed": "Já fiz a avaliação",
+      "writeReview": "Escrever Avaliação",
+      "bookingLabel": "Reserva",
+      "yourRating": "Sua Avaliação",
+      "whatDidYouLike": "O que você gostou?",
+      "whatWouldYouImprove": "O que você melhoraria?",
+      "loadingReasons": "Carregando motivos...",
+      "imagesLabel": "Imagens",
+      "imagesSelected": "imagem(ns) selecionada(s)",
+      "writeYourReview": "Escreva sua Avaliação",
+      "reviewPlaceholder": "Compartilhe sua experiência com este passeio...",
+      "cancelBtn": "Cancelar",
+      "submitReview": "Enviar Avaliação",
+      "cancelBooking": "Cancelar Reserva",
+      "reservaLabel": "Reserva",
+      "confirmCancelQuestion": "Tem certeza de que deseja cancelar esta reserva?",
+      "irreversibleAction": "Esta ação não pode ser desfeita.",
+      "cancellationReasonSelect": "Motivo do cancelamento",
+      "selectReason": "Selecione um motivo",
+      "reasonCannotAttend": "Não posso comparecer",
+      "reasonIllness": "Doença",
+      "reasonInabilityToTravel": "Incapacidade de viajar",
+      "reasonLegalObligations": "Obrigações legais",
+      "reasonChangeOfPlans": "Mudança de planos",
+      "goBack": "Voltar",
+      "confirmCancellation": "Confirmar Cancelamento",
+      "rescheduleBooking": "Reagendar Reserva",
+      "selectNewDates": "Selecione as novas datas",
+      "selectCheckInOut": "Escolha as datas de Check In e Check Out para o seu passeio.",
+      "checkIn": "Check In",
+      "checkOut": "Check Out",
+      "continueBtn": "Continuar",
+      "chooseFiles": "Selecionar arquivos",
+      "noFilesSelected": "Nenhum arquivo selecionado"
+    },
+    "swal": {
+      "attention": "Atenção",
+      "error": "Erro",
+      "success": "Sucesso",
+      "completedTitle": "Concluída!",
+      "completedText": "A reserva foi marcada como concluída.",
+      "suspendedTitle": "Suspensa",
+      "suspendedText": "A reserva foi suspensa.",
+      "deletedTitle": "Excluída",
+      "deletedText": "A reserva foi excluída.",
+      "errorLoadingDetails": "Não foi possível carregar os detalhes da reserva.",
+      "limitExceeded": "Limite excedido",
+      "limitExceededText": "Você pode anexar no máximo 5 imagens.",
+      "invalidFiles": "Arquivos inválidos",
+      "invalidFilesText1": "Alguns arquivos são inválidos:<br>",
+      "invalidFilesText2": "<br><br>São permitidas apenas imagens PNG/JPG de no máximo 5MB.",
+      "validationError": "Erro de validação",
+      "reviewValidationText": "Por favor, selecione uma classificação e escreva um comentário.",
+      "noReservationFound": "Nenhuma reserva associada encontrada.",
+      "reviewSent": "Avaliação enviada!",
+      "reviewSentText": "Sua avaliação para {{tourName}} foi salva com sucesso.",
+      "reviewSendError": "❌ Erro ao enviar avaliação. Por favor, tente novamente.",
+      "selectCancellationReason": "Por favor, selecione um motivo de cancelamento",
+      "reservationNotFound": "Reserva selecionada não encontrada",
+      "invalidCancellationReason": "Motivo de cancelamento inválido",
+      "reservationCanceled": "Reserva cancelada",
+      "reservationCanceledText": "A reserva foi cancelada com sucesso.",
+      "errorCancelingReservation": "❌ Erro ao cancelar a reserva.",
+      "couldNotCancel": "Não foi possível cancelar a reserva.",
+      "reservationNotFoundSimple": "Reserva não encontrada",
+      "selectDatesCheck": "Por favor, selecione as datas de Check In e Check Out",
+      "checkOutAfterCheckIn": "A data de Check Out deve ser posterior à data de Check In",
+      "tourIdError": "Não foi possível obter o ID do passeio. Por favor, tente novamente.",
+      "noSlotsAvailable": "Nenhum horário disponível para as datas selecionadas. Por favor, tente outras datas.",
+      "errorLoadingSlots": "Erro ao carregar os horários disponíveis. Por favor, tente novamente.",
+      "couldNotLoadTourInfo": "Não foi possível carregar as informações do passeio. Por favor, tente novamente.",
+      "errorLoadingTourInfo": "Erro ao carregar as informações do passeio. Por favor, tente novamente.",
+      "processing": "Processando...",
+      "confirmedTitle": "Confirmada!",
+      "confirmedText": "A reserva foi marcada como entregue com sucesso.",
+      "confirmErrorText": "Não foi possível confirmar a reserva. Por favor, tente novamente.",
+      "confirmWrongDayText": "Você só pode confirmar a reserva no mesmo dia do tour. A confirmação antecipada não é permitida.",
+      "declineTitle": "Não pode atender esta reserva?",
+      "declineText": "Ao confirmar, a reserva será cancelada automaticamente. O turista receberá um crédito pelo valor pago e um email com tours alternativos. Esta ação não pode ser desfeita.",
+      "yesDecline": "Sim, não posso atender",
+      "declinedTitle": "Reserva recusada",
+      "declinedText": "O turista foi notificado e recebeu um crédito pelo valor pago.",
+      "declineErrorText": "Não foi possível recusar a reserva. Por favor, tente novamente.",
+      "bookingCanceledTitle": "Reserva cancelada",
+      "bookingCanceledText": "A reserva {{bookingId}} foi marcada como cancelada.",
+      "markAsCompletedTitle": "Marcar como concluída?",
+      "markAsCompletedText": "Ficará registrado que o passeio foi concluído com sucesso.",
+      "yesComplete": "Sim, concluir",
+      "back": "Voltar",
+      "exportingTitle": "Exportando {{format}}",
+      "exportingText": "Seu arquivo está sendo gerado e será baixado em alguns segundos.",
+      "approveBookingTitle": "Aprovar esta reserva?",
+      "yesApprove": "Sim, aprovar",
+      "suspendBookingTitle": "Suspender esta reserva?",
+      "yesSuspend": "Sim, suspender",
+      "deletePermanentlyTitle": "Excluir permanentemente?",
+      "cannotBeUndone": "Esta ação não pode ser desfeita.",
+      "yesDelete": "Sim, excluir",
+      "requiredFieldsTitle": "Campos obrigatórios",
+      "bookingCanceledText2": "A reserva {{bookingId}} foi cancelada com sucesso.",
+      "cancelErrorText": "Ocorreu um erro ao cancelar a reserva. Por favor, tente novamente.",
+      "cancelByRainTitle": "Cancelar por causa da chuva?",
+      "cancelByRainConfirmText": "Tem certeza que deseja cancelar esta reserva devido à chuva? Esta ação não pode ser desfeita.",
+      "yesCancel": "Sim, cancelar",
+      "successfulCancelTitle": "Cancelamento bem sucedido",
+      "rainCanceledText": "A reserva {{bookingId}} foi cancelada por causa da chuva.",
+      "rainCancelErrorText": "Ocorreu um problema ao cancelar a reserva por causa da chuva. Tente novamente.",
+      "alreadyReviewedTitle": "Você já avaliou este passeio!",
+      "alreadyReviewedText": "Você não pode enviar outra avaliação para a mesma reserva.",
+      "confirmDeliveryTitle": "Confirmar entrega?",
+      "confirmDeliveryText": "Esta ação marcará a reserva como entregue e processará o pagamento.",
+      "yesConfirm": "Sim, confirmar",
+      "cancel": "Cancelar",
+      "loadingDetails": "Carregando detalhes..."
+    },
+    "config": {
+      "clientTitle": "Minhas Reservas",
+      "clientSubtitle": "Gerencie suas reservas de passeios e experiências",
+      "providerTitle": "Gestão de Reservas",
+      "providerSubtitle": "Administre as reservas dos seus passeios",
+      "adminTitle": "Administração de Reservas",
+      "adminSubtitle": "Visão completa de todas as reservas da plataforma",
+      "columns": {
+        "id": "ID da Reserva",
+        "idShort": "ID",
+        "tourName": "Nome do Passeio",
+        "tourNameShort": "Nome do Passeio",
+        "customer": "Cliente",
+        "checkInDate": "Data da Reserva",
+        "checkIn": "Data da reserva",
+        "price": "Preço",
+        "amount": "Preço",
+        "priceCustomer": "Cliente",
+        "priceProvider": "Fornecedor",
+        "status": "Status",
+        "tour": "Passeio",
+        "provider": "Fornecedor",
+        "travellers": "Viajantes",
+        "bookingDate": "Data da Reserva"
+      },
+      "actions": {
+        "view": "Ver",
+        "reschedule": "Reagendar",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "complete": "Completar",
+        "approve": "Aprovar",
+        "suspend": "Suspender",
+        "delete": "Excluir",
+        "decline": "Não posso atender"
+      },
+      "filters": {
+        "status": "Status",
+        "statusAll": "Todos",
+        "statusPending": "Pendente",
+        "statusReserved": "Reservada",
+        "statusInTransit": "Em Trânsito",
+        "statusDelivered": "Entregada",
+        "statusCanceled": "Cancelada",
+        "statusRescheduled": "Reagendada",
+        "statusTemporal": "Temporal",
+        "statusNoShow": "Não Compareceu",
+        "dateRange": "Intervalo de Datas",
+        "tourType": "Tipo de Passeio",
+        "typeAll": "Todos",
+        "typeAdventure": "Aventura",
+        "typeCultural": "Cultural",
+        "typeBeach": "Praia",
+        "typeCity": "Cidade",
+        "typeNature": "Natureza",
+        "searchCustomer": "Buscar Cliente",
+        "customer": "Cliente",
+        "provider": "Fornecedor"
+      }
+    }
+  },
+  "tour-form": {
+    "breadcrumb": {
+      "home": "Início",
+      "providersPanel": "Painel de Provedores",
+      "addTours": "Adicionar Passeios",
+      "editTours": "Editar Passeios"
+    },
+    "title": {
+      "add": "Adicionar Passeios",
+      "edit": "Editar Passeios"
+    },
+    "status": {
+      "noStatus": "Sem status",
+      "label": "Status do Passeio:",
+      "created": "Criado",
+      "submitted": "Enviado",
+      "accepted": "Aceito",
+      "returned": "Devolvido",
+      "cancelled": "Cancelado",
+      "submitButton": "Enviar para Revisão",
+      "cannotEditWarning": "Este passeio está em revisão e não pode ser editado.",
+      "cannotEditMessage": "Você deve esperar até que seja aceito, devolvido ou cancelado para poder editá-lo novamente.",
+      "autoSubmitNote": "Nota:",
+      "autoSubmitMessage": "Ao salvar as alterações, o passeio será enviado automaticamente para revisão.",
+      "sendForReview": "Enviar para Revisão"
+    },
+    "sections": {
+      "tourDetails": "Detalhes do Passeio",
+      "description": "Descrição",
+      "locations": "Localizações",
+      "mainAttractions": "Atrações Principais",
+      "includes": "Inclui",
+      "excludes": "Exclui",
+      "itinerary": "Itinerário",
+      "faq": "Perguntas Frequentes",
+      "cancellationPolicies": "Políticas de Cancelamento",
+      "tags": "Tags"
+    },
+    "fields": {
+      "name": {
+        "label": "Nome",
+        "errors": {
+          "required": "O nome é obrigatório",
+          "minlength": "O nome deve ter pelo menos 3 caracteres",
+          "maxlength": "O nome não pode ter mais de 50 caracteres"
+        }
+      },
+      "category": {
+        "label": "Categoria",
+        "placeholder": "Selecionar",
+        "options": {
+          "aquatic": "Aquático",
+          "land": "Terrestre",
+          "adventure": "Aventura",
+          "night": "Noturno",
+          "experiences": "Experiências",
+          "cultural": "Cultural",
+          "transportRental": "Aluguel de Transporte"
+        },
+        "errors": {
+          "required": "A categoria é obrigatória"
+        }
+      },
+      "subcategory": {
+        "label": "Subcategoria",
+        "placeholder": "Selecionar subcategoria"
+      },
+      "priceType": {
+        "label": "Tipo de preço",
+        "placeholder": "Selecionar",
+        "options": {
+          "group": "Grupo",
+          "individual": "Individual"
+        },
+        "errors": {
+          "required": "O tipo de preço é obrigatório"
+        }
+      },
+      "duration": {
+        "label": "Duração",
+        "placeholder": "Selecionar duração",
+        "options": {
+          "1_2_hours": "1 a 2 horas",
+          "2_4_hours": "2 a 4 horas",
+          "4_6_hours": "4 a 6 horas",
+          "up_to_1_day": "Até 1 dia",
+          "up_to_3_days": "Até 3 dias",
+          "up_to_5_days": "Até 5 dias"
+        },
+        "errors": {
+          "required": "A duração é obrigatória",
+          "minlength": "A duração deve ter pelo menos 1 caractere",
+          "maxlength": "A duração não pode ter mais de 50 caracteres"
+        }
+      },
+      "isUnlimited": {
+        "label": "Ilimitado"
+      },
+      "schedule": {
+        "label": "Horário",
+        "options": {
+          "morning": "Manhã",
+          "afternoon": "Tarde",
+          "night": "Noite"
+        },
+        "errors": {
+          "required": "Obrigatório"
+        }
+      },
+      "totalNumberOfPeoples": {
+        "label": "Número Total de Pessoas",
+        "errors": {
+          "required": "O número total de pessoas é obrigatório"
+        }
+      },
+      "minAge": {
+        "label": "Idade Mínima",
+        "errors": {
+          "required": "A idade mínima é obrigatória"
+        }
+      },
+      "description": {
+        "label": "Descrição",
+        "placeholder": "Insira a descrição aqui...",
+        "errors": {
+          "required": "Descrição é obrigatória",
+          "minlength": "A descrição deve ter pelo menos 3 caracteres",
+          "maxlength": "A descrição não pode exceder 5000 caracteres"
+        }
+      },
+      "typeOfAddress": {
+        "label": "Tipo de Endereço",
+        "placeholder": "Selecionar",
+        "options": {
+          "meetingPoint": "Ponto de Encontro",
+          "endPoint": "Ponto Final",
+          "pickUpPoint": "Ponto de Coleta"
+        },
+        "errors": {
+          "required": "O tipo de endereço é obrigatório"
+        }
+      },
+      "country": {
+        "label": "País",
+        "placeholder": "Selecionar",
+        "errors": {
+          "required": "O país é obrigatório"
+        }
+      },
+      "department": {
+        "label": "Departamento",
+        "placeholder": "Selecionar",
+        "errors": {
+          "required": "O departamento é obrigatório"
+        }
+      },
+      "city": {
+        "label": "Cidade",
+        "placeholder": "Selecionar",
+        "errors": {
+          "required": "A cidade é obrigatória"
+        }
+      },
+      "location": {
+        "label": "Localização",
+        "placeholder": "Digite o endereço completo",
+        "errors": {
+          "required": "A localização é obrigatória"
+        }
+      },
+      "address": {
+        "label": "Endereço",
+        "errors": {
+          "required": "O endereço é obrigatório",
+          "minlength": "O endereço deve ter pelo menos 3 caracteres",
+          "maxlength": "O endereço não pode ter mais de 50 caracteres"
+        }
+      },
+      "attraction": {
+        "label": "Atração",
+        "errors": {
+          "required": "A atração é obrigatória"
+        }
+      },
+      "include": {
+        "label": "Inclui",
+        "errors": {
+          "required": "Este campo é obrigatório"
+        }
+      },
+      "exclude": {
+        "label": "Exclui",
+        "errors": {
+          "required": "Este campo é obrigatório"
+        }
+      },
+      "itineraryTitle": {
+        "label": "Título",
+        "errors": {
+          "required": "O título é obrigatório",
+          "minlength": "O título deve ter pelo menos 3 caracteres",
+          "maxlength": "O título não pode ter mais de 50 caracteres"
+        }
+      },
+      "day": {
+        "label": "Dia",
+        "errors": {
+          "required": "O dia é obrigatório",
+          "min": "O dia mínimo é 1"
+        }
+      },
+      "time": {
+        "label": "Hora",
+        "errors": {
+          "required": "A hora é obrigatória"
+        }
+      },
+      "itineraryDescription": {
+        "label": "Descrição",
+        "errors": {
+          "required": "A descripción é obrigatória",
+          "minlength": "A descrição deve ter pelo menos 3 caracteres",
+          "maxlength": "A descrição não pode ter mais de 255 caracteres"
+        }
+      },
+      "question": {
+        "label": "Pergunta",
+        "errors": {
+          "required": "A pergunta é obrigatória",
+          "minlength": "A pergunta deve ter pelo menos 3 caracteres",
+          "maxlength": "A pergunta não pode ter mais de 50 caracteres"
+        }
+      },
+      "answer": {
+        "label": "Resposta",
+        "errors": {
+          "required": "A resposta é obrigatória",
+          "minlength": "A resposta deve ter pelo menos 3 caracteres",
+          "maxlength": "A resposta não pode ter mais de 255 caracteres"
+        }
+      },
+      "cancellationPolicyType": {
+        "label": "Tipo de política de cancelamento",
+        "placeholder": "Selecionar",
+        "options": {
+          "flexible": "Flexível",
+          "moderate": "Moderada",
+          "nonRefundable": "Não reembolsável",
+          "standard": "Estándar (hasta 48 horas antes)",
+          "strict": "Estricto (hasta 7 días antes)"
+        },
+        "errors": {
+          "required": "O tipo de política de cancelamento é obrigatório"
+        }
+      },
+      "observations": {
+        "label": "Observações",
+        "errors": {
+          "required": "As observações são obrigatórias",
+          "maxlength": "As observações não podem ter mais de 255 caracteres"
+        }
+      },
+      "allowsRainRefund": {
+        "label": "Permite reembolso por chuva",
+        "errors": {
+          "required": "Este campo é obrigatório"
+        }
+      },
+      "allowsRescheduling": {
+        "label": "Permite reagendamento",
+        "errors": {
+          "required": "Este campo é obrigatório"
+        }
+      },
+      "tags": {
+        "label": "Tags"
+      }
+    },
+    "buttons": {
+      "addNew": "Adicionar Novo",
+      "addTour": "Adicionar novo passeio",
+      "editTour": "Editar passeio",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "close": "Fechar"
+    },
+    "modals": {
+      "itinerary": {
+        "titleAdd": "Adicionar novo itinerário",
+        "titleEdit": "Editar itinerário"
+      },
+      "faq": {
+        "titleAdd": "Adicionar nova pergunta",
+        "titleEdit": "Editar pergunta"
+      },
+      "submitConfirm": {
+        "title": "Confirmar envio para revisão",
+        "message": "Tem certeza de que deseja enviar este passeio para revisão?",
+        "pointsTitle": "Depois de enviado:",
+        "point1": "Você não poderá editar o passeio até que ele seja revisado",
+        "point2": "O administrador avaliará seu passeio",
+        "point3": "Você receberá uma notificação do resultado",
+        "cancel": "Cancelar",
+        "confirm": "Sim, Enviar para Revisão",
+        "submitting": "Enviando..."
+      },
+      "deleteConfirm": {
+        "title": "Confirmar exclusão",
+        "message": "Tem certeza de que deseja excluir este item?",
+        "no": "Não",
+        "yes": "Sim"
+      }
+    }
+  },
+  "legal": {
+    "titleTerms": "Termos e Condições",
+    "titlePrivacy": "Política de Privacidade",
+    "pages": "Páginas",
+    "terms": "<div class=\"mb-4\">\n  <p class=\"mb-2\">TERMOS E CONDIÇÕES DE USO</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Última atualização: [16/04/2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identificação do responsável pela Plataforma</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A plataforma digital Tourya é operada por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Razão social: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tipo de sociedade: Sociedad por Acciones Simplificada (S.A.S.)</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NIT: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Endereço: Centro Comercial New Point, Loja 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> E-mail: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Telefone: 311 218 2520</p>\n</div>\n<h6 class=\"mb-2\">2. Aceitação dos Termos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O acesso, a navegação e o uso da plataforma Tourya, bem como a realização de reservas de passeios ou experiências turísticas, implicam a aceitação expressa, libre e voluntária dos presentes Termos e Condições.</p>\n  <p class=\"mb-2\">Caso o usuário não concorde com estes Termos, deverá abster-se de utilizar a plataforma.</p>\n</div>\n<h6 class=\"mb-2\">3. Definições</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Para os fins destes Termos:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Tourya”: Plataforma digital que atua como intermediária tecnológica e comercial.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Usuário” ou “Cliente”: Pessoa física que reserva passeios através da plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Operador Turístico” ou “Fornecedor”: Terceiro independente que oferece e presta diretamente os serviços turísticos publicados na Tourya.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Passeio” ou “Experiência”: Serviço turístico oferecido por um Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> “Reserva”: Contrato celebrado entre o Usuário e o Operador Turístico para a prestação de um passeio.</p>\n</div>\n<h6 class=\"mb-2\">4. Natureza do Serviço da Tourya</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A Tourya NíO é uma prestadora de serviços turísticos.</p>\n  <p class=\"mb-2\">A Tourya opera exclusivamente como uma plataforma digital, cuja função é:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitar a publicação, promoção e comercialização de passeios.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Processar pagamentos em nome dos operadores turísticos.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilitar a comunicação entre Usuários e Operadores.</p>\n  <p class=\"mb-2\">O serviço turístico é prestado única e exclusivamente pelo Operador Turístico, que atua de forma independente e sob sua própria responsabilidade.</p>\n</div>\n<h6 class=\"mb-2\">5. Relação Contratual</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Ao efetuar uma reserva:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> O contrato de prestação do serviço turístico é celebrado diretamente entre o Usuário e o Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A Tourya não é parte desse contrato, nem assume obrigações decorrentes da execução do passeio.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A Tourya não garante a qualidade, segurança, adequação ou resultado do serviço turístico.</p>\n</div>\n<h6 class=\"mb-2\">6. Obrigações do Operador Turístico</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O Operador Turístico é o único responsável por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cumprir toda a legislação colombiana aplicável, incluindo estar inscrito no Registro Nacional de Turismo (RNT).</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Possuir seguros obrigatórios em vigor e as autorizações legais necessárias.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Prestar o serviço conforme descrito na plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Atender reclamações, queixas e solicitações do Usuário.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responsabilizar-se por acidentes, lesões, perdas, danos ou incumprimentos ocorridos durante o passeio.</p>\n  <p class=\"mb-2\">A Tourya poderá solicitar, a qualquer momento, a documentação que comprove o cumprimento dessas obrigações.</p>\n</div>\n<h6 class=\"mb-2\">7. Responsabilidade da Tourya</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A Tourya será responsável exclusivamente por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> O funcionamento correto de plataforma tecnológica.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A gestão do processo de pagamento de acordo com as políticas publicadas.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A proteção dos dados pessoais dos usuários, em conformidade com a lei.</p>\n</div>\n<h6 class=\"mb-2\">8. Exclusão e Limitação de Responsabilidade</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A Tourya NíO será responsável por:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A realização do passeio ou da experiência.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cancelamentos, atrasos, modificações ou incumprimentos por parte do Operador.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Acidentes, danos, lesões, doenças ou perdas sofridas durante o passeio.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Atos ou omissões do Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Informações imprecisas fornecidas pelo Operador.</p>\n  <p class=\"mb-2\">Na medida máxima permitida pela lei colombiana, a Tourya não será responsável por danos indiretos, lucros cessantes ou prejuízos consequenciais.</p>\n</div>\n<h6 class=\"mb-2\">9. Pagos e Comissões</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A Tourya recebe os pagamentos efetuados pelos Usuários em nome do Operador Turístico.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A Tourya retém uma comissão de intermediação, previamente acordada com o Operador.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> O saldo restante será transferido ao Operador de acordo com os prazos internos da plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> O pagamento não implica que a Tourya assuma responsabilidade pela prestação do serviço.</p>\n</div>\n<h6 class=\"mb-2\">10. Políticas de cancelamento e reembolso</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Cada passeio terá uma política de cancelamento específica, visível antes da reserva:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Flexível: cancelamento até 24 horas antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Padrão: cancelamento até 48 horas antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Moderada: cancelamento até 4 dias antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Rigida: cancelamento até 7 dias antes</p>\n  <p class=\"mb-2\">Os cancelamentos e reembolsos são regidos pela política selecionada e são de responsabilidade do Operador Turístico. A Tourya poderá atuar como intermediária na gestão do reembolso, sem assumir responsabilidade direta.</p>\n</div>\n<h6 class=\"mb-2\">11. Suspensão e Exclusão de Operadores</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A Tourya poderá, a seu critério, suspender, limitar ou excluir operadores turísticos que:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Descumpram a legislação aplicável.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Descumpram as políticas de cancelamento ou de serviço.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Prejudiquem a reputação da plataforma.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Gerem reclamações repetidas dos usuários.</p>\n</div>\n<h6 class=\"mb-2\">12. Propriedade Intelectual</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Todos os conteúdos da plataforma (marca, logotipos, textos, software) são propriedade da Tourya ou de seus licenciadores e estão protegidos pela legislação de propriedade intelectual.</p>\n</div>\n<h6 class=\"mb-2\">13. Proteção de Dados Pessoal</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O tratamento de dados pessoais é realizado de acordo com a Lei 1581 de 2012 e demais normas aplicáveis.</p>\n  <p class=\"mb-2\">O Usuário declara ter lido e aceitado a Política de Privacidade da Tourya.</p>\n</div>\n<h6 class=\"mb-2\">14. Modificações</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A Tourya poderá modificar estes Termos a qualquer momento.</p>\n  <p class=\"mb-2\">As modificações serão publicadas na plataforma e serão consideradas aceitas com o uso continuado do serviço.</p>\n</div>\n<h6 class=\"mb-2\">15. Lei Aplicável e Foro Competente</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Estes Termos são regidos pelas leis da República da Colômbia.</p>\n  <p class=\"mb-2\">Qualquer controvérsia será submetida aos juízes competentes do foro de Tourya..</p>\n</div>\n<h6 class=\"mb-2\">16. Contato</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Para dúvidas ou reclamações:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📧 \udce7 luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📞 \udcde 311 218 2520</p>\n</div>",
+    "privacy": "<div class=\"mb-4\">\n  <p class=\"mb-2\">📄 POLÍTICA DE TRATAMENTO DE DADOS PESSOAIS</p>\n  <p class=\"mb-2\">TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-2\">Última atualização: [16/04/2026]</p>\n</div>\n<h6 class=\"mb-2\">1. Identificação do responsável pelo Tratamento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O responsável pelo tratamento dos dados pessoais é:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Razão social: TOURYA MARKETPLACE S.A.S.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> NIT: 901.961.052-4</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Domicílio: Centro Comercial New Point, Local 227, Colombia</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correio eletrônico: luis.mendoza@tourya.co</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Telefone: 311 218 2520</p>\n  <p class=\"mb-2\">Doravante, \"TOURYA\".</p>\n</div>\n<h6 class=\"mb-2\">2. Marco Legal</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Esta Política é regida pelas disposições de:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Lei 1581 de 2012</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Decreto 1377 de 2013</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Demais normas concordantes sobre proteção de dados pessoais na Colômbia</p>\n</div>\n<h6 class=\"mb-2\">3. Definições</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Dados Pessoais: Informação que permite identificar ou tornar identificável uma pessoa natural.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Titular: Pessoa natural cujos dados pessoais são objeto de tratamento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tratamento: Qualquer operação sobre dados pessoais, como coleta, armazenamento, uso, circulação ou exclusão.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responsable del Tratamento: TOURYA.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Encargado del Tratamento: Terceiros que tratam dados por conta da TOURYA (por exemplo, provedores tecnológicos).</p>\n</div>\n<h6 class=\"mb-2\">4. Dados Pessoais Tratados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA coleta e trata apenas os dados necessários para a operação do Marketplace turístico.</p>\n  <p class=\"mb-2\">Dados do Usuário / Turista:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Nome</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Sobrenome</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Número de documento de identidade</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Telefone de contacto</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Correio eletrônico</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cidade de residência</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estado/província</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> País</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A TOURYA não coleta dados sensíveis nem dados financeiros diretamente (estos últimos son gestionados por pasarelas de pago externas).</p>\n</div>\n<h6 class=\"mb-2\">5. Finalidades del Tratamento</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Os dados pessoais serão tratados para as seguintes finalidades:</p>\n</div>\n<h6 class=\"mb-2\">1. Gerenciar reservas de passeios e experiências turísticas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Facilitar a comunicação entre o Usuário e o Operador Turístico.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Processar pagamentos e reembolsos relacionados às reservas.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Cumprir obrigações legais e contratuais.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Atender a solicitações, queixas e reclamações (PQR).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Enviar comunicações relacionadas à reserva (confirmações, alterações, cancelamentos).</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">7. Melhorar a experiência do usuário na plataforma.</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Os dados não serão utilizados para fins distintos sem autorização prévia do titular.</p>\n</div>\n<h6 class=\"mb-2\">6. Autorização do Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O Titular autoriza de forma prévia, expressa e informada a TOURYA para o tratamento de seus dados pessoais ao:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Registrar-se na plataforma</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Fazer uma reserva</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Aceitar esta Política por meio de mecanismos digitais</p>\n  <p class=\"mb-2\">A autorização poderá ser revogada a qualquer momento, sem efeitos retroativos.</p>\n</div>\n<h6 class=\"mb-2\">7. Circulação e Transferência de Dados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA poderá compartilhar os dados pessoais apenas com:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Operadores Turísticos, exclusivamente para a prestação do passeio reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Provedores tecnológicos (hospedagem, CRM, gateway de pagamentos), sob acordos de confidencialidade.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Autoridades competentes, quando exigido por lei.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> A TOURYA não vende nem comercializa dados pessoais.</p>\n</div>\n<h6 class=\"mb-2\">8. Direitos do Titular</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">O Titular tem o direito de:</p>\n</div>\n<h6 class=\"mb-2\">1. Conhecer, atualizar e retificar seus dados pessoais.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">2. Solicitar prova da autorização concedida.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">3. Ser informado sobre o uso de seus dados.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">4. Apresentar queixas à SIC por infrações.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">5. Revogar a autorização e/ou solicitar a exclusão do dado.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">6. Acessar gratuitamente seus dados pessoais.</h6>\n<div class=\"mb-4\">\n</div>\n<h6 class=\"mb-2\">9. Procedimento para o Exercício de Direitos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">As solicitações deverão ser enviadas para o e-mail:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📧 luis.mendoza@tourya.co</p>\n  <p class=\"mb-2\">Prazos legais:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Consultas: até 10 dias úteis</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Reclamações: até 15 dias úteis</p>\n</div>\n<h6 class=\"mb-2\">10. Medidas de Segurança</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA adota medidas técnicas, administrativas e organizacionais razoáveis para proteger os dados pessoais contra:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Acesso não autorizado</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Perda</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Uso indevido</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Alteração</p>\n  <p class=\"mb-2\">No entanto, o usuário reconhece que nenhum sistema é completamente seguro.</p>\n</div>\n<h6 class=\"mb-2\">11. Tratamento por Parte de Operadores Turísticos</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Os Operadores Turísticos que acessam dados pessoais dos Usuários:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Actúan como Encargados del Tratamento.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Só podem usar os dados para executar o passeio reservado.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Deben cumplir la Lei 1581 de 2012.</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Não podem usar os dados com fins próprios sem autorização do Titular.</p>\n</div>\n<h6 class=\"mb-2\">12. Conservação de Dados</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Os dados pessoais serão conservados:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Durante a vigência da relação contratual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Enquanto houver uma obrigação legal ou contratual</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Até que o Titular solicite sua exclusão (quando legalmente aplicável)</p>\n</div>\n<h6 class=\"mb-2\">13. Modificações na Política</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A TOURYA poderá modificar esta Política a qualquer momento.</p>\n  <p class=\"mb-2\">As modificações serão informadas por meio da plataforma.</p>\n</div>\n<h6 class=\"mb-2\">14. Vigência</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">A presente Política entra em vigor a partir de sua publicação e permanecerá vigente enquanto a TOURYA realizar o tratamento de dados pessoais.</p>\n</div>",
+    "operatorTerms": "\n<div class=\"mb-4\">\n  <p class=\"mb-2\"><strong>POLÍTICAS OPERATIVAS PARA OPERADORES</strong></p>\n  <p class=\"mb-2\"><strong>TOURYA MARKETPLACE S.A.S.</strong></p>\n  <p class=\"mb-2\">Versión 1.0</p>\n  <p class=\"mb-2\">Última actualización: [01/06/2026]</p>\n</div>\n\n<h6 class=\"mb-2\">1. INTRODUCCIÓN</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Bienvenido a Tourya 👋</p>\n  <p class=\"mb-2\">Estas Políticas Operativas tienen como objetivo definir las buenas prácticas, lineamientos operativos y estándares mínimos de servicio para todos los operadores turísticos que utilizan la plataforma Tourya.</p>\n  <p class=\"mb-2\">Estas políticas complementan:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El Contrato de Vinculación de Operador Turístico</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El Contrato de Mandato</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Las políticas generales de Tourya</p>\n  <p class=\"mb-2\">El uso continuo de la plataforma implica la aceptación de estas políticas.</p>\n</div>\n\n<h6 class=\"mb-2\">2. NATURALEZA DE TOURYA</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya es un marketplace digital que conecta turistas con operadores turísticos independientes.</p>\n  <p class=\"mb-2\"><strong>👉 Tourya:</strong></p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Facilita reservas</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Gestiona pagos</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Promociona experiencias</p>\n  <p class=\"mb-2 mt-3\"><strong>👉 El operador:</strong></p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Presta directamente el servicio turístico</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Responde frente al usuario</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Debe cumplir la normativa colombiana</p>\n</div>\n\n<h6 class=\"mb-2\">3. REQUISITOS PARA OPERAR EN TOURYA</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Para mantener activa su cuenta, el operador debe:</p>\n  <p class=\"mb-1\">✅ Tener Registro Nacional de Turismo (RNT) vigente</p>\n  <p class=\"mb-1\">✅ Contar con permisos y seguros requeridos</p>\n  <p class=\"mb-1\">✅ Mantener información actualizada</p>\n  <p class=\"mb-1\">✅ Cumplir estas políticas y la ley colombiana</p>\n  <p class=\"mb-2 mt-2\">Tourya podrá solicitar documentación en cualquier momento.</p>\n</div>\n\n<h6 class=\"mb-2\">4. PUBLICACIÓN DE TOURS</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El operador debe garantizar que:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> La información publicada sea veraz</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Los precios sean correctos</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Las fotografías representen el servicio real</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Las condiciones del tour estén claras</p>\n  <p class=\"mb-2 mt-3\"><strong>🚫 No está permitido:</strong></p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Publicidad engañosa</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Información falsa</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Ocultar restricciones importantes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Publicar tours sin capacidad operativa real</p>\n</div>\n\n<h6 class=\"mb-2\">5. RESERVAS Y CONFIRMACIONES</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2 fw-bold\">5.1 Confirmación de Reservas</p>\n  <p class=\"mb-2\">Las reservas realizadas a través de Tourya son vinculantes una vez confirmadas en la plataforma.</p>\n  <p class=\"mb-2\">El operador deberá:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Revisar constantemente sus reservas</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Confirmar disponibilidad</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Preparar la prestación del servicio</p>\n\n  <p class=\"mb-2 mt-3 fw-bold\">5.2 Disponibilidad</p>\n  <p class=\"mb-2\">El operador es responsable de mantener actualizada la disponibilidad de sus tours.</p>\n</div>\n\n<h6 class=\"mb-2\">6. PRESTACIÓN DEL SERVICIO</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El operador se compromete a:</p>\n  <p class=\"mb-1\">✅ Ser puntual</p>\n  <p class=\"mb-1\">✅ Prestar el servicio conforme a lo publicado</p>\n  <p class=\"mb-1\">✅ Mantener una atención respetuosa y profesional</p>\n  <p class=\"mb-1\">✅ Cumplir normas de seguridad aplicables</p>\n  <p class=\"mb-1\">✅ Informar cualquier novedad relevante</p>\n  \n  <p class=\"mb-2 mt-3\"><strong>🚫 No está permitido:</strong></p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Modificar precios directamente al turista</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Exigir pagos por fuera de Tourya</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Cambiar condiciones sin autorización</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Delegar tours a terceros no autorizados</p>\n</div>\n\n<h6 class=\"mb-2\">7. CANCELACIONES Y REEMBOLSOS</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">El operador acepta las políticas de cancelación disponibles en Tourya:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Flexible → hasta 24h antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estándar → hasta 48h antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Moderada → hasta 4 días antes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Estricta → hasta 7 días antes</p>\n\n  <p class=\"mb-2 mt-3 fw-bold\">7.1 Cancelaciones por el Operador</p>\n  <p class=\"mb-2\">El operador debe evitar cancelaciones injustificadas.</p>\n  <p class=\"mb-2\">Cancelaciones frecuentes pueden generar:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Menor visibilidad</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Suspensión temporal</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Deslistado del marketplace</p>\n</div>\n\n<h6 class=\"mb-2\">8. PAGOS Y CICLOS DE LIQUIDACIÓN</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2 fw-bold\">8.1 Frecuencia de Pago</p>\n  <p class=\"mb-2\">Tourya realiza pagos:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Martes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Viernes</p>\n\n  <p class=\"mb-2 mt-3 fw-bold\">8.2 Periodo de Maduración</p>\n  <p class=\"mb-2\">Los servicios deben cumplir un periodo de maduración de 48 horas antes de ser liquidados.</p>\n  <p class=\"mb-2\">Esto permite gestionar:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Reembolsos</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Reclamos</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Validaciones</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Contracargos</p>\n\n  <p class=\"mb-2 mt-3 fw-bold\">8.3 Ejemplos</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tour realizado lunes → pago viernes</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tour realizado sábado → pago martes</p>\n\n  <p class=\"mb-2 mt-3 fw-bold\">8.4 Condiciones para Pago</p>\n  <p class=\"mb-2\">Los pagos están sujetos a:</p>\n  <p class=\"mb-1\">✅ Servicio efectivamente prestado</p>\n  <p class=\"mb-1\">✅ Ausencia de fraude o chargeback</p>\n  <p class=\"mb-1\">✅ Cumplimiento de políticas</p>\n</div>\n\n<h6 class=\"mb-2\">9. FACTURACIÓN</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Dependiendo del modelo operativo vigente:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> El operador podrá facturar directamente al usuario</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Tourya podrá facturar en nombre del operador bajo contrato de mandato</p>\n  <p class=\"mb-2 mt-2\">La factura electrónica podrá emitirse una vez finalizado el servicio o el paquete de servicios reservado.</p>\n</div>\n\n<h6 class=\"mb-2\">10. RELACIÓN CON LOS TURISTAS</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los operadores deben mantener una relación profesional y respetuosa con los usuarios.</p>\n  <p class=\"mb-2 mt-2\"><strong>🚫 Está prohibido:</strong></p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Solicitar pagos directos por fuera de Tourya</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Extraer clientes de la plataforma</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Realizar spam o promociones no autorizadas</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Usar datos personales con fines propios</p>\n</div>\n\n<h6 class=\"mb-2\">11. PROTECCIÓN DE DATOS PERSONALES</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Los datos de los turistas solo podrán utilizarse para:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Coordinación del servicio</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Contacto relacionado con la reserva</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Prestación del tour</p>\n  \n  <p class=\"mb-2 mt-2\"><strong>🚫 Está prohibido:</strong></p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Compartir información con terceros</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Usar datos para marketing propio</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-danger me-2\"></i> Conservar datos innecesariamente</p>\n</div>\n\n<h6 class=\"mb-2\">12. CALIDAD Y EXPERIENCIA</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya busca mantener altos estándares de experiencia.</p>\n  <p class=\"mb-2\">Se evaluarán factores como:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Reseñas</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Cumplimiento</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Puntualidad</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Calidad del servicio</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Atención al cliente</p>\n</div>\n\n<h6 class=\"mb-2\">13. INCUMPLIMIENTOS</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">En caso de incumplimientos, Tourya podrá aplicar medidas como:</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Advertencias</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Menor visibilidad</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Suspensión temporal</p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> Deslistado definitivo</p>\n</div>\n\n<h6 class=\"mb-2\">14. MODIFICACIONES</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-2\">Tourya podrá actualizar estas políticas en cualquier momento.</p>\n  <p class=\"mb-2\">Las modificaciones serán notificadas mediante la plataforma o correo electrónico.</p>\n</div>\n\n<h6 class=\"mb-2\">15. CONTACTO</h6>\n<div class=\"mb-4\">\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> ✉️ <a href=\"mailto:luis.mendoza@tourya.co\" class=\"text-primary text-decoration-none\">luis.mendoza@tourya.co</a></p>\n  <p class=\"mb-1\"><i class=\"ti ti-square-rotated-filled text-primary me-2\"></i> 📞 311 218 2520</p>\n</div>\n"
+  },
+  "aboutUs": {
+    "title1": "Sobre a Tourya",
+    "desc1": "A Tourya é um marketplace criado para conectar turistas às melhores experiências na ilha de San Andrés.",
+    "desc2": "A Tourya é um aplicativo que conecta turistas aos melhores passeios de forma fácil e segura. Permite descobrir, comparar e reservar experiências pelo celular em poucos minutos.",
+    "point1": "Oferece informações claras, preços transparentes e confirmação imediata con QR. Você encontrará informações claras, precisas e completas sobre cada passeio antes de comprar. As avaliações reais ajudarão você a escolher com confiança e sem surpresas.",
+    "point2": "Explore, comparar e reservar passeios facilmente pelo celular em poucos passos. Receba confirmação imediata com QR e gerencie alterações ou cancelamentos sem complicações. Tudo com suporte 24 horas por dia, 7 dias por semana, para que você viaje sem preocupações.",
+    "missionTitle": "Nossa missão",
+    "missionDesc": "Na Tourya, ajudamos os turistas a viver experiências memoráveis em San Andrés. Conectamos viajantes a passeios seguros, confiáveis e fáceis de reservar. Oferecemos uma plataforma transparente para você aproveitar sem preocupações.",
+    "whyChooseUs": {
+      "title": "Por que nos ",
+      "titlePrimary": "escolher?",
+      "card1": {
+        "title": "Compra sem risco",
+        "desc": "Não há medo de golpes. Você paga com segurança e recebe exatamente o que vê."
+      },
+      "card2": {
+        "title": "Tudo claro, sem surpresas",
+        "desc": "Preços, horários e condições transparentes desde o início. Nada oculto."
+      },
+      "card3": {
+        "title": "Cancelamento fácil",
+        "desc": "Alterações ou cancelamentos sem complicações. Flexibilidade real para o viajante."
+      },
+      "card4": {
+        "title": "Sempre acompanhado",
+        "desc": "Suporte 24 horas por dia, 7 dias por semana. Você não está sozinho se algo acontecer."
+      }
+    }
+  },
+  "tours-detail": {
+    "breadcrumb": {
+      "details": "Detalhes do Passeio",
+      "tours": "Passeios"
+    },
+    "header": {
+      "seeAll": "Ver Tudo",
+      "viewLocation": "Ver Localização",
+      "reviews": "Avaliações"
+    },
+    "actions": {
+      "save": "Salvar",
+      "saved": "Salvo",
+      "share": "Compartilhar"
+    },
+    "sections": {
+      "description": "Descrição",
+      "highlights": "Destaques",
+      "itinerary": "Itinerário",
+      "includesExcludes": "Inclui e Exclui",
+      "gallery": "Galeria",
+      "location": "Localização",
+      "cancellationPolicies": "Políticas de Cancelamento",
+      "faq": "Perguntas Frequentes",
+      "reviews": "Avaliações"
+    },
+    "policies": {
+      "rainRefund": "Reembolso por Chuva",
+      "rescheduling": "Reagendamento"
+    },
+    "reviews": {
+      "writeReview": "Escrever uma Avaliação",
+      "rejection": {
+        "selectReason": "Por favor, selecione um motivo para rejeição",
+        "success": "Avaliação rejeitada com sucesso",
+        "error": "Erro ao rejeitar avaliação"
+      },
+      "customerReviewsAndRatings": "Avaliações e classificações dos clientes",
+      "basedOnReviews": "Com base em {{count}} avaliações",
+      "starRatings": "Avaliações de {{star}} estrelas"
+    },
+    "booking": {
+      "checkIn": "De",
+      "checkOut": "Para",
+      "guests": "Viajantes",
+      "adults": "Adultos",
+      "children": "Crianças",
+      "infants": "Bebês",
+      "selectDate": "Selecionar Data",
+      "confirmSelection": "Confirmar Seleção",
+      "addToCart": "Adicionar ao Carrinho",
+      "selectionActive": "Sua seleção está ativa",
+      "finishBooking": "Finalizar reserva",
+      "person": "Pessoa",
+      "persons": "Pessoas",
+      "noTravellers": "Sem viajantes",
+      "perPerson": "Por Pessoa",
+      "group": "Grupo",
+      "upTo": "até",
+      "duration": "Duração",
+      "minAge": "Idade mínima",
+      "price": "Preço",
+      "availability": "Disponibilidade",
+      "checkAvailability": "Consultar Disponibilidade",
+      "loginToCheck": "Para consultar a disponibilidade você deve fazer o login.",
+      "login": "Entrar",
+      "tourName": "Nome do passeio",
+      "details": "Detalhe",
+      "selectTravelers": "Selecionar viajantes",
+      "meetingPoint": "Ponto de encontro"
+    },
+    "enquiry": {
+      "title": "Contate-nos",
+      "submit": "Enviar Consulta"
+    },
+    "provider": {
+      "title": "Detalhes do Provedor",
+      "callUs": "Ligue para nós",
+      "email": "Email"
+    },
+    "why-book": {
+      "title": "Por que reservar conosco",
+      "item1": "Informação clara sempre",
+      "item2": "Compra 100% segura",
+      "item3": "Cancelamento fácil flexível",
+      "item4": "Suporte real 24/7",
+      "item5": "Escritório físico local"
+    }
+  },
+  "header": {
+    "login": "Entrar",
+    "logout": "Sair",
+    "myBooking": "Minhas Reservas",
+    "myProfile": "Meu Perfil",
+    "menu": {
+      "tours": "Passeio",
+      "tourList": "Lista de Tours",
+      "schedulesTemplates": "Modelos de Horários",
+      "myBookings": "Minhas Reservas",
+      "myReviews": "Minhas Avaliações",
+      "wishlist": "Lista de Desejos",
+      "myPayments": "Meus Pagamentos",
+      "blog": "Blog",
+      "contactUs": "Contate-nos",
+      "legal": "Informações legais",
+      "termsAndConditions": "Termos e Condições",
+      "privacyPolicy": "Política de Privacidade",
+      "providers": "Fornecedores"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "subtitle": "Faça login para gerenciar sua conta TourYa",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu E-mail",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite a Senha",
+      "rememberMe": "Lembrar-me",
+      "forgotPassword": "Esqueceu a Senha?",
+      "button": "Entrar",
+      "or": "Ou",
+      "noAccount": "Você não tem uma conta?",
+      "signupLink": "Inscrever-se"
+    },
+    "register": {
+      "title": "Inscrever-se",
+      "subtitle": "Crie sua conta TourYa",
+      "nameLabel": "Nome",
+      "namePlaceholder": "Digite seu Nome Completo",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu E-mail",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite a Senha",
+      "confirmPasswordLabel": "Confirmar Senha",
+      "confirmPasswordPlaceholder": "Digite a Senha",
+      "agreeTerms": "Eu concordo com os ",
+      "termsLink": "Termos de Serviço.",
+      "button": "Registrar",
+      "or": "Ou",
+      "hasAccount": "Já tem uma conta?",
+      "loginLink": "Entrar"
+    },
+    "changePassword": {
+      "title": "Alterar Senha",
+      "subtitle": "Insira os detalhes para alterar a senha",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite a Senha",
+      "confirmPasswordLabel": "Confirmar Senha",
+      "confirmPasswordPlaceholder": "Digite a Senha",
+      "button": "Alterar Senha"
+    },
+    "forgotPassword": {
+      "title": "Esqueceu a Senha",
+      "subtitle": "Redefina sua Senha do TourYa",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu E-mail",
+      "button": "Redefinir Senha",
+      "rememberPassword": "Lembra da Senha?",
+      "loginLink": "Entrar"
+    }
+  },
+  "searchComponent": {
+    "city": "Cidade",
+    "selectCity": "Selecione a cidade",
+    "checkIn": "De",
+    "checkOut": "Para",
+    "travellers": "Viajantes",
+    "person": "Pessoa",
+    "persons": "Pessoas",
+    "selectTravelers": "Selecione os viajantes",
+    "adult": "Adulto",
+    "children": "Criança",
+    "infants": "Bebê",
+    "search": "Pesquisar",
+    "yearsOld": "Anos",
+    "adults": "Adultos",
+    "child": "Criança",
+    "infant": "Bebê",
+    "economy": "Econômica",
+    "firstClass": "Primeira Classe",
+    "business": "Negócios"
+  },
+  "toursCards": {
+    "aquanauts": "Aquanautas",
+    "whiteNight": "Noite Branca",
+    "cayTour": "Passeio ao ilhéu",
+    "beachCart": "Carro de praia",
+    "parasailing": "Parasail",
+    "scubaDiving": "Mergulho",
+    "paddleBoard": "Paddle Board",
+    "tours": "passeios"
+  },
+  "footer": {
+    "destinations": "Destinos",
+    "company": "Empresa",
+    "aboutUs": "Quem somos",
+    "blog": "Blog",
+    "support": "Suporte",
+    "contactUs": "Fale conosco",
+    "legal": "Legal",
+    "termsAndConditions": "Termos e condições",
+    "privacyPolicy": "Políticas de privacidade e tratamento de dados pessoais",
+    "suppliers": "Fornecedores",
+    "registerAsSupplier": "Registre-se como fornecedor",
+    "availableOn": "Disponível em:",
+    "email": "E-mail:"
+  },
+  "filters": {
+    "timeOfDay": "Período do dia",
+    "morning": "Manhã",
+    "afternoon": "Tarde",
+    "eveningAndNight": "Noite",
+    "duration": "Período do dia",
+    "oneToTwoHours": "1 a 2 horas",
+    "twoToFourHours": "2 a 4 horas",
+    "fourToSixHours": "4 a 6 horas",
+    "upToOneDay": "Até 1 dia",
+    "upToThreeDays": "Até 3 dias",
+    "upToFiveDays": "Até 5 dias",
+    "priceRange": "Preço",
+    "range": "Intervalo:",
+    "toursFound": "Tours encontrados na sua pesquisa",
+    "generalSearch": "Busca Geral",
+    "searchTours": "Buscar tours...",
+    "categories": "Categorias",
+    "subcategories": "Subcategorias",
+    "filtersTitle": "Filtros",
+    "resetFilters": "Limpar"
+  },
+  "myProfile": {
+    "title": "Meu perfil",
+    "basicInfo": "Informações básicas",
+    "name": "Nome",
+    "lastName": "Sobrenome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "addressInfo": "Informações de endereço",
+    "address": "Endereço",
+    "country": "País",
+    "state": "Estado/Província",
+    "city": "Cidade",
+    "zipCode": "Código postal",
+    "myBookings": "Minhas Reservas",
+    "myReviews": "Minhas Avaliações",
+    "wishlist": "Lista de desejos",
+    "alerts": {
+      "photo": "Foto de perfil",
+      "uploadSuccess": "Carregado com sucesso",
+      "uploadError": "Erro ao carregar",
+      "profileData": "Dados do perfil",
+      "updateSuccess": "Atualizados com sucesso",
+      "updateError": "Erro ao atualizar",
+      "processCompleted": "Processo Concluído!",
+      "updateResult": "Resultado da atualização",
+      "understood": "Entendido",
+      "replySuccess": "Resposta enviada com sucesso!",
+      "replyError": "Erro ao enviar a resposta. Por favor, tente novamente.",
+      "reviewDeleted": "Avaliação excluída com sucesso",
+      "reviewDeleteError": "Erro ao excluir a avaliação. Por favor, tente novamente."
+    }
+  },
+  "toursList": {
+    "loading": "Carregando...",
+    "searchingTours": "Procurando passeios...",
+    "trending": "Em alta",
+    "available": "Disponível",
+    "priceFrom": "Preço desde",
+    "priceType": {
+      "person": "por pessoa",
+      "group": "grupo de {{amount}}"
+    },
+    "checkAvailability": "consultar disponibilidade",
+    "noToursFound": "Nenhum passeio encontrado com os critérios de busca.",
+    "showing": "Exibindo",
+    "of": "de",
+    "tours": "passeios",
+    "reviews": "Avaliações",
+    "noReviews": "Sem avaliações",
+    "sortBy": "Classificar por: ",
+    "sortByShort": "Classificar por",
+    "recommended": "Recomendados",
+    "priceLowToHigh": "Preço: Menor para Maior",
+    "priceHighToLow": "Preço: Maior para Menor",
+    "newest": "Mais recentes",
+    "ratings": "Classificações",
+    "reset": "Limpar",
+    "apply": "Aplicar",
+    "search": "Buscar"
+  },
+  "tourSlotModal": {
+    "title": "Selecionar Horário e Participantes",
+    "available": "Disponível:",
+    "availableSchedules": "Horários Disponíveis",
+    "selectSchedule": "Selecione o horário da sua preferência",
+    "groupsAvailable": "grupos disponíveis",
+    "slotsAvailable": "vagas disponíveis",
+    "full": "Completo",
+    "from": "A partir de",
+    "noSchedulesTitle": "Nenhum horário disponível",
+    "noSchedulesDesc": "Desculpe, não há horários disponíveis para este tour na data selecionada.",
+    "participantsByGroup": "Participantes por Grupo",
+    "selectParticipants": "Selecionar Participantes",
+    "availablePersons": "Disponíveis: {{ count }} pessoas",
+    "maxPersonsPerGroup": "Máximo de {{ count }} pessoas por grupo",
+    "selectScheduleForCapacity": "Selecione um horário para ver a capacidade exata",
+    "selectGroups": "Selecionar Grupos",
+    "quantityGroups": "Quantidade de grupos a reservar",
+    "perGroup": "por grupo",
+    "each": "cada",
+    "maxAvailabilityLimit": "Limite máximo de disponibilidade",
+    "totalParticipants": "Total de Participantes",
+    "totalPrice": "Preço Total:",
+    "cancel": "Cancelar",
+    "logout": "Sair",
+    "reschedule": "Reagendar",
+    "addToItinerary": "Adicionar ao carrinho de compras",
+    "verifyingProfile": "Verificando perfil...",
+    "rescheduling": "Reagendando...",
+    "adding": "Adicionando...",
+    "adults": "Adultos",
+    "any": "Qualquer",
+    "children": "Crianças",
+    "infants": "Bebês",
+    "seniors": "Idosos"
+  },
+  "cart": {
+    "myItinerary": "Meu Itinerário",
+    "of": "a",
+    "days": "dias",
+    "people": "pessoas",
+    "personSingularPlural": "pessoa(s)",
+    "groupsLabel": "Grupo(s)",
+    "selectToursFor": "Selecione tours para",
+    "daysOfTravel": "dias de viagem",
+    "selectedTours": "Passeios Selecionados",
+    "totalDays": "dias no total",
+    "selectedToursTitle": "Passeios Selecionados",
+    "removeTour": "Remover tour",
+    "noToursSelected": "Nenhum tour selecionado ainda",
+    "tourSingularPlural": "tour(s)",
+    "clearing": "Limpando...",
+    "clear": "Limpar",
+    "loading": "Carregando...",
+    "continue": "Ir para o carrinho",
+    "confirmClearTitle": "Você tem certeza?",
+    "confirmClearText": "Esta ação removerá todos os tours do seu carrinho",
+    "confirmClearYes": "Sim, limpar carrinho",
+    "confirmClearCancel": "Cancelar",
+    "clearSuccessTitle": "Carrinho limpo!",
+    "clearSuccessText": "Todos os tours foram removidos",
+    "clearErrorTitle": "Erro ao limpar o carrinho",
+    "clearErrorText": "Por favor, tente novamente",
+    "tourRemoved": "Tour removido",
+    "errorTitle": "Erro",
+    "removeTourError": "Não foi possível remover o tour. Tente novamente.",
+    "errorLoading": "Erro ao carregar o carrinho. Por favor, tente novamente.",
+    "errorSessionExpired": "Sessão expirada. Por favor, faça login novamente.",
+    "errorConnection": "Erro de conexão. Verifique sua conexão com a internet.",
+    "errorData": "Erro nos dados do carrinho. Verifique as informações e tente novamente.",
+    "errorServer": "Erro no servidor. Por favor, tente mais tarde."
+  },
+  "tour-schedule": {
+    "breadcrumb": {
+      "title": "Calendario del Tour",
+      "providersPanel": "Panel de Proveedores"
+    },
+    "calendar": {
+      "previous": "Anterior",
+      "today": "Hoy",
+      "next": "Siguiente",
+      "scheduleFor": "Horarios del"
+    },
+    "template": {
+      "selectionTitle": "Seleccionar Template",
+      "label": "Template",
+      "placeholder": "Seleccionar template",
+      "loading": "Cargando templates...",
+      "noTemplates": "No hay templates disponibles",
+      "apply": "Aplicar Template"
+    },
+    "config": {
+      "title": "Configuración de Calendario",
+      "reset": "Limpiar formulario",
+      "label": {
+        "label": "Etiqueta",
+        "required": "La etiqueta es requerida",
+        "minlength": "La etiqueta debe tener al menos 3 caracteres",
+        "maxlength": "La etiqueta no puede tener más de 50 caracteres"
+      },
+      "startDate": {
+        "label": "Fecha de Inicio",
+        "required": "La fecha de inicio es requerida",
+        "invalid": "La fecha de inicio es inválida"
+      },
+      "endDate": {
+        "label": "Fecha de Fin",
+        "required": "La fecha de fin es requerida",
+        "invalid": "La fecha de fin es inválida",
+        "invalidRange": "La fecha de fin es inválida."
+      },
+      "daysOfWeek": {
+        "label": "Días de la semana",
+        "required": "Los días de la semana son requeridos",
+        "SUNDAY": "DOMINGO",
+        "MONDAY": "LUNES",
+        "TUESDAY": "MARTES",
+        "WEDNESDAY": "MIÉRCOLES",
+        "THURSDAY": "JUEVES",
+        "FRIDAY": "VIERNES",
+        "SATURDAY": "SÁBADO"
+      }
+    },
+    "slots": {
+      "title": "Slots",
+      "slotNumber": "Slot #",
+      "startTime": {
+        "label": "Hora de inicio",
+        "required": "La hora de inicio es requerida"
+      },
+      "endTime": {
+        "label": "Hora de fin",
+        "required": "La hora de fin es requerida",
+        "invalidRange": "Rango de tiempo inválido"
+      },
+      "capacity": {
+        "label": "Capacidad",
+        "required": "La capacidad es requerida",
+        "min": "La capacidad debe ser al menos 1",
+        "unlimited": "Ilimitada"
+      }
+    },
+    "prices": {
+      "title": "Precios",
+      "priceNumber": "Precio #",
+      "ageType": {
+        "label": "Tipo de edad",
+        "required": "El tipo de edad es requerido",
+        "ANY": "CUALQUIERA",
+        "ADULT": "ADULTO",
+        "CHILD": "NIÑO",
+        "INFANT": "INFANTE"
+      },
+      "price": {
+        "label": "Precio",
+        "required": "El precio es requerido",
+        "min": "El precio debe ser mayor a cero"
+      },
+      "clientBadge": "Cliente",
+      "providerBadge": "Fornecedor",
+      "addNew": "Agregar Nuevo Precio"
+    },
+    "actions": {
+      "addNewSlot": "Agregar Nuevo Slot",
+      "addSchedule": "Agregar nuevo calendario",
+      "editSchedule": "Editar calendario"
+    },
+    "messages": {
+      "noSlots": "No hay horarios configurados para este día",
+      "config": "Configuración:",
+      "days": "Días:",
+      "schedule": "Horario",
+      "availability": "Disponibilidad",
+      "capacity": "Capacidad:",
+      "success": "Calendario del tour guardado exitosamente.",
+      "error": "Ha ocurrido un error, por favor intente de nuevo",
+      "errorGettingTour": "Error al obtener el tour.",
+      "errorGettingSchedules": "Error al obtener los calendarios del tour."
+    },
+    "anyModal": {
+      "title": "Confirmar cambio de tipo de edad",
+      "p1": "Has seleccionado \"ANY (CUALQUIERA)\" en el Precio #1.",
+      "p2": "Para agregar un nuevo precio, el Precio #1 se cambiará automáticamente de \"ANY\" a \"ADULT\".",
+      "p3": "¿Deseas continuar?",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    }
+  },
+  "templates": {
+    "title": "Plantillas de Horarios",
+    "providersPanel": "Panel de Proveedores",
+    "breadcrumb": "Plantillas",
+    "form": {
+      "back": "Volver",
+      "editTemplate": "Editar Template",
+      "createTemplate": "Crear Template",
+      "templateInfo": "Información del Template",
+      "resetForm": "Limpiar formulario",
+      "label": "Etiqueta",
+      "daysOfWeek": "Días de la semana",
+      "slots": "Slots",
+      "slot": "Slot",
+      "startTime": "Hora de inicio",
+      "endTime": "Hora de fin",
+      "capacity": "Capacidad",
+      "prices": "Precios",
+      "price": "Precio",
+      "ageType": "Tipo de edad",
+      "priceLabel": "Precio",
+      "addNewPrice": "Añadir Nuevo Precio",
+      "addNewSlot": "Añadir Nuevo Slot",
+      "updateTemplate": "Actualizar Template",
+      "createTemplateBtn": "Crear Template",
+      "errors": {
+        "labelRequired": "La etiqueta es obligatoria",
+        "labelMinLength": "La etiqueta debe tener al menos 3 caracteres",
+        "labelMaxLength": "La etiqueta no puede tener más de 50 caracteres",
+        "daysOfWeekRequired": "Los días de la semana son obligatorios",
+        "startTimeRequired": "La hora de inicio es obligatoria",
+        "endTimeRequired": "La hora de fin es obligatoria",
+        "invalidRangeTime": "Rango de tiempo inválido",
+        "capacityRequired": "La capacidad es obligatoria",
+        "capacityNumber": "La capacidad debe ser un número",
+        "ageTypeRequired": "El tipo de edad es obligatorio",
+        "priceRequired": "El precio es obligatorio",
+        "priceMin": "El precio debe ser mayor que cero"
+      }
+    }
+  },
+  "cartSummary": {
+    "secureCheckout": "Finalizar compra",
+    "contactInfo": "Informações de contato (Quem efetua o pagamento)",
+    "firstName": "Nome",
+    "lastName": "Sobrenome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "additionalInfo": "Informações adicionais",
+    "accommodation": "Hospedagem (para serviços de transporte)",
+    "accommodationName": "Nome do alojamento",
+    "address": "Direção",
+    "placeOfOrigin": "Local de origem",
+    "country": "País",
+    "stateOrDepartment": "Estado ou Departamento",
+    "city": "Cidade",
+    "travelersInfo": "Informações sobre a pessoa de contato da excursão",
+    "travelersCompleted": "{{count}} de {{total}} Dados do contato preenchidos",
+    "useMyData": "Usar meus dados",
+    "statusPending": "Em aberto",
+    "statusComplete": "Completo",
+    "travelerInfoTour": "Pessoa de contato da passeio",
+    "isItYou": "Informações sobre o organizador do passeio",
+    "orderSummary": "Resumo do seu pedido",
+    "participantsCount": "{{count}} pessoas",
+    "participantsLabel": "pessoas",
+    "groupsLabel": "Grupo(s)",
+    "priceTypeAdult": "Adulto",
+    "priceTypeChild": "Criança",
+    "priceTypeBaby": "Bebê",
+    "totalPerTour": "Total por passeio",
+    "subtotal": "Subtotal",
+    "availableCredits": "Créditos disponíveis:",
+    "hasCreditsMsg": "Você tem créditos que pode usar nas suas reservas.",
+    "useCreditBtn": "usar crédito:",
+    "totalToPay": "Total a pagar:",
+    "proceedToPayment": "Efetuar o pagamento",
+    "continueShopping": "Continuar comprando",
+    "each": "CADA",
+    "expandAll": "Expandir todos",
+    "collapseAll": "Recolher todos",
+    "selectCountry": "Selecione o país",
+    "pageTitle": "Resumo do Carrinho",
+    "breadcrumbTours": "Passeios",
+    "breadcrumbCart": "Carrinho",
+    "countryColombia": "Colômbia",
+    "countryUSA": "Estados Unidos",
+    "countrySpain": "Espanha",
+    "travelerFirstName": "Nome do Viajante",
+    "travelerLastName": "Sobrenome do Viajante",
+    "travelerEmail": "E-mail do Viajante",
+    "travelerPhone": "Telefone do Viajante",
+    "noToursInCart": "Não há passeios no carrinho",
+    "addToursToComplete": "Adicione passeios ao carrinho para preencher as informações dos viajantes",
+    "paymentMethod": "Forma de pagamento",
+    "securePayments": "Pagamentos seguros processados pelo Wompi",
+    "accepts": "Aceita",
+    "creditDebitCards": "cartões de crédito/débito",
+    "andMoreMethods": "e mais métodos de pagamento",
+    "howItWorks": "Como funciona?",
+    "paymentExplanation": "Ao clicar em \"Efetuar o Pagamento\", a plataforma segura do Wompi será aberta, onde você poderá escolher seu método de pagamento preferido.",
+    "appliedCredits": "Créditos Aplicados:",
+    "useCredit": "Usar crédito",
+    "selectCreditsToUse": "Selecionar créditos a serem utilizados",
+    "cartEmpty": "Seu carrinho está vazio",
+    "exploreToursPrompt": "Explore nossos passeios e encontre sua próxima aventura!",
+    "exploreToursBtn": "Explorar Passeios",
+    "loading": "Carregando...",
+    "loadingCart": "Carregando seu carrinho...",
+    "goTo": "Ir a",
+    "removeFromCart": "Remover passeio do carrinho",
+    "removeCredits": "Remover créditos",
+    "firstNamePlaceholder": "João",
+    "lastNamePlaceholder": "Silva",
+    "emailPlaceholder": "exemplo@email.com",
+    "phonePlaceholder": "3001234567",
+    "additionalInfoPlaceholder": "Informações adicionais, comentários especiais...",
+    "accommodationNamePlaceholder": "Hotel XYZ",
+    "accommodationAddressPlaceholder": "Localização do alojamento",
+    "cityPlaceholder": "Cidade",
+    "travelerEmailPlaceholder": "viajante@email.com",
+    "selectDepartment": "Selecione o Departamento",
+    "selectCity": "Selecione a Cidade",
+    "travelersTotal": "Viajantes no total",
+    "electronicBilling": {
+      "title": "Faturamento Eletrônico",
+      "wantBilling": "Deseja faturamento eletrônico?",
+      "documentType": "Tipo de documento",
+      "documentNumber": "Número do documento",
+      "customerName": "Nome do Cliente / Razão Social",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "docTypes": {
+        "CC": "Carteira de Identidade",
+        "CE": "Identidade de Estrangeiro",
+        "NIT": "NIT",
+        "PASSPORT": "Passaporte"
+      },
+      "placeholders": {
+        "documentNumber": "Ex. 123456789",
+        "customerName": "Nome completo ou razão social",
+        "email": "email@exemplo.com",
+        "phone": "Ex. 3001234567"
+      }
+    },
+    "errors": {
+      "noCartItemsForCredits": "Não há itens no carrinho para aplicar créditos.",
+      "completeField": "Por favor preencha o campo: {{field}} em Informações de Contato",
+      "completeTravelersInfo": "Por favor preencha as informações de todos os viajantes",
+      "invalidEmail": "Por favor insira um endereço de e-mail válido",
+      "completeRequiredFields": "Por favor preencha todos os campos obrigatórios corretamente",
+      "noCartItems": "Não há itens no carrinho para processar",
+      "creditPaymentError": "Ocorreu um erro ao processar o pagamento com seus créditos. Por favor entre em contato com o suporte.",
+      "paymentConfigError": "Erro na configuração de pagamento: {{errors}}",
+      "paymentSuccessButReservationFailedTitle": "Erro na Reserva",
+      "paymentSuccessButReservationFailed": "O pagamento foi bem-sucedido, mas ocorreu um erro ao criar a reserva. Por favor entre em contato com o suporte.",
+      "paymentDeclinedTitle": "Pagamento Recusado",
+      "paymentDeclined": "O pagamento foi recusado. Por favor tente outro método de pagamento.",
+      "paymentPendingTitle": "Pagamento Pendente",
+      "paymentPending": "O pagamento está sendo processado. Você receberá uma confirmação em breve.",
+      "invalidItemId": "Erro: ID de item inválido",
+      "completeContactFirst": "Por favor preencha primeiro suas informações de contato (Nome, Sobrenome, E-mail e Telefone)"
+    }
+  },
+  "listTours": {
+    "welcomeBack": "Bem-vindo de volta!",
+    "tourAdded": "Adicionamos o tour \"{{tourName}}\" ao seu carrinho.",
+    "tourAddedGeneric": "O seu tour foi adicionado ao carrinho com sucesso.",
+    "viewCart": "Ver carrinho",
+    "continueShopping": "Continuar procurando",
+    "errorTitle": "Erro",
+    "errorAddTour": "Houve um problema ao adicionar o tour. Por favor, tente novamente.",
+    "understood": "Entendido"
+  },
+  "clientCredits": {
+    "myCredits": "Meus Créditos",
+    "totalCredits": "Total de créditos",
+    "creditsList": "Lista de créditos",
+    "statusLabel": "Status:",
+    "allStatuses": "Todos",
+    "colUse": "Usar",
+    "colId": "ID do crédito",
+    "colBookingId": "ID da reserva",
+    "colValue": "Valor",
+    "colCreationDate": "Data de criação",
+    "colExpirationDate": "Data de validade",
+    "colStatus": "Status",
+    "noCreditsFound": "Nenhum crédito encontrado",
+    "selectedCount": "Selecionados",
+    "totalSelected": "Total",
+    "cancelBtn": "Cancelar",
+    "useCreditsBtn": "Usar Créditos",
+    "exceedingMaxError": "O valor total dos créditos selecionados é maior que o valor da reserva, deve ser menor ou igual a",
+    "statuses": {
+      "all": "Todos",
+      "created": "Criada",
+      "canceled": "Cancelada",
+      "eliminated": "Eliminada",
+      "reserved": "Reservado",
+      "used": "Usado",
+      "applied": "Aplicado",
+      "consumed": "Consumido",
+      "expired": "Expirado"
+    }
+  },
+  "bookingTours": {
+    "title": "Reservar Passeios",
+    "breadcrumbTours": "Passeios",
+    "breadcrumbBooking": "Reserva",
+    "tourInfo": "Informações do Passeio",
+    "maxGuests": "Máximo {{guests}} hóspedes",
+    "bookingDetails": "Detalhes da Reserva",
+    "fromDate": "Data de Início",
+    "selectStartDate": "Selecione a data de início",
+    "toDate": "Data de Término",
+    "selectEndDate": "Selecione a data de término",
+    "adults": "Adultos",
+    "children": "Crianças (2-12 anos)",
+    "infants": "Bebês (0-2 anos)",
+    "fullName": "Nome Completo",
+    "enterFullName": "Digite seu nome completo",
+    "email": "E-mail",
+    "enterEmail": "Digite seu e-mail",
+    "phoneNumber": "Número de Telefone",
+    "enterPhone": "Digite seu número de telefone",
+    "specialRequests": "Pedidos Especiais",
+    "enterRequests": "Qualquer pedido especial ou requisito...",
+    "proceedPayment": "Prosseguir para o Pagamento",
+    "bookingSummary": "Resumo da Reserva",
+    "adultsLabel": "Adultos",
+    "childrenLabel": "Crianças",
+    "infantsLabel": "Bebês",
+    "free": "Grátis",
+    "total": "Total"
+  },
+  "bookingConfirm": {
+    "title": "Confirmação da reserva",
+    "breadcrumbTours": "Passeios",
+    "breadcrumbConfirmation": "Confirmação",
+    "successTitle": "Reserva Confirmada!",
+    "successMessage": "A sua reserva de passeio foi confirmada com sucesso. Em breve você receberá um e-mail de confirmação.",
+    "bookingId": "ID da Reserva",
+    "bookingDetails": "Detalhes da Reserva",
+    "tourName": "Nome do Passeio",
+    "location": "Localização",
+    "duration": "Duração",
+    "travelDates": "Datas de Viagem",
+    "adults": "Adultos",
+    "children": "Crianças",
+    "infants": "Bebês",
+    "totalAmount": "Valor Total",
+    "customerInfo": "Informações do Cliente",
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "paymentMethod": "Forma de pagamento",
+    "downloadInvoice": "Baixar Fatura",
+    "printBooking": "Imprimir Reserva",
+    "backToHome": "Voltar ao Início",
+    "importantInfoTitle": "Informações Importantes",
+    "info1": "Por favor, chegue 30 minutos antes do horário de início do passeio",
+    "info2": "Traga sapatos confortáveis para caminhar e roupas adequadas para o clima",
+    "info3": "Não se esqueça de trazer a confirmação da sua reserva",
+    "info4": "Entre em contato conosco 24 horas antes se precisar fazer alterações"
+  },
+  "tourBookingSuccess": {
+    "title": "Confirmação da reserva",
+    "breadcrumbTours": "Passeios",
+    "breadcrumbConfirmation": "Confirmação",
+    "loading": {
+      "visuallyHidden": "Carregando...",
+      "processingTitle": "Processando sua reserva...",
+      "processingDesc": "Por favor, aguarde enquanto confirmamos seu pagamento."
+    },
+    "errorState": {
+      "title": "Erro ao carregar confirmação",
+      "backBtn": "Voltar aos Passeios"
+    },
+    "success": {
+      "title": "Reserva Confirmada!",
+      "message": "Sua reserva foi processada com sucesso. Você receberá um e-mail de confirmação em breve.",
+      "paymentId": "Pagamento",
+      "reservation": "Reserva",
+      "reservations": "Reservas"
+    },
+    "paymentSummary": {
+      "title": "Resumo do Pagamento",
+      "downloadAllQRs": "Baixar Todos os QRs",
+      "transactionId": "ID da Transação",
+      "paymentMethod": "Forma de pagamento",
+      "totalValue": "Valor total",
+      "creditsApplied": "Créditos aplicados",
+      "totalPaid": "Total Pago"
+    },
+    "carousel": {
+      "reservation": "Reserva",
+      "of": "de",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "goTo": "Ir para a reserva"
+    },
+    "details": {
+      "travellers": "Viajantes",
+      "tourDate": "Data do Passeio",
+      "tourTime": "Horário do passeio",
+      "reservationId": "ID da Reserva",
+      "duration": "Duração",
+      "price": "Preço",
+      "deliveryStatus": "Status da entrega",
+      "created": "Criado",
+      "lastModified": "Última modificação",
+      "includedActivities": "Atividades Incluídas",
+      "extraServices": "Serviços Adicionais",
+      "locations": "Localizações",
+      "locationName": "Nome do local",
+      "address": "Endereço",
+      "region": "Região"
+    },
+    "qr": {
+      "title": "QR Code desta reserva",
+      "loadError": "Não foi possível carregar o código QR",
+      "instruction": "Apresente este código QR no momento do seu passeio para confirmar sua reserva #{{id}}.",
+      "download": "Baixar QR",
+      "share": "Compartilhar"
+    },
+    "provider": {
+      "title": "Contato de atendimento",
+      "email": "E-mail de Contato",
+      "phone": "Telefone"
+    },
+    "payer": {
+      "title": "Informações do pagador",
+      "fullName": "Nome completo",
+      "email": "e-mail",
+      "phone": "Telefone",
+      "document": "Número de identificação"
+    },
+    "actions": {
+      "print": "Imprimir Reserva",
+      "viewReservations": "Ver Minhas Reservas"
+    },
+    "importantInfo": {
+      "title": "Informações Importantes",
+      "point1": "Guarde os códigos QR de suas reservas, você precisará deles para acessar os passeios.",
+      "point2": "Você receberá um e-mail de confirmação com todos os detalhes.",
+      "point3": "Se tiver dúvidas, entre em contato com o provedor de serviços diretamente.",
+      "point4": "Você pode baixar cada QR individualmente ou todos juntos.",
+      "point5": "Os QRs também estão disponíveis no seu perfil de usuário."
+    },
+    "status": {
+      "pending": "Pendente",
+      "confirmed": "Confirmado",
+      "delivered": "Entregue",
+      "cancelled": "Cancelado"
+    },
+    "categories": {
+      "aquatic": "Aquático",
+      "land": "Terrestre",
+      "cultural": "Cultural",
+      "adventure": "Aventura",
+      "night": "Noturno",
+      "experiences": "Experiências",
+      "transportRental": "Aluguel de Transporte"
+    },
+    "alerts": {
+      "downloadSuccess": "✅ {{count}} códigos QR baixados",
+      "downloadError": "Erro ao baixar códigos QR",
+      "shareSuccess": "✅ Link do QR copiado para a área de transferência",
+      "shareError": "Erro ao compartilhar código QR"
+    },
+    "errors": {
+      "paymentProcessing": "O seu pagamento está a ser processado. Você poderá ver suas reservas em \"Minhas Reservas\" em breve.",
+      "recoveryError": "Ocorreu um erro ao recuperar os detalhes da sua reserva. Por favor, entre em contato com o suporte."
+    },
+    "tourOperator": {
+      "title": "Operadora de Turismo",
+      "email": "E-mail",
+      "phone": "Telefone"
+    }
+  },
+  "clientSidebar": {
+    "main": "Principal",
+    "myBookings": "Minhas Reservas",
+    "myReviews": "Minhas Avaliações",
+    "wishlist": "Lista de desejos",
+    "account": "Conta",
+    "myProfile": "Meu Perfil",
+    "credits": "Créditos",
+    "logout": "Sair",
+    "since": "Desde"
+  },
+  "pendingReviews": {
+    "title": "Resenhas pendentes",
+    "intro": "Você tem as seguintes resenhas pendentes para concluir",
+    "tourNoName": "Passeio sem nome",
+    "serviceResponsible": "Responsável pelo serviço:",
+    "emailLabel": "E-mail",
+    "phoneLabel": "Telefone",
+    "reservationDate": "Data da reserva",
+    "reservationId": "Número da reserva",
+    "tourType": "Categoria",
+    "city": "Cidade",
+    "destination": "Destino",
+    "statusDelivered": "Concluídas",
+    "reviewBtn": "Resumir",
+    "closeBtn": "Fechar"
+  },
+  "contactUsForm": {
+    "title": "Entre em contato",
+    "subtitle": "Como podemos ajudá-lo? Por favor, descreva sua dúvida",
+    "firstName": "Nome",
+    "lastName": "Sobrenome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "message": "Mensagem",
+    "sendButton": "Enviar mensagem"
+  },
+  "contactUsPage": {
+    "breadcrumb": {
+      "title": "Contate-nos",
+      "pages": "Páginas"
+    },
+    "info": {
+      "heading": "Contate nossa equipe de suporte dedicada",
+      "subheading": "Nossa equipe está pronta para ajudá-lo. Sua satisfação é nossa prioridade.",
+      "paragraph": "Você tem alguma dúvida, precisa de conselhos ou precisa de ajuda? Nossa equipe de especialistas está aqui para ajudá-lo em cada etapa do caminho. Estamos a apenas uma mensagem ou chamada de distância, prontos para fornecer a orientação de que você precisa.",
+      "emailLabel": "E-mail:",
+      "phoneLabel": "Telefone de contato:",
+      "addressLabel": "Nosso endereço:"
+    }
+  },
+  "backofficeUsers": {
+    "sidebarLink": "Usuários Backoffice",
+    "title": "Usuários Backoffice",
+    "subtitle": "Gestão de usuários com papel BACKOFFICE_OPERATION (equipe Tourya).",
+    "loading": "Carregando usuários...",
+    "empty": "Ainda não há usuários BACKOFFICE_OPERATION.",
+    "mustChangePassword": "Deve alterar a senha temporária",
+    "columns": {
+      "fullName": "Nome completo",
+      "email": "Email",
+      "phone": "Telefone",
+      "status": "Status",
+      "actions": "Ações"
+    },
+    "status": {
+      "enabled": "Ativo",
+      "disabled": "Inativo"
+    },
+    "actions": {
+      "create": "Criar usuário",
+      "edit": "Editar",
+      "resetPassword": "Redefinir senha",
+      "disable": "Desativar",
+      "enable": "Reativar",
+      "cancel": "Cancelar",
+      "save": "Salvar"
+    },
+    "create": { "title": "Criar usuário Backoffice" },
+    "edit": { "title": "Editar usuário Backoffice" },
+    "resetPassword": {
+      "title": "Redefinir senha temporária",
+      "for": "Para:"
+    },
+    "form": {
+      "firstname": "Nome",
+      "lastname": "Sobrenome",
+      "email": "Email",
+      "phone": "Telefone",
+      "temporaryPassword": "Senha temporária",
+      "temporaryPasswordHint": "Mínimo 8 caracteres. O usuário deverá alterá-la no primeiro login."
+    },
+    "swal": {
+      "errorTitle": "Erro",
+      "yesConfirm": "Sim, confirmar",
+      "cancel": "Cancelar",
+      "createdTitle": "Usuário criado",
+      "createdText": "O usuário foi criado. Comunique a senha temporária.",
+      "updatedTitle": "Atualizado",
+      "updatedText": "Os dados do usuário foram atualizados.",
+      "passwordResetTitle": "Senha redefinida",
+      "passwordResetText": "O usuário deverá alterá-la no próximo login.",
+      "confirmToggleTitle": "Confirmar?",
+      "confirmDisableText": "Você vai desativar {{name}}. Não poderá acessar a plataforma.",
+      "confirmEnableText": "Você vai reativar {{name}}. Voltará a poder acessar.",
+      "disabledTitle": "Usuário desativado",
+      "enabledTitle": "Usuário reativado"
+    },
+    "errors": {
+      "loadFailed": "Não foi possível carregar a lista de usuários.",
+      "createFailed": "Não foi possível criar o usuário.",
+      "updateFailed": "Não foi possível atualizar o usuário.",
+      "resetFailed": "Não foi possível redefinir a senha.",
+      "disableFailed": "Não foi possível desativar o usuário.",
+      "enableFailed": "Não foi possível reativar o usuário."
+    }
+  },
+  "app-config-admin": {
+    "sidebarLink": "Configurações",
+    "title": "Configurações do sistema",
+    "description": "Ajuste valores operacionais sem precisar de redeploy. As alterações se aplicam na próxima requisição.",
+    "groups": {
+      "booking": "Reservas e carrinho",
+      "payoutsAndCredits": "Pagamentos a fornecedores e créditos",
+      "gallery": "Galeria de passeios",
+      "kybDocs": "KYB (documentos do fornecedor)",
+      "authProtection": "Proteção de autenticação"
+    },
+    "table": {
+      "setting": "Configuração",
+      "value": "Valor atual",
+      "actions": "Ações",
+      "loading": "Carregando…",
+      "errorLoading": "Falha ao carregar",
+      "save": "Salvar",
+      "saving": "Salvando…",
+      "reset": "Reverter",
+      "on": "Ativo",
+      "off": "Inativo"
+    },
+    "swal": {
+      "savedTitle": "Configuração salva",
+      "savedText": "Será aplicada na próxima requisição ({{ key }}).",
+      "errorTitle": "Não foi possível salvar",
+      "errorText": "Erro salvando {{ key }}: {{ message }}"
+    },
+    "holdMinutes": {
+      "label": "Minutos do hold do carrinho",
+      "description": "Tempo que o turista tem para completar o pagamento antes que a reserva TEMPORAL expire."
+    },
+    "payoutBufferDays": {
+      "label": "Dias de buffer para o payout",
+      "description": "Dias entre a data da reserva e quando o pagamento ao fornecedor fica disponível."
+    },
+    "creditExpirationMonths": {
+      "label": "Meses de validade do crédito",
+      "description": "Duração do crédito emitido após um cancelamento antes de expirar."
+    },
+    "galleryMaxSizeMb": {
+      "label": "Tamanho máximo por imagem (MB)",
+      "description": "Imagens maiores que este tamanho são rejeitadas ao sincronizar a galeria."
+    },
+    "galleryMinWidthPx": {
+      "label": "Largura mínima da imagem (px)",
+      "description": "Largura mínima aceita para garantir qualidade visual."
+    },
+    "galleryMaxImagesPerTour": {
+      "label": "Máximo de imagens por passeio",
+      "description": "Total de imagens que um passeio pode ter na sua galeria."
+    },
+    "kybRequireMandatoryDocs": {
+      "label": "Exigir documentos KYB obrigatórios",
+      "description": "Quando ativo, o envio da solicitação do fornecedor é rejeitado se faltarem documentos obrigatórios."
+    },
+    "authRateLimitEnabled": {
+      "label": "Rate limit em /auth",
+      "description": "Ativa o bloqueio temporário de um IP que faz requisições demais nos endpoints de autenticação."
+    },
+    "authRateLimitPerMinute": {
+      "label": "Requisições permitidas por IP por minuto",
+      "description": "Limiar do rate limiter. Ao exceder retorna HTTP 429."
+    },
+    "authLockoutEnabled": {
+      "label": "Bloqueio de conta após falhas",
+      "description": "Ativa o bloqueio temporário da conta após N tentativas consecutivas de login com falha."
+    },
+    "authLockoutMaxAttempts": {
+      "label": "Tentativas com falha permitidas",
+      "description": "Quantidade de tentativas com falha antes de aplicar o lockout."
+    },
+    "authLockoutBaseBackoffSeconds": {
+      "label": "Backoff base em segundos",
+      "description": "Segundos de bloqueio ao atingir o máximo. Cada nova falha dobra este valor (cap 24h)."
+    }
+  },
+  "tour-gallery": {
+    "title": "Galeria de imagens do tour",
+    "breadcrumb": "Galeria do tour",
+    "providersPanel": "Painel de provedores",
+    "uploadButton": "Enviar imagens",
+    "uploadTitle": "Enviar imagens da galeria",
+    "limitsHint": "JPEG, PNG ou WebP · Máx {{maxSize}} MB por imagem · Orientação horizontal · Largura mínima {{minWidth}} px · Até {{maxImages}} imagens no total",
+    "currentCount": "{{current}} de {{max}} imagens na galeria",
+    "issueCodes": {
+      "TOO_LARGE": "Excede o tamanho máximo permitido",
+      "INVALID_FORMAT": "Formato não suportado (use JPEG, PNG ou WebP)",
+      "NOT_LANDSCAPE": "Deve ser horizontal (largura ≥ altura)",
+      "WIDTH_TOO_SMALL": "Largura abaixo do mínimo permitido",
+      "TOO_MANY_IMAGES": "Excede o número máximo de imagens por passeio"
+    },
+    "errors": {
+      "validationTitle": "Algumas imagens não atendem às regras",
+      "generic": "Ocorreu um erro, tente novamente",
+      "genericTitle": "Não foi possível salvar a galeria"
+    }
+  },
+  "tour-list": {
+    "breadcrumbTitle": "Tours",
+    "breadcrumbTours": "Tours",
+    "breadcrumbActive": "Lista de tours",
+    "resultsFound": "{{total}} tours encontrados",
+    "price": "Preço",
+    "actions": {
+      "editTour": "Editar tour",
+      "editGallery": "Editar galeria",
+      "listSchedule": "Agenda",
+      "principalContact": "Contato principal"
+    },
+    "snack": {
+      "tourAdded": "Tour adicionado com sucesso",
+      "tourEdited": "Tour editado com sucesso"
+    },
+    "principalModal": {
+      "title": "Contato principal do tour",
+      "help": "Marque o operador que será o contato principal deste tour. Por padrão, o provedor é o contato principal.",
+      "loading": "Carregando operadores…",
+      "noOperators": "Este tour ainda não tem operadores atribuídos. ",
+      "goToOperators": "Ir para Meus operadores",
+      "currentBadge": "Atual"
+    }
+  },
+  "request-provider": {
+    "breadcrumb": "Solicitação de fornecedor",
+    "sidebar": {
+      "title": "Solicitação de fornecedor",
+      "basicInfo": "Informações básicas"
+    },
+    "loading": {
+      "data": "Carregando dados...",
+      "info": "Carregando informações do fornecedor..."
+    },
+    "sections": {
+      "providerDetails": "Dados do fornecedor",
+      "documents": "Documentos"
+    },
+    "fields": {
+      "name": "Nome",
+      "namePlaceholder": "Insira seu nome completo",
+      "documentNumber": "Número do documento",
+      "documentNumberPlaceholder": "Insira o número do seu documento",
+      "documentType": "Tipo de documento",
+      "selectDocumentType": "Selecione o tipo de documento",
+      "serviceType": "Tipo de serviço",
+      "selectServiceType": "Selecione o tipo de serviço",
+      "rnt": "Registro Nacional de Turismo (RNT)",
+      "rntPlaceholder": "Insira seu RNT",
+      "country": "País",
+      "department": "Estado/Departamento",
+      "city": "Cidade",
+      "selectPlaceholder": "Selecionar",
+      "phone": "Telefone",
+      "phonePlaceholder": "Insira seu número de telefone",
+      "address": "Endereço",
+      "addressPlaceholder": "Insira seu endereço completo"
+    },
+    "validation": {
+      "nameRequired": "O nome é obrigatório",
+      "nameMinLength": "O nome deve ter pelo menos 3 caracteres",
+      "documentNumberRequired": "O número do documento é obrigatório",
+      "documentNumberMinLength": "O número do documento deve ter pelo menos 6 caracteres",
+      "documentTypeRequired": "O tipo de documento é obrigatório",
+      "serviceTypeRequired": "O tipo de serviço é obrigatório",
+      "rntRequired": "O RNT é obrigatório",
+      "countryRequired": "O país é obrigatório",
+      "phoneRequired": "O telefone é obrigatório",
+      "phoneMinLength": "O telefone deve ter pelo menos 10 dígitos",
+      "addressRequired": "O endereço é obrigatório",
+      "addressMinLength": "O endereço deve ter pelo menos 10 caracteres"
+    },
+    "buttons": {
+      "submit": "Enviar solicitação",
+      "resubmit": "Reenviar solicitação",
+      "sendToServer": "Enviar documentos ao servidor",
+      "viewFile": "Ver arquivo",
+      "changeDocument": "Alterar {{name}}",
+      "uploadDocument": "Carregar {{name}}",
+      "remove": "Remover"
+    },
+    "status": {
+      "declinedReason": "Motivo da rejeição:",
+      "incompleteReason": "Motivo da solicitação de informação:",
+      "submittedBadge": "Status: Enviada",
+      "submittedMessage": "Sua solicitação foi enviada com sucesso."
+    },
+    "documents": {
+      "requiredTitle": "Documentos obrigatórios",
+      "workflow": {
+        "title": "Fluxo de trabalho:",
+        "step1": "Carregue os documentos usando os botões abaixo",
+        "step2": "Os documentos são salvos temporariamente no navegador",
+        "step3": "Pressione \"Enviar documentos ao servidor\" para enviá-los"
+      },
+      "badges": {
+        "mandatory": "Obrigatório",
+        "optional": "Opcional",
+        "new": "Novo",
+        "existing": "Existente"
+      },
+      "acceptedFormats": "PDF, JPG, PNG, DOC (Máx 10MB)",
+      "existingFile": "Arquivo existente",
+      "summary": {
+        "totalAvailable": "Total disponíveis",
+        "withFiles": "Com arquivos",
+        "mandatoryPending": "Obrigatórios pendentes",
+        "readyToSend": "Novos para enviar",
+        "markedForDelete": "{{count}} arquivo(s) marcado(s) para exclusão",
+        "pressToSend": ". Pressione este botão para enviá-los ao servidor"
+      }
+    },
+    "cancelled": {
+      "title": "Sua Solicitação Foi Cancelada",
+      "description": "Infelizmente sua solicitação de fornecedor foi cancelada.",
+      "reason": "Motivo:",
+      "reasonUnspecified": "Não especificado",
+      "logoutInstruction": "Por favor, encerre a sessão.",
+      "logoutButton": "Encerrar sessão"
+    }
+  },
+  "maritime-reports": {
+    "link": "Relatórios DIMAR",
+    "confirm_red": {
+      "title": "Publicar bandeira vermelha?",
+      "body": "As reservas ativas de passeios na zona e datas selecionadas serão canceladas automaticamente. Os clientes receberão crédito compensatório.",
+      "irreversible": "Esta ação não pode ser desfeita.",
+      "cancel_btn": "Cancelar",
+      "confirm_btn": "Sim, publicar bandeira vermelha"
+    }
+  }
+}

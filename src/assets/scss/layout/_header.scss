@@ -4,6 +4,7 @@
 
 header {
     background: transparent;
+    /*background-color: #1b6475;*/
     position: relative;
     left: 0;
     top: 0;
@@ -585,7 +586,7 @@ header {
     }
     .header-btn {
         .btn {
-            font-size: $font-size-13;
+            font-size: $font-size-15;
             @include rounded(55px);
             padding: 7px 12px;
             margin-right: 12px;
@@ -626,7 +627,7 @@ header {
     }
 }
 .header-topbar {
-    padding: 8px 0 0;
+    height: 58px;
     position: relative;
     border-bottom: 1px solid rgba($light, 0.07);
     p {
@@ -651,6 +652,18 @@ header {
             color: $white;
         }
     }
+    
+    .header-item {
+        margin-top: 1px;
+    }
+
+    .custome-logo-header {
+        width: 210px;
+        height: 60px;
+        margin-right: 115px;
+    }
+
+
     @include respond-below(md) {
         display: none;
     }
@@ -688,11 +701,11 @@ header {
 .offcanvas-info {
 	background: $white none repeat scroll 0 0;
 	position: fixed;
-	right: 0;
+	left: 0;
 	top: 0;
 	width: 350px;
 	height: 100%;
-    @include transform(translateX(calc(100% + 80px)));
+    @include transform(translateX(calc(-100% - 80px)));
 	-webkit-transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
 	-moz-transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
 	transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;

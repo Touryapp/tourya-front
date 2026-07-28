@@ -1,0 +1,305 @@
+.qr-scanner-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.scanner-header {
+  background: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  
+  h5 {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .btn-link {
+    padding: 0;
+    text-decoration: none;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.booking-info-card {
+  padding: 1rem 1.5rem;
+  
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    
+    .card-body {
+      padding: 1.25rem;
+      
+      h6 {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+      
+      p {
+        font-size: 0.9rem;
+        color: #666;
+        
+        strong {
+          color: #333;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.scanner-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  min-height: 400px;
+}
+
+.scanner-viewport {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #000; // Fondo negro para ver si el contenedor está visible
+  
+  ::ng-deep zxing-scanner {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    position: relative !important;
+    
+    // Contenedor del video
+    > div {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      position: relative !important;
+    }
+    
+    // El elemento video
+    video {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      display: block !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      z-index: 1 !important;
+      background: #000;
+    }
+  }
+}
+
+.scanner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10; // Asegurar que esté sobre el video
+  
+  .scan-frame {
+    width: 250px;
+    height: 250px;
+    border: 3px solid #fff;
+    border-radius: 16px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    animation: pulse 2s infinite;
+    position: relative;
+    
+    // Esquinas decorativas
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 4px solid #4CAF50;
+    }
+    
+    &::before {
+      top: -4px;
+      left: -4px;
+      border-right: none;
+      border-bottom: none;
+      border-radius: 16px 0 0 0;
+    }
+    
+    &::after {
+      bottom: -4px;
+      right: -4px;
+      border-left: none;
+      border-top: none;
+      border-radius: 0 0 16px 0;
+    }
+  }
+  
+  .scan-instruction {
+    color: white;
+    margin-top: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  .camera-name {
+    color: white;
+    margin-top: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    
+    small {
+      font-size: 0.85rem;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+.processing-state,
+.error-state,
+.no-permission-state {
+  text-align: center;
+  padding: 2rem;
+  max-width: 400px;
+  
+  p {
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.error-state,
+.no-permission-state {
+  i {
+    display: block;
+  }
+}
+
+.scanner-actions {
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+  
+  .camera-selector {
+    width: 100%;
+    text-align: left;
+    
+    .form-label {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.9rem;
+      display: block;
+    }
+    
+    .form-select {
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      
+      &:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+    }
+  }
+  
+  button {
+    flex: 1;
+    min-width: 180px;
+    max-width: 250px;
+    font-weight: 500;
+    
+    i {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.attempts-counter {
+  text-align: center;
+  padding: 0.75rem;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  
+  small {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .scanner-viewport {
+    max-width: 100%;
+    aspect-ratio: 4/5;
+  }
+  
+  .scanner-overlay .scan-frame {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .scanner-actions {
+    flex-direction: column;
+    
+    button {
+      max-width: 100%;
+    }
+  }
+}
+
+// Success snackbar styling (opcional)
+::ng-deep .success-snackbar {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}

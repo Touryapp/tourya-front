@@ -109,6 +109,7 @@ export interface SideBar {
   img?:string;
   twoTitle?:boolean;
   menu: SideBarMenu[];
+  isSubMenu?: boolean;
 
 }
 export interface SideBar2 {

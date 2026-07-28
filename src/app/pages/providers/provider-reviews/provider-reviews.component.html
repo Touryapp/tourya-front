@@ -1,0 +1,460 @@
+<!-- Provider Reviews Section -->
+<div class="provider-reviews">
+    
+    <!-- Review Title / Header -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3">
+                <div>
+                    <h5 class="mb-1">{{ (isCliente ? 'provider-reviews.titleClient' : 'provider-reviews.title') | translate }}</h5>
+                    <p class="fs-14 text-gray-6 mb-0">
+                        {{'provider-reviews.stats.totalReviews' | translate}}: <span class="fw-semibold text-dark">{{ totalReviews }}</span>
+                    </p>
+                </div>
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                    <div class="me-3">
+                        <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+                            <i class="isax isax-refresh me-1"></i>{{'provider-reviews.filters.clearFilters' | translate}}
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <a href="javascript:void(0);" 
+                           class="dropdown-toggle btn btn-sm btn-white rounded border d-inline-flex align-items-center" 
+                           data-bs-toggle="dropdown">
+                            <i class="ti ti-file-export me-1"></i>{{'provider-reviews.actions.export' | translate}}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="exportData('pdf')">
+                                    <i class="ti ti-file-type-pdf me-1"></i>{{'provider-reviews.actions.exportPdf' | translate}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="exportData('excel')">
+                                    <i class="ti ti-file-type-xls me-1"></i>{{'provider-reviews.actions.exportExcel' | translate}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Review Title -->
+
+    <!-- Filters Section -->
+    @if (showFilters) {
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <!-- Filtro de Calificación (común para todos los roles) -->
+                    <div [class]="isCliente || isProveedor ? 'col-md-6' : 'col-md-4'">
+                        <label class="form-label fw-medium">{{'provider-reviews.filters.rating' | translate}}:</label>
+                        <select 
+                            class="form-select"
+                            [(ngModel)]="selectedRatingFilter"
+                            (ngModelChange)="filterByRating(selectedRatingFilter)">
+                            <option value="0">{{'provider-reviews.filters.all' | translate}}</option>
+                            <option value="5">5 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="4">4 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="3">3 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="2">2 {{'provider-reviews.filters.stars' | translate}}</option>
+                            <option value="1">1 {{'provider-reviews.filters.stars' | translate}}</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtro de Tour (común para Cliente y Proveedor, autocomplete para Backoffice) -->
+                    <div [class]="isCliente || isProveedor ? 'col-md-6' : 'col-md-4'">
+                        <label class="form-label fw-medium">{{'provider-reviews.filters.tour' | translate}}:</label>
+                        
+                        <!-- Select simple para Cliente y Proveedor -->
+                        @if (isCliente || isProveedor) {
+                            <select 
+                                class="form-select"
+                                [(ngModel)]="selectedTourFilter"
+                                (ngModelChange)="onFilterChange()">
+                                <option value="all">{{'provider-reviews.filters.allTours' | translate}}</option>
+                                @for (tour of availableTours; track tour.id) {
+                                    <option [value]="tour.id">{{ (tour.name | localizedName) }}</option>
+                                }
+                            </select>
+                        }
+                        
+                        <!-- Autocomplete para Backoffice -->
+                        @if (isBackoffice) {
+                            <div class="position-relative">
+                                <input 
+                                    type="text"
+                                    class="form-control"
+                                    [(ngModel)]="tourSearchTerm"
+                                    (ngModelChange)="filterTours()"
+                                    (focus)="tourDropdownOpen = true"
+                                    [placeholder]="'provider-reviews.filters.allTours' | translate"
+                                    autocomplete="off" />
+                                @if (tourDropdownOpen && filteredTours.length > 0) {
+                                    <div class="autocomplete-dropdown">
+                                        <div class="autocomplete-item" (click)="resetTourFilter()">
+                                            {{'provider-reviews.filters.allTours' | translate}}
+                                        </div>
+                                        @for (tour of filteredTours; track tour.id) {
+                                            <div class="autocomplete-item" (click)="selectTour(tour)">
+                                                {{ (tour.name | localizedName) }}
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Filtro de Proveedor (solo Backoffice) -->
+                    @if (isBackoffice) {
+                        <div class="col-md-4">
+                            <label class="form-label fw-medium">{{'provider-reviews.filters.provider' | translate}}:</label>
+                            <div class="position-relative">
+                                <input 
+                                    type="text"
+                                    class="form-control"
+                                    [(ngModel)]="providerSearchTerm"
+                                    (ngModelChange)="filterProviders()"
+                                    (focus)="providerDropdownOpen = true"
+                                    [placeholder]="'provider-reviews.filters.allProviders' | translate"
+                                    autocomplete="off" />
+                                @if (providerDropdownOpen && filteredProviders.length > 0) {
+                                    <div class="autocomplete-dropdown">
+                                        <div class="autocomplete-item" (click)="resetProviderFilter()">
+                                            {{'provider-reviews.filters.allProviders' | translate}}
+                                        </div>
+                                        @for (provider of filteredProviders; track provider.id) {
+                                            <div class="autocomplete-item" (click)="selectProvider(provider)">
+                                                {{ provider.name }}
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    }
+    <!-- /Filters Section -->
+
+    <!-- Reviews List -->
+    @if (filteredReviews.length > 0) {
+        @for (review of filteredReviews; track $index) {
+            <div class="card shadow-sm mb-3 review-card">
+                <div class="card-body">
+                    <!-- Review Header -->
+                    <div class="border-bottom mb-3 pb-3">
+                        <div class="row align-items-center">
+                            <!-- Customer Info -->
+                            <div class="col-lg-6 mb-3 mb-lg-0">
+                                <div class="d-flex align-items-center">
+                                    <span class="avatar avatar-lg rounded-circle flex-shrink-0 me-3">
+                                        <img [src]="review.customerImage || 'assets/img/users/user-default.jpg'" 
+                                             alt="customer" 
+                                             class="img-fluid rounded-circle">
+                                    </span>
+                                    <div>
+                                        <h6 class="fs-16 mb-1">{{ review.customerName }}</h6>
+                                        <div class="d-flex align-items-center flex-wrap">
+                                            <span class="fs-14 text-gray-6 d-flex align-items-center">
+                                                {{'provider-reviews.date' | translate}} {{ review.date | date:(currentLang === 'en' ? 'MM/dd/yyyy' : 'dd/MM/yyyy') }}
+                                                <i class="ti ti-point-filled text-gray mx-2"></i>
+                                            </span>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-xs text-dark me-2" 
+                                                      [ngClass]="getRatingBadgeClass(review.rating!)">
+                                                    {{ review.rating }}
+                                                </span>
+                                                <div class="rating-stars">
+                                                    @for (star of getStarsArray(review.rating!); track $index) {
+                                                        <i class="fa-solid fa-star" 
+                                                           [class.text-warning]="star.full"
+                                                           [class.text-gray-3]="!star.full"></i>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div *ngIf="review.reasonId && getReasonLabel(review.reasonType, review.reasonId)" class="mt-2">
+                                            <span class="badge bg-light text-dark border" 
+                                                  style="font-size: 0.75rem; padding: 0.4em 0.6em;">
+                                                <i class="fa-solid fa-check text-success me-1" *ngIf="review.reasonType === 'POSITIVE'"></i>
+                                                <i class="fa-solid fa-xmark text-danger me-1" *ngIf="review.reasonType === 'NEGATIVE'"></i>
+                                                {{ getReasonLabel(review.reasonType, review.reasonId) | localizedName }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tour Info -->
+                            <div class="col-lg-6">
+                                <div class="d-flex align-items-center justify-content-lg-end">
+                                    <span class="avatar avatar-md rounded flex-shrink-0 me-2">
+                                        <img [src]="review.tourImage || 'assets/img/tours/default-tour.jpg'" 
+                                             alt="tour" 
+                                             class="img-fluid rounded tour-image-aligned">
+                                    </span>
+                                    <div>
+                                        <p class="fs-14 fw-medium text-dark mb-0">{{ review.tourName | localizedName }}</p>
+                                        <p class="fs-12 text-gray-6 mb-0">
+                                            <i class="isax isax-receipt-text me-1"></i>{{'provider-reviews.reservation' | translate}}: {{ review.bookingId || review.reservationId || 'N/A' }}
+                                        </p>
+                                        <div class="mt-2 text-lg-end">
+                                            <button type="button" class="btn btn-sm btn-warning fw-medium py-1 px-2 fs-12" 
+                                                    (click)="goToReservation(review.bookingId || review.reservationId)"
+                                                    [disabled]="!review.bookingId && !review.reservationId">
+                                                {{'provider-reviews.actions.goToReservation' | translate}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Content -->
+                    <div class="mb-3">
+                        <p class="fs-15 text-gray-7 mb-0">{{ (review.comment | localizedName) }}</p>
+                    </div>
+
+                    <!-- Review Images -->
+                    @if (review.attachmentUrls && review.attachmentUrls.length > 0) {
+                        <div class="mb-3">
+                            <div class="d-flex flex-wrap gap-2">
+                                @for (imageUrl of review.attachmentUrls; track imageUrl) {
+                                    <a [href]="imageUrl" target="_blank" class="review-image-thumbnail">
+                                        <img [src]="imageUrl" 
+                                             alt="Review attachment" 
+                                             class="rounded"
+                                             style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Review Footer -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-2">
+                        <!-- Engagement Stats -->
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="fs-14 text-gray-6">
+                                <i class="isax isax-like-1 me-1"></i>{{ review.likes }}
+                            </span>
+                            <span class="fs-14 text-gray-6">
+                                <i class="isax isax-dislike me-1"></i>{{ review.dislikes }}
+                            </span>
+                            <span class="fs-14 text-gray-6">
+                                <i class="isax isax-heart text-danger me-1"></i>{{ review.hearts }}
+                            </span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- Botón Responder solo para Proveedor -->
+                            @if (isProveedor && canRespondToReview(review)) {
+                                <button 
+                                    class="btn btn-sm btn-outline-primary"
+                                    (click)="respondToReview(review.id!)">
+                                    <i class="isax isax-message-text me-1"></i>{{'provider-reviews.actions.respond' | translate}}
+                                </button>
+                            }
+                            
+                            <!-- Botón Rechazar solo para Backoffice -->
+                            @if (isBackoffice && !review.answer) {
+                                <button 
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="toggleRejectForm(review.id!)">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.actions.reject' | translate}}
+                                </button>
+                            }
+                            
+                            <!-- Botón Ver detalles removido -->
+                        </div>
+                    </div>
+                    
+                    <!-- Reply Form (shown when user clicks Responder) -->
+                    @if (isReplyFormOpen(review.id!)) {
+                        <div class="reply-form-container mt-4 p-3 border rounded">
+                            <h6 class="fs-16 fw-medium mb-3">
+                                <i class="isax isax-message-text me-2 text-primary"></i>{{'provider-reviews.replyForm.title' | translate}}
+                            </h6>
+                            <div class="mb-3">
+                                <textarea 
+                                    [(ngModel)]="replyText"
+                                    class="form-control"
+                                    rows="4"
+                                    [placeholder]="'provider-reviews.replyForm.placeholder' | translate"
+                                    maxlength="500"></textarea>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-muted">{{ replyText.length }}/500 {{'provider-reviews.replyForm.charactersCount' | translate}}</small>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="form-label fs-14 fw-medium text-gray-7">
+                                        <i class="isax isax-gallery me-1"></i>{{'provider-reviews.replyForm.attachImages' | translate}}
+                                    </label>
+                                    <input type="file" class="form-control form-control-sm" accept=".jpg, .jpeg, .png" multiple
+                                           (change)="onReplyImagesSelected($event)">
+                                    @if (replyImages.length > 0) {
+                                        <small class="text-muted d-block mt-1">{{ 'provider-reviews.replyForm.imagesSelected' | translate: { count: replyImages.length } }}</small>
+                                    }
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button 
+                                    class="btn btn-sm btn-outline-secondary"
+                                    (click)="cancelReply()">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.replyForm.cancel' | translate}}
+                                </button>
+                                <button 
+                                    class="btn btn-sm btn-primary"
+                                    (click)="submitReply(review.id!)"
+                                    [disabled]="!replyText.trim()">
+                                    <i class="isax isax-send-2 me-1"></i>{{'provider-reviews.replyForm.submit' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    
+                    <!-- Rejection Form (shown when Backoffice clicks Rechazar) -->
+                    @if (isRejectFormOpen(review.id!)) {
+                        <div class="reject-form-container mt-4 p-3 border rounded">
+                            <h6 class="fs-16 fw-medium mb-3">
+                                <i class="isax isax-close-circle me-2 text-danger"></i>{{'provider-reviews.rejectForm.title' | translate}}
+                            </h6>
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">{{'provider-reviews.rejectForm.label' | translate}}</label>
+                                <select 
+                                    class="form-select"
+                                    [(ngModel)]="selectedRejectionReason">
+                                    <option value="">{{'provider-reviews.rejectForm.placeholder' | translate}}</option>
+                                    @for (reason of rejectionReasons; track reason) {
+                                        <option [value]="reason">{{ reason | translate }}</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button 
+                                    class="btn btn-sm btn-outline-secondary"
+                                    (click)="cancelReject()">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.rejectForm.cancel' | translate}}
+                                </button>
+                                <button 
+                                    class="btn btn-sm btn-danger"
+                                    (click)="submitReject(review.id!)"
+                                    [disabled]="!selectedRejectionReason">
+                                    <i class="isax isax-close-circle me-1"></i>{{'provider-reviews.rejectForm.submit' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (review.answer) {
+                        <div class="review-info reply mt-4 p-3">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="avatar avatar-lg me-2 flex-shrink-0">
+                                        <img [src]="review.answer.providerImage || 'assets/img/users/user-default.jpg'" 
+                                             class="rounded-circle" 
+                                             alt="provider">
+                                    </span>
+                                    <div>
+                                        <h6 class="fs-16 fw-medium mb-1">{{ review.answer.providerName }}</h6>
+                                        <div class="d-flex align-items-center flex-wrap date-info">
+                                            <p class="fs-14 mb-0">{{ review.answer.daysAgo }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-2">{{ (review.answer.comment | localizedName) }}</p>
+                            
+                            <!-- Answer Images -->
+                            @if (review.answer.attachmentUrls && review.answer.attachmentUrls.length > 0) {
+                                <div class="mb-2">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @for (imageUrl of review.answer.attachmentUrls; track imageUrl) {
+                                            <a [href]="imageUrl" target="_blank" class="review-image-thumbnail">
+                                                <img [src]="imageUrl" 
+                                                     alt="Answer attachment" 
+                                                     class="rounded"
+                                                     style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            
+                            <div class="d-inline-flex align-items-center">
+                                <a href="javascript:void(0);" class="d-inline-flex align-items-center fs-14 me-3">
+                                    <i class="isax isax-like-1 me-2"></i>{{ review.answer.likes }}
+                                </a>
+                                <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3">
+                                    <i class="isax isax-dislike me-2"></i>{{ review.answer.dislikes }}
+                                </a>
+                                <a href="javascript:void(0);" class="d-inline-flex align-items-center me-3">
+                                    <i class="isax isax-heart5 text-danger me-2"></i>{{ review.answer.hearts }}
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    } @else {
+        <!-- Empty State -->
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <div class="text-muted">
+                    <i class="isax isax-star fs-1 mb-3 d-block"></i>
+                    @if (selectedRatingFilter > 0 || selectedTourFilter !== 'all' || selectedProviderFilter !== 'all' || selectedUserFilter !== 'all') {
+                        <h5>{{'provider-reviews.empty.noResults' | translate}}</h5>
+                        <p>{{'provider-reviews.empty.adjustFilters' | translate}}</p>
+                        <button class="btn btn-primary mt-3" (click)="clearFilters()">
+                            {{'provider-reviews.filters.clearFilters' | translate}}
+                        </button>
+                    } @else {
+                        <h5>{{'provider-reviews.empty.noReviews' | translate}}</h5>
+                        <p>{{'provider-reviews.empty.noReviewsMessage' | translate}}</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <!-- /Reviews List -->
+
+    <!-- Pagination -->
+    @if (filteredReviews.length > 0 && totalPages > 1) {
+        <nav class="pagination-nav mt-4">
+            <ul class="pagination justify-content-center justify-content-sm-end">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="previousPage()" aria-label="Previous">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                    </a>
+                </li>
+                @for (page of getPageNumbers(); track page) {
+                    <li class="page-item" [class.active]="page === currentPage">
+                        <a class="page-link" href="javascript:void(0);" (click)="goToPage(page)">{{ page }}</a>
+                    </li>
+                }
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" href="javascript:void(0);" (click)="nextPage()" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    <!-- /Pagination -->
+
+</div>
+<!-- /Provider Reviews Section -->

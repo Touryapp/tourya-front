@@ -20,7 +20,7 @@ export class AgentComponent {
   side_bar_data: SideBar2[] = [];
   public sideBar2: Array<SideBar2> = [];
   constructor( private common: CommonService,private data: DataService ) {
-    this.data.getSideBarData.subscribe((res: SideBar2[]) => {
+    this.data.getSideBarData2.subscribe((res: SideBar2[]) => {
       this.side_bar_data = res;
     });
     this.common.base.subscribe((res: string) => {

@@ -1,0 +1,544 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center" *ngIf="!isEmbedded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{{ 'request-provider.breadcrumb' | translate }}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl"><i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'request-provider.breadcrumb' | translate }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <!-- Center Loading Spinner -->
+        <div *ngIf="isLoadingData" class="d-flex flex-column align-items-center justify-content-center py-5 my-5">
+            <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+                <span class="visually-hidden">{{ 'request-provider.loading.data' | translate }}</span>
+            </div>
+            <h4 class="mt-4 text-muted">{{ 'request-provider.loading.info' | translate }}</h4>
+        </div>
+
+        <div class="row" *ngIf="!isLoadingData && dataRequestProvider?.status !== 'Cancelled'">
+
+            <!-- Sidebar -->
+            <div class="col-lg-3" *ngIf="!isEmbedded">
+                <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="mb-3">{{ 'request-provider.sidebar.title' | translate }}</h5>
+                            <ul class="add-tab-list">
+                                <li *ngFor="let tab of tabs">
+                                    <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
+                                        (click)="scrollTo(tab.id)"
+                                        *ngIf="tab.id !== 'gallery' || shouldShowGalleryPanel()">
+                                        {{ tab.label | translate }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Sidebar -->
+
+            <!-- Request Provider Form -->
+            <div [class.col-lg-9]="!isEmbedded" [class.col-lg-12]="isEmbedded">
+                <form [formGroup]="requestProviderForm" (ngSubmit)="onSubmit()">
+                    <div class="card shadow-none" id="basic_info">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">{{ 'request-provider.sections.providerDetails' | translate }}</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+                                <!-- Name -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.name' | translate }}</label>
+                                        <input type="text" class="form-control" formControlName="name"
+                                            [placeholder]="'request-provider.fields.namePlaceholder' | translate">
+                                        <div *ngIf="requestProviderForm.controls['name'].invalid && (requestProviderForm.controls['name'].dirty || requestProviderForm.controls['name'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['name'].errors?.['required']">
+                                                {{ 'request-provider.validation.nameRequired' | translate }}
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['name'].errors?.['minlength']">
+                                                {{ 'request-provider.validation.nameMinLength' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Document Number -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.documentNumber' | translate }}</label>
+                                        <input type="text" class="form-control" formControlName="documentNumber"
+                                            [placeholder]="'request-provider.fields.documentNumberPlaceholder' | translate">
+                                        <div *ngIf="requestProviderForm.controls['documentNumber'].invalid && (requestProviderForm.controls['documentNumber'].dirty || requestProviderForm.controls['documentNumber'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['documentNumber'].errors?.['required']">
+                                                {{ 'request-provider.validation.documentNumberRequired' | translate }}
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['documentNumber'].errors?.['minlength']">
+                                                {{ 'request-provider.validation.documentNumberMinLength' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Document Type -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.documentType' | translate }}</label>
+                                        <select class="form-control" formControlName="documentType">
+                                            <option value="">{{ 'request-provider.fields.selectDocumentType' | translate }}</option>
+                                            <option *ngFor="let documentType of documentTypes" [value]="documentType.id">
+                                                {{ documentType.description }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="requestProviderForm.controls['documentType'].invalid && (requestProviderForm.controls['documentType'].dirty || requestProviderForm.controls['documentType'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['documentType'].errors?.['required']">
+                                                {{ 'request-provider.validation.documentTypeRequired' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Service Type -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.serviceType' | translate }}</label>
+                                        <select class="form-control" formControlName="serviceType">
+                                            <option value="">{{ 'request-provider.fields.selectServiceType' | translate }}</option>
+                                            <option *ngFor="let serviceType of serviceTypes" [value]="serviceType" [disabled]="serviceType !== 'Tour'">
+                                                {{ serviceType }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="requestProviderForm.controls['serviceType'].invalid && (requestProviderForm.controls['serviceType'].dirty || requestProviderForm.controls['serviceType'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['serviceType'].errors?.['required']">
+                                                {{ 'request-provider.validation.serviceTypeRequired' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- RNT -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.rnt' | translate }}</label>
+                                        <input type="text" class="form-control" formControlName="rnt"
+                                            [placeholder]="'request-provider.fields.rntPlaceholder' | translate">
+                                        <div *ngIf="requestProviderForm.controls['rnt'].invalid && (requestProviderForm.controls['rnt'].dirty || requestProviderForm.controls['rnt'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['rnt'].errors?.['required']">
+                                                {{ 'request-provider.validation.rntRequired' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Country -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.country' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" [placeholder]="'request-provider.fields.selectPlaceholder' | translate"
+                                            formControlName="country"
+                                            (valueChange)="onCountryChange($event)">
+                                            <mat-option *ngFor="let country of countries"
+                                                [value]="country.id">{{country.name}}</mat-option>
+                                        </mat-select>
+
+                                        <div *ngIf="requestProviderForm.controls['country'].invalid && (requestProviderForm.controls['country'].dirty || requestProviderForm.controls['country'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['country'].errors?.['required']">
+                                                {{ 'request-provider.validation.countryRequired' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.department' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" [placeholder]="'request-provider.fields.selectPlaceholder' | translate"
+                                            formControlName="department"
+                                            (valueChange)="onDepartmentChange($event)">
+                                            <mat-option *ngFor="let department of departments"
+                                                [value]="department.id">{{department.name}}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="mb-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ 'request-provider.fields.city' | translate }}</label>
+                                            <mat-select class="custom-mat-select select" [placeholder]="'request-provider.fields.selectPlaceholder' | translate"
+                                                formControlName="city">
+                                                <mat-option *ngFor="let city of cities"
+                                                    [value]="city.id">{{city.name}}</mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.phone' | translate }}</label>
+                                        <input type="text" class="form-control" formControlName="phone"
+                                            [placeholder]="'request-provider.fields.phonePlaceholder' | translate">
+                                        <div *ngIf="requestProviderForm.controls['phone'].invalid && (requestProviderForm.controls['phone'].dirty || requestProviderForm.controls['phone'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['phone'].errors?.['required']">
+                                                {{ 'request-provider.validation.phoneRequired' | translate }}
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['phone'].errors?.['minlength']">
+                                                {{ 'request-provider.validation.phoneMinLength' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'request-provider.fields.address' | translate }}</label>
+                                        <textarea class="form-control" rows="3" formControlName="address"
+                                            [placeholder]="'request-provider.fields.addressPlaceholder' | translate"></textarea>
+                                        <div *ngIf="requestProviderForm.controls['address'].invalid && (requestProviderForm.controls['address'].dirty || requestProviderForm.controls['address'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="requestProviderForm.controls['address'].errors?.['required']">
+                                                {{ 'request-provider.validation.addressRequired' | translate }}
+                                            </div>
+                                            <div *ngIf="requestProviderForm.controls['address'].errors?.['minlength']">
+                                                {{ 'request-provider.validation.addressMinLength' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mostrar motivo de rechazo o solicitud de información antes del botón Submit Request -->
+                    <div *ngIf="dataRequestProvider.status === 'Declined' && dataRequestProvider.declinedReason" class="mt-3">
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="isax isax-close-circle me-2"></i>
+                            <span class="fw-bold">{{ 'request-provider.status.declinedReason' | translate }}</span>&nbsp;{{ dataRequestProvider.declinedReason }}
+                        </div>
+                    </div>
+                    <div *ngIf="dataRequestProvider.status === 'Incomplete Information' && dataRequestProvider.incompleteReason" class="mt-3">
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="isax isax-info-circle me-2"></i>
+                            <span class="fw-bold">{{ 'request-provider.status.incompleteReason' | translate }}</span>&nbsp;{{ dataRequestProvider.incompleteReason }}
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="save my-4">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <!-- Botón Submit/Resubmit Request -->
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="loading || (requestProviderForm.touched && requestProviderForm.invalid)"
+                                *ngIf="!isExistingData || dataRequestProvider.status === 'Incomplete Information'">
+                                <span>{{ (!isExistingData ? 'request-provider.buttons.submit' : 'request-provider.buttons.resubmit') | translate }}</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
+                                </div>
+                            </button>
+
+                            <!-- Botón Submitted (cuando el status es Created) -->
+                            <button type="button" class="btn btn-success"
+                                (click)="changeToSubmitted()"
+                                [disabled]="loading || !canChangeToSubmitted"
+                                *ngIf="isExistingData && canChangeToSubmitted">
+                                <span>{{ 'request-provider.buttons.submit' | translate }}</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2">
+                                </div>
+                            </button>
+
+                            <!-- Mensaje cuando ya está Submitted -->
+                            <div *ngIf="isExistingData && !canChangeToSubmitted && dataRequestProvider.status === 'Submitted'"
+                                 class="alert alert-success mb-0">
+                                <i class="isax isax-tick-circle me-2"></i>
+                                <strong>{{ 'request-provider.status.submittedBadge' | translate }}</strong> - {{ 'request-provider.status.submittedMessage' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div *ngIf="successMessage" class="mt-3">
+                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                            <i class="isax isax-tick-circle5 me-2"></i>
+                            {{ successMessage }}
+                        </div>
+                    </div>
+
+                    <div *ngIf="errorMessage" class="mt-3">
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="isax isax-close-circle me-2"></i>
+                            {{ errorMessage }}
+                        </div>
+                    </div>
+
+                    <!-- Panel de carga de archivos solo si isExistingData es true y status es Pre-Approved -->
+                    <div class="card shadow-none" id="gallery" *ngIf="shouldShowGalleryPanel()">
+                        <div class="card-header">
+                            <h5 class="fs-18">{{ 'request-provider.sections.documents' | translate }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- 3 Botones de carga de archivos según estructura JSON -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6 class="mb-4">{{ 'request-provider.documents.requiredTitle' | translate }}</h6>
+                                    <!-- Información del flujo de trabajo -->
+                                    <div class="alert alert-info mb-3">
+                                        <h6><i class="isax isax-info-circle me-2"></i>{{ 'request-provider.documents.workflow.title' | translate }}</h6>
+                                        <ol class="mb-0">
+                                            <li>{{ 'request-provider.documents.workflow.step1' | translate }}</li>
+                                            <li>{{ 'request-provider.documents.workflow.step2' | translate }}</li>
+                                            <li>{{ 'request-provider.documents.workflow.step3' | translate }}</li>
+                                        </ol>
+                                    </div>
+                                    <!-- Grid de botones de carga dinámicos -->
+                                    <div class="row g-4">
+                                        <!-- BOTÓN DINÁMICO: Se genera uno por cada tipo de documento -->
+                                        <div class="col-lg-4 col-md-6" *ngFor="let docType of requestProviderDocumentTypes">
+                                            <div class="card h-100 border-2 position-relative"
+                                                 [class.border-success]="hasFile(docType.id)"
+                                                 [class.border-danger]="!hasFile(docType.id) && docType.mandatory"
+                                                 [class.border-secondary]="!hasFile(docType.id) && !docType.mandatory"
+                                                 [class.bg-light]="hasFile(docType.id)">
+
+                                                <!-- Badge de estado -->
+                                                <div class="position-absolute top-0 end-0 p-2">
+                                                    <span *ngIf="!hasFile(docType.id) && docType.mandatory" class="badge bg-danger">
+                                                        <i class="isax isax-danger me-1"></i>{{ 'request-provider.documents.badges.mandatory' | translate }}
+                                                    </span>
+                                                    <span *ngIf="!hasFile(docType.id) && !docType.mandatory" class="badge bg-secondary">
+                                                        <i class="isax isax-info-circle me-1"></i>{{ 'request-provider.documents.badges.optional' | translate }}
+                                                    </span>
+                                                    <span *ngIf="hasNewFile(docType.id)" class="badge bg-success">
+                                                        <i class="isax isax-tick-circle me-1"></i>{{ 'request-provider.documents.badges.new' | translate }}
+                                                    </span>
+                                                    <span *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)" class="badge bg-primary">
+                                                        <i class="isax isax-document me-1"></i>{{ 'request-provider.documents.badges.existing' | translate }}
+                                                    </span>
+                                                </div>
+
+                                                <div class="card-body text-center p-4">
+                                                    <!-- Sin archivo cargado -->
+                                                    <div *ngIf="!hasFile(docType.id)">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4"
+                                                               [class.text-danger]="docType.mandatory"
+                                                               [class.text-secondary]="!docType.mandatory"></i>
+                                                        </div>
+                                                        <h5 class="card-title mb-2"
+                                                            [class.text-danger]="docType.mandatory"
+                                                            [class.text-secondary]="!docType.mandatory">
+                                                            {{ docType.name }}
+                                                        </h5>
+                                                        <p class="card-text text-muted mb-3">
+                                                            {{ docType.description }}
+                                                        </p>
+                                                        <button
+                                                            type="button"
+                                                            class="btn w-100 mb-2"
+                                                            [class.btn-danger]="docType.mandatory"
+                                                            [class.btn-secondary]="!docType.mandatory"
+                                                            (click)="triggerFileInput(docType.id)"
+                                                            [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved' && dataRequestProvider.status !== 'Submitted'">
+                                                            <i class="isax isax-document-upload me-2"></i>
+                                                            {{ 'request-provider.buttons.uploadDocument' | translate: { name: docType.name } }}
+                                                        </button>
+                                                        <small class="text-muted">{{ 'request-provider.documents.acceptedFormats' | translate }}</small>
+                                                    </div>
+
+                                                    <!-- Con archivo cargado (nuevo o existente) -->
+                                                    <div *ngIf="hasFile(docType.id)">
+                                                        <div class="mb-3">
+                                                            <i class="isax isax-document-text display-4"
+                                                               [class.text-success]="hasNewFile(docType.id)"
+                                                               [class.text-primary]="hasExistingFile(docType.id) && !hasNewFile(docType.id)"></i>
+                                                        </div>
+                                                        <h5 class="card-title mb-2"
+                                                            [class.text-success]="hasNewFile(docType.id)"
+                                                            [class.text-primary]="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
+                                                            {{ docType.name }}
+                                                        </h5>
+                                                        <div class="file-info mb-3">
+                                                            <p class="mb-1 fw-bold">{{ getFileName(docType.id) }}</p>
+                                                            <small class="text-muted" *ngIf="hasNewFile(docType.id)">
+                                                                {{ getFileSizeInMB(docType.id) }} MB
+                                                            </small>
+                                                            <small class="text-muted" *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
+                                                                {{ 'request-provider.documents.existingFile' | translate }}
+                                                            </small>
+                                                        </div>
+
+                                                        <!-- Botones para archivo existente -->
+                                                        <div class="d-grid gap-2" *ngIf="hasExistingFile(docType.id) && !hasNewFile(docType.id)">
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-outline-info"
+                                                                (click)="openFile(docType.id)"
+                                                                [disabled]="false">
+                                                                <i class="isax isax-eye me-1"></i>
+                                                                {{ 'request-provider.buttons.viewFile' | translate }}
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-outline-primary"
+                                                                (click)="triggerFileInput(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
+                                                                <i class="isax isax-refresh me-1"></i>
+                                                                {{ 'request-provider.buttons.changeDocument' | translate: { name: docType.name } }}
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-outline-danger"
+                                                                (click)="removeDocumentFile(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
+                                                                <i class="isax isax-trash me-1"></i>
+                                                                {{ 'request-provider.buttons.remove' | translate }}
+                                                            </button>
+                                                        </div>
+
+                                                        <!-- Botones para archivo nuevo -->
+                                                        <div class="d-grid gap-2" *ngIf="hasNewFile(docType.id)">
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-outline-primary"
+                                                                (click)="triggerFileInput(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
+                                                                <i class="isax isax-refresh me-1"></i>
+                                                                {{ 'request-provider.buttons.changeDocument' | translate: { name: docType.name } }}
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-outline-danger"
+                                                                (click)="removeDocumentFile(docType.id)"
+                                                                [disabled]="dataRequestProvider.status !== 'Incomplete Information' && dataRequestProvider.status !== 'Pre-Approved'">
+                                                                <i class="isax isax-trash me-1"></i>
+                                                                {{ 'request-provider.buttons.remove' | translate }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Input file oculto -->
+                                                    <input
+                                                        type="file"
+                                                        class="d-none"
+                                                        id="document-file-{{ docType.id }}"
+                                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                                        (change)="onDocumentFileSelected($event, docType.id)"
+                                                        >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Panel de resumen -->
+                            <div class="mt-4">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-primary">{{ getTotalDocumentTypes() }}</div>
+                                                <small class="text-muted">{{ 'request-provider.documents.summary.totalAvailable' | translate }}</small>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-success">{{ getTotalLoadedDocuments() }}</div>
+                                                <small class="text-muted">{{ 'request-provider.documents.summary.withFiles' | translate }}</small>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-warning">{{ getTotalMandatoryPending() }}</div>
+                                                <small class="text-muted">{{ 'request-provider.documents.summary.mandatoryPending' | translate }}</small>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="h4 mb-1 text-info">{{ getTotalReadyToSend() }}</div>
+                                                <small class="text-muted">{{ 'request-provider.documents.summary.readyToSend' | translate }}</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Información adicional sobre archivos eliminados -->
+                                        <div class="row mt-2" *ngIf="agregarGaleria.deletedGalleries.length > 0">
+                                            <div class="col-12 text-center">
+                                                <small class="text-danger">
+                                                    <i class="isax isax-trash me-1"></i>
+                                                    {{ 'request-provider.documents.summary.markedForDelete' | translate: { count: agregarGaleria.deletedGalleries.length } }}
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Botón para guardar todos los documentos -->
+                                        <div class="row mt-3">
+                                            <div class="col-12 text-center">
+                                                <button
+                                                    *ngIf="dataRequestProvider.status === 'Incomplete Information' || dataRequestProvider.status === 'Pre-Approved'"
+                                                    type="button"
+                                                    class="btn btn-success"
+                                                    (click)="saveAllDocumentsToGallery()"
+                                                    [disabled]="!canSendDocuments()">
+                                                    <i class="isax isax-cloud-add me-2"></i>
+                                                    {{ 'request-provider.buttons.sendToServer' | translate }}
+                                                </button>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">
+                                                        {{ getDocumentStatusMessage() }}
+                                                        <ng-container *ngIf="dataRequestProvider.status === 'Incomplete Information' || dataRequestProvider.status === 'Pre-Approved'">
+                                                            {{ 'request-provider.documents.summary.pressToSend' | translate }}
+                                                        </ng-container>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /Request Provider Form -->
+
+        </div>
+
+        <!-- Cancelled State -->
+        <div class="row" *ngIf="!isLoadingData && dataRequestProvider?.status === 'Cancelled'">
+            <div class="col-12 text-center py-5 my-5">
+                <div class="card border-0 shadow-sm p-5 mx-auto" style="max-width: 600px; border-radius: 20px;">
+                    <div class="mb-4">
+                        <i class="isax isax-close-circle text-danger" style="font-size: 5rem;"></i>
+                    </div>
+                    <h3 class="text-danger mb-3">{{ 'request-provider.cancelled.title' | translate }}</h3>
+                    <p class="text-muted mb-4 fs-16">
+                        {{ 'request-provider.cancelled.description' | translate }}<br><br>
+                        {{ 'request-provider.cancelled.reason' | translate }} <strong>{{ dataRequestProvider?.declinedReason || ('request-provider.cancelled.reasonUnspecified' | translate) }}</strong><br><br>
+                        {{ 'request-provider.cancelled.logoutInstruction' | translate }}
+                    </p>
+                    <button class="btn btn-primary btn-lg px-4 py-2" (click)="logout()">
+                        <i class="isax isax-logout me-2"></i> {{ 'request-provider.cancelled.logoutButton' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->

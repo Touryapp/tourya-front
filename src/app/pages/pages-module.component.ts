@@ -59,6 +59,12 @@ export class PagesModuleComponent implements OnInit{
       this.base = res;
       this.withoutWrapperPages = this.withoutWrapperPagesArray.includes(this.base);
       this.scrollToTop();
+      
+      // Refresh AOS after navigation payload has rendered
+      setTimeout(() => {
+        Aos.refresh();
+      }, 500);
+
     //Loader
       if(this.showPreloaderState === '1'){
         this.showPreloader = true;

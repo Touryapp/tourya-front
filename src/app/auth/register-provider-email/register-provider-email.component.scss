@@ -1,0 +1,37 @@
+.spinner-border {
+  margin-left: 5px;
+}
+
+.fs-40 {
+    font-size: 40px !important;
+}
+
+.modal {
+    transition: opacity 0.15s linear;
+}
+
+.modal-content {
+    animation: modal-upscale 0.3s ease-out;
+}
+
+@keyframes modal-upscale {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.authentication-card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.border-bottom {
+    border-color: #f0f0f0 !important;
+}
+

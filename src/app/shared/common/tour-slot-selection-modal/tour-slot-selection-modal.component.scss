@@ -1,0 +1,570 @@
+/* Modal Base Styles */
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 0.5rem;
+  pointer-events: none;
+  max-width: 800px;
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+/* Modal Styles */
+.modal-header {
+  padding: 24px 24px 16px;
+
+  .modal-title-section {
+    flex: 1;
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+      color: #6c757d;
+    }
+  }
+
+  .btn-close {
+    font-size: 16px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+/* Tour Info Section */
+.tour-info-section {
+  padding: 0 24px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+  .tour-header {
+    display: flex;
+    gap: 16px;
+
+    .tour-image {
+      flex: 0 0 120px;
+
+      img {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+    }
+
+    .tour-details {
+      flex: 1;
+      min-width: 0;
+
+      .tour-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        line-height: 1.3;
+      }
+
+      .tour-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 16px;
+        margin-bottom: 8px;
+
+        span {
+          font-size: 12px;
+          color: #6c757d;
+          display: flex;
+          align-items: center;
+        }
+
+        .rating {
+          color: #f39c12;
+        }
+      }
+
+      .tour-description {
+        font-size: 13px;
+        color: #6c757d;
+        line-height: 1.4;
+        margin-bottom: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .tour-header {
+      flex-direction: column;
+
+      .tour-image {
+        flex: none;
+        align-self: center;
+      }
+    }
+  }
+}
+
+/* Section Styles */
+.slots-section,
+.participants-section {
+  padding: 20px 24px;
+
+  .section-header {
+    margin-bottom: 16px;
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: #6c757d;
+    }
+  }
+}
+
+.participants-section {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.slot-container {
+  display: flex;
+}
+
+.slot-item-wrapper {
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-bottom: 16px;
+
+  &:hover:not(.full) {
+    transform: translateY(-2px);
+  }
+
+  &.selected .slot-card {
+    border-color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), 0.05);
+  }
+
+  &.full {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .slot-card {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    background: white;
+    transition: all 0.2s;
+    position: relative;
+    min-height: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .slot-time {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      width: 20%;
+
+      .start-time,
+      .end-time {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--bs-primary);
+      }
+    }
+
+    .slot-capacity {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;    
+      font-size: 12px;
+      color: #6c757d;
+      width: 30%;
+      text-align: center;
+
+      .separator {
+        width: 100%;
+        margin-top: 24px;
+        border: 1px dashed #6c757d;
+      }
+
+      .available-capacity {
+        margin-top: 8px;
+      }
+    }
+
+    .slot-price {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 30%;
+      background: #f89201;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+
+      .from-text {
+        font-size: 18px;
+        color: #6c757d;
+        display: block;
+      }
+
+      .price {
+        font-size: 24px;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+    }
+
+    .selected-indicator {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      color: var(--bs-primary);
+      font-size: 20px;
+    }
+
+    .full-overlay {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      color: var(--bs-danger);
+      font-size: 20px;
+    }
+  }
+}
+
+/* No Slots */
+.no-slots {
+  text-align: center;
+  padding: 40px 20px;
+
+  i {
+    color: #dee2e6;
+  }
+
+  h6 {
+    color: #6c757d;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #6c757d;
+    margin-bottom: 0;
+  }
+}
+
+/* Participants List */
+.participants-list {
+  .participant-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #f8f9fa;
+
+    .participant-info {
+      flex: 1;
+
+      .participant-type {
+        font-size: 15px;
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 4px;
+      }
+
+      .participant-details {
+        font-size: 12px;
+        color: #6c757d;
+
+        .age-range {
+          margin-right: 12px;
+        }
+
+        .price {
+          font-weight: 500;
+          color: var(--bs-primary);
+        }
+      }
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .quantity-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+
+        i {
+          font-size: 14px;
+        }
+
+        &:disabled {
+          opacity: 0.4;
+        }
+      }
+
+      .quantity-input {
+        width: 60px;
+        height: 32px;
+        text-align: center;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        background: white;
+      }
+    }
+  }
+}
+
+/* Selection Summary */
+.selection-summary {
+  margin-top: 20px;
+
+  .summary-card {
+    background: rgba(var(--bs-primary-rgb), 0.05);
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.2);
+    border-radius: 8px;
+    padding: 16px;
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+        padding-top: 8px;
+        border-top: 1px solid rgba(var(--bs-primary-rgb), 0.2);
+      }
+
+      .label {
+        font-size: 14px;
+        color: #6c757d;
+      }
+
+      .value {
+        font-size: 14px;
+        font-weight: 500;
+        color: #2c3e50;
+
+        &.price {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--bs-primary);
+        }
+      }
+    }
+  }
+}
+
+/* Validation Errors */
+.validation-errors {
+  padding: 0 24px 20px;
+
+  .alert {
+    margin-bottom: 0;
+
+    ul {
+      padding-left: 20px;
+
+      li {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 16px 24px 24px;
+
+  .footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+
+    .btn {
+      min-width: 120px;
+    }
+
+    .btn-primary {
+      position: relative;
+
+      &:disabled {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .footer-actions {
+      flex-direction: column-reverse;
+      gap: 8px;
+
+      .btn {
+        width: 100%;
+        margin: 0 !important;
+      }
+    }
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .modal-header,
+  .tour-info-section,
+  .slots-section,
+  .participants-section,
+  .validation-errors,
+  .modal-footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .slots-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .participant-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    .quantity-controls {
+      align-self: flex-end;
+    }
+  }
+}
+
+/* Animation */
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: none;
+}
+
+/* Custom modal size for this component */
+::ng-deep .modal-lg {
+  max-width: 800px;
+}
+
+:host ::ng-deep {
+  .date-carousel {
+    .owl-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 180px !important;
+    }
+
+    .date-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80px;
+      width: 180px;
+      border: 1px solid black;
+      border-radius: 12px;
+      margin: 8px;
+
+      &.selected {
+        border: 3px solid #f89201 !important;
+      }
+
+      .text {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.group-selection-list {
+  background: rgba(var(--bs-primary-rgb), 0.03);
+  border: 1px dashed rgba(var(--bs-primary-rgb), 0.3);
+  border-radius: 12px;
+  padding: 8px;
+  margin-bottom: 20px;
+
+  .participant-item {
+    margin-bottom: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  .availability-error {
+    padding: 4px 16px 8px;
+    font-weight: 500;
+    color: #dc3545;
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}

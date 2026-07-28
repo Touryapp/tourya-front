@@ -1,0 +1,109 @@
+.save {
+  position: sticky;
+  width: 100%;
+  bottom: 10vh;
+}
+
+.spinner-border {
+  margin-left: 5px;
+}
+
+.mat-slide-toogle {
+  margin-left: 8px
+}
+
+// Estilos para el modal
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+// Badges de estado
+.badge {
+  &.bg-secondary {
+    background-color: #6c757d !important;
+  }
+  
+  &.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000;
+  }
+  
+  &.bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000;
+  }
+  
+  &.bg-success {
+    background-color: #198754 !important;
+    color: #fff;
+  }
+  
+  &.bg-danger {
+    background-color: #dc3545 !important;
+    color: #fff;
+  }
+}
+
+// Deshabilitar formulario visualmente
+fieldset:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+// Checkboxes de Duración (estilo píldora)
+.duration-check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 14px 6px 10px;
+  border: 1.5px solid #dee2e6;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+  background: #fff;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  user-select: none;
+
+  input[type="checkbox"] {
+    accent-color: var(--bs-primary, #0d6efd);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &:has(input:checked) {
+    border-color: var(--bs-primary, #0d6efd);
+    background: rgba(13, 110, 253, 0.08);
+    color: var(--bs-primary, #0d6efd);
+  }
+
+  &:hover {
+    border-color: var(--bs-primary, #0d6efd);
+  }
+}
+
+.tags-scroll-container {
+  max-height: 141px;
+  overflow-y: auto;
+}

@@ -1,0 +1,991 @@
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="breadcrumb-title mb-2 text-dark">{{tourId ? ('tour-form.title.edit' | translate) : ('tour-form.title.add' | translate) }}</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-0">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.baseUrl" class="text-dark"><i class="isax isax-home5"></i></a>
+                    </li>
+                    <li class="breadcrumb-item"><a [routerLink]="'/providers/provider-panel'" class="text-dark">{{ 'tour-form.breadcrumb.providersPanel' | translate }}</a>
+                    </li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page">
+                        {{tourId ? ('tour-form.breadcrumb.editTours' | translate) : ('tour-form.breadcrumb.addTours' | translate) }}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
+        <form [formGroup]="tourForm" (ngSubmit)="onSubmit()">
+            <fieldset [disabled]="!canEdit">
+                <div class="row">
+
+            <!-- Sidebar -->
+            <div class="col-lg-3 ">
+                <div class="card border-0 mb-4 mb-lg-0 theiaStickySidebar">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="mb-3">{{tourId ? ('tour-form.title.edit' | translate) : ('tour-form.title.add' | translate) }}</h5>
+                            <ul class="add-tab-list">
+                                <li *ngFor="let tab of tabs">
+                                    <a href="javascript:void(0);" [class.active]="activeTab === tab.id"
+                                        (click)="scrollTo(tab.id)">
+                                        {{ tab.label | translate }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Sidebar -->
+
+            <!-- Add Tour -->
+            <div class="col-lg-9">
+                <!-- Estado del Tour -->
+                <div class="card shadow-none mb-3" *ngIf="tourId && tour">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="fw-medium">{{ 'tour-form.status.label' | translate }}</span>
+                                <span class="badge fs-14 px-3 py-2" [ngClass]="getStatusBadgeClass(tour.status)">
+                                    {{ getStatusLabel(tour.status) }}
+                                </span>
+                            </div>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-primary" 
+                                    *ngIf="canSubmitForReview"
+                                    (click)="openSubmitConfirmModal()">
+                                    <i class="isax isax-send me-2"></i>{{ 'tour-form.status.submitButton' | translate }}
+                                </button>
+                        </div>
+                        
+                        <!-- Alerta si no puede editar -->
+                        <div class="alert alert-warning mt-3 mb-0" *ngIf="!canEdit">
+                            <i class="isax isax-info-circle me-2"></i>
+                            <strong>{{ 'tour-form.status.cannotEditWarning' | translate }}</strong>
+                            {{ 'tour-form.status.cannotEditMessage' | translate }}
+                        </div>
+                        
+                        <!-- Alerta si auto-enviará a revisión -->
+                        <div class="alert alert-info mt-3 mb-0" *ngIf="shouldAutoSubmit">
+                            <i class="isax isax-info-circle me-2"></i>
+                            <strong>{{ 'tour-form.status.autoSubmitNote' | translate }}</strong> {{ 'tour-form.status.autoSubmitMessage' | translate }}
+                        </div>
+                    </div>
+                </div>
+                
+                    <div class="card shadow-none" id="basic_info">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">{{ 'tour-form.sections.tourDetails' | translate }}</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.name.label' | translate }}</label>
+                                        <input type="text" class="form-control" formControlName="name"
+                                            (blur)="onNameBlur($event)">
+                                        <div *ngIf="tourForm.controls['name'].invalid && (tourForm.controls['name'].dirty || tourForm.controls['name'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['name'].errors?.['required']">
+                                                {{ 'tour-form.fields.name.errors.required' | translate }}
+                                            </div>
+                                            <div *ngIf="tourForm.controls['name'].errors?.['minlength']">
+                                                {{ 'tour-form.fields.name.errors.minlength' | translate }}
+                                            </div>
+                                            <div *ngIf="tourForm.controls['name'].errors?.['maxlength']">
+                                                {{ 'tour-form.fields.name.errors.maxlength' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.category.label' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.category.placeholder' | translate }}"
+                                            formControlName="category" (blur)="onCategoryBlur($event)">
+                                            <mat-option *ngFor="let cat of backendCategories" [value]="cat.id">
+                                                {{ cat.name | localizedName }}
+                                            </mat-option>
+                                        </mat-select>
+
+                                        <div *ngIf="tourForm.controls['category'].invalid && (tourForm.controls['category'].dirty || tourForm.controls['category'].touched)"
+                                            class="text-danger">
+
+                                            <div *ngIf="tourForm.controls['category'].errors?.['required']">
+                                                {{ 'tour-form.fields.category.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.subcategory.label' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.subcategory.placeholder' | translate }}"
+                                            formControlName="subcategory">
+                                            <mat-option *ngFor="let item of subcategories" [value]="item.code">
+                                                {{ item.name | localizedName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label d-block mb-1">{{ 'tour-form.fields.isUnlimited.label' | translate }}</label>
+                                        <mat-slide-toggle class="mat-slide-toogle mt-1" formControlName="isUnlimited"></mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.priceType.label' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.priceType.placeholder' | translate }}"
+                                            formControlName="priceType">
+                                            <mat-option [value]="PriceType.GROUP">{{ 'tour-form.fields.priceType.options.group' | translate }}</mat-option>
+                                            <mat-option [value]="PriceType.INDIVIDUAL">{{ 'tour-form.fields.priceType.options.individual' | translate }}</mat-option>
+                                        </mat-select>
+
+
+                                        <div *ngIf="tourForm.controls['priceType'].invalid && (tourForm.controls['priceType'].dirty || tourForm.controls['priceType'].touched)"
+                                            class="text-danger">
+
+                                            <div *ngIf="tourForm.controls['priceType'].errors?.['required']">
+                                                {{ 'tour-form.fields.priceType.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6" *ngIf="tourForm.get('priceType')?.value === PriceType.GROUP">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.totalNumberOfPeoples.label' | translate }}</label>
+                                        <input type="number" class="form-control" formControlName="totalNumberOfPeoples"
+                                            min="1" (keypress)="onKeyPressTotalNumberOfPeople($event)"
+                                            (blur)="onTotalNumberOfPeopleBlur($event)">
+                                        <div *ngIf="tourForm.controls['totalNumberOfPeoples'].invalid && (tourForm.controls['totalNumberOfPeoples'].dirty || tourForm.controls['totalNumberOfPeoples'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['totalNumberOfPeoples'].errors?.['required']">
+                                                {{ 'tour-form.fields.totalNumberOfPeoples.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.duration.label' | translate }}</label>
+                                        <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.duration.placeholder' | translate }}"
+                                            formControlName="duration">
+                                            <mat-option value="1_a_2_horas">{{ 'tour-form.fields.duration.options.1_2_hours' | translate }}</mat-option>
+                                            <mat-option value="2_a_4_horas">{{ 'tour-form.fields.duration.options.2_4_hours' | translate }}</mat-option>
+                                            <mat-option value="4_a_6_horas">{{ 'tour-form.fields.duration.options.4_6_hours' | translate }}</mat-option>
+                                            <mat-option value="hasta_1_dia">{{ 'tour-form.fields.duration.options.up_to_1_day' | translate }}</mat-option>
+                                            <mat-option value="hasta_3_dias">{{ 'tour-form.fields.duration.options.up_to_3_days' | translate }}</mat-option>
+                                            <mat-option value="hasta_5_dias">{{ 'tour-form.fields.duration.options.up_to_5_days' | translate }}</mat-option>
+                                        </mat-select>
+                                        <div *ngIf="tourForm.controls['duration'].invalid && (tourForm.controls['duration'].dirty || tourForm.controls['duration'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['duration'].errors?.['required']">
+                                                {{ 'tour-form.fields.duration.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.minAge.label' | translate }} </label>
+                                        <input type="number" class="form-control" formControlName="minAge" min="0"
+                                            (keypress)="onKeyPressMinAge($event)" (blur)="onMinAgeBlur($event)">
+                                        <div *ngIf="tourForm.controls['minAge'].invalid && (tourForm.controls['minAge'].dirty || tourForm.controls['minAge'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['minAge'].errors?.['required']">
+                                                {{ 'tour-form.fields.minAge.errors.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ 'tour-form.fields.schedule.label' | translate }}</label>
+                                        <div class="d-flex flex-wrap gap-2 mt-1">
+                                            <label class="duration-check-label" *ngFor="let opt of scheduleOptions">
+                                                <input type="checkbox"
+                                                    [value]="opt.value"
+                                                    [checked]="isScheduleSelected(opt.value)"
+                                                    (change)="onScheduleChange(opt.value, $event)">
+                                                <span>{{ opt.label | translate }}</span>
+                                            </label>
+                                        </div>
+                                        <div *ngIf="tourForm.controls['schedule'].invalid && (tourForm.controls['schedule'].dirty || tourForm.controls['schedule'].touched)"
+                                            class="text-danger">
+                                            <div *ngIf="tourForm.controls['schedule'].errors?.['required']">
+                                                {{ 'shared.required' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-none" id="description">
+                        <div class="card-header">
+                            <h5 class="fs-18">{{ 'tour-form.sections.description' | translate }}</h5>
+                        </div>
+                        <div class="card-body text-editor">
+                            <ngx-editor [editor]="editor" formControlName="description"
+                                placeholder="{{ 'tour-form.fields.description.placeholder' | translate }}"
+                                (focusOut)="onDescriptionBlur($event)">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                                </ngx-editor-menu>
+                            </ngx-editor>
+
+                            <div *ngIf="tourForm.controls['description'].invalid && (tourForm.controls['description'].dirty || tourForm.controls['description'].touched)"
+                                class="text-danger">
+                                <div *ngIf="tourForm.controls['description'].errors?.['minlength']">
+                                    {{ 'tour-form.fields.description.errors.minlength' | translate }}
+                                </div>
+                                <div *ngIf="tourForm.controls['description'].errors?.['maxlength']">
+                                    {{ 'tour-form.fields.description.errors.maxlength' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="card shadow-none" id="locations">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">{{ 'tour-form.sections.locations' | translate }}</h5>
+                            </div>
+                        </div>
+
+                        <div class="card-body pb-1">
+                            <div formArrayName="locations">
+                                <ng-container *ngFor="let location of locations.controls; let i=index"
+                                    [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+
+                                                <label class="form-label">{{ 'tour-form.fields.typeOfAddress.label' | translate }}</label>
+
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.typeOfAddress.placeholder' | translate }}"
+                                                    formControlName="typeOfAddress">
+                                                    <mat-option
+                                                        [disabled]="typeOfAddressIsSelected(TypeOfAddress.MEETING_POINT, i)"
+                                                        [value]="TypeOfAddress.MEETING_POINT">
+                                                        {{ 'tour-form.fields.typeOfAddress.options.meetingPoint' | translate }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <div *ngIf="location.get('typeOfAddress')?.invalid && (location.get('typeOfAddress')?.dirty || location.get('typeOfAddress')?.touched)"
+                                                    class="text-danger">
+
+                                                    <div *ngIf="location.get('typeOfAddress')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.typeOfAddress.errors.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.country.label' | translate }}</label>
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.country.placeholder' | translate }}"
+                                                    formControlName="country"
+                                                    (valueChange)="onCountryChange($event, i)">
+                                                    <mat-option *ngFor="let country of countries"
+                                                        [value]="country.id">{{country.name}}</mat-option>
+                                                </mat-select>
+
+                                                <div *ngIf="location.get('country')?.invalid && (location.get('country')?.dirty || location.get('country')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('country')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.country.errors.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.department.label' | translate }}</label>
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.department.placeholder' | translate }}"
+                                                    formControlName="department"
+                                                    (valueChange)=" onDepartmentChange($event, i)">
+                                                    <mat-option *ngFor="let department of departments[i]"
+                                                        [value]="department.id">{{department.name}}</mat-option>
+                                                </mat-select>
+
+                                                <div *ngIf="location.get('department')?.invalid && (location.get('department')?.dirty || location.get('department')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('department')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.department.errors.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="mb-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ 'tour-form.fields.city.label' | translate }}</label>
+                                                    <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.city.placeholder' | translate }}"
+                                                        formControlName="city">
+                                                        <mat-option *ngFor="let city of cities[i]"
+                                                            [value]="city.id">{{city.name}}</mat-option>
+                                                    </mat-select>
+                                                    <div *ngIf="location.get('city')?.invalid && (location.get('city')?.dirty || location.get('city')?.touched)"
+                                                        class="text-danger">
+                                                        <div *ngIf="location.get('city')?.errors?.['required']">
+                                                            {{ 'tour-form.fields.city.errors.required' | translate }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.location.label' | translate }}</label>
+                                                <input #addressInput type="text" formControlName="location"
+                                                    class="form-control" placeholder="{{ 'tour-form.fields.location.placeholder' | translate }}"
+                                                    (blur)="initAutocomplete(i)"
+                                                    (change)="onLocationChange($event,i)" />
+
+                                                <div *ngIf="(location.get('location')?.invalid || location.get('latitude')?.invalid || location.get('longitude')?.invalid) && (location.get('location')?.dirty || location.get('location')?.touched)"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="location.get('location')?.errors?.['required'] || location.get('latitude')?.errors?.['required'] || location.get('longitude')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.location.errors.required' | translate }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.address.label' | translate }}</label>
+                                                <textarea class="form-control" minlength="2" maxlength="50"
+                                                    formControlName="address" (blur)="onAddressBlur($event, i)">
+                                                </textarea>
+
+                                                <div *ngIf="location.get('address')?.invalid && (location.get('address')?.dirty || location.get('address')?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="location.get('address')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.address.errors.required' | translate }}
+                                                    </div>
+
+                                                    <div *ngIf="location.get('address')?.errors?.['minlength']">
+                                                        {{ 'tour-form.fields.address.errors.minlength' | translate }}
+                                                    </div>
+                                                    <div *ngIf="location.get('address')?.errors?.['maxlength']">
+                                                        {{ 'tour-form.fields.address.errors.maxlength' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <a *ngIf="locations.length > 1"
+                                            class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                            (click)="removeLocation(i)">
+                                            <i class="isax isax-trash"></i>
+                                        </a>
+                                    </div>
+                                </ng-container>
+
+                                <div class="mt-3">
+                                    <a *ngIf="locations.length < 3" href="javascript:void(0);"
+                                        class="btn btn-primary btn-sm add-highlight" (click)="addLocation()">
+                                        <i class="isax isax-add-circle me-1"></i>
+                                        {{ 'tour-form.buttons.addNew' | translate }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card shadow-none" id="activities">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">{{ 'tour-form.sections.mainAttractions' | translate }}</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div formArrayName="mainAttractions">
+                                <ng-container *ngFor="let attraction of mainAttractions.controls; let i=index"
+                                    [formGroupName]="i">
+                                    <div class="row add-highlight-info">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.attraction.label' | translate }}</label>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="text" class="form-control"
+                                                        formControlName="description"
+                                                        (blur)="onMainAttractionDescriptionBlur($event, i)">
+
+                                                    <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                        (click)="removeAttraction(i)">
+                                                        <i class="isax isax-trash"></i>
+                                                    </a>
+                                                </div>
+
+                                                <div *ngIf="attraction.get('description')?.invalid && (attraction.get('description')?.touched || attraction.get('description')?.dirty)"
+                                                    class="text-danger">
+                                                    <div *ngIf="attraction.get('description')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.attraction.errors.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <div>
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm add-highlight"
+                                        (click)="addAttraction()">
+                                        <i class="isax isax-add-circle me-1"></i>
+                                        {{ 'tour-form.buttons.addNew' | translate }}
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card shadow-none" id="includes">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h5 class="fs-18">{{ 'tour-form.sections.includes' | translate }}</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body pb-1">
+                                    <div formArrayName="includes">
+                                        <div class="mb-3">
+                                            <ng-container *ngFor="let include of includes.controls; let i=index"
+                                                [formGroupName]="i">
+                                                <div class="row add-highlight-info">
+                                                    <div class="col-md-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ 'tour-form.fields.include.label' | translate }}</label>
+                                                            <div class="d-flex align-items-center">
+                                                                <input type="text" class="form-control"
+                                                                    formControlName="description"
+                                                                    (blur)="onIncludeDescriptionBlur($event, i)">
+                                                                <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                    (click)="removeInclude(i)">
+                                                                    <i class="isax isax-trash"></i>
+                                                                </a>
+                                                            </div>
+
+                                                            <div *ngIf="include.get('description')?.invalid && (include.get('description')?.touched || include.get('description')?.dirty)"
+                                                                class="text-danger">
+                                                                <div
+                                                                    *ngIf="include.get('description')?.errors?.['required']">
+                                                                    {{ 'tour-form.fields.include.errors.required' | translate }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                            <div>
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-primary btn-sm add-highlight"
+                                                    (click)="addInclude()"><i class="isax isax-add-circle me-1"></i>
+                                                    {{ 'tour-form.buttons.addNew' | translate }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card shadow-none" id="excludes">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h5 class="fs-18">{{ 'tour-form.sections.excludes' | translate }}</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body pb-1">
+                                    <div formArrayName="excludes">
+                                        <div class="mb-3">
+                                            <ng-container *ngFor="let exclude of excludes.controls; let i=index"
+                                                [formGroupName]="i">
+                                                <div class="row add-highlight-info">
+                                                    <div class="col-md-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ 'tour-form.fields.exclude.label' | translate }}</label>
+                                                            <div class="d-flex align-items-center">
+                                                                <input type="text" class="form-control"
+                                                                    formControlName="description"
+                                                                    (blur)="onExcludeDescriptionBlur($event, i)">
+                                                                <a class="text-danger trash-icon d-flex align-items-center justify-content-center ms-3"
+                                                                    (click)="removeExclude(i)">
+                                                                    <i class="isax isax-trash"></i>
+                                                                </a>
+                                                            </div>
+
+                                                            <div *ngIf="exclude.get('description')?.invalid && (exclude.get('description')?.touched || exclude.get('description')?.dirty)"
+                                                                class="text-danger">
+                                                                <div
+                                                                    *ngIf="exclude.get('description')?.errors?.['required']">
+                                                                    {{ 'tour-form.fields.exclude.errors.required' | translate }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                            <div>
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-primary btn-sm add-highlight" (click)="addExclude()">
+                                                    <i class="isax isax-add-circle me-1"></i>
+                                                    {{ 'tour-form.buttons.addNew' | translate }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-none" id="itineraries">
+                        <div class="card-header">
+                            <h5 class="fs-18">{{ 'tour-form.sections.itinerary' | translate }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div formArrayName="itineraries">
+                                <ng-container *ngFor="let it of itineraries.controls; let i=index" [formGroupName]="i">
+                                    <div class="card shadow-none mb-3">
+                                        <div class="card-body px-3 py-2">
+
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                                                <h6><a href="javascript:void(0);">{{it.get('title')?.value}}</a></h6>
+                                                <div class="d-flex align-items-center">
+                                                    <a href="javascript:void(0);"
+                                                        class="rounded-edit d-flex align-items-center justify-content-center me-2"
+                                                        (click)="openModal(itineraryModal,'itinerary', i)">
+                                                        <i class="isax isax-edit-2"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0);"
+                                                        class="trash-icon d-flex align-items-center justify-content-center"
+                                                        (click)="removeItinerary(i)">
+                                                        <i class="isax isax-trash text-danger"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div>
+                                <a href="javascript:void(0);" class="btn btn-primary btn-sm"
+                                    (click)="openModal(itineraryModal)">
+                                    <i class="isax isax-add-circle me-1"></i>
+                                    {{ 'tour-form.buttons.addNew' | translate }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow-none" id="tags">
+                        <div class="card-header">
+                            <h5 class="fs-18">{{ 'tour-form.sections.tags' | translate }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap gap-2 mt-1 tags-scroll-container">
+                                <label class="duration-check-label" *ngFor="let t of tagsList">
+                                    <input type="checkbox"
+                                        [value]="t.id"
+                                        [checked]="isTagSelected(t.id)"
+                                        (change)="onTagChange(t.id, $event)">
+                                    <span>{{ t.name | localizedName }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-none" id="faq">
+                        <div class="card-header">
+                            <h5 class="fs-18">{{ 'tour-form.sections.faq' | translate }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div formArrayName="faq">
+                                <ng-container *ngFor="let faq of faq.controls; let i=index" [formGroupName]="i">
+                                    <div class="card shadow-none mb-3">
+                                        <div class="card-body px-3 py-2">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                                                <h6><a href="javascript:void(0);">{{faq.get('question')?.value}}</a>
+                                                </h6>
+                                                <div class="d-flex align-items-center">
+                                                    <a href="javascript:void(0);"
+                                                        class="rounded-edit d-flex align-items-center justify-content-center me-2"
+                                                        (click)="openModal(faqModal, 'faq', i)">
+                                                        <i class="isax isax-edit-2"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0);"
+                                                        class="trash-icon d-flex align-items-center justify-content-center"
+                                                        (click)="removeFaq(i)">
+                                                        <i class="isax isax-trash text-danger"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div>
+                                <a href="javascript:void(0);" class="btn btn-primary btn-sm"
+                                    (click)="openModal(faqModal)">
+                                    <i class="isax isax-add-circle me-1"></i>{{ 'tour-form.buttons.addNew' | translate }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card shadow-none" id="cancellationPolicies">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="fs-18">{{ 'tour-form.sections.cancellationPolicies' | translate }}</h5>
+                            </div>
+                        </div>
+                        <div class="card-body pb-1">
+                            <div formArrayName="cancellationPolicies">
+                                <ng-container
+                                    *ngFor="let cancellationPolicy of cancellationPolicies.controls; let i=index"
+                                    [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+
+                                                <label class="form-label">{{ 'tour-form.fields.cancellationPolicyType.label' | translate }}</label>
+
+                                                <mat-select class="custom-mat-select select" placeholder="{{ 'tour-form.fields.cancellationPolicyType.placeholder' | translate }}"
+                                                    formControlName="cancellationPolicyType"
+                                                    (blur)="onCancellationPolicyTypeBlur($event, i)">
+                                                    <mat-option [value]="CancellationPolicyType.FLEXIBLE">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.flexible' | translate }}
+                                                    </mat-option>
+                                                    <mat-option [value]="CancellationPolicyType.STANDARD">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.standard' | translate }}
+                                                    </mat-option>
+                                                    <mat-option [value]="CancellationPolicyType.MODERATE">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.moderate' | translate }}
+                                                    </mat-option>
+                                                    <mat-option [value]="CancellationPolicyType.STRICT">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.options.strict' | translate }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <div *ngIf="cancellationPolicy.get('cancellationPolicyType')?.invalid && (cancellationPolicy.get('cancellationPolicyType')?.dirty || cancellationPolicy.get('cancellationPolicyType')?.touched)"
+                                                    class="text-danger">
+
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('cancellationPolicyType')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.cancellationPolicyType.errors.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.observations.label' | translate }}</label>
+                                                <textarea class="form-control" rows="3" formControlName="observations"
+                                                    maxlength="255" (blur)="onObservationsBlur($event, i)"></textarea>
+
+                                                <div *ngIf="cancellationPolicy.get('observations')?.invalid && (cancellationPolicy.get('observations')?.touched || cancellationPolicy.get('observations')?.dirty)"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('observations')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.observations.errors.required' | translate }}
+                                                    </div>
+
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('observations')?.errors?.['maxlength']">
+                                                        {{ 'tour-form.fields.observations.errors.maxlength' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.allowsRainRefund.label' | translate }}</label>
+                                                <mat-slide-toggle class="mat-slide-toogle"
+                                                    formControlName="allowsRainRefund"></mat-slide-toggle>
+
+                                                <div *ngIf="cancellationPolicy.get('allowsRainRefund')?.invalid && (cancellationPolicy.get('allowsRainRefund')?.touched || cancellationPolicy.get('allowsRainRefund')?.dirty)"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('allowsRainRefund')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.allowsRainRefund.errors.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'tour-form.fields.allowsRescheduling.label' | translate }}</label>
+                                                <mat-slide-toggle class="mat-slide-toogle"
+                                                    formControlName="allowsRescheduling"></mat-slide-toggle>
+
+                                                <div *ngIf="cancellationPolicy.get('allowsRescheduling')?.invalid && (cancellationPolicy.get('allowsRescheduling')?.touched || cancellationPolicy.get('allowsRescheduling')?.dirty)"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="cancellationPolicy.get('allowsRescheduling')?.errors?.['required']">
+                                                        {{ 'tour-form.fields.allowsRescheduling.errors.required' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="save" *ngIf="!tourId || tourId && tour">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="loading || (submitted && tourForm.touched && tourForm.invalid) || !canEdit">
+                                <span>{{tourId? ('tour-form.buttons.editTour' | translate) : ('tour-form.buttons.addTour' | translate) }}</span>
+                                <div *ngIf="loading" class="spinner-border spinner-border-sm">
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div *ngIf="errorMessage" class="mt-3">
+                        <p class="text-danger text-center">
+                            {{ errorMessage }}
+                        </p>
+                    </div>
+
+
+            </div>
+            <!-- /Add Tour -->
+
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+<!-- Itinerary Modal -->
+<ng-template #itineraryModal id="itinerary_modal">
+    <div class="modal-header">
+        <h5>{{ itineraryIndex >= 0 ? ('tour-form.modals.itinerary.titleEdit' | translate) : ('tour-form.modals.itinerary.titleAdd' | translate) }}</h5>
+        <button aria-label="close" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <form [formGroup]="itineraryForm" (ngSubmit)="onSubmitItinerary()">
+        <div class="modal-body">
+            <div>
+                <label class="form-label">{{ 'tour-form.fields.itineraryTitle.label' | translate }}</label>
+                <input type="text" class="form-control" formControlName="title" (blur)="onItineraryTitleBlur($event)">
+                <div *ngIf="itineraryForm.controls['title'].invalid && (itineraryForm.controls['title'].dirty || itineraryForm.controls['title'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['title'].errors?.['required']">
+                        {{ 'tour-form.fields.itineraryTitle.errors.required' | translate }}
+                    </div>
+
+                    <div *ngIf="itineraryForm.controls['title'].errors?.['minlength']">
+                        {{ 'tour-form.fields.itineraryTitle.errors.minlength' | translate }}
+                    </div>
+                    <div *ngIf="itineraryForm.controls['title'].errors?.['maxlength']">
+                        {{ 'tour-form.fields.itineraryTitle.errors.maxlength' | translate }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">{{ 'tour-form.fields.day.label' | translate }}</label>
+                <input type="number" class="form-control" formControlName="day" min="1"
+                    (keypress)="onKeyPressDay($event)">
+                <div *ngIf="itineraryForm.controls['day'].invalid && (itineraryForm.controls['day'].dirty || itineraryForm.controls['day'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['day'].errors?.['required']">
+                        {{ 'tour-form.fields.day.errors.required' | translate }}
+                    </div>
+                    <div *ngIf="itineraryForm.controls['day'].errors?.['min']">
+                        {{ 'tour-form.fields.day.errors.min' | translate }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">{{ 'tour-form.fields.time.label' | translate }}</label>
+                <input type="time" class="form-control" formControlName="time">
+                <div *ngIf="itineraryForm.controls['time'].invalid && (itineraryForm.controls['time'].dirty || itineraryForm.controls['time'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['time'].errors?.['required']">
+                        {{ 'tour-form.fields.time.errors.required' | translate }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">{{ 'tour-form.fields.itineraryDescription.label' | translate }}</label>
+                <textarea class="form-control" rows="3" formControlName="description"
+                    (blur)="onItineraryDescriptionBlur($event)"></textarea>
+                <div *ngIf="itineraryForm.controls['description'].invalid && (itineraryForm.controls['description'].dirty || itineraryForm.controls['description'].touched)"
+                    class="text-danger">
+                    <div *ngIf="itineraryForm.controls['description'].errors?.['required']">
+                        {{ 'tour-form.fields.itineraryDescription.errors.required' | translate }}
+                    </div>
+                    <div *ngIf="itineraryForm.controls['description'].errors?.['minlength']">
+                        {{ 'tour-form.fields.itineraryDescription.errors.minlength' | translate }}
+                    </div>
+                    <div *ngIf="itineraryForm.controls['description'].errors?.['maxlength']">
+                        {{ 'tour-form.fields.itineraryDescription.errors.maxlength' | translate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="d-flex align-items-center justify-content-end m-0">
+                <button type="button" class="btn btn-sm btn-light me-2" (click)="closeModal()">{{ 'shared.cancel' | translate }}</button>
+                <button type="submit" class="btn btn-sm btn-primary">
+                    {{ itineraryIndex >= 0 ? ('tour-form.modals.itinerary.titleEdit' | translate) : ('tour-form.buttons.addNew' | translate)}}
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+</ng-template>
+<!-- /Itinerary Modal -->
+
+<!-- FAQ Modal -->
+<ng-template #faqModal id="faq_modal">
+
+    <div class="modal-header">
+        <h5>{{ faqIndex >= 0 ? ('tour-form.modals.faq.titleEdit' | translate) : ('tour-form.modals.faq.titleAdd' | translate) }}</h5>
+        <button aria-label="close" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <form [formGroup]="faqForm" (ngSubmit)="onSubmitFaq()">
+        <div class="modal-body">
+            <div class="mb-3">
+                <label class="form-label">{{ 'tour-form.fields.question.label' | translate }}</label>
+                <input type="text" class="form-control" formControlName="question" (blur)="onQuestionBlur($event)">
+
+                <div *ngIf="faqForm.controls['question'].invalid && (faqForm.controls['question'].dirty || faqForm.controls['question'].touched)"
+                    class="text-danger">
+                    <div *ngIf="faqForm.controls['question'].errors?.['required']">
+                        {{ 'tour-form.fields.question.errors.required' | translate }}
+                    </div>
+
+                    <div *ngIf="faqForm.controls['question'].errors?.['minlength']">
+                        {{ 'tour-form.fields.question.errors.minlength' | translate }}
+                    </div>
+                    <div *ngIf="faqForm.controls['question'].errors?.['maxlength']">
+                        {{ 'tour-form.fields.question.errors.maxlength' | translate }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">{{ 'tour-form.fields.answer.label' | translate }}</label>
+                <textarea type="text" class="form-control" formControlName="answer"
+                    (blur)="onAnswerBlur($event)"></textarea>
+                <div *ngIf="faqForm.controls['answer'].invalid && (faqForm.controls['answer'].dirty || faqForm.controls['answer'].touched)"
+                    class="text-danger">
+                    <div *ngIf="faqForm.controls['answer'].errors?.['required']">
+                        {{ 'tour-form.fields.answer.errors.required' | translate }}
+                    </div>
+
+                    <div *ngIf="faqForm.controls['answer'].errors?.['minlength']">
+                        {{ 'tour-form.fields.answer.errors.minlength' | translate }}
+                    </div>
+                    <div *ngIf="faqForm.controls['answer'].errors?.['maxlength']">
+                        {{ 'tour-form.fields.answer.errors.maxlength' | translate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="d-flex align-items-center justify-content-end m-0">
+                <button type="button" class="btn btn-sm btn-light me-2" (click)="closeModal()">{{ 'shared.cancel' | translate }}</button>
+                <button type="submit" class="btn btn-sm btn-primary">
+                    {{ faqIndex >= 0 ? ('tour-form.modals.faq.titleEdit' | translate) : ('tour-form.buttons.addNew' | translate)}}</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<!-- / FAQ Modal -->
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete_modal">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form>
+                    <div class="text-center">
+                        <h5 class="mb-3">{{ 'tour-form.modals.deleteConfirm.title' | translate }}</h5>
+                        <p class="mb-3">{{ 'tour-form.modals.deleteConfirm.message' | translate }}</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <a href="javascript:void(0);" class="btn btn-light me-2">{{ 'tour-form.modals.deleteConfirm.no' | translate }}</a>
+                            <button type="submit" class="btn btn-primary">{{ 'tour-form.modals.deleteConfirm.yes' | translate }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Modal -->
+
+<!-- Modal de Confirmación para Enviar a Revisión -->
+<div class="modal fade" [class.show]="showSubmitConfirmModal" [style.display]="showSubmitConfirmModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'tour-form.modals.submitConfirm.title' | translate }}</h5>
+                <button type="button" class="btn-close" (click)="closeSubmitConfirmModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'tour-form.modals.submitConfirm.message' | translate }}</p>
+                <div class="alert alert-info mb-0">
+                    <i class="isax isax-info-circle me-2"></i>
+                    <small>
+                        <strong>{{ 'tour-form.modals.submitConfirm.pointsTitle' | translate }}:</strong><br>
+                        • {{ 'tour-form.modals.submitConfirm.point1' | translate }}<br>
+                        • {{ 'tour-form.modals.submitConfirm.point2' | translate }}<br>
+                        • {{ 'tour-form.modals.submitConfirm.point3' | translate }}
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeSubmitConfirmModal()" [disabled]="isSubmitting">
+                    {{ 'tour-form.modals.submitConfirm.cancel' | translate }}
+                </button>
+                <button type="button" class="btn btn-primary" (click)="submitTourForReview()" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">{{ 'tour-form.modals.submitConfirm.confirm' | translate }}</span>
+                    <div *ngIf="isSubmitting" class="d-flex align-items-center">
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        {{ 'tour-form.modals.submitConfirm.submitting' | translate }}
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Backdrop para Confirmación -->
+<div class="modal-backdrop fade" [class.show]="showSubmitConfirmModal" [style.display]="showSubmitConfirmModal ? 'block' : 'none'"></div>
+<!-- /Modal de Confirmación -->

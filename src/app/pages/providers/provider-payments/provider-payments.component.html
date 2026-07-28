@@ -1,0 +1,278 @@
+<!-- Provider Payments Section -->
+<div class="provider-payments">
+    
+    <!-- Payments Header -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3">
+                <div>
+                    <h5 class="mb-1">Mis Pagos Recibidos</h5>
+                    <p class="fs-14 text-gray-6 mb-0">
+                        Total de Pagos: <span class="fw-semibold text-dark">{{ totalPayments }}</span> | 
+                        Ingresos Completados: <span class="fw-semibold text-success">${{ totalAmount | number:'1.2-2' }}</span>
+                    </p>
+                </div>
+                <div class="d-flex align-items-center flex-wrap row-gap-3 gap-2">
+                    <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+                        <i class="isax isax-refresh me-1"></i>Limpiar Filtros
+                    </button>
+                    <div class="dropdown">
+                        <a href="javascript:void(0);" 
+                           class="dropdown-toggle btn btn-sm btn-white rounded border d-inline-flex align-items-center" 
+                           data-bs-toggle="dropdown">
+                            <i class="ti ti-file-export me-1"></i>Exportar
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="exportData('pdf')">
+                                    <i class="ti ti-file-type-pdf me-1"></i>Exportar como PDF
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="exportData('excel')">
+                                    <i class="ti ti-file-type-xls me-1"></i>Exportar como Excel
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Payments Header -->
+
+    <!-- Payments List -->
+    <div class="card hotel-list">
+        <div class="card-body p-0">
+            <div class="list-header d-flex align-items-center justify-content-between flex-wrap p-3">
+                <h6 class="mb-0">Lista de Pagos</h6>
+                <div class="d-flex align-items-center flex-wrap gap-2">
+
+                    <!-- Filter by Status -->
+                    <div class="dropdown">
+                        <a href="javascript:void(0);" 
+                           class="dropdown-toggle text-gray-6 btn btn-sm rounded border d-inline-flex align-items-center" 
+                           data-bs-toggle="dropdown" 
+                           aria-expanded="false">
+                            Estado
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="filterByStatus('All')">Todos</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="filterByStatus('PAID')">Pagada</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="filterByStatus('PENDING')">Pendiente</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" 
+                                   class="dropdown-item rounded-1"
+                                   (click)="filterByStatus('CANCELLED')">Cancelada</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Date Range Picker -->
+                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)"></app-date-range-picker>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="custom-datatable-filter table-responsive">
+                @if (loading) {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Cargando órdenes de pago...</p>
+                    </div>
+                } @else {
+                    <table matSort (matSortChange)="sortData($event)" class="table datatable">
+                        <thead class="thead-light">
+                            <tr>
+                                <th mat-sort-header="id">ID</th>
+                                <th mat-sort-header="createdAt">Fecha de Creación</th>
+                                <th mat-sort-header="payDate">Fecha de Pago</th>
+                                <th mat-sort-header="amountTotal">Monto Total</th>
+                                <th mat-sort-header="status">Estado</th>
+                                <th>Comprobante</th>
+                                @if (authService.isTouryaBackoffice()) {
+                                    <th>Acción</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (payment of tableData; track payment.id) {
+                                <tr (click)="openPaymentDetails(payment)" style="cursor: pointer;">
+                                    <td>#{{ payment.id }}</td>
+                                    <td>{{ payment.createdAt | date:'shortDate' }}</td>
+                                    <td>{{ payment.payDate ? (payment.payDate | date:'shortDate') : '-' }}</td>
+                                    <td class="fw-semibold text-success">${{ payment.amountTotal | number:'1.2-2' }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                              [ngClass]="getStatusClass(payment.status)">
+                                            <i class="fa-solid fa-circle fs-5 me-1"></i>{{ getStatusLabel(payment.status) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (payment.proofUrl) {
+                                            <a [href]="payment.proofUrl" target="_blank" class="btn btn-sm btn-outline-info" (click)="$event.stopPropagation()">
+                                                <i class="isax isax-document-text me-1"></i> Ver
+                                            </a>
+                                        } @else {
+                                            <span class="text-muted fs-12 italic">No disponible</span>
+                                        }
+                                    </td>
+                                    @if (authService.isTouryaBackoffice()) {
+                                        <td>
+                                            @if (payment.status === 'PENDING') {
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input #fileInput type="file" class="d-none" accept=".pdf,.jpg,.png" (change)="onFileSelected($event, payment)">
+                                                    <button 
+                                                        class="btn btn-sm btn-primary d-inline-flex align-items-center" 
+                                                        (click)="$event.stopPropagation(); fileInput.click()"
+                                                        title="Subir comprobante">
+                                                        <i class="isax isax-document-upload me-1"></i> Subir
+                                                    </button>
+                                                </div>
+                                            } @else if (payment.status === 'PAID') {
+                                                <div class="d-flex align-items-center text-success">
+                                                    <i class="isax isax-tick-circle me-1"></i>
+                                                    <span class="fs-12 fw-medium">Pagado</span>
+                                                </div>
+                                            } @else {
+                                                <span class="text-muted fs-12">N/A</span>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                            @if (tableData.length === 0) {
+                                <tr>
+                                    <td colspan="9" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="isax isax-wallet-money fs-1 mb-3 d-block"></i>
+                                            <h5>No se encontraron órdenes de pago</h5>
+                                            <p>Intenta ajustar tus filtros de búsqueda</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <!-- /Table -->
+
+        </div>
+    </div>
+    <!-- /Payments List -->
+
+    <!-- Statistics Cards (Optional) -->
+    <div class="row mt-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-gray-6 mb-1 fs-14">Total Pagados</p>
+                            <h4 class="mb-0">${{ paidTotal | number:'1.0-0' }}</h4>
+                        </div>
+                        <div class="stats-icon bg-success-subtle">
+                            <i class="isax isax-tick-circle text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-gray-6 mb-1 fs-14">Total Pendientes</p>
+                            <h4 class="mb-0">${{ pendingTotal | number:'1.0-0' }}</h4>
+                        </div>
+                        <div class="stats-icon bg-warning-subtle">
+                            <i class="isax isax-clock text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-gray-6 mb-1 fs-14">Total Cancelados</p>
+                            <h4 class="mb-0">${{ canceledTotal | number:'1.0-0' }}</h4>
+                        </div>
+                        <div class="stats-icon bg-danger-subtle">
+                            <i class="isax isax-close-circle text-danger"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-gray-6 mb-1 fs-14">Total Ingresos</p>
+                            <h4 class="mb-0 text-success">${{ totalIncome | number:'1.0-0' }}</h4>
+                        </div>
+                        <div class="stats-icon bg-primary-subtle">
+                            <i class="isax isax-dollar-square text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Statistics Cards -->
+
+    <!-- Pagination -->
+    @if (tableData.length > 0) {
+        <nav class="pagination-nav mt-4">
+            <ul class="pagination justify-content-center justify-content-sm-end">
+                <li class="page-item disabled">
+                    <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                    </a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
+                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    <!-- /Pagination -->
+
+</div>
+<!-- /Provider Payments Section -->
+
+<app-provider-payment-details-modal 
+    [showModal]="showPaymentDetailsModal" 
+    [selectedPayment]="selectedPayment" 
+    (closeModal)="closePaymentDetailsModal()">
+</app-provider-payment-details-modal>

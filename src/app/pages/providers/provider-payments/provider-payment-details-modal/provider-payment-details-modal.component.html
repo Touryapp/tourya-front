@@ -1,0 +1,157 @@
+@if (showModal && selectedPayment) {
+    <!-- Backdrop -->
+    <div class="modal-backdrop fade show" style="z-index: 1050;"></div>
+    
+    <!-- Modal -->
+    <div class="modal fade show d-block" tabindex="-1" style="z-index: 1055;">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Detalles del Pago 
+                        <span class="fs-14 fw-medium text-primary">{{ selectedPayment.id }}</span>
+                    </h5>
+                    <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Loading state -->
+                    @if (loading) {
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Cargando detalles de la reserva...</p>
+                        </div>
+                    } @else {
+                        <!-- Payment Info Header -->
+                        <div class="upcoming-title mb-4 d-flex align-items-center justify-content-between p-3 rounded bg-light">
+                            <div class="d-flex align-items-center flex-wrap">
+                                <div>
+                                    <h6 class="mb-2">Monto total: ${{ selectedPayment.amountTotal | number:'1.2-2' }}</h6>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <p class="d-flex align-items-center mb-0 fs-14">
+                                            <i class="isax isax-calendar me-2"></i>Fecha Creación: {{ selectedPayment.createdAt | date:'shortDate' }}
+                                        </p>
+                                        <p class="d-flex align-items-center mb-0 fs-14">
+                                            <i class="isax isax-shop me-2"></i>Proveedor: {{ selectedPayment.providerId }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                      [ngClass]="selectedPayment.status === 'PAID' ? 'badge-success' : (selectedPayment.status === 'PENDING' ? 'badge-secondary' : 'badge-danger')">
+                                    <i class="fa-solid fa-circle fs-5 me-1"></i>{{ selectedPayment.status === 'PAID' ? 'Pagada' : (selectedPayment.status === 'PENDING' ? 'Pendiente' : 'Cancelada') }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Associated Bookings Table -->
+                        <div class="upcoming-details mb-4">
+                            <h6 class="mb-3">Reservas Asociadas</h6>
+                            <div class="table-responsive">
+                                <table class="table datatable">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>ID Reserva</th>
+                                            <th>Monto</th>
+                                            <th>Fecha Disponible Pago</th>
+                                            <th>Estado Pago</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (booking of associatedBookings; track booking.reservationId) {
+                                            <tr (click)="toggleRow(booking.reservationId)" class="clickable-row" [class.bg-light]="expandedBookingId === booking.reservationId">
+                                                <td class="fw-medium">#{{ booking.reservationId }}</td>
+                                                <td class="fw-semibold text-success">${{ booking.amount | number:'1.2-2' }}</td>
+                                                <td>{{ booking.payoutAvailableDate | date:'shortDate' }}</td>
+                                                <td>
+                                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                                          [ngClass]="getStatusClass(booking.payoutStatus)">
+                                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ booking.payoutStatus }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            @if (expandedBookingId === booking.reservationId) {
+                                                <tr>
+                                                    <td colspan="4" class="p-0 border-0">
+                                                        <div class="bg-light p-3 m-2 rounded border fade-in-row">
+                                                            <h6 class="mb-3 fs-14">Detalle de la reserva</h6>
+                                                            <div class="row gy-3">
+                                                                <div class="col-lg-4">
+                                                                    <h6 class="fs-14 text-gray-6">Fecha de la reserva</h6>
+                                                                    <p class="text-dark fs-16 fw-medium">{{ booking.scheduleDate ? (booking.scheduleDate | date:'shortDate') : (booking.checkInDate || 'N/A') }}</p>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <h6 class="fs-14 text-gray-6">Duración</h6>
+                                                                    <p class="text-dark fs-16 fw-medium">{{ (booking.slotTimeStart && booking.slotTimeEnd) ? (booking.slotTimeStart + ' - ' + booking.slotTimeEnd) : (booking.duration || 'N/A') }}</p>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <h6 class="fs-14 text-gray-6">Viajeros</h6>
+                                                                    <p class="text-dark fs-16 fw-medium">{{ booking.totalTourists || booking.travellers || 'N/A' }}</p>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <h6 class="fs-14 text-gray-6">Precio total</h6>
+                                                                    <p class="text-dark fs-16 fw-medium text-success">${{ booking.amount | number:'1.0-0' }}</p>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <h6 class="fs-14 text-gray-6">Fecha de compra</h6>
+                                                                    <p class="text-dark fs-16 fw-medium">{{ booking.reservationCreatedDate ? (booking.reservationCreatedDate | date:'shortDate') : (booking.bookingDate || 'N/A') }}</p>
+                                                                </div>
+                                                                @if (booking.maxCancellationDate) {
+                                                                    <div class="col-lg-4">
+                                                                        <h6 class="fs-14 text-gray-6">Fecha máxima de cancelación</h6>
+                                                                        <p class="text-dark fs-16 fw-medium text-danger">{{ booking.maxCancellationDate | date:'shortDate' }}</p>
+                                                                    </div>
+                                                                }
+                                                                @if (booking.maxReschedulingDate) {
+                                                                    <div class="col-lg-4">
+                                                                        <h6 class="fs-14 text-gray-6">Fecha máxima de reagendamiento</h6>
+                                                                        <p class="text-dark fs-16 fw-medium text-warning">{{ booking.maxReschedulingDate | date:'shortDate' }}</p>
+                                                                    </div>
+                                                                }
+                                                                @if (booking.allowsRainRefund !== undefined) {
+                                                                    <div class="col-lg-4">
+                                                                        <h6 class="fs-14 text-gray-6">Permite cancelación por lluvia</h6>
+                                                                        @if (booking.allowsRainRefund) {
+                                                                            <p class="text-dark fs-16 fw-medium text-success"><i class="isax isax-tick-circle me-1"></i>Sí</p>
+                                                                        } @else {
+                                                                            <p class="text-dark fs-16 fw-medium text-danger"><i class="isax isax-close-circle me-1"></i>No</p>
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                            <div class="d-flex justify-content-end mt-3 border-top pt-3">
+                                                                <button type="button" class="btn btn-sm btn-warning fw-medium" (click)="goToReservation(booking.reservationId); $event.stopPropagation()">
+                                                                    Ir a la reserva
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        @if (associatedBookings.length === 0) {
+                                            <tr>
+                                                <td colspan="4" class="text-center py-4 text-muted">
+                                                    No hay reservas asociadas a este pago.
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                        <button type="button" class="btn btn-secondary" (click)="close()">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

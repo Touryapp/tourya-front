@@ -1,66 +1,101 @@
-import { Component,HostListener  } from '@angular/core';
-import { MainMenu, Menu, SideBar } from '../../../shared/models/models';
-import { DataService } from '../../../shared/data/data.service';
-import { CommonService } from '../../../shared/common/common.service';
-import { NavigationEnd, Router } from '@angular/router';
-import { SideBarService } from '../../../shared/side-bar/side-bar.service';
-import { routes } from '../../../shared/routes/routes';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { SettingService } from '../../../shared/settings/settings.service';
+import { Component, HostListener, inject, OnInit, OnDestroy } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil, debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { MainMenu, Menu, SideBar } from "../../../shared/models/models";
 
+
+import { CommonService } from "../../../shared/common/common.service";
+import { NavigationEnd, Router } from "@angular/router";
+import { SideBarService } from "../../../shared/side-bar/side-bar.service";
+import { routes } from "../../../shared/routes/routes";
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { SettingService } from "../../../shared/settings/settings.service";
+import { AuthService } from "../../../core/services/auth.service";
+import { TranslateService } from "@ngx-translate/core";
+import { Roles } from "../../enums/roles.enum";
+import { RequestsProvidersStatus } from "../../enums/requests-providers-status.enum";
+import { DataService } from "../../../shared/data/data.service";
+import { ProviderPanelStateService, ProviderPanelView } from "../../../shared/services/provider-panel-state.service";
 
 @Component({
-    selector: 'app-default-header',
-    templateUrl: './default-header.component.html',
-    styleUrl: './default-header.component.scss',
-    standalone: false
+  selector: "app-default-header",
+  templateUrl: "./default-header.component.html",
+  styleUrl: "./default-header.component.scss",
+  standalone: false,
 })
-export class DefaultHeaderComponent {
-  
+export class DefaultHeaderComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private langChange$ = new Subject<string>();
+  authService = inject(AuthService);
   header: Array<SideBar> = [];
-  base = 'dashboard';
-  public page = '';
-  last = '';
+  base = "dashboard";
+  public page = "";
+  last = "";
   isMobileMenu = false;
-  isDropdownOpen=false;
-  isDropdownOpen1=false;
-  isHovered=false;
-  ishome2=false;
-  isheaderFour=false;
-  show=false;
+  isDropdownOpen = false;
+  isDropdownOpen1 = false;
+  isHovered = false;
+  ishome2 = false;
+  isheaderFour = false;
+  show = false;
   isFixed = false;
-  isdark=true;
-  islight=false;
-  themeColor = '2';
+  isdark = true;
+  islight = false;
+  themeColor = "2";
   public routes = routes;
   side_bar_data: MainMenu[] = [];
   password: boolean[] = [false, false]; // Add more as needed
- 
-   togglePassword(index: number): void {
-     this.password[index] = !this.password[index];
-   }
-  @HostListener('window:scroll', [])
+  isLegalOpen = false;
+  isProfileOpen = false;
+  isProfileToursOpen = false;
+
+  toggleLegal() {
+    this.isLegalOpen = !this.isLegalOpen;
+  }
+
+  toggleProfile() {
+    this.isProfileOpen = !this.isProfileOpen;
+  }
+
+  toggleProfileTours() {
+    this.isProfileToursOpen = !this.isProfileToursOpen;
+    // Keep parent open
+    this.isProfileOpen = true;
+  }
+
+
+  togglePassword(index: number): void {
+    this.password[index] = !this.password[index];
+  }
+  @HostListener("window:scroll", [])
   onWindowScroll() {
+    // Don't change header state when hamburger menu is open to prevent menu reset
+    if (this.show) {
+      return;
+    }
     // Add a fixed class when the scroll position is greater than 50px
     this.isFixed = window.pageYOffset > 50;
   }
   mainMenus = [
-    { title: 'Menu 1', separateRoute: false },
-    { title: 'Menu 2', separateRoute: false },
-    { title: 'Menu 3', separateRoute: false },
+    { title: "Menu 1", separateRoute: false },
+    { title: "Menu 2", separateRoute: false },
+    { title: "Menu 3", separateRoute: false },
   ];
   openDropdownIndex: number | null = null;
+
+  selectedLanguage: string = "en";
+  languages: string[] = ["en"];
+
   constructor(
     private data: DataService,
     private sideBar: SideBarService,
     private common: CommonService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
-    public settings:SettingService,
-  ) 
-
-
-  {
+    public settings: SettingService,
+    private translate: TranslateService,
+    private panelStateService: ProviderPanelStateService
+  ) {
     this.common.base.subscribe((res: string) => {
       this.base = res;
     });
@@ -74,8 +109,13 @@ export class DefaultHeaderComponent {
     this.settings.themeColor.subscribe((res: string) => {
       this.themeColor = res;
     });
+
+    // Obtener el idioma actual (ya fue detectado en app.component.ts)
+    // No forzar "en" como default para respetar la detección automática
+    const currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'es';
+    this.selectedLanguage = currentLang;
+    this.languages = this.translate.getLangs();
   }
- 
 
   elem = document.documentElement;
   fullscreen() {
@@ -90,14 +130,14 @@ export class DefaultHeaderComponent {
   }
 
   public expandSubMenus(menu: Menu): void {
-    sessionStorage.setItem('menuValue', menu.menuValue);
+    sessionStorage.setItem("menuValue", menu.menuValue);
     this.side_bar_data.map((mainMenus: MainMenu) => {
       mainMenus.menu.map((resMenu: Menu) => {
         // collapse other submenus which are open
         if (resMenu.menuValue === menu.menuValue) {
           menu.showSubRoute = !menu.showSubRoute;
           if (menu.showSubRoute === false) {
-            sessionStorage.removeItem('menuValue');
+            sessionStorage.removeItem("menuValue");
           }
         } else {
           resMenu.showSubRoute = false;
@@ -105,56 +145,239 @@ export class DefaultHeaderComponent {
       });
     });
   }
-   
 
-    miniSideBarBlur(position: string) {
-      if (position === 'over') {
-        this.sideBar.expandSideBar.next(true);
-      } else {
-        this.sideBar.expandSideBar.next(false);
-      }
+  miniSideBarBlur(position: string) {
+    if (position === "over") {
+      this.sideBar.expandSideBar.next(true);
+    } else {
+      this.sideBar.expandSideBar.next(false);
     }
+  }
 
-    miniSideBarFocus(position: string) {
-      if (position === 'over') {
-        this.sideBar.expandSideBar.next(true);
-      } else {
-        this.sideBar.expandSideBar.next(false);
-      }
+  miniSideBarFocus(position: string) {
+    if (position === "over") {
+      this.sideBar.expandSideBar.next(true);
+    } else {
+      this.sideBar.expandSideBar.next(false);
     }
-    public submenus = false;
-    openSubmenus() {
-      this.submenus = !this.submenus;
-    }
-    ngOnInit(): void {
-      this.breakpointObserver.observe(['(max-width: 991px)']).subscribe(result => {
+  }
+  public submenus = false;
+  openSubmenus() {
+    this.submenus = !this.submenus;
+  }
+  ngOnInit(): void {
+    this.breakpointObserver
+      .observe(["(max-width: 991px)"])
+      .subscribe((result) => {
         this.isMobileMenu = result.matches;
       });
-      const themeColor = localStorage.getItem('themeColor') || '2';
-      this.settings.changeThemeColor(themeColor);
+    const themeColor = localStorage.getItem("themeColor") || "2";
+    this.settings.changeThemeColor(themeColor);
+
+    // FIX: Sincronizar selectedLanguage con cambios de idioma
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ lang }) => {
+        this.selectedLanguage = lang;
+      });
+
+    // Debounce para evitar cambios de idioma concurrentes
+    this.langChange$
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(lang => {
+        this.selectedLanguage = lang;
+        this.translate.use(lang);
+        localStorage.setItem("lang", lang);
+      });
+      
+    // Sincronizar al inicializar
+    this.selectedLanguage = this.translate.currentLang || this.translate.getDefaultLang() || 'es';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  closeMenu(): void {
+    this.isMobileMenu = false; // Removes the `mean-container` class
+    this.show = false;
+    // Re-enable body scroll
+    document.body.style.overflow = '';
+  }
+  addmenu(): void {
+    this.isMobileMenu = true;
+    this.show = true;
+    // Disable body scroll to prevent menu reset on scroll
+    document.body.style.overflow = 'hidden';
+  }
+  openSubMenu(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+    this.openDropdownIndex = null;
+  }
+  toggleSubMenu(index: number): void {
+    // If the clicked menu is already open, close it
+    this.openDropdownIndex = this.openDropdownIndex === index ? null : index;
+    this.isDropdownOpen = false;
+  }
+  darkMode(): void {
+    this.isdark = !this.isdark;
+    this.islight = !this.islight;
+  }
+  onSubmit0(): void {
+    this.router.navigateByUrl("/index");
+  }
+
+  useLanguage(language: string): void {
+    // Proveedores no pueden cambiar el idioma
+    if (!this.canChangeLanguage) {
+      console.warn('Los proveedores no pueden cambiar el idioma');
+      return;
     }
-    closeMenu(): void {
-      this.isMobileMenu = false; // Removes the `mean-container` class
-      this.show=false;
+
+    const langs = this.translate.getLangs();
+    if (langs.includes(language)) {
+      this.langChange$.next(language);
     }
-    addmenu():void{
-      this.isMobileMenu = true;
-      this.show=true;
+  }
+
+  getLanguageImg(language: string): string {
+    switch (language.toLowerCase()) {
+      case "en": {
+        return "assets/img/flags/us-flag.svg";
+      }
+      case "es": {
+        return "assets/img/flags/es.png";
+      }
+      case "pt": {
+        return "assets/img/flags/br.png";
+      }
+      default: {
+        return "assets/img/flags/us-flag.svg";
+      }
     }
-    openSubMenu():void{
-      this.isDropdownOpen=!this.isDropdownOpen;
-      this.openDropdownIndex=null;
+  }
+
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl("/login");
+  }
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+  get isProvider(): boolean {
+    return this.authService.isProvider();
+  }
+  get isUser(): boolean {
+    return this.authService.isUser();
+  }
+
+  /**
+   * Determina si el usuario puede cambiar el idioma
+   * Solo los proveedores (que no sean admin) NO pueden cambiar el idioma
+   */
+  get canChangeLanguage(): boolean {
+    // No mostrar selector de idioma a Proveedores ni a Administradores (backoffice)
+    if (this.isProvider || this.isAdmin) {
+      return false;
     }
-    toggleSubMenu(index: number): void {
-      // If the clicked menu is already open, close it
-      this.openDropdownIndex = this.openDropdownIndex === index ? null : index;
-      this.isDropdownOpen=false;
+    // Clientes y usuarios no autenticados (invitados) sí pueden cambiar idioma
+    return true;
+  }
+
+  /**
+   * Get the user's display name (first name + first surname)
+   */
+  get userDisplayName(): string {
+    return this.authService.getUserDisplayName();
+  }
+
+  redirectByRole() {
+    const requestProviderStatus = this.authService.getRequestProviderStatus();
+    if (this.isUser && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
+      this.router.navigate(["/providers/requestproviders"]);
+    } else if (this.isProvider && requestProviderStatus === RequestsProvidersStatus.APPROVED) {
+      this.router.navigate(["providers"]);
     }
-    darkMode():void{
-      this.isdark=!this.isdark;
-      this.islight=!this.islight;
+  }
+
+  navigateToProviderPanel(view: ProviderPanelView): void {
+    console.log('🔄 Navegando a provider panel con vista:', view);
+    
+    const requestProviderStatus = this.authService.getRequestProviderStatus();
+    if (requestProviderStatus && requestProviderStatus !== RequestsProvidersStatus.APPROVED) {
+      console.log('🔄 Proveedor no aprobado, redirigiendo a requestproviders. Estado actual:', requestProviderStatus);
+      this.router.navigate(['/providers/requestproviders']);
+      this.closeMenu();
+      return;
     }
-    onSubmit0():void{
-      this.router.navigateByUrl('/index')
+    
+    // Primero navegar a la ruta del provider panel
+    this.router.navigate(['/providers/provider-panel']).then(() => {
+      // Luego cambiar la vista usando el servicio
+      this.panelStateService.setView(view);
+      
+      // Cerrar el menú hamburguesa
+      this.closeMenu();
+    });
+  }
+
+  /**
+   * Navega a la sección de perfil correcta basándose en el rol del usuario
+   * - Si es Cliente: navega a /clients/my-profile con query param de sección
+   * - Si es Proveedor: navega a /providers/provider-panel con la vista correspondiente
+   */
+  navigateToProfileSection(section: 'profile' | 'bookings' | 'reviews' | 'payments' | 'tours' | 'templates'): void {
+    console.log('🔄 Navegando a sección de perfil:', section, 'Rol:', this.isProvider ? 'Provider' : 'Client');
+    
+    // Si el usuario es proveedor (y no solo cliente), usar la navegación de proveedor
+    if (this.isProvider && !this.isAdmin) {
+      // Mapear las secciones a las vistas del provider panel
+      const viewMap: { [key: string]: ProviderPanelView } = {
+        'tours': 'tours',
+        'templates': 'templates',
+        'bookings': 'reservas',
+        'reviews': 'reviews',
+        'payments': 'pagos'
+      };
+      
+      const view = viewMap[section];
+      if (view) {
+        this.navigateToProviderPanel(view);
+      }
+    } else {
+      // Si es cliente, navegar a la ruta de cliente con query param de sección
+      const sectionMap: { [key: string]: string } = {
+        'profile': 'profile',
+        'bookings': 'bookings',
+        'reviews': 'reviews',
+        'payments': 'payments'
+      };
+      
+      const clientSection = sectionMap[section] || 'profile';
+      
+      this.router.navigate(['/clients/my-profile'], {
+        queryParams: { section: clientSection }
+      }).then(() => {
+        // Cerrar el menú hamburguesa
+        this.closeMenu();
+      });
     }
+  }
+
+  /**
+   * Navega a la página de login pasando la URL actual como returnUrl
+   */
+  navigateToLogin(): void {
+    const currentUrl = this.router.url;
+    this.router.navigate(['/login'], {
+      queryParams: { returnUrl: currentUrl }
+    });
+  }
 }

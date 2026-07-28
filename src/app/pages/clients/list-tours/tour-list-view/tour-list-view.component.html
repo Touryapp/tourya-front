@@ -1,0 +1,134 @@
+<!-- Loading indicator -->
+<div class="col-12 text-center" *ngIf="loading">
+    <div class="d-flex justify-content-center align-items-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">{{ 'toursList.loading' | translate }}</span>
+        </div>
+        <span class="ms-3">{{ 'toursList.searchingTours' | translate }}</span>
+    </div>
+</div>
+
+<div class="hotel-list" *ngIf="!loading">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <!-- Tours List -->
+            <div class="place-item mb-4" *ngFor="let tour of tours; let i = index">
+                <div class="place-img custom-item">
+                    <owl-carousel-o class="img-slider image-slide nav-center" [options]="imageSlider">
+                        <ng-template carouselSlide *ngFor="let image of tour?.tour?.gallery; let imgIndex = index">
+                            <div class="slide-images">
+                                <a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">
+                                    <img [src]="image.imageUrl || 'assets/img/tours/tours-07.jpg'" class="img-fluid"
+                                        [alt]="image.description || 'Tour image'">
+                                </a>
+                            </div>
+                        </ng-template>
+                        <!-- Fallback image if no gallery -->
+                        <ng-template carouselSlide *ngIf="!tour?.tour?.gallery || tour?.tour?.gallery?.length === 0">
+                            <div class="slide-images">
+                                <a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">
+                                    <img src="assets/img/tours/tours-07.jpg" class="img-fluid" alt="Tour image">
+                                </a>
+                            </div>
+                        </ng-template>
+                    </owl-carousel-o>
+                    <div class="fav-item">
+                        <a href="javascript:void(0);" class="fav-icon" [ngClass]="{ selected: isClassAdded[i] }"
+                            (click)="onToggleFavorite(i)">
+                            <i class="isax isax-heart5"></i>
+                        </a>
+                        <span class="badge bg-info d-inline-flex align-items-center"
+                            *ngIf="tour?.schedules?.at(0)?.status === 'ACTIVE'">
+                            <i class="isax isax-ranking me-1"></i>{{ 'toursList.available' | translate }}
+                        </span>
+                    </div>
+                </div>
+                <div class="place-content">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
+                        <div>
+                            <h5 class="mb-1 text-truncate"><a [routerLink]="routes.clientsToursDetail+'/'+tour.tour.id">{{ (tour.tour.name | localizedName) ||
+                                    'N/A' }}</a></h5>
+                            <p class="fs-14 d-flex align-items-center">
+                                <i class="isax isax-location5 me-2"></i>
+                                {{ tour?.tour?.address?.city || 'N/A' }}, {{ tour?.tour?.address?.state || 'N/A' }}
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <p class="fs-14 text-gray-9 border-end pe-2 me-2 mb-0">
+                                <span class="me-1"><i class="ti ti-receipt text-primary"></i></span> {{ (getCategoryNameObj(tour?.tour) | localizedName) }}
+                            </p>
+                            <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{
+                                tour.tour.rating ?? '...' }}</span>
+                            <p class="fs-14">({{ tour.tour.rating ? ('toursList.reviews' | translate) : ('toursList.noReviews' | translate) }})</p>
+                        </div>
+                    </div>
+                    <p class="fs-14 border-bottom pb-3 mb-3">{{ (tour.tour.description | localizedName) || 'N/A' }}</p>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
+                        <div class="d-flex align-items-center">
+                            <span class="me-2"><i class="isax isax-calendar-tick text-gray-6"></i></span>
+                            <p class="fs-14 text-gray-9 border-end pe-2 me-2 mb-0">{{ tour.tour.duration || 'N/A' }}</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
+                                {{ 'toursList.priceFrom' | translate }}
+                                <span class="ms-1 fs-18 fw-semibold text-primary">{{ getLowestPrice(tour) }}</span>
+                            </h6>
+                            <a href="javascript:void(0);" class="avatar avatar-sm flex-shrink-0">
+                                <img src="assets/img/users/user-08.jpg" class="rounded-circle" alt="img">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Botón de agregar al carrito -->
+                    <div class="mt-3 pt-3 border-top">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="onSelectTour(tour)">
+                            <i class="isax isax-calendar-add me-1"></i>
+                            {{ 'toursList.checkAvailability' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /Tours List -->
+
+            <!-- Mensaje cuando no hay tours -->
+            <div class="col-12 text-center" *ngIf="tours.length === 0">
+                <div class="alert alert-info">
+                    <i class="isax isax-search-normal me-2"></i>
+                    {{ 'toursList.noToursFound' | translate }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination -->
+<nav class="pagination-nav" *ngIf="totalPages > 1">
+    <ul class="pagination justify-content-center">
+        <!-- Botón Anterior -->
+        <li class="page-item" [ngClass]="{ disabled: isFirstPage() }">
+            <a class="page-link" href="javascript:void(0);" (click)="onGoToPreviousPage()" aria-label="Previous">
+                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+            </a>
+        </li>
+
+        <!-- Números de página -->
+        <li class="page-item" *ngFor="let pageNum of getPageNumbers()" [ngClass]="{ active: pageNum === currentPage }">
+            <a class="page-link" href="javascript:void(0);" (click)="onGoToPage(pageNum)">{{ pageNum }}</a>
+        </li>
+
+        <!-- Botón Siguiente -->
+        <li class="page-item" [ngClass]="{ disabled: isLastPage() }">
+            <a class="page-link" href="javascript:void(0);" (click)="onGoToNextPage()" aria-label="Next">
+                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+        </li>
+    </ul>
+
+    <!-- Información de paginación -->
+    <div class="text-center mt-2">
+        <small class="text-muted">
+            {{ 'toursList.showing' | translate }} {{ (currentPage - 1) * size + 1 }} - {{ Math.min(currentPage * size, totalItems) }} {{ 'toursList.of' | translate }} {{ totalItems }} {{ 'toursList.tours' | translate }}
+        </small>
+    </div>
+</nav>
+<!-- /Pagination -->

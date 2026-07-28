@@ -1,0 +1,515 @@
+
+<!-- Page Wrapper -->
+<div class="content">
+    <div class="container">
+
+        <!-- Tour Search -->
+        <div class="card">
+            <div class="card-body">
+                <div class="banner-form">
+                    <form class="d-lg-flex">
+                        <div class="d-flex form-info">
+                            <!-- Select Ciudad -->
+                            <div class="form-item">
+                                <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.city' | translate }}</label>
+                                <select class="form-control" [(ngModel)]="selectedLocation" [ngModelOptions]="{standalone: true}" name="location">
+                                    <option [ngValue]="null" disabled selected>{{ 'searchComponent.selectCity' | translate }}</option>
+                                    <option *ngFor="let loc of locationsPublic" [ngValue]="loc">{{loc.cityName}} - {{ loc.stateName }}</option>
+                                </select>
+                            </div>
+                            <!-- Check In (range picker trigger) -->
+                            <div class="form-item position-relative">
+                                <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkIn' | translate }}</label>
+                                <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY"
+                                    [value]="bsRangeValue[0] | date: 'dd-MM-yyyy'" readonly />
+                                <input type="text"
+                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 1;"
+                                    bsDaterangepicker #drp="bsDaterangepicker"
+                                    [bsConfig]="{ displayMonths: 2, showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true, containerClass: 'theme-green' }"
+                                    container="body" [bsValue]="bsRangeValue"
+                                    [minDate]="minDate"
+                                    (bsValueChange)="onDateRangeChange($event)" />
+                            </div>
+                            <!-- Check Out (click opens range picker) -->
+                            <div class="form-item" (click)="drp.show()">
+                                <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.checkOut' | translate }}</label>
+                                <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY"
+                                    [value]="bsRangeValue[1] | date: 'dd-MM-yyyy'" readonly />
+                            </div>
+
+                            <div class="form-item dropdown">
+                                <div data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" role="menu">
+                                    <label class="form-label fs-14 text-default mb-1">{{ 'searchComponent.travellers' | translate }}</label>
+                                    <h5>{{ getTotalPersons() }} <span class="fw-normal fs-14">{{ getTotalPersons() === 1 ? ('searchComponent.person' | translate) : ('searchComponent.persons' | translate) }}</span></h5>
+                                </div>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-xl">
+                                    <h5 class="mb-3">{{ 'searchComponent.selectTravelers' | translate }}</h5>
+                                    <div class="mb-3 border br-10 info-item pb-1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.adult' | translate }}</label>
+                                                    <app-common-counter 
+                                                        [quantity]="travellersData.adults" 
+                                                        [min]="1" 
+                                                        [max]="999"
+                                                        (quantityChange)="updateTravellersCount('adults', $event)">
+                                                    </app-common-counter>
+                                                </div>
+                                                <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.children' | translate }} <span class="text-default fw-normal">( 2-11 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
+                                                    <app-common-counter 
+                                                        [quantity]="travellersData.children" 
+                                                        [min]="0" 
+                                                        [max]="999"
+                                                        (quantityChange)="updateTravellersCount('children', $event)">
+                                                    </app-common-counter>
+                                                </div>
+                                                <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                    <label class="form-label text-gray-9 mb-2">{{ 'searchComponent.infants' | translate }} <span class="text-default fw-normal">( 0-2 {{ 'searchComponent.yearsOld' | translate }} )</span></label>
+                                                    <app-common-counter 
+                                                        [quantity]="travellersData.infants" 
+                                                        [min]="0" 
+                                                        [max]="999"
+                                                        (quantityChange)="updateTravellersCount('infants', $event)">
+                                                    </app-common-counter>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <a href="javascript:void(0);" class="btn btn-light btn-sm me-2" data-bs-toggle="dropdown">Close</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button (click)="onSearch()" class="btn btn-primary search-btn rounded ms-2">{{ 'searchComponent.search' | translate }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Tour Search -->
+
+        <!-- Tour Types -->
+        <!-- <div class="mb-2">
+            <div class="mb-3">
+                <h5 class="mb-2">Choose type of Tours you are interested</h5>
+            </div>
+            <div class="row">
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-01.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Ecotourism</a></h6>
+                            <p class="fs-14">216 Hotels</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-02.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Adventure Tour</a></h6>
+                            <p class="fs-14">569 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-03.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Group Tours</a></h6>
+                            <p class="fs-14">129 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-04.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Beach Tours</a></h6>
+                            <p class="fs-14">600 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-05.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Historical Tours</a></h6>
+                            <p class="fs-14">200 tours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-flex align-items-center hotel-type-item mb-3">
+                        <a [routerLink]="routes.tourGrid" class="avatar avatar-lg">
+                            <img src="assets/img/tours/tours-06.jpg" class="rounded-circle" alt="img">
+                        </a>
+                        <div class="ms-2">
+                            <h6 class="fs-16 fw-medium"><a [routerLink]="routes.tourGrid">Summer Trip</a></h6>
+                            <p class="fs-14">200 tours</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- /Tour Types -->
+
+        <div class="row">
+
+            <!-- Sidebar -->
+            <div class="col-xl-3 col-lg-3 ">
+                <div class="card filter-sidebar mb-4 mb-lg-0 theiaStickySidebar">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5>{{ 'filters.filtersTitle' | translate }}</h5>
+                        <a href="javascript:void(0);" class="fs-14 link-primary" (click)="resetFilters()">{{ 'filters.resetFilters' | translate }}</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <form>
+                            <div class="filter-header border-bottom p-3">
+                                <h6 class="mb-0 fw-medium">{{ 'filters.generalSearch' | translate }}</h6>
+                            </div>
+                            <div class="p-3 border-bottom pb-4">
+                                <div class="search-box">
+                                    <span class="search-icon">
+                                        <i class="isax isax-search-normal"></i>
+                                    </span>
+                                    <input type="text" class="form-control" [placeholder]="'filters.searchTours' | translate"
+                                        [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+                            <div class="accordion accordion-list">
+
+                                <!-- Categorías -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-hotel" aria-expanded="true" aria-controls="accordion-hotel" role="button">
+                                            <i class="isax isax-buildings me-2 text-primary"></i>{{ 'filters.categories' | translate }}
+                                        </div>
+                                    </div>
+                                    <div id="accordion-hotel" class="accordion-collapse collapse show">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let c of categories; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'cat_'+i" 
+                                                        [checked]="selectedCategoryIds.includes(c.id)"
+                                                        (change)="toggleSelection(selectedCategoryIds, c.id)">
+                                                    <label class="form-check-label ms-2" [for]="'cat_'+i">
+                                                        {{ c.name | localizedName }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SubCategorías -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0" [ngClass]="{'collapsed': !isSubCategoriesAccordionOpen}" data-bs-toggle="collapse" data-bs-target="#accordion-subcats" [attr.aria-expanded]="isSubCategoriesAccordionOpen ? 'true' : 'false'" role="button">
+                                            <i class="isax isax-category-2 me-2 text-primary"></i>{{ 'filters.subcategories' | translate }}
+                                        </div>
+                                    </div>
+                                    <div id="accordion-subcats" class="accordion-collapse collapse" [ngClass]="{'show': isSubCategoriesAccordionOpen}">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let s of filteredSubCategories; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'subcat_'+i" 
+                                                        [checked]="selectedSubCategories.includes(s.code || s.name)"
+                                                        (change)="toggleSubCategory(s)">
+                                                    <label class="form-check-label ms-2" [for]="'subcat_'+i">
+                                                        {{ s.name | localizedName }}
+                                                    </label>
+                                                </div>
+                                                <div *ngIf="filteredSubCategories.length === 0" class="text-muted fs-14">
+                                                    No hay subcategorías disponibles
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tags -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-tags" aria-expanded="false" aria-controls="accordion-tags" role="button">
+                                            <i class="isax isax-ranking me-2 text-primary"></i>Tags
+                                        </div>
+                                    </div>
+                                    <div id="accordion-tags" class="accordion-collapse collapse">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let t of tags; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'tag_'+i" 
+                                                        [checked]="selectedTags.includes(t.id)"
+                                                        (change)="toggleSelection(selectedTags, t.id)">
+                                                    <label class="form-check-label ms-2" [for]="'tag_'+i">
+                                                        {{ t.name | localizedName }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Horarios -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-horarios" aria-expanded="false" aria-controls="accordion-horarios" role="button">
+                                            <i class="isax isax-clock me-2 text-primary"></i>{{ 'filters.timeOfDay' | translate }}
+                                        </div>
+                                    </div>
+                                    <div id="accordion-horarios" class="accordion-collapse collapse">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let h of scheduleOptions; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'horario_'+i" 
+                                                        [checked]="selectedSchedules.includes(h.value)"
+                                                        (change)="toggleSelection(selectedSchedules, h.value)">
+                                                    <label class="form-check-label ms-2" [for]="'horario_'+i">
+                                                        {{ h.label | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Duraciones -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-duraciones" aria-expanded="false" aria-controls="accordion-duraciones" role="button">
+                                            <i class="isax isax-timer-1 me-2 text-primary"></i>{{ 'filters.duration' | translate }}
+                                        </div>
+                                    </div>
+                                    <div id="accordion-duraciones" class="accordion-collapse collapse">
+                                        <div class="accordion-body pt-2">
+                                            <div class="tag-scroll" style="max-height: 160px; overflow: auto;">
+                                                <div class="form-check d-flex align-items-center ps-0 mb-2" *ngFor="let d of durationOptions; let i = index">
+                                                    <input class="form-check-input ms-0 mt-0" type="checkbox" [id]="'duracion_'+i" 
+                                                        [checked]="selectedDurations.includes(d.value)"
+                                                        (change)="toggleSelection(selectedDurations, d.value)">
+                                                    <label class="form-check-label ms-2" [for]="'duracion_'+i">
+                                                        {{ d.label | translate }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Rango de Precio -->
+                                <div class="accordion-item border-bottom p-3">
+                                    <div class="accordion-header">
+                                        <div class="accordion-button p-0 collapsed" data-bs-toggle="collapse"
+                                            data-bs-target="#accordion-popular" aria-expanded="false"
+                                            aria-controls="accordion-popular" role="button">
+                                            <i class="isax isax-coin me-2 text-primary"></i>{{ 'filters.priceRange' | translate }}
+                                        </div>
+                                    </div>
+                                    <div id="accordion-popular" class="accordion-collapse collapse">
+                                        <div class="accordion-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <div class="input-group input-group-sm me-2">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" [(ngModel)]="minPriceFormatted" 
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </div>
+                                                <div class="input-group input-group-sm ms-2">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" [(ngModel)]="maxPriceFormatted" 
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </div>
+                                            </div>
+                                            <div class="filter-range mt-3">
+                                                <div class="d-flex align-items-center">
+                                                    <input type="range" class="form-range" min="0" max="5000000"
+                                                        step="10000" [(ngModel)]="minPrice"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="onMinPriceChange($event)"
+                                                        (change)="onMinPriceChange($event)">
+                                                </div>
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <input type="range" class="form-range" min="0" max="5000000"
+                                                        step="10000" [(ngModel)]="maxPrice"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="onMaxPriceChange($event)"
+                                                        (change)="onMaxPriceChange($event)">
+                                                </div>
+                                            </div>
+                                            <div class="filter-range-amount">
+                                                <p class="fs-14">{{ 'filters.range' | translate }} <span class="text-gray-9 fw-medium">${{ minPrice | number:'1.0-0' }} - ${{ maxPrice | number:'1.0-0' }}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Botón de búsqueda -->
+                            <div class="p-3 border-top">
+                                <button type="button" class="btn btn-primary w-100" (click)="onSearchFromFilters()">
+                                    <i class="isax isax-search-normal me-2"></i>
+                                    {{ 'toursList.search' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /Sidebar -->
+
+            <div class="col-xl-9 col-lg-8">
+                <div class="theiaStickySidebar">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <h6 class="mb-3">{{ tours.length }} {{ 'filters.toursFound' | translate }}</h6>
+                        <div class="d-flex align-items-center flex-wrap">
+                            <div class="list-item d-flex align-items-center mb-3">
+                                <a href="javascript:void(0);" class="list-icon me-2"
+                                    [ngClass]="{ active: viewMode === 'grid' }" (click)="setViewMode('grid')">
+                                    <i class="isax isax-grid-1"></i>
+                                </a>
+                                <a href="javascript:void(0);" class="list-icon me-2"
+                                    [ngClass]="{ active: viewMode === 'list' }" (click)="setViewMode('list')">
+                                    <i class="isax isax-firstline"></i>
+                                </a>
+                            </div>
+                            <div class="dropdown mb-3">
+                                <a href="javascript:void(0);" class="dropdown-toggle py-2" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <span class="fw-medium text-gray-9">{{ 'toursList.sortBy' | translate }}</span>{{ 'toursList.recommended' | translate }}
+                                </a>
+                                <div class="dropdown-menu dropdown-sm">
+                                    <form>
+                                        <h6 class="fw-medium fs-16 mb-3">{{ 'toursList.sortByShort' | translate }}</h6>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend1" checked>
+                                            <label class="form-check-label ms-2" for="recommend1">{{ 'toursList.recommended' | translate }}</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend2">
+                                            <label class="form-check-label ms-2" for="recommend2">{{ 'toursList.priceLowToHigh' | translate }}</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend3">
+                                            <label class="form-check-label ms-2" for="recommend3">{{ 'toursList.priceHighToLow' | translate }}</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend4">
+                                            <label class="form-check-label ms-2" for="recommend4">{{ 'toursList.newest' | translate }}</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend5">
+                                            <label class="form-check-label ms-2" for="recommend5">{{ 'toursList.ratings' | translate }}</label>
+                                        </div>
+                                        <div class="form-check d-flex align-items-center ps-0 mb-0">
+                                            <input class="form-check-input ms-0 mt-0" name="recommend" type="checkbox"
+                                                id="recommend6">
+                                            <label class="form-check-label ms-2" for="recommend6">{{ 'toursList.reviews' | translate }}</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-end border-top pt-3 mt-3">
+                                            <a href="javascript:void(0);" class="btn btn-light btn-sm me-2">{{ 'toursList.reset' | translate }}</a>
+                                            <button type="submit" class="btn btn-primary btn-sm">{{ 'toursList.apply' | translate }}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Grid View -->
+                    <div *ngIf="viewMode === 'grid'">
+                        <app-tour-grid-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
+                            [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
+                            [initialFavoriteStates]="favoriteStates" [categories]="categories"
+                            (toggleFavorite)="onToggleFavoriteFromGrid($event)" (goToPage)="onGoToPageFromGrid($event)"
+                            (goToPreviousPage)="onGoToPreviousPageFromGrid()" (goToNextPage)="onGoToNextPageFromGrid()"
+                            (selectTour)="selectTour($event)">
+                        </app-tour-grid-view>
+                    </div>
+ 
+                    <!-- List View -->
+                    <div *ngIf="viewMode === 'list'">
+                        <app-tour-list-view [tours]="tours" [loading]="loading" [totalItems]="totalItems"
+                            [totalPages]="totalPages" [currentPage]="currentPage" [size]="size"
+                            [initialFavoriteStates]="favoriteStates" [categories]="categories"
+                            (toggleFavorite)="onToggleFavorite($event)" (goToPage)="onGoToPageFromList($event)"
+                            (goToPreviousPage)="onGoToPreviousPageFromList()" (goToNextPage)="onGoToNextPageFromList()"
+                            (selectTour)="selectTour($event)">
+                        </app-tour-list-view>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav class="pagination-nav" *ngIf="totalPages > 1">
+                        <ul class="pagination justify-content-center">
+                            <!-- Botón Anterior -->
+                            <li class="page-item" [ngClass]="{ disabled: isFirstPage() }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                                </a>
+                            </li>
+
+                            <!-- Números de página -->
+                            <li class="page-item" *ngFor="let pageNum of getPageNumbers()"
+                                [ngClass]="{ active: pageNum === currentPage }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToPage(pageNum)">{{ pageNum
+                                    }}</a>
+                            </li>
+
+                            <!-- Botón Siguiente -->
+                            <li class="page-item" [ngClass]="{ disabled: isLastPage() }">
+                                <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()"
+                                    aria-label="Next">
+                                    <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Información de paginación -->
+                        <div class="text-center mt-2">
+                            <small class="text-muted">
+                                Mostrando {{ (currentPage - 1) * size + 1 }} - {{ Math.min(currentPage * size,
+                                totalItems) }} de {{ totalItems }} tours
+                            </small>
+                        </div>
+                    </nav>
+                    <!-- /Pagination -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+<!-- Floating Cart -->
+<!-- Debug temporal -->
+<!-- <div *ngIf="checkIn && checkOut" style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: red; color: white; padding: 10px; font-size: 12px;">
+      Cart Visible: {{ isCartVisible }}<br>
+      CheckIn: {{ checkIn }}<br>
+      CheckOut: {{ checkOut }}<br>
+      Days: {{ daySelections.length }}<br>
+      Items: {{ cartSummary?.totalItems || 0 }}
+    </div> -->
+
+<app-floating-cart [isVisible]="isCartVisible" (daySelected)="onDaySelected($event)"
+    (cartToggled)="onCartToggled($event)" (clearCart)="onCartCleared()">
+</app-floating-cart>
