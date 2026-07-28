@@ -351,7 +351,17 @@ export class BookingManagementConfigService {
           visible: (row) => {
             const isActionable = row.status === 'Pending' || row.status === 'PENDING'
               || row.status === 'RESCHEDULED' || row.status === 'Rescheduled';
-            return isActionable;
+            if (!isActionable) return false;
+            // TC-007 (#194 scope extra): esconder el boton si el scheduleDate ya paso.
+            // El endpoint backend tambien lo rechaza con 400. La reserva debe pasar a
+            // NO_SHOW via job, no via decline manual.
+            const rawDate: string | undefined = row.rawCheckInDate;
+            if (!rawDate) return true;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const scheduleDate = new Date(rawDate + 'T00:00:00');
+            scheduleDate.setHours(0, 0, 0, 0);
+            return scheduleDate.getTime() >= today.getTime();
           }
         }
       ],
