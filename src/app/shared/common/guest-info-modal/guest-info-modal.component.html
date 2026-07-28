@@ -53,8 +53,23 @@
               </div>
           </div>
 
+          <!-- TC-009 (#196): documento con tipo + numero. documentType persiste en tourist_profile. -->
           <div class="row">
-              <div class="col-md-6 mb-3">
+              <div class="col-md-3 mb-3">
+                  <label class="form-label text-nowrap" for="documentType">Tipo</label>
+                  <select id="documentType" formControlName="documentType" class="form-control form-control-lg">
+                      <option value="CC">CC</option>
+                      <option value="CE">CE</option>
+                      <option value="PP">PP</option>
+                      <option value="NIT">NIT</option>
+                      <option value="TI">TI</option>
+                  </select>
+                  <div *ngIf="guestInfoForm.controls['documentType'].invalid && (guestInfoForm.controls['documentType'].dirty || guestInfoForm.controls['documentType'].touched)" class="text-danger mt-1 fs-14">
+                      <div *ngIf="guestInfoForm.controls['documentType'].errors?.['required']">Tipo de documento es requerido</div>
+                  </div>
+              </div>
+
+              <div class="col-md-3 mb-3">
                   <label class="form-label text-nowrap" for="documentNumber">Número de Documento</label>
                   <div class="input-icon">
                       <span class="input-icon-addon">
