@@ -36,7 +36,6 @@ import { PendingActionService, PendingCartAction } from "../../services/pending-
 import { I18nFieldService } from "../../services/i18n-field.service";
 import { ReservationService } from "../../services/reservation.service";
 import { RescheduleConfirmationModalComponent } from "../reschedule-confirmation-modal/reschedule-confirmation-modal.component";
-import { GuestInfoModalComponent } from "../guest-info-modal/guest-info-modal.component";
 import { TouristService } from "../../services/tourist.service";
 import { RequestProvidersService } from "../../../pages/providers/requestproviders/request-providers.service";
 import { TranslateModule } from "@ngx-translate/core";
@@ -963,73 +962,15 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     this.isProcessing = true;
 
     try {
-      if (this.shouldConsumeService) {
-        console.log("🛒 Agregando tour al carrito con backend...");
-        
-        // Agregar item al carrito con persistencia en backend
-        await this.cartService.addItemToCartWithBackend(cartItem);
-        
-        console.log("✅ Tour agregado exitosamente al carrito");
-        
-        // Notificar al componente padre que el tour fue agregado
-        this.data.tourAdded(cartItem);
-        
-        // Cerrar modal
-        this.closeModal();
-      } else {
-        console.log("⚠️ Abriendo modal de información de huésped...");
-        
-        const guestModalRef = this.dialog.open(GuestInfoModalComponent, {
-          width: '700px',
-          maxWidth: '95vw',
-          data: { cartItem }
-        });
-
-        guestModalRef.afterClosed().subscribe(result => {
-          this.isProcessing = false;
-          
-          if (result && typeof result === 'object') {
-            const { profileSuccess, photoSuccess, photoAttempted } = result;
-            
-            let htmlContent = '<div style="text-align: left; margin-top: 10px; font-size: 1.1rem;">';
-            if (photoAttempted) {
-              htmlContent += `<p>${photoSuccess ? '✅' : '❌'} <strong>Foto de perfil:</strong> ${photoSuccess ? 'Cargada correctamente' : 'Error al cargar'}</p>`;
-            }
-            htmlContent += `<p>${profileSuccess ? '✅' : '❌'} <strong>Datos del perfil:</strong> ${profileSuccess ? 'Actualizados correctamente' : 'Error al actualizar'}</p>`;
-            htmlContent += '</div>';
-
-            const isTotalSuccess = (!photoAttempted || photoSuccess) && profileSuccess;
-
-            // Forzamos el Swal a que se dispare con un target global o específico si es necesario
-            setTimeout(() => {
-              Swal.fire({
-                title: isTotalSuccess ? '¡Proceso Completado!' : 'Resultado de la actualización',
-                html: htmlContent,
-                icon: isTotalSuccess ? 'success' : (profileSuccess || photoSuccess ? 'warning' : 'error'),
-                confirmButtonText: 'Entendido',
-                confirmButtonColor: '#3085d6',
-                allowOutsideClick: false,
-                backdrop: true,
-                // Intentar forzar que se renderice en el body pero con un z-index superior
-                target: 'body' 
-              }).then(() => {
-                if (profileSuccess) {
-                  this.refreshProfileCheck();
-                }
-              });
-            }, 150);
-
-          } else if (result === true) {
-            this.refreshProfileCheck();
-          }
-        });
-
-
-
-
-
-      }
-      
+      // TC-013 (#212): siempre agregar al carrito sin bloquear con el modal de perfil.
+      // El modal de completar perfil se dispara desde cart-summary cuando ya hay
+      // intencion de compra. shouldConsumeService queda para otros usos pero ya no
+      // gatea el flujo aca.
+      console.log("🛒 Agregando tour al carrito con backend...");
+      await this.cartService.addItemToCartWithBackend(cartItem);
+      console.log("✅ Tour agregado exitosamente al carrito");
+      this.data.tourAdded(cartItem);
+      this.closeModal();
     } catch (error: any) {
       console.error("❌ Error agregando tour al carrito:", error);
       console.error("❌ Error status:", error?.status);

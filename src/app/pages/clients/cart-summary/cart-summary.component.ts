@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { GuestInfoModalComponent } from '../../../shared/common/guest-info-modal/guest-info-modal.component';
 import { Subject, takeUntil, take, firstValueFrom } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
@@ -140,7 +142,8 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     private countryService: CountryService,
     private departmentService: DepartmentService,
     private cityService: CityService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -149,6 +152,34 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadUserCredits();
     this.loadUserProfile();
     this.getCountries();
+    this.openGuestModalIfProfileIncomplete();
+  }
+
+  /**
+   * TC-013 (#212): al entrar al checkout, si el perfil de turista aun no tiene
+   * los campos minimos (address-complete = false), abrir el guest-info-modal
+   * para que el usuario complete su informacion aca (antes se disparaba al
+   * agregar el primer tour al carrito, muy temprano y bloqueante).
+   */
+  private openGuestModalIfProfileIncomplete(): void {
+    this.touristService.checkAddressComplete()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (!res?.addressComplete) {
+            console.log('CartSummary: perfil incompleto -> abriendo guest-info-modal');
+            const ref = this.dialog.open(GuestInfoModalComponent, {
+              width: '700px',
+              maxWidth: '95vw',
+              data: {}
+            });
+            ref.afterClosed()
+              .pipe(takeUntil(this.destroy$))
+              .subscribe(() => this.loadUserProfile());
+          }
+        },
+        error: (err) => console.error('CartSummary: error checkAddressComplete', err)
+      });
   }
 
   getCountries() {
