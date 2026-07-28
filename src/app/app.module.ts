@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { ErrorHandler, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
@@ -13,6 +13,7 @@ import { provideAnimationsAsync } from "@angular/platform-browser/animations/asy
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AuthInterceptor } from "./core/interceptors/auth.interceptor";
+import { ChunkLoadErrorHandler } from "./core/chunk-load-error-handler";
 
 // Importaciones para Firebase
 import { initializeApp } from "firebase/app";
@@ -79,6 +80,7 @@ export const auth = getAuth(app);
       useClass: AuthInterceptor,
       multi: true,
     },
+    { provide: ErrorHandler, useClass: ChunkLoadErrorHandler },
     provideHttpClient(withInterceptorsFromDi()),
   ],
   bootstrap: [AppComponent],
