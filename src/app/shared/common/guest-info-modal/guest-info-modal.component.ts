@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { TranslateModule } from "@ngx-translate/core";
 import Swal from "sweetalert2";
 
 import { Country } from '../../dto/country.dto';
@@ -25,7 +26,8 @@ import { AuthService } from "../../../core/services/auth.service";
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ]
 })
 export class GuestInfoModalComponent implements OnInit {
