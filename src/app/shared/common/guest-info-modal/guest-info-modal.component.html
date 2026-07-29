@@ -1,181 +1,180 @@
 <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; max-height: 90vh; display: flex; flex-direction: column;">
   <div class="modal-header border-bottom p-4">
-      <h5 class="modal-title fw-bold text-dark mb-0">Información del Huésped</h5>
-      <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      <h5 class="modal-title fw-bold text-dark mb-0">{{ 'guestInfoModal.title' | translate }}</h5>
+      <button type="button" class="btn-close" (click)="closeModal()" [attr.aria-label]="'guestInfoModal.close' | translate"></button>
   </div>
-  
+
   <div class="modal-body p-4" style="overflow-y: auto;">
       <div *ngIf="isLoadingData" class="d-flex flex-column align-items-center justify-content-center py-5">
           <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-              <span class="visually-hidden">Cargando datos...</span>
+              <span class="visually-hidden">{{ 'guestInfoModal.loadingData' | translate }}</span>
           </div>
-          <h5 class="mt-3 text-muted">Cargando información...</h5>
+          <h5 class="mt-3 text-muted">{{ 'guestInfoModal.loadingInfo' | translate }}</h5>
       </div>
 
       <form *ngIf="!isLoadingData" [formGroup]="guestInfoForm" (ngSubmit)="submitForm()">
-          <h6 class="mb-3 text-primary border-bottom pb-2">Datos Personales</h6>
+          <h6 class="mb-3 text-primary border-bottom pb-2">{{ 'guestInfoModal.sections.personalData' | translate }}</h6>
 
           <div class="row">
               <div class="col-md-6 mb-3">
-                  <label class="form-label" for="firstName">Nombre</label>
+                  <label class="form-label" for="firstName">{{ 'guestInfoModal.firstName' | translate }}</label>
                   <div class="input-icon">
                       <span class="input-icon-addon">
                           <i class="fa-regular fa-user"></i>
                       </span>
                       <input type="text" id="firstName" formControlName="firstName"
-                          class="form-control form-control-lg" placeholder="Ingresa tu nombre"
+                          class="form-control form-control-lg" [placeholder]="'guestInfoModal.firstNamePlaceholder' | translate"
                           minlength="2" maxlength="50">
                   </div>
                   <div *ngIf="guestInfoForm.controls['firstName'].invalid && (guestInfoForm.controls['firstName'].dirty || guestInfoForm.controls['firstName'].touched)"
                       class="text-danger mt-1 fs-14">
-                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['required']">Nombre es requerido</div>
-                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['minlength']">Nombre debe tener al menos 2 caracteres</div>
-                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['maxlength']">Nombre no puede tener más de 50 caracteres</div>
+                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['required']">{{ 'guestInfoModal.errors.firstNameRequired' | translate }}</div>
+                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['minlength']">{{ 'guestInfoModal.errors.firstNameMinLength' | translate }}</div>
+                      <div *ngIf="guestInfoForm.controls['firstName'].errors?.['maxlength']">{{ 'guestInfoModal.errors.firstNameMaxLength' | translate }}</div>
                   </div>
               </div>
 
               <div class="col-md-6 mb-3">
-                  <label class="form-label" for="lastName">Apellido</label>
+                  <label class="form-label" for="lastName">{{ 'guestInfoModal.lastName' | translate }}</label>
                   <div class="input-icon">
                       <span class="input-icon-addon">
                           <i class="fa-regular fa-user"></i>
                       </span>
                       <input type="text" id="lastName" formControlName="lastName"
-                          class="form-control form-control-lg" placeholder="Ingresa tus apellidos"
+                          class="form-control form-control-lg" [placeholder]="'guestInfoModal.lastNamePlaceholder' | translate"
                           minlength="2" maxlength="50">
                   </div>
                   <div *ngIf="guestInfoForm.controls['lastName'].invalid && (guestInfoForm.controls['lastName'].dirty || guestInfoForm.controls['lastName'].touched)"
                       class="text-danger mt-1 fs-14">
-                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['required']">Apellido es requerido</div>
-                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['minlength']">Apellido debe tener al menos 2 caracteres</div>
-                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['maxlength']">Apellido no puede tener más de 50 caracteres</div>
+                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['required']">{{ 'guestInfoModal.errors.lastNameRequired' | translate }}</div>
+                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['minlength']">{{ 'guestInfoModal.errors.lastNameMinLength' | translate }}</div>
+                      <div *ngIf="guestInfoForm.controls['lastName'].errors?.['maxlength']">{{ 'guestInfoModal.errors.lastNameMaxLength' | translate }}</div>
                   </div>
               </div>
           </div>
 
           <!-- TC-009 (#196): documento con tipo + numero. documentType persiste en tourist_profile. -->
           <div class="row">
-              <div class="col-md-3 mb-3">
-                  <label class="form-label text-nowrap" for="documentType">Tipo</label>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label text-nowrap" for="documentType">{{ 'guestInfoModal.documentType' | translate }}</label>
                   <select id="documentType" formControlName="documentType" class="form-control form-control-lg">
-                      <option value="CC">CC</option>
-                      <option value="CE">CE</option>
-                      <option value="PP">PP</option>
-                      <option value="NIT">NIT</option>
-                      <option value="TI">TI</option>
+                      <option value="CC">{{ 'guestInfoModal.documentTypes.CC' | translate }}</option>
+                      <option value="CE">{{ 'guestInfoModal.documentTypes.CE' | translate }}</option>
+                      <option value="PP">{{ 'guestInfoModal.documentTypes.PP' | translate }}</option>
+                      <option value="PPT">{{ 'guestInfoModal.documentTypes.PPT' | translate }}</option>
+                      <option value="NIT">{{ 'guestInfoModal.documentTypes.NIT' | translate }}</option>
+                      <option value="TI">{{ 'guestInfoModal.documentTypes.TI' | translate }}</option>
                   </select>
                   <div *ngIf="guestInfoForm.controls['documentType'].invalid && (guestInfoForm.controls['documentType'].dirty || guestInfoForm.controls['documentType'].touched)" class="text-danger mt-1 fs-14">
-                      <div *ngIf="guestInfoForm.controls['documentType'].errors?.['required']">Tipo de documento es requerido</div>
+                      <div *ngIf="guestInfoForm.controls['documentType'].errors?.['required']">{{ 'guestInfoModal.errors.documentTypeRequired' | translate }}</div>
                   </div>
               </div>
 
-              <div class="col-md-3 mb-3">
-                  <label class="form-label text-nowrap" for="documentNumber">Número de Documento</label>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label text-nowrap" for="documentNumber">{{ 'guestInfoModal.documentNumber' | translate }}</label>
                   <div class="input-icon">
                       <span class="input-icon-addon">
                           <i class="fa-regular fa-id-card"></i>
                       </span>
-                      <input type="text" id="documentNumber" formControlName="documentNumber" class="form-control form-control-lg" placeholder="Ingresa tu documento" minlength="6">
+                      <input type="text" id="documentNumber" formControlName="documentNumber" class="form-control form-control-lg" [placeholder]="'guestInfoModal.documentNumberPlaceholder' | translate" minlength="6">
                   </div>
                   <div *ngIf="guestInfoForm.controls['documentNumber'].invalid && (guestInfoForm.controls['documentNumber'].dirty || guestInfoForm.controls['documentNumber'].touched)" class="text-danger mt-1 fs-14">
-                      <div *ngIf="guestInfoForm.controls['documentNumber'].errors?.['required']">Número de documento es requerido</div>
-                      <div *ngIf="guestInfoForm.controls['documentNumber'].errors?.['minlength']">Debe tener al menos 6 caracteres</div>
+                      <div *ngIf="guestInfoForm.controls['documentNumber'].errors?.['required']">{{ 'guestInfoModal.errors.documentNumberRequired' | translate }}</div>
+                      <div *ngIf="guestInfoForm.controls['documentNumber'].errors?.['minlength']">{{ 'guestInfoModal.errors.documentNumberMinLength' | translate }}</div>
                   </div>
               </div>
 
-              <div class="col-md-6 mb-3">
-                  <label class="form-label text-nowrap" for="phone">Teléfono de contacto</label>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label text-nowrap" for="phone">{{ 'guestInfoModal.phone' | translate }}</label>
                   <div class="input-icon">
                       <span class="input-icon-addon">
                           <i class="fa-solid fa-phone"></i>
                       </span>
-                      <input type="text" id="phone" formControlName="phone" class="form-control form-control-lg" placeholder="1234567890" minlength="10">
+                      <input type="text" id="phone" formControlName="phone" class="form-control form-control-lg" [placeholder]="'guestInfoModal.phonePlaceholder' | translate" minlength="10">
                   </div>
                   <div *ngIf="guestInfoForm.controls['phone'].invalid && (guestInfoForm.controls['phone'].dirty || guestInfoForm.controls['phone'].touched)" class="text-danger mt-1 fs-14">
-                      <div *ngIf="guestInfoForm.controls['phone'].errors?.['required']">Teléfono es requerido</div>
-                      <div *ngIf="guestInfoForm.controls['phone'].errors?.['minlength']">Debe tener al menos 10 dígitos</div>
+                      <div *ngIf="guestInfoForm.controls['phone'].errors?.['required']">{{ 'guestInfoModal.errors.phoneRequired' | translate }}</div>
+                      <div *ngIf="guestInfoForm.controls['phone'].errors?.['minlength']">{{ 'guestInfoModal.errors.phoneMinLength' | translate }}</div>
                   </div>
               </div>
           </div>
 
           <div class="mb-3">
-              <label class="form-label" for="email">Correo electrónico</label>
+              <label class="form-label" for="email">{{ 'guestInfoModal.email' | translate }}</label>
               <div class="input-icon">
                   <span class="input-icon-addon">
                       <i class="fa-regular fa-envelope"></i>
                   </span>
                   <input type="email" id="email" formControlName="email"
-                      class="form-control form-control-lg" placeholder="Ingresa tu correo">
+                      class="form-control form-control-lg" [placeholder]="'guestInfoModal.emailPlaceholder' | translate">
               </div>
               <div *ngIf="guestInfoForm.controls['email'].invalid && (guestInfoForm.controls['email'].dirty || guestInfoForm.controls['email'].touched)"
                   class="text-danger mt-1 fs-14">
-                  <div *ngIf="guestInfoForm.controls['email'].errors?.['required']">Correo es requerido</div>
-                  <div *ngIf="guestInfoForm.controls['email'].errors?.['email']">Correo no es válido</div>
+                  <div *ngIf="guestInfoForm.controls['email'].errors?.['required']">{{ 'guestInfoModal.errors.emailRequired' | translate }}</div>
+                  <div *ngIf="guestInfoForm.controls['email'].errors?.['email']">{{ 'guestInfoModal.errors.emailInvalid' | translate }}</div>
               </div>
           </div>
 
-          <h6 class="mt-4 mb-3 text-primary border-bottom pb-2">Ubicación y Foto</h6>
+          <h6 class="mt-4 mb-3 text-primary border-bottom pb-2">{{ 'guestInfoModal.sections.locationAndPhoto' | translate }}</h6>
 
           <div class="mb-3">
-              <label class="form-label" for="country">País</label>
+              <label class="form-label" for="country">{{ 'guestInfoModal.country' | translate }}</label>
               <select class="form-select form-control-lg" formControlName="country" id="country" (change)="onCountryChange($event)">
-                  <option value="">Selecciona país</option>
+                  <option value="">{{ 'guestInfoModal.selectCountry' | translate }}</option>
                   <option *ngFor="let c of countries" [value]="c.id">
                       {{c.name}}
                   </option>
               </select>
               <div *ngIf="guestInfoForm.controls['country'].invalid && (guestInfoForm.controls['country'].dirty || guestInfoForm.controls['country'].touched)" class="text-danger mt-1 fs-14">
-                  <div *ngIf="guestInfoForm.controls['country'].errors?.['required']">País es requerido</div>
+                  <div *ngIf="guestInfoForm.controls['country'].errors?.['required']">{{ 'guestInfoModal.errors.countryRequired' | translate }}</div>
               </div>
           </div>
 
           <div class="row">
               <div class="col-md-6 mb-3">
-                  <label class="form-label" for="department">Estado/Provincia</label>
+                  <label class="form-label" for="department">{{ 'guestInfoModal.department' | translate }}</label>
                   <select class="form-select form-control-lg" formControlName="department" id="department" (change)="onDepartmentChange($event)">
-                      <option value="">Selecciona estado/provincia</option>
+                      <option value="">{{ 'guestInfoModal.selectDepartment' | translate }}</option>
                       <option *ngFor="let d of departments" [value]="d.id">
                           {{d.name}}
                       </option>
                   </select>
                   <div *ngIf="guestInfoForm.controls['department'].invalid && (guestInfoForm.controls['department'].dirty || guestInfoForm.controls['department'].touched)" class="text-danger mt-1 fs-14">
-                      <div *ngIf="guestInfoForm.controls['department'].errors?.['required']">Estado/provincia es requerido</div>
+                      <div *ngIf="guestInfoForm.controls['department'].errors?.['required']">{{ 'guestInfoModal.errors.departmentRequired' | translate }}</div>
                   </div>
               </div>
 
               <div class="col-md-6 mb-3">
-                  <label class="form-label" for="city">Ciudad</label>
+                  <label class="form-label" for="city">{{ 'guestInfoModal.city' | translate }}</label>
                   <select class="form-select form-control-lg" formControlName="city" id="city">
-                      <option value="">Selecciona ciudad</option>
+                      <option value="">{{ 'guestInfoModal.selectCity' | translate }}</option>
                       <option *ngFor="let ci of cities" [value]="ci.id">
                           {{ci.name}}
                       </option>
                   </select>
                   <div *ngIf="guestInfoForm.controls['city'].invalid && (guestInfoForm.controls['city'].dirty || guestInfoForm.controls['city'].touched)" class="text-danger mt-1 fs-14">
-                      <div *ngIf="guestInfoForm.controls['city'].errors?.['required']">Ciudad es requerida</div>
+                      <div *ngIf="guestInfoForm.controls['city'].errors?.['required']">{{ 'guestInfoModal.errors.cityRequired' | translate }}</div>
                   </div>
               </div>
           </div>
 
           <div class="mb-4">
-              <label class="form-label" for="photo">Foto</label>
+              <label class="form-label" for="photo">{{ 'guestInfoModal.photo' | translate }}</label>
               <div class="d-flex align-items-center gap-3">
                   <div class="position-relative">
                       <input type="file" id="photo" class="form-control form-control-lg" (change)="onFileChange($event)" accept="image/*" style="padding-top: 0.6rem;">
                   </div>
                   <div *ngIf="filePreview" class="rounded overflow-hidden shadow-sm" style="width: 50px; height: 50px; border: 1px solid #e0e0e0;">
-                      <img [src]="filePreview" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                      <img [src]="filePreview" [alt]="'guestInfoModal.photoPreview' | translate" style="width: 100%; height: 100%; object-fit: cover;">
                   </div>
               </div>
-              <div *ngIf="guestInfoForm.controls['photo'].invalid && (guestInfoForm.controls['photo'].dirty || guestInfoForm.controls['photo'].touched)" class="text-danger mt-1 fs-14">
-                  <div *ngIf="guestInfoForm.controls['photo'].errors?.['required']">La foto es requerida</div>
-              </div>
+              <small class="text-muted d-block mt-1">{{ 'guestInfoModal.photoOptional' | translate }}</small>
           </div>
 
           <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-              <button type="button" class="btn btn-light btn-lg" (click)="closeModal()" [disabled]="loading">Cancelar</button>
+              <button type="button" class="btn btn-light btn-lg" (click)="closeModal()" [disabled]="loading">{{ 'guestInfoModal.cancel' | translate }}</button>
               <button type="submit" class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" [disabled]="loading || (guestInfoForm.touched && guestInfoForm.invalid)">
-                  <span>Continuar</span>
+                  <span>{{ 'guestInfoModal.continue' | translate }}</span>
                   <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></div>
               </button>
           </div>
