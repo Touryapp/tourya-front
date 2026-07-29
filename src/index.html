@@ -26,6 +26,64 @@
   <!-- Wompi Widget Script -->
   <script type="text/javascript" src="https://checkout.wompi.co/widget.js"></script>
 
+  <!--
+    TC-008 (#195): rescate global de ChunkLoadError.
+
+    Vive inline en index.html (fuera del bundle Angular) para estar disponible
+    ANTES que cualquier chunk lazy intente cargarse. Si un import() dinamico
+    falla (bundle stale del navegador vs deploy nuevo), forzamos reload del
+    index.html + main.js del deploy vigente. sessionStorage evita loop infinito
+    si el reload no soluciona (bug real, no cache stale).
+
+    Redundancia dentro de Angular en `main.ts` (bootstrap) via ErrorHandler.
+  -->
+  <script>
+    (function () {
+      var FLAG = 'ttChunkReloadInProgress';
+
+      function isChunkLoadError(err) {
+        if (!err) return false;
+        var m = (err && err.message) ? String(err.message) : String(err);
+        return m.indexOf('Failed to fetch dynamically imported module') !== -1
+          || m.indexOf('error loading dynamically imported module') !== -1
+          || /Loading chunk .+ failed/i.test(m)
+          || m.indexOf('ChunkLoadError') !== -1;
+      }
+
+      function handleChunkError(err) {
+        if (!isChunkLoadError(err)) return false;
+        try {
+          if (sessionStorage.getItem(FLAG)) {
+            sessionStorage.removeItem(FLAG);
+            return false;
+          }
+          sessionStorage.setItem(FLAG, '1');
+          window.location.reload();
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }
+
+      window.addEventListener('error', function (event) {
+        if (handleChunkError(event.error || event.message)) {
+          event.preventDefault();
+        }
+      });
+
+      window.addEventListener('unhandledrejection', function (event) {
+        if (handleChunkError(event.reason)) {
+          event.preventDefault();
+        }
+      });
+
+      // Al iniciar una navegacion exitosa (sin recarga), limpiar la flag.
+      try {
+        sessionStorage.removeItem(FLAG);
+      } catch (_) { /* private mode */ }
+    })();
+  </script>
+
 </head>
 
 <body>
