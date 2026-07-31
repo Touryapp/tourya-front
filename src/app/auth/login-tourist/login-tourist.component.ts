@@ -90,6 +90,11 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
               email: response.email,
               roles: response.roleList,
             });
+            // TC-008 #195 (4ta iter): diagnostico. Ver que roleList llega y como queda en localStorage.
+            console.log('[TC-008 diag] login OK. roleList response=', response.roleList,
+              ' mustChangePassword=', (response as any).mustChangePassword,
+              ' user guardado=', this.authService.getUser(),
+              ' isBackofficeOperation=', this.authService.isBackofficeOperation());
             this.getConsultDataAndRedirect(response.roleList);
           } else {
             this.errorMessage =
@@ -203,17 +208,32 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
   }
 
   redirectByRole(role: RoleDto[]) {
+    // TC-008 #195 (4ta iter): logging de diagnostico para detectar por que el redirect
+    // no completa. Luis reporto que despues de "Redirigiendo basado en rol" la URL
+    // sigue en /login. Este log muestra el path resuelto y el resultado de navigate().
+    const roleIds = role.map(r => r.id);
+    let target: string | null = null;
     if (role.some(r => r.id === Roles.ADMIN)) {
-      this.router.navigate(["admin"]);
+      target = "/admin";
     } else if (role.some(r => r.id === Roles.BACKOFFICE_OPERATION)) {
       // FE-15d fix (#195): sin este branch el user quedaba clavado en login post-auth.
-      // Mismo destino que HomeRedirectGuard para este rol.
-      this.router.navigate(["admin/bookings-management"]);
+      target = "/admin/bookings-management";
     } else if (role.some(r => r.id === Roles.PROVIDER || r.id === Roles.PROVIDER_OPERATOR)) {
-      this.router.navigate(["providers/provider-panel"]);
+      target = "/providers/provider-panel";
     } else if (role.some(r => r.id === Roles.USER)) {
-      this.router.navigate(["home"]);
+      target = "/home";
     }
+
+    console.log('[TC-008 diag] redirectByRole: roleIds=', roleIds, ' target=', target);
+    if (target === null) {
+      console.error('[TC-008 diag] redirectByRole: ningun branch matcheo. roleIds=', roleIds);
+      return;
+    }
+
+    this.router.navigate([target]).then(
+      ok => console.log('[TC-008 diag] navigate result:', ok, 'url ahora:', this.router.url),
+      err => console.error('[TC-008 diag] navigate error:', err)
+    );
   }
 
   getConsultDataAndRedirect(roleList: RoleDto[]) {

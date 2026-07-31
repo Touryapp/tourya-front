@@ -86,6 +86,9 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private forceLogout(): void {
+    // TC-008 #195 (4ta iter): logging para detectar si es el interceptor el que
+    // esta tirando al user de vuelta a /login por 401 sin refresh token valido.
+    console.warn('[TC-008 diag] AuthInterceptor.forceLogout ejecutado, redirigiendo a /login');
     this.authService.removeTokens();
     this.router.navigate(['/login']);
   }
