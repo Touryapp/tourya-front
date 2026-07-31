@@ -1381,9 +1381,7 @@
       "CC": "Cédula de Cidadania (CC)",
       "CE": "Cédula de Estrangeiro (CE)",
       "PP": "Passaporte",
-      "PPT": "Permissão de Proteção Temporária (PPT)",
-      "NIT": "NIT",
-      "TI": "Cartão de Identidade (TI)"
+      "PPT": "Permissão de Proteção Temporária (PPT)"
     },
     "documentNumber": "Número do Documento",
     "documentNumberPlaceholder": "Digite seu documento",
