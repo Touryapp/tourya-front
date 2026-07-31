@@ -20,15 +20,24 @@ export class BackofficeGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    if (!this.authService.isAuthenticated()) {
+    const authed = this.authService.isAuthenticated();
+    const isBO = this.authService.isTouryaBackoffice();
+    // TC-008 #195 (4ta iter): logging de diagnostico.
+    console.log('[TC-008 diag] BackofficeGuard: authenticated=', authed,
+      ' isTouryaBackoffice=', isBO,
+      ' user=', this.authService.getUser());
+
+    if (!authed) {
+      console.warn('[TC-008 diag] BackofficeGuard: no authenticated, redirigiendo a /');
       this.router.navigate(['/']);
       return false;
     }
 
-    if (this.authService.isTouryaBackoffice()) {
+    if (isBO) {
       return true;
     }
 
+    console.warn('[TC-008 diag] BackofficeGuard: no es TouryaBackoffice, redirigiendo a /');
     this.router.navigate(['/']);
     return false;
   }
