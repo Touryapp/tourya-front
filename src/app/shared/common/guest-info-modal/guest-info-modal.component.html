@@ -62,8 +62,6 @@
                       <option value="CE">{{ 'guestInfoModal.documentTypes.CE' | translate }}</option>
                       <option value="PP">{{ 'guestInfoModal.documentTypes.PP' | translate }}</option>
                       <option value="PPT">{{ 'guestInfoModal.documentTypes.PPT' | translate }}</option>
-                      <option value="NIT">{{ 'guestInfoModal.documentTypes.NIT' | translate }}</option>
-                      <option value="TI">{{ 'guestInfoModal.documentTypes.TI' | translate }}</option>
                   </select>
                   <div *ngIf="guestInfoForm.controls['documentType'].invalid && (guestInfoForm.controls['documentType'].dirty || guestInfoForm.controls['documentType'].touched)" class="text-danger mt-1 fs-14">
                       <div *ngIf="guestInfoForm.controls['documentType'].errors?.['required']">{{ 'guestInfoModal.errors.documentTypeRequired' | translate }}</div>
