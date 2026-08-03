@@ -151,8 +151,10 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('CartSummary: Iniciando componente...');
     this.loadCartData();
     this.loadUserCredits();
+    // TC-009 (#196 v4): la carga de countries ahora vive dentro de loadUserProfile ->
+    // matchPlaceOfOriginFromProfile para evitar race con getCountries() del ngOnInit
+    // (bug intermitente reportado por Luis 2026-08-03: Country vacio pero State/City llenos).
     this.loadUserProfile();
-    this.getCountries();
     this.openGuestModalIfProfileIncomplete();
   }
 
@@ -301,7 +303,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
    * Carga los datos del perfil del usuario y pre-llena el formulario
    */
   private loadUserProfile(): void {
-    this.touristService.getProfile()
+    this.touristService.getProfile(true)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (profile) => {
@@ -317,37 +319,43 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
               this.contactForm.address1 = (profile as any).address || this.contactForm.address1;
             }
 
-            // TC-009 (#196 v3): matchear country/state/city del perfil a IDs
-            // reales de los dropdowns "Lugar de procedencia". Antes solo se
-            // asignaba `mapCountryToIsoCode` que devolvia 'CO'/'US'/'ES' pero los
-            // <select> usan `country.id` numerico → nada matchea → dropdown vacio.
-            this.matchPlaceOfOriginFromProfile(profile);
-
             this.syncFormsData();
           }
+          // TC-009 (#196 v4): siempre cargar countries — aun sin profile con
+          // country, para que el usuario pueda seleccionar manualmente.
+          this.matchPlaceOfOriginFromProfile(profile || {} as TouristProfileDto);
         },
         error: (error) => {
           console.error('CartSummary: Error cargando perfil de usuario:', error);
+          // Sin profile, igual cargamos countries para permitir seleccion manual.
+          this.matchPlaceOfOriginFromProfile({} as TouristProfileDto);
         }
       });
   }
 
   /**
-   * TC-009 (#196 v3): matching en cascada nombre → id para lugar de procedencia.
+   * TC-009 (#196 v3-v4): matching en cascada nombre → id para lugar de procedencia.
    * Backend guarda `country/state/city` como strings (Colombia, Bolivar, Cartagena);
-   * los <select> del cart-summary usan IDs numericos. Este helper hace el matching.
+   * los <select> del cart-summary usan IDs numericos.
+   *
+   * v4 (Luis 2026-08-03): siempre carga la lista de countries (aun sin profile.country)
+   * para eliminar el race con el `getCountries()` paralelo del ngOnInit anterior.
+   * El match parcial (solo country, o country+state) queda tolerado — el resto queda
+   * en '' y el usuario los completa a mano.
    */
   private matchPlaceOfOriginFromProfile(profile: TouristProfileDto): void {
-    if (!profile.country) return;
     this.countryService.getCountries()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (countries) => {
           this.countries = countries || [];
+          if (!profile.country) return;
           const matchedCountry = this.countries.find(c =>
             c.name?.toLowerCase() === profile.country?.toLowerCase());
           if (!matchedCountry) return;
-          this.contactForm.country = String(matchedCountry.id);
+          // NgModel de <option [value]="country.id"> compara con el binding; para evitar
+          // mismatches string vs number, usar el mismo tipo que las options (number).
+          this.contactForm.country = matchedCountry.id as any;
           if (!profile.state) return;
           this.departmentService.getDepartmentsByCountryId(matchedCountry.id)
             .pipe(takeUntil(this.destroy$))
@@ -357,7 +365,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
                 const matchedDept = this.departments.find(d =>
                   d.name?.toLowerCase() === profile.state?.toLowerCase());
                 if (!matchedDept) return;
-                this.contactForm.state = String(matchedDept.id);
+                this.contactForm.state = matchedDept.id as any;
                 if (!profile.city) return;
                 this.cityService.getCitiesByDepartmentId(matchedDept.id)
                   .pipe(takeUntil(this.destroy$))
@@ -367,7 +375,7 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
                       const matchedCity = this.cities.find(c =>
                         c.name?.toLowerCase() === profile.city?.toLowerCase());
                       if (matchedCity) {
-                        this.contactForm.city = String(matchedCity.id);
+                        this.contactForm.city = matchedCity.id as any;
                       }
                     },
                     error: (err) => console.error('matchPlaceOfOriginFromProfile cities error', err)

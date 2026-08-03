@@ -18,6 +18,15 @@ export class TouristService {
 
   private profileCache$: Observable<TouristProfileDto> | null = null;
 
+  /**
+   * TC-009 (#196 v4): invalidar el cache del perfil. Se llama desde AuthService
+   * en logout/removeTokens para evitar que un user vea datos del user anterior
+   * cuando cierra sesion y entra con otro (bug reportado por Luis 2026-08-03).
+   */
+  clearProfileCache(): void {
+    this.profileCache$ = null;
+  }
+
   checkAddressComplete(): Observable<AddressCompleteResponseDto> {
     return this.http.get<AddressCompleteResponseDto>(`${this.baseUrl}/profile/address-complete`);
   }
