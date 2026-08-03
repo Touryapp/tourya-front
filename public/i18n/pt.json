@@ -1081,6 +1081,14 @@
     "lastName": "Sobrenome",
     "email": "E-mail",
     "phone": "Telefone",
+    "documentType": "Tipo de Documento",
+    "documentNumber": "Número do Documento",
+    "documentTypes": {
+      "CC": "Cédula de Cidadania (CC)",
+      "CE": "Cédula de Estrangeiro (CE)",
+      "PP": "Passaporte",
+      "PPT": "Permissão de Proteção Temporária (PPT)"
+    },
     "addressInfo": "Informações de endereço",
     "address": "Endereço",
     "country": "País",
