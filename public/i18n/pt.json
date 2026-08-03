@@ -224,6 +224,12 @@
     }
   },
   "provider-tour-management": {
+    "sidebar": {
+      "section": "Painel Backoffice",
+      "bookings": "Reservas",
+      "maritimeReports": "Relatório de Atividades Marítimas",
+      "providerPayments": "Ordens de Pagamento"
+    },
     "header": {
       "totalBookings": "Total de Reservas",
       "confirmBooking": "Confirmar Reserva",

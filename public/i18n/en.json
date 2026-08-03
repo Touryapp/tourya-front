@@ -224,6 +224,12 @@
     }
   },
   "provider-tour-management": {
+    "sidebar": {
+      "section": "Backoffice Panel",
+      "bookings": "Bookings",
+      "maritimeReports": "Maritime Activity Reports",
+      "providerPayments": "Payment Orders"
+    },
     "header": {
       "totalBookings": "Total Bookings",
       "confirmBooking": "Confirm Booking",
