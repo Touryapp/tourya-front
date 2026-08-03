@@ -91,9 +91,20 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   currentRole!: UserRole;
   // FE-15c: mostrar acceso a reportes DIMAR cuando el backoffice está viendo /admin/bookings-management.
   showMaritimeReportsLink = false;
+  // TC-008 (#195 sidebar): mostrar sidebar admin con 3 items solo cuando el user
+  // es ADMIN o BACKOFFICE_OPERATION en la vista bookings-management.
+  showAdminSidebar = false;
 
   goToMaritimeReports(): void {
     this.router.navigate(['/admin/maritime-reports']);
+  }
+
+  goToBookingsManagement(): void {
+    this.router.navigate(['/admin/bookings-management']);
+  }
+
+  goToProviderPayments(): void {
+    this.router.navigate(['/admin/provider-payments']);
   }
   
   // Variables de paginación y filtrado
@@ -189,6 +200,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
     this.config = this.configService.getConfigByRole(this.currentRole);
     this.showMaritimeReportsLink = this.authService.isTouryaBackoffice()
       && this.router.url.includes('bookings-management');
+    // TC-008 (#195 sidebar): mismo criterio que showMaritimeReportsLink pero
+    // ahora tambien decide si mostrar el sidebar admin con 3 items.
+    this.showAdminSidebar = this.showMaritimeReportsLink;
     
     // Cargar datos según el rol
     // TC-005 post-fix: ADMIN/BACKOFFICE_OPERATION también consume el endpoint provider

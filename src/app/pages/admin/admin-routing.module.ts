@@ -37,6 +37,16 @@ const routes: Routes = [
         canActivate: [BackofficeGuard],
         loadComponent: () => import('../maritime-activity-reports/maritime-activity-reports.component').then(m => m.MaritimeActivityReportsComponent)
       },
+      // TC-008 (#195 refinamiento Luis 2026-08-03): ordenes de pago expuestas al
+      // rol BACKOFFICE_OPERATION. El componente ya existia dentro del dashboard;
+      // ahora es una ruta propia para que BO pueda acceder sin AdminGuard.
+      // Se usa loadChildren + un pequeno wrapper routing para mantener el modulo
+      // NgModule original (que no tenia RouterModule.forChild propio).
+      {
+        path: 'provider-payments',
+        canActivate: [BackofficeGuard],
+        loadChildren: () => import('./provider-payments-wrapper-routing.module').then(m => m.ProviderPaymentsWrapperRoutingModule)
+      },
       // FE-15d: CRUD de usuarios BACKOFFICE_OPERATION. Solo ADMIN puede gestionar.
       {
         path: 'backoffice-users',
