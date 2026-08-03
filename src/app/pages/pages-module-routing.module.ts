@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { PagesModuleComponent } from "./pages-module.component";
 import { AuthGuard } from "../core/guards/auth.guard";
 import { AdminGuard } from "../core/guards/admin.guard";
+import { BackofficeGuard } from "../core/guards/backoffice.guard";
 import { ContactanosComponent } from "./contactanos/contactanos.component";
 import { ConocenosComponent } from "./conocenos/conocenos.component";
 import { LegalSiteComponent } from "./legal-site/legal-site.component";
@@ -25,10 +26,15 @@ const routes: Routes = [
           import("./providers/providers.module").then((m) => m.ProvidersModule),
       },
       {
+        // TC-008 (#195 5ta iter): el padre acepta ADMIN o BACKOFFICE_OPERATION.
+        // Los hijos internos siguen protegidos individualmente (AdminGuard para
+        // dashboard/tour-admin/backoffice-users, BackofficeGuard para bookings-management/
+        // maritime-reports). Antes AdminGuard aca rechazaba a BO antes de que
+        // BackofficeGuard del hijo pudiera evaluar — quedaba clavado en /login.
         path: "admin",
         loadChildren: () =>
           import("./admin/admin.module").then((m) => m.AdminModule),
-        canActivate: [AdminGuard],
+        canActivate: [BackofficeGuard],
       },
       { path: "contactanos", loadComponent: () => import('./contactanos/contactanos.component').then(m => m.ContactanosComponent) },
       { path: "conocenos", loadComponent: () => import('./conocenos/conocenos.component').then(m => m.ConocenosComponent) },
