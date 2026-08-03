@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { TouristService } from '../../shared/services/tourist.service';
 import {
   GoogleAuthProvider,
   FacebookAuthProvider,
@@ -39,7 +40,10 @@ export class AuthService {
   public currentUser: Observable<User | null> = this.currentUserSubject.asObservable();
   private baseUrl = environment.apiUrl + "/auth";
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private touristService: TouristService
+  ) {
     onAuthStateChanged(auth, (user) => {
       this.currentUserSubject.next(user);
     });
@@ -101,6 +105,9 @@ export class AuthService {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(LEGACY_TOKEN_KEY);
+    // TC-009 (#196 v4): invalidar caches por-user para que un logout limpio no
+    // deje datos del user anterior visibles al proximo login (Luis 2026-08-03).
+    this.touristService.clearProfileCache();
   }
 
   setUser(user: any): void {
