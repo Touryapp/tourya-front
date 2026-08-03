@@ -1238,6 +1238,14 @@
     "lastName": "Apellido",
     "email": "Correo Electrónico",
     "phone": "Teléfono",
+    "documentType": "Tipo de Documento",
+    "documentNumber": "Número de Documento",
+    "documentTypes": {
+      "CC": "Cédula de Ciudadanía",
+      "CE": "Cédula de Extranjería",
+      "PP": "Pasaporte",
+      "PPT": "Permiso por Protección Temporal"
+    },
     "addressInfo": "Información de Dirección",
     "address": "Dirección",
     "country": "País",

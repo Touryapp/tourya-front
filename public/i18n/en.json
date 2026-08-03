@@ -1237,6 +1237,14 @@
     "lastName": "Last name",
     "email": "Email",
     "phone": "Phone",
+    "documentType": "Document Type",
+    "documentNumber": "Document Number",
+    "documentTypes": {
+      "CC": "Citizenship ID (CC)",
+      "CE": "Foreigner ID (CE)",
+      "PP": "Passport",
+      "PPT": "Temporary Protection Permit (PPT)"
+    },
     "addressInfo": "Address Information",
     "address": "Address",
     "country": "Country",

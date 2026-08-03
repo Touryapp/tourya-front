@@ -17,6 +17,7 @@ import { CreditService } from '../../../shared/services/credit.service';
 import { ClientCredit } from '../../../shared/models/credit.model';
 import { SearchToursService } from '../list-tours/search-tours.service';
 import { TouristService } from '../../../shared/services/tourist.service';
+import { TouristProfileDto } from '../../../shared/dto/tourist-profile.dto';
 import { CountryService } from '../../../shared/services/country.service';
 import { DepartmentService } from '../../../shared/services/department.service';
 import { CityService } from '../../../shared/services/city.service';
@@ -160,6 +161,10 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
    * los campos minimos (address-complete = false), abrir el guest-info-modal
    * para que el usuario complete su informacion aca (antes se disparaba al
    * agregar el primer tour al carrito, muy temprano y bloqueante).
+   *
+   * TC-009 (#196 v3): si el usuario cancela el modal sin completar el perfil,
+   * redirigir a /clients/list-tours (Luis 2026-07-31: "no dejarnos hacer la
+   * compra sin la informacion del usuario").
    */
   private openGuestModalIfProfileIncomplete(): void {
     this.touristService.checkAddressComplete()
@@ -175,7 +180,15 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             });
             ref.afterClosed()
               .pipe(takeUntil(this.destroy$))
-              .subscribe(() => this.loadUserProfile());
+              .subscribe((result) => {
+                const cancelled = !result || (typeof result === 'object' && result.profileSuccess !== true);
+                if (cancelled) {
+                  console.log('CartSummary: modal cancelado sin completar perfil -> volver a list-tours');
+                  this.router.navigate(['/clients/list-tours']);
+                  return;
+                }
+                this.loadUserProfile();
+              });
           }
         },
         error: (err) => console.error('CartSummary: error checkAddressComplete', err)
@@ -298,14 +311,17 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.contactForm.lastName = profile.lastName || this.contactForm.lastName;
             this.contactForm.email = profile.email || this.contactForm.email;
             this.contactForm.phone = profile.phone || this.contactForm.phone;
-            this.contactForm.country = this.mapCountryToIsoCode(profile.country) || this.contactForm.country;
-            this.contactForm.city = profile.city || this.contactForm.city;
-            
+
             // Asignar campos adicionales si el backend los envía (dirección, info adicional)
             if ((profile as any).address) {
               this.contactForm.address1 = (profile as any).address || this.contactForm.address1;
             }
 
+            // TC-009 (#196 v3): matchear country/state/city del perfil a IDs
+            // reales de los dropdowns "Lugar de procedencia". Antes solo se
+            // asignaba `mapCountryToIsoCode` que devolvia 'CO'/'US'/'ES' pero los
+            // <select> usan `country.id` numerico → nada matchea → dropdown vacio.
+            this.matchPlaceOfOriginFromProfile(profile);
 
             this.syncFormsData();
           }
@@ -313,6 +329,54 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         error: (error) => {
           console.error('CartSummary: Error cargando perfil de usuario:', error);
         }
+      });
+  }
+
+  /**
+   * TC-009 (#196 v3): matching en cascada nombre → id para lugar de procedencia.
+   * Backend guarda `country/state/city` como strings (Colombia, Bolivar, Cartagena);
+   * los <select> del cart-summary usan IDs numericos. Este helper hace el matching.
+   */
+  private matchPlaceOfOriginFromProfile(profile: TouristProfileDto): void {
+    if (!profile.country) return;
+    this.countryService.getCountries()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (countries) => {
+          this.countries = countries || [];
+          const matchedCountry = this.countries.find(c =>
+            c.name?.toLowerCase() === profile.country?.toLowerCase());
+          if (!matchedCountry) return;
+          this.contactForm.country = String(matchedCountry.id);
+          if (!profile.state) return;
+          this.departmentService.getDepartmentsByCountryId(matchedCountry.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (depts) => {
+                this.departments = depts || [];
+                const matchedDept = this.departments.find(d =>
+                  d.name?.toLowerCase() === profile.state?.toLowerCase());
+                if (!matchedDept) return;
+                this.contactForm.state = String(matchedDept.id);
+                if (!profile.city) return;
+                this.cityService.getCitiesByDepartmentId(matchedDept.id)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe({
+                    next: (cities) => {
+                      this.cities = cities || [];
+                      const matchedCity = this.cities.find(c =>
+                        c.name?.toLowerCase() === profile.city?.toLowerCase());
+                      if (matchedCity) {
+                        this.contactForm.city = String(matchedCity.id);
+                      }
+                    },
+                    error: (err) => console.error('matchPlaceOfOriginFromProfile cities error', err)
+                  });
+              },
+              error: (err) => console.error('matchPlaceOfOriginFromProfile departments error', err)
+            });
+        },
+        error: (err) => console.error('matchPlaceOfOriginFromProfile countries error', err)
       });
   }
 

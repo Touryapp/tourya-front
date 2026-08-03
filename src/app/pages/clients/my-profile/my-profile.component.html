@@ -73,15 +73,22 @@
                                         <p>{{ profileData?.phone || 'N/A' }}</p>
                                     </div>
                                 </div>
+                                <!-- TC-009 (#196): documento pedido por Luis 2026-07-31. -->
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <h6 class="fs-14">{{ 'myProfile.documentType' | translate }}</h6>
+                                        <p>{{ profileData?.documentType ? (('myProfile.documentTypes.' + (profileData?.documentType || '')) | translate) : 'N/A' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <h6 class="fs-14">{{ 'myProfile.documentNumber' | translate }}</h6>
+                                        <p>{{ profileData?.documentNumber || 'N/A' }}</p>
+                                    </div>
+                                </div>
                             </div>
                             <h6 class="fs-16 mb-3">{{ 'myProfile.addressInfo' | translate }}</h6>
                             <div class="row g-2">
-                                <div class="col-md-12">
-                                    <div>
-                                        <h6 class="fs-14">{{ 'myProfile.address' | translate }}</h6>
-                                        <p>N/A</p>
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <div>
                                         <h6 class="fs-14">{{ 'myProfile.country' | translate }}</h6>
@@ -98,12 +105,6 @@
                                     <div>
                                         <h6 class="fs-14">{{ 'myProfile.city' | translate }}</h6>
                                         <p>{{ profileData?.city || 'N/A' }}</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div>
-                                        <h6 class="fs-14">{{ 'myProfile.zipCode' | translate }}</h6>
-                                        <p>N/A</p>
                                     </div>
                                 </div>
                             </div>
