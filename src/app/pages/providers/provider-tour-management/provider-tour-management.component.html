@@ -1,34 +1,8 @@
 <!-- Provider Tour Management -->
+<!-- TC-008 (#195 reabierto Luis 2026-08-04): sidebar removido de aca — ahora vive
+     en AdminComponent (shell) con items completos segun rol. Layout vuelve al
+     original full-width. -->
 <div class="provider-tour-management">
-<div class="row">
-<!-- TC-008 (#195 sidebar BO): menu lateral con 3 items para ADMIN/BO en la vista
-     bookings-management. No aparece para PROVIDER ni CLIENT. -->
-<aside *ngIf="showAdminSidebar" class="col-xl-3 col-lg-4 admin-sidebar mb-4 mb-lg-0">
-  <div class="card user-sidebar theiaStickySidebar">
-    <div class="card-body user-sidebar-body">
-      <ul>
-        <li><span class="fs-14 text-gray-3 fw-medium mb-2">{{ 'provider-tour-management.sidebar.section' | translate }}</span></li>
-        <li>
-          <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBookingsManagement()">
-            <i class="isax isax-calendar-tick me-2"></i>{{ 'provider-tour-management.sidebar.bookings' | translate }}
-          </a>
-        </li>
-        <li>
-          <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToMaritimeReports()">
-            <i class="isax isax-flag me-2"></i>{{ 'provider-tour-management.sidebar.maritimeReports' | translate }}
-          </a>
-        </li>
-        <li>
-          <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToProviderPayments()">
-            <i class="isax isax-wallet-2 me-2"></i>{{ 'provider-tour-management.sidebar.providerPayments' | translate }}
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</aside>
-
-<div [ngClass]="showAdminSidebar ? 'col-xl-9 col-lg-8' : 'col-12'">
 
     <!-- Booking Header -->
     <div class="card booking-header mb-4">
@@ -906,7 +880,5 @@
 }
 <!-- /Reschedule Date Selection Modal -->
 
-</div><!-- /col main -->
-</div><!-- /row wrapper -->
 </div><!-- /provider-tour-management -->
 

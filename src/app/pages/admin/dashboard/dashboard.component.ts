@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RequestProvider } from '../../../shared/dto/requestProvider-response.dto';
 import { RequestProvidersService } from '../../providers/requestproviders/request-providers.service';
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
@@ -36,7 +36,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private requestProvidersService: RequestProvidersService,
     private panelStateService: ProviderPanelStateService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   /** FE-15b post-fix: navega a la vista de reservas (BookingsManagement) del backoffice. */
@@ -57,6 +58,15 @@ export class DashboardComponent implements OnInit {
     if (this.panelStateService.hasPaymentToOpen()) {
       this.toggleProviderPayments();
     }
+
+    // TC-008 (#195 reabierto): el shell admin puede navegar aqui con
+    // ?section=solicitudes|tours|appConfig para activar la seccion correspondiente.
+    this.route.queryParamMap.subscribe(params => {
+      const section = params.get('section');
+      if (section === 'solicitudes' && !this.mostrarSolicitudes) this.toggleSolicitudes();
+      else if (section === 'tours' && !this.mostrarTourList) this.toggleTourList();
+      else if (section === 'appConfig' && !this.mostrarAppConfig) this.toggleAppConfig();
+    });
   }
 
   toggleTourList(): void {
