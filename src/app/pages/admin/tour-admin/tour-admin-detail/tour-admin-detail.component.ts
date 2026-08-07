@@ -20,6 +20,8 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
   tour: TourAdminDto | null = null;
   loading: boolean = false;
   showAcceptModal: boolean = false;
+  // TC-015 (#218): true = editar % sin aceptar el tour; false = flujo original de aceptar tour.
+  porcentajeModalEditMode: boolean = false;
   showCancelModal: boolean = false;
   showReturnModal: boolean = false;
 
@@ -221,6 +223,7 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
   }
 
   openAcceptModal(): void {
+    this.porcentajeModalEditMode = false;
     const current = this.tour?.porcentajeTourya;
     if (typeof current === 'number' && Number.isFinite(current)) {
       this.porcentajeTouryaInput = this.round2(current * 100);
@@ -228,6 +231,36 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
       this.porcentajeTouryaInput = this.DEFAULT_PORCENTAJE_TOURYA_PERCENT;
     }
     this.showAcceptModal = true;
+  }
+
+  /**
+   * TC-015 (#218): abre el mismo modal pero en modo edicion — el submit solo
+   * actualiza el porcentajeTourya sin llamar a acceptTour. Habilitado para
+   * tours ya aceptados (canEditPorcentaje()).
+   */
+  openEditPorcentajeModal(): void {
+    this.porcentajeModalEditMode = true;
+    const current = this.tour?.porcentajeTourya;
+    if (typeof current === 'number' && Number.isFinite(current)) {
+      this.porcentajeTouryaInput = this.round2(current * 100);
+    } else {
+      this.porcentajeTouryaInput = this.DEFAULT_PORCENTAJE_TOURYA_PERCENT;
+    }
+    this.showAcceptModal = true;
+  }
+
+  canEditPorcentaje(): boolean {
+    return this.tour?.status === 'accepted';
+  }
+
+  /**
+   * TC-015 (#218): visualizacion del % actual en el sidebar. Retorna null si
+   * el backend aun no expone el valor (evita mostrar "0%" enganoso).
+   */
+  getPorcentajeTouryaDisplay(): string | null {
+    const p = this.tour?.porcentajeTourya;
+    if (typeof p !== 'number' || !Number.isFinite(p)) return null;
+    return `${this.round2(p * 100)}%`;
   }
 
   closeAcceptModal(): void {
@@ -272,6 +305,32 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
       typeof this.tour.porcentajeTourya === 'number' && Number.isFinite(this.tour.porcentajeTourya)
         ? this.round2(this.tour.porcentajeTourya * 100) / 100
         : null;
+
+    // TC-015 (#218): en modo edicion, solo PATCH del %; no llama a acceptTour.
+    if (this.porcentajeModalEditMode) {
+      if (currentDecimal !== null && Math.abs(currentDecimal - newDecimal) <= 0.00001) {
+        // Nada cambio -> cerrar sin request.
+        this.showAcceptModal = false;
+        return;
+      }
+      this.savingPorcentajeTourya = true;
+      this.tourAdminService.updatePorcentajeTourya(tourId, newDecimal).subscribe({
+        next: () => {
+          if (this.tour) {
+            this.tour.porcentajeTourya = newDecimal;
+          }
+          this.savingPorcentajeTourya = false;
+          this.openSnackBar('Porcentaje Tourya actualizado');
+          this.showAcceptModal = false;
+        },
+        error: (error) => {
+          this.savingPorcentajeTourya = false;
+          console.error('Error al actualizar el porcentaje Tourya:', error);
+          this.openSnackBar('Error al actualizar el porcentaje Tourya');
+        }
+      });
+      return;
+    }
 
     const doAccept = () => {
       this.tourAdminService.acceptTour(tourId).subscribe({
