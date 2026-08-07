@@ -64,6 +64,8 @@ export interface ProviderTourBooking {
   canRainCancel?: boolean;
   qrUrl?: string;
   totalTourists?: number;
+  /** TC-016 (#219): desglose de viajeros por ageType (ADULT/CHILD/INFANT). */
+  travelerBreakdown?: { ageType: string; quantity: number; unitPrice?: number; providerUnitPrice?: number }[];
   serviceResponsible?: any; // New field for reservation contact
   tourDetails?: any; // New field for public tour details
   // Payer info (for PROVIDER/ADMIN view)
@@ -629,6 +631,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
+      travelerBreakdown: reservation.travelerBreakdown,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
       // PROVIDER: sigue viendo el providerPrice como precio principal (TC-005 previo, PR #71).
       price: reservation.providerPrice != null ? `$${reservation.providerPrice.toFixed(2)}` : '',
@@ -693,6 +696,7 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       customerPhone: reservation.payerPhone,
       travellers: `${reservation.totalTourists} ${reservation.totalTourists === 1 ? 'Turista' : 'Turistas'}`,
       totalTourists: reservation.totalTourists,
+      travelerBreakdown: reservation.travelerBreakdown,
       duration: `${reservation.slotTimeStart} - ${reservation.slotTimeEnd}`,
       // ADMIN/CLIENT: sigue viendo shoppingTotalPrice como precio principal.
       price: `$${(reservation.shoppingTotalPrice || 0).toFixed(2)}`,

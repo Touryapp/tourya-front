@@ -116,6 +116,13 @@
               {{ item.totalParticipants }} {{ 'cart.personSingularPlural' | translate }}
             </p>
 
+            <!-- TC-016 (#219): desglose por ageType leyendo item.participants (ya viene del backend en el carrito). -->
+            <p class="tour-card-breakdown fs-12 text-secondary mb-0 ms-4" *ngIf="item.participants?.length">
+              <ng-container *ngFor="let p of item.participants; let last = last">
+                {{ p.quantity }} {{ 'configuration.ageType.' + p.ageType | translate }}<span *ngIf="!last">, </span>
+              </ng-container>
+            </p>
+
             <!-- Precio -->
             <div class="tour-card-price">
               {{ formatPrice(item.totalPrice) }}
