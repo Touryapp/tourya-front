@@ -246,6 +246,11 @@
                   <h6 class="fw-medium">Price</h6>
                   <p class="flex-fill">{{ tour.price ? ('$' + tour.price) : '—' }}</p>
                 </div>
+                <!-- TC-015 (#218): visibilidad del % Tourya actual para ADMIN. -->
+                <div class="d-flex align-items-center justify-content-between details-info">
+                  <h6 class="fw-medium">% Tourya</h6>
+                  <p class="flex-fill">{{ getPorcentajeTouryaDisplay() || '—' }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -277,8 +282,12 @@
               <button class="btn btn-warning w-100 mb-2 fs-14" (click)="openReturnModal()" [disabled]="canReturn()">
                 <i class="isax isax-rotate-left me-2"></i>Devolver Tour
               </button>
-              <button class="btn btn-danger w-100 fs-14" (click)="openCancelModal()" [disabled]="!canCancel()">
+              <button class="btn btn-danger w-100 mb-2 fs-14" (click)="openCancelModal()" [disabled]="!canCancel()">
                 <i class="isax isax-close-circle me-2"></i>Cancelar Tour
+              </button>
+              <!-- TC-015 (#218): editar % Tourya para tours ya aceptados. -->
+              <button class="btn btn-outline-primary w-100 fs-14" (click)="openEditPorcentajeModal()" [disabled]="!canEditPorcentaje()">
+                <i class="isax isax-percentage-square me-2"></i>Editar % Tourya
               </button>
             </div>
           </div>
@@ -333,11 +342,12 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Confirmar Aceptación</h5>
+        <h5 class="modal-title">{{ porcentajeModalEditMode ? 'Editar % Tourya' : 'Confirmar Aceptación' }}</h5>
         <button type="button" class="btn-close" (click)="closeAcceptModal()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>¿Estás seguro de que deseas aceptar este tour?</p>
+        <p *ngIf="!porcentajeModalEditMode">¿Estás seguro de que deseas aceptar este tour?</p>
+        <p *ngIf="porcentajeModalEditMode">Actualiza el porcentaje Tourya de este tour. El cambio no afecta los slots ya creados.</p>
 
         <div class="mb-3">
           <label for="porcentajeTouryaInput" class="form-label fw-semibold">
@@ -363,7 +373,7 @@
           </div>
         </div>
 
-        <div class="alert alert-success mb-0">
+        <div class="alert alert-success mb-0" *ngIf="!porcentajeModalEditMode">
           <i class="isax isax-info-circle me-2"></i>
           <small>El tour pasará a estado "Aceptado" y estará disponible para los usuarios.</small>
         </div>
@@ -375,7 +385,7 @@
           (click)="acceptTour()"
           [disabled]="savingPorcentajeTourya || !isPorcentajeTouryaValid()"
         >
-          <span *ngIf="!savingPorcentajeTourya">Sí, Aceptar</span>
+          <span *ngIf="!savingPorcentajeTourya">{{ porcentajeModalEditMode ? 'Guardar' : 'Sí, Aceptar' }}</span>
           <span *ngIf="savingPorcentajeTourya">Guardando…</span>
         </button>
         <button
