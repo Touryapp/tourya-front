@@ -223,13 +223,20 @@
       }
     }
   },
-  "provider-tour-management": {
+  "admin": {
     "sidebar": {
-      "section": "Backoffice Panel",
-      "bookings": "Bookings",
+      "section": "Admin Panel",
+      "dashboard": "Dashboard",
+      "requests": "Request List",
+      "toursManagement": "Tour Management",
       "maritimeReports": "Maritime Activity Reports",
-      "providerPayments": "Payment Orders"
-    },
+      "providerPayments": "Payment Orders",
+      "bookings": "Bookings",
+      "backofficeUsers": "Backoffice Users",
+      "appConfig": "System Configuration"
+    }
+  },
+  "provider-tour-management": {
     "header": {
       "totalBookings": "Total Bookings",
       "confirmBooking": "Confirm Booking",

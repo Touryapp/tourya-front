@@ -1,9 +1,76 @@
 <div class="admin-wrapper">
-  <div class="admin-header">
-  </div>
-  
-  <div class="admin-content">
-    <router-outlet></router-outlet>
-  </div>
-</div> 
+  <div class="admin-header"></div>
 
+  <div class="admin-content">
+    <!-- TC-008 (#195 reabierto): sidebar persistente en todas las vistas admin
+         excepto /admin/dashboard (que ya tiene su propio con toggles). ADMIN ve
+         8 items; BACKOFFICE_OPERATION ve 3. -->
+    <div class="row" *ngIf="showShellSidebar; else noSidebar">
+      <aside class="col-xl-3 col-lg-4 admin-sidebar mb-4 mb-lg-0">
+        <div class="card user-sidebar theiaStickySidebar">
+          <div class="card-body user-sidebar-body">
+            <ul>
+              <li><span class="fs-14 text-gray-3 fw-medium mb-2">{{ 'admin.sidebar.section' | translate }}</span></li>
+
+              <ng-container *ngIf="isAdmin">
+                <li>
+                  <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToDashboard()">
+                    <i class="isax isax-grid-55 me-2"></i>{{ 'admin.sidebar.dashboard' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToDashboardSolicitudes()">
+                    <i class="isax isax-user me-2"></i>{{ 'admin.sidebar.requests' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToDashboardTours()">
+                    <i class="isax isax-map me-2"></i>{{ 'admin.sidebar.toursManagement' | translate }}
+                  </a>
+                </li>
+              </ng-container>
+
+              <!-- Comunes ADMIN y BO -->
+              <li>
+                <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToMaritimeReports()">
+                  <i class="isax isax-flag me-2"></i>{{ 'admin.sidebar.maritimeReports' | translate }}
+                </a>
+              </li>
+              <li>
+                <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToProviderPayments()">
+                  <i class="isax isax-wallet-2 me-2"></i>{{ 'admin.sidebar.providerPayments' | translate }}
+                </a>
+              </li>
+              <li>
+                <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBookingsManagement()">
+                  <i class="isax isax-calendar-tick me-2"></i>{{ 'admin.sidebar.bookings' | translate }}
+                </a>
+              </li>
+
+              <ng-container *ngIf="isAdmin">
+                <li>
+                  <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBackofficeUsers()">
+                    <i class="isax isax-people me-2"></i>{{ 'admin.sidebar.backofficeUsers' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToDashboardAppConfig()">
+                    <i class="isax isax-setting-2 me-2"></i>{{ 'admin.sidebar.appConfig' | translate }}
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <div class="col-xl-9 col-lg-8">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+
+    <ng-template #noSidebar>
+      <router-outlet></router-outlet>
+    </ng-template>
+  </div>
+</div>
