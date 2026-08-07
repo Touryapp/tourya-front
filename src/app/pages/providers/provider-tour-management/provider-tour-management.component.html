@@ -322,7 +322,15 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.travelers' | translate }}</h6>
-                                    <p class="text-dark fs-16 fw-medium">{{ formatTravellers(selectedBooking.travellers) }}</p>
+                                    <p class="text-dark fs-16 fw-medium mb-1">{{ formatTravellers(selectedBooking.travellers) }}</p>
+                                    <!-- TC-016 (#219): desglose por ageType (ADULT/CHILD/INFANT) proveniente de shopping_cart_item_detail via SP. -->
+                                    @if (selectedBooking.travelerBreakdown?.length) {
+                                        <p class="fs-13 text-gray-6 mb-0">
+                                            @for (t of selectedBooking.travelerBreakdown; track t.ageType; let last = $last) {
+                                                <span>{{ t.quantity }} {{ 'configuration.ageType.' + t.ageType | translate }}</span>@if (!last) {<span>, </span>}
+                                            }
+                                        </p>
+                                    }
                                 </div>
                                 <div class="col-lg-4">
                                     <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.totalPrice' | translate }}</h6>

@@ -73,6 +73,18 @@ export interface ClientReservation {
   providerName?: string;
   /** TC-005 refinamientos (#188): imagen principal del tour desde tour_gallery (primera por order_index). */
   tourImageUrl?: string;
+  /** TC-016 (#219): desglose de viajeros por ageType (ADULT/CHILD/INFANT). Puede ser [] para reservas historicas. */
+  travelerBreakdown?: TravelerBreakdown[];
+}
+
+/**
+ * TC-016 (#219): item del desglose de viajeros por ageType dentro de una reserva.
+ */
+export interface TravelerBreakdown {
+  ageType: string;
+  quantity: number;
+  unitPrice?: number;
+  providerUnitPrice?: number;
 }
 
 /**
