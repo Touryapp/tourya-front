@@ -481,10 +481,14 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
     if (!loc) return [];
 
-    // try to find city/state names from locationsPublic
+    // TC-016 (#219): el backend ahora expone countryName/stateName/cityName
+    // directo en TourAddressResponse. Se usa primero; si por compatibilidad
+    // hacia atras vinieran null, se cae al catalogo locationsPublic.
+    const anyLoc = loc as any;
     const found = this.locationsPublic.find(lp => lp.cityId === loc.cityId && lp.stateId === loc.stateId);
-    const cityName = found ? found.cityName : undefined;
-    const stateName = found ? found.stateName : undefined;
+    const cityName = anyLoc.cityName ?? (found ? found.cityName : undefined);
+    const stateName = anyLoc.stateName ?? (found ? found.stateName : undefined);
+    const countryName = anyLoc.countryName ?? (found ? (found as any).countryName : undefined);
 
     const parts: { isI18n: boolean, text: any }[] = [];
     if (loc.location) parts.push({ isI18n: true, text: loc.location }); // friendly name of the location
@@ -493,6 +497,8 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     else if (loc.cityId) parts.push({ isI18n: false, text: String(loc.cityId) });
     if (stateName) parts.push({ isI18n: false, text: stateName });
     else if (loc.stateId) parts.push({ isI18n: false, text: String(loc.stateId) });
+    // TC-016 (#219): agregar country que antes no se mostraba.
+    if (countryName) parts.push({ isI18n: false, text: countryName });
 
     this._cachedLocationParts = parts;
     return parts;

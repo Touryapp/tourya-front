@@ -489,9 +489,23 @@
                                 <h6 class="mb-3">{{ 'provider-tour-management.modal.meetingPoint' | translate }}</h6>
                                 @for (loc of selectedBooking.tourDetails.locations; track loc.id) {
                                     <div class="mb-3">
-                                        <p class="fs-14 fw-medium text-dark mb-2">
-                                            <i class="isax isax-location5 text-primary me-2"></i>{{ loc.address }}
-                                        </p>
+                                        <!-- TC-016 (#219): nombre location + address + ciudad/estado/pais -->
+                                        @if (loc.location) {
+                                            <p class="fs-15 fw-semibold text-dark mb-1">
+                                                <i class="isax isax-location5 text-primary me-2"></i>{{ (loc.location | localizedName) || loc.location }}
+                                            </p>
+                                        }
+                                        @if (loc.address) {
+                                            <p class="fs-14 text-dark mb-1">
+                                                <i class="isax isax-map me-2 text-gray-6"></i>{{ loc.address }}
+                                            </p>
+                                        }
+                                        @if (loc.cityName || loc.stateName || loc.countryName) {
+                                            <p class="fs-13 text-gray-6 mb-2">
+                                                <i class="isax isax-global me-2"></i>
+                                                @if (loc.cityName) { {{ loc.cityName }} }@if (loc.cityName && (loc.stateName || loc.countryName)) {, }@if (loc.stateName) { {{ loc.stateName }} }@if (loc.stateName && loc.countryName) {, }@if (loc.countryName) { {{ loc.countryName }} }
+                                            </p>
+                                        }
                                         @if (loc.latitude && loc.longitude) {
                                             <google-map height="280px" width="100%"
                                                 [center]="{lat: loc.latitude, lng: loc.longitude}"

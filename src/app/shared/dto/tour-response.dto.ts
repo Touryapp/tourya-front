@@ -100,6 +100,10 @@ interface Location {
   countryId: number;
   stateId: number;
   cityId: number;
+  // TC-016 (#219): backend expone nombres directos junto a los IDs.
+  countryName?: string;
+  stateName?: string;
+  cityName?: string;
   latitude: number;
   longitude: number;
 }
