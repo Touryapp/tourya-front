@@ -328,6 +328,7 @@
       "itinerary": "Itinerary",
       "stopLabel": "Stop",
       "meetingPoint": "Meeting point",
+      "hotelPickup": "This tour picks up the customer at their hotel",
       "tourContactInfo": "Contact information (tour)",
       "reviewBtn": "Review",
       "alreadyReviewed": "Already reviewed",
@@ -642,8 +643,10 @@
         "options": {
           "meetingPoint": "Meeting Point",
           "endPoint": "End Point",
-          "pickUpPoint": "Pick Up Point"
+          "pickUpPoint": "Pick Up Point",
+          "hotelPickup": "Hotel Pickup"
         },
+        "hotelPickupHint": "This tour picks up the customer at their hotel. No physical tour location required.",
         "errors": {
           "required": "Address type is required"
         }
@@ -925,7 +928,8 @@
       "tourName": "Tour Name",
       "details": "Details",
       "selectTravelers": "Select travelers",
-      "meetingPoint": "Meeting Point"
+      "meetingPoint": "Meeting Point",
+      "hotelPickup": "We pick you up at your hotel"
     },
     "enquiry": {
       "title": "Enquire Us",

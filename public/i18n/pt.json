@@ -328,6 +328,7 @@
       "itinerary": "Itinerário",
       "stopLabel": "Parada",
       "meetingPoint": "Ponto de encontro",
+      "hotelPickup": "Este tour busca o cliente no seu hotel",
       "tourContactInfo": "Informações de contato (passeio)",
       "reviewBtn": "Avaliar",
       "alreadyReviewed": "Já fiz a avaliação",
@@ -642,8 +643,10 @@
         "options": {
           "meetingPoint": "Ponto de Encontro",
           "endPoint": "Ponto Final",
-          "pickUpPoint": "Ponto de Coleta"
+          "pickUpPoint": "Ponto de Coleta",
+          "hotelPickup": "Coleta no hotel"
         },
+        "hotelPickupHint": "Este tour busca o cliente no seu hotel. Não requer localização física do tour.",
         "errors": {
           "required": "O tipo de endereço é obrigatório"
         }
@@ -926,7 +929,8 @@
       "tourName": "Nome do passeio",
       "details": "Detalhe",
       "selectTravelers": "Selecionar viajantes",
-      "meetingPoint": "Ponto de encontro"
+      "meetingPoint": "Ponto de encontro",
+      "hotelPickup": "Buscamos você no seu hotel"
     },
     "enquiry": {
       "title": "Contate-nos",
