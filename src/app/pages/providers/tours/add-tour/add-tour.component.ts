@@ -599,6 +599,43 @@ export class AddTourComponent {
     this.locations.markAsDirty();
   }
 
+  // TC-017 (#220): HOTEL_PICKUP no tiene ubicacion fisica — el frontend limpia
+  // valores + validators de country/state/city/lat/long/address/location cuando
+  // el provider selecciona ese tipo, para que la validacion del form no lo bloquee.
+  isHotelPickup(index: number): boolean {
+    return this.locations.at(index)?.get('typeOfAddress')?.value === TypeOfAddress.HOTEL_PICKUP;
+  }
+
+  hasHotelPickupLocation(): boolean {
+    return this.locations.controls.some(l => l.get('typeOfAddress')?.value === TypeOfAddress.HOTEL_PICKUP);
+  }
+
+  onTypeOfAddressChange(index: number): void {
+    const loc = this.locations.at(index);
+    if (!loc) return;
+    const physicalFields = ['country', 'department', 'city', 'location', 'latitude', 'longitude', 'address'];
+    if (loc.get('typeOfAddress')?.value === TypeOfAddress.HOTEL_PICKUP) {
+      physicalFields.forEach(f => {
+        const ctrl = loc.get(f);
+        if (ctrl) {
+          ctrl.clearValidators();
+          ctrl.setValue(null, { emitEvent: false });
+          ctrl.updateValueAndValidity({ emitEvent: false });
+        }
+      });
+    } else {
+      // Restaurar validators cuando el provider cambia de HOTEL_PICKUP a otro tipo.
+      loc.get('country')?.setValidators([Validators.required]);
+      loc.get('department')?.setValidators([Validators.required]);
+      loc.get('city')?.setValidators([Validators.required]);
+      loc.get('location')?.setValidators([Validators.required]);
+      loc.get('latitude')?.setValidators([Validators.required, Validators.pattern("^-?([0-8]?[0-9]|90)(.[0-9]{1,10})$")]);
+      loc.get('longitude')?.setValidators([Validators.required, Validators.pattern("^-?(?:180(?:\\.0+)?|(?:1[0-7]\\d|\\d{1,2})(?:\\.\\d+)?)$")]);
+      loc.get('address')?.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
+      physicalFields.forEach(f => loc.get(f)?.updateValueAndValidity({ emitEvent: false }));
+    }
+  }
+
   get mainAttractions(): FormArray {
     return this.tourForm.get("mainAttractions") as FormArray;
   }
@@ -867,14 +904,18 @@ export class AddTourComponent {
         address,
       } = location;
 
+      // TC-017 (#220): HOTEL_PICKUP no tiene ubicacion fisica — enviar null en country/state/city,
+      // 0 en lat/long (backend acepta null tras PR api #226).
+      const isHotelPickup = typeOfAddress === TypeOfAddress.HOTEL_PICKUP;
+
       return {
-        countryId: +country,
-        stateId: +department,
-        cityId: +city,
-        latitude: +latitude,
-        longitude: +longitude,
-        address,
-        location: this.i18nService.createI18nField(location.location),
+        countryId: isHotelPickup ? null : +country,
+        stateId: isHotelPickup ? null : +department,
+        cityId: isHotelPickup ? null : +city,
+        latitude: isHotelPickup ? 0 : +latitude,
+        longitude: isHotelPickup ? 0 : +longitude,
+        address: isHotelPickup ? null : address,
+        location: isHotelPickup ? null : this.i18nService.createI18nField(location.location),
         addressType: typeOfAddress,
       };
     });
@@ -1118,6 +1159,9 @@ export class AddTourComponent {
               longitude: location.longitude,
               address: location.address,
             });
+            // TC-017 (#220): en carga de tour existente, ajustar validators si es HOTEL_PICKUP
+            // para no bloquear el submit del provider al editar.
+            this.onTypeOfAddressChange(index);
           });
 
           this.tour?.mainAttractions?.map((mainAttraction, index) => {
