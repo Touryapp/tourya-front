@@ -1218,7 +1218,25 @@ export class TourSlotSelectionModalComponent implements OnInit, AfterViewInit {
     return this.dateErrors.has(dayjs(date).format('YYYY-MM-DD'));
   }
 
+  /**
+   * TC-018 (#227) Bug B: true si el schedule del dia tiene el flag blockedByMaritimeReport.
+   * El backend lo calcula via EXISTS contra maritim_activity_report (flag=RED activo).
+   */
+  isDayBlockedByMaritime(date: Date): boolean {
+    if (!this.selectedTour?.schedules?.length) return false;
+    const dateStr = dayjs(date).format('YYYY-MM-DD');
+    const schedule = this.selectedTour.schedules.find(
+      s => dayjs(s.scheduleDate).format('YYYY-MM-DD') === dateStr
+    );
+    return schedule?.blockedByMaritimeReport === true;
+  }
+
   selectDate(date: Date) {
+    // TC-018 (#227) Bug B: silenciosamente no permitir seleccionar dias bajo alerta DIMAR RED.
+    // El HTML tambien pinta el dia como disabled — este guard es defensa.
+    if (this.isDayBlockedByMaritime(date)) {
+      return;
+    }
     if (!this.canSelectDate(date)) {
       const dateStr = dayjs(date).format('YYYY-MM-DD');
       this.dateErrors.add(dateStr);

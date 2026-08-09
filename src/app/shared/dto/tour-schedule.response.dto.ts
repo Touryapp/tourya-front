@@ -33,7 +33,9 @@ export interface TourScheduleConfigResponseDto {
 
   "status": string,
   "configId": number,
-  "config": TourScheduleConfigDto
+  "config": TourScheduleConfigDto,
+  /** TC-018 (#227) Bug B: true si hay alerta DIMAR RED activa para este dia. */
+  "blockedByMaritimeReport"?: boolean
 }
 export interface TourScheduleConfigDto {
   "id": number,

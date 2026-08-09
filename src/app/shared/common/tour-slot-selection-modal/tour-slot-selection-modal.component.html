@@ -43,14 +43,26 @@
         </div>
 
         <!-- Date Carousel -->
+        <!-- TC-018 (#227) Bug B: dias bajo alerta DIMAR RED aparecen con clase 'blocked' y tooltip. -->
         <div class="date-carousel">
           <owl-carousel-o [options]="customOptions">
             <ng-template *ngFor="let date of dates" carouselSlide>
-              <div class="date-item d-flex flex-column align-items-center justify-content-center" [ngClass]="{'selected': selectedDate === date}" (click)="selectDate(date)">
+              <div class="date-item d-flex flex-column align-items-center justify-content-center"
+                   [ngClass]="{'selected': selectedDate === date, 'blocked': isDayBlockedByMaritime(date)}"
+                   [style.opacity]="isDayBlockedByMaritime(date) ? 0.45 : 1"
+                   [style.cursor]="isDayBlockedByMaritime(date) ? 'not-allowed' : 'pointer'"
+                   [attr.title]="isDayBlockedByMaritime(date) ? ('tourSlotModal.blockedByMaritime' | translate) : null"
+                   (click)="selectDate(date)">
                 <span class="text text-center mb-1 m-0" style="line-height: 1;">{{date | date: 'dd/MM/yyyy'}}</span>
-                <span class="text-center w-100 m-0" 
-                      [ngClass]="{'text-danger font-weight-bold': hasCapacityError(date)}" 
+                <span class="text-center w-100 m-0"
+                      *ngIf="!isDayBlockedByMaritime(date)"
+                      [ngClass]="{'text-danger font-weight-bold': hasCapacityError(date)}"
                       style="font-size: 0.75rem; opacity: 0.85; line-height: 1; transition: color 0.3s;">{{ 'tourSlotModal.available' | translate }} {{ getDayAvailability(date) }}</span>
+                <span class="text-center w-100 m-0 text-danger"
+                      *ngIf="isDayBlockedByMaritime(date)"
+                      style="font-size: 0.7rem; line-height: 1;">
+                  <i class="isax isax-warning-2 me-1"></i>{{ 'tourSlotModal.blockedShort' | translate }}
+                </span>
               </div>
             </ng-template>
           </owl-carousel-o>

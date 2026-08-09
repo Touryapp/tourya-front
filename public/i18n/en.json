@@ -1318,6 +1318,8 @@
   "tourSlotModal": {
     "title": "Select Schedule and Participants",
     "available": "Available:",
+    "blockedByMaritime": "Not available: active DIMAR alert for maritime conditions",
+    "blockedShort": "Blocked (DIMAR)",
     "availableSchedules": "Available Schedules",
     "selectSchedule": "Select your preferred schedule",
     "groupsAvailable": "groups available",
