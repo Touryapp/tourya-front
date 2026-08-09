@@ -13,6 +13,9 @@ export interface TourAdminDto {
   rating: number | null;
   status: TourStatus;
   tourCategoryId: number;
+  // TC-015 refinamiento (#218): columnas adicionales en la lista Gestion de Tours (admin).
+  subCategory?: string;
+  priceType?: string;
   // opcionalmente puede venir el objeto de categoría embebido
   tourCategory?: TourCategoryDto;
   provider: ProviderDto;
