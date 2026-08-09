@@ -57,13 +57,13 @@
           <div *ngIf="!loading && tours.length > 0" class="table-responsive">
             <table class="table table-hover mb-0">
               <thead>
+                <!-- TC-015 refinamiento (#218): Categoria/Duracion/Capacidad reemplazadas por Subcategoria/Tipo precio. -->
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
                   <th>Proveedor</th>
-                  <th>Categoría</th>
-                  <th>Duración</th>
-                  <th>Capacidad</th>
+                  <th>Subcategoría</th>
+                  <th>Tipo precio</th>
                   <th>Estado</th>
                   <th class="text-center">Acciones</th>
                 </tr>
@@ -89,10 +89,12 @@
                     </div>
                   </td>
                   <td>
-                    <span class="badge bg-light text-dark">{{ getCategoryName(tour.tourCategoryId) }}</span>
+                    <span class="badge bg-light text-dark">{{ tour.subCategory || '—' }}</span>
                   </td>
-                  <td>{{ tour.duration }}</td>
-                  <td>{{ tour.maxPeople }} personas</td>
+                  <td>
+                    <span *ngIf="tour.priceType === 'grupo'" class="badge bg-info-transparent text-info">Grupo ({{ tour.maxPeople }})</span>
+                    <span *ngIf="tour.priceType !== 'grupo'" class="badge bg-secondary-transparent text-secondary">{{ tour.priceType || 'Individual' }}</span>
+                  </td>
                   <td>
                     <span class="badge" [ngClass]="getStatusBadgeClass(tour.status)">
                       {{ getStatusLabel(tour.status) }}
