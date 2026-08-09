@@ -197,6 +197,12 @@
                       <div>
                         <small class="text-muted d-block">{{ 'tourBookingSuccess.details.travellers' | translate }}</small>
                         <span class="fw-medium">{{ currentReservation.travellers }}</span>
+                        <!-- TC-016 (#219): desglose por ageType usando priceBreakdown que ya viene del backend. -->
+                        <span class="d-block fs-13 text-gray-6" *ngIf="currentReservation.priceBreakdown?.length">
+                          <ng-container *ngFor="let p of currentReservation.priceBreakdown; let last = last">
+                            {{ p.quantity }} {{ ('tour-schedule.prices.ageType.' + (p.ageType?.name || p.ageType)) | translate }}<span *ngIf="!last">, </span>
+                          </ng-container>
+                        </span>
                       </div>
                     </div>
                   </div>

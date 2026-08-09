@@ -444,6 +444,9 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
       customerEmail: reservation.serviceResponsibleEmail || 'N/A',
       customerPhone: reservation.serviceResponsiblePhone || 'N/A',
       travellers: reservation.totalTourists != null ? `${reservation.totalTourists}` : 'N/A',
+      // TC-016 (#219): propagar tambien aqui — este mapper se usa cuando el modal se abre
+      // desde QR/detalle. Antes se olvido y el modal mostraba solo "Viajeros: 2" sin desglose.
+      travelerBreakdown: reservation.travelerBreakdown,
       duration: reservation.duration ? `${reservation.duration} días` : 'N/A',
       // TC-005: PROVIDER puro ve el neto que recibe (providerPrice del SP); ADMIN/BACKOFFICE/CLIENT ven el precio que paga el cliente.
       price: this.pickBookingPriceForRole(reservation),
