@@ -327,7 +327,7 @@
                                     @if (selectedBooking.travelerBreakdown?.length) {
                                         <p class="fs-13 text-gray-6 mb-0">
                                             @for (t of selectedBooking.travelerBreakdown; track t.ageType; let last = $last) {
-                                                <span>{{ t.quantity }} {{ 'configuration.ageType.' + t.ageType | translate }}</span>@if (!last) {<span>, </span>}
+                                                <span>{{ t.quantity }} {{ 'tour-schedule.prices.ageType.' + t.ageType | translate }}</span>@if (!last) {<span>, </span>}
                                             }
                                         </p>
                                     }
