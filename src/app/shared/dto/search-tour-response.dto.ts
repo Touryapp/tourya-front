@@ -37,6 +37,8 @@ export interface ScheduleDto {
   isUnlimitedCapacity: boolean;
   status: string;
   availability?: number;
+  /** TC-018 (#227) Bug B: true si hay alerta DIMAR RED activa (subcat+ubic+rango fechas) para este dia. */
+  blockedByMaritimeReport?: boolean;
   config?: ConfigDto;
 }
 export interface TourDto {

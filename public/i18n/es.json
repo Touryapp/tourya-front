@@ -1319,6 +1319,8 @@
   "tourSlotModal": {
     "title": "Seleccionar Horario y Participantes",
     "available": "Disponibles:",
+    "blockedByMaritime": "No disponible: alerta DIMAR vigente por condiciones marítimas",
+    "blockedShort": "Bloqueado DIMAR",
     "availableSchedules": "Horarios Disponibles",
     "selectSchedule": "Selecciona el horario que prefieras",
     "groupsAvailable": "grupos disponibles",
