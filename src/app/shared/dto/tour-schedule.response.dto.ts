@@ -9,6 +9,8 @@ export interface TourSchedule {
   daysOfWeek: string[];
 
   slots: TourScheduleSlot[];
+  // TC-019 (#231): subcategoria del template (si aplica). Nullable retrocompatible.
+  subCategory?: string;
 }
 
 export interface TourScheduleSlot {
