@@ -35,6 +35,20 @@
                             </div>
                         </div>
 
+                        <!-- TC-019 (#231): campo Subcategoria a la que aplica el template. -->
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">{{ 'templates.form.subCategory' | translate }}</label>
+                                <mat-select class="custom-mat-select select" placeholder="{{ 'templates.form.subCategoryPlaceholder' | translate }}"
+                                    formControlName="subCategory">
+                                    <mat-option value="">{{ 'templates.form.subCategoryNone' | translate }}</mat-option>
+                                    <mat-option *ngFor="let sub of subcategories" [value]="sub.code">
+                                        {{ (sub.name?.['es'] || sub.code) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">{{ 'templates.form.label' | translate }}</label>

@@ -1040,10 +1040,13 @@ export class TourScheduleComponent {
     });
   }
 
-  // Métodos para manejo de templates
+  // Métodos para manejo de templates.
+  // TC-019 (#231): pasa la subcategoria del tour como filtro — el backend devuelve
+  // solo templates que aplican a esa subcat. Templates viejos con NULL quedan afuera.
   loadTemplates(): void {
     this.templatesLoading = true;
-    this.templateService.getTemplates().subscribe({
+    const subCategory = this.tour?.subCategory || undefined;
+    this.templateService.getTemplates(subCategory).subscribe({
       next: (templates) => {
         this.templates = templates;
         this.templatesLoading = false;

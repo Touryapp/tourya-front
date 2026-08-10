@@ -13,9 +13,13 @@ export class TemplateService {
 
   constructor(private http: HttpClient) {}
 
-  // Obtener todos los templates
-  getTemplates(): Observable<TourSchedule[]> {
-    return this.http.get<TourSchedule[]>(`${this.baseUrl}/templates`);
+  // Obtener todos los templates. TC-019 (#231): filtro opcional por subcategoria.
+  getTemplates(subCategory?: string): Observable<TourSchedule[]> {
+    let params = new HttpParams();
+    if (subCategory) {
+      params = params.set("subCategory", subCategory);
+    }
+    return this.http.get<TourSchedule[]>(`${this.baseUrl}/templates`, { params });
   }
 
   // Obtener un template por ID

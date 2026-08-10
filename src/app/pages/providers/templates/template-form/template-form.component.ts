@@ -9,6 +9,8 @@ import { onlyNumberValidator } from "../../../../shared/validators/only-number.v
 import { routes } from "../../../../shared/routes/routes";
 import { AuthService } from "../../../../core/services/auth.service";
 import { CreateTourSchedule } from "../../../../shared/dto/create-tour-schedule.dto";
+import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
+import { CategoryDto, SubCategoryDto } from "../../../../shared/dto/category.dto";
 @Component({
   selector: "app-template-form",
   standalone: false,
@@ -28,6 +30,9 @@ export class TemplateFormComponent implements OnInit {
   showAnyModal = false;
   pendingSlotIndex: number | null = null;
 
+  // TC-019 (#231): subcategorias disponibles para el select del template.
+  subcategories: SubCategoryDto[] = [];
+
   DAYS_OF_WEEK = [
     { label: "tour-schedule.config.daysOfWeek.SUNDAY", value: "SUNDAY", day: 0 },
     { label: "tour-schedule.config.daysOfWeek.MONDAY", value: "MONDAY", day: 1 },
@@ -44,7 +49,8 @@ export class TemplateFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private authService: AuthService,
+    private searchToursService: SearchToursService
   ) {
     this.templateForm = this.fb.group({
       label: [
@@ -55,16 +61,38 @@ export class TemplateFormComponent implements OnInit {
           Validators.maxLength(50),
         ],
       ],
+      // TC-019 (#231): subcategoria a la que aplica el template. Opcional en el form
+      // pero requerido en la practica para que el template aparezca en el dropdown filtrado.
+      subCategory: [""],
       daysOfWeek: this.fb.array([]),
 
       slots: this.fb.array([]),
     });
   }
 
+  // TC-019 (#231): carga catalogo de subcategorias desde categoriesPublic (categoria -> subcategorias).
+  // Se aplanan a un unico Set porque el select solo elige el code de la subcategoria.
+  private loadSubcategories(): void {
+    this.searchToursService.categoriesPublic().subscribe({
+      next: (data: CategoryDto[]) => {
+        if (!data) return;
+        const unique = new Map<string, SubCategoryDto>();
+        data.forEach(cat => {
+          (cat.subCategories || []).forEach(sub => unique.set(sub.code, sub));
+        });
+        this.subcategories = Array.from(unique.values());
+      },
+      error: () => {}
+    });
+  }
+
   ngOnInit(): void {
-    this.templateId = this.route.snapshot.paramMap.get("id") ? 
+    // TC-019 (#231): cargar catalogo de subcategorias en init (create y edit).
+    this.loadSubcategories();
+
+    this.templateId = this.route.snapshot.paramMap.get("id") ?
       +this.route.snapshot.paramMap.get("id")! : null;
-    
+
     this.isEditMode = !!this.templateId;
 
     if (this.isEditMode && this.templateId) {
@@ -91,6 +119,8 @@ export class TemplateFormComponent implements OnInit {
       next: (template) => {
         this.templateForm.patchValue({
           label: template.label,
+          // TC-019 (#231): precarga subCategory en edit mode.
+          subCategory: template.subCategory || "",
         });
 
         // Limpiar y reconstruir días de la semana
@@ -186,6 +216,8 @@ export class TemplateFormComponent implements OnInit {
       const templateData: any = {
         providerId: providerId, // ID del proveedor actual
         label: formData.label,
+        // TC-019 (#231): enviar subCategory (string vacio => backend lo ignora).
+        subCategory: formData.subCategory || null,
         daysOfWeek: formData.daysOfWeek,
         slots: formData.slots.map((slot: any) => ({
           ...slot,
