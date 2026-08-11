@@ -383,7 +383,9 @@
 
 
                         <!-- ===== SOLO PROVIDER / ADMIN ===== -->
-                        @if (currentRole !== 'CLIENT') {
+                        <!-- TC-021 (#236): PROVIDER solo ve datos del cliente hasta 1 dia antes del scheduleDate.
+                             ADMIN/BACKOFFICE siempre ven (canSeeCustomerData retorna true si !== PROVIDER). -->
+                        @if (currentRole !== 'CLIENT' && canSeeCustomerData()) {
 
                             <!-- Reserva a nombre de -->
                             @if (selectedBooking.serviceResponsible) {
@@ -444,23 +446,27 @@
                         <!-- ===== TODOS LOS ROLES ===== -->
 
                         <!-- Información del Cliente -->
-                        <div class="upcoming-details mb-4">
-                            <h6 class="mb-3">{{ 'provider-tour-management.modal.customerInfo' | translate }}</h6>
-                            <div class="row gy-3">
-                                <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.name' | translate }}</h6>
-                                    <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerName }}</p>
-                                </div>
-                                <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.email' | translate }}</h6>
-                                    <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerEmail }}</p>
-                                </div>
-                                <div class="col-lg-4">
-                                    <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.phone' | translate }}</h6>
-                                    <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerPhone }}</p>
+                        <!-- TC-021 (#236): mismos datos que "Reserva a nombre de" — tambien se oculta al
+                             PROVIDER lejos del scheduleDate. CLIENT ve siempre (son sus propios datos). -->
+                        @if (canSeeCustomerData()) {
+                            <div class="upcoming-details mb-4">
+                                <h6 class="mb-3">{{ 'provider-tour-management.modal.customerInfo' | translate }}</h6>
+                                <div class="row gy-3">
+                                    <div class="col-lg-4">
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.name' | translate }}</h6>
+                                        <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerName }}</p>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.email' | translate }}</h6>
+                                        <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerEmail }}</p>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h6 class="fs-14 text-gray-6">{{ 'provider-tour-management.modal.fields.phone' | translate }}</h6>
+                                        <p class="text-dark fs-16 fw-medium">{{ selectedBooking.customerPhone }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                         <!-- Secciones ocultas para Proveedores -->
                         @if (currentRole !== 'PROVIDER') {
