@@ -408,9 +408,8 @@ export class TourBookingConfirmationComponent implements OnInit {
    * Navegar a mis reservas
    */
   goToMyReservations(): void {
-    // TODO: Implementar navegación a mis reservas cuando esté disponible
-    console.log('Navegating to my reservations...');
-    this.router.navigate(['/clients/list-tours']);
+    // TC-020 (#235 bug b): navegar a la tab "Mis reservas" del perfil.
+    this.router.navigate(['/clients/my-profile'], { queryParams: { section: 'bookings' } });
   }
 
   /**
