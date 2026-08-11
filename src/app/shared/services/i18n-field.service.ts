@@ -87,7 +87,7 @@ export class I18nFieldService {
    */
   createI18nField(value: string, lang?: SupportedLanguage): I18nField {
     const targetLang = lang || this.getCurrentLanguage();
-    
+
     const field: I18nField = {
       es: '',
       en: '',
@@ -97,6 +97,20 @@ export class I18nFieldService {
     field[targetLang] = value || '';
 
     return field;
+  }
+
+  /**
+   * TC-017 (#220 opcion B): fuerza guardar el valor en el slot 'es' (español).
+   * Uso pensado para el editor de tour (add-tour) — el backend valida que
+   * TranslatedField.es no sea vacio (RNT/legal), asi que siempre guardamos alli
+   * sin importar el idioma del UI. Los slots 'en' y 'pt' quedan vacios y seran
+   * llenados por un agente IA en fase futura.
+   *
+   * @param value - El valor del input del usuario
+   * @returns I18nField con {es: value, en: '', pt: ''}
+   */
+  createI18nFieldInSpanish(value: string): I18nField {
+    return this.createI18nField(value, 'es');
   }
 
   /**

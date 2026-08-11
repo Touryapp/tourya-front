@@ -915,7 +915,7 @@ export class AddTourComponent {
         latitude: isHotelPickup ? 0 : +latitude,
         longitude: isHotelPickup ? 0 : +longitude,
         address: isHotelPickup ? null : address,
-        location: isHotelPickup ? null : this.i18nService.createI18nField(location.location),
+        location: isHotelPickup ? null : this.i18nService.createI18nFieldInSpanish(location.location),
         addressType: typeOfAddress,
       };
     });
@@ -958,8 +958,8 @@ export class AddTourComponent {
 
     const body = {
       id: this.tourId || undefined,
-      name: this.i18nService.createI18nField(name),
-      description: this.i18nService.createI18nField(description),
+      name: this.i18nService.createI18nFieldInSpanish(name),
+      description: this.i18nService.createI18nFieldInSpanish(description),
       tourCategoryId: +category,
       priceType: priceType === PriceType.GROUP ? 'grupo' : 'individual',
       durationEnum: Array.isArray(duration) ? duration[0] : duration,
@@ -973,33 +973,33 @@ export class AddTourComponent {
       locations: locationMap,
       mainAttractions: mainAttractions.map((attr: any) => ({
         id: attr.id,
-        description: this.i18nService.createI18nField(attr.description)
+        description: this.i18nService.createI18nFieldInSpanish(attr.description)
       })),
       includes: includes.map((inc: any) => ({
         id: inc.id,
-        description: this.i18nService.createI18nField(inc.description),
+        description: this.i18nService.createI18nFieldInSpanish(inc.description),
         type: inc.type
       })),
       excludes: excludes.map((exc: any) => ({
         id: exc.id,
-        description: this.i18nService.createI18nField(exc.description),
+        description: this.i18nService.createI18nFieldInSpanish(exc.description),
         type: exc.type
       })),
       faq: faq.map((f: any) => ({
         id: f.id,
-        question: this.i18nService.createI18nField(f.question),
-        answer: this.i18nService.createI18nField(f.answer)
+        question: this.i18nService.createI18nFieldInSpanish(f.question),
+        answer: this.i18nService.createI18nFieldInSpanish(f.answer)
       })),
       itineraries: itineraries.map((itin: any) => ({
         id: itin.id,
-        title: this.i18nService.createI18nField(itin.title),
+        title: this.i18nService.createI18nFieldInSpanish(itin.title),
         day: itin.day,
         time: itin.time,
-        description: this.i18nService.createI18nField(itin.description)
+        description: this.i18nService.createI18nFieldInSpanish(itin.description)
       })),
       cancellationPolicies: cancellationPolicies.map((policy: any) => ({
         id: policy.id,
-        observations: this.i18nService.createI18nField(policy.observations),
+        observations: this.i18nService.createI18nFieldInSpanish(policy.observations),
         allowsRainRefund: policy.allowsRainRefund,
         allowsRescheduling: policy.allowsRescheduling,
         cancellationPolicyType: policy.cancellationPolicyType
