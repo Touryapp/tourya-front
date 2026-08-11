@@ -137,7 +137,10 @@ export class MyProfileComponent implements OnInit {
 
   loadProfile(): void {
     this.profileLoading = true;
-    this.touristService.getProfile().subscribe({
+    // TC-020 (#235 bug d): forceRefresh=true — sin esto el cache stale de
+    // TouristService (shareReplay(1)) devolvia la version anterior del profile
+    // y el documentType aparecia como N/A aunque el update lo hubiera guardado.
+    this.touristService.getProfile(true).subscribe({
       next: (data) => {
         this.profileData = data;
         this.profileLoading = false;

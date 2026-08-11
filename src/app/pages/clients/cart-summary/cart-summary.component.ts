@@ -79,7 +79,10 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     address2: '',
     city: '',
     state: '',
-    zipCode: ''
+    zipCode: '',
+    // TC-020 (#235 bug a): docType/docNumber para propagar a Wompi + backend.
+    documentType: '',
+    documentNumber: ''
   };
 
   // Hospedaje form
@@ -313,6 +316,10 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.contactForm.lastName = profile.lastName || this.contactForm.lastName;
             this.contactForm.email = profile.email || this.contactForm.email;
             this.contactForm.phone = profile.phone || this.contactForm.phone;
+            // TC-020 (#235 bug a): propagar docType/docNumber del profile al contactForm
+            // para que se envie a Wompi + backend en vez de hardcodes CC/00000000/123456789.
+            this.contactForm.documentType = (profile as any).documentType || this.contactForm.documentType;
+            this.contactForm.documentNumber = (profile as any).documentNumber || this.contactForm.documentNumber;
 
             // Asignar campos adicionales si el backend los envía (dirección, info adicional)
             if ((profile as any).address) {
@@ -752,8 +759,11 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
           fullName: `${this.userForm.firstName} ${this.userForm.lastName}`.trim(),
           phoneNumber: this.userForm.phone.replace(/\D/g, ''), // Solo números
           phoneNumberPrefix: '+57',
-          legalId: '123456789', // TODO: Agregar campo en el formulario
-          legalIdType: 'CC'
+          // TC-020 (#235 bug a): usar docType/docNumber del profile del turista via
+          // contactForm (populado en loadUserProfile). Fallback a CC/00000000 si el
+          // profile no los tiene (perfiles pre-TC-009 con document_type NULL).
+          legalId: this.contactForm.documentNumber || '00000000',
+          legalIdType: this.contactForm.documentType || 'CC'
         },
         shippingAddress: shippingAddress
       };
@@ -1085,14 +1095,16 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       
       // 4. Preparar información del pagador
+      // TC-020 (#235 bug a): docType/docNumber del contactForm (populados desde profile).
+      // Fallback a CC/00000000 para perfiles legacy sin documento configurado.
       const payerInfo = {
         fullName: this.contactForm.firstName + ' ' + this.contactForm.lastName,
         firstName: this.contactForm.firstName,
         lastName: this.contactForm.lastName,
         email: this.contactForm.email,
         phone: this.contactForm.phone,
-        documentType: 'CC', // TODO: Obtener del formulario si está disponible
-        documentNumber: '00000000', // TODO: Obtener del formulario
+        documentType: this.contactForm.documentType || 'CC',
+        documentNumber: this.contactForm.documentNumber || '00000000',
         address1: this.contactForm.address1,
         city: this.contactForm.city,
         country: this.contactForm.country
