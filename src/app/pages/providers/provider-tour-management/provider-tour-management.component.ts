@@ -97,6 +97,25 @@ export class ProviderTourManagementComponent implements OnInit, OnDestroy, OnCha
   goToMaritimeReports(): void {
     this.router.navigate(['/admin/maritime-reports']);
   }
+
+  /**
+   * TC-021 (#236): PROVIDER solo puede ver datos personales del cliente hasta 1 dia
+   * antes del scheduleDate (para evitar contacto directo + negociacion fuera de la
+   * plataforma). ADMIN/BACKOFFICE/CLIENT ven siempre.
+   *
+   * Fail-closed si no hay rawCheckInDate — mejor ocultar por accidente que filtrar.
+   */
+  canSeeCustomerData(): boolean {
+    if (this.currentRole !== 'PROVIDER') return true;
+    if (!this.selectedBooking?.rawCheckInDate) return false;
+    const schedule = this.parseLocalDate(this.selectedBooking.rawCheckInDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    schedule.setHours(0, 0, 0, 0);
+    const diffMs = schedule.getTime() - today.getTime();
+    const diffDays = Math.floor(diffMs / 86_400_000);
+    return diffDays <= 1;
+  }
   
   // Variables de paginación y filtrado
   public pageSize = 10;
