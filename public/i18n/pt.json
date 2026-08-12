@@ -30,6 +30,10 @@
     "hotelPickup": {
       "longMessage": "Para desfrutar deste tour, nossa equipe irá buscar você diretamente na sua acomodação.",
       "shortMessage": "Buscamos você na sua acomodação"
+    },
+    "priceType": {
+      "individual": "Individual",
+      "group": "Grupo"
     }
   },
   "rejectionReasons": {

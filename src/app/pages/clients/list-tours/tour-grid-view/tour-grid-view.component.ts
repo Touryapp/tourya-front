@@ -92,16 +92,19 @@ export class TourGridViewComponent implements OnChanges {
     }
   }
 
+  // TC-017 (#220): backend puede enviar 'grupo'/'individual' (minusc) o 'GROUP'/'INDIVIDUAL' (mayus).
+  // Se normaliza y se usa la key i18n tour.priceType.* con formato "Grupo (N)" donde N = maxPeople.
   getPriceTypeLabel(tour: any): string {
     const priceType = tour?.priceType;
     if (!priceType) return '';
     const upper = priceType.toUpperCase();
     if (upper === 'PRIVATE' || upper === 'PER_PERSON' || upper === 'INDIVIDUAL') {
-      return this.translate.instant('toursList.priceType.person');
+      return this.translate.instant('tour.priceType.individual');
     }
-    if (upper === 'GROUP' || upper === 'PER_GROUP') {
-      const amount = tour?.maxCapacity || 0;
-      return this.translate.instant('toursList.priceType.group', { amount: amount });
+    if (upper === 'GROUP' || upper === 'GRUPO' || upper === 'PER_GROUP') {
+      const amount = tour?.maxPeople || 0;
+      const label = this.translate.instant('tour.priceType.group');
+      return `${label} (${amount})`;
     }
     return priceType;
   }

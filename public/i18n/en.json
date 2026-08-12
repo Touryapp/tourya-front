@@ -30,6 +30,10 @@
     "hotelPickup": {
       "longMessage": "For this tour, our team will pick you up directly at your accommodation.",
       "shortMessage": "We pick you up at your accommodation"
+    },
+    "priceType": {
+      "individual": "Individual",
+      "group": "Group"
     }
   },
   "rejectionReasons": {
