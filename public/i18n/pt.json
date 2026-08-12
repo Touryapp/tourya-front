@@ -26,6 +26,12 @@
       "tourSubmitted": "Passeio enviado para revisão com sucesso"
     }
   },
+  "tour": {
+    "hotelPickup": {
+      "longMessage": "Para desfrutar deste tour, nossa equipe irá buscar você diretamente na sua acomodação.",
+      "shortMessage": "Buscamos você na sua acomodação"
+    }
+  },
   "rejectionReasons": {
     "inappropriate": "Conteúdo inapropriado",
     "fake": "Informação falsa ou enganosa",

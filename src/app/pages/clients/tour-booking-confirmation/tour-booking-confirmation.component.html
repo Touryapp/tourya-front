@@ -332,21 +332,30 @@
                           <div class="mb-2">
                             <span class="badge bg-secondary">{{ location.addressType }}</span>
                           </div>
-                          
-                          <div class="row g-2 mb-1">
-                            <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.locationName' | translate }}:</div>
-                            <div class="col-sm-8 fw-medium">{{ (location.location | localizedName) || location.address }}</div>
-                          </div>
-                  
-                          <div class="row g-2 mb-1">
-                            <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.address' | translate }}:</div>
-                            <div class="col-sm-8 small">{{ location.address }}</div>
-                          </div>
-                  
-                          <div class="row g-2">
-                            <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.region' | translate }}:</div>
-                            <div class="col-sm-8 small">{{ getResolvedLocationString(location.countryId, location.stateId, location.cityId) }}</div>
-                          </div>
+
+                          <!-- TC-017 (#220): Hotel Pickup no tiene direccion fisica — mostrar mensaje largo. -->
+                          <ng-container *ngIf="location.addressType === 'Hotel Pickup'; else physicalLocationInfo">
+                            <div class="alert alert-info d-flex align-items-center mb-0" role="alert">
+                              <i class="isax isax-building me-2 fs-18"></i>
+                              <span class="fw-medium">{{ 'tour.hotelPickup.longMessage' | translate }}</span>
+                            </div>
+                          </ng-container>
+                          <ng-template #physicalLocationInfo>
+                            <div class="row g-2 mb-1">
+                              <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.locationName' | translate }}:</div>
+                              <div class="col-sm-8 fw-medium">{{ (location.location | localizedName) || location.address }}</div>
+                            </div>
+
+                            <div class="row g-2 mb-1">
+                              <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.address' | translate }}:</div>
+                              <div class="col-sm-8 small">{{ location.address }}</div>
+                            </div>
+
+                            <div class="row g-2">
+                              <div class="col-sm-4 text-muted small fw-medium">{{ 'tourBookingSuccess.details.region' | translate }}:</div>
+                              <div class="col-sm-8 small">{{ getResolvedLocationString(location.countryId, location.stateId, location.cityId) }}</div>
+                            </div>
+                          </ng-template>
                         </div>
                       </li>
                     </ul>

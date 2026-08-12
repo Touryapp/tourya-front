@@ -417,10 +417,17 @@
                                                 <i class="fas fa-clock me-1"></i>
                                                 {{ item.schedule.startTime }} - {{ item.schedule.endTime }}
                                             </p>
-                                            <p class="text-muted small mb-1" [title]="item.address.city + ', ' + item.address.state">
+                                            <!-- TC-017 (#220): Hotel Pickup no tiene direccion — mostrar mensaje corto. -->
+                                            <p class="text-muted small mb-1" *ngIf="isHotelPickupItem(item); else itemAddress">
                                                 <i class="fas fa-map-marker-alt me-1"></i>
-                                                {{ item.address.city.length > 15 ? (item.address.city | slice:0:15) + '...' : item.address.city }}, {{ item.address.state.length > 15 ? (item.address.state | slice:0:15) + '...' : item.address.state }}
+                                                {{ 'tour.hotelPickup.shortMessage' | translate }}
                                             </p>
+                                            <ng-template #itemAddress>
+                                                <p class="text-muted small mb-1" [title]="(item.address.city || '') + ', ' + (item.address.state || '')">
+                                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                                    {{ (item.address.city || '').length > 15 ? ((item.address.city || '') | slice:0:15) + '...' : (item.address.city || '') }}, {{ (item.address.state || '').length > 15 ? ((item.address.state || '') | slice:0:15) + '...' : (item.address.state || '') }}
+                                                </p>
+                                            </ng-template>
                                             <!-- TC-006: para tours grupo mostramos la cantidad de grupos; para individual la cantidad de pax. -->
                                             <p class="text-muted small mb-1" *ngIf="item.tour?.priceType === 'grupo'">
                                                 <i class="fas fa-users me-1"></i>
