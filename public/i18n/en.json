@@ -26,6 +26,12 @@
       "tourSubmitted": "Tour submitted for review successfully"
     }
   },
+  "tour": {
+    "hotelPickup": {
+      "longMessage": "For this tour, our team will pick you up directly at your accommodation.",
+      "shortMessage": "We pick you up at your accommodation"
+    }
+  },
   "rejectionReasons": {
     "inappropriate": "Inappropriate content",
     "fake": "Fake or misleading information",

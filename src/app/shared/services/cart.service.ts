@@ -901,11 +901,13 @@ export class CartService {
         })),
         totalPrice: item.totalPrice, // ✅ API: item.totalPrice
         totalParticipants: item.details.reduce((sum: number, detail: any) => sum + detail.quantity, 0), // ✅ Calculado
+        // TC-017 (#220): sin fallbacks fake — Hotel Pickup deja geo vacia y la UI muestra el mensaje corto.
         address: {
-          city: item.city || 'Cartagena',
-          state: item.department || item.state || 'Bolívar',
-          country: item.country || 'Colombia',
-          address: item.meetingPoint || 'Plaza de la Aduana, Centro Histórico'
+          city: item.city || '',
+          state: item.department || item.state || '',
+          country: item.country || '',
+          address: item.meetingPoint || '',
+          addressType: item.addressType || undefined
         },
         // Usar imagen del tour si viene en la respuesta
         gallery: item.tourImageUrl ? [

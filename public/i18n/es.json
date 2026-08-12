@@ -31,6 +31,12 @@
     "fake": "Información falsa o engañosa",
     "spam": "Spam o contenido irrelevante"
   },
+  "tour": {
+    "hotelPickup": {
+      "longMessage": "Para disfrutar de este tour, nuestro equipo te recogerá directamente en tu alojamiento.",
+      "shortMessage": "Te recogemos en tu alojamiento"
+    }
+  },
   "home": {
     "title": "Reserve los Mejores Tours en San Andrés al Mejor Precio",
     "subtitle": "Disfruta de la isla con atención 24/7, compra segura y cancelaciones flexibles.",

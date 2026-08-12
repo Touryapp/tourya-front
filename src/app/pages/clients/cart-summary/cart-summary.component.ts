@@ -1395,6 +1395,21 @@ export class CartSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
+   * TC-017 (#220): true si el tour es Hotel Pickup. El backend aun no expone address_type
+   * en la respuesta del carrito, asi que caemos al empty-check de geo como fallback.
+   * Cuando el backend lo exponga (address.addressType), la deteccion se vuelve exacta.
+   */
+  isHotelPickupItem(item: CartItem): boolean {
+    if (item?.address?.addressType === 'Hotel Pickup') {
+      return true;
+    }
+    const city = item?.address?.city || '';
+    const state = item?.address?.state || '';
+    const address = item?.address?.address || '';
+    return !city && !state && !address;
+  }
+
+  /**
    * Helper para obtener label de tipo de participante
    */
   getParticipantTypeLabel(ageType: string): string {

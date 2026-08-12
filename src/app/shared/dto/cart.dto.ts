@@ -38,6 +38,9 @@ export interface CartItem {
     state: string;
     country: string;
     address: string;
+    // TC-017 (#220): opcional para detectar Hotel Pickup en el UI. Si backend expone address_type
+    // en la respuesta del carrito, viene poblado; si no, la deteccion cae al empty-check en el template.
+    addressType?: string;
   };
   gallery: {
     imageUrl: string;
