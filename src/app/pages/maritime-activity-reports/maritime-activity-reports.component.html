@@ -1,20 +1,10 @@
-<!-- Breadcrumb and Page Header -->
-  <div class="breadcrumb-bar shadow-sm mb-4" *ngIf="!embedMode">
-    <div class="container-fluid">
-      <div class="row align-items-center">
-        <div class="col-md-12 col-12">
-          <h2 class="breadcrumb-title text-center mb-2">Maritime Activity Reports</h2>
-          <nav aria-label="breadcrumb" class="page-breadcrumb">
-            <ol class="breadcrumb justify-content-center mb-0">
-              <li class="breadcrumb-item"><a [routerLink]="routes.home"><i class="isax isax-home-1"></i></a></li>
-              <li class="breadcrumb-item active" aria-current="page">DIMAR</li>
-              <li class="breadcrumb-item active" aria-current="page">Reports</li>
-            </ol>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- TC-008 #195 refinamiento (2026-08-12): el shell AdminComponent (o el
+     dashboard cuando se usa en modo embed) ya provee el contexto de navegacion
+     via su sidebar activo. El breadcrumb-bar hardcodeado en ingles ("Maritime
+     Activity Reports") duplicaba ese contexto y aparecia como un header extra
+     mal formateado al entrar por sub-flujos (/admin/maritime-reports). Se
+     elimina del componente hijo — regla: el shell es responsable del titulo/
+     breadcrumb, el componente hijo solo pinta contenido. -->
 
 <div [ngClass]="embedMode ? '' : 'content section-padding'">
   <div [ngClass]="embedMode ? '' : 'container'">
