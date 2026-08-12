@@ -2134,6 +2134,18 @@
       "irreversible": "Esta acción no se puede deshacer.",
       "cancel_btn": "Cancelar",
       "confirm_btn": "Sí, publicar bandera roja"
+    },
+    "table": {
+      "subCategory": "Subcategoría"
+    },
+    "actions": {
+      "view": "Ver",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "view_modal": {
+      "title": "Ver Reporte",
+      "close_btn": "Cerrar"
     }
   }
 }

@@ -41,7 +41,9 @@ export class MaritimeActivityReportsComponent implements OnInit {
   // Data
   reports: MaritimeActivityReport[] = [];
   dataSource = new MatTableDataSource<MaritimeActivityReport>([]);
-  displayedColumns: string[] = ['id', 'country', 'department', 'city', 'tag', 'flag', 'reportDate', 'actions'];
+  // TC-018 #227: Rediseno columnas listado DIMAR.
+  // Se quitan Department y Status (duplicaba Flag). Se agrega subCategory.
+  displayedColumns: string[] = ['id', 'country', 'city', 'flag', 'subCategory', 'reportDate', 'actions'];
   
   // Dashboard Stats
   todayReport: MaritimeActivityReport | null = null;
@@ -55,8 +57,13 @@ export class MaritimeActivityReportsComponent implements OnInit {
   // Form (Modal Simulation)
   reportForm: FormGroup;
   isEditMode = false;
+  // TC-018 #227: modo lectura para "Ver reporte" (reusa el mismo modal).
+  isViewMode = false;
   selectedReportId: number | null = null;
   showFormModal = false;
+
+  // TC-018 #227: expuesto al template para condicionar botones por bandera.
+  readonly MaritimeFlagRed = MaritimeFlag.RED;
 
   countries: any[] = [];
   departments: any[] = [];
@@ -228,18 +235,53 @@ export class MaritimeActivityReportsComponent implements OnInit {
 
   openCreateModal(): void {
     this.isEditMode = false;
+    this.isViewMode = false;
     this.selectedReportId = null;
     this.reportForm.reset({ flag: MaritimeFlag.GREEN });
+    this.reportForm.enable();
     this.showFormModal = true;
   }
 
   openEditModal(report: MaritimeActivityReport): void {
+    // TC-018 #227: reportes con bandera RED son inmutables (ya cancelaron
+    // reservas retroactivamente vi BE-23). Silently no-op si algun caller
+    // los pasa por descuido.
+    if (report.flag === MaritimeFlag.RED) {
+      this.openViewModal(report);
+      return;
+    }
     this.isEditMode = true;
+    this.isViewMode = false;
     this.selectedReportId = report.id!;
-    
-    // Find category name by ID
+    this.hydrateFormFromReport(report);
+    this.reportForm.enable();
+    this.showFormModal = true;
+  }
+
+  // TC-018 #227: nuevo modo "Ver" (solo lectura). Reusa el mismo modal para
+  // evitar duplicar markup / bindings. El template oculta el boton Guardar
+  // cuando isViewMode === true, y deshabilitamos el form aqui.
+  openViewModal(report: MaritimeActivityReport): void {
+    this.isEditMode = false;
+    this.isViewMode = true;
+    this.selectedReportId = report.id!;
+    this.hydrateFormFromReport(report);
+    this.reportForm.disable();
+    this.showFormModal = true;
+  }
+
+  // TC-018 #227: extraida de openEditModal para reusar en openViewModal.
+  // Fix: la subcategoria del reporte viene como subcategoryCode (string),
+  // pero el <mat-option> antes usaba [value]="sub.name" (dict localizado).
+  // Ahora precargamos los subCategories del catalogo primero, luego pasamos
+  // el CODE al form (el mat-option ahora usa [value]="sub.code" tambien).
+  private hydrateFormFromReport(report: MaritimeActivityReport): void {
     const category = this.categories.find(c => c.id === report.businessCategoryId);
     const categoryName = category ? category.name : '';
+
+    // Cargar subcategorias antes del patch, para que el mat-select tenga
+    // opciones cuando se le asigne el valor.
+    this.subCategories = (category && category.subCategories) ? category.subCategories : [];
 
     this.reportForm.patchValue({
       country: report.countryName,
@@ -269,19 +311,14 @@ export class MaritimeActivityReportsComponent implements OnInit {
         });
       }
     }
-
-    if (categoryName) {
-      const selectedCategory = this.categories.find(c => c.name === categoryName);
-      if (selectedCategory && selectedCategory.subCategories) {
-        this.subCategories = selectedCategory.subCategories;
-      }
-    }
-
-    this.showFormModal = true;
   }
 
   closeModal(): void {
     this.showFormModal = false;
+    // Rehabilitar por si venia de modo Ver, asi el siguiente open* no
+    // arrastra un form deshabilitado.
+    this.reportForm.enable();
+    this.isViewMode = false;
   }
 
   attemptSave(): void {
@@ -309,14 +346,17 @@ export class MaritimeActivityReportsComponent implements OnInit {
     const deptObj = this.departments.find(d => d.name === reportData.department);
     const cityObj = this.cities.find(c => c.name === reportData.city);
     const categoryObj = this.categories.find(c => c.name === reportData.category);
-    const subCatObj = this.subCategories.find(s => s.name === reportData.subCategory);
+    // TC-018 #227: el mat-option de subcategoria ahora usa el CODE como value
+    // (string estable), no el name localizado (dict). Asi el patchValue del
+    // modo Editar precarga correctamente.
+    const subCatObj = this.subCategories.find(s => s.code === reportData.subCategory);
 
     const payload = {
       countryId: countryObj ? countryObj.id : null,
       stateId: deptObj ? deptObj.id : null,
       cityId: cityObj ? cityObj.id : null,
       businessCategoryId: categoryObj ? categoryObj.id : null,
-      subcategoryCode: subCatObj ? subCatObj.code : null,
+      subcategoryCode: subCatObj ? subCatObj.code : reportData.subCategory,
       flag: reportData.flag,
       reportStartDate: reportData.reportStartDate,
       reportEndDate: reportData.reportEndDate
@@ -341,9 +381,17 @@ export class MaritimeActivityReportsComponent implements OnInit {
     }
   }
 
-  deleteReport(id: number): void {
+  deleteReport(report: MaritimeActivityReport): void {
+    // TC-018 #227: reportes RED son inmutables (BE-23 ya cancelo reservas).
+    // Segunda linea de defensa por si el boton llega a mostrarse.
+    if (report.flag === MaritimeFlag.RED) {
+      return;
+    }
+    if (report.id == null) {
+      return;
+    }
     if (confirm('¿Estás seguro de eliminar este reporte?')) {
-      this.reportsService.delete(id).subscribe({
+      this.reportsService.delete(report.id).subscribe({
         next: () => this.loadReports(),
         error: (err) => console.error('Error deleting report', err)
       });

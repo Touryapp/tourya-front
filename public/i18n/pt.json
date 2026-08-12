@@ -2134,6 +2134,18 @@
       "irreversible": "Esta ação não pode ser desfeita.",
       "cancel_btn": "Cancelar",
       "confirm_btn": "Sim, publicar bandeira vermelha"
+    },
+    "table": {
+      "subCategory": "Subcategoria"
+    },
+    "actions": {
+      "view": "Ver",
+      "edit": "Editar",
+      "delete": "Excluir"
+    },
+    "view_modal": {
+      "title": "Ver Relatório",
+      "close_btn": "Fechar"
     }
   }
 }
