@@ -240,6 +240,10 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public wishlistIds: number[] = [];
   public favoriteStates: boolean[] = [];
 
+  // TC-017 (#220): sort en cliente sobre la pagina actual (recommended = orden del backend).
+  public sortOption: 'recommended' | 'price_asc' | 'price_desc' = 'recommended';
+  private originalTours: TourScheduleResponseDto[] = [];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -676,6 +680,44 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.viewMode = mode;
   }
 
+  // TC-017 (#220): sort dropdown handlers.
+  // Ordenamos sobre la pagina actual (client-side). 'recommended' devuelve el orden del backend.
+  onSortOptionChange(option: 'recommended' | 'price_asc' | 'price_desc'): void {
+    this.sortOption = option;
+    this.tours = this.applySort(this.originalTours);
+    this.updateFavoriteStates();
+  }
+
+  getSortOptionLabel(): string {
+    switch (this.sortOption) {
+      case 'price_asc':
+        return 'toursList.priceLowToHigh';
+      case 'price_desc':
+        return 'toursList.priceHighToLow';
+      case 'recommended':
+      default:
+        return 'toursList.recommended';
+    }
+  }
+
+  private applySort(source: TourScheduleResponseDto[]): TourScheduleResponseDto[] {
+    if (!source || source.length === 0) return [];
+    const arr = [...source];
+    if (this.sortOption === 'price_asc') {
+      arr.sort((a, b) => this.getPriceForSort(a) - this.getPriceForSort(b));
+    } else if (this.sortOption === 'price_desc') {
+      arr.sort((a, b) => this.getPriceForSort(b) - this.getPriceForSort(a));
+    }
+    return arr;
+  }
+
+  private getPriceForSort(item: TourScheduleResponseDto): number {
+    const price = item?.tour?.priceFrom;
+    if (price === null || price === undefined) return Number.MAX_SAFE_INTEGER;
+    const num = typeof price === 'number' ? price : Number(price);
+    return isNaN(num) ? Number.MAX_SAFE_INTEGER : num;
+  }
+
   // Event handlers for tour-list-view component
   onToggleFavorite(index: number): void {
     this.toggleClass(index);
@@ -909,7 +951,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
         console.log("Respuesta completa de searchTours:", response);
 
         if (response && response.content) {
-          this.tours = response.content || [];
+          this.originalTours = response.content || [];
+          this.tours = this.applySort(this.originalTours);
           this.totalItems = response.totalElements || 0;
           this.totalPages = response.totalPages || 0;
           this.currentPage = response.number + 1;

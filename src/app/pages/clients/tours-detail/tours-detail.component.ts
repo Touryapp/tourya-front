@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 // usando @angular/google-maps para mapa nativo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -168,8 +169,22 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private reviewsService: ReviewsService,
     private touristService: TouristService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private location: Location
   ) {}
+
+  /**
+   * TC-017 (#220): boton "Volver" en el detalle del tour.
+   * Usa history.back cuando hay historial; cae al listado si el usuario
+   * abrio la URL directo (sin history previa) o si es el primer entry.
+   */
+  public goBack(): void {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate([routes.listTours]);
+    }
+  }
 
   // Reviews data
   reviews: ProviderReview[] = [];
