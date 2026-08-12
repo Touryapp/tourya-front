@@ -2133,6 +2133,18 @@
       "irreversible": "This action cannot be undone.",
       "cancel_btn": "Cancel",
       "confirm_btn": "Yes, publish red flag"
+    },
+    "table": {
+      "subCategory": "Subcategory"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "view_modal": {
+      "title": "View Report",
+      "close_btn": "Close"
     }
   }
 }

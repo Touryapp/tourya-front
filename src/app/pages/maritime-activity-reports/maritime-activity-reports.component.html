@@ -98,20 +98,14 @@
               <td mat-cell *matCellDef="let report"> {{ report.countryName }} </td>
             </ng-container>
 
-            <!-- Department Column -->
-            <ng-container matColumnDef="department">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
-              <td mat-cell *matCellDef="let report"> {{ report.stateName }} </td>
-            </ng-container>
-
             <!-- City Column -->
             <ng-container matColumnDef="city">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
               <td mat-cell *matCellDef="let report"> {{ report.cityName }} </td>
             </ng-container>
 
-            <!-- Tag Column -->
-            <ng-container matColumnDef="tag">
+            <!-- Flag Column -->
+            <ng-container matColumnDef="flag">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Flag </th>
               <td mat-cell *matCellDef="let report">
                 <span class="badge rounded-pill" [ngClass]="getBadgeClass(report.flag)">
@@ -120,14 +114,10 @@
               </td>
             </ng-container>
 
-            <!-- Flag Column -->
-            <ng-container matColumnDef="flag">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-              <td mat-cell *matCellDef="let report">
-                <span class="badge rounded-pill" [ngClass]="getBadgeClass(report.flag)">
-                  {{ report.flag }}
-                </span>
-              </td>
+            <!-- TC-018 #227: Subcategory Column (nueva) -->
+            <ng-container matColumnDef="subCategory">
+              <th mat-header-cell *matHeaderCellDef> {{ 'maritime-reports.table.subCategory' | translate }} </th>
+              <td mat-cell *matCellDef="let report"> {{ report.subcategoryCode || '-' }} </td>
             </ng-container>
 
             <!-- Date Column -->
@@ -141,12 +131,22 @@
               <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
               <td mat-cell *matCellDef="let report" class="text-center">
                 <div class="d-flex justify-content-center gap-2">
-                  <button class="btn btn-icon btn-sm btn-outline-primary" (click)="openEditModal(report)" title="Edit">
-                    <i class="isax isax-edit-2"></i>
+                  <!-- TC-018 #227: Ver siempre visible. -->
+                  <button class="btn btn-icon btn-sm btn-outline-secondary" (click)="openViewModal(report)"
+                          [title]="'maritime-reports.actions.view' | translate">
+                    <i class="isax isax-eye"></i>
                   </button>
-                  <button class="btn btn-icon btn-sm btn-outline-danger" (click)="deleteReport(report.id!)" title="Delete">
-                    <i class="isax isax-trash"></i>
-                  </button>
+                  <!-- TC-018 #227: Editar/Eliminar solo si NO es RED (reportes RED son inmutables porque BE-23 ya cancelo reservas retroactivamente). -->
+                  <ng-container *ngIf="report.flag !== MaritimeFlagRed">
+                    <button class="btn btn-icon btn-sm btn-outline-primary" (click)="openEditModal(report)"
+                            [title]="'maritime-reports.actions.edit' | translate">
+                      <i class="isax isax-edit-2"></i>
+                    </button>
+                    <button class="btn btn-icon btn-sm btn-outline-danger" (click)="deleteReport(report)"
+                            [title]="'maritime-reports.actions.delete' | translate">
+                      <i class="isax isax-trash"></i>
+                    </button>
+                  </ng-container>
                 </div>
               </td>
             </ng-container>
@@ -192,8 +192,14 @@
       <div class="modal-content border-0 shadow-lg">
         <div class="modal-header">
           <h5 class="modal-title">
-            <i class="isax me-2 text-primary" [ngClass]="isEditMode ? 'isax-edit-2' : 'isax-add-circle'"></i>
-            {{ isEditMode ? 'Editar Reporte' : 'Crear Nuevo Reporte' }}
+            <i class="isax me-2 text-primary"
+               [ngClass]="isViewMode ? 'isax-eye' : (isEditMode ? 'isax-edit-2' : 'isax-add-circle')"></i>
+            <ng-container *ngIf="isViewMode; else editOrCreateTitle">
+              {{ 'maritime-reports.view_modal.title' | translate }}
+            </ng-container>
+            <ng-template #editOrCreateTitle>
+              {{ isEditMode ? 'Editar Reporte' : 'Crear Nuevo Reporte' }}
+            </ng-template>
           </h5>
           <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
         </div>
@@ -235,8 +241,11 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Subcategoría <span class="text-danger">*</span></label>
+                  <!-- TC-018 #227 fix: value=sub.code (string estable) para que
+                       patchValue con report.subcategoryCode precargue el select
+                       en modo Editar. El texto mostrado sigue localizado. -->
                   <mat-select class="custom-mat-select select" placeholder="Seleccione Subcategoría" formControlName="subCategory">
-                    <mat-option *ngFor="let sub of subCategories" [value]="sub.name">{{ sub.name | localizedName }}</mat-option>
+                    <mat-option *ngFor="let sub of subCategories" [value]="sub.code">{{ sub.name | localizedName }}</mat-option>
                   </mat-select>
                 </div>
               </div>
@@ -266,9 +275,10 @@
         </div>
         <div class="modal-footer border-0">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">
-            Cancelar
+            {{ isViewMode ? ('maritime-reports.view_modal.close_btn' | translate) : 'Cancelar' }}
           </button>
-          <button type="submit" form="reportForm" class="btn btn-primary px-4" [disabled]="reportForm.invalid">
+          <!-- TC-018 #227: en modo Ver no hay boton de guardar (solo lectura). -->
+          <button *ngIf="!isViewMode" type="submit" form="reportForm" class="btn btn-primary px-4" [disabled]="reportForm.invalid">
             {{ isEditMode ? 'Actualizar' : 'Guardar' }} Reporte
           </button>
         </div>
