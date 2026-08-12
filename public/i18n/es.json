@@ -1,4 +1,7 @@
 {
+  "common": {
+    "back": "Volver"
+  },
   "shared": {
     "available": "Disponible",
     "notAvailable": "No disponible",
@@ -1321,8 +1324,8 @@
     "sortBy": "Ordenar por : ",
     "sortByShort": "Ordenar por",
     "recommended": "Recomendado",
-    "priceLowToHigh": "Precio: Menor a Mayor",
-    "priceHighToLow": "Precio: Mayor a Menor",
+    "priceLowToHigh": "Precio de menor a mayor",
+    "priceHighToLow": "Precio de mayor a menor",
     "newest": "Más recientes",
     "ratings": "Calificaciones",
     "reset": "Restablecer",

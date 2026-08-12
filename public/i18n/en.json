@@ -1,4 +1,7 @@
 {
+  "common": {
+    "back": "Back"
+  },
   "shared": {
     "available": "Available",
     "notAvailable": "Not available",
@@ -1320,8 +1323,8 @@
     "sortBy": "Sort By : ",
     "sortByShort": "Sort By",
     "recommended": "Recommended",
-    "priceLowToHigh": "Price: low to high",
-    "priceHighToLow": "Price: high to low",
+    "priceLowToHigh": "Price low to high",
+    "priceHighToLow": "Price high to low",
     "newest": "Newest",
     "ratings": "Ratings",
     "reset": "Reset",
