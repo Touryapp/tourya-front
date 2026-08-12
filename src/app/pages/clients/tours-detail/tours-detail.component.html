@@ -170,11 +170,12 @@
                     <div class="bg-light-200 card-bg-light mb-4" id="location">
                         <h5 class="fs-18 mb-3">{{ 'tours-detail.sections.location' | translate }}</h5>
                         <!-- Map -->
-                        <div>
+                        <!-- TC-017 (#220): ocultar mapa cuando todas las ubicaciones son Hotel Pickup, aun si el backend envia coords por defecto. -->
+                        <div *ngIf="!isHotelPickup">
                             <google-map *ngIf="mapCenter" height="400px" width="100%" [center]="mapCenter" [zoom]="mapZoom" class="tour-detail-map w-100">
                                 <map-marker [position]="mapCenter"></map-marker>
                             </google-map>
-                            
+
                         </div>
                         <!-- /Map -->
                         <!-- TC-016 (#219): mostrar tambien nombre location + pais + ciudad debajo del mapa, no solo la direccion textual. -->

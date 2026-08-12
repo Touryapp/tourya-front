@@ -278,17 +278,21 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
             // Marcar que necesitamos refrescar lightgallery después del render
             this.needRefresh = true;
           }
-          // set map center from first location when available
-          const loc = this.tour?.locations && this.tour.locations.length ? this.tour.locations[0] : undefined;
-  
-          if (loc && loc.latitude !== undefined && loc.longitude !== undefined) {
+          // set map center from first PHYSICAL location (skip Hotel Pickup) when available.
+          // TC-017 (#220): antes usaba locations[0] sin filtrar, y si backend enviaba coords por defecto
+          // para Hotel Pickup el mapa se pintaba con la ubicacion equivocada.
+          const physicalLoc = this.tour?.locations?.find(
+            l => l?.addressType !== 'Hotel Pickup' && l?.latitude !== undefined && l?.longitude !== undefined
+          );
+
+          if (physicalLoc) {
           // subscribe to cart items to control floating cart visibility
           this.cartService.cartItems$
             .pipe(takeUntil(this.destroy$))
             .subscribe((items) => {
               this.isCartVisible = !!(items && items.length > 0);
             });
-            this.mapCenter = { lat: loc.latitude, lng: loc.longitude };
+            this.mapCenter = { lat: physicalLoc.latitude, lng: physicalLoc.longitude };
             this.mapZoom = 15;
           }
           // load public locations catalog (city/state names) once tour is loaded
@@ -561,18 +565,31 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   /**
+   * TC-017 (#220): true cuando todas las ubicaciones del tour son "Hotel Pickup" (o no hay ninguna fisica).
+   * Sirve para ocultar el <google-map> aun cuando el backend devuelva coords por defecto (ej. ciudad).
+   */
+  get isHotelPickup(): boolean {
+    const locs = this.tour?.locations;
+    if (!locs || locs.length === 0) return false;
+    return locs.every(l => l?.addressType === 'Hotel Pickup');
+  }
+
+  /**
    * Helper to map priceType to human-readable labels.
+   * TC-017 (#220): backend devuelve valores en minusculas ('grupo' / 'individual'),
+   * normalizamos a mayusculas antes de comparar. Formato para grupo: "Grupo (N)" donde N = maxPeople.
    */
   getPriceTypeLabel(): string {
-    if (!this.tour) return '';
-    if (this.tour.priceType === PriceType.INDIVIDUAL) {
-      return this.translate.instant('tours-detail.booking.perPerson');
-    } else if (this.tour.priceType === PriceType.GROUP) {
-      const upTo = this.translate.instant('tours-detail.booking.upTo');
-      const persons = this.translate.instant('tours-detail.booking.persons').toLowerCase();
-      return `${this.translate.instant('tours-detail.booking.group')} (${upTo} ${this.tour.maxPeople || 0} ${persons})`;
+    if (!this.tour?.priceType) return '';
+    const upper = this.tour.priceType.toUpperCase();
+    if (upper === 'GROUP' || upper === 'GRUPO' || upper === 'PER_GROUP') {
+      const label = this.translate.instant('tour.priceType.group');
+      return `${label} (${this.tour.maxPeople || 0})`;
     }
-    return this.tour.priceType || '';
+    if (upper === 'INDIVIDUAL' || upper === 'PRIVATE' || upper === 'PER_PERSON') {
+      return this.translate.instant('tour.priceType.individual');
+    }
+    return this.tour.priceType;
   }
 
   getImage(i: number): string {
