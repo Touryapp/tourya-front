@@ -240,8 +240,10 @@ export class ListToursComponent implements OnInit, OnDestroy {
   public wishlistIds: number[] = [];
   public favoriteStates: boolean[] = [];
 
-  // TC-017 (#220): sort en cliente sobre la pagina actual (recommended = orden del backend).
-  public sortOption: 'recommended' | 'price_asc' | 'price_desc' = 'recommended';
+  // TC-017 (#220): sort en cliente sobre la pagina actual.
+  // Default '' = sin ordenar (respeta el orden que trae el backend). Luis 13-ago pidio quitar
+  // la opcion "Recomendado" — el estado no-seleccionado ya expresa lo mismo sin ambiguedad.
+  public sortOption: '' | 'price_asc' | 'price_desc' = '';
   private originalTours: TourScheduleResponseDto[] = [];
 
   constructor(
@@ -680,9 +682,9 @@ export class ListToursComponent implements OnInit, OnDestroy {
     this.viewMode = mode;
   }
 
-  // TC-017 (#220): sort dropdown handlers.
-  // Ordenamos sobre la pagina actual (client-side). 'recommended' devuelve el orden del backend.
-  onSortOptionChange(option: 'recommended' | 'price_asc' | 'price_desc'): void {
+  // TC-017 (#220): sort dropdown handlers. Ordenamos sobre la pagina actual (client-side).
+  // Estado '' = sin ordenar (respeta orden del backend).
+  onSortOptionChange(option: '' | 'price_asc' | 'price_desc'): void {
     this.sortOption = option;
     this.tours = this.applySort(this.originalTours);
     this.updateFavoriteStates();
@@ -694,9 +696,8 @@ export class ListToursComponent implements OnInit, OnDestroy {
         return 'toursList.priceLowToHigh';
       case 'price_desc':
         return 'toursList.priceHighToLow';
-      case 'recommended':
       default:
-        return 'toursList.recommended';
+        return '';
     }
   }
 
