@@ -384,14 +384,8 @@
                                 <div class="dropdown-menu dropdown-sm">
                                     <form>
                                         <h6 class="fw-medium fs-16 mb-3">{{ 'toursList.sortByShort' | translate }}</h6>
-                                        <!-- TC-017 (#220): sort en cliente sobre this.tours. Radios para asegurar exclusividad. -->
-                                        <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                            <input class="form-check-input ms-0 mt-0" name="sortOption" type="radio"
-                                                id="sort_recommended" value="recommended"
-                                                [checked]="sortOption === 'recommended'"
-                                                (change)="onSortOptionChange('recommended')">
-                                            <label class="form-check-label ms-2" for="sort_recommended">{{ 'toursList.recommended' | translate }}</label>
-                                        </div>
+                                        <!-- TC-017 (#220): sort en cliente sobre this.tours. Radios para asegurar exclusividad.
+                                             Sin default seleccionado: si el usuario no elige, la lista respeta el orden del backend. -->
                                         <div class="form-check d-flex align-items-center ps-0 mb-2">
                                             <input class="form-check-input ms-0 mt-0" name="sortOption" type="radio"
                                                 id="sort_price_asc" value="price_asc"
