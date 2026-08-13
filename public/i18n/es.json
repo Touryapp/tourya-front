@@ -247,7 +247,18 @@
       "providerPayments": "Órdenes de pago",
       "bookings": "Reservas",
       "backofficeUsers": "Usuarios Backoffice",
+      "credits": "Créditos",
       "appConfig": "Configuración del sistema"
+    },
+    "menu": {
+      "credits": "Créditos"
+    },
+    "credits": {
+      "title": "Gestión de Créditos",
+      "subtitle": "Total de créditos",
+      "colTourist": "Turista",
+      "colReserved": "Reservado",
+      "colAvailable": "Disponible"
     }
   },
   "provider-tour-management": {
@@ -1608,6 +1619,7 @@
     "colCreationDate": "Fecha de creación",
     "colExpirationDate": "Fecha de expiración",
     "colStatus": "Estado",
+    "colActions": "Acciones",
     "noCreditsFound": "No se encontraron créditos",
     "selectedCount": "Seleccionados",
     "totalSelected": "Total",
@@ -1624,6 +1636,33 @@
       "applied": "Aplicado",
       "consumed": "Consumido",
       "expired": "Expirado"
+    }
+  },
+  "credit": {
+    "status": {
+      "refundRequested": "Solicitud de devolución",
+      "refunded": "Dinero devuelto"
+    },
+    "actions": {
+      "requestRefund": "Solicitar devolución",
+      "uploadProof": "Subir comprobante",
+      "viewProof": "Ver comprobante"
+    },
+    "confirm": {
+      "requestRefund": "¿Estás seguro que deseas solicitar la devolución en efectivo de este crédito? Una vez aprobado por Tourya, recibirás el monto en tu cuenta bancaria."
+    },
+    "toast": {
+      "refundRequested": "Solicitud enviada"
+    },
+    "upload": {
+      "helper": "Sube el comprobante (imagen JPG/PNG o PDF, máx 5MB) de la devolución realizada al turista.",
+      "fileLabel": "Archivo de comprobante",
+      "constraints": "Formatos permitidos: JPG, PNG, PDF. Tamaño máximo: 5MB.",
+      "submit": "Subir",
+      "success": "Comprobante subido correctamente",
+      "errorType": "Tipo de archivo no permitido. Usa JPG, PNG o PDF.",
+      "errorSize": "El archivo excede el tamaño máximo de 5MB.",
+      "noPreview": "Sin previsualización (archivo PDF)"
     }
   },
   "bookingTours": {

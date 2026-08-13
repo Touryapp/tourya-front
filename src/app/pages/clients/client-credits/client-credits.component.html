@@ -1,6 +1,6 @@
 <!-- Credits Management -->
 <div class="provider-tour-management" [ngClass]="{'p-0': mode === 'payment'}">
-    
+
     <!-- Header (Hidden in payment mode) -->
     <div class="card booking-header mb-4" *ngIf="mode === 'profile'">
         <div class="card-body header-content d-flex align-items-center justify-content-between flex-wrap">
@@ -17,17 +17,20 @@
         <div class="card-body p-0">
             <div class="list-header d-flex align-items-center justify-content-between flex-wrap p-3" *ngIf="mode === 'profile'">
                 <h6 class="mb-0">{{ 'clientCredits.creditsList' | translate }}</h6>
-                
+
                 <!-- Status Filter -->
                 <div class="d-flex align-items-center">
                     <span class="fs-14 text-gray-9 fw-medium me-2">{{ 'clientCredits.statusLabel' | translate }}</span>
-                    <select 
-                        class="form-select form-select-sm w-auto" 
+                    <select
+                        class="form-select form-select-sm w-auto"
                         (change)="onStatusChange($event)"
                         [value]="selectedStatus">
                         <option value="">{{ 'clientCredits.allStatuses' | translate }}</option>
                         <option value="CREATED">{{ 'clientCredits.statuses.created' | translate }}</option>
+                        <option value="REFUND_REQUESTED">{{ 'credit.status.refundRequested' | translate }}</option>
+                        <option value="REFUNDED">{{ 'credit.status.refunded' | translate }}</option>
                         <option value="CANCELED">{{ 'clientCredits.statuses.canceled' | translate }}</option>
+                        <option value="EXPIRED">{{ 'clientCredits.statuses.expired' | translate }}</option>
                         <option value="DELETED">{{ 'clientCredits.statuses.eliminated' | translate }}</option>
                     </select>
                 </div>
@@ -50,6 +53,7 @@
                             <th>{{ 'clientCredits.colCreationDate' | translate }}</th>
                             <th *ngIf="mode === 'profile'">{{ 'clientCredits.colExpirationDate' | translate }}</th>
                             <th>{{ 'clientCredits.colStatus' | translate }}</th>
+                            <th *ngIf="mode === 'profile'">{{ 'clientCredits.colActions' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,16 +70,44 @@
                                 <td>{{ credit.creationDate | date:'dd/MM/yyyy' }}</td>
                                 <td *ngIf="mode === 'profile'">{{ credit.expirationDate | date:'dd/MM/yyyy' }}</td>
                                 <td>
-                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10" 
+                                    <span class="badge rounded-pill d-inline-flex align-items-center fs-10"
                                           [ngClass]="getStatusClass(credit.status)">
-                                        <i class="fa-solid fa-circle fs-5 me-1"></i>{{ 'clientCredits.statuses.' + credit.status.toLowerCase() | translate }}
+                                        <i class="fa-solid fa-circle fs-5 me-1"></i>
+                                        @if (credit.status.toUpperCase() === 'REFUND_REQUESTED' || credit.status.toUpperCase() === 'REFUNDED') {
+                                            {{ 'credit.status.' + getStatusI18nKey(credit.status) | translate }}
+                                        } @else {
+                                            {{ 'clientCredits.statuses.' + credit.status.toLowerCase() | translate }}
+                                        }
                                     </span>
+                                </td>
+                                <td *ngIf="mode === 'profile'">
+                                    @if (canRequestRefund(credit)) {
+                                        <button
+                                            class="btn btn-sm btn-outline-primary d-inline-flex align-items-center"
+                                            [disabled]="refundingCreditId === credit.id"
+                                            (click)="onRequestRefund(credit)">
+                                            @if (refundingCreditId === credit.id) {
+                                                <span class="spinner-border spinner-border-sm me-1"></span>
+                                            } @else {
+                                                <i class="isax isax-money-recive me-1"></i>
+                                            }
+                                            {{ 'credit.actions.requestRefund' | translate }}
+                                        </button>
+                                    } @else if (credit.status.toUpperCase() === 'REFUNDED' && credit.refundProofUrl) {
+                                        <a [href]="credit.refundProofUrl" target="_blank" rel="noopener"
+                                           class="btn btn-sm btn-outline-primary d-inline-flex align-items-center">
+                                            <i class="isax isax-document-text me-1"></i>
+                                            {{ 'credit.actions.viewProof' | translate }}
+                                        </a>
+                                    } @else {
+                                        <span class="text-muted fs-12">-</span>
+                                    }
                                 </td>
                             </tr>
                         }
                         @if (tableData.length === 0 && !isLoading) {
                             <tr>
-                                <td [attr.colspan]="mode === 'payment' ? 6 : 6" class="text-center py-5">
+                                <td [attr.colspan]="mode === 'payment' ? 6 : 7" class="text-center py-5">
                                     <div class="text-muted">
                                         <i class="isax isax-box fs-1 mb-3 d-block"></i>
                                         <h5>{{ 'clientCredits.noCreditsFound' | translate }}</h5>
@@ -85,7 +117,7 @@
                         }
                         @if (isLoading) {
                             <tr>
-                                <td [attr.colspan]="mode === 'payment' ? 6 : 6" class="text-center py-5">
+                                <td [attr.colspan]="mode === 'payment' ? 6 : 7" class="text-center py-5">
                                     <div class="spinner-border text-primary" role="status">
                                         <span class="visually-hidden">{{ 'cartSummary.loading' | translate }}</span>
                                     </div>
@@ -116,7 +148,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Error Message -->
                 <div *ngIf="isExceedingMax" class="text-danger fs-12 mt-2">
                     <i class="fas fa-exclamation-triangle me-1"></i>

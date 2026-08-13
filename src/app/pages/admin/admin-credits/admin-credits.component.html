@@ -1,0 +1,226 @@
+<!-- TC-022: Admin/Backoffice - Gestion de creditos y devoluciones -->
+<div class="admin-credits">
+
+    <!-- Header -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3">
+                <div>
+                    <h5 class="mb-1">{{ 'admin.credits.title' | translate }}</h5>
+                    <p class="fs-14 text-gray-6 mb-0">
+                        {{ 'admin.credits.subtitle' | translate }}:
+                        <span class="fw-semibold text-dark">{{ totalElements }}</span>
+                    </p>
+                </div>
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <label for="statusFilter" class="fs-14 fw-medium mb-0">
+                        {{ 'clientCredits.statusLabel' | translate }}
+                    </label>
+                    <select
+                        id="statusFilter"
+                        class="form-select form-select-sm w-auto"
+                        [ngModel]="selectedStatus"
+                        (ngModelChange)="onStatusChange($event)">
+                        @for (status of statusOptions; track status) {
+                            <option [value]="status">{{ getStatusOptionLabel(status) }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Header -->
+
+    <!-- Credits Table -->
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="custom-datatable-filter table-responsive">
+                @if (loading) {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{{ 'cartSummary.loading' | translate }}</span>
+                        </div>
+                        <p class="mt-2 text-muted">{{ 'cartSummary.loading' | translate }}</p>
+                    </div>
+                } @else if (errorMessage) {
+                    <div class="alert alert-danger m-3">{{ errorMessage }}</div>
+                } @else {
+                    <table class="table datatable align-middle">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>{{ 'clientCredits.colId' | translate }}</th>
+                                <th>{{ 'admin.credits.colTourist' | translate }}</th>
+                                <th>{{ 'clientCredits.colValue' | translate }}</th>
+                                <th>{{ 'admin.credits.colReserved' | translate }}</th>
+                                <th>{{ 'admin.credits.colAvailable' | translate }}</th>
+                                <th>{{ 'clientCredits.colStatus' | translate }}</th>
+                                <th>{{ 'clientCredits.colCreationDate' | translate }}</th>
+                                <th>{{ 'clientCredits.colActions' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (credit of credits; track credit.id) {
+                                <tr>
+                                    <td>#{{ credit.id }}</td>
+                                    <td>
+                                        <div class="fw-medium">{{ credit.touristName || '-' }}</div>
+                                        <div class="fs-12 text-muted">{{ credit.touristEmail || '' }}</div>
+                                    </td>
+                                    <td class="fw-semibold">{{ credit.amount | currency:'COP':'symbol':'1.0-0' }}</td>
+                                    <td>{{ (credit.reservedAmount ?? 0) | currency:'COP':'symbol':'1.0-0' }}</td>
+                                    <td class="text-success fw-medium">
+                                        {{ (credit.amount - (credit.reservedAmount ?? 0)) | currency:'COP':'symbol':'1.0-0' }}
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill d-inline-flex align-items-center fs-10"
+                                              [ngClass]="getStatusClass(credit.status)">
+                                            <i class="fa-solid fa-circle fs-5 me-1"></i>
+                                            {{ getStatusLabel(credit.status) }}
+                                        </span>
+                                    </td>
+                                    <td>{{ credit.creationDate | date:'dd/MM/yyyy' }}</td>
+                                    <td>
+                                        @if (credit.status.toUpperCase() === 'REFUND_REQUESTED') {
+                                            <button
+                                                class="btn btn-sm btn-primary d-inline-flex align-items-center"
+                                                (click)="openUploadModal(credit)"
+                                                [attr.title]="'credit.actions.uploadProof' | translate">
+                                                <i class="isax isax-document-upload me-1"></i>
+                                                {{ 'credit.actions.uploadProof' | translate }}
+                                            </button>
+                                        } @else if (credit.status.toUpperCase() === 'REFUNDED' && credit.refundProofUrl) {
+                                            <a [href]="credit.refundProofUrl" target="_blank" rel="noopener"
+                                               class="btn btn-sm btn-outline-primary d-inline-flex align-items-center">
+                                                <i class="isax isax-document-text me-1"></i>
+                                                {{ 'credit.actions.viewProof' | translate }}
+                                            </a>
+                                        } @else {
+                                            <span class="text-muted fs-12">-</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @if (credits.length === 0) {
+                                <tr>
+                                    <td colspan="8" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="isax isax-box fs-1 mb-3 d-block"></i>
+                                            <h5>{{ 'clientCredits.noCreditsFound' | translate }}</h5>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (!loading && totalPages > 1) {
+                <nav class="pagination-nav p-3 border-top">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <span class="fs-12 text-muted">
+                            {{ pageStart }} - {{ pageEnd }} / {{ totalElements }}
+                        </span>
+                        <ul class="pagination mb-0">
+                            <li class="page-item" [class.disabled]="page === 0">
+                                <button class="page-link" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                            </li>
+                            <li class="page-item active">
+                                <span class="page-link">{{ displayPage }} / {{ totalPages }}</span>
+                            </li>
+                            <li class="page-item" [class.disabled]="page >= totalPages - 1">
+                                <button class="page-link" (click)="onPageChange(page + 1)" [disabled]="page >= totalPages - 1">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            }
+        </div>
+    </div>
+
+</div>
+
+<!-- Upload Refund Proof Modal -->
+@if (showUploadModal && uploadTarget) {
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        {{ 'credit.actions.uploadProof' | translate }} - #{{ uploadTarget.id }}
+                    </h5>
+                    <button type="button" class="btn-close" (click)="closeUploadModal()" [disabled]="uploadInFlight"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="fs-14 text-muted mb-3">
+                        {{ 'credit.upload.helper' | translate }}
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">
+                            {{ 'admin.credits.colTourist' | translate }}
+                        </label>
+                        <div>{{ uploadTarget.touristName }} <span class="text-muted">({{ uploadTarget.touristEmail }})</span></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">
+                            {{ 'clientCredits.colValue' | translate }}
+                        </label>
+                        <div class="fw-semibold text-success">
+                            {{ uploadTarget.amount | currency:'COP':'symbol':'1.0-0' }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="proofFile" class="form-label fw-medium">
+                            {{ 'credit.upload.fileLabel' | translate }}
+                        </label>
+                        <input
+                            id="proofFile"
+                            type="file"
+                            class="form-control"
+                            accept="image/jpeg,image/png,application/pdf"
+                            (change)="onFileSelected($event)"
+                            [disabled]="uploadInFlight">
+                        <div class="form-text">{{ 'credit.upload.constraints' | translate }}</div>
+                    </div>
+
+                    @if (selectedFile) {
+                        <div class="border rounded p-2">
+                            <div class="fs-12 text-muted mb-1">
+                                {{ selectedFile.name }} ({{ (selectedFile.size / 1024) | number:'1.0-0' }} KB)
+                            </div>
+                            @if (previewUrl) {
+                                <img [src]="previewUrl" alt="preview" class="img-fluid" style="max-height: 240px;">
+                            } @else {
+                                <div class="d-flex align-items-center text-muted">
+                                    <i class="isax isax-document-1 fs-3 me-2"></i>
+                                    <span>{{ 'credit.upload.noPreview' | translate }}</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" (click)="closeUploadModal()" [disabled]="uploadInFlight">
+                        {{ 'shared.cancel' | translate }}
+                    </button>
+                    <button type="button" class="btn btn-primary d-inline-flex align-items-center"
+                            [disabled]="!selectedFile || uploadInFlight"
+                            (click)="submitUpload()">
+                        @if (uploadInFlight) {
+                            <span class="spinner-border spinner-border-sm me-1"></span>
+                        }
+                        {{ 'credit.upload.submit' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

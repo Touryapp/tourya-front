@@ -46,6 +46,12 @@
                   <i class="isax isax-calendar-tick me-2"></i>{{ 'admin.sidebar.bookings' | translate }}
                 </a>
               </li>
+              <!-- TC-022: gestion de creditos (ADMIN + BACKOFFICE_OPERATION). -->
+              <li>
+                <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToCredits()">
+                  <i class="isax isax-money-recive me-2"></i>{{ 'admin.sidebar.credits' | translate }}
+                </a>
+              </li>
 
               <ng-container *ngIf="isAdmin">
                 <li>

@@ -246,7 +246,18 @@
       "providerPayments": "Payment Orders",
       "bookings": "Bookings",
       "backofficeUsers": "Backoffice Users",
+      "credits": "Credits",
       "appConfig": "System Configuration"
+    },
+    "menu": {
+      "credits": "Credits"
+    },
+    "credits": {
+      "title": "Credit Management",
+      "subtitle": "Total credits",
+      "colTourist": "Tourist",
+      "colReserved": "Reserved",
+      "colAvailable": "Available"
     }
   },
   "provider-tour-management": {
@@ -1607,6 +1618,7 @@
     "colCreationDate": "Creation Date",
     "colExpirationDate": "Expiration date",
     "colStatus": "Status",
+    "colActions": "Actions",
     "noCreditsFound": "No credits found",
     "selectedCount": "Selected",
     "totalSelected": "Total",
@@ -1623,6 +1635,33 @@
       "applied": "Applied",
       "consumed": "Consumed",
       "expired": "Expired"
+    }
+  },
+  "credit": {
+    "status": {
+      "refundRequested": "Refund requested",
+      "refunded": "Refunded"
+    },
+    "actions": {
+      "requestRefund": "Request refund",
+      "uploadProof": "Upload proof",
+      "viewProof": "View proof"
+    },
+    "confirm": {
+      "requestRefund": "Are you sure you want to request the cash refund of this credit? Once approved by Tourya, you will receive the amount in your bank account."
+    },
+    "toast": {
+      "refundRequested": "Request sent"
+    },
+    "upload": {
+      "helper": "Upload the refund proof (JPG/PNG image or PDF, max 5MB) for the tourist.",
+      "fileLabel": "Proof file",
+      "constraints": "Allowed formats: JPG, PNG, PDF. Max size: 5MB.",
+      "submit": "Upload",
+      "success": "Proof uploaded successfully",
+      "errorType": "File type not allowed. Use JPG, PNG or PDF.",
+      "errorSize": "File exceeds the 5MB maximum size.",
+      "noPreview": "No preview (PDF file)"
     }
   },
   "bookingTours": {
