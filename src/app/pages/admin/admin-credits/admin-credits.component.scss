@@ -1,0 +1,14 @@
+.admin-credits {
+    .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .fs-10 {
+        font-size: 10px !important;
+    }
+}
+
+.modal.show.d-block {
+    z-index: 1055;
+}

@@ -52,6 +52,12 @@ const routes: Routes = [
         path: 'backoffice-users',
         canActivate: [AdminGuard],
         loadComponent: () => import('./backoffice-users/backoffice-users.component').then(m => m.BackofficeUsersComponent)
+      },
+      // TC-022: gestion de creditos y devoluciones. Expuesto a ADMIN + BACKOFFICE_OPERATION.
+      {
+        path: 'credits',
+        canActivate: [BackofficeGuard],
+        loadComponent: () => import('./admin-credits/admin-credits.component').then(m => m.AdminCreditsComponent)
       }
     ]
   }

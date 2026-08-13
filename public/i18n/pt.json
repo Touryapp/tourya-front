@@ -246,7 +246,18 @@
       "providerPayments": "Ordens de Pagamento",
       "bookings": "Reservas",
       "backofficeUsers": "Usuários Backoffice",
+      "credits": "Créditos",
       "appConfig": "Configuração do sistema"
+    },
+    "menu": {
+      "credits": "Créditos"
+    },
+    "credits": {
+      "title": "Gestão de Créditos",
+      "subtitle": "Total de créditos",
+      "colTourist": "Turista",
+      "colReserved": "Reservado",
+      "colAvailable": "Disponível"
     }
   },
   "provider-tour-management": {
@@ -1608,6 +1619,7 @@
     "colCreationDate": "Data de criação",
     "colExpirationDate": "Data de validade",
     "colStatus": "Status",
+    "colActions": "Ações",
     "noCreditsFound": "Nenhum crédito encontrado",
     "selectedCount": "Selecionados",
     "totalSelected": "Total",
@@ -1624,6 +1636,33 @@
       "applied": "Aplicado",
       "consumed": "Consumido",
       "expired": "Expirado"
+    }
+  },
+  "credit": {
+    "status": {
+      "refundRequested": "Solicitação de devolução",
+      "refunded": "Dinheiro devolvido"
+    },
+    "actions": {
+      "requestRefund": "Solicitar devolução",
+      "uploadProof": "Enviar comprovante",
+      "viewProof": "Ver comprovante"
+    },
+    "confirm": {
+      "requestRefund": "Tem certeza de que deseja solicitar a devolução em dinheiro deste crédito? Uma vez aprovado pela Tourya, você receberá o valor em sua conta bancária."
+    },
+    "toast": {
+      "refundRequested": "Solicitação enviada"
+    },
+    "upload": {
+      "helper": "Envie o comprovante (imagem JPG/PNG ou PDF, máx 5MB) da devolução ao turista.",
+      "fileLabel": "Arquivo do comprovante",
+      "constraints": "Formatos permitidos: JPG, PNG, PDF. Tamanho máximo: 5MB.",
+      "submit": "Enviar",
+      "success": "Comprovante enviado com sucesso",
+      "errorType": "Tipo de arquivo não permitido. Use JPG, PNG ou PDF.",
+      "errorSize": "O arquivo excede o tamanho máximo de 5MB.",
+      "noPreview": "Sem prévia (arquivo PDF)"
     }
   },
   "bookingTours": {

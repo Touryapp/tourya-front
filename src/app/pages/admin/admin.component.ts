@@ -122,6 +122,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/bookings-management']);
   }
 
+  /** TC-022: gestion de creditos y devoluciones (BackofficeGuard). */
+  goToCredits(): void {
+    this.router.navigate(['/admin/credits']);
+  }
+
   /** Usuarios Backoffice (AdminGuard). */
   goToBackofficeUsers(): void {
     this.router.navigate(['/admin/backoffice-users']);
