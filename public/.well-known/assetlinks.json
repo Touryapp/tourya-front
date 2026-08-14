@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tourya.mobile",
+      "sha256_cert_fingerprints": [
+        "FD:39:C5:75:FF:A4:7D:0D:B3:94:E1:66:D6:96:1A:B4:44:1A:D5:9D:11:C9:B3:E3:1E:A8:D8:34:A4:A7:66:B3"
+      ]
+    }
+  }
+]
