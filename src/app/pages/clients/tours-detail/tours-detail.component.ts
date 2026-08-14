@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 // usando @angular/google-maps para mapa nativo
@@ -215,7 +215,7 @@ export class ToursDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   public reviewReasonsNegative: ReviewReason[] = [];
   public reviewReasonsLoading: boolean = false;
   public selectedReasonId: number | null = null;
-  private currentTourId: number = 0;
+  public currentTourId: number = 0;
   public canWriteReview: boolean = false;
 
   // Computed: reasons based on rating

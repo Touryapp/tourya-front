@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "back": "Volver"
   },
@@ -2198,6 +2198,20 @@
     "view_modal": {
       "title": "Ver Reporte",
       "close_btn": "Cerrar"
+    }
+  },
+  "concierge": {
+    "title": "Concierge Tourya",
+    "welcome": "Hola! Soy tu concierge de Tourya. En que puedo ayudarte?",
+    "placeholder": "Escribi tu consulta...",
+    "send": "Enviar",
+    "thinking": "Pensando...",
+    "error": "Hubo un error, intenta de nuevo",
+    "escalated": "Te contactaremos por WhatsApp",
+    "action": {
+      "searched": "{{count}} tours encontrados",
+      "addedToCart": "Agregado al carrito",
+      "cartFailed": "No se pudo agregar al carrito"
     }
   }
 }

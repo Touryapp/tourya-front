@@ -1,4 +1,4 @@
-    <!-- Page Wrapper -->
+﻿    <!-- Page Wrapper -->
     <div class="content" *ngIf="tour">
         <div class="container" >
             <!-- TC-017 (#220): boton "Volver" para regresar al listado. -->
@@ -675,6 +675,9 @@
         <app-floating-cart [isVisible]="isCartVisible" (daySelected)="onDaySelected($event)"
             (cartToggled)="onCartToggled($event)" (clearCart)="onCartCleared()">
         </app-floating-cart>
+
+        <!-- FE-Concierge: Travel Concierge widget bound to current tour -->
+        <app-concierge-chat-widget [tourId]="currentTourId"></app-concierge-chat-widget>
 
         <!-- Review Modal (Angular-driven, igual al de provider-tour-management) -->
         @if (showReviewModal) {

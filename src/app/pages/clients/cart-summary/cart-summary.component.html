@@ -1,4 +1,4 @@
-<!-- Page Wrapper -->
+﻿<!-- Page Wrapper -->
 <div class="content content-two pt-4">
     <div class="container" *ngIf="!loading; else loadingTemplate">
         <!-- Header Section -->
@@ -603,3 +603,6 @@
     </ng-template>
 </div>
 <!-- /Page Wrapper -->
+
+<!-- FE-Concierge: Travel Concierge widget (no explicit cartId - backend infers active cart from JWT) -->
+<app-concierge-chat-widget></app-concierge-chat-widget>

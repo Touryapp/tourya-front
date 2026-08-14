@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+﻿import { NgModule } from "@angular/core";
 import { CommonModule, DatePipe } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { NgScrollbarModule } from "ngx-scrollbar";
@@ -51,6 +51,7 @@ import { MatOptionModule } from "@angular/material/core";
 import { TourSlotSelectionModalComponent } from "./common/tour-slot-selection-modal/tour-slot-selection-modal.component";
 import { PendingReviewsModalComponent } from "./components/pending-reviews-modal/pending-reviews-modal.component";
 import { LocalizedNamePipe } from "./pipe/localized-name/localized-name.pipe";
+import { ConciergeChatWidgetComponent } from "./common/concierge-chat-widget/concierge-chat-widget.component";
 @NgModule({
   declarations: [
     FooterComponent,
@@ -58,7 +59,8 @@ import { LocalizedNamePipe } from "./pipe/localized-name/localized-name.pipe";
     CommonCounterComponent,
     UserDashboardComponent,
     ConfirmDialogComponent,
-    PendingReviewsModalComponent
+    PendingReviewsModalComponent,
+    ConciergeChatWidgetComponent
   ],
   imports: [
     CommonModule,
@@ -141,7 +143,8 @@ import { LocalizedNamePipe } from "./pipe/localized-name/localized-name.pipe";
     PendingReviewsModalComponent,
     GoogleMapsModule,
     RouterModule,
-    LocalizedNamePipe
+    LocalizedNamePipe,
+    ConciergeChatWidgetComponent
   ],
   providers: [
     provideNgxMask(),
