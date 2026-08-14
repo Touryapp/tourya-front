@@ -55,6 +55,13 @@
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBookingsManagement()"><i
                 class="isax isax-calendar-tick"></i> Reservas</a>
           </li>
+          <!-- TC-022 #253 fix: link al panel de créditos (ADMIN + BACKOFFICE_OPERATION).
+               El item vivía solo en el shell admin.component.html; faltaba acá en el sidebar
+               propio del dashboard. -->
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToCredits()"><i
+                class="isax isax-money-recive"></i> {{ 'admin.sidebar.credits' | translate }}</a>
+          </li>
           <li>
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBackofficeUsers()"><i
                 class="isax isax-people"></i> {{ 'backofficeUsers.sidebarLink' | translate }}</a>
