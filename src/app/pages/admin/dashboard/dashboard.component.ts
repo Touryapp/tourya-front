@@ -50,6 +50,13 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/admin/backoffice-users']);
   }
 
+  /** TC-022 #253 fix: navega a la vista de gestión de créditos (ADMIN + BACKOFFICE_OPERATION).
+   * El item se había agregado al shell admin.component.html pero no a este sidebar del dashboard
+   * — Luis reportó que no le aparecía en /admin/dashboard aunque estaba en el resto de vistas admin. */
+  goToCredits(): void {
+    this.router.navigate(['/admin/credits']);
+  }
+
   ngOnInit(): void {
     this.cargarSolicitudes();
     this.showGalleryFiles();
