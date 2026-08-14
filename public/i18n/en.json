@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "back": "Back"
   },
@@ -2197,6 +2197,20 @@
     "view_modal": {
       "title": "View Report",
       "close_btn": "Close"
+    }
+  },
+  "concierge": {
+    "title": "Tourya Concierge",
+    "welcome": "Hi! I'm your Tourya concierge. How can I help you?",
+    "placeholder": "Type your question...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "error": "Something went wrong, please try again",
+    "escalated": "We'll reach out to you on WhatsApp",
+    "action": {
+      "searched": "{{count}} tours found",
+      "addedToCart": "Added to cart",
+      "cartFailed": "Could not add to cart"
     }
   }
 }
