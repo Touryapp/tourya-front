@@ -29,6 +29,12 @@ import { I18nFieldService } from "../../../../shared/services/i18n-field.service
 import { PriceType } from "../../../../shared/enums/price-type.enum";
 import { SearchToursService } from "../../../clients/list-tours/search-tours.service";
 import { TagDto } from "../../../../shared/dto/search-tour-response.dto";
+import { OperatorSupportService } from "../../../../shared/services/operator-support.service";
+import {
+  SuggestTourContentDraft,
+  TourContentSuggestion,
+} from "../../../../shared/models/operator-support.model";
+import Swal from "sweetalert2";
 
 
 @Component({
@@ -112,6 +118,12 @@ export class AddTourComponent {
   // Forzar envío en la siguiente guardada (usar el mismo endpoint de guardado con status 'submitted')
   forceSubmit: boolean = false;
 
+  // IA-07 (Operator Support) — sugerencias de nombre/descripcion/tags.
+  aiSuggestionLoading: boolean = false;
+  aiSuggestion: TourContentSuggestion | null = null;
+  aiSelectedTagCodes: string[] = [];
+  aiSuggestModalRef?: BsModalRef;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -124,7 +136,8 @@ export class AddTourComponent {
     private _snackBar: MatSnackBar,
     private i18nService: I18nFieldService,
     private searchToursService: SearchToursService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private operatorSupport: OperatorSupportService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -1405,6 +1418,206 @@ export class AddTourComponent {
     } else {
       this.isSubmitting = false;
     }
+  }
+
+  // -------------------------------------------------------------------------
+  // IA-07 Operator Support — sugerencias de contenido del tour
+  // (POST /agents/operator-support/suggest-tour-content).
+  // -------------------------------------------------------------------------
+
+  /**
+   * Traduce el enum de duration del form a minutos (midpoint aproximado).
+   * El backend usa este dato solo como contexto para el LLM.
+   */
+  private durationEnumToMinutes(value: string | null | undefined): number {
+    switch (value) {
+      case '1_a_2_horas':
+        return 90;
+      case '2_a_4_horas':
+        return 180;
+      case '4_a_6_horas':
+        return 300;
+      case 'hasta_1_dia':
+        return 480;
+      case 'hasta_3_dias':
+        return 2880;
+      case 'hasta_5_dias':
+        return 4320;
+      default:
+        return 0;
+    }
+  }
+
+  /**
+   * Valida que los campos requeridos por el endpoint suggest-tour-content estén
+   * completos. Devuelve la lista de labels traducidos de los que faltan.
+   */
+  private missingSuggestFields(): string[] {
+    const missing: string[] = [];
+    const name = this.tourForm.get('name')?.value;
+    const category = this.tourForm.get('category')?.value;
+    const priceType = this.tourForm.get('priceType')?.value;
+    const duration = this.tourForm.get('duration')?.value;
+    const minAge = this.tourForm.get('minAge')?.value;
+
+    if (!name || String(name).trim().length < 3) {
+      missing.push(this.translate.instant('tour-form.fields.name.label'));
+    }
+    if (!category) {
+      missing.push(this.translate.instant('tour-form.fields.category.label'));
+    }
+    if (!priceType) {
+      missing.push(this.translate.instant('tour-form.fields.priceType.label'));
+    }
+    if (!duration) {
+      missing.push(this.translate.instant('tour-form.fields.duration.label'));
+    }
+    if (minAge === null || minAge === undefined || minAge === '') {
+      missing.push(this.translate.instant('tour-form.fields.minAge.label'));
+    }
+    return missing;
+  }
+
+  /**
+   * Handler del boton "Sugerir con IA". Valida draft, llama endpoint,
+   * abre el modal con las sugerencias. El provider decide que aplicar.
+   */
+  openAiSuggestModal(template: TemplateRef<any>): void {
+    const missing = this.missingSuggestFields();
+    if (missing.length > 0) {
+      Swal.fire({
+        icon: 'info',
+        title: this.translate.instant('operatorSupport.suggest.title'),
+        text: this.translate.instant('operatorSupport.suggest.incomplete', {
+          fields: missing.join(', '),
+        }),
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    const priceTypeValue = this.tourForm.get('priceType')?.value;
+    const priceTypeStr =
+      priceTypeValue === PriceType.GROUP ? 'grupo' : 'individual';
+
+    const draft: SuggestTourContentDraft = {
+      name: String(this.tourForm.get('name')?.value || '').trim(),
+      categoryId: +this.tourForm.get('category')?.value,
+      subcategoryId: null,
+      durationMinutes: this.durationEnumToMinutes(
+        this.tourForm.get('duration')?.value
+      ),
+      minAge: +this.tourForm.get('minAge')?.value,
+      priceType: priceTypeStr,
+      isUnlimitedCapacity: !!this.tourForm.get('isUnlimited')?.value,
+      currentDescription: String(
+        this.tourForm.get('description')?.value || ''
+      ).trim() || undefined,
+    };
+
+    this.aiSuggestionLoading = true;
+    this.aiSuggestion = null;
+    this.aiSelectedTagCodes = [];
+    this.aiSuggestModalRef = this.modalService.show(template);
+
+    this.operatorSupport
+      .suggestTourContent({ tourId: this.tourId || null, draft })
+      .subscribe({
+        next: (data) => {
+          this.aiSuggestionLoading = false;
+          this.aiSuggestion = data;
+        },
+        error: (err) => {
+          this.aiSuggestionLoading = false;
+          console.error('Error suggesting tour content.', err);
+          this.aiSuggestModalRef?.hide();
+          Swal.fire({
+            icon: 'error',
+            title: this.translate.instant('operatorSupport.suggest.title'),
+            text: this.translate.instant('operatorSupport.error'),
+            confirmButtonText: 'OK',
+          });
+        },
+      });
+  }
+
+  closeAiSuggestModal(): void {
+    this.aiSuggestModalRef?.hide();
+    this.aiSuggestion = null;
+    this.aiSelectedTagCodes = [];
+  }
+
+  /**
+   * Aplica uno de los nombres sugeridos al FormControl `name`.
+   */
+  applySuggestedName(name: string): void {
+    if (!name) return;
+    this.tourForm.get('name')?.setValue(name);
+    this.tourForm.get('name')?.markAsDirty();
+  }
+
+  /**
+   * Reemplaza la descripcion del form por la sugerencia.
+   */
+  applySuggestedDescription(): void {
+    const description = this.aiSuggestion?.descriptionSuggestion;
+    if (!description) return;
+    this.tourForm.get('description')?.setValue(description);
+    this.tourForm.get('description')?.markAsDirty();
+  }
+
+  /**
+   * Toggle en la lista de tags sugeridos por el LLM (que llegan por code/nombre).
+   * Se guardan por code — al aplicar, se resuelve contra `tagsList`.
+   */
+  toggleSuggestedTag(tag: string): void {
+    const idx = this.aiSelectedTagCodes.indexOf(tag);
+    if (idx >= 0) {
+      this.aiSelectedTagCodes.splice(idx, 1);
+    } else {
+      this.aiSelectedTagCodes.push(tag);
+    }
+  }
+
+  isSuggestedTagSelected(tag: string): boolean {
+    return this.aiSelectedTagCodes.indexOf(tag) >= 0;
+  }
+
+  /**
+   * Agrega los tags sugeridos+seleccionados al FormControl `tags` del wizard.
+   * Solo agrega los que el backend/catalogo de tagsList reconoce (match case-insensitive
+   * por code o por nombre localizado).
+   */
+  applySelectedTags(): void {
+    if (!this.aiSelectedTagCodes.length) return;
+    const currentTagIds: number[] = [...(this.tourForm.get('tags')?.value || [])];
+    let added = 0;
+    this.aiSelectedTagCodes.forEach((sugg) => {
+      const normalized = (sugg || '').toString().trim().toLowerCase();
+      if (!normalized) return;
+      const match = this.tagsList.find((t: any) => {
+        const code = (t?.code || t?.name?.es || t?.name || '')
+          .toString()
+          .toLowerCase();
+        if (code === normalized) return true;
+        // Match por cualquier variante localizada del nombre.
+        if (t?.name && typeof t.name === 'object') {
+          return Object.values(t.name as Record<string, string>).some(
+            (v) => (v || '').toString().toLowerCase() === normalized
+          );
+        }
+        return false;
+      });
+      if (match && !currentTagIds.includes(match.id)) {
+        currentTagIds.push(match.id);
+        added++;
+      }
+    });
+    if (added > 0) {
+      this.tourForm.get('tags')?.setValue(currentTagIds);
+      this.tourForm.get('tags')?.markAsDirty();
+    }
+    this.aiSelectedTagCodes = [];
   }
 }
 

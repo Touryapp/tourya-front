@@ -2212,5 +2212,45 @@
       "addedToCart": "Added to cart",
       "cartFailed": "Could not add to cart"
     }
+  },
+  "operatorSupport": {
+    "error": "The assistant could not process your request",
+    "suggest": {
+      "button": "Suggest with AI",
+      "title": "AI Assistant Suggestions",
+      "loading": "Generating suggestions...",
+      "names": "Suggested names",
+      "namesHint": "Tap a name to replace the current one",
+      "description": "Suggested description",
+      "tags": "Suggested tags",
+      "addSelectedTags": "Add selected to my tags",
+      "use": "Use this suggestion",
+      "dismiss": "Close",
+      "incomplete": "Please complete first: {{fields}}"
+    },
+    "pricing": {
+      "ok": "Within market range",
+      "warn": "Price {{percent}}% above average",
+      "critical": "Price {{percent}}% above, may reduce sales",
+      "range": "Range: {{min}} - {{max}}",
+      "medianHint": "median {{median}}"
+    },
+    "gallery": {
+      "recommendations": "Assistant recommendations",
+      "issue": {
+        "imageVertical": "Vertical image detected — horizontal is recommended",
+        "imageTooLarge": "Image exceeds 5MB",
+        "tooManyImages": "Maximum 7 images"
+      }
+    },
+    "reviewReply": {
+      "button": "Draft with AI",
+      "toneDetected": "Detected tone: {{tone}}",
+      "tone": {
+        "PROFESSIONAL": "Professional",
+        "WARM": "Warm",
+        "APOLOGETIC": "Apologetic"
+      }
+    }
   }
 }

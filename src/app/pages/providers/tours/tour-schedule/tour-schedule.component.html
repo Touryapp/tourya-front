@@ -372,6 +372,36 @@
 
                                             <div class="card-body pb-1">
 
+                                                <!-- IA-07 price alert badge. Se refresca en cada blur del providerPrice.
+                                                     El backend nunca modifica el precio, solo informa. -->
+                                                <div *ngIf="priceAlert && !priceAlertLoading" class="mb-3">
+                                                    <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded"
+                                                        [ngClass]="priceAlertBadgeClass()">
+                                                        <i class="isax isax-info-circle"></i>
+                                                        <div>
+                                                            <div class="fw-medium">
+                                                                <ng-container [ngSwitch]="priceAlert.severity">
+                                                                    <ng-container *ngSwitchCase="'OK'">
+                                                                        {{ 'operatorSupport.pricing.ok' | translate }}
+                                                                        <span *ngIf="priceAlert.comparablePriceRange?.median != null">
+                                                                            &nbsp;({{ 'operatorSupport.pricing.medianHint' | translate: { median: priceAlert.comparablePriceRange!.median } }})
+                                                                        </span>
+                                                                    </ng-container>
+                                                                    <ng-container *ngSwitchCase="'WARN'">
+                                                                        {{ 'operatorSupport.pricing.warn' | translate: { percent: priceAlertPercentAboveMedian || 0 } }}
+                                                                    </ng-container>
+                                                                    <ng-container *ngSwitchCase="'CRITICAL'">
+                                                                        {{ 'operatorSupport.pricing.critical' | translate: { percent: priceAlertPercentAboveMedian || 0 } }}
+                                                                    </ng-container>
+                                                                </ng-container>
+                                                            </div>
+                                                            <small *ngIf="priceAlert.comparablePriceRange?.min != null && priceAlert.comparablePriceRange?.max != null" class="d-block">
+                                                                {{ 'operatorSupport.pricing.range' | translate: { min: priceAlert.comparablePriceRange!.min, max: priceAlert.comparablePriceRange!.max } }}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div formArrayName="prices">
                                                     <ng-container *ngFor="let price of prices(i).controls; let j=index"
                                                         [formGroupName]="j">

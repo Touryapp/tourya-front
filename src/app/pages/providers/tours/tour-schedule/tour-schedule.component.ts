@@ -29,6 +29,8 @@ import { AuthService } from "../../../../core/services/auth.service";
 import { TourScheduleConfigResponseDto } from "../../../../shared/dto/tour-schedule.response.dto";
 import { I18nFieldService } from "../../../../shared/services/i18n-field.service";
 import { TranslateService } from "@ngx-translate/core";
+import { OperatorSupportService } from "../../../../shared/services/operator-support.service";
+import { PriceAlert } from "../../../../shared/models/operator-support.model";
 @Component({
   selector: "app-tour-schedule",
   standalone: false,
@@ -97,6 +99,11 @@ export class TourScheduleComponent {
   showAnyModal = false;
   pendingSlotIndex: number | null = null;
 
+  // IA-07 (Operator Support) — price alert (OK/WARN/CRITICAL). Se refresca on-blur
+  // en cualquier providerPrice de la seccion Prices; el backend lee el precio del tour.
+  priceAlert: PriceAlert | null = null;
+  priceAlertLoading: boolean = false;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -106,7 +113,8 @@ export class TourScheduleComponent {
     private templateService: TemplateService,
     private authService: AuthService,
     public i18nService: I18nFieldService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private operatorSupport: OperatorSupportService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -260,6 +268,62 @@ export class TourScheduleComponent {
       displayPrice = parseFloat(price);
     }
     priceControl?.setValue(displayPrice);
+
+    // IA-07: dispara la alerta pricing cuando el provider deja un precio > 0.
+    // El backend lee el providerPrice del propio tour (no lo enviamos), asi que
+    // multiples blur simplemente refrescan la misma respuesta.
+    if (displayPrice > 0) {
+      this.refreshPriceAlert();
+    }
+  }
+
+  /**
+   * IA-07: solicita al backend la alerta de precio para este tour.
+   * NO se dispara si no hay tourId (creacion nueva sin guardar). Guardrail
+   * server-side: el endpoint solo alerta, nunca modifica el precio.
+   */
+  refreshPriceAlert(): void {
+    if (!this.tourId || this.priceAlertLoading) return;
+    this.priceAlertLoading = true;
+    this.operatorSupport.getPriceAlert(this.tourId).subscribe({
+      next: (data) => {
+        this.priceAlertLoading = false;
+        this.priceAlert = data;
+      },
+      error: (err) => {
+        this.priceAlertLoading = false;
+        // Silencioso: el badge simplemente no se muestra. La alerta es opcional.
+        console.warn('Price alert unavailable', err);
+        this.priceAlert = null;
+      },
+    });
+  }
+
+  /**
+   * IA-07: porcentaje del precio del provider vs la mediana comparable.
+   * Redondeado sin decimales. Devuelve null si no hay datos suficientes.
+   */
+  get priceAlertPercentAboveMedian(): number | null {
+    const provider = this.priceAlert?.providerPrice;
+    const median = this.priceAlert?.comparablePriceRange?.median;
+    if (!provider || !median || median <= 0) return null;
+    return Math.round(((provider - median) / median) * 100);
+  }
+
+  /**
+   * Clase CSS del badge de alerta segun severity (OK/WARN/CRITICAL).
+   */
+  priceAlertBadgeClass(): string {
+    switch (this.priceAlert?.severity) {
+      case 'OK':
+        return 'bg-success-transparent text-success';
+      case 'WARN':
+        return 'bg-warning-transparent text-warning';
+      case 'CRITICAL':
+        return 'bg-danger-transparent text-danger';
+      default:
+        return 'bg-secondary-transparent text-secondary';
+    }
   }
 
   onLabelBlur(event: FocusEvent) {
