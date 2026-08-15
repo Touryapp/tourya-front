@@ -231,7 +231,19 @@
 
                     <div class="card shadow-none" id="description">
                         <div class="card-header">
-                            <h5 class="fs-18">{{ 'tour-form.sections.description' | translate }}</h5>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <h5 class="fs-18 mb-0">{{ 'tour-form.sections.description' | translate }}</h5>
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-primary ai-suggest-btn"
+                                    (click)="openAiSuggestModal(aiSuggestModal)"
+                                    [disabled]="!canEdit || aiSuggestionLoading">
+                                    <span *ngIf="!aiSuggestionLoading">{{ 'operatorSupport.suggest.button' | translate }}</span>
+                                    <span *ngIf="aiSuggestionLoading" class="d-inline-flex align-items-center">
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                        {{ 'operatorSupport.suggest.loading' | translate }}
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body text-editor">
                             <ngx-editor [editor]="editor" formControlName="description"
@@ -1007,4 +1019,77 @@
 
 <!-- Modal Backdrop para Confirmación -->
 <div class="modal-backdrop fade" [class.show]="showSubmitConfirmModal" [style.display]="showSubmitConfirmModal ? 'block' : 'none'"></div>
+
+<!-- IA-07 Operator Support — Sugerencias del asistente (nombre/descripcion/tags) -->
+<ng-template #aiSuggestModal>
+    <div class="modal-header">
+        <h5 class="modal-title">{{ 'operatorSupport.suggest.title' | translate }}</h5>
+        <button type="button" aria-label="close" class="btn-close" (click)="closeAiSuggestModal()"></button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="aiSuggestionLoading" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 mb-0 text-muted">{{ 'operatorSupport.suggest.loading' | translate }}</p>
+        </div>
+
+        <ng-container *ngIf="!aiSuggestionLoading && aiSuggestion">
+            <!-- Nombres sugeridos -->
+            <div class="mb-4" *ngIf="aiSuggestion.nameSuggestions?.length">
+                <h6 class="fw-medium mb-2">{{ 'operatorSupport.suggest.names' | translate }}</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button"
+                        class="btn btn-sm btn-outline-primary ai-suggest-chip"
+                        *ngFor="let name of aiSuggestion.nameSuggestions"
+                        (click)="applySuggestedName(name)">
+                        {{ name }}
+                    </button>
+                </div>
+                <small class="text-muted d-block mt-1">{{ 'operatorSupport.suggest.namesHint' | translate }}</small>
+            </div>
+
+            <!-- Descripcion sugerida -->
+            <div class="mb-4" *ngIf="aiSuggestion.descriptionSuggestion">
+                <h6 class="fw-medium mb-2">{{ 'operatorSupport.suggest.description' | translate }}</h6>
+                <textarea class="form-control mb-2" rows="8" readonly>{{ aiSuggestion.descriptionSuggestion }}</textarea>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="applySuggestedDescription()">
+                        {{ 'operatorSupport.suggest.use' | translate }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tags sugeridos -->
+            <div class="mb-4" *ngIf="aiSuggestion.tagSuggestions?.length">
+                <h6 class="fw-medium mb-2">{{ 'operatorSupport.suggest.tags' | translate }}</h6>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <button type="button"
+                        class="btn btn-sm ai-suggest-chip"
+                        [class.btn-primary]="isSuggestedTagSelected(tag)"
+                        [class.btn-outline-primary]="!isSuggestedTagSelected(tag)"
+                        *ngFor="let tag of aiSuggestion.tagSuggestions"
+                        (click)="toggleSuggestedTag(tag)">
+                        {{ tag }}
+                    </button>
+                </div>
+                <button type="button"
+                    class="btn btn-sm btn-primary"
+                    [disabled]="!aiSelectedTagCodes.length"
+                    (click)="applySelectedTags()">
+                    {{ 'operatorSupport.suggest.addSelectedTags' | translate }}
+                </button>
+            </div>
+
+            <!-- Reasoning (opcional, contextual) -->
+            <div class="alert alert-light border" *ngIf="aiSuggestion.reasoning">
+                <small class="text-muted">{{ aiSuggestion.reasoning }}</small>
+            </div>
+        </ng-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" (click)="closeAiSuggestModal()">
+            {{ 'operatorSupport.suggest.dismiss' | translate }}
+        </button>
+    </div>
+</ng-template>
+<!-- /IA-07 Operator Support -->
 <!-- /Modal de Confirmación -->

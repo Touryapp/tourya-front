@@ -15,6 +15,11 @@ import {
   AppConfigService,
   RawConfigValue,
 } from "../../../../shared/services/app-config.service";
+import { OperatorSupportService } from "../../../../shared/services/operator-support.service";
+import {
+  GalleryValidationIssue,
+  ImageMetadata,
+} from "../../../../shared/models/operator-support.model";
 
 interface GalleryLimits {
   maxSizeMb: number;
@@ -26,6 +31,7 @@ interface GalleryIssue {
   fileName: string;
   code: string;
   message?: string;
+  severity?: string;
 }
 
 const DEFAULT_LIMITS: GalleryLimits = {
@@ -54,6 +60,10 @@ export class TourGalleryComponent implements OnInit {
 
   limits: GalleryLimits = { ...DEFAULT_LIMITS };
 
+  // IA-07 (Operator Support) — sugerencias del backend post-validate-gallery.
+  aiGallerySuggestions: string[] = [];
+  aiGalleryInlineIssues: GalleryValidationIssue[] = [];
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -62,7 +72,8 @@ export class TourGalleryComponent implements OnInit {
     private _snackBar: MatSnackBar,
     public i18nService: I18nFieldService,
     private appConfigService: AppConfigService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private operatorSupport: OperatorSupportService
   ) {
     this.tourId = +(this.route.snapshot.paramMap.get("id") || 0);
 
@@ -284,15 +295,95 @@ export class TourGalleryComponent implements OnInit {
     Promise.all(
       asyncCandidates.map((file) => this.validateDimensions(file))
     ).then((results) => {
+      const passed: { file: File; width: number; height: number }[] = [];
       results.forEach((result) => {
         if (result.issue) {
           rejectedIssues.push(result.issue);
-        } else {
-          this.attachFileToForm(result.file);
+        } else if (result.width && result.height) {
+          passed.push({ file: result.file, width: result.width, height: result.height });
         }
       });
-      finish();
+
+      // IA-07: valida los candidatos que pasaron los checks locales contra el
+      // backend antes de adjuntarlos al formulario. El backend puede detectar
+      // reglas adicionales (proporcion, cantidad, warnings) que el cliente no
+      // reimplementa. Ver validate-gallery en IA-07.
+      this.remoteValidateGallery(passed).then((result) => {
+        // Issues CRITICAL rechazan el archivo correspondiente antes del upload.
+        // Los WARN se muestran inline (no bloquean el flujo).
+        const inlineIssues: GalleryValidationIssue[] = [];
+        result.issues.forEach((iss) => {
+          if (iss.severity === 'CRITICAL' && typeof iss.fileIndex === 'number') {
+            const bad = passed[iss.fileIndex];
+            rejectedIssues.push({
+              fileName: bad?.file?.name || `#${iss.fileIndex + 1}`,
+              code: iss.code || 'IMAGE_INVALID',
+              message: iss.message,
+              severity: 'CRITICAL',
+            });
+          } else {
+            inlineIssues.push(iss);
+          }
+        });
+
+        // Attach solo los que no quedaron marcados como CRITICAL por el backend.
+        const criticalIndexes = new Set(
+          result.issues
+            .filter((i) => i.severity === 'CRITICAL' && typeof i.fileIndex === 'number')
+            .map((i) => i.fileIndex as number)
+        );
+        passed.forEach((candidate, idx) => {
+          if (!criticalIndexes.has(idx)) {
+            this.attachFileToForm(candidate.file);
+          }
+        });
+
+        this.aiGalleryInlineIssues = inlineIssues;
+        this.aiGallerySuggestions = result.suggestions;
+        finish();
+      });
     });
+  }
+
+  /**
+   * IA-07: llama POST /agents/operator-support/validate-gallery con la metadata
+   * de los archivos que pasaron los checks locales. NO reimplementa la validacion
+   * en el cliente (regla del brief).
+   *
+   * Fallo silencioso: si el endpoint no responde, no bloquea el flujo original.
+   */
+  private remoteValidateGallery(
+    candidates: { file: File; width: number; height: number }[]
+  ): Promise<{ issues: GalleryValidationIssue[]; suggestions: string[] }> {
+    if (candidates.length === 0) {
+      return Promise.resolve({ issues: [], suggestions: [] });
+    }
+    const metadata: ImageMetadata[] = candidates.map((c) => ({
+      filename: c.file.name,
+      sizeBytes: c.file.size,
+      widthPx: c.width,
+      heightPx: c.height,
+      format: (c.file.type || '').replace(/^image\//, '') || 'jpg',
+    }));
+    return new Promise((resolve) => {
+      this.operatorSupport.validateGallery(metadata).subscribe({
+        next: (data) => {
+          resolve({
+            issues: data.issues || [],
+            suggestions: data.suggestions || [],
+          });
+        },
+        error: (err) => {
+          console.warn('validate-gallery failed, continuing with local checks only', err);
+          resolve({ issues: [], suggestions: [] });
+        },
+      });
+    });
+  }
+
+  dismissGalleryAiSuggestions(): void {
+    this.aiGalleryInlineIssues = [];
+    this.aiGallerySuggestions = [];
   }
 
   private validateSyncRules(file: File): GalleryIssue | null {
@@ -308,7 +399,7 @@ export class TourGalleryComponent implements OnInit {
 
   private validateDimensions(
     file: File
-  ): Promise<{ file: File; issue: GalleryIssue | null; dataUrl?: string }> {
+  ): Promise<{ file: File; issue: GalleryIssue | null; dataUrl?: string; width?: number; height?: number }> {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -320,6 +411,8 @@ export class TourGalleryComponent implements OnInit {
             resolve({
               file,
               issue: { fileName: file.name, code: "NOT_LANDSCAPE" },
+              width,
+              height,
             });
             return;
           }
@@ -327,10 +420,12 @@ export class TourGalleryComponent implements OnInit {
             resolve({
               file,
               issue: { fileName: file.name, code: "WIDTH_TOO_SMALL" },
+              width,
+              height,
             });
             return;
           }
-          resolve({ file, issue: null, dataUrl });
+          resolve({ file, issue: null, dataUrl, width, height });
         };
         image.onerror = () => {
           resolve({

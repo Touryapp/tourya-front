@@ -5,6 +5,8 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
 import { I18nFieldService } from '../../../shared/services/i18n-field.service';
 import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
+import { OperatorSupportService } from '../../../shared/services/operator-support.service';
+import { ReviewReplyTone } from '../../../shared/models/operator-support.model';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 
@@ -90,12 +92,20 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
   public reviewReasonsNegative: ReviewReason[] = [];
   public reviewReasonsLoading: boolean = false;
 
+  // IA-07 (Operator Support) — borrador de respuesta de resenas.
+  // aiDraftingReviewId: id de la resena para la que se esta pidiendo el draft
+  // (para mostrar el spinner solo en ese boton). aiDraftTone: tono detectado
+  // por el backend, solo se muestra si el editor esta abierto para esa resena.
+  public aiDraftingReviewId: string | null = null;
+  public aiDraftTone: ReviewReplyTone | null = null;
+
   constructor(
     private authService: AuthService,
     public i18nService: I18nFieldService,
     private panelStateService: ProviderPanelStateService,
     private reviewsService: ReviewsService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private operatorSupport: OperatorSupportService
   ) {}
 
   get currentLang(): string {
@@ -583,6 +593,64 @@ export class ProviderReviewsComponent implements OnInit, OnChanges {
   public cancelReply(): void {
     this.replyingToReviewId = null;
     this.replyText = '';
+    this.aiDraftTone = null;
+  }
+
+  // -------------------------------------------------------------------------
+  // IA-07 Operator Support — borrador de respuesta con IA para una resena
+  // (POST /agents/operator-support/draft-review-reply/{reviewId}).
+  // -------------------------------------------------------------------------
+
+  /**
+   * Devuelve el label traducido del tono detectado por el backend.
+   * Tolerante a tonos futuros: si no hay traduccion, devuelve el raw.
+   */
+  public getToneLabel(tone: ReviewReplyTone | null | undefined): string {
+    if (!tone) return '';
+    const key = `operatorSupport.reviewReply.tone.${tone}`;
+    const translated = this.translate.instant(key);
+    // Si i18n no tiene la key devuelve la key literal — evitamos mostrar eso.
+    return translated === key ? String(tone) : translated;
+  }
+
+  /**
+   * Estado de loading solo para el boton del review que esta pidiendo el draft.
+   */
+  public isDraftingReply(reviewId: string): boolean {
+    return this.aiDraftingReviewId === reviewId;
+  }
+
+  /**
+   * Llama IA-07 draft-review-reply y abre el editor con el texto sugerido
+   * pre-cargado. El provider puede editar antes de publicar. Nunca publica
+   * automaticamente — la publicacion sigue por el flujo `submitReply` existente.
+   */
+  public draftReviewReply(reviewId: string): void {
+    if (!reviewId || this.aiDraftingReviewId) return;
+    const numericId = Number(reviewId);
+    if (!Number.isFinite(numericId) || numericId <= 0) {
+      return;
+    }
+    this.aiDraftingReviewId = reviewId;
+    this.operatorSupport.draftReviewReply(numericId).subscribe({
+      next: (draft) => {
+        this.aiDraftingReviewId = null;
+        // Abrimos el editor de esta resena (mismo TextEditor existente) con el draft.
+        this.replyingToReviewId = reviewId;
+        this.replyText = draft.draftText || '';
+        this.aiDraftTone = draft.tone || null;
+      },
+      error: (err) => {
+        this.aiDraftingReviewId = null;
+        console.error('Error drafting review reply', err);
+        Swal.fire({
+          icon: 'error',
+          title: this.translate.instant('operatorSupport.reviewReply.button'),
+          text: this.translate.instant('operatorSupport.error'),
+          confirmButtonText: 'OK',
+        });
+      },
+    });
   }
 
   /**

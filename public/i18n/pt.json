@@ -2213,5 +2213,45 @@
       "addedToCart": "Adicionado ao carrinho",
       "cartFailed": "Nao foi possivel adicionar ao carrinho"
     }
+  },
+  "operatorSupport": {
+    "error": "O assistente nao pode processar sua solicitacao",
+    "suggest": {
+      "button": "Sugerir com IA",
+      "title": "Sugestoes do assistente",
+      "loading": "Gerando sugestoes...",
+      "names": "Nomes sugeridos",
+      "namesHint": "Toque em um nome para substituir o atual",
+      "description": "Descricao sugerida",
+      "tags": "Tags sugeridas",
+      "addSelectedTags": "Adicionar selecionadas as minhas tags",
+      "use": "Usar esta sugestao",
+      "dismiss": "Fechar",
+      "incomplete": "Preencha primeiro: {{fields}}"
+    },
+    "pricing": {
+      "ok": "Dentro da faixa de mercado",
+      "warn": "Preco {{percent}}% acima da media",
+      "critical": "Preco {{percent}}% acima, pode reduzir vendas",
+      "range": "Faixa: {{min}} - {{max}}",
+      "medianHint": "mediana {{median}}"
+    },
+    "gallery": {
+      "recommendations": "Recomendacoes do assistente",
+      "issue": {
+        "imageVertical": "Imagem vertical detectada — recomendado horizontal",
+        "imageTooLarge": "Imagem excede 5MB",
+        "tooManyImages": "Maximo 7 imagens"
+      }
+    },
+    "reviewReply": {
+      "button": "Rascunho com IA",
+      "toneDetected": "Tom detectado: {{tone}}",
+      "tone": {
+        "PROFESSIONAL": "Profissional",
+        "WARM": "Caloroso",
+        "APOLOGETIC": "Desculpe"
+      }
+    }
   }
 }

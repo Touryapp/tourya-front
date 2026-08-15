@@ -263,10 +263,23 @@
                         <div class="d-flex align-items-center gap-2">
                             <!-- Botón Responder solo para Proveedor -->
                             @if (isProveedor && canRespondToReview(review)) {
-                                <button 
+                                <button
                                     class="btn btn-sm btn-outline-primary"
                                     (click)="respondToReview(review.id!)">
                                     <i class="isax isax-message-text me-1"></i>{{'provider-reviews.actions.respond' | translate}}
+                                </button>
+                                <!-- IA-07: borrador con IA. Reusa el TextEditor existente. -->
+                                <button
+                                    class="btn btn-sm btn-outline-primary ai-suggest-btn"
+                                    (click)="draftReviewReply(review.id!)"
+                                    [disabled]="isDraftingReply(review.id!)">
+                                    <ng-container *ngIf="!isDraftingReply(review.id!)">
+                                        {{'operatorSupport.reviewReply.button' | translate}}
+                                    </ng-container>
+                                    <ng-container *ngIf="isDraftingReply(review.id!)">
+                                        <span class="spinner-border spinner-border-sm me-1"></span>
+                                        {{'operatorSupport.suggest.loading' | translate}}
+                                    </ng-container>
                                 </button>
                             }
                             
@@ -290,14 +303,18 @@
                                 <i class="isax isax-message-text me-2 text-primary"></i>{{'provider-reviews.replyForm.title' | translate}}
                             </h6>
                             <div class="mb-3">
-                                <textarea 
+                                <textarea
                                     [(ngModel)]="replyText"
                                     class="form-control"
                                     rows="4"
                                     [placeholder]="'provider-reviews.replyForm.placeholder' | translate"
                                     maxlength="500"></textarea>
-                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="d-flex justify-content-between align-items-center mt-2 flex-wrap gap-2">
                                     <small class="text-muted">{{ replyText.length }}/500 {{'provider-reviews.replyForm.charactersCount' | translate}}</small>
+                                    <!-- IA-07: badge del tono detectado (solo si venimos del borrador con IA) -->
+                                    <small *ngIf="aiDraftTone" class="badge bg-info-transparent text-info">
+                                        {{ 'operatorSupport.reviewReply.toneDetected' | translate: { tone: getToneLabel(aiDraftTone) } }}
+                                    </small>
                                 </div>
                                 <div class="mt-3">
                                     <label class="form-label fs-14 fw-medium text-gray-7">
