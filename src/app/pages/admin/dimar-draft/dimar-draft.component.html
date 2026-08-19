@@ -1,0 +1,136 @@
+<!-- FE IA-08 T3: pagina admin/backoffice para generar el borrador DIMAR. -->
+<div class="dimar-draft-page">
+  <div class="card mb-4 no-print">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3">
+        <div>
+          <h5 class="mb-1">
+            <i class="isax isax-flag me-2 text-primary"></i>
+            {{ 'backofficeSupport.dimar.title' | translate }}
+          </h5>
+          <p class="fs-14 text-gray-6 mb-0">
+            {{ 'backofficeSupport.dimar.subtitle' | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card mb-4 no-print">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="dimarDate" class="form-label fw-semibold">
+            {{ 'backofficeSupport.dimar.filter.date' | translate }}
+          </label>
+          <input id="dimarDate" type="date" class="form-control"
+            [(ngModel)]="date" [disabled]="loading" />
+        </div>
+        <div class="col-md-4">
+          <label for="dimarProviderId" class="form-label fw-semibold">
+            {{ 'backofficeSupport.dimar.filter.provider' | translate }}
+          </label>
+          <input id="dimarProviderId" type="number" min="1" step="1"
+            class="form-control" [(ngModel)]="providerId"
+            [disabled]="loading"
+            placeholder="{{ 'backofficeSupport.dimar.filter.providerPlaceholder' | translate }}" />
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="button" class="btn btn-primary w-100"
+            (click)="onGenerate()" [disabled]="!canGenerate()">
+            <span class="spinner-border spinner-border-sm me-2" *ngIf="loading" role="status"></span>
+            <i class="isax isax-magic-star me-2" *ngIf="!loading"></i>
+            {{ 'backofficeSupport.dimar.filter.generate' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estados -->
+  <div class="alert alert-danger no-print" *ngIf="errorMessage && !loading">
+    <i class="isax isax-warning-2 me-2"></i>{{ errorMessage }}
+  </div>
+
+  <div class="text-center py-5" *ngIf="loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <ng-container *ngIf="draft && !loading">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3 mb-3">
+          <div>
+            <div class="text-muted small">
+              {{ 'backofficeSupport.dimar.filter.date' | translate }}: {{ draft.date }}
+              &middot;
+              {{ 'backofficeSupport.dimar.filter.provider' | translate }}: #{{ draft.providerId }}
+            </div>
+            <div class="d-flex align-items-baseline gap-2 mt-1">
+              <h2 class="fw-bold mb-0">{{ draft.totalPassengers }}</h2>
+              <span class="text-muted">
+                {{ 'backofficeSupport.dimar.totalPassengers' | translate }}
+              </span>
+            </div>
+          </div>
+          <div class="d-flex gap-2 no-print">
+            <button type="button" class="btn btn-outline-primary"
+              (click)="onExportCsv()"
+              [disabled]="!draft.passengers || draft.passengers.length === 0">
+              <i class="isax isax-document-download me-1"></i>
+              {{ 'backofficeSupport.dimar.export' | translate }}
+            </button>
+            <button type="button" class="btn btn-outline-secondary"
+              (click)="onPrint()">
+              <i class="isax isax-printer me-1"></i>
+              {{ 'backofficeSupport.dimar.print' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="draft.passengers && draft.passengers.length > 0; else emptyPassengers">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th>{{ 'backofficeSupport.dimar.col.reservation' | translate }}</th>
+                <th>{{ 'backofficeSupport.dimar.col.tour' | translate }}</th>
+                <th>{{ 'backofficeSupport.dimar.col.payer' | translate }}</th>
+                <th>{{ 'backofficeSupport.dimar.col.documentType' | translate }}</th>
+                <th>{{ 'backofficeSupport.dimar.col.documentNumber' | translate }}</th>
+                <th>{{ 'backofficeSupport.dimar.col.ageType' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of draft.passengers; trackBy: trackByPassenger">
+                <td>#{{ p.reservationId }}</td>
+                <td>{{ p.tourName }}</td>
+                <td>{{ p.payerName }}</td>
+                <td>{{ p.documentType }}</td>
+                <td>{{ p.documentNumber }}</td>
+                <td>{{ p.ageType }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #emptyPassengers>
+          <div class="alert alert-warning mb-0">
+            <i class="isax isax-info-circle me-2"></i>
+            {{ 'backofficeSupport.dimar.emptyPassengers' | translate }}
+          </div>
+        </ng-template>
+
+        <div class="mt-3" *ngIf="draft.notes">
+          <h6 class="fw-bold">
+            <i class="isax isax-note-2 me-1 text-primary"></i>
+            {{ 'backofficeSupport.dimar.notes' | translate }}
+          </h6>
+          <p class="text-muted mb-0" style="white-space: pre-wrap;">{{ draft.notes }}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

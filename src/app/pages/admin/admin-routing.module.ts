@@ -73,6 +73,14 @@ const routes: Routes = [
         path: 'reviews/moderation',
         canActivate: [BackofficeGuard],
         loadComponent: () => import('./reviews-moderation/reviews-moderation.component').then(m => m.ReviewsModerationComponent)
+      },
+      // FE IA-08 T3: pagina para generar el borrador DIMAR (consume
+      // POST /admin/agents/backoffice-support/dimar-draft del backend IA-08).
+      // Expuesto a ADMIN + BACKOFFICE_OPERATION.
+      {
+        path: 'dimar-draft',
+        canActivate: [BackofficeGuard],
+        loadComponent: () => import('./dimar-draft/dimar-draft.component').then(m => m.DimarDraftComponent)
       }
     ]
   }

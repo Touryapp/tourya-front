@@ -15,6 +15,10 @@
             <span class="badge fs-16 px-3 py-2" [ngClass]="getStatusBadgeClass(tour.status)">
               {{ getStatusLabel(tour.status) }}
             </span>
+            <!-- FE IA-08 T2: pre-validacion informativa. -->
+            <button class="btn btn-outline-primary" (click)="openTourPrevalidation()" [disabled]="!tour">
+              <i class="isax isax-magic-star me-2"></i>{{ 'backofficeSupport.tour.button' | translate }}
+            </button>
             <button class="btn btn-success" (click)="openAcceptModal()" [disabled]="!canAccept()">
               <i class="isax isax-tick-circle me-2"></i>Aceptar Tour
             </button>
@@ -260,6 +264,10 @@
                   - <strong>Cancelado:</strong> Tour rechazado
                 </small>
               </div>
+              <!-- FE IA-08 T2: pre-validacion (info). -->
+              <button class="btn btn-outline-primary w-100 mb-2 fs-14" (click)="openTourPrevalidation()" [disabled]="!tour">
+                <i class="isax isax-magic-star me-2"></i>{{ 'backofficeSupport.tour.button' | translate }}
+              </button>
               <button class="btn btn-success w-100 mb-2 fs-14" (click)="openAcceptModal()" [disabled]="!canAccept()">
                 <i class="isax isax-tick-circle me-2"></i>Aceptar Tour
               </button>
@@ -321,6 +329,89 @@
   </div>
 </div>
 
+<!-- FE IA-08 T2: modal informativo de pre-validacion IA. -->
+<div class="modal fade" [class.show]="showPrevalidationModal"
+  [style.display]="showPrevalidationModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="isax isax-magic-star me-2 text-primary"></i>
+          {{ 'backofficeSupport.tour.title' | translate }}
+          <ng-container *ngIf="prevalidationResult">
+            <span class="badge ms-2" [ngClass]="prevalidationResult.canApprove ? 'bg-success' : 'bg-danger'">
+              {{ (prevalidationResult.canApprove ? 'backofficeSupport.tour.canApproveTrue' : 'backofficeSupport.tour.canApproveFalse') | translate }}
+            </span>
+          </ng-container>
+        </h5>
+        <button type="button" class="btn-close"
+          (click)="closePrevalidationModal()" [disabled]="prevalidationLoading"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center py-4" *ngIf="prevalidationLoading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2 text-muted">{{ 'backofficeSupport.tour.title' | translate }}...</p>
+        </div>
+
+        <div class="alert alert-danger" *ngIf="!prevalidationLoading && prevalidationError">
+          <i class="isax isax-warning-2 me-2"></i>{{ prevalidationError }}
+        </div>
+
+        <ng-container *ngIf="!prevalidationLoading && !prevalidationError && prevalidationResult">
+          <div class="table-responsive" *ngIf="prevalidationIssuesSorted.length > 0; else emptyIssues">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th class="text-center">{{ 'backofficeSupport.tour.severityCol' | translate }}</th>
+                  <th>{{ 'backofficeSupport.tour.codeCol' | translate }}</th>
+                  <th>{{ 'backofficeSupport.tour.fieldCol' | translate }}</th>
+                  <th>{{ 'backofficeSupport.tour.messageCol' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let issue of prevalidationIssuesSorted; trackBy: trackByIssue">
+                  <td class="text-center">
+                    <span class="badge" [ngClass]="getIssueSeverityBadgeClass(issue.severity)">
+                      {{ ('backofficeSupport.tour.severity.' + issue.severity) | translate }}
+                    </span>
+                  </td>
+                  <td><code>{{ issue.code }}</code></td>
+                  <td class="text-muted small">{{ issue.field }}</td>
+                  <td>{{ issue.message }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #emptyIssues>
+            <div class="alert alert-success mb-0">
+              <i class="isax isax-tick-circle me-2"></i>
+              {{ 'backofficeSupport.tour.noIssues' | translate }}
+            </div>
+          </ng-template>
+
+          <div class="mt-3" *ngIf="prevalidationResult.reasoning">
+            <h6 class="fw-bold">
+              <i class="isax isax-note-2 me-1 text-primary"></i>
+              {{ 'backofficeSupport.tour.reasoning' | translate }}
+            </h6>
+            <p class="text-muted mb-0" style="white-space: pre-wrap;">{{ prevalidationResult.reasoning }}</p>
+          </div>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+          (click)="closePrevalidationModal()" [disabled]="prevalidationLoading">
+          {{ 'backofficeSupport.tour.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade" [class.show]="showPrevalidationModal"
+  [style.display]="showPrevalidationModal ? 'block' : 'none'"></div>
 <!-- Modal de Confirmación para Aceptar -->
 <div class="modal fade" [class.show]="showAcceptModal" [style.display]="showAcceptModal ? 'block' : 'none'" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
