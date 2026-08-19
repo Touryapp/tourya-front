@@ -62,6 +62,13 @@
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToCredits()"><i
                 class="isax isax-money-recive"></i> {{ 'admin.sidebar.credits' | translate }}</a>
           </li>
+          <!-- FE IA-11: observabilidad de agentes IA. Mismo tratamiento que credits:
+               el link vive en admin.component.html (shell) y aca replica el sidebar
+               propio del dashboard para que ADMIN lo vea desde /admin/dashboard. -->
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToAgentsObservability()"><i
+                class="isax isax-chart-2"></i> {{ 'admin.sidebar.agentsObservability' | translate }}</a>
+          </li>
           <li>
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBackofficeUsers()"><i
                 class="isax isax-people"></i> {{ 'backofficeUsers.sidebarLink' | translate }}</a>

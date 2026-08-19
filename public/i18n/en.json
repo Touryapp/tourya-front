@@ -247,6 +247,7 @@
       "bookings": "Bookings",
       "backofficeUsers": "Backoffice Users",
       "credits": "Credits",
+      "agentsObservability": "AI Observability",
       "appConfig": "System Configuration"
     },
     "menu": {
@@ -260,7 +261,53 @@
       "colAvailable": "Available"
     }
   },
-  "provider-tour-management": {
+  "agentsObservability": {
+    "title": "AI Agents Observability",
+    "filter": {
+      "from": "From",
+      "to": "To",
+      "agent": "Agent",
+      "all": "All",
+      "refresh": "Refresh",
+      "lastUpdated": "Last updated"
+    },
+    "summary": {
+      "title": "Summary by agent",
+      "calls": "Calls",
+      "cost": "Cost",
+      "tokens": "Tokens",
+      "avgLatency": "Avg latency",
+      "successRate": "Success rate",
+      "escalatedRate": "Escalated to human"
+    },
+    "timeseries": {
+      "title": "Daily usage and cost"
+    },
+    "latency": {
+      "title": "Latency (p50 / p95 / p99)"
+    },
+    "resultTypes": {
+      "title": "Result distribution",
+      "success": "Success",
+      "error": "Error",
+      "rejected": "Rejected"
+    },
+    "topConsumers": {
+      "title": "Top consumers",
+      "email": "Email",
+      "deletedUser": "User #{{id}}"
+    },
+    "overrides": {
+      "title": "Override rate",
+      "total": "Total suggestions",
+      "kept": "Kept",
+      "edited": "Edited",
+      "discarded": "Discarded",
+      "proxyTooltip": "MVP: proxy computed as escalatedRate + errorRate. Real outcome tracking pending (IA-11b)."
+    },
+    "empty": "No activity in this range",
+    "error": "Failed to load"
+  },  "provider-tour-management": {
     "header": {
       "totalBookings": "Total Bookings",
       "confirmBooking": "Confirm Booking",
