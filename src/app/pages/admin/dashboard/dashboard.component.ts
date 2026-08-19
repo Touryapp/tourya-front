@@ -57,6 +57,14 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/admin/credits']);
   }
 
+  /** FE IA-11: navega al dashboard admin de observabilidad de agentes IA
+   * (ADMIN + BACKOFFICE_OPERATION). Mismo tratamiento defensivo que goToCredits:
+   * el link vive en admin.component.html (shell) y se replica aca en el sidebar
+   * propio del dashboard para que ADMIN lo vea al entrar por /admin/dashboard. */
+  goToAgentsObservability(): void {
+    this.router.navigate(['/admin/agents']);
+  }
+
   ngOnInit(): void {
     this.cargarSolicitudes();
     this.showGalleryFiles();

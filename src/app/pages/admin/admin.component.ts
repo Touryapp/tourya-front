@@ -127,6 +127,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/credits']);
   }
 
+  /** FE IA-11: dashboard admin de observabilidad de agentes IA (BackofficeGuard). */
+  goToAgentsObservability(): void {
+    this.router.navigate(['/admin/agents']);
+  }
+
   /** Usuarios Backoffice (AdminGuard). */
   goToBackofficeUsers(): void {
     this.router.navigate(['/admin/backoffice-users']);

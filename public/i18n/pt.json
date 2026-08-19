@@ -247,6 +247,7 @@
       "bookings": "Reservas",
       "backofficeUsers": "Usuários Backoffice",
       "credits": "Créditos",
+      "agentsObservability": "Observabilidade IA",
       "appConfig": "Configuração do sistema"
     },
     "menu": {
@@ -260,7 +261,53 @@
       "colAvailable": "Disponível"
     }
   },
-  "provider-tour-management": {
+  "agentsObservability": {
+    "title": "Observabilidade de agentes IA",
+    "filter": {
+      "from": "De",
+      "to": "Até",
+      "agent": "Agente",
+      "all": "Todos",
+      "refresh": "Atualizar",
+      "lastUpdated": "Última atualização"
+    },
+    "summary": {
+      "title": "Resumo por agente",
+      "calls": "Chamadas",
+      "cost": "Custo",
+      "tokens": "Tokens",
+      "avgLatency": "Latência média",
+      "successRate": "Taxa de sucesso",
+      "escalatedRate": "Encaminhado a humano"
+    },
+    "timeseries": {
+      "title": "Uso e custo por dia"
+    },
+    "latency": {
+      "title": "Latência (p50 / p95 / p99)"
+    },
+    "resultTypes": {
+      "title": "Distribuição de resultados",
+      "success": "Sucesso",
+      "error": "Erro",
+      "rejected": "Rejeitado"
+    },
+    "topConsumers": {
+      "title": "Top usuários",
+      "email": "Email",
+      "deletedUser": "Usuário #{{id}}"
+    },
+    "overrides": {
+      "title": "Taxa de override",
+      "total": "Sugestões totais",
+      "kept": "Aceitas",
+      "edited": "Editadas",
+      "discarded": "Descartadas",
+      "proxyTooltip": "MVP: proxy calculado com escalatedRate + errorRate. Rastreamento real pendente (IA-11b)."
+    },
+    "empty": "Sem atividade neste período",
+    "error": "Não foi possível carregar"
+  },  "provider-tour-management": {
     "header": {
       "totalBookings": "Total de Reservas",
       "confirmBooking": "Confirmar Reserva",

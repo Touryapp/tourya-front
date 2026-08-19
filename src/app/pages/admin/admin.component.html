@@ -52,6 +52,12 @@
                   <i class="isax isax-money-recive me-2"></i>{{ 'admin.sidebar.credits' | translate }}
                 </a>
               </li>
+              <!-- FE IA-11: observabilidad de agentes IA (ADMIN + BACKOFFICE_OPERATION). -->
+              <li>
+                <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToAgentsObservability()">
+                  <i class="isax isax-chart-2 me-2"></i>{{ 'admin.sidebar.agentsObservability' | translate }}
+                </a>
+              </li>
 
               <ng-container *ngIf="isAdmin">
                 <li>

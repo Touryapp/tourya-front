@@ -58,6 +58,13 @@ const routes: Routes = [
         path: 'credits',
         canActivate: [BackofficeGuard],
         loadComponent: () => import('./admin-credits/admin-credits.component').then(m => m.AdminCreditsComponent)
+      },
+      // FE IA-11: dashboard admin de observabilidad de agentes IA (consume
+      // GET /admin/agents/* del backend IA-11). Expuesto a ADMIN + BACKOFFICE_OPERATION.
+      {
+        path: 'agents',
+        canActivate: [BackofficeGuard],
+        loadComponent: () => import('./agents-observability/agents-observability.component').then(m => m.AgentsObservabilityComponent)
       }
     ]
   }
@@ -67,4 +74,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdminRoutingModule { } 
+export class AdminRoutingModule { }
