@@ -58,6 +58,12 @@
                   <i class="isax isax-chart-2 me-2"></i>{{ 'admin.sidebar.agentsObservability' | translate }}
                 </a>
               </li>
+              <!-- FE IA-10: cola de moderacion de resenas (ADMIN + BACKOFFICE_OPERATION). -->
+              <li>
+                <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToReviewsModeration()">
+                  <i class="isax isax-shield-tick me-2"></i>{{ 'admin.sidebar.reviewsModeration' | translate }}
+                </a>
+              </li>
 
               <ng-container *ngIf="isAdmin">
                 <li>

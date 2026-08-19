@@ -1,0 +1,250 @@
+<!-- FE IA-10: Cola de moderacion de resenas (backend IA-10 Gemini Flash). -->
+<div class="reviews-moderation">
+
+  <!-- Header + filtros -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-3 mb-3">
+        <div>
+          <h5 class="mb-1">{{ 'reviewsModeration.title' | translate }}</h5>
+          <p class="fs-14 text-gray-6 mb-0" *ngIf="lastUpdated">
+            {{ 'reviewsModeration.filter.lastUpdated' | translate }}:
+            <span class="fw-semibold text-dark">{{ lastUpdated | date:'medium' }}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Tabs de status -->
+      <ul class="nav nav-pills mb-3" role="tablist">
+        <li class="nav-item me-2" *ngFor="let st of statusOptions">
+          <button
+            type="button"
+            class="nav-link btn-sm"
+            [class.active]="selectedStatus === st"
+            (click)="onStatusChange(st)">
+            {{ 'reviewsModeration.filter.status.' + (st === 'PENDING' ? 'pending' : 'rejected') | translate }}
+          </button>
+        </li>
+      </ul>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-sm-6 col-md-3">
+          <label for="rev-mod-from" class="form-label fs-14 fw-medium mb-1">
+            {{ 'reviewsModeration.filter.from' | translate }}
+          </label>
+          <input
+            id="rev-mod-from"
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="fromDate"
+            [max]="toDate" />
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <label for="rev-mod-to" class="form-label fs-14 fw-medium mb-1">
+            {{ 'reviewsModeration.filter.to' | translate }}
+          </label>
+          <input
+            id="rev-mod-to"
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="toDate"
+            [min]="fromDate" />
+        </div>
+        <div class="col-sm-8 col-md-4">
+          <label for="rev-mod-flag" class="form-label fs-14 fw-medium mb-1">
+            {{ 'reviewsModeration.filter.flag' | translate }}
+          </label>
+          <select
+            id="rev-mod-flag"
+            class="form-select form-select-sm"
+            [(ngModel)]="selectedFlag">
+            <option *ngFor="let f of flagOptions" [ngValue]="f">
+              {{ f === 'ALL' ? ('reviewsModeration.filter.allFlags' | translate) : flagLabel(f) }}
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-4 col-md-2 d-grid">
+          <button type="button" class="btn btn-primary btn-sm" (click)="onRefresh()">
+            <i class="isax isax-refresh me-1"></i>
+            {{ 'reviewsModeration.filter.refresh' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla principal -->
+  <div class="card">
+    <div class="card-body">
+
+      <ng-container *ngIf="loading">
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading…</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && error">
+        <div class="alert alert-danger d-flex justify-content-between align-items-center mb-0">
+          <span>
+            <i class="isax isax-warning-2 me-1"></i>
+            {{ 'reviewsModeration.error' | translate }}
+          </span>
+          <button type="button" class="btn btn-sm btn-outline-danger" (click)="onRefresh()">
+            <i class="isax isax-refresh me-1"></i>
+            {{ 'reviewsModeration.filter.refresh' | translate }}
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !error">
+        <ng-container *ngIf="filteredRows.length === 0; else queueTable">
+          <div class="text-center py-5 text-gray-6">
+            {{ 'reviewsModeration.empty' | translate }}
+          </div>
+        </ng-container>
+
+        <ng-template #queueTable>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th>{{ 'reviewsModeration.column.date' | translate }}</th>
+                  <th>{{ 'reviewsModeration.column.review' | translate }}</th>
+                  <th>{{ 'reviewsModeration.column.tour' | translate }}</th>
+                  <th>{{ 'reviewsModeration.column.author' | translate }}</th>
+                  <th>{{ 'reviewsModeration.column.flags' | translate }}</th>
+                  <th class="text-end">{{ 'reviewsModeration.column.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of filteredRows; trackBy: trackByReviewId">
+                  <td class="text-nowrap">
+                    <span *ngIf="row.moderatedAt; else noDate">
+                      {{ row.moderatedAt | date:'short' }}
+                    </span>
+                    <ng-template #noDate><span class="text-muted">—</span></ng-template>
+                  </td>
+                  <td class="review-cell">
+                    <div class="review-text" [attr.title]="row.reviewText || ''">
+                      {{ truncateText(row.reviewText) }}
+                    </div>
+                    <span
+                      *ngIf="row.reasoning"
+                      class="reasoning-icon ms-1"
+                      [attr.title]="row.reasoning">
+                      <i
+                        class="isax isax-information"
+                        [attr.aria-label]="'reviewsModeration.reasoningTooltip' | translate"></i>
+                    </span>
+                  </td>
+                  <td>{{ row.tourName || '—' }}</td>
+                  <td class="text-nowrap">{{ row.authorEmail || '—' }}</td>
+                  <td>
+                    <span
+                      *ngFor="let flag of row.moderationFlags"
+                      class="badge flag-chip me-1 mb-1"
+                      [style.background-color]="flagColor(flag)">
+                      {{ flagLabel(flag) }}
+                    </span>
+                    <span *ngIf="!row.moderationFlags || row.moderationFlags.length === 0" class="text-muted">—</span>
+                  </td>
+                  <td class="text-end text-nowrap">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-primary me-1"
+                      [disabled]="isInFlight(row)"
+                      (click)="onReModerate(row)">
+                      <span *ngIf="isInFlight(row)" class="spinner-border spinner-border-sm me-1"></span>
+                      {{ 'reviewsModeration.action.remoderate' | translate }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      (click)="openDetail(row)">
+                      {{ 'reviewsModeration.action.viewFull' | translate }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: ver resena completa -->
+<ng-container *ngIf="showDetailModal && detailTarget as target">
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ 'reviewsModeration.action.viewFull' | translate }} - #{{ target.reviewId }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeDetail()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-medium">{{ 'reviewsModeration.column.tour' | translate }}</label>
+            <div>{{ target.tourName || '—' }}</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium">{{ 'reviewsModeration.column.author' | translate }}</label>
+            <div>{{ target.authorEmail || '—' }}</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium">{{ 'reviewsModeration.column.date' | translate }}</label>
+            <div>
+              <ng-container *ngIf="target.moderatedAt; else noDateDetail">
+                {{ target.moderatedAt | date:'medium' }}
+              </ng-container>
+              <ng-template #noDateDetail><span class="text-muted">—</span></ng-template>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium">{{ 'reviewsModeration.column.flags' | translate }}</label>
+            <div>
+              <span
+                *ngFor="let flag of target.moderationFlags"
+                class="badge flag-chip me-1"
+                [style.background-color]="flagColor(flag)">
+                {{ flagLabel(flag) }}
+              </span>
+              <span *ngIf="!target.moderationFlags || target.moderationFlags.length === 0" class="text-muted">—</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium">{{ 'reviewsModeration.column.review' | translate }}</label>
+            <div class="border rounded p-3 review-full-text">
+              <ng-container *ngIf="hasReviewText(target); else emptyText">
+                {{ target.reviewText }}
+              </ng-container>
+              <ng-template #emptyText><span class="text-muted">—</span></ng-template>
+            </div>
+          </div>
+          <div *ngIf="target.reasoning" class="mb-0">
+            <label class="form-label fw-medium">
+              <i class="isax isax-information me-1"></i>
+              {{ 'reviewsModeration.reasoningTooltip' | translate }}
+            </label>
+            <div class="border rounded p-3 bg-light">
+              {{ target.reasoning }}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeDetail()">
+            {{ 'shared.close' | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="goToReviewDetail()">
+            {{ 'reviewsModeration.action.goToDetail' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

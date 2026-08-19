@@ -1,4 +1,4 @@
-﻿{
+{
   "common": {
     "back": "Voltar"
   },
@@ -248,6 +248,7 @@
       "backofficeUsers": "Usuários Backoffice",
       "credits": "Créditos",
       "agentsObservability": "Observabilidade IA",
+      "reviewsModeration": "Fila de moderacão",
       "appConfig": "Configuração do sistema"
     },
     "menu": {
@@ -307,7 +308,47 @@
     },
     "empty": "Sem atividade neste período",
     "error": "Não foi possível carregar"
-  },  "provider-tour-management": {
+  },
+  "reviewsModeration": {
+    "title": "Fila de moderação de avaliações",
+    "filter": {
+      "status": {
+        "pending": "Pendentes",
+        "rejected": "Rejeitadas"
+      },
+      "from": "De",
+      "to": "Até",
+      "flag": "Flag",
+      "allFlags": "Todos",
+      "refresh": "Atualizar",
+      "lastUpdated": "Última atualização"
+    },
+    "column": {
+      "date": "Data",
+      "review": "Avaliação",
+      "tour": "Tour",
+      "author": "Autor",
+      "flags": "Flags",
+      "actions": "Ações"
+    },
+    "action": {
+      "remoderate": "Re-moderar",
+      "viewFull": "Ver avaliação completa",
+      "goToDetail": "Abrir detalhe"
+    },
+    "flag": {
+      "SPAM": "Spam",
+      "OFFENSIVE": "Ofensivo",
+      "OFF_TOPIC": "Fora do tema",
+      "POTENTIAL_FRAUD": "Possível fraude",
+      "INAPPROPRIATE_MEDIA": "Mídia inapropriada"
+    },
+    "empty": "Sem avaliações para moderar neste período",
+    "error": "Não foi possível carregar a fila",
+    "remoderateSuccess": "Avaliação re-moderada",
+    "reasoningTooltip": "Raciocínio do assistente IA"
+  },
+  "provider-tour-management": {
     "header": {
       "totalBookings": "Total de Reservas",
       "confirmBooking": "Confirmar Reserva",

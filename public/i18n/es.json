@@ -1,4 +1,4 @@
-﻿{
+{
   "common": {
     "back": "Volver"
   },
@@ -249,6 +249,7 @@
       "backofficeUsers": "Usuarios Backoffice",
       "credits": "Créditos",
       "agentsObservability": "Observabilidad IA",
+      "reviewsModeration": "Cola de moderación",
       "appConfig": "Configuración del sistema"
     },
     "menu": {
@@ -308,7 +309,47 @@
     },
     "empty": "Sin actividad en este período",
     "error": "No se pudo cargar"
-  },  "provider-tour-management": {
+  },
+  "reviewsModeration": {
+    "title": "Cola de moderación de reseñas",
+    "filter": {
+      "status": {
+        "pending": "Pendientes",
+        "rejected": "Rechazadas"
+      },
+      "from": "Desde",
+      "to": "Hasta",
+      "flag": "Flag",
+      "allFlags": "Todos",
+      "refresh": "Actualizar",
+      "lastUpdated": "Última actualización"
+    },
+    "column": {
+      "date": "Fecha",
+      "review": "Reseña",
+      "tour": "Tour",
+      "author": "Autor",
+      "flags": "Flags",
+      "actions": "Acciones"
+    },
+    "action": {
+      "remoderate": "Re-moderar",
+      "viewFull": "Ver reseña completa",
+      "goToDetail": "Ir al detalle"
+    },
+    "flag": {
+      "SPAM": "Spam",
+      "OFFENSIVE": "Ofensivo",
+      "OFF_TOPIC": "Fuera de tema",
+      "POTENTIAL_FRAUD": "Posible fraude",
+      "INAPPROPRIATE_MEDIA": "Media inapropiado"
+    },
+    "empty": "Sin reseñas para moderar en este período",
+    "error": "No se pudo cargar la cola",
+    "remoderateSuccess": "Reseña re-moderada",
+    "reasoningTooltip": "Razonamiento del asistente IA"
+  },
+  "provider-tour-management": {
     "header": {
       "totalBookings": "Total de Reservas",
       "confirmBooking": "Confirmar Reserva",

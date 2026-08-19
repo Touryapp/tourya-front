@@ -132,6 +132,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/agents']);
   }
 
+  /** FE IA-10: cola de moderacion de resenas (BackofficeGuard). */
+  goToReviewsModeration(): void {
+    this.router.navigate(['/admin/reviews/moderation']);
+  }
+
   /** Usuarios Backoffice (AdminGuard). */
   goToBackofficeUsers(): void {
     this.router.navigate(['/admin/backoffice-users']);

@@ -1,4 +1,4 @@
-﻿{
+{
   "common": {
     "back": "Back"
   },
@@ -248,6 +248,7 @@
       "backofficeUsers": "Backoffice Users",
       "credits": "Credits",
       "agentsObservability": "AI Observability",
+      "reviewsModeration": "Moderation Queue",
       "appConfig": "System Configuration"
     },
     "menu": {
@@ -307,7 +308,47 @@
     },
     "empty": "No activity in this range",
     "error": "Failed to load"
-  },  "provider-tour-management": {
+  },
+  "reviewsModeration": {
+    "title": "Reviews Moderation Queue",
+    "filter": {
+      "status": {
+        "pending": "Pending",
+        "rejected": "Rejected"
+      },
+      "from": "From",
+      "to": "To",
+      "flag": "Flag",
+      "allFlags": "All",
+      "refresh": "Refresh",
+      "lastUpdated": "Last updated"
+    },
+    "column": {
+      "date": "Date",
+      "review": "Review",
+      "tour": "Tour",
+      "author": "Author",
+      "flags": "Flags",
+      "actions": "Actions"
+    },
+    "action": {
+      "remoderate": "Re-moderate",
+      "viewFull": "View full review",
+      "goToDetail": "Open detail"
+    },
+    "flag": {
+      "SPAM": "Spam",
+      "OFFENSIVE": "Offensive",
+      "OFF_TOPIC": "Off topic",
+      "POTENTIAL_FRAUD": "Potential fraud",
+      "INAPPROPRIATE_MEDIA": "Inappropriate media"
+    },
+    "empty": "No reviews to moderate in this range",
+    "error": "Failed to load the queue",
+    "remoderateSuccess": "Review re-moderated",
+    "reasoningTooltip": "AI assistant reasoning"
+  },
+  "provider-tour-management": {
     "header": {
       "totalBookings": "Total Bookings",
       "confirmBooking": "Confirm Booking",

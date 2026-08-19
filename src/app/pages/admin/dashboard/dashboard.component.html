@@ -69,6 +69,12 @@
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToAgentsObservability()"><i
                 class="isax isax-chart-2"></i> {{ 'admin.sidebar.agentsObservability' | translate }}</a>
           </li>
+          <!-- FE IA-10: cola de moderacion de resenas. Mismo tratamiento defensivo
+               que credits / agentsObservability: link en shell + replica aca. -->
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToReviewsModeration()"><i
+                class="isax isax-shield-tick"></i> {{ 'admin.sidebar.reviewsModeration' | translate }}</a>
+          </li>
           <li>
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBackofficeUsers()"><i
                 class="isax isax-people"></i> {{ 'backofficeUsers.sidebarLink' | translate }}</a>
