@@ -250,6 +250,7 @@
       "credits": "Créditos",
       "agentsObservability": "Observabilidad IA",
       "reviewsModeration": "Cola de moderación",
+      "dimarDraft": "DIMAR Draft",
       "appConfig": "Configuración del sistema"
     },
     "menu": {
@@ -310,6 +311,7 @@
     "empty": "Sin actividad en este período",
     "error": "No se pudo cargar"
   },
+<<<<<<< HEAD
   "reviewsModeration": {
     "title": "Cola de moderación de reseñas",
     "filter": {
@@ -348,6 +350,81 @@
     "error": "No se pudo cargar la cola",
     "remoderateSuccess": "Reseña re-moderada",
     "reasoningTooltip": "Razonamiento del asistente IA"
+  },
+  "backofficeSupport": {
+    "error": "El asistente no pudo procesar tu solicitud",
+    "kyb": {
+      "button": "Checklist automatico con IA",
+      "title": "Checklist KYB automatico",
+      "reasoning": "Razonamiento del asistente",
+      "close": "Cerrar",
+      "itemTypeCol": "Documento",
+      "itemPresentCol": "Presente",
+      "itemStatusCol": "Estado",
+      "itemIssuesCol": "Observaciones",
+      "overallStatus": {
+        "COMPLETE": "Completo",
+        "INCOMPLETE": "Incompleto",
+        "REJECTED": "Rechazado"
+      },
+      "itemStatus": {
+        "OK": "OK",
+        "WARN": "Atencion",
+        "CRITICAL": "Critico"
+      }
+    },
+    "tour": {
+      "button": "Pre-validar con IA",
+      "title": "Pre-validacion del tour",
+      "canApprove": "Puede aprobar",
+      "canApproveTrue": "Puede aprobar",
+      "canApproveFalse": "No puede aprobar",
+      "reasoning": "Razonamiento del asistente",
+      "close": "Cerrar",
+      "noIssues": "Sin issues detectados por el asistente",
+      "severityCol": "Severidad",
+      "codeCol": "Codigo",
+      "fieldCol": "Campo",
+      "messageCol": "Mensaje",
+      "severity": {
+        "CRITICAL": "Critico",
+        "WARN": "Atencion",
+        "INFO": "Info"
+      }
+    },
+    "dimar": {
+      "title": "Borrador DIMAR",
+      "subtitle": "Genera el listado de pasajeros del dia para revisar antes de subir a DIMAR.",
+      "filter": {
+        "date": "Fecha",
+        "provider": "Proveedor",
+        "providerPlaceholder": "ID del proveedor",
+        "generate": "Generar borrador"
+      },
+      "col": {
+        "reservation": "Reserva",
+        "tour": "Tour",
+        "payer": "Nombre",
+        "documentType": "Tipo doc.",
+        "documentNumber": "Nro. doc.",
+        "ageType": "Categoria edad"
+      },
+      "totalPassengers": "pasajeros",
+      "notes": "Notas del asistente",
+      "export": "Exportar CSV",
+      "print": "Imprimir",
+      "emptyPassengers": "El asistente no encontro reservas confirmadas en el dia y proveedor indicados."
+    },
+    "payout": {
+      "button": "Detectar anomalias con IA",
+      "title": "Detectando anomalias",
+      "detected": "{{count}} payout orders con anomalias detectadas",
+      "empty": "Sin anomalias en el rango",
+      "severity": {
+        "CRITICAL": "Critico",
+        "WARN": "Atencion"
+      }
+    }
   },
   "provider-tour-management": {
     "header": {

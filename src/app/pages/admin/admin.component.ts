@@ -137,6 +137,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/reviews/moderation']);
   }
 
+  /** FE IA-08 T3: pagina DIMAR draft (BackofficeGuard). */
+  goToDimarDraft(): void {
+    this.router.navigate(['/admin/dimar-draft']);
+  }
+
   /** Usuarios Backoffice (AdminGuard). */
   goToBackofficeUsers(): void {
     this.router.navigate(['/admin/backoffice-users']);

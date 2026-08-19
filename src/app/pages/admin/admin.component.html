@@ -64,6 +64,12 @@
                   <i class="isax isax-shield-tick me-2"></i>{{ 'admin.sidebar.reviewsModeration' | translate }}
                 </a>
               </li>
+              <!-- FE IA-08 T3: DIMAR draft (ADMIN + BACKOFFICE_OPERATION). -->
+              <li>
+                <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToDimarDraft()">
+                  <i class="isax isax-flag me-2"></i>{{ 'admin.sidebar.dimarDraft' | translate }}
+                </a>
+              </li>
 
               <ng-container *ngIf="isAdmin">
                 <li>

@@ -249,6 +249,7 @@
       "credits": "Credits",
       "agentsObservability": "AI Observability",
       "reviewsModeration": "Moderation Queue",
+      "dimarDraft": "DIMAR draft",
       "appConfig": "System Configuration"
     },
     "menu": {
@@ -309,6 +310,7 @@
     "empty": "No activity in this range",
     "error": "Failed to load"
   },
+<<<<<<< HEAD
   "reviewsModeration": {
     "title": "Reviews Moderation Queue",
     "filter": {
@@ -347,6 +349,81 @@
     "error": "Failed to load the queue",
     "remoderateSuccess": "Review re-moderated",
     "reasoningTooltip": "AI assistant reasoning"
+  },
+  "backofficeSupport": {
+    "error": "The assistant could not process your request",
+    "kyb": {
+      "button": "Automatic checklist with AI",
+      "title": "Automatic KYB checklist",
+      "reasoning": "Assistant reasoning",
+      "close": "Close",
+      "itemTypeCol": "Document",
+      "itemPresentCol": "Present",
+      "itemStatusCol": "Status",
+      "itemIssuesCol": "Notes",
+      "overallStatus": {
+        "COMPLETE": "Complete",
+        "INCOMPLETE": "Incomplete",
+        "REJECTED": "Rejected"
+      },
+      "itemStatus": {
+        "OK": "OK",
+        "WARN": "Warning",
+        "CRITICAL": "Critical"
+      }
+    },
+    "tour": {
+      "button": "Pre-validate with AI",
+      "title": "Tour pre-validation",
+      "canApprove": "Can approve",
+      "canApproveTrue": "Can approve",
+      "canApproveFalse": "Cannot approve",
+      "reasoning": "Assistant reasoning",
+      "close": "Close",
+      "noIssues": "No issues detected by the assistant",
+      "severityCol": "Severity",
+      "codeCol": "Code",
+      "fieldCol": "Field",
+      "messageCol": "Message",
+      "severity": {
+        "CRITICAL": "Critical",
+        "WARN": "Warning",
+        "INFO": "Info"
+      }
+    },
+    "dimar": {
+      "title": "DIMAR draft",
+      "subtitle": "Generate the day's passenger list to review before uploading to DIMAR.",
+      "filter": {
+        "date": "Date",
+        "provider": "Provider",
+        "providerPlaceholder": "Provider ID",
+        "generate": "Generate draft"
+      },
+      "col": {
+        "reservation": "Reservation",
+        "tour": "Tour",
+        "payer": "Name",
+        "documentType": "Doc. type",
+        "documentNumber": "Doc. number",
+        "ageType": "Age category"
+      },
+      "totalPassengers": "passengers",
+      "notes": "Assistant notes",
+      "export": "Export CSV",
+      "print": "Print",
+      "emptyPassengers": "The assistant did not find confirmed reservations for the given date and provider."
+    },
+    "payout": {
+      "button": "Detect anomalies with AI",
+      "title": "Detecting anomalies",
+      "detected": "{{count}} payout orders with detected anomalies",
+      "empty": "No anomalies in the range",
+      "severity": {
+        "CRITICAL": "Critical",
+        "WARN": "Warning"
+      }
+    }
   },
   "provider-tour-management": {
     "header": {

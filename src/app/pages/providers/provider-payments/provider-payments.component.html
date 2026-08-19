@@ -13,6 +13,21 @@
                     </p>
                 </div>
                 <div class="d-flex align-items-center flex-wrap row-gap-3 gap-2">
+                    <!-- FE IA-08 T4: deteccion de anomalias con IA. Solo visible en la vista backoffice. -->
+                    <ng-container *ngIf="authService.isTouryaBackoffice()">
+                        <input type="date" class="form-control form-control-sm" style="width: auto;"
+                            [(ngModel)]="anomaliesFrom" [disabled]="anomaliesLoading"
+                            aria-label="Anomalies from" />
+                        <input type="date" class="form-control form-control-sm" style="width: auto;"
+                            [(ngModel)]="anomaliesTo" [disabled]="anomaliesLoading"
+                            aria-label="Anomalies to" />
+                        <button class="btn btn-sm btn-outline-primary" (click)="detectAnomalies()"
+                            [disabled]="!anomaliesFrom || !anomaliesTo || anomaliesLoading">
+                            <span class="spinner-border spinner-border-sm me-1" *ngIf="anomaliesLoading" role="status"></span>
+                            <i class="isax isax-magic-star me-1" *ngIf="!anomaliesLoading"></i>
+                            {{ 'backofficeSupport.payout.button' | translate }}
+                        </button>
+                    </ng-container>
                     <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
                         <i class="isax isax-refresh me-1"></i>Limpiar Filtros
                     </button>
@@ -44,6 +59,64 @@
         </div>
     </div>
     <!-- /Payments Header -->
+
+    <!-- FE IA-08 T4: panel con anomalias detectadas por el agente IA. Solo se
+         muestra si el humano dispara la deteccion (showAnomaliesPanel). -->
+    <div class="card mb-4" *ngIf="showAnomaliesPanel && authService.isTouryaBackoffice()">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">
+                    <i class="isax isax-magic-star me-2 text-primary"></i>
+                    <ng-container *ngIf="anomaliesLoading">
+                        {{ 'backofficeSupport.payout.title' | translate }}...
+                    </ng-container>
+                    <ng-container *ngIf="!anomaliesLoading && anomaliesResult">
+                        {{ 'backofficeSupport.payout.detected' | translate: { count: anomaliesResult.length } }}
+                    </ng-container>
+                </h6>
+                <button type="button" class="btn-close"
+                    (click)="closeAnomaliesPanel()" [disabled]="anomaliesLoading"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="text-center py-3" *ngIf="anomaliesLoading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+
+            <div class="alert alert-success mb-0"
+                *ngIf="!anomaliesLoading && anomaliesResult && anomaliesResult.length === 0">
+                <i class="isax isax-tick-circle me-2"></i>
+                {{ 'backofficeSupport.payout.empty' | translate }}
+            </div>
+
+            <div *ngIf="!anomaliesLoading && anomaliesResult && anomaliesResult.length > 0">
+                <div class="border rounded p-3 mb-2"
+                    *ngFor="let order of anomaliesResult; trackBy: trackByAnomalyOrder">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <a href="javascript:void(0);" class="fw-semibold"
+                            (click)="openAnomalyOrder(order.payoutOrderId)">
+                            Payout Order #{{ order.payoutOrderId }}
+                        </a>
+                        <span class="badge bg-light text-dark">{{ order.anomalies.length }}</span>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex gap-2 mb-2"
+                            *ngFor="let a of order.anomalies; trackBy: trackByAnomalyItem">
+                            <span class="badge" [ngClass]="getAnomalySeverityClass(a.severity)">
+                                {{ ('backofficeSupport.payout.severity.' + a.severity) | translate }}
+                            </span>
+                            <div>
+                                <div class="fw-medium"><code>{{ a.code }}</code> &mdash; {{ a.message }}</div>
+                                <div class="text-muted small" *ngIf="a.explanation">{{ a.explanation }}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Payments List -->
     <div class="card hotel-list">

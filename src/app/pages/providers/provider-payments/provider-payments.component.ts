@@ -6,6 +6,8 @@ import { PayoutOrdersService } from '../../../shared/services/payout-orders.serv
 import { PayoutOrder, PayoutOrdersResponse } from '../../../shared/dto/payout-order.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
+import { BackofficeSupportService } from '../../../shared/services/backoffice-support.service';
+import { PayoutAnomalyItem, PayoutAnomalyResponse, PayoutAnomalySeverity } from '../../../shared/models/backoffice-support.model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -41,11 +43,22 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   public selectedPayment: PayoutOrder | null = null;
   public showPaymentDetailsModal: boolean = false;
 
+  // FE IA-08 T4: deteccion de anomalias en payout orders con el agente IA.
+  // El panel solo se muestra en la vista backoffice (isTouryaBackoffice()); en
+  // la vista del provider no aplica. Fallback silencioso ante error: cerramos
+  // el panel para no romper la UX del listado.
+  public anomaliesFrom = '';
+  public anomaliesTo = '';
+  public anomaliesLoading = false;
+  public anomaliesResult: PayoutAnomalyResponse[] | null = null;
+  public showAnomaliesPanel = false;
+
   constructor(
     public authService: AuthService,
     private payoutOrdersService: PayoutOrdersService,
     private snackBar: MatSnackBar,
-    private panelStateService: ProviderPanelStateService
+    private panelStateService: ProviderPanelStateService,
+    private backofficeSupportService: BackofficeSupportService
   ) {}
 
   ngOnInit(): void {
@@ -253,6 +266,73 @@ export class ProviderPaymentsComponent implements OnInit, OnDestroy {
   /**
    * Subir archivo para pago pendiente (Solo Admin)
    */
+  // ==== FE IA-08 T4: anomalias en payout orders (agente IA). ====
+
+  /**
+   * Dispara la deteccion de anomalias en las payout orders del rango
+   * [anomaliesFrom, anomaliesTo]. El endpoint devuelve solo las orders con
+   * al menos una anomalia; lista vacia = todo OK.
+   *
+   * <p>Fallback silencioso ante error del backend: cerramos el panel y no
+   * interrumpimos el listado normal de pagos. Se loguea en consola para
+   * diagnostico, pero el humano puede seguir usando la pantalla.</p>
+   */
+  public detectAnomalies(): void {
+    if (!this.anomaliesFrom || !this.anomaliesTo || this.anomaliesLoading) {
+      return;
+    }
+    this.anomaliesLoading = true;
+    this.showAnomaliesPanel = true;
+    this.anomaliesResult = null;
+
+    this.backofficeSupportService
+      .payoutAnomalies(this.anomaliesFrom, this.anomaliesTo)
+      .subscribe({
+        next: (data) => {
+          this.anomaliesResult = data || [];
+          this.anomaliesLoading = false;
+        },
+        error: (err) => {
+          console.error('[FE IA-08 T4] Error detectando anomalias:', err);
+          this.anomaliesResult = null;
+          this.anomaliesLoading = false;
+          this.showAnomaliesPanel = false;
+        }
+      });
+  }
+
+  public closeAnomaliesPanel(): void {
+    if (this.anomaliesLoading) {
+      return;
+    }
+    this.showAnomaliesPanel = false;
+    this.anomaliesResult = null;
+  }
+
+  public openAnomalyOrder(orderId: number): void {
+    const target = this.tableData.find(p => p.id === orderId)
+      || this.tableDataCopy.find(p => p.id === orderId);
+    if (target) {
+      this.openPaymentDetails(target);
+    }
+  }
+
+  public getAnomalySeverityClass(severity: PayoutAnomalySeverity | undefined): string {
+    switch (severity) {
+      case 'CRITICAL': return 'bg-danger';
+      case 'WARN': return 'bg-warning text-dark';
+      default: return 'bg-secondary';
+    }
+  }
+
+  public trackByAnomalyOrder(_i: number, item: PayoutAnomalyResponse): number {
+    return item.payoutOrderId;
+  }
+
+  public trackByAnomalyItem(_i: number, item: PayoutAnomalyItem): string {
+    return `${item.severity}-${item.code}-${item.message}`;
+  }
+
   public onFileSelected(event: any, payment: PayoutOrder): void {
     event.stopPropagation();
     const file = event.target.files[0];

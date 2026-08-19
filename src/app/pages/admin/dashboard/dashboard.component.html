@@ -75,6 +75,11 @@
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToReviewsModeration()"><i
                 class="isax isax-shield-tick"></i> {{ 'admin.sidebar.reviewsModeration' | translate }}</a>
           </li>
+          <!-- FE IA-08 T3: DIMAR draft. Mismo tratamiento defensivo que credits/agents. -->
+          <li>
+            <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToDimarDraft()"><i
+                class="isax isax-flag"></i> {{ 'admin.sidebar.dimarDraft' | translate }}</a>
+          </li>
           <li>
             <a class="d-flex align-items-center" style="cursor: pointer;" (click)="goToBackofficeUsers()"><i
                 class="isax isax-people"></i> {{ 'backofficeUsers.sidebarLink' | translate }}</a>
@@ -449,7 +454,15 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer justify-content-center">
+      <div class="modal-footer justify-content-center flex-wrap">
+        <!-- FE IA-08 T1: checklist KYB automatico (informativo). No bloquea las
+             acciones de aprobar/rechazar; el ADMIN sigue decidiendo. -->
+        <button type="button" class="btn btn-outline-primary me-2"
+          (click)="openKybChecklist()" [disabled]="!selectedProvider">
+          <i class="isax isax-magic-star me-1"></i>
+          {{ 'backofficeSupport.kyb.button' | translate }}
+        </button>
+
         <!-- Botón Pre-Approved: solo visible cuando el estado es Created -->
         <button type="button" class="btn btn-info me-2" (click)="openPreApproveConfirmModal()"
           [disabled]="!canPreApprove()">
@@ -474,6 +487,94 @@
 
 <!-- Modal Backdrop -->
 <div class="modal-backdrop fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'"></div>
+
+<!-- FE IA-08 T1: modal informativo del checklist KYB automatico. -->
+<div class="modal fade" [class.show]="showKybModal"
+  [style.display]="showKybModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="isax isax-magic-star me-2 text-primary"></i>
+          {{ 'backofficeSupport.kyb.title' | translate }}
+          <ng-container *ngIf="kybResult">
+            <span class="badge ms-2"
+              [ngClass]="getKybOverallBadgeClass(kybResult.overallStatus)">
+              {{ ('backofficeSupport.kyb.overallStatus.' + kybResult.overallStatus) | translate }}
+            </span>
+          </ng-container>
+        </h5>
+        <button type="button" class="btn-close"
+          (click)="closeKybModal()" [disabled]="kybLoading"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center py-4" *ngIf="kybLoading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2 text-muted">{{ 'backofficeSupport.kyb.title' | translate }}...</p>
+        </div>
+
+        <div class="alert alert-danger" *ngIf="!kybLoading && kybError">
+          <i class="isax isax-warning-2 me-2"></i>{{ kybError }}
+        </div>
+
+        <ng-container *ngIf="!kybLoading && !kybError && kybResult">
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>{{ 'backofficeSupport.kyb.itemTypeCol' | translate }}</th>
+                  <th class="text-center">{{ 'backofficeSupport.kyb.itemPresentCol' | translate }}</th>
+                  <th class="text-center">{{ 'backofficeSupport.kyb.itemStatusCol' | translate }}</th>
+                  <th>{{ 'backofficeSupport.kyb.itemIssuesCol' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of kybResult.items; trackBy: trackByKybItem">
+                  <td class="fw-medium">{{ item.documentType }}</td>
+                  <td class="text-center">
+                    <i class="isax" [ngClass]="item.present ? 'isax-tick-circle text-success' : 'isax-close-circle text-danger'"></i>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge" [ngClass]="getKybItemBadgeClass(item.status)">
+                      {{ ('backofficeSupport.kyb.itemStatus.' + item.status) | translate }}
+                    </span>
+                  </td>
+                  <td>
+                    <ul class="mb-0 ps-3" *ngIf="item.issues && item.issues.length > 0; else noIssues">
+                      <li *ngFor="let issue of item.issues">{{ issue }}</li>
+                    </ul>
+                    <ng-template #noIssues>
+                      <span class="text-muted small">&mdash;</span>
+                    </ng-template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-3" *ngIf="kybResult.reasoning">
+            <h6 class="fw-bold">
+              <i class="isax isax-note-2 me-1 text-primary"></i>
+              {{ 'backofficeSupport.kyb.reasoning' | translate }}
+            </h6>
+            <p class="text-muted mb-0" style="white-space: pre-wrap;">{{ kybResult.reasoning }}</p>
+          </div>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+          (click)="closeKybModal()" [disabled]="kybLoading">
+          {{ 'backofficeSupport.kyb.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade" [class.show]="showKybModal"
+  [style.display]="showKybModal ? 'block' : 'none'"></div>
 
 <!-- Modal de Solicitud de Información -->
 <div class="modal fade" [class.show]="showRequestInfoModal" [style.display]="showRequestInfoModal ? 'block' : 'none'"

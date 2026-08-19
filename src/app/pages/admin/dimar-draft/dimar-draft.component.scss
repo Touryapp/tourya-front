@@ -1,0 +1,31 @@
+/**
+ * FE IA-08 T3: estilos de la pagina DIMAR draft. Solo agregamos reglas
+ * necesarias para la copia impresa: ocultamos filtros/botones y limpiamos
+ * fondos/paddings para que el listado quede legible en papel.
+ */
+.dimar-draft-page {
+  .card {
+    border-radius: 12px;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .dimar-draft-page {
+    .card {
+      border: none;
+      box-shadow: none;
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    table {
+      font-size: 12px;
+    }
+  }
+}

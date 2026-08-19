@@ -5,6 +5,9 @@ import { RequestProvidersService } from '../../providers/requestproviders/reques
 import { RequestProviderDocumentType } from '../../../shared/dto/RequestProviderDocumentTypeList.dto';
 import { RequestsProvidersStatus } from '../../../shared/enums/requests-providers-status.enum';
 import { ProviderPanelStateService } from '../../../shared/services/provider-panel-state.service';
+import { BackofficeSupportService } from '../../../shared/services/backoffice-support.service';
+import { KybChecklistItem, KybChecklistResponse, KybItemStatus, KybOverallStatus } from '../../../shared/models/backoffice-support.model';
+import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 
 
@@ -30,12 +33,20 @@ export class DashboardComponent implements OnInit {
   mostrarProviderPayments: boolean = false;
   mostrarAppConfig: boolean = false;
 
+  // FE IA-08 T1: estado del modal de KYB checklist automatico (informativo).
+  showKybModal = false;
+  kybLoading = false;
+  kybResult: KybChecklistResponse | null = null;
+  kybError = '';
+
   // Referencia al enum para usar en el template
   readonly StatusEnum = RequestsProvidersStatus;
 
   constructor(
     private requestProvidersService: RequestProvidersService,
     private panelStateService: ProviderPanelStateService,
+    private backofficeSupportService: BackofficeSupportService,
+    private translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -71,6 +82,14 @@ export class DashboardComponent implements OnInit {
    * dashboard para que ADMIN lo vea al entrar por /admin/dashboard. */
   goToReviewsModeration(): void {
     this.router.navigate(['/admin/reviews/moderation']);
+  }
+
+  /** FE IA-08 T3: navega a la pagina DIMAR draft (ADMIN + BACKOFFICE_OPERATION).
+   * Defensivo: el link vive tambien en admin.component.html (shell), pero lo
+   * replicamos en el sidebar propio del dashboard para que ADMIN lo vea al
+   * entrar directamente por /admin/dashboard. Mismo patron que goToAgentsObservability. */
+  goToDimarDraft(): void {
+    this.router.navigate(['/admin/dimar-draft']);
   }
 
   ngOnInit(): void {
@@ -438,6 +457,67 @@ export class DashboardComponent implements OnInit {
     return this.getFileType(url) === 'image';
   }
 
+  // ==== FE IA-08 T1: Checklist KYB automatico (informativo). ====
+
+  /**
+   * Dispara el KYB checklist del RequestProvider seleccionado. El ADMIN
+   * sigue decidiendo aprobar/rechazar con los botones habituales; este
+   * modal solo agrega contexto (documentos presentes, issues detectados).
+   */
+  openKybChecklist(): void {
+    if (!this.selectedProvider) {
+      return;
+    }
+    this.showKybModal = true;
+    this.kybLoading = true;
+    this.kybError = '';
+    this.kybResult = null;
+
+    this.backofficeSupportService.kybChecklist(this.selectedProvider.id).subscribe({
+      next: (data) => {
+        this.kybResult = data;
+        this.kybLoading = false;
+      },
+      error: (err) => {
+        console.error('[FE IA-08 T1] Error al obtener KYB checklist:', err);
+        this.kybError = this.translate.instant('backofficeSupport.error');
+        this.kybLoading = false;
+      }
+    });
+  }
+
+  closeKybModal(): void {
+    if (this.kybLoading) {
+      return;
+    }
+    this.showKybModal = false;
+    this.kybResult = null;
+    this.kybError = '';
+  }
+
+  /** Badge segun overallStatus del checklist KYB. */
+  getKybOverallBadgeClass(status: KybOverallStatus | undefined): string {
+    switch (status) {
+      case 'COMPLETE': return 'bg-success';
+      case 'INCOMPLETE': return 'bg-warning text-dark';
+      case 'REJECTED': return 'bg-danger';
+      default: return 'bg-secondary';
+    }
+  }
+
+  /** Badge por item del checklist KYB. */
+  getKybItemBadgeClass(status: KybItemStatus | undefined): string {
+    switch (status) {
+      case 'OK': return 'bg-success';
+      case 'WARN': return 'bg-warning text-dark';
+      case 'CRITICAL': return 'bg-danger';
+      default: return 'bg-secondary';
+    }
+  }
+
+  trackByKybItem(_i: number, item: KybChecklistItem): string {
+    return item.documentType;
+  }
   // Función para obtener la cantidad de documentos con imagen
   getGalleryWithImageCount(): number {
     if (!this.selectedProvider || !this.selectedProvider.requestProviderGalleryList) {
@@ -485,4 +565,5 @@ export class DashboardComponent implements OnInit {
   }
 
 }
+
 

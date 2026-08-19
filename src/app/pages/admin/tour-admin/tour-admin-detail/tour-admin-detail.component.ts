@@ -8,7 +8,10 @@ import { LightGallery } from 'lightgallery/lightgallery';
 import lgZoom from 'lightgallery/plugins/zoom';
 import lgVideo from 'lightgallery/plugins/video';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { I18nFieldService } from '../../../../shared/services/i18n-field.service';
+import { BackofficeSupportService } from '../../../../shared/services/backoffice-support.service';
+import { IssueSeverity, TourPrevalidationIssue, TourPrevalidationResponse } from '../../../../shared/models/backoffice-support.model';
 
 @Component({
   selector: 'app-tour-admin-detail',
@@ -24,6 +27,12 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
   porcentajeModalEditMode: boolean = false;
   showCancelModal: boolean = false;
   showReturnModal: boolean = false;
+
+  // FE IA-08 T2: estado de la pre-validacion de tour con el agente IA.
+  showPrevalidationModal = false;
+  prevalidationLoading = false;
+  prevalidationResult: TourPrevalidationResponse | null = null;
+  prevalidationError = '';
 
   porcentajeTouryaInput: number = 15;
   savingPorcentajeTourya: boolean = false;
@@ -119,7 +128,9 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
     private tourAdminService: TourAdminService,
     private cityService: CityService,
     private _snackBar: MatSnackBar,
-    public i18nService: I18nFieldService
+    public i18nService: I18nFieldService,
+    private backofficeSupportService: BackofficeSupportService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -491,6 +502,76 @@ export class TourAdminDetailComponent implements OnInit, AfterViewChecked {
       this.lightGallery.refresh();
       this.needRefresh = false;
     }
+  }
+
+  // ==== FE IA-08 T2: Pre-validacion informativa antes de aprobar. ====
+
+  /**
+   * Dispara el agente IA de pre-validacion del tour. El ADMIN sigue decidiendo
+   * aprobar/cancelar con los botones habituales; este modal solo agrega
+   * contexto (i18n faltante, galeria pobre, campos ambiguos).
+   */
+  openTourPrevalidation(): void {
+    if (!this.tour) {
+      return;
+    }
+    this.showPrevalidationModal = true;
+    this.prevalidationLoading = true;
+    this.prevalidationError = '';
+    this.prevalidationResult = null;
+
+    this.backofficeSupportService.tourPrevalidation(this.tour.id).subscribe({
+      next: (data) => {
+        this.prevalidationResult = data;
+        this.prevalidationLoading = false;
+      },
+      error: (err) => {
+        console.error('[FE IA-08 T2] Error en tour-prevalidation:', err);
+        this.prevalidationError = this.translate.instant('backofficeSupport.error');
+        this.prevalidationLoading = false;
+      }
+    });
+  }
+
+  closePrevalidationModal(): void {
+    if (this.prevalidationLoading) {
+      return;
+    }
+    this.showPrevalidationModal = false;
+    this.prevalidationResult = null;
+    this.prevalidationError = '';
+  }
+
+  /**
+   * Devuelve las issues ordenadas por severity: CRITICAL primero, WARN, INFO.
+   * Estabilizamos el orden con el indice original en caso de empate para no
+   * mezclar issues visualmente entre renders.
+   */
+  get prevalidationIssuesSorted(): TourPrevalidationIssue[] {
+    const list = this.prevalidationResult?.issues || [];
+    const rank: Record<IssueSeverity, number> = { CRITICAL: 0, WARN: 1, INFO: 2 };
+    return list
+      .map((issue, index) => ({ issue, index }))
+      .sort((a, b) => {
+        const ra = rank[a.issue.severity] ?? 99;
+        const rb = rank[b.issue.severity] ?? 99;
+        if (ra !== rb) { return ra - rb; }
+        return a.index - b.index;
+      })
+      .map((entry) => entry.issue);
+  }
+
+  getIssueSeverityBadgeClass(severity: IssueSeverity | undefined): string {
+    switch (severity) {
+      case 'CRITICAL': return 'bg-danger';
+      case 'WARN': return 'bg-warning text-dark';
+      case 'INFO': return 'bg-info text-dark';
+      default: return 'bg-secondary';
+    }
+  }
+
+  trackByIssue(_i: number, item: TourPrevalidationIssue): string {
+    return `${item.severity}-${item.code}-${item.field}`;
   }
 
   openSnackBar(message: string) {
