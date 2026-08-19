@@ -65,6 +65,14 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/admin/agents']);
   }
 
+  /** FE IA-10: navega a la cola de moderacion de resenas (ADMIN + BACKOFFICE_OPERATION).
+   * Mismo tratamiento defensivo que goToCredits / goToAgentsObservability: el link
+   * vive en admin.component.html (shell) y se replica en el sidebar propio del
+   * dashboard para que ADMIN lo vea al entrar por /admin/dashboard. */
+  goToReviewsModeration(): void {
+    this.router.navigate(['/admin/reviews/moderation']);
+  }
+
   ngOnInit(): void {
     this.cargarSolicitudes();
     this.showGalleryFiles();

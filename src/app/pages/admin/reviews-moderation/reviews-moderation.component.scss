@@ -1,0 +1,65 @@
+// FE IA-10: cola de moderacion de resenas (backend IA-10).
+
+.reviews-moderation {
+
+  .nav-pills .nav-link {
+    color: #475467;
+    background-color: #f2f4f7;
+    border: 1px solid #e5e7eb;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    &.active {
+      background-color: #2f80ed;
+      color: #ffffff;
+      border-color: #2f80ed;
+    }
+  }
+
+  .table-responsive {
+    max-height: 640px;
+    overflow-y: auto;
+  }
+
+  .review-cell {
+    max-width: 320px;
+
+    .review-text {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      line-clamp: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      cursor: help;
+    }
+
+    .reasoning-icon {
+      cursor: help;
+      color: #6b7280;
+      display: inline-flex;
+      vertical-align: middle;
+    }
+  }
+
+  .flag-chip {
+    color: #ffffff;
+    font-weight: 500;
+    padding: 0.35em 0.6em;
+    border-radius: 0.35rem;
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .review-full-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 320px;
+    overflow-y: auto;
+    background-color: #ffffff;
+  }
+}

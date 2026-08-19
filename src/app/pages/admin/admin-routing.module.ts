@@ -65,6 +65,14 @@ const routes: Routes = [
         path: 'agents',
         canActivate: [BackofficeGuard],
         loadComponent: () => import('./agents-observability/agents-observability.component').then(m => m.AgentsObservabilityComponent)
+      },
+      // FE IA-10: cola de moderacion de resenas (consume /admin/reviews/moderation
+      // y /admin/agents/review-moderation/{id}/re-moderate del backend IA-10).
+      // Expuesto a ADMIN + BACKOFFICE_OPERATION.
+      {
+        path: 'reviews/moderation',
+        canActivate: [BackofficeGuard],
+        loadComponent: () => import('./reviews-moderation/reviews-moderation.component').then(m => m.ReviewsModerationComponent)
       }
     ]
   }
