@@ -310,7 +310,6 @@
     "empty": "No activity in this range",
     "error": "Failed to load"
   },
-<<<<<<< HEAD
   "reviewsModeration": {
     "title": "Reviews Moderation Queue",
     "filter": {
