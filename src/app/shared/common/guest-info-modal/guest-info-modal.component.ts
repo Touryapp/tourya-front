@@ -131,16 +131,17 @@ export class GuestInfoModalComponent implements OnInit {
   }
 
   /**
-   * TC-009 (#196): rellena firstName / lastName / email / filePreview desde la
-   * sesion social (Firebase user) SOLO si el campo del form aun esta vacio.
+   * TC-009 (#196): rellena firstName / lastName / email desde la sesion del
+   * usuario (localStorage `user`) SOLO si el campo del form aun esta vacio.
    * Evita pisar datos que ya vinieron del `tourist_profile`.
    *
-   * Opcion B decidida (usar Firebase actual). Cuando SEC-06 Fase B mergee, este
-   * bloque se refactoriza para consumir firstname/lastname directamente del
-   * backend Token Exchange (mas confiable que split del displayName).
+   * SEC-06 / FE-02: Firebase removido — ahora leemos del usuario que
+   * setUser() guardo tras el Token Exchange (fullName + email). Se pierde el
+   * fallback de photoURL porque Firebase User era su unica fuente; si se
+   * quiere recuperar, el backend deberia devolverlo en SocialResponseDto.
    */
   private applySocialFallback(): void {
-    const socialUser = this.authService.getCurrentUser();
+    const socialUser = this.authService.getUser();
     if (!socialUser) return;
 
     const setIfEmpty = (fieldName: string, value: string | null | undefined) => {
@@ -151,20 +152,15 @@ export class GuestInfoModalComponent implements OnInit {
       }
     };
 
-    const displayName = (socialUser as any).displayName as string | null | undefined;
-    if (displayName) {
-      const parts = displayName.trim().split(/\s+/);
+    const fullName = socialUser.fullName as string | null | undefined;
+    if (fullName) {
+      const parts = fullName.trim().split(/\s+/);
       const first = parts.shift() ?? '';
       const last = parts.join(' ');
       setIfEmpty('firstName', first);
       if (last) setIfEmpty('lastName', last);
     }
-    setIfEmpty('email', (socialUser as any).email);
-
-    const photoURL = (socialUser as any).photoURL as string | null | undefined;
-    if (photoURL && !this.filePreview) {
-      this.filePreview = photoURL;
-    }
+    setIfEmpty('email', socialUser.email);
   }
 
 

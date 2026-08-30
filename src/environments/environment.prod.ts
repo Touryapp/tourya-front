@@ -3,15 +3,9 @@ export const environment = {
   apiUrl: "https://tourya-dev-api-5j2nd2oflq-ue.a.run.app/api/v1",
   apiUrlBack: "https://tourya-dev-api-5j2nd2oflq-ue.a.run.app/api/v1",
   baseUrl: "",
-  firebaseConfig: {
-    apiKey: "AIzaSyCJyNkzo4e80-G0eBCUrIBDt6bbJ8Osp_g",
-    authDomain: "tourya-169d6.firebaseapp.com",
-    projectId: "tourya-169d6",
-    storageBucket: "tourya-169d6.firebasestorage.app",
-    messagingSenderId: "318643880116",
-    appId: "1:318643880116:web:f969a728674b09bc3a17e1",
-    measurementId: "G-9LTR442NCT"
-  },
+  // SEC-06 / FE-02: OAuth Client IDs publicos. Ver comentario en environment.ts.
+  googleClientId: "318643880116-f8a76i410ks8p5b6idqhb9qhf39i405k.apps.googleusercontent.com",
+  facebookAppId: "3998716940417210",
   wompi: {
     publicKey: 'pub_test_bIOZLLlzg8Oel52ljFIp7Sd4FDEOo1da',
     privateKey: 'prv_test_qSmhjc5VxZqkdTkkPPenk5zPPfnOKn4R',

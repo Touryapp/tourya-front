@@ -15,10 +15,10 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AuthInterceptor } from "./core/interceptors/auth.interceptor";
 import { ChunkLoadErrorHandler } from "./core/chunk-load-error-handler";
 
-// Importaciones para Firebase
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { environment } from "../environments/environment";
+// SEC-06 / FE-02: Firebase removido. El login social ahora usa Token Exchange
+// directo contra Google Identity Services + Facebook JS SDK, cargados bajo
+// demanda desde login-tourist.component. Ver auth.service.authenticateWithGoogle
+// y authenticateWithFacebook.
 
 // Componentes
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
@@ -40,10 +40,6 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
-
-// Inicializar Firebase
-const app = initializeApp(environment.firebaseConfig);
-export const auth = getAuth(app);
 
 @NgModule({
   declarations: [

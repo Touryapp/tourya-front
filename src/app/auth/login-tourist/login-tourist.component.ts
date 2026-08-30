@@ -1,9 +1,8 @@
-import { Component, NgZone, Renderer2, OnInit, OnDestroy } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, NgZone, Renderer2, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { routes } from "../../shared/routes/routes";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
-import { SocialLoginDto } from "../../shared/dto/social-login.dto";
 import { Roles } from "../../shared/enums/roles.enum";
 import { RoleDto } from "../../shared/dto/role.dto";
 import { RequestProvidersService } from "../../pages/providers/requestproviders/request-providers.service";
@@ -13,6 +12,13 @@ import { BsModalService } from "ngx-bootstrap/modal";
 import { PendingReviewsModalComponent } from "../../shared/components/pending-reviews-modal/pending-reviews-modal.component";
 import { PendingActionService } from "../../shared/services/pending-action.service";
 import { TranslateService } from "@ngx-translate/core";
+import { environment } from "../../../environments/environment";
+
+declare const google: any;
+declare const FB: any;
+
+const GOOGLE_GIS_SCRIPT_ID = "google-gsi-client";
+const FACEBOOK_SDK_SCRIPT_ID = "facebook-jssdk";
 
 @Component({
   selector: "app-login-tourist",
@@ -20,7 +26,7 @@ import { TranslateService } from "@ngx-translate/core";
   styleUrl: "./login-tourist.component.scss",
   standalone: false,
 })
-export class LoginTouristComponent implements OnInit, OnDestroy {
+export class LoginTouristComponent implements OnInit, AfterViewInit, OnDestroy {
   public routes = routes;
   password: boolean[] = [false, false]; // Add more as needed
 
@@ -32,6 +38,11 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
 
   loginTouristForm: FormGroup;
   private returnUrl: string | null = null;
+
+  // SEC-06 / FE-02: contenedor donde Google Identity Services renderiza su
+  // boton oficial. Reemplaza al boton custom porque el flujo id_token de GIS
+  // requiere que el click provenga del boton oficial (limitacion de la libreria).
+  @ViewChild('googleSignInBtn', { static: false }) googleSignInBtn?: ElementRef<HTMLDivElement>;
 
   togglePassword(index: number): void {
     this.password[index] = !this.password[index];
@@ -64,11 +75,109 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     this.renderer.addClass(document.body, "bg-light-200");
   }
 
+  ngAfterViewInit(): void {
+    // SEC-06 / FE-02: cargar Google Identity Services y Facebook JS SDK bajo
+    // demanda. Solo se cargan cuando el usuario abre el login, no en toda la
+    // app. Ambos scripts son inyectados dinamicamente en el <head>, evitando
+    // sumar peso a index.html.
+    this.loadGoogleIdentityServices()
+      .then(() => this.setupGoogleButton())
+      .catch((err) => console.error('Google Identity Services no pudo cargarse', err));
+    this.loadFacebookSdk()
+      .catch((err) => console.error('Facebook JS SDK no pudo cargarse', err));
+  }
+
   navigation() {
     this.router.navigate([routes.index]);
   }
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, "bg-light-200");
+  }
+
+  private loadGoogleIdentityServices(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (typeof google !== 'undefined' && google?.accounts?.id) {
+        resolve();
+        return;
+      }
+      if (document.getElementById(GOOGLE_GIS_SCRIPT_ID)) {
+        const check = setInterval(() => {
+          if (typeof google !== 'undefined' && google?.accounts?.id) {
+            clearInterval(check);
+            resolve();
+          }
+        }, 100);
+        setTimeout(() => { clearInterval(check); reject(new Error('GIS timeout')); }, 10000);
+        return;
+      }
+      const script = document.createElement('script');
+      script.id = GOOGLE_GIS_SCRIPT_ID;
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('GIS load error'));
+      document.head.appendChild(script);
+    });
+  }
+
+  private setupGoogleButton(): void {
+    if (!google?.accounts?.id || !this.googleSignInBtn) {
+      return;
+    }
+    google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      callback: (response: { credential: string }) => {
+        this.ngZone.run(() => this.handleGoogleCredential(response.credential));
+      },
+      auto_select: false,
+      cancel_on_tap_outside: true,
+    });
+    google.accounts.id.renderButton(this.googleSignInBtn.nativeElement, {
+      type: 'standard',
+      theme: 'outline',
+      size: 'large',
+      text: 'signin_with',
+      shape: 'rectangular',
+      logo_alignment: 'left',
+      width: 240,
+    });
+  }
+
+  private loadFacebookSdk(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (typeof FB !== 'undefined') {
+        resolve();
+        return;
+      }
+      if (document.getElementById(FACEBOOK_SDK_SCRIPT_ID)) {
+        const check = setInterval(() => {
+          if (typeof FB !== 'undefined') {
+            clearInterval(check);
+            resolve();
+          }
+        }, 100);
+        setTimeout(() => { clearInterval(check); reject(new Error('FB SDK timeout')); }, 10000);
+        return;
+      }
+      (window as any).fbAsyncInit = () => {
+        (window as any).FB.init({
+          appId: environment.facebookAppId,
+          cookie: true,
+          xfbml: false,
+          version: 'v18.0',
+        });
+        resolve();
+      };
+      const script = document.createElement('script');
+      script.id = FACEBOOK_SDK_SCRIPT_ID;
+      script.src = 'https://connect.facebook.net/en_US/sdk.js';
+      script.async = true;
+      script.defer = true;
+      script.crossOrigin = 'anonymous';
+      script.onerror = () => reject(new Error('FB SDK load error'));
+      document.head.appendChild(script);
+    });
   }
 
   submitForm() {
@@ -119,93 +228,81 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Método para iniciar sesión con Google
-  async signInWithGoogle(): Promise<void> {
-    try {
-      this.googleLoading = true;
-      const result = await this.authService.loginWithGoogle();
-
-      // Obtener datos del usuario
-      const user = result.user;
-      console.log('Usuario de Google:', user);
-
-      // Obtener token de autenticación
-      const token = await user.getIdToken();
-      console.log('Token:', token);
-      // Datos básicos del usuario que podemos usar
-      const userData: SocialLoginDto = {
-        firstname: user.displayName || '',
-        lastname: '',
-        email: user.email || '',
-        uuidSocial: user.uid || '',
-      };
-
-      await this.authService.authenticateSocial(userData).subscribe({
-        next: (response) => {
-          console.log('Respuesta de Google:', response)
-          this.authService.setTokensFromResponse(response);
-          this.authService.setUser({
-            fullName: response.fullName,
-            email: response.email,
-            roles: response.roleList,
-          });
-          this.googleLoading = false;
-          this.getConsultDataAndRedirect(response.roleList);
-        },
-        error: (err) => {
-          console.error('Error en autenticación con Google:', err);
-          this.googleLoading = false;
-        }
-      });
-    } catch (error) {
-      console.error('Error en autenticación con Google:', error);
-      this.googleLoading = false;
+  /**
+   * SEC-06 / FE-02: callback que dispara GIS cuando el usuario completa el flujo
+   * de Google. `credential` es el id_token JWT firmado por Google. Se envia al
+   * backend, que lo valida contra las claves publicas de Google y devuelve el
+   * JWT propio de Tourya.
+   */
+  private handleGoogleCredential(idToken: string): void {
+    if (!idToken) {
+      this.errorMessage = this.translate.instant("auth.login.errors.generic");
+      return;
     }
+    this.googleLoading = true;
+    this.errorMessage = "";
+    this.authService.authenticateWithGoogle(idToken).subscribe({
+      next: (response) => {
+        this.authService.setTokensFromResponse(response);
+        this.authService.setUser({
+          fullName: response.fullName,
+          email: response.email,
+          roles: response.roleList,
+        });
+        this.googleLoading = false;
+        this.getConsultDataAndRedirect(response.roleList);
+      },
+      error: (err) => {
+        console.error('Error en autenticación con Google:', err);
+        this.googleLoading = false;
+        this.errorMessage = this.translate.instant("auth.login.errors.generic");
+      }
+    });
   }
 
-  // Método para iniciar sesión con Facebook
-  async signInWithFacebook(): Promise<void> {
-    try {
-      this.facebookLoading = true;
-      const result = await this.authService.loginWithFacebook();
-
-      // Obtener datos del usuario
-      const user = result.user;
-      console.log('Usuario de Facebook:', user);
-      // Obtener token de autenticación
-      const token = await user.getIdToken();
-      console.log('Token de Facebook:', token);
-      // Datos básicos del usuario
-      const userData: SocialLoginDto = {
-        firstname: user.displayName || '',
-        lastname: '',
-        email: user.email || '',
-        uuidSocial: user.uid || '',
-      };
-
-      await this.authService.authenticateSocial(userData).subscribe({
-        next: (response) => {
-          // Navegar a la página principal
-          console.log('Respuesta de Facebook:', response)
-          this.authService.setTokensFromResponse(response);
-          this.authService.setUser({
-            fullName: response.fullName,
-            email: response.email,
-            roles: response.roleList,
-          });
-          this.facebookLoading = false;
-          this.getConsultDataAndRedirect(response.roleList);
-        },
-        error: (err) => {
-          console.error('Error en autenticación con Facebook:', err);
-          this.facebookLoading = false;
-        }
-      });
-
-    } catch (error) {
-      console.error('Error en autenticación con Facebook:', error);
-      this.facebookLoading = false;
+  /**
+   * SEC-06 / FE-02: dispara el flujo de Facebook JS SDK. Al aceptar, `FB.login`
+   * retorna un accessToken que se envia al backend para validar contra la
+   * Graph API antes de emitir el JWT propio.
+   */
+  signInWithFacebook(): void {
+    if (typeof FB === 'undefined') {
+      this.errorMessage = this.translate.instant("auth.login.errors.generic");
+      return;
     }
+    this.facebookLoading = true;
+    this.errorMessage = "";
+    FB.login((response: any) => {
+      this.ngZone.run(() => this.handleFacebookLogin(response));
+    }, { scope: 'email,public_profile' });
+  }
+
+  private handleFacebookLogin(response: any): void {
+    if (response?.status !== 'connected' || !response.authResponse?.accessToken) {
+      this.facebookLoading = false;
+      if (response?.status !== 'unknown') {
+        this.errorMessage = this.translate.instant("auth.login.errors.generic");
+      }
+      return;
+    }
+    const accessToken = response.authResponse.accessToken;
+    this.authService.authenticateWithFacebook(accessToken).subscribe({
+      next: (backendResponse) => {
+        this.authService.setTokensFromResponse(backendResponse);
+        this.authService.setUser({
+          fullName: backendResponse.fullName,
+          email: backendResponse.email,
+          roles: backendResponse.roleList,
+        });
+        this.facebookLoading = false;
+        this.getConsultDataAndRedirect(backendResponse.roleList);
+      },
+      error: (err) => {
+        console.error('Error en autenticación con Facebook:', err);
+        this.facebookLoading = false;
+        this.errorMessage = this.translate.instant("auth.login.errors.generic");
+      }
+    });
   }
 
   redirectByRole(role: RoleDto[]) {
@@ -269,7 +366,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error al obtener los datos del usuario:', error);
         this.authService.setRequestProviderStatus(RequestsProvidersStatus.CREATED);
-        
+
         // Ejecutar navegación con estado por defecto
         this.performNavigation(isProviderOrOperator, isAdmin, roleList, hasPendingAction, RequestsProvidersStatus.CREATED);
       }
@@ -278,7 +375,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
 
   private performNavigation(isProviderOrOperator: boolean, isAdmin: boolean, roleList: RoleDto[], hasPendingAction: boolean, status: RequestsProvidersStatus) {
     const isOperator = roleList.some(r => r.id === Roles.PROVIDER_OPERATOR);
-    
+
     if (isProviderOrOperator && !isAdmin) {
       if (status === RequestsProvidersStatus.APPROVED || isOperator) {
         console.log('👤 Redirigiendo proveedor a su panel');
