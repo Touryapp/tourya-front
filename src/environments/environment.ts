@@ -6,15 +6,14 @@ export const environment = {
   production: false,
   apiUrl: "/api/v1",
   apiUrlBack: "/api/v1",
-  firebaseConfig: {
-    apiKey: "AIzaSyCJyNkzo4e80-G0eBCUrIBDt6bbJ8Osp_g",
-    authDomain: "tourya-169d6.firebaseapp.com",
-    projectId: "tourya-169d6",
-    storageBucket: "tourya-169d6.firebasestorage.app",
-    messagingSenderId: "318643880116",
-    appId: "1:318643880116:web:f969a728674b09bc3a17e1",
-    measurementId: "G-9LTR442NCT",
-  },
+  // SEC-06 / FE-02: OAuth Client IDs de los proveedores sociales. Son IDs
+  // publicos por diseno del protocolo OAuth 2.0 / OIDC — el navegador los
+  // expone en cada request al popup del proveedor. Los secrets NUNCA viven
+  // en el frontend; los usa el backend en /auth/google y /auth/facebook
+  // (ver POST /api/v1/auth/google y /api/v1/auth/facebook, Token Exchange
+  // server-side).
+  googleClientId: "318643880116-f8a76i410ks8p5b6idqhb9qhf39i405k.apps.googleusercontent.com",
+  facebookAppId: "3998716940417210",
   wompi: {
     publicKey: 'pub_test_bIOZLLlzg8Oel52ljFIp7Sd4FDEOo1da',
     privateKey: 'prv_test_qSmhjc5VxZqkdTkkPPenk5zPPfnOKn4R',

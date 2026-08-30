@@ -100,13 +100,11 @@
                                     <span class="span-or">{{ 'auth.login.or' | translate }}</span>
                                 </div>
                                 <div class="d-flex align-items-center mb-3">
-                                    <a href="javascript:void(0);" (click)="signInWithGoogle()"
-                                        class="btn btn-light flex-fill d-flex align-items-center justify-content-center me-2">
-                                        <img src="assets/img/icons/google-icon.svg" class="me-2" alt="Img">
-                                        <span *ngIf="!googleLoading">Google</span>
-                                        <div *ngIf="googleLoading" class="spinner-border spinner-border-sm">
-                                        </div>
-                                    </a>
+                                    <!-- SEC-06 / FE-02: boton oficial renderizado por Google Identity Services (GIS).
+                                         Reemplaza al boton custom porque el flujo id_token de GIS requiere que el
+                                         click provenga del boton oficial (limitacion de la libreria). Facebook
+                                         mantiene el boton custom porque FB.login es programatico. -->
+                                    <div #googleSignInBtn class="me-2 d-flex align-items-center" style="min-height: 44px;"></div>
                                     <a href="javascript:void(0);" (click)="signInWithFacebook()"
                                         class="btn btn-light flex-fill d-flex align-items-center justify-content-center">
                                         <img src="assets/img/icons/fb-icon.svg" class="me-2" alt="Img">

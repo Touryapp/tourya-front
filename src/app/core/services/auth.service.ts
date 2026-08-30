@@ -1,16 +1,6 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TouristService } from '../../shared/services/tourist.service';
-import {
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  UserCredential,
-  signOut,
-  User,
-  onAuthStateChanged,
-  signInWithPopup
-} from 'firebase/auth';
-import { BehaviorSubject, Observable, catchError, of } from 'rxjs';
-import { auth } from '../../app.module';
+import { Observable, catchError, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { LoginResponseDto } from '../../shared/dto/login-response.dto';
@@ -18,7 +8,6 @@ import { RegisterResponseDto } from '../../shared/dto/register-response.dto';
 import { RegisterDto } from '../../shared/dto/register.dto';
 import { v4 as uuidv4 } from "uuid";
 import { SocialResponseDto } from '../../shared/dto/social-responose.dto';
-import { SocialLoginDto } from '../../shared/dto/social-login.dto';
 import { RoleDto } from '../../shared/dto/role.dto';
 import { Roles } from '../../shared/enums/roles.enum';
 import { RequestsProvidersStatus } from '../../shared/enums/requests-providers-status.enum';
@@ -36,18 +25,12 @@ const LEGACY_TOKEN_KEY = 'token';
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-  public currentUser: Observable<User | null> = this.currentUserSubject.asObservable();
   private baseUrl = environment.apiUrl + "/auth";
 
   constructor(
     private http: HttpClient,
     private touristService: TouristService
-  ) {
-    onAuthStateChanged(auth, (user) => {
-      this.currentUserSubject.next(user);
-    });
-  }
+  ) {}
 
   isAuthenticated(): boolean {
     return !!this.getAccessToken();
@@ -159,64 +142,28 @@ export class AuthService {
     });
   }
 
-  async loginWithGoogle(): Promise<UserCredential> {
-    const provider = new GoogleAuthProvider();
-    provider.addScope('profile');
-    provider.addScope('email');
-    return signInWithPopup(auth, provider);
-  }
-
-  authenticateGoogle(data: {
-    idToken: string;
-  }): Observable<RegisterResponseDto> {
-
-    return this.http.post<RegisterResponseDto>(
-      `${this.baseUrl}/google-auth`,
-      data
-    );
-  }
-  async loginWithFacebook(): Promise<UserCredential> {
-    const provider = new FacebookAuthProvider();
-    provider.addScope('email');
-    provider.addScope('public_profile');
-    return signInWithPopup(auth, provider);
-  }
-
-  authenticateFacebook(data: {
-    idToken: string;
-  }): Observable<RegisterResponseDto> {
-
-    return this.http.post<RegisterResponseDto>(
-      `${this.baseUrl}/facebook-auth`,
-      data
-    );
-  }
-
-  getCurrentUser(): User | null {
-    return auth.currentUser;
-  }
-
-  async getUserToken(): Promise<string | null> {
-    const user = auth.currentUser;
-    if (user) {
-      return await user.getIdToken();
-    }
-    return null;
-  }
-
-  async logoutSocial(): Promise<void> {
-    return signOut(auth);
-  }
-
-  isAuthenticatedSocial(): boolean {
-    return !!auth.currentUser;
-  }
-
-  authenticateSocial(data: SocialLoginDto): Observable<SocialResponseDto> {
-
+  /**
+   * SEC-06 / FE-02 (Token Exchange): envia el id_token que emitio Google
+   * Identity Services al backend, que lo valida contra las claves publicas de
+   * Google antes de emitir el JWT propio de Tourya. Reemplaza al viejo
+   * flujo authenticateSocial + Firebase SDK.
+   */
+  authenticateWithGoogle(idToken: string): Observable<SocialResponseDto> {
     return this.http.post<SocialResponseDto>(
-      `${this.baseUrl}/social-auth`,
-      data
+      `${this.baseUrl}/google`,
+      { idToken }
+    );
+  }
+
+  /**
+   * SEC-06 / FE-02 (Token Exchange): envia el accessToken que emitio Facebook
+   * JS SDK al backend, que lo valida via Graph API antes de emitir el JWT
+   * propio.
+   */
+  authenticateWithFacebook(accessToken: string): Observable<SocialResponseDto> {
+    return this.http.post<SocialResponseDto>(
+      `${this.baseUrl}/facebook`,
+      { accessToken }
     );
   }
 
