@@ -1160,37 +1160,82 @@
     }
   },
   "auth": {
+    "copyright": "Copyright © 2025. Todos os direitos reservados,",
     "login": {
       "title": "Entrar",
       "subtitle": "Faça login para gerenciar sua conta TourYa",
       "emailLabel": "E-mail",
-      "emailPlaceholder": "Digite seu E-mail",
+      "emailPlaceholder": "Digite seu e-mail",
       "passwordLabel": "Senha",
-      "passwordPlaceholder": "Digite a Senha",
+      "passwordPlaceholder": "Digite sua senha",
       "rememberMe": "Lembrar-me",
-      "forgotPassword": "Esqueceu a Senha?",
+      "forgotPassword": "Esqueceu a senha?",
       "button": "Entrar",
       "or": "Ou",
-      "noAccount": "Você não tem uma conta?",
-      "signupLink": "Inscrever-se"
+      "noAccount": "Ainda não tem uma conta?",
+      "signupLink": "Cadastre-se",
+      "errors": {
+        "emailRequired": "E-mail é obrigatório",
+        "emailInvalid": "E-mail inválido",
+        "passwordRequired": "Senha é obrigatória",
+        "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+        "generic": "Ocorreu um erro, por favor tente novamente"
+      },
+      "disabledModal": {
+        "title": "Conta Inativa",
+        "description": "Desculpe, sua conta não está ativa no momento.",
+        "noticeBefore": "Por favor, verifique seu e-mail para ",
+        "noticeStrong": "ativar sua conta",
+        "noticeAfter": " ou entre em contato com o suporte.",
+        "button": "Aceitar"
+      }
     },
     "register": {
-      "title": "Inscrever-se",
-      "subtitle": "Crie sua conta TourYa",
+      "title": "Criar Conta",
+      "subtitle": "Crie o passeio dos seus sonhos",
       "nameLabel": "Nome",
-      "namePlaceholder": "Digite seu Nome Completo",
+      "namePlaceholder": "Digite seu nome completo",
+      "firstNameLabel": "Nome",
+      "firstNamePlaceholder": "Digite seu nome",
+      "lastNameLabel": "Sobrenome",
+      "lastNamePlaceholder": "Digite seu sobrenome",
       "emailLabel": "E-mail",
-      "emailPlaceholder": "Digite seu E-mail",
+      "emailPlaceholder": "Digite seu e-mail",
       "passwordLabel": "Senha",
-      "passwordPlaceholder": "Digite a Senha",
+      "passwordPlaceholder": "Digite sua senha",
       "confirmPasswordLabel": "Confirmar Senha",
-      "confirmPasswordPlaceholder": "Digite a Senha",
-      "agreeTerms": "Eu concordo com os ",
+      "confirmPasswordPlaceholder": "Digite sua senha",
+      "agreeTerms": "Aceito os ",
       "termsLink": "Termos de Serviço.",
-      "button": "Registrar",
+      "button": "Cadastrar",
       "or": "Ou",
       "hasAccount": "Já tem uma conta?",
-      "loginLink": "Entrar"
+      "loginLink": "Entrar",
+      "errors": {
+        "firstNameRequired": "Nome é obrigatório",
+        "firstNameMinLength": "Nome deve ter pelo menos 2 caracteres",
+        "firstNameMaxLength": "Nome não pode ter mais de 50 caracteres",
+        "lastNameRequired": "Sobrenome é obrigatório",
+        "lastNameMinLength": "Sobrenome deve ter pelo menos 2 caracteres",
+        "lastNameMaxLength": "Sobrenome não pode ter mais de 50 caracteres",
+        "emailRequired": "E-mail é obrigatório",
+        "emailInvalid": "E-mail inválido",
+        "passwordRequired": "Senha é obrigatória",
+        "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+        "passwordMismatch": "As senhas não coincidem",
+        "termsRequired": "Os termos de serviço devem ser aceitos",
+        "emailAlreadyRegistered": "Este e-mail já está cadastrado",
+        "emailInvalidFormat": "E-mail inválido",
+        "generic": "Ocorreu um erro, por favor tente novamente"
+      },
+      "successModal": {
+        "title": "Cadastro Concluído!",
+        "description": "Sua conta foi criada.",
+        "noticeBefore": "Verifique seu e-mail para ",
+        "noticeStrong": "ativar sua conta",
+        "noticeAfter": ".",
+        "button": "Entendi, Ir para o Início"
+      }
     },
     "changePassword": {
       "title": "Alterar Senha",
@@ -1202,13 +1247,17 @@
       "button": "Alterar Senha"
     },
     "forgotPassword": {
-      "title": "Esqueceu a Senha",
-      "subtitle": "Redefina sua Senha do TourYa",
+      "title": "Esqueci minha senha",
+      "subtitle": "Redefina sua senha do Tourya",
       "emailLabel": "E-mail",
-      "emailPlaceholder": "Digite seu E-mail",
-      "button": "Redefinir Senha",
-      "rememberPassword": "Lembra da Senha?",
-      "loginLink": "Entrar"
+      "emailPlaceholder": "Digite seu e-mail",
+      "button": "Alterar Senha",
+      "rememberPassword": "Lembra da senha?",
+      "loginLink": "Entrar",
+      "errors": {
+        "emailRequired": "E-mail é obrigatório",
+        "emailInvalid": "O formato do e-mail deve ser válido"
+      }
     }
   },
   "searchComponent": {
@@ -1273,7 +1322,7 @@
     "range": "Intervalo:",
     "toursFound": "Tours encontrados na sua pesquisa",
     "generalSearch": "Busca Geral",
-    "searchTours": "Buscar tours...",
+    "searchTours": "Pesquisar passeios...",
     "categories": "Categorias",
     "subcategories": "Subcategorias",
     "filtersTitle": "Filtros",

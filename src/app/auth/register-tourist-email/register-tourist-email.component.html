@@ -13,20 +13,20 @@
                     <div class="card authentication-card">
                         <div class="card-header">
                             <div class="text-center">
-                                <h5 class="mb-1">Crear Cuenta</h5>
-                                <p>Crea el tour de tus sueños</p>
+                                <h5 class="mb-1">{{ 'auth.register.title' | translate }}</h5>
+                                <p>{{ 'auth.register.subtitle' | translate }}</p>
                             </div>
                         </div>
                         <div class="card-body">
                             <form [formGroup]="registerTouristEmailForm" (ngSubmit)="submitForm()">
                                 <div class="mb-3">
-                                    <label class="form-label" for="first_name">Nombre</label>
+                                    <label class="form-label" for="first_name">{{ 'auth.register.firstNameLabel' | translate }}</label>
                                     <div class="input-icon">
                                         <span class="input-icon-addon">
                                             <i class="fa-regular fa-user"></i>
                                         </span>
                                         <input type="text" id="first_name" formControlName="firstName"
-                                            class="form-control form-control-lg" placeholder="Ingresa tu nombre"
+                                            class="form-control form-control-lg" [placeholder]="'auth.register.firstNamePlaceholder' | translate"
                                             minlength="2" maxlength="50">
                                     </div>
 
@@ -34,77 +34,77 @@
                                         class="text-danger">
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['firstName'].errors?.['required']">
-                                            Nombre es requerido
+                                            {{ 'auth.register.errors.firstNameRequired' | translate }}
                                         </div>
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['firstName'].errors?.['minlength']">
-                                            Nombre debe tener al menos 2 caracteres
+                                            {{ 'auth.register.errors.firstNameMinLength' | translate }}
                                         </div>
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['firstName'].errors?.['maxlength']">
-                                            Nombre no puede tener más de 50 caracteres
+                                            {{ 'auth.register.errors.firstNameMaxLength' | translate }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="last_name">Apellido</label>
+                                    <label class="form-label" for="last_name">{{ 'auth.register.lastNameLabel' | translate }}</label>
                                     <div class="input-icon">
                                         <span class="input-icon-addon">
                                             <i class="fa-regular fa-user"></i>
                                         </span>
                                         <input type="text" id="last_name" formControlName="lastName"
-                                            class="form-control form-control-lg" placeholder="Ingresa tus nombres"
+                                            class="form-control form-control-lg" [placeholder]="'auth.register.lastNamePlaceholder' | translate"
                                             minlength="2" maxlength="50">
                                     </div>
 
                                     <div *ngIf="registerTouristEmailForm.controls['lastName'].invalid && (registerTouristEmailForm.controls['lastName'].dirty || registerTouristEmailForm.controls['lastName'].touched)"
                                         class="text-danger">
                                         <div *ngIf="registerTouristEmailForm.controls['lastName'].errors?.['required']">
-                                            Apellido es requerido
+                                            {{ 'auth.register.errors.lastNameRequired' | translate }}
                                         </div>
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['lastName'].errors?.['minlength']">
-                                            Apellido debe tener al menos 2 caracteres
+                                            {{ 'auth.register.errors.lastNameMinLength' | translate }}
                                         </div>
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['lastName'].errors?.['maxlength']">
-                                            Apellido no puede tener más de 50 caracteres
+                                            {{ 'auth.register.errors.lastNameMaxLength' | translate }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="email">Correo</label>
+                                    <label class="form-label" for="email">{{ 'auth.register.emailLabel' | translate }}</label>
                                     <div class="input-icon">
                                         <span class="input-icon-addon">
                                             <i class="fa-regular fa-envelope"></i>
                                         </span>
                                         <input type="email" id="email" formControlName="email"
-                                            class="form-control form-control-lg" placeholder="Ingresa tu correo">
+                                            class="form-control form-control-lg" [placeholder]="'auth.register.emailPlaceholder' | translate">
                                     </div>
 
                                     <div *ngIf="registerTouristEmailForm.controls['email'].invalid && (registerTouristEmailForm.controls['email'].dirty || registerTouristEmailForm.controls['email'].touched)"
                                         class="text-danger">
 
                                         <div *ngIf="registerTouristEmailForm.controls['email'].errors?.['required']">
-                                            Correo es requerido
+                                            {{ 'auth.register.errors.emailRequired' | translate }}
                                         </div>
                                         <div *ngIf="registerTouristEmailForm.controls['email'].errors?.['email']">
-                                            Correo no es válido
+                                            {{ 'auth.register.errors.emailInvalid' | translate }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="password">Contraseña</label>
+                                    <label class="form-label" for="password">{{ 'auth.register.passwordLabel' | translate }}</label>
                                     <div class="pass-group input-icon">
                                         <span class="input-icon-addon">
                                             <i class="fa-solid fa-unlock"></i>
                                         </span>
                                         <input [type]="password[0] ? 'text' : 'password'" id="password"
                                             formControlName="password" class="pass-input form-control form-control-lg"
-                                            placeholder="Ingresa tu contraseña" />
+                                            [placeholder]="'auth.register.passwordPlaceholder' | translate" />
                                         <span class="isax toggle-password"
                                             [ngClass]="password[0] ? 'isax-eye' : 'isax-eye-slash'"
                                             (click)="togglePassword(0)" (keydown.enter)="togglePassword(0)"
@@ -114,16 +114,16 @@
                                     <div *ngIf="registerTouristEmailForm.controls['password'].invalid && (registerTouristEmailForm.controls['password'].dirty || registerTouristEmailForm.controls['password'].touched)"
                                         class="text-danger">
                                         <div *ngIf="registerTouristEmailForm.controls['password'].errors?.['required']">
-                                            Contraseña es requerida
+                                            {{ 'auth.register.errors.passwordRequired' | translate }}
                                         </div>
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['password'].errors?.['minlength']">
-                                            Contraseña debe tener al menos 8 caracteres
+                                            {{ 'auth.register.errors.passwordMinLength' | translate }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="password_confirm">Confirmar Contraseña</label>
+                                    <label class="form-label" for="password_confirm">{{ 'auth.register.confirmPasswordLabel' | translate }}</label>
                                     <div class="pass-group input-icon">
                                         <span class="input-icon-addon">
                                             <i class="fa-solid fa-unlock"></i>
@@ -131,7 +131,7 @@
                                         <input [type]="password[1] ? 'text' : 'password'" id="password_confirm"
                                             formControlName="confirmPassword"
                                             class="pass-input form-control form-control-lg"
-                                            placeholder="Ingresa tu contraseña" />
+                                            [placeholder]="'auth.register.confirmPasswordPlaceholder' | translate" />
                                         <span class="isax toggle-password"
                                             [ngClass]="password[1] ? 'isax-eye' : 'isax-eye-slash'"
                                             (click)="togglePassword(1)" (keydown.enter)="togglePassword(1)"
@@ -142,15 +142,15 @@
                                         class="text-danger">
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['confirmPassword'].errors?.['required']">
-                                            Contraseña es requerida
+                                            {{ 'auth.register.errors.passwordRequired' | translate }}
                                         </div>
                                         <div
                                             *ngIf="registerTouristEmailForm.controls['confirmPassword'].errors?.['minlength']">
-                                            Contraseña debe tener al menos 8 caracteres
+                                            {{ 'auth.register.errors.passwordMinLength' | translate }}
                                         </div>
 
                                         <div *ngIf="registerTouristEmailForm.errors?.['passwordMismatch']">
-                                            Contraseñas no coinciden
+                                            {{ 'auth.register.errors.passwordMismatch' | translate }}
                                         </div>
                                     </div>
                                 </div>
@@ -160,17 +160,17 @@
                                             <input class="form-check-input mt-0" type="checkbox" formControlName="terms"
                                                 id="agree">
                                             <label class="form-check-label ms-2 text-gray-9 fs-14" for="agree" style="margin-right: 4px;">
-                                                Acepto los
+                                                {{ 'auth.register.agreeTerms' | translate }}
                                             </label>
                                             <a [routerLink]="routes.termsConditions" target="_blank"
-                                                class="link-primary fw-medium fs-14">Términos De Servicio.</a>
+                                                class="link-primary fw-medium fs-14">{{ 'auth.register.termsLink' | translate }}</a>
 
                                         </div>
                                     </div>
                                     <div *ngIf="registerTouristEmailForm.controls['terms'].invalid && (registerTouristEmailForm.controls['terms'].dirty || registerTouristEmailForm.controls['terms'].touched)"
                                         class="text-danger">
                                         <div *ngIf="registerTouristEmailForm.controls['terms'].errors?.['required']">
-                                            Los términos de servicio deben ser aceptados
+                                            {{ 'auth.register.errors.termsRequired' | translate }}
                                         </div>
                                     </div>
                                 </div>
@@ -178,7 +178,7 @@
                                     <button type="submit"
                                         class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100"
                                         [disabled]="loading || (registerTouristEmailForm.touched && registerTouristEmailForm.invalid)">
-                                        <span>Registrarme</span>
+                                        <span>{{ 'auth.register.button' | translate }}</span>
 
                                         <div *ngIf="loading" class="spinner-border spinner-border-sm">
                                         </div>
@@ -196,8 +196,8 @@
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-center">
-                                    <p class="fs-14">¿Ya tienes cuenta? <a [routerLink]="'/login'"
-                                            class="link-primary fw-medium">Iniciar Sesión</a></p>
+                                    <p class="fs-14">{{ 'auth.register.hasAccount' | translate }} <a [routerLink]="'/login'"
+                                            class="link-primary fw-medium">{{ 'auth.register.loginLink' | translate }}</a></p>
                                 </div>
                             </form>
                         </div>
@@ -210,7 +210,7 @@
 
     </div>
     <div class="coprright-footer">
-        <p class="fs-14">Copyright &copy; 2025. All Rights Reserved, <a [routerLink]="routes.index"
+        <p class="fs-14">{{ 'auth.copyright' | translate }} <a [routerLink]="routes.index"
                 class="text-primary fw-medium">Tourya</a></p>
     </div>
 </div>
@@ -225,18 +225,18 @@
                         <i class="isax isax-tick-circle5 fs-40"></i>
                     </div>
                 </div>
-                <h4 class="fw-bold mb-3 text-dark">¡Registro Exitoso!</h4>
+                <h4 class="fw-bold mb-3 text-dark">{{ 'auth.register.successModal.title' | translate }}</h4>
                 <p class="text-muted fs-15 mb-4 px-3">
-                    Tu cuenta ha sido creada.
+                    {{ 'auth.register.successModal.description' | translate }}
                 </p>
                 <div class="alert alert-light border-0 py-3 mb-4" style="background-color: #f8f9fa; border-radius: 12px;">
                     <p class="mb-0 fs-14 text-dark">
                         <i class="isax isax-sms me-2 text-primary"></i>
-                        Revisa tu correo electrónico para <strong>activar tu cuenta</strong>.
+                        {{ 'auth.register.successModal.noticeBefore' | translate }}<strong>{{ 'auth.register.successModal.noticeStrong' | translate }}</strong>{{ 'auth.register.successModal.noticeAfter' | translate }}
                     </p>
                 </div>
                 <button type="button" class="btn btn-primary btn-xl rounded w-100 fw-bold shadow-sm" (click)="closeModal()">
-                    Entendido, Ir al Inicio
+                    {{ 'auth.register.successModal.button' | translate }}
                 </button>
             </div>
         </div>

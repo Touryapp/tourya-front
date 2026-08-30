@@ -1319,37 +1319,82 @@
     }
   },
   "auth": {
+    "copyright": "Copyright © 2025. All Rights Reserved,",
     "login": {
-      "title": "Login",
-      "subtitle": "Login to Start Manage your TourYa Account",
+      "title": "Sign In",
+      "subtitle": "Sign in to start managing your TourYa account",
       "emailLabel": "Email",
-      "emailPlaceholder": "Enter Email",
+      "emailPlaceholder": "Enter your email",
       "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter Password",
-      "rememberMe": "Remember Me",
-      "forgotPassword": "Forgot Password?",
-      "button": "Login",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot your password?",
+      "button": "Sign In",
       "or": "Or",
-      "noAccount": "Don't you have an account?",
-      "signupLink": "Sign up"
+      "noAccount": "Don't have an account yet?",
+      "signupLink": "Sign up",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Email is not valid",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "generic": "An error occurred, please try again"
+      },
+      "disabledModal": {
+        "title": "Inactive Account",
+        "description": "Sorry, your account is not active at this time.",
+        "noticeBefore": "Please check your email to ",
+        "noticeStrong": "activate your account",
+        "noticeAfter": " or contact support.",
+        "button": "Accept"
+      }
     },
     "register": {
-      "title": "Sign Up",
-      "subtitle": "Create your TourYa Account",
+      "title": "Create Account",
+      "subtitle": "Create the tour of your dreams",
       "nameLabel": "Name",
-      "namePlaceholder": "Enter Full Name",
+      "namePlaceholder": "Enter your full name",
+      "firstNameLabel": "First name",
+      "firstNamePlaceholder": "Enter your first name",
+      "lastNameLabel": "Last name",
+      "lastNamePlaceholder": "Enter your last name",
       "emailLabel": "Email",
-      "emailPlaceholder": "Enter Email",
+      "emailPlaceholder": "Enter your email",
       "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter Password",
-      "confirmPasswordLabel": "Confirm Password",
-      "confirmPasswordPlaceholder": "Enter Password",
-      "agreeTerms": "I agree with the ",
-      "termsLink": "Terms Of Service.",
-      "button": "Register",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Enter your password",
+      "agreeTerms": "I agree to the ",
+      "termsLink": "Terms of Service.",
+      "button": "Sign Up",
       "or": "Or",
       "hasAccount": "Already have an account?",
-      "loginLink": "Login"
+      "loginLink": "Sign In",
+      "errors": {
+        "firstNameRequired": "First name is required",
+        "firstNameMinLength": "First name must be at least 2 characters",
+        "firstNameMaxLength": "First name cannot be more than 50 characters",
+        "lastNameRequired": "Last name is required",
+        "lastNameMinLength": "Last name must be at least 2 characters",
+        "lastNameMaxLength": "Last name cannot be more than 50 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Email is not valid",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "passwordMismatch": "Passwords do not match",
+        "termsRequired": "Terms of service must be accepted",
+        "emailAlreadyRegistered": "This email is already registered",
+        "emailInvalidFormat": "Invalid email address",
+        "generic": "An error occurred, please try again"
+      },
+      "successModal": {
+        "title": "Registration Successful!",
+        "description": "Your account has been created.",
+        "noticeBefore": "Check your email to ",
+        "noticeStrong": "activate your account",
+        "noticeAfter": ".",
+        "button": "Got it, go to Home"
+      }
     },
     "changePassword": {
       "title": "Change Password",
@@ -1361,13 +1406,17 @@
       "button": "Change Password"
     },
     "forgotPassword": {
-      "title": "Forgot Password",
-      "subtitle": "Reset Your TourYa Password",
+      "title": "Forgot my password",
+      "subtitle": "Reset your Tourya password",
       "emailLabel": "Email",
-      "emailPlaceholder": "Enter Email",
+      "emailPlaceholder": "Enter your email",
       "button": "Reset Password",
-      "rememberPassword": "Remember Password ?",
-      "loginLink": "Login"
+      "rememberPassword": "Remember your password?",
+      "loginLink": "Sign In",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Email format must be valid"
+      }
     }
   },
   "searchComponent": {
