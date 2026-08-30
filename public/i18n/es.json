@@ -1320,6 +1320,7 @@
     }
   },
   "auth": {
+    "copyright": "Copyright © 2025. Todos los derechos reservados,",
     "login": {
       "title": "Iniciar Sesión",
       "subtitle": "Inicia sesión para administrar tu cuenta de TourYa",
@@ -1332,25 +1333,69 @@
       "button": "Iniciar Sesión",
       "or": "O",
       "noAccount": "¿No tienes una cuenta?",
-      "signupLink": "Regístrate"
+      "signupLink": "Regístrate",
+      "errors": {
+        "emailRequired": "Correo es requerido",
+        "emailInvalid": "Correo no es válido",
+        "passwordRequired": "Contraseña es requerida",
+        "passwordMinLength": "Contraseña debe tener al menos 8 caracteres",
+        "generic": "Ha ocurrido un error, por favor intente de nuevo"
+      },
+      "disabledModal": {
+        "title": "Cuenta no Activa",
+        "description": "Lo sentimos, tu cuenta no se encuentra activa en este momento.",
+        "noticeBefore": "Por favor, revisa tu correo electrónico para ",
+        "noticeStrong": "activar tu cuenta",
+        "noticeAfter": " o contacta a soporte.",
+        "button": "Aceptar"
+      }
     },
     "register": {
-      "title": "Registrarse",
-      "subtitle": "Crea tu cuenta de TourYa",
+      "title": "Crear Cuenta",
+      "subtitle": "Crea el tour de tus sueños",
       "nameLabel": "Nombre",
       "namePlaceholder": "Ingresa tu nombre completo",
+      "firstNameLabel": "Nombre",
+      "firstNamePlaceholder": "Ingresa tu nombre",
+      "lastNameLabel": "Apellido",
+      "lastNamePlaceholder": "Ingresa tu apellido",
       "emailLabel": "Correo Electrónico",
       "emailPlaceholder": "Ingresa tu correo",
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "Ingresa tu contraseña",
       "confirmPasswordLabel": "Confirmar Contraseña",
       "confirmPasswordPlaceholder": "Ingresa tu contraseña",
-      "agreeTerms": "Estoy de acuerdo con los ",
-      "termsLink": "Términos de Servicio.",
-      "button": "Registrarse",
+      "agreeTerms": "Acepto los ",
+      "termsLink": "Términos De Servicio.",
+      "button": "Registrarme",
       "or": "O",
-      "hasAccount": "¿Ya tienes una cuenta?",
-      "loginLink": "Iniciar Sesión"
+      "hasAccount": "¿Ya tienes cuenta?",
+      "loginLink": "Iniciar Sesión",
+      "errors": {
+        "firstNameRequired": "Nombre es requerido",
+        "firstNameMinLength": "Nombre debe tener al menos 2 caracteres",
+        "firstNameMaxLength": "Nombre no puede tener más de 50 caracteres",
+        "lastNameRequired": "Apellido es requerido",
+        "lastNameMinLength": "Apellido debe tener al menos 2 caracteres",
+        "lastNameMaxLength": "Apellido no puede tener más de 50 caracteres",
+        "emailRequired": "Correo es requerido",
+        "emailInvalid": "Correo no es válido",
+        "passwordRequired": "Contraseña es requerida",
+        "passwordMinLength": "Contraseña debe tener al menos 8 caracteres",
+        "passwordMismatch": "Contraseñas no coinciden",
+        "termsRequired": "Los términos de servicio deben ser aceptados",
+        "emailAlreadyRegistered": "Correo electrónico ya está registrado",
+        "emailInvalidFormat": "Correo electrónico inválido",
+        "generic": "Ha ocurrido un error, por favor intente de nuevo"
+      },
+      "successModal": {
+        "title": "¡Registro Exitoso!",
+        "description": "Tu cuenta ha sido creada.",
+        "noticeBefore": "Revisa tu correo electrónico para ",
+        "noticeStrong": "activar tu cuenta",
+        "noticeAfter": ".",
+        "button": "Entendido, Ir al Inicio"
+      }
     },
     "changePassword": {
       "title": "Cambiar Contraseña",
@@ -1362,13 +1407,17 @@
       "button": "Cambiar Contraseña"
     },
     "forgotPassword": {
-      "title": "Olvidé mi Contraseña",
-      "subtitle": "Restablece tu contraseña de TourYa",
-      "emailLabel": "Correo Electrónico",
+      "title": "Olvide mi Contraseña",
+      "subtitle": "Restablece tu contraseña de Tourya",
+      "emailLabel": "Correo",
       "emailPlaceholder": "Ingresa tu correo",
-      "button": "Restablecer Contraseña",
-      "rememberPassword": "¿Recuerdas tu contraseña?",
-      "loginLink": "Iniciar Sesión"
+      "button": "Cambiar Contraseña",
+      "rememberPassword": "¿Recordar Contraseña?",
+      "loginLink": "Ingresar",
+      "errors": {
+        "emailRequired": "Email requerido",
+        "emailInvalid": "El formato de correo debe ser válido"
+      }
     }
   },
   "searchComponent": {

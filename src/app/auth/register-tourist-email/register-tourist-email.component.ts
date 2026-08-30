@@ -4,6 +4,7 @@ import { routes } from "../../shared/routes/routes";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { passwordMatchValidator } from "../../shared/validators/password-match.validator";
 import { AuthService } from "../../core/services/auth.service";
+import { TranslateService } from "@ngx-translate/core";
 @Component({
   selector: "app-register-tourist-email",
   standalone: false,
@@ -28,7 +29,8 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private renderer: Renderer2,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {
     this.registerTouristEmailForm = new FormGroup(
       {
@@ -88,12 +90,11 @@ export class RegisterTouristEmailComponent implements OnInit, OnDestroy {
           this.loading = false;
 
           if (error?.error?.statusCode === 409) {
-            this.errorMessage = "Correo electrónico ya está registrado";
+            this.errorMessage = this.translate.instant("auth.register.errors.emailAlreadyRegistered");
           } else if (error?.error?.statusCode === 400) {
-            this.errorMessage = "Correo electrónico inválido";
+            this.errorMessage = this.translate.instant("auth.register.errors.emailInvalidFormat");
           } else {
-            this.errorMessage =
-              "Ha ocurrido un error, por favor intente de nuevo";
+            this.errorMessage = this.translate.instant("auth.register.errors.generic");
           }
         },
       });

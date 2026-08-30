@@ -12,6 +12,7 @@ import { ReviewsService } from "../../core/services/reviews.service";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { PendingReviewsModalComponent } from "../../shared/components/pending-reviews-modal/pending-reviews-modal.component";
 import { PendingActionService } from "../../shared/services/pending-action.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-login-tourist",
@@ -44,7 +45,8 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
     private requestProviderService: RequestProvidersService,
     private reviewsService: ReviewsService,
     private modalService: BsModalService,
-    private pendingActionService: PendingActionService
+    private pendingActionService: PendingActionService,
+    private translate: TranslateService
   ) {
     this.loginTouristForm = new FormGroup({
       email: new FormControl("", [Validators.required, Validators.email]),
@@ -97,8 +99,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
               ' isBackofficeOperation=', this.authService.isBackofficeOperation());
             this.getConsultDataAndRedirect(response.roleList);
           } else {
-            this.errorMessage =
-              "Ha ocurrido un error, por favor intente de nuevo";
+            this.errorMessage = this.translate.instant("auth.login.errors.generic");
           }
         },
         error: (err: any) => {
@@ -108,7 +109,7 @@ export class LoginTouristComponent implements OnInit, OnDestroy {
           if (err?.error?.errorCode === 303) {
             this.showDisabledModal = true;
           } else {
-            this.errorMessage = "Ha ocurrido un error, por favor intente de nuevo";
+            this.errorMessage = this.translate.instant("auth.login.errors.generic");
           }
         },
       });
