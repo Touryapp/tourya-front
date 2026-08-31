@@ -5,7 +5,7 @@ export const environment = {
   baseUrl: "",
   // SEC-06 / FE-02: OAuth Client IDs publicos. Ver comentario en environment.ts.
   googleClientId: "318643880116-f8a76i410ks8p5b6idqhb9qhf39i405k.apps.googleusercontent.com",
-  facebookAppId: "3998716940417210",
+  facebookAppId: "1572035247680930",
   wompi: {
     publicKey: 'pub_test_bIOZLLlzg8Oel52ljFIp7Sd4FDEOo1da',
     privateKey: 'prv_test_qSmhjc5VxZqkdTkkPPenk5zPPfnOKn4R',

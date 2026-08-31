@@ -13,7 +13,7 @@ export const environment = {
   // (ver POST /api/v1/auth/google y /api/v1/auth/facebook, Token Exchange
   // server-side).
   googleClientId: "318643880116-f8a76i410ks8p5b6idqhb9qhf39i405k.apps.googleusercontent.com",
-  facebookAppId: "3998716940417210",
+  facebookAppId: "1572035247680930",
   wompi: {
     publicKey: 'pub_test_bIOZLLlzg8Oel52ljFIp7Sd4FDEOo1da',
     privateKey: 'prv_test_qSmhjc5VxZqkdTkkPPenk5zPPfnOKn4R',
