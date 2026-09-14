@@ -87,9 +87,17 @@
 </head>
 
 <body>
-  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6adZVdzTvBpE2yBRK8cDfsss8QXChK0I"></script> -->
+  <!-- FE-03 (issue #130) 2026-09-14: API key nueva creada en GCP project
+       tourya-project-dev (donde vive Tourya). La anterior
+       (AIzaSyAdUenfnZZUQZo_d9k_tCVjtWneXlcEGiw) vivia en la cuenta personal
+       de Luis y se pauso, rompiendo el autocomplete de direcciones del
+       register-provider-email. La nueva key esta restringida a:
+         - HTTP referrers: https://dev.tourya.co/*, https://tourya.co/*,
+           https://www.tourya.co/*, http://localhost:4200/*
+         - APIs: Maps JavaScript API + Places API
+       Ver comentario en el issue #130 para el detalle de setup en GCP. -->
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdUenfnZZUQZo_d9k_tCVjtWneXlcEGiw&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhZyxumhwwONcXdvhq176P5PtbESkTbeA&libraries=places"></script>
 
   <app-root></app-root>
 </body>
