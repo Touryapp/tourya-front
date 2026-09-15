@@ -131,9 +131,16 @@ export class RegisterProviderEmailComponent implements OnInit, OnDestroy, AfterV
     const inputElement = this.addressInput.nativeElement;
     // @ts-ignore
     if (inputElement && window.google && window.google.maps && window.google.maps.places) {
+      // FE-03b (feedback Luis 2026-09-14 WhatsApp): quitar el filtro
+      // `types: ["address"]` para que el autocomplete tambien devuelva
+      // establecimientos (hoteles de San Andres, oficinas, etc.), no solo
+      // direcciones postales estrictas. Google Places API v1 no permite
+      // mezclar ["address", "establishment"] en un solo Autocomplete —
+      // omitir `types` es la forma soportada de incluir ambas categorias.
+      // Se mantiene `componentRestrictions: COL` para seguir limitando a
+      // Colombia (San Andres incluido).
       // @ts-ignore
       const autocomplete = new window.google.maps.places.Autocomplete(inputElement, {
-        types: ["address"],
         componentRestrictions: { country: ["COL"] },
       });
 
